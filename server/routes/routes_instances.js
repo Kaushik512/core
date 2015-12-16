@@ -157,7 +157,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         instancesDao.getInstanceById(req.params.instanceId, function(err, instances) {
             if (err) {
                 logger.debug("Failed to fetch Instance ", err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             if (instances.length) {
@@ -165,12 +165,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 Task.getTasksByNodeIds([req.params.instanceId], function(err, tasks) {
                     if (err) {
                         logger.debug("Failed to fetch tasks by node id ", err);
-                        res.send(500, errorResponses.db.error);
+                        res.status(500).send( errorResponses.db.error);
                         return;
                     }
                     logger.debug('length ==>', tasks.length);
                     if (tasks.length) {
-                        res.send(400, {
+                        res.status(400).send( {
                             message: "Instance is associated with task"
                         });
                         return;
@@ -190,7 +190,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         }
                         var infraManagerId = infraManagerData.serverId;
                         if (!infraManagerId) {
-                            res.send(500, {
+                            res.status(500).send( {
                                 message: "Instance data corrupted"
                             });
                             return;
@@ -199,13 +199,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         masterUtil.getCongifMgmtsById(infraManagerId, function(err, infraManagerDetails) {
                             if (err) {
                                 logger.debug("Failed to fetch Infra Manager Details ", err);
-                                res.send(500, errorResponses.db.error);
+                                res.status(500).send( errorResponses.db.error);
                                 return;
                             }
                             logger.debug('infraManager ==>', infraManagerDetails);
                             if (!infraManagerDetails) {
                                 logger.debug("Infra Manager details not found", err);
-                                res.send(500, {
+                                res.status(500).send( {
                                     message: "Infra Manager Details Corrupted"
                                 });
                                 return;
@@ -277,7 +277,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             instancesDao.removeInstancebyId(req.params.instanceId, function(err, data) {
                 if (err) {
                     logger.error("Instance deletion Failed >> ", err);
-                    res.send(500, errorResponses.db.error);
+                    res.status(500).send( errorResponses.db.error);
                     return;
                 }
                 logger.debug("Exit delete() for /instances/%s", req.params.instanceid);
@@ -323,7 +323,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         instancesDao.removeAppUrl(req.params.instanceId, req.params.appUrlId, function(err, deleteCount) {
             if (err) {
                 logger.error("Failed to remove app url", err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             res.send({
@@ -363,7 +363,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         instancesDao.removeTaskId(req.params.instanceId, function(err, deleteCount) {
             if (err) {
                 logger.error("Failed to taskId", err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             res.send({
@@ -1130,7 +1130,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             }
 
                             if (!configManagmentId) {
-                                res.send(500, {
+                                res.status(500).send( {
                                     message: "Instance Data Corrupted"
                                 });
                                 return;
@@ -1468,7 +1468,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             });
 
                             if (!data[0].providerId) {
-                                res.send(500, {
+                                res.status(500).send( {
                                     message: "Insufficient provider details, to complete the operation"
                                 });
                                 logsDao.insertLog({
@@ -1625,7 +1625,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                             timestamp: timestampEnded
                                                         });
                                                         instancesDao.updateActionLog(req.params.instanceId, actionLog._id, false, timestampEnded);
-                                                        res.send(500, {
+                                                        res.status(500).send( {
                                                             actionLogId: actionLog._id
                                                         });
                                                         return;
@@ -1694,14 +1694,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 AWSProvider.getAWSProviderById(data[0].providerId, function(err, aProvider) {
                                     if (err) {
                                         logger.error(err);
-                                        res.send(500, "Unable to get Provider.");
+                                        res.status(500).send( "Unable to get Provider.");
                                         return;
                                     }
                                     logger.debug("Provider:>>>>>>>>>> ", JSON.stringify(aProvider));
                                     AWSKeyPair.getAWSKeyPairByProviderId(aProvider._id, function(err, keyPair) {
                                         logger.debug("keyPairs length::::: ", keyPair[0].region);
                                         if (err) {
-                                            res.send(500, "Error getting to fetch Keypair.")
+                                            res.status(500).send( "Error getting to fetch Keypair.")
                                         }
                                         var cryptoConfig = appConfig.cryptoSettings;
                                         var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
@@ -1729,7 +1729,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         timestamp: timestampEnded
                                                     });
                                                     instancesDao.updateActionLog(req.params.instanceId, actionLog._id, false, timestampEnded);
-                                                    res.send(500, {
+                                                    res.status(500).send( {
                                                         actionLogId: actionLog._id
                                                     });
                                                     return;
@@ -1919,7 +1919,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 });
 
                                 if (!data[0].providerId) {
-                                    res.send(500, {
+                                    res.status(500).send( {
                                         message: "Insufficient provider details, to complete the operation"
                                     });
                                     logsDao.insertLog({
@@ -1986,7 +1986,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                             timestamp: timestampEnded
                                                         });
                                                         instancesDao.updateActionLog(req.params.instanceId, actionLog._id, false, timestampEnded);
-                                                        res.send(500, {
+                                                        res.status(500).send( {
                                                             actionLogId: actionLog._id
                                                         });
                                                         return;
@@ -2055,13 +2055,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 AWSProvider.getAWSProviderById(data[0].providerId, function(err, aProvider) {
                                     if (err) {
                                         logger.error(err);
-                                        res.send(500, "Unable to find Provider.");
+                                        res.status(500).send( "Unable to find Provider.");
                                         return;
                                     }
                                     AWSKeyPair.getAWSKeyPairByProviderId(aProvider._id, function(err, keyPair) {
                                         logger.debug("keyPairs length::::: ", keyPair[0].region);
                                         if (err) {
-                                            res.send(500, "Error getting to fetch Keypair.")
+                                            res.status(500).send( "Error getting to fetch Keypair.")
                                         }
 
                                         var timestampStarted = new Date().getTime();
@@ -2107,7 +2107,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         timestamp: timestampEnded
                                                     });
                                                     instancesDao.updateActionLog(req.params.instanceId, actionLog._id, false, timestampEnded);
-                                                    res.send(500, {
+                                                    res.status(500).send( {
                                                         actionLogId: actionLog._id
                                                     });
                                                     return;
@@ -2402,7 +2402,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         });
                         instancesDao.updateActionLog(req.params.instanceId, actionLog._id, false, timestampEnded);
 
-                        res.send(500, {
+                        res.status(500).send( {
                             actionLogId: actionLog._id
                         });
                         return;
@@ -2419,7 +2419,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 });
                                 instancesDao.updateActionLog(req.params.instanceId, actionLog._id, false, timestampEnded);
 
-                                res.send(500, {
+                                res.status(500).send( {
                                     actionLogId: actionLog._id
                                 });
                                 return;
@@ -2434,7 +2434,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 });
                                 instancesDao.updateActionLog(req.params.instanceId, actionLog._id, false, timestampEnded);
 
-                                res.send(500, {
+                                res.status(500).send( {
                                     actionLogId: actionLog._id
                                 });
                                 return;
@@ -2623,13 +2623,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         instancesDao.getInstanceById(req.params.instanceId, function(err, anInstance) {
             if (err) {
                 logger.error("Failed to fetch Instance: ", err);
-                res.send(500, "Failed to fetch Instance: ");
+                res.status(500).send( "Failed to fetch Instance: ");
                 return;
             }
             if (anInstance) {
                 instancesDao.updateInstanceName(req.params.instanceId, req.body.name, function(err, updateCount) {
                     if (err) {
-                        res.send(500, "Failed to update instance name");
+                        res.status(500).send( "Failed to update instance name");
                         return;
                     }
                     logger.debug(updateCount);
@@ -2651,14 +2651,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         instancesDao.getInstanceById(req.params.instanceId, function(err, anInstance) {
             if (err) {
                 logger.error("Failed to fetch Instance: ", err);
-                res.send(500, "Failed to fetch Instance: ");
+                res.status(500).send( "Failed to fetch Instance: ");
                 return;
             }
 
             logger.debug("Return instance>>>>>>>>>>> ", JSON.stringify(anInstance));
             if (anInstance.length) {
                 if (anInstance[0].bootStrapStatus !== 'success') {
-                    res.send(400, {
+                    res.status(400).send( {
                         message: "Instance is not boostraped"
                     });
                     return;
@@ -2676,7 +2676,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     //decrypting pem file
                     credentialCryptography.decryptCredential(anInstance[0].credentials, function(err, decryptedCredentials) {
                         if (err) {
-                            res.send(500, "Unable to decrypt file.");
+                            res.status(500).send( "Unable to decrypt file.");
                             return;
                         }
 
@@ -2706,7 +2706,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             var installedSoftwareString = '';
                             sshConnection.exec(cmd, function(err, retCode) {
                                 if (err) {
-                                    res.send(500, {
+                                    res.status(500).send( {
                                         "message": "Unable to ssh"
                                     });
                                     return;
@@ -2716,22 +2716,22 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         installedSoftwareString: installedSoftwareString
                                     });
                                 } else if (retCode === -5000) {
-                                    res.send(500, {
+                                    res.status(500).send( {
                                         "message": "Host Unreachable."
                                     });
                                     return;
                                 } else if (retCode === -5001) {
-                                    res.send(500, {
+                                    res.status(500).send( {
                                         "message": "Invalid credentials."
                                     });
                                     return;
                                 } else if (retCode === -5002) {
-                                    res.send(500, {
+                                    res.status(500).send( {
                                         "message": "Unknown Exeption Occured. Code : " + retCode
                                     });
                                     return;
                                 } else {
-                                    res.send(500, {
+                                    res.status(500).send( {
                                         "message": "Unknown Exeption Occured. Code : " + retCode
                                     });
                                     return;
@@ -2770,7 +2770,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             chef.runKnifeWinrmCmd(cmd, chefClientOptions, function(err, retCode) {
 
                                 if (err) {
-                                    res.send(500, {
+                                    res.status(500).send( {
                                         "message": "Unable to winrm"
                                     });
                                     return;
@@ -2790,22 +2790,22 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         installedSoftwareString: installedSoftwareString
                                     });
                                 } else if (retCode === -5000) {
-                                    res.send(500, {
+                                    res.status(500).send( {
                                         "message": "Host Unreachable."
                                     });
                                     return;
                                 } else if (retCode === -5001) {
-                                    res.send(500, {
+                                    res.status(500).send( {
                                         "message": "Invalid credentials."
                                     });
                                     return;
                                 } else if (retCode === -5002) {
-                                    res.send(500, {
+                                    res.status(500).send( {
                                         "message": "Unknown Exeption Occured while trying knife winrm. Code : " + retCode
                                     });
                                     return;
                                 } else {
-                                    res.send(500, {
+                                    res.status(500).send( {
                                         "message": "Unknown Exeption Occured while trying knife winrm. Code : " + retCode
                                     });
                                     return;
@@ -2835,7 +2835,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         instancesDao.getInstanceById(req.params.instanceId, function(err, instances) {
             if (err) {
                 logger.debug("Failed to fetch Instance ", err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             if (!instances.length) {
@@ -2849,12 +2849,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             configmgmtDao.getChefServerDetails(instance.chef.serverId, function(err, chefDetails) {
                 if (err) {
                     logger.debug("Failed to fetch ChefServerDetails ", err);
-                    res.send(500, errorResponses.chef.corruptChefData);
+                    res.status(500).send( errorResponses.chef.corruptChefData);
                     return;
                 }
                 credentialCryptography.decryptCredential(instance.credentials, function(err, decryptedCredentials) {
                     if (err) {
-                        res.send(500, {
+                        res.status(500).send( {
                             "message": "Unable to decrypt file."
                         });
                         return;
@@ -2874,7 +2874,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     scpClient.upload(chefDetails.chefRepoLocation + '/.chef/', '/home/' + decryptedCredentials.username + '/.chef/', function(err) {
                         if (err) {
                             logger.debug(err);
-                            res.send(500, err);
+                            res.status(500).send( err);
                             return;
                         }
                         res.send(200, {
@@ -2892,7 +2892,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         instancesDao.getInstanceById(req.params.instanceId, function(err, instances) {
             if (err) {
                 logger.debug("Failed to fetch Instance ", err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             if (!instances.length) {
@@ -2906,12 +2906,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             configmgmtDao.getChefServerDetails(instance.chef.serverId, function(err, chefDetails) {
                 if (err) {
                     logger.debug("Failed to fetch ChefServerDetails ", err);
-                    res.send(500, errorResponses.chef.corruptChefData);
+                    res.status(500).send( errorResponses.chef.corruptChefData);
                     return;
                 }
                 credentialCryptography.decryptCredential(instance.credentials, function(err, decryptedCredentials) {
                     if (err) {
-                        res.send(500, {
+                        res.status(500).send( {
                             "message": "Unable to decrypt file."
                         });
                         return;
@@ -2968,7 +2968,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                     fileIo.readDir('', chefDetails.chefRepoLocation + '/.chef/', function(err, dirList, fileList) {
                         if (err) {
-                            res.send(500, errorResponses.db.error);
+                            res.status(500).send( errorResponses.db.error);
                             return;
                         }
                         var count = 0;
@@ -2979,7 +2979,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 createCmdString(fileList[count], cmdString, function(err, cmdString) {
                                     count++;
                                     if (err) {
-                                        res.send(500, errorResponses.db.error);
+                                        res.status(500).send( errorResponses.db.error);
                                         return;
                                     }
                                     loopFiles(fileList, cmdString, callback);
@@ -3014,7 +3014,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     logger.debug(cmd);
                                     sshConnection.exec(cmd, function(err, retCode) {
                                         if (err) {
-                                            res.send(500, {
+                                            res.status(500).send( {
                                                 "message": "Unable to ssh"
                                             });
                                             return;
@@ -3024,22 +3024,22 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                 "message": "true"
                                             });
                                         } else if (retCode === -5000) {
-                                            res.send(500, {
+                                            res.status(500).send( {
                                                 "message": "Host Unreachable."
                                             });
                                             return;
                                         } else if (retCode === -5001) {
-                                            res.send(500, {
+                                            res.status(500).send( {
                                                 "message": "Invalid credentials."
                                             });
                                             return;
                                         } else if (retCode === -5002) {
-                                            res.send(500, {
+                                            res.status(500).send( {
                                                 "message": "Unknown Exeption Occured. Code : " + retCode
                                             });
                                             return;
                                         } else {
-                                            res.send(500, {
+                                            res.status(500).send( {
                                                 "message": "Unknown Exeption Occured. Code : " + retCode
                                             });
                                             return;
@@ -3076,7 +3076,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     chef.runKnifeWinrmCmd('mkdir ' + remotePath + ' && ' + cmdString, chefClientOptions, function(err, retCode) {
 
                                         if (err) {
-                                            res.send(500, {
+                                            res.status(500).send( {
                                                 "message": "Unable to winrm"
                                             });
                                             return;
@@ -3087,22 +3087,22 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                 "message": "true"
                                             });
                                         } else if (retCode === -5000) {
-                                            res.send(500, {
+                                            res.status(500).send( {
                                                 "message": "Host Unreachable."
                                             });
                                             return;
                                         } else if (retCode === -5001) {
-                                            res.send(500, {
+                                            res.status(500).send( {
                                                 "message": "Invalid credentials."
                                             });
                                             return;
                                         } else if (retCode === -5002) {
-                                            res.send(500, {
+                                            res.status(500).send( {
                                                 "message": "Unknown Exeption Occured while trying knife winrm. Code : " + retCode
                                             });
                                             return;
                                         } else {
-                                            res.send(500, {
+                                            res.status(500).send( {
                                                 "message": "Unknown Exeption Occured while trying knife winrm. Code : " + retCode
                                             });
                                             return;
@@ -3118,7 +3118,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                             });
                         } else {
-                            res.send(500, errorResponses.db.error);
+                            res.status(500).send( errorResponses.db.error);
                             return;
                         }
                     });
@@ -3154,7 +3154,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         instancesDao.getInstanceById(req.params.instanceId, function(err, instances) {
             if (err) {
                 logger.error("Failed to fetch ActionLogs: ", err);
-                res.send(500, {
+                res.status(500).send( {
                     message: "DB error"
                 });
                 return;
@@ -3168,7 +3168,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             var instance = instances[0];
             credentialCryptography.decryptCredential(instance.credentials, function(err, decryptedCredentials) {
                 if (err) {
-                    res.send(500, {
+                    res.status(500).send( {
                         message: "error occured while decrypting credentials"
                     });
                     return;
@@ -3206,7 +3206,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         });
                     }
                     if (err) {
-                        res.send(500, {
+                        res.status(500).send( {
                             message: "Unable to run service cmd on instance"
                         });
                         return;
@@ -3216,7 +3216,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             message: "cmd ran successfully"
                         });
                     } else {
-                        res.send(500, {
+                        res.status(500).send( {
                             message: "cmd failed. code : " + ret
                         });
                     }

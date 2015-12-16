@@ -8,13 +8,13 @@ module.exports.setRoutes = function(app) {
         // logger.debug(' chef exec -==>',req.body);
         ChefClientExecution.getExecutionById(req.params.executionId, function(err, chefClientExecution) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             if(chefClientExecution) {
             	chefClientExecution.update(req.body.message,req.body.jsonAttribute,function(err,data){
                     if(err) {
-                    	res.send(500,errorResponses.db.error);
+                    	res.status(500).send(errorResponses.db.error);
                     	return;
                     }
                     res.send(200,{
@@ -33,7 +33,7 @@ module.exports.setRoutes = function(app) {
 
         ChefClientExecution.getExecutionById(req.params.executionId, function(err, chefClientExecution) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             if(chefClientExecution) {

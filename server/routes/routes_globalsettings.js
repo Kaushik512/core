@@ -20,7 +20,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.get('/globalsettings', function(req, res) {
         GlobalSettings.getGolbalSettings(function(err, globalSettings) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             if (globalSettings) {
@@ -35,7 +35,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         logger.debug("Got GlobalSettings data: ", JSON.stringify(req.body.aGlobalSettings));
         GlobalSettings.createNew(req.body.aGlobalSettings, function(err, globalSettings) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             if (globalSettings) {
@@ -50,7 +50,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         logger.debug("Got GlobalSettings data: ", JSON.stringify(req.body.aGlobalSettings));
         GlobalSettings.getGolbalSettingsById(req.params.gSettingsId, function(err, globalSettings) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             if(!globalSettings){
@@ -59,7 +59,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             }
             GlobalSettings.updateSettings(req.params.gSettingsId, req.body.aGlobalSettings, function(err, globalSettings) {
                 if (err) {
-                    res.send(500, errorResponses.db.error);
+                    res.status(500).send( errorResponses.db.error);
                     return;
                 }
                 res.send(200,"Success");
@@ -75,7 +75,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.get('/globalsettings/:gSettingsId', function(req, res) {
         GlobalSettings.getGolbalSettingsById(req.params.gSettingsId, function(err, globalSettings) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             if (globalSettings) {
@@ -92,7 +92,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.delete('/globalsettings/:gSettingsId', function(req, res) {
         GlobalSettings.getGolbalSettingsById(req.params.gSettingsId, function(err, globalSettings) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             if (globalSettings) {

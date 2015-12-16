@@ -750,7 +750,7 @@ module.exports.setRoutes = function(app, socketIo) {
                                                 keys.push(aProvider.secretKey);
                                                 cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
                                                     if (err) {
-                                                        res.send(500, "Failed to decrypt accessKey or secretKey");
+                                                        res.status(500).send( "Failed to decrypt accessKey or secretKey");
                                                         return;
                                                     }
                                                     var ec2 = new EC2({

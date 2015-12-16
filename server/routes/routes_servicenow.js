@@ -22,7 +22,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
         CMDBConfig.getCMDBServerById(req.params.serverId, function(err, data) {
             if (err) {
                 logger.error("Error getCMDBServerById..", err);
-                res.send(500, err);
+                res.status(500).send( err);
                 return;
             }
             logger.debug("getCMDBServerById response ok");
@@ -39,7 +39,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
                 if (err) {
                     logger.error("Error in Getting Servicenow Config Items:", err);
-                    res.send(500, err);
+                    res.status(500).send( err);
                     return;
                 }
 
@@ -78,7 +78,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
         CMDBConfig.getCMDBServerById(req.params.serverId, function(err, data) {
             if (err) {
                 logger.error("Error getCMDBServerById", err);
-                res.send(500, err);
+                res.status(500).send( err);
                 return;
             }
 
@@ -495,7 +495,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             logger.debug("Saving config");
             if (err) {
                 logger.error("Error saving CMDB config:", err);
-                res.send(500, "Failed to save Org.");
+                res.status(500).send( "Failed to save Org.");
                 return;
             }
 
@@ -529,7 +529,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             logger.debug("Upadted config");
             if (err) {
                 logger.error("Error updating CMDB config:", err);
-                res.send(500, "Failed to update CMDB config.");
+                res.status(500).send( "Failed to update CMDB config.");
                 return;
             }
 
@@ -576,7 +576,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
         CMDBConfig.removeServerById(req.params.id, function(err, data) {
             if (err) {
                 logger.error("Failed to remove item (%s)", err);
-                res.send(500, err);
+                res.status(500).send( err);
                 return;
             }
             logger.debug("Exit removeInstancebyId (%s)", req.params.id);

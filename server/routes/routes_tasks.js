@@ -25,7 +25,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     app.get('/tasks/history/list/all', function(req, res) {
         TaskHistory.listHistory(function(err, tHistories) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             res.send(tHistories);
@@ -35,7 +35,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     app.get('/tasks/list/all', function(req, res) {
         Tasks.listTasks(function(err, tasks) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             res.send(tasks);
@@ -46,7 +46,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         Tasks.getTaskById(req.params.taskId, function(err, task) {
             if (err) {
                 logger.error(err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             if (task) {
@@ -54,7 +54,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     configmgmtDao.getJenkinsDataFromId(task.taskConfig.jenkinsServerId, function(err, jenkinsData) {
                         if (err) {
                             logger.error('jenkins list fetch error', err);
-                            res.send(500, errorResponses.db.error);
+                            res.status(500).send( errorResponses.db.error);
                             return;
                         } else {
                             if (!(jenkinsData && jenkinsData.length)) {
@@ -87,14 +87,14 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
             if (err) {
                 logger.error(err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
 
             task.execute(req.session.user.cn, req.protocol + '://' + req.get('host'), choiceParam,nexusData, function(err, taskRes, historyData) {
                 if (err) {
                     logger.error(err);
-                    res.send(500, err);
+                    res.status(500).send( err);
                     return;
                 }
                 if (historyData) {
@@ -110,7 +110,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         Application.getBuildsByTaskId(req.params.taskId, function(err, builds) {
             if (err) {
                 logger.error(err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             if (builds && builds.length) {
@@ -122,13 +122,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 instancesDao.removeTaskIdFromAllInstances(req.params.taskId, function(err, deleteCount) {
                     if (err) {
                         logger.error(err);
-                        res.send(500, errorResponses.db.error);
+                        res.status(500).send( errorResponses.db.error);
                         return;
                     }
                     Tasks.removeTaskById(req.params.taskId, function(err, deleteCount) {
                         if (err) {
                             logger.error(err);
-                            res.send(500, errorResponses.db.error);
+                            res.status(500).send( errorResponses.db.error);
                             return;
                         }
                         if (deleteCount) {
@@ -149,7 +149,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         Tasks.getTaskById(req.params.taskId, function(err, data) {
             if (err) {
                 logger.error(err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             if (data) {
@@ -166,7 +166,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         Tasks.getTaskById(req.params.taskId, function(err, task) {
             if (err) {
                 logger.error(err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             if (task) {
@@ -186,7 +186,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     TaskHistory.getLast100HistoriesByTaskId(req.params.taskId, function(err, histories) {
                         if (err) {
                             logger.debug(errorResponses.db.error);
-                            res.send(500, errorResponses.db.error);
+                            res.status(500).send( errorResponses.db.error);
                             return;
                         }
                         //logger.debug("---100 Last histories------",JSON.stringify(histories));
@@ -260,7 +260,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                     if (count === jobResult.length) {
                                                         task.getHistory(function(err, tHistories) {
                                                             if (err) {
-                                                                res.send(500, errorResponses.db.error);
+                                                                res.status(500).send( errorResponses.db.error);
                                                                 return;
                                                             }
                                                             res.send(tHistories);
@@ -272,7 +272,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 if (count === jobResult.length) {
                                                     task.getHistory(function(err, tHistories) {
                                                         if (err) {
-                                                            res.send(500, errorResponses.db.error);
+                                                            res.status(500).send( errorResponses.db.error);
                                                             return;
                                                         }
                                                         res.send(tHistories);
@@ -285,7 +285,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 } else {
                                     task.getHistory(function(err, tHistories) {
                                         if (err) {
-                                            res.send(500, errorResponses.db.error);
+                                            res.status(500).send( errorResponses.db.error);
                                             return;
                                         }
                                         res.send(tHistories);
@@ -356,7 +356,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 if (count1 === jobResult.length) {
                                                     task.getHistory(function(err, tHistories) {
                                                         if (err) {
-                                                            res.send(500, errorResponses.db.error);
+                                                            res.status(500).send( errorResponses.db.error);
                                                             return;
                                                         }
                                                         res.send(tHistories);
@@ -375,7 +375,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     logger.debug("Else part...");
                     task.getHistory(function(err, tHistories) {
                         if (err) {
-                            res.send(500, errorResponses.db.error);
+                            res.status(500).send( errorResponses.db.error);
                             return;
                         }
                         res.send(tHistories);
@@ -392,7 +392,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         Tasks.getTaskById(req.params.taskId, function(err, task) {
             if (err) {
                 logger.error(err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             if (!task) {
@@ -404,7 +404,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
             task.getHistoryById(req.params.historyId, function(err, history) {
                 if (err) {
-                    res.send(500, {
+                    res.status(500).send( {
                         message: "Server Behaved Unexpectedly"
                     });
                     return;
@@ -425,7 +425,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         Tasks.getTaskByIds(req.body.taskIds, function(err, data) {
             if (err) {
                 logger.error(err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             if (data) {
@@ -454,7 +454,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         Tasks.updateTaskById(req.params.taskId, taskData, function(err, updateCount) {
             if (err) {
                 logger.error(err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             if (updateCount) {
@@ -471,7 +471,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         Tasks.getTaskById(req.params.taskId, function(err, data) {
             if (err) {
                 logger.error(err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             if (data) {
@@ -486,7 +486,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     Tasks.updateJobUrl(req.params.taskId, tConfig, function(err, updateCount) {
                         if (err) {
                             logger.error(err);
-                            res.send(500, errorResponses.db.error);
+                            res.status(500).send( errorResponses.db.error);
                             return;
                         }
                         if (updateCount) {

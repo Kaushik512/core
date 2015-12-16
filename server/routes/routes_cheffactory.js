@@ -11,7 +11,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
         masterUtil.getCongifMgmtsById(req.params.serverId, function(err, infraManagerDetails) {
             if (err) {
-                res.send(500, {
+                res.status(500).send( {
                     message: "Server Behaved Unexpectedly"
                 });
                 return;
@@ -47,7 +47,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
         var chefFactory = req.chefFactory;
         chefFactory.sync(function(err, cookbooks) {
             if (err) {
-                res.send(500, {
+                res.status(500).send( {
                     message: "Server Behaved Unexpectedly"
                 });
                 return;
@@ -61,7 +61,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
         var chefFactory = req.chefFactory;
         chefFactory.getCookbookData(path, function(err, cookbookData) {
             if (err) {
-                res.send(500, {
+                res.status(500).send( {
                     message: "Server Behaved Unexpectedly"
                 });
                 return;
@@ -83,7 +83,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 if (err.stdErrMsg) {
                     errRespJson.stdErrMsg = err.stdErrMsg;
                 }
-                res.send(500, errRespJson);
+                res.status(500).send( errRespJson);
                 return;
             }
             res.send(200);
@@ -96,7 +96,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
         logger.debug('path ===> ',path);
         chefFactory.getRoleData(path, function(err, cookbookData) {
             if (err) {
-                res.send(500, {
+                res.status(500).send( {
                     message: "Server Behaved Unexpectedly"
                 });
                 return;
@@ -118,7 +118,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 if (err.stdErrMsg) {
                     errRespJson.stdErrMsg = err.stdErrMsg;
                 }
-                res.send(500, errRespJson);
+                res.status(500).send( errRespJson);
                 return;
             }
             res.send(200);
@@ -131,7 +131,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
         var chefFactory = req.chefFactory;
         chefFactory.getFactoryItems(function(err, factoryItems) {
             if (err) {
-                res.send(500, {
+                res.status(500).send( {
                     message: "Server Behaved Unexpectedly"
                 });
                 return;
@@ -151,7 +151,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
         var jobTracker;
 
         if (!((cookbooks && cookbooks.length) || (roles && roles.length))) {
-            res.send(400, {
+            res.status(400).send( {
                 message: "cookbooks/roles list is empty"
             });
             return;
@@ -224,7 +224,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
         longJobTracker.getTaskStatus(null, function(err, obj) {
             if (err) {
-                res.send(500, {
+                res.status(500).send( {
                     message: "unable to initialize Job tracker"
                 });
                 return;

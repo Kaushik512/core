@@ -134,7 +134,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 }
                 blueprintData.cloudFormationData = cloudFormationData;
             } else {
-                res.send(400, {
+                res.status(400).send( {
                     message: "Invalid Blueprint Type"
                 });
                 return;
@@ -149,7 +149,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             Blueprints.createNew(blueprintData, function(err, data) {
                 if (err) {
                     logger.error('error occured while saving blueorint', err);
-                    res.send(500, {
+                    res.status(500).send( {
                         message: "DB error"
                     });
                     return;
@@ -179,13 +179,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         Blueprints.getById(req.params.blueprintId, function(err, blueprint) {
             if (err) {
                 logger.error("Failed to get blueprint versions ", err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             blueprint.update(blueprintUpdateData, function(err, updatedBlueprint) {
                 if (err) {
                     logger.error("Failed to update blueprint ", err);
-                    res.send(500, errorResponses.db.error);
+                    res.status(500).send( errorResponses.db.error);
                     return;
                 }
                 var latestVersionData = updatedBlueprint.getLatestVersion();
@@ -209,7 +209,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         Blueprints.getById(req.params.blueprintId, function(err, blueprint) {
             if (err) {
                 logger.error("Failed to get blueprint versions ", err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             logger.debug(blueprint);
@@ -227,7 +227,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         Blueprints.removeById(req.params.blueprintId, function(err, data) {
             if (err) {
                 logger.error("Failed to delete blueprint ", err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             res.send(200, {
@@ -246,7 +246,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 res.send(200);
                 return;
             } else {
-                res.send(400, {
+                res.status(400).send( {
                     message: err
                 });
                 return;
@@ -260,7 +260,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         //verifying if the user has permission
         logger.debug('Verifying User permission set for execute.');
         if (!req.query.envId) {
-            res.send(400, {
+            res.status(400).send( {
                 "message": "Invalid Environment Id"
             });
             return;
@@ -279,7 +279,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     Blueprints.getById(req.params.blueprintId, function(err, blueprint) {
                         if (err) {
                             logger.error('Failed to getBlueprint. Error = ', err);
-                            res.send(500, errorResponses.db.error);
+                            res.status(500).send( errorResponses.db.error);
                             return;
                         }
                         if (!blueprint) {
@@ -298,7 +298,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 return;
                             }
                             if (!envName) {
-                                res.send(500, {
+                                res.status(500).send( {
                                     "message": "Unable to find environment name from environment id"
                                 });
                                 return;
@@ -328,7 +328,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 if (blueprint.blueprintType === 'instance_launch') {
                                     var version = blueprint.getVersionData(req.query.version);
                                     if (!version) {
-                                        res.send(400, {
+                                        res.status(400).send( {
                                             message: "No blueprint version available"
                                         });
                                         return;
@@ -337,7 +337,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     instancesDao.findByProviderId(cloudProvider.cloudProviderId, function(err, instances) {
                                         if (err) {
                                             logger.error("Unable to fetch instance by providerId ", err);
-                                            res.send(500, {
+                                            res.status(500).send( {
                                                 message: "Server Behaved Unexpectedly"
                                             });
                                             return;
@@ -350,7 +350,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         }
 
                                         if (maxCount !== 0 && instances.length + cloudProvider.cloudProviderData.instanceCount > maxCount) {
-                                            res.send(500, {
+                                            res.status(500).send( {
                                                 message: "Instance limit reached"
                                             });
                                             return;
@@ -359,14 +359,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         VMImage.getImageById(cloudProvider.cloudProviderData.imageId, function(err, anImage) {
                                             if (err) {
                                                 logger.error(err);
-                                                res.send(500, errorResponses.db.error);
+                                                res.status(500).send( errorResponses.db.error);
                                                 return;
                                             }
                                             logger.debug("Loaded Image -- : >>>>>>>>>>> %s", anImage.providerId);
                                             AWSProvider.getAWSProviderById(anImage.providerId, function(err, aProvider) {
                                                 if (err) {
                                                     logger.error(err);
-                                                    res.send(500, errorResponses.db.error);
+                                                    res.status(500).send( errorResponses.db.error);
                                                     return;
                                                 }
 
@@ -377,7 +377,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                 AWSKeyPair.getAWSKeyPairById(cloudProvider.cloudProviderData.keyPairId, function(err, aKeyPair) {
                                                     if (err) {
                                                         logger.error(err);
-                                                        res.send(500, errorResponses.db.error);
+                                                        res.status(500).send( errorResponses.db.error);
                                                         return;
                                                     }
                                                     var cryptoConfig = appConfig.cryptoSettings;
@@ -387,7 +387,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     keys.push(aProvider.secretKey);
                                                     cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
                                                         if (err) {
-                                                            res.send(500, "Failed to decrypt accessKey or secretKey");
+                                                            res.status(500).send( "Failed to decrypt accessKey or secretKey");
                                                             return;
                                                         }
 
@@ -786,7 +786,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 } else if (blueprint.blueprintType === 'aws_cf') {
                                     var stackName = req.query.stackName;
                                     if (!stackName) {
-                                        res.send(400, {
+                                        res.status(400).send( {
                                             message: "Invalid stack name"
                                         });
                                         return;
@@ -794,7 +794,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     AWSProvider.getAWSProviderById(blueprint.blueprintConfig.cloudProviderId, function(err, aProvider) {
                                         if (err) {
                                             logger.error("Unable to fetch provide", err);
-                                            res.send(500, errorResponses.db.error);
+                                            res.status(500).send( errorResponses.db.error);
                                             return;
                                         }
                                         var cryptoConfig = appConfig.cryptoSettings;
@@ -804,7 +804,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         keys.push(aProvider.secretKey);
                                         cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
                                             if (err) {
-                                                res.send(500, {
+                                                res.status(500).send( {
                                                     message: "Failed to decrypt accessKey or secretKey"
                                                 });
                                                 return;
@@ -817,7 +817,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                             fileIo.readFile(chefRepoPath + 'catalyst_files/' + templateFile, function(err, fileData) {
                                                 if (err) {
                                                     logger.error("Unable to read template file " + templateFile, err);
-                                                    res.send(500, {
+                                                    res.status(500).send( {
                                                         message: "Unable to read template file"
                                                     });
                                                     return;
@@ -843,7 +843,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     }, function(err, stackData) {
                                                         if (err) {
                                                             logger.error("Unable to launch CloudFormation Stack", err);
-                                                            res.send(500, {
+                                                            res.status(500).send( {
                                                                 message: "Unable to launch CloudFormation Stack"
                                                             });
                                                             return;
@@ -852,7 +852,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         awsCF.getStack(stackData.StackId, function(err, stack) {
                                                             if (err) {
                                                                 logger.error("Unable to get stack details", err);
-                                                                res.send(500, {
+                                                                res.status(500).send( {
                                                                     "message": "Error occured while fetching stack status"
                                                                 });
                                                                 return;
@@ -917,7 +917,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                 }, function(err, cloudFormation) {
                                                                     if (err) {
                                                                         logger.error("Unable to save CloudFormation data in DB", err);
-                                                                        res.send(500, errorResponses.db.error);
+                                                                        res.status(500).send( errorResponses.db.error);
                                                                         return;
                                                                     }
                                                                     res.send(200, {
@@ -1348,7 +1348,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                 });
 
                                                             } else {
-                                                                res.send(500, {
+                                                                res.status(500).send( {
                                                                     "message": "Error occured while fetching stack status"
                                                                 });
                                                                 return;
@@ -1396,7 +1396,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     logger.debug(req.query.version);
                                     var version = blueprint.getVersionData(req.query.version);
                                     if (!version) {
-                                        res.send(400, {
+                                        res.status(400).send( {
                                             message: "No blueprint version available"
                                         });
                                         return;
@@ -1441,7 +1441,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                             openstack.createServer(openstackconfig.tenantId, launchparams, function(err, instanceData) {
                                                 if (err) {
                                                     logger.error('openstack createServer error', err);
-                                                    res.send(500, err);
+                                                    res.status(500).send( err);
                                                     return;
                                                 }
                                                 logger.debug('OS Launched');
@@ -1660,7 +1660,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     logger.debug(req.query.version);
                                     var version = blueprint.getVersionData(req.query.version);
                                     if (!version) {
-                                        res.send(400, {
+                                        res.status(400).send( {
                                             message: "No blueprint version available"
                                         });
                                         return;
@@ -1706,7 +1706,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                             hppubliccloud.createServer(hppubliccloudconfig.tenantId, launchparams, function(err, instanceData) {
                                                 if (err) {
                                                     logger.error('hppubliccloud createServer error', err);
-                                                    res.send(500, err);
+                                                    res.status(500).send( err);
                                                     return;
                                                 }
                                                 logger.debug('OS Launched');
@@ -1916,7 +1916,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     logger.debug(req.query.version);
                                     var version = blueprint.getVersionData(req.query.version);
                                     if (!version) {
-                                        res.send(400, {
+                                        res.status(400).send( {
                                             message: "No blueprint version available"
                                         });
                                         return;
@@ -1942,7 +1942,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                                                 if (err) {
                                                     logger.error(err);
-                                                    res.send(500, errorResponses.db.error);
+                                                    res.status(500).send( errorResponses.db.error);
                                                     return;
                                                 }
                                                 anImage = JSON.parse(JSON.stringify(anImage));
@@ -2008,7 +2008,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         azureCloud.createServer(launchparams, function(err, instanceData) {
                                                             if (err) {
                                                                 logger.error('azure createServer error', err);
-                                                                res.send(500, err);
+                                                                res.status(500).send( err);
                                                                 return;
                                                             }
 
@@ -2020,7 +2020,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                             credentialcryptography.encryptCredential(credentials, function(err, encryptedCredentials) {
                                                                 if (err) {
                                                                     logger.error('azure encryptCredential error', err);
-                                                                    res.send(500, err);
+                                                                    res.status(500).send( err);
                                                                     return;
                                                                 }
                                                                 logger.debug('Credentials encrypted..');
@@ -2347,7 +2347,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     logger.debug(req.query.version);
                                     var version = blueprint.getVersionData(req.query.version);
                                     if (!version) {
-                                        res.send(400, {
+                                        res.status(400).send( {
                                             message: "No blueprint version available"
                                         });
                                         return;
@@ -2382,7 +2382,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                                                         vmwareCloud.createServer(appConfig.vmware.serviceHost, anImage.imageIdentifier, serverjson, function(err, createserverdata) {
                                                             if (err) {
-                                                                res.send(500, {
+                                                                res.status(500).send( {
                                                                     message: "Server Behaved Unexpectedly"
                                                                 });
                                                                 return;
@@ -2397,7 +2397,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                 credentialcryptography.encryptCredential(credentials, function(err, encryptedCredentials) {
                                                                     if (err) {
                                                                         logger.error('vmware encryptCredential error', err);
-                                                                        res.send(500, err);
+                                                                        res.status(500).send( err);
                                                                         return;
                                                                     }
 
@@ -2711,7 +2711,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 
                                 } else {
-                                    res.send(400, {
+                                    res.status(400).send( {
                                         message: "Invalid Blueprint Type"
                                     })
                                 }

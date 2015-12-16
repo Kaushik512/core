@@ -32,7 +32,7 @@ buildSchema.methods.execute = function(user, baseUrl, callback) {
     Task.getTaskById(self.taskId, function(err, task) {
         if (err) {
             logger.error(err);
-            res.send(500, errorResponses.db.error);
+            res.status(500).send( errorResponses.db.error);
             return;
         }
         var buildHistory;

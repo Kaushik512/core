@@ -34,7 +34,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
         configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
             if (err) {
                 logger.debug(err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             if (!chefDetails) {
@@ -50,12 +50,12 @@ module.exports.setRoutes = function(app, verificationFunc) {
             });
             chef.getNodesList(function(err, nodeList) {
                 if (err) {
-                    res.send(500, errorResponses.chef.connectionError);
+                    res.status(500).send( errorResponses.chef.connectionError);
                     return;
                 } else {
                     instancesDao.getInstancesFilterByChefServerIdAndNodeNames(req.params.serverId, nodeList, function(err, instances) {
                         if (err) {
-                            res.send(500, errorResponses.chef.connectionError);
+                            res.status(500).send( errorResponses.chef.connectionError);
                             return;
                         }
                         if (instances && instances.length) {
@@ -92,7 +92,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
         configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
             if (err) {
                 logger.debug(err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             if (!chefDetails) {
@@ -108,7 +108,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             });
             chef.getEnvironmentsList(function(err, environmentsList) {
                 if (err) {
-                    res.send(500, errorResponses.chef.connectionError);
+                    res.status(500).send( errorResponses.chef.connectionError);
                     return;
                 } else {
                     res.send(environmentsList);
@@ -479,7 +479,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             });
             chef.createEnvironment(req.body.envName, function(err, envName) {
                 if (err) {
-                    res.send(500, "Error to create Env on chef.");
+                    res.status(500).send( "Error to create Env on chef.");
                     return;
                 } else if (envName === 409) {
                     logger.debug("Got 409");
@@ -603,7 +603,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
     app.post('/chef/servers/:serverId/attributes', function(req, res) {
 
         if (!((req.body.cookbooks && req.body.cookbooks.length) || (req.body.roles && req.body.roles.length))) {
-            res.send(400, {
+            res.status(400).send( {
                 message: "Invalid cookbooks or roles"
             });
             return;
@@ -713,11 +713,11 @@ module.exports.setRoutes = function(app, verificationFunc) {
         configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
             if (err) {
                 logger.debug(err);
-                res.send(500, errorResponses.chef.corruptChefData);
+                res.status(500).send( errorResponses.chef.corruptChefData);
                 return;
             }
             if (!chefDetails) {
-                res.send(500, errorResponses.chef.corruptChefData);
+                res.status(500).send( errorResponses.chef.corruptChefData);
                 return;
             }
             var chef = new Chef({
@@ -807,15 +807,15 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     chef.createDataBag(req.body.name, function(err, dataBag) {
                         if (err) {
                             logger.debug("Exit /chef/../databag/create");
-                            res.send(500, "Failed to create Data Bag on Chef.");
+                            res.status(500).send( "Failed to create Data Bag on Chef.");
                             return;
                         } else if (dataBag === 409) {
                             logger.debug("Exit /chef/../databag/create");
-                            res.send(500, "Data Bag already exist on Chef.");
+                            res.status(500).send( "Data Bag already exist on Chef.");
                             return;
                         } else if (dataBag === 400) {
                             logger.debug("Exit /chef/../databag/create");
-                            res.send(400, "Name can only contain lowercase letters, numbers, hyphens, and underscores.");
+                            res.status(400).send( "Name can only contain lowercase letters, numbers, hyphens, and underscores.");
                             return;
                         }
                         logger.debug("Exit /chef/../databag/create");
@@ -855,7 +855,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             chef.getDataBags(function(err, dataBags) {
                 if (err) {
                     logger.debug("Exit /chef/../databag/list");
-                    res.send(500, "Failed to get Data Bag from Chef.");
+                    res.status(500).send( "Failed to get Data Bag from Chef.");
                     return;
                 }
                 logger.debug("Exit /chef/../databag/list");
@@ -892,11 +892,11 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     chef.deleteDataBag(req.params.dataBagName, function(err, statusCode) {
                         if (err) {
                             logger.debug("Exit /chef/../databag/../delete");
-                            res.send(500, "Failed to delete Data Bag on Chef.");
+                            res.status(500).send( "Failed to delete Data Bag on Chef.");
                             return;
                         } else if (statusCode === 404) {
                             logger.debug("Exit /chef/../databag/../delete");
-                            res.send(500, "No Data Bag found on Chef.");
+                            res.status(500).send( "No Data Bag found on Chef.");
                             return;
                         }
                         logger.debug("Exit /chef/../databag/../delete");
@@ -923,7 +923,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 logger.debug("Got permission to create DataBagItem: ", isPermitted);
                 configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
                     if (err) {
-                        res.send(500, "Error to get chef detail.");
+                        res.status(500).send( "Error to get chef detail.");
                         return;
                     }
                     if (!chefDetails) {
@@ -940,7 +940,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     logger.debug("Chef...>>>>>>>>>>>>>>>>>>> ", JSON.stringify(chef));
                     logger.debug("Id check: ", JSON.stringify(req.body));
                     if (typeof req.body.id === 'undefined' || req.body.id.length === 0) {
-                        res.send(400, "Id can't be empty.");
+                        res.status(400).send( "Id can't be empty.");
                         return;
                     }
                     var dataBagItem;
@@ -958,18 +958,18 @@ module.exports.setRoutes = function(app, verificationFunc) {
                         dataBagItem = JSON.parse(JSON.stringify(dataBagItem));
                     } catch (e) {
                         logger.debug("error: ", e);
-                        res.send(500, "Invalid Json for Data Bag item.");
+                        res.status(500).send( "Invalid Json for Data Bag item.");
                         return;
                     }
                     chef.createDataBagItem(req, dataBagItem, function(err, dataBagItem) {
                         if (err) {
                             logger.debug("Exit /chef/../databag/../item/create");
-                            res.send(500, "Failed to create Data Bag Item on Chef.");
+                            res.status(500).send( "Failed to create Data Bag Item on Chef.");
                             return;
                         }
                         if (dataBagItem === 409) {
                             logger.debug("Exit /chef/../databag/../item/create");
-                            res.send(500, "Data Bag Item already exist on Chef.");
+                            res.status(500).send( "Data Bag Item already exist on Chef.");
                             return;
                         }
                         if (dataBagItem === 403) {
@@ -1015,7 +1015,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             chef.getDataBagItems(req.params.dataBagName, function(err, dataBagItems) {
                 if (err) {
                     logger.debug("Exit /chef/../databag/item/list");
-                    res.send(500, "Failed to get Data Bag from Chef.");
+                    res.status(500).send( "Failed to get Data Bag from Chef.");
                     return;
                 }
                 logger.debug("Exit /chef/../databag/item/list");
@@ -1073,13 +1073,13 @@ module.exports.setRoutes = function(app, verificationFunc) {
                         dataBagItem = JSON.parse(JSON.stringify(dataBagItem));
                     } catch (e) {
                         logger.debug("error: ", e);
-                        res.send(500, "Invalid Json for Data Bag item.");
+                        res.status(500).send( "Invalid Json for Data Bag item.");
                         return;
                     }
                     chef.updateDataBagItem(req, dataBagItem, function(err, dataBagItem) {
                         if (err) {
                             logger.debug("Exit /chef/../databag/../item/update");
-                            res.send(500, "Failed to update Data Bag Item on Chef.");
+                            res.status(500).send( "Failed to update Data Bag Item on Chef.");
                             return;
                         }
                         if (dataBagItem === 403) {
@@ -1128,7 +1128,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     chef.deleteDataBagItem(req.params.dataBagName, req.params.itemName, function(err, dataBagItem) {
                         if (err) {
                             logger.debug("Exit /chef/../databag/../item/delete");
-                            res.send(500, "Failed to delete Data Bag Item on Chef.");
+                            res.status(500).send( "Failed to delete Data Bag Item on Chef.");
                             return;
                         }
                         logger.debug("Exit /chef/../databag/../item/delete");
@@ -1168,7 +1168,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             chef.getDataBagItemById(req.params.dataBagName, req.params.itemId, function(err, dataBagItem) {
                 if (err) {
                     logger.debug("Exit /chef/../databag/../item/find");
-                    res.send(500, "Failed to find Data Bag Item on Chef.");
+                    res.status(500).send( "Failed to find Data Bag Item on Chef.");
                     return;
                 }
                 logger.debug("Exit /chef/../databag/../item/find");
@@ -1202,7 +1202,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             chef.deleteEnvironment(req.params.envName, function(err, env) {
                 if (err) {
                     logger.debug("Exit /chef/../environments ", err);
-                    res.send(500, "Failed to delete environments on Chef.");
+                    res.status(500).send( "Failed to delete environments on Chef.");
                     return;
                 }
                 logger.debug("Exit /chef/../environments");

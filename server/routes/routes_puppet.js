@@ -20,7 +20,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
         if(req.params.puppetServerId) {
             next();
         } else {
-            res.send(400,{
+            res.status(400).send({
                 message:"Invalid puppet server id"
             })
             return;
@@ -32,7 +32,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
         masterUtil.getCongifMgmtsById(req.params.puppetServerId, function(err, puppetData) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             logger.debug('puppet db ==> ', puppetData);
@@ -50,7 +50,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
         masterUtil.getCongifMgmtsById(req.params.puppetServerId, function(err, puppetData) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             logger.debug('puppet db ==> ', puppetData);
@@ -74,7 +74,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             var puppet = new Puppet(puppetSettings);
             puppet.getEnvironments(function(err, data) {
                 if (err) {
-                    res.send(500, err);
+                    res.status(500).send( err);
                     return;
                 }
                 res.send(200, data);
@@ -86,7 +86,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
     app.post('/puppet/:puppetServerId/environments', function(req, res) {
         masterUtil.getCongifMgmtsById(req.params.puppetServerId, function(err, puppetData) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             logger.debug('puppet db ==> ', puppetData);
@@ -111,7 +111,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             var puppet = new Puppet(puppetSettings);
             puppet.createEnvironment(req.body.envName, function(err, data) {
                 if (err) {
-                    res.send(500, err);
+                    res.status(500).send( err);
                     return;
                 }
                 res.send(200, data);
@@ -123,7 +123,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
     app.get('/puppet/:puppetServerId/nodes', function(req, res) {
         masterUtil.getCongifMgmtsById(req.params.puppetServerId, function(err, puppetData) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             logger.debug('puppet db ==> ', puppetData);
@@ -147,7 +147,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             var puppet = new Puppet(puppetSettings);
             puppet.getNodesList(function(err, data) {
                 if (err) {
-                    res.send(500, err);
+                    res.status(500).send( err);
                     return;
                 }
                 res.send(200, data);
@@ -160,7 +160,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
     app.get('/puppet/:puppetServerId/nodes/:nodeName', function(req, res) {
         masterUtil.getCongifMgmtsById(req.params.puppetServerId, function(err, puppetData) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             logger.debug('puppet db ==> ', puppetData);
@@ -184,7 +184,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             var puppet = new Puppet(puppetSettings);
             puppet.getNode(req.params.nodeName, function(err, data) {
                 if (err) {
-                    res.send(500, err);
+                    res.status(500).send( err);
                     return;
                 }
                 res.send(200, data);

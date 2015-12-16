@@ -35,7 +35,6 @@ var MasterUtil = function() {
                 var errOccured = false;
                 for (var x = 0; x < users.length; x++) {
                     (function(countUser) {
-                        logger.debug("x+++++++++++++++++++++++ ", countUser);
                         if (users[countUser].id === '7') {
                             usrCount++;
                             var orgIds = users[countUser].orgname_rowid;
@@ -54,7 +53,6 @@ var MasterUtil = function() {
                                     if (orgs) {
                                         for (var y = 0; y < orgs.length; y++) {
                                             (function(countOrg) {
-                                                logger.debug("y++++++++++++++++ ", countOrg);
                                                 if (orgs[countOrg].id === '1') {
                                                     logger.debug("Able to get Org.", JSON.stringify(orgs[countOrg]));
                                                     orgList.push(orgs[countOrg]);
@@ -135,7 +133,6 @@ var MasterUtil = function() {
                             if (bgs[bgCount].id === '2') {
                                 logger.debug("Returned BG: ", JSON.stringify(bgs[bgCount]));
                                 names = configmgmtDao.convertRowIDToValue(bgs[bgCount].orgname_rowid, rowidlist)
-                                logger.debug("Get bg: ++++++++++++++++++++____________", names);
                                 bgs[bgCount].orgname = names;
                                 productGroupList.push(bgs[bgCount]);
                             }
@@ -216,23 +213,10 @@ var MasterUtil = function() {
                             if (projects[projectCount].id === '4') {
                                 names = configmgmtDao.convertRowIDToValue(projects[projectCount].orgname_rowid, rowidlist);
                                 bgnames = configmgmtDao.convertRowIDToValue(projects[projectCount].productgroupname_rowid, rowidlist);
-                                logger.debug("getProjects===================== ", bgnames);
                                 projects[projectCount].orgname = names;
                                 projects[projectCount].productgroupname = bgnames;
-                                //projectList.push(projects[projectCount]);
-                                logger.debug("pppppppppppppp: ", projects[projectCount].environmentname_rowid);
-                                /*if(typeof projects[projectCount].environmentname_rowid != "undefined"){
-                                var envs = projects[projectCount].environmentname_rowid.split(",");
-                                for(var e = 0;e< envs.length;e++){
-                                    logger.debug("envs:::::::::::::: ",projects[projectCount].environmentname);
-                                    envnames = configmgmtDao.convertRowIDToValue(envs[e], rowidlist);
-                                    allEnvs =allEnvs+","+envnames;
-                                }
-                                allEnvs = allEnvs.substring(1);
-                                projects[projectCount].environmentname = allEnvs;*/
                                 projectList.push(projects[projectCount]);
                             }
-                            // }
                         })(i);
                     }
                     logger.debug("Returned Projects: ", JSON.stringify(projectList));
@@ -467,7 +451,6 @@ var MasterUtil = function() {
                 var errOccured = false;
                 for (var x = 0; x < users.length; x++) {
                     (function(countUser) {
-                        logger.debug("x+++++++++++++++++++++++ ", countUser);
                         if (users[countUser].id === '7') {
                             usrCount++;
                             var orgIds = users[countUser].orgname_rowid;
@@ -486,7 +469,6 @@ var MasterUtil = function() {
                                     if (orgs) {
                                         for (var y = 0; y < orgs.length; y++) {
                                             (function(countOrg) {
-                                                logger.debug("y++++++++++++++++ ", countOrg);
                                                 if (orgs[countOrg].id === '1') {
                                                     logger.debug("Able to get Org.", JSON.stringify(orgs[countOrg]));
                                                     orgList.push(orgs[countOrg]);
@@ -632,7 +614,6 @@ var MasterUtil = function() {
             },
             "id": "7"
         }, function(err, users) {
-            logger.debug("Got user+++++++++++++++++++ ", JSON.stringify(users));
             if (users) {
                 configmgmtDao.getRowids(function(err, rowidlist) {
                     for (var i = 0; i < users.length; i++) {
@@ -723,7 +704,6 @@ var MasterUtil = function() {
                             teamList.push(teams[i]);
                         }
                     }
-                    logger.debug("My team:???????????? ", JSON.stringify(teamList));
                     callback(null, teamList);
                     return;
                 });
@@ -854,7 +834,6 @@ var MasterUtil = function() {
                                 logger.debug("Team array: ", JSON.stringify(teams));
                                 catObj.teams = teams;
                                 var allObj = Object.keys(orgObj);
-                                logger.debug("orgTm>>>>>>>>>>>>>>> ", JSON.stringify(allObj));
                                 for (var tmOrg = 0; tmOrg < allObj.length; tmOrg++) {
                                     loopCount++;
                                     d4dModelNew.d4dModelMastersTeams.find({
@@ -868,7 +847,6 @@ var MasterUtil = function() {
                                             callback(err, null);
                                             return;
                                         }
-                                        logger.debug("allTeams:::::::::::::: ", JSON.stringify(allTeams));
                                         for (var xy = 0; xy < allTeams.length; xy++) {
                                             (function(xy) {
                                                 if (typeof allTeams[xy].orgname_rowid != "undefined" && typeof allTeams[xy].projectname_rowid != "undefined") {
@@ -905,11 +883,11 @@ var MasterUtil = function() {
                                                                 callback(err, null);
                                                             }
                                                             if (project) {
-                                                                logger.debug("Available project:>>>>> ", JSON.stringify(project));
+                                                                logger.debug("Available project: ", JSON.stringify(project));
                                                                 for (var x1 = 0; x1 < project.length; x1++) {
                                                                     if (project[x1].id === '4') {
                                                                         projects.push(project[x1].rowid);
-                                                                        logger.debug("projectList:>>> ", project[x1].rowid);
+                                                                        logger.debug("projectList: ", project[x1].rowid);
                                                                     }
                                                                 }
                                                                 catObj.projects = projects;
@@ -933,7 +911,7 @@ var MasterUtil = function() {
                                                                     returnObj.push(catObj);
                                                                     logger.debug("returnObj: ", returnObj);
                                                                     if (allObj.length === loopCount) {
-                                                                        logger.debug("Condition matched:::::::::::;");
+                                                                        logger.debug("Condition matched:");
                                                                         callback(null, returnObj);
                                                                         return;
                                                                     }
@@ -976,7 +954,6 @@ var MasterUtil = function() {
                         callback(err, null);
                     }
                     if (permissionSet) {
-                        logger.debug("Fetched permissionSet:>>>>>>> ", JSON.stringify(permissionSet));
                         callback(null, permissionSet);
                     } else {
                         callback(null, []);
@@ -1111,13 +1088,10 @@ var MasterUtil = function() {
                             if (projects[projectCount].id === '4') {
                                 names = configmgmtDao.convertRowIDToValue(projects[projectCount].orgname_rowid, rowidlist);
                                 bgnames = configmgmtDao.convertRowIDToValue(projects[projectCount].productgroupname_rowid, rowidlist);
-                                logger.debug("getProjects===================== ", bgnames);
                                 projects[projectCount].orgname = names;
                                 projects[projectCount].productgroupname = bgnames;
-                                //projectList.push(projects[projectCount]);
                                 var envs = projects[projectCount].environmentname_rowid.split(",");
                                 for (var e = 0; e < envs.length; e++) {
-                                    logger.debug("envs:::::::::::::: ", projects[projectCount].environmentname);
                                     envnames = configmgmtDao.convertRowIDToValue(envs[e], rowidlist);
                                     allEnvs = allEnvs + "," + envnames;
                                 }
@@ -1177,7 +1151,6 @@ var MasterUtil = function() {
                 callback(err, null);
                 return;
             }
-            logger.debug("Got Org>>>>>>>>>>>>>>>>>>>>>>: ", JSON.stringify(org));
             d4dModelNew.d4dModelMastersProductGroup.update({
                 orgname_rowid: orgId,
                 id: '2'
@@ -1189,7 +1162,6 @@ var MasterUtil = function() {
                 if (err) {
                     logger.debug("Error to update Settings.");
                 }
-                logger.debug("Settings Updated............. ", JSON.stringify(aBody));
 
                 d4dModelNew.d4dModelMastersProjects.update({
                     orgname_rowid: orgId,
@@ -1202,7 +1174,6 @@ var MasterUtil = function() {
                     if (err) {
                         logger.debug("Error to update Settings.");
                     }
-                    logger.debug("Settings Updated............. ", JSON.stringify(aBody));
 
                     d4dModelNew.d4dModelMastersEnvironments.update({
                         orgname_rowid: orgId,
@@ -1215,7 +1186,6 @@ var MasterUtil = function() {
                         if (err) {
                             logger.debug("Error to update Settings.");
                         }
-                        logger.debug("Settings Updated............. ", JSON.stringify(aBody));
 
                         d4dModelNew.d4dModelMastersConfigManagement.update({
                             orgname_rowid: orgId,
@@ -1228,7 +1198,6 @@ var MasterUtil = function() {
                             if (err) {
                                 logger.debug("Error to update Settings.");
                             }
-                            logger.debug("Settings Updated............. ", JSON.stringify(aBody));
                             d4dModelNew.d4dModelMastersDockerConfig.update({
                                 orgname_rowid: orgId,
                                 id: '18'
@@ -1240,7 +1209,6 @@ var MasterUtil = function() {
                                 if (err) {
                                     logger.debug("Error to update Settings.");
                                 }
-                                logger.debug("Settings Updated............. ", JSON.stringify(aBody));
                                 d4dModelNew.d4dModelMastersUsers.update({
                                     orgname_rowid: orgId,
                                     id: '7'
@@ -1252,7 +1220,6 @@ var MasterUtil = function() {
                                     if (err) {
                                         logger.debug("Error to update Settings.");
                                     }
-                                    logger.debug("Settings Updated............. ", JSON.stringify(aBody));
                                     d4dModelNew.d4dModelMastersUserroles.update({
                                         orgname_rowid: orgId,
                                         id: '6'
@@ -1264,7 +1231,6 @@ var MasterUtil = function() {
                                         if (err) {
                                             logger.debug("Error to update Settings.");
                                         }
-                                        logger.debug("Settings Updated............. ", JSON.stringify(aBody));
                                         d4dModelNew.d4dModelMastersDesignTemplateTypes.update({
                                             orgname_rowid: orgId,
                                             id: '16'
@@ -1276,7 +1242,6 @@ var MasterUtil = function() {
                                             if (err) {
                                                 logger.debug("Error to update Settings.");
                                             }
-                                            logger.debug("Settings Updated............. ", JSON.stringify(aBody));
                                             d4dModelNew.d4dModelMastersTemplatesList.update({
                                                 orgname_rowid: orgId,
                                                 id: '17'
@@ -1288,7 +1253,6 @@ var MasterUtil = function() {
                                                 if (err) {
                                                     logger.debug("Error to update Settings.");
                                                 }
-                                                logger.debug("Settings Updated............. ", JSON.stringify(aBody));
                                                 d4dModelNew.d4dModelMastersServicecommands.update({
                                                     orgname_rowid: orgId,
                                                     id: '19'
@@ -1300,7 +1264,6 @@ var MasterUtil = function() {
                                                     if (err) {
                                                         logger.debug("Error to update Settings.");
                                                     }
-                                                    logger.debug("Settings Updated............. ", JSON.stringify(aBody));
                                                     d4dModelNew.d4dModelJenkinsConfig.update({
                                                         orgname_rowid: orgId,
                                                         id: '20'
@@ -1312,7 +1275,6 @@ var MasterUtil = function() {
                                                         if (err) {
                                                             logger.debug("Error to update Settings.");
                                                         }
-                                                        logger.debug("Settings Updated............. ", JSON.stringify(aBody));
                                                         d4dModelNew.d4dModelMastersTeams.find({
                                                             orgname_rowid: orgId,
                                                             id: '21'
@@ -1320,7 +1282,6 @@ var MasterUtil = function() {
                                                             if (err) {
                                                                 logger.debug("Error to get Settings.");
                                                             }
-                                                            logger.debug("Got teams::::::::::::::: ", JSON.stringify(teams));
 
                                                             d4dModelNew.d4dModelMastersTeams.update({
                                                                 orgname_rowid: {
@@ -1335,7 +1296,6 @@ var MasterUtil = function() {
                                                                 if (err) {
                                                                     logger.debug("Error to update Settings.");
                                                                 }
-                                                                logger.debug("Settings Updated............. ", JSON.stringify(aBody));
                                                                 callback(null, aBody);
                                                                 return;
                                                             });
@@ -1365,8 +1325,6 @@ var MasterUtil = function() {
                 if (err) {
                     logger.debug("Error to get Settings.");
                 }
-                logger.debug("Got teams::::::::::::::: ", JSON.stringify(teams));
-
                 for (var t = 0; t < teams.length; t++) {
                     names = configmgmtDao.convertRowIDToValue(teams[t].orgname_rowid, rowidlist);
                     var currentTeamName = teams[t].teamname;
@@ -1396,7 +1354,7 @@ var MasterUtil = function() {
                             if (err) {
                                 logger.debug("Error to update Settings.");
                             }
-                            logger.debug("Settings Updated............. ", JSON.stringify(aBody));
+                            logger.debug("Settings Updated: ", JSON.stringify(aBody));
                         });
                     }
 
@@ -1575,11 +1533,9 @@ var MasterUtil = function() {
         d4dModelNew.d4dModelMastersPuppetServer.find({
             orgname_rowid: orgId
         }, function(err, configMgmt) {
-            //logger.debug("Got puppet: ",JSON.stringify(configMgmt));
             d4dModelNew.d4dModelMastersConfigManagement.find({
                 orgname_rowid: orgId
             }, function(err, chefmgmt) {
-                //logger.debug("Got Chef: ",JSON.stringify(chefmgmt));
                 configmgmtDao.getRowids(function(err, rowidlist) {
                     if (configMgmt) {
                         for (var i = 0; i < configMgmt.length; i++) {
@@ -1616,7 +1572,6 @@ var MasterUtil = function() {
                 callback(err, null);
                 return;
             }
-            //logger.debug("Got puppet: ",JSON.stringify(configMgmt));
             configmgmtDao.getRowids(function(err, rowidlist) {
                 if (err) {
                     callback(err, null);
@@ -1635,7 +1590,6 @@ var MasterUtil = function() {
                     rowid: anId,
                     id: "10"
                 }, function(err, chefmgmt) {
-                    //logger.debug("Got Chef: ",JSON.stringify(chefmgmt));
                     if (err) {
                         callback(err, null);
                         return;
@@ -1705,7 +1659,7 @@ var MasterUtil = function() {
             if (err) {
                 logger.debug("App deploy fetch error.", err);
             }
-            logger.debug("App deploy .", JSON.stringify(data));
+            logger.debug("App deploy: ", JSON.stringify(data));
             if (data.length) {
                 var appDataList = [];
                 var count = 0;
@@ -1716,7 +1670,6 @@ var MasterUtil = function() {
                         d4dModelNew.d4dModelMastersProjects.find({
                             appdeploy: {
                                 $elemMatch: {
-                                    //{ $regex : new RegExp(thename, "i") }
                                     // The regex will enable case-insensitive
                                     applicationname: { $regex : new RegExp(appName, "i")}
                                 }
@@ -1728,7 +1681,6 @@ var MasterUtil = function() {
                                 logger.debug("Failed to fetch app data", err);
                                 callback(err, null);
                             }
-                            logger.debug("++++++++++++++++++++++++++++++++++++++++++++++++============ ", JSON.stringify(appData));
                             if (appData.length) {
                                 var dummyData = {
                                     _id: data[i].id,

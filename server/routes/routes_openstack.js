@@ -51,7 +51,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
 	        openstack.getProjects(function(err,projects){
 	        	if(err){
 	                 logger.error('openstack tenants fetch error', err);
-	                 res.send(500,err.error.message);
+	                 res.status(500).send(err.error.message);
 	                 return;
 	        	}
 	            
@@ -70,7 +70,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
 	        openstack.getTenants(function(err,tenants){
 	        	if(err){
 	                 logger.error('openstack tenants fetch error', err);
-	                 res.send(500,err.error.message);
+	                 res.status(500).send(err.error.message);
 	                 return;
 	        	}
 	            
@@ -88,7 +88,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
         openstack.getImages(openstackconfig.tenantid,function(err,images){
         	if(err){
                  logger.error('openstack images fetch error', err);
-                 res.send(500,err.error.message);
+                 res.status(500).send(err.error.message);
                  return;
         	}
             
@@ -106,7 +106,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
         openstack.getServers(openstackconfig.tenantid,function(err,servers){
         	if(err){
                  logger.error('openstack servers fetch error', err);
-                 res.send(500,err);
+                 res.status(500).send(err);
                  return;
         	}
             
@@ -124,7 +124,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
 		        openstack.getNetworks(function(err,networks){
 		        	if(err){
 		                 logger.error('openstack networks fetch error', err);
-		                 res.send(500,err);
+		                 res.status(500).send(err);
 		                 return;
 		        	}
 					res.send(networks);
@@ -146,7 +146,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
 	        openstack.getFlavors(openstackconfig.tenantId,function(err,flavors){
 	        	if(err){
 	                 logger.error('openstack flavors fetch error', err);
-	                 res.send(500,err);
+	                 res.status(500).send(err);
 	                 return;
 	        	}
 	            
@@ -166,7 +166,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
 		        openstack.getSecurityGroups(function(err,securityGroups){
 		        	if(err){
 		                 logger.error('openstack securityGroups fetch error', err);
-		                 res.send(500,err);
+		                 res.status(500).send(err);
 		                 return;
 		        	}
 		            
@@ -191,7 +191,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
 	        openstack.createServer(openstackconfig.tenantId,json,function(err,data){
 	        	if(err){
 	                 logger.error('openstack createServer error', err);
-	                 res.send(500,err);
+	                 res.status(500).send(err);
 	                 return;
 	        	}
 	            
@@ -211,7 +211,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
         openstack.getServerById(req.params.tenantId, req.params.serverId, function(err,data){
       		 if(err){
       		 	logger.error('openstack createServer error', err);
-	            res.send(500,err);
+	            res.status(500).send(err);
 	            return;
       		 }
 

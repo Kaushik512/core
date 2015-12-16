@@ -51,7 +51,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             hppubliccloud.getProjects(function(err, projects) {
                 if (err) {
                     logger.error('hppubliccloud tenants fetch error', err);
-                    res.send(500, err.error.message);
+                    res.status(500).send( err.error.message);
                     return;
                 }
 
@@ -70,7 +70,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             hppubliccloud.getTenants(function(err, tenants) {
                 if (err) {
                     logger.error('hppubliccloud tenants fetch error', err);
-                    res.send(500, err.error.message);
+                    res.status(500).send( err.error.message);
                     return;
                 }
 
@@ -88,7 +88,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             hppubliccloud.getImages(hppubliccloudconfig.tenantid, function(err, images) {
                 if (err) {
                     logger.error('hppubliccloud images fetch error', err);
-                    res.send(500, err.error.message);
+                    res.status(500).send( err.error.message);
                     return;
                 }
 
@@ -106,7 +106,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             hppubliccloud.getServers(hppubliccloudconfig.tenantid, function(err, servers) {
                 if (err) {
                     logger.error('hppubliccloud servers fetch error', err);
-                    res.send(500, err);
+                    res.status(500).send( err);
                     return;
                 }
 
@@ -124,7 +124,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             hppubliccloud.getNetworks(function(err, networks) {
                 if (err) {
                     logger.error('hppubliccloud networks fetch error', err);
-                    res.send(500, err);
+                    res.status(500).send( err);
                     return;
                 }
                 res.send(networks);
@@ -142,7 +142,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             hppubliccloud.getFlavors(hppubliccloudconfig.tenantId, function(err, flavors) {
                 if (err) {
                     logger.error('hppubliccloud flavors fetch error', err);
-                    res.send(500, err);
+                    res.status(500).send( err);
                     return;
                 }
 
@@ -161,7 +161,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             hppubliccloud.getSecurityGroups(function(err, securityGroups) {
                 if (err) {
                     logger.error('hppubliccloud securityGroups fetch error', err);
-                    res.send(500, err);
+                    res.status(500).send( err);
                     return;
                 }
 
@@ -182,7 +182,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             hppubliccloud.createServer(hppubliccloudconfig.tenantId, json, function(err, data) {
                 if (err) {
                     logger.error('hppubliccloud createServer error', err);
-                    res.send(500, err);
+                    res.status(500).send( err);
                     return;
                 }
 
@@ -202,7 +202,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             hppubliccloud.getServerById(req.params.tenantId, req.params.serverId, function(err, data) {
                 if (err) {
                     logger.error('hppubliccloud createServer error', err);
-                    res.send(500, err);
+                    res.status(500).send( err);
                     return;
                 }
 

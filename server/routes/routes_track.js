@@ -20,7 +20,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.get('/track', function(req, res) {
         Track.getTracks(function(err, tracks) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             if (tracks) {
@@ -38,7 +38,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         Track.getTrackByType(req.body.trackData.type, function(err, tracks) {
             if (err) {
                 logger.debug("error Type:>>>>>");
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             if (tracks.length === 0) {
@@ -46,7 +46,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 Track.createNew(req.body.trackData, function(err, tracks) {
                     if (err) {
                         logger.debug("error Type New:>>>>>");
-                        res.send(500, errorResponses.db.error);
+                        res.status(500).send( errorResponses.db.error);
                         return;
                     }
                     if (tracks) {
@@ -62,7 +62,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 tracks[0].save(function(err, track) {
                     if (err) {
                         logger.debug("error Type Update:>>>>>", err);
-                        res.send(500, errorResponses.db.error);
+                        res.status(500).send( errorResponses.db.error);
                         return;
                     }
                     res.send(200, track);
@@ -78,7 +78,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         logger.debug("Got tracks data: ", JSON.stringify(req.body.trackData), req.params.trackId);
         Track.getTrackById(req.params.trackId, function(err, tracks) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             if (!tracks) {
@@ -86,14 +86,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (!req.body.trackData.itemUrls) {
-                res.send(400, {
+                res.status(400).send( {
                     message: "Bad Request"
                 })
                 return;
             }
             Track.updateTrack(req.params.trackId, req.body.trackData.itemUrls, function(err, updateCount) {
                 if (err) {
-                    res.send(500, errorResponses.db.error);
+                    res.status(500).send( errorResponses.db.error);
                     return;
                 }
                 res.send(200, {
@@ -107,7 +107,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.get('/track/:trackId', function(req, res) {
         Track.getTrackById(req.params.trackId, function(err, tracks) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             if (tracks) {
@@ -124,7 +124,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.delete('/track/:trackId/:itemId', function(req, res) {
         Track.getTrackById(req.params.trackId, function(err, track) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             if (track) {

@@ -51,31 +51,31 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
         // Field validation for undefined and empty
         if (typeof providerId === 'undefined' || providerId.length === 0) {
-            res.send(400, "{Please Enter ProviderId.}");
+            res.status(400).send( "{Please Enter ProviderId.}");
             return;
         }
         if (typeof imageIdentifier === 'undefined' || imageIdentifier.length === 0) {
-            res.send(400, "{Please Enter ImageIdentifier.}");
+            res.status(400).send( "{Please Enter ImageIdentifier.}");
             return;
         }
         if (typeof name === 'undefined' || name.length === 0) {
-            res.send(400, "{Please Enter Name.}");
+            res.status(400).send( "{Please Enter Name.}");
             return;
         }
         if (typeof osType === 'undefined' || osType.length === 0) {
-            res.send(400, "{Please Enter OS Type.}");
+            res.status(400).send( "{Please Enter OS Type.}");
             return;
         }
         if (typeof osName === 'undefined' || osName.length === 0) {
-            res.send(400, "{Please Enter OS Name.}");
+            res.status(400).send( "{Please Enter OS Name.}");
             return;
         }
         if (typeof userName === 'undefined' || userName.length === 0) {
-            res.send(400, "{Please Enter OS UserName.}");
+            res.status(400).send( "{Please Enter OS UserName.}");
             return;
         }
         if (typeof providerType === 'undefined' || providerType.length === 0) {
-            res.send(400, "{Please Enter OS Provider Type.}");
+            res.status(400).send( "{Please Enter OS Provider Type.}");
             return;
         }
 
@@ -109,7 +109,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
             masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
                 if (err) {
-                    res.send(500, "Failed to fetch User.");
+                    res.status(500).send( "Failed to fetch User.");
                 }
                 logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
                 if (anUser) {
@@ -126,7 +126,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         openstackProvider.getopenstackProviderById(providerId, function(err, aProvider) {
                             if (err) {
                                 logger.error(err);
-                                res.send(500, "Image creation failed due to Image name already exist.");
+                                res.status(500).send( "Image creation failed due to Image name already exist.");
                                 return;
                             }
                             logger.debug("Returned Provider: ", aProvider);
@@ -138,7 +138,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             VMImage.createNew(vmimageData, function(err, anImage) {
                                 if (err) {
                                     logger.debug("err.....", err);
-                                    res.send(500, "Selected is already registered.");
+                                    res.status(500).send( "Selected is already registered.");
                                     return;
                                 }
                                 logger.debug("Exit post() for /vmimages");
@@ -151,14 +151,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         AWSProvider.getAWSProviderById(providerId, function(err, aProvider) {
                             if (err) {
                                 logger.error(err);
-                                res.send(500, "Image creation failed due to Image name already exist.");
+                                res.status(500).send( "Image creation failed due to Image name already exist.");
                                 return;
                             }
                             logger.debug("Returned Provider: ", aProvider);
                             AWSKeyPair.getAWSKeyPairByProviderId(providerId, function(err, keyPair) {
                                 logger.debug("keyPairs length::::: ", keyPair[0].region);
                                 if (err) {
-                                    res.send(500, "Error getting to fetch Keypair.")
+                                    res.status(500).send( "Error getting to fetch Keypair.")
                                 }
                                 logger.debug("vmimageData <<<<<<<<<<<<<<<<<<<<< %s", vmimageData);
                                 var keys = [];
@@ -166,7 +166,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 keys.push(aProvider.secretKey);
                                 cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
                                     if (err) {
-                                        res.sned(500, "Failed to decrypt accessKey or secretKey");
+                                        res.status(500).send("Failed to decrypt accessKey or secretKey");
                                         return;
                                     }
                                     var ec2 = new EC2({
@@ -178,7 +178,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     ec2.checkImageAvailability(vmimageData.imageIdentifier, function(err, data) {
                                         if (err) {
                                             logger.debug("Unable to describeImages from AWS.", err);
-                                            res.send(500, "Invalid Image Id.");
+                                            res.status(500).send( "Invalid Image Id.");
                                             return;
                                         }
                                         if (data.Images.length > 0) {
@@ -187,7 +187,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                             VMImage.createNew(vmimageData, function(err, anImage) {
                                                 if (err) {
                                                     logger.debug("err.....", err);
-                                                    res.send(500, "Selected is already registered.");
+                                                    res.status(500).send( "Selected is already registered.");
                                                     return;
                                                 }
                                                 logger.debug("Exit post() for /vmimages");
@@ -195,7 +195,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                 return;
                                             });
                                         } else {
-                                            res.send(500, "The image is empty for amid: " + vmimageData.imageIdentifier);
+                                            res.status(500).send( "The image is empty for amid: " + vmimageData.imageIdentifier);
                                             return;
                                         }
 
@@ -215,21 +215,21 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var loggedInUser = req.session.user.cn;
         masterUtil.getLoggedInUser(loggedInUser, function(err, anUser) {
             if (err) {
-                res.send(500, "Failed to fetch User.");
+                res.status(500).send( "Failed to fetch User.");
             }
             if (!anUser) {
-                res.send(500, "Invalid User.");
+                res.status(500).send( "Invalid User.");
             }
             if (anUser.orgname_rowid[0] === "") {
                 masterUtil.getAllActiveOrg(function(err, orgList) {
                     if (err) {
-                        res.send(500, 'Not able to fetch Orgs.');
+                        res.status(500).send( 'Not able to fetch Orgs.');
                     }
                     if (orgList) {
                         VMImage.getImagesForOrg(orgList, function(err, images) {
                             if (err) {
                                 logger.error(err);
-                                res.send(500, errorResponses.db.error);
+                                res.status(500).send( errorResponses.db.error);
                                 return;
                             }
                             if (images) {
@@ -244,13 +244,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             } else {
                 masterUtil.getOrgs(loggedInUser, function(err, orgList) {
                     if (err) {
-                        res.send(500, 'Not able to fetch Orgs.');
+                        res.status(500).send( 'Not able to fetch Orgs.');
                     }
                     if (orgList) {
                         VMImage.getImagesForOrg(orgList, function(err, images) {
                             if (err) {
                                 logger.error(err);
-                                res.send(500, errorResponses.db.error);
+                                res.status(500).send( errorResponses.db.error);
                                 return;
                             }
                             if (images) {
@@ -271,13 +271,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         logger.debug("Enter get() for /vmimages/%s", req.params.imageId);
         var imageId = req.params.imageId.trim();
         if (typeof imageId === 'undefined' || imageId.length === 0) {
-            res.send(500, "Please Enter ImageId.");
+            res.status(500).send( "Please Enter ImageId.");
             return;
         }
         VMImage.getImageById(imageId, function(err, anImage) {
             if (err) {
                 logger.error(err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             if (anImage) {
@@ -307,32 +307,32 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var password = req.body.password.trim(); //only for azure provider
 
         if (typeof providerId === 'undefined' || providerId.length === 0) {
-            res.send(400, "{Please Enter ProviderId.}");
+            res.status(400).send( "{Please Enter ProviderId.}");
             return;
         }
         if (typeof imageIdentifier === 'undefined' || imageIdentifier.length === 0) {
-            res.send(400, "{Please Enter ImageIdentifier.}");
+            res.status(400).send( "{Please Enter ImageIdentifier.}");
             return;
         }
         if (typeof name === 'undefined' || name.length === 0) {
-            res.send(400, "{Please Enter Name.}");
+            res.status(400).send( "{Please Enter Name.}");
             return;
         }
 
         if (typeof imageId === 'undefined' || imageId.length === 0) {
-            res.send(400, "{Please Enter ImageId.}");
+            res.status(400).send( "{Please Enter ImageId.}");
             return;
         }
         if (typeof osType === 'undefined' || osType.length === 0) {
-            res.send(400, "{Please Enter OS Type.}");
+            res.status(400).send( "{Please Enter OS Type.}");
             return;
         }
         if (typeof osName === 'undefined' || osName.length === 0) {
-            res.send(400, "{Please Enter OS Name.}");
+            res.status(400).send( "{Please Enter OS Name.}");
             return;
         }
         if (typeof userName === 'undefined' || userName.length === 0) {
-            res.send(400, "{Please Enter OS UserName.}");
+            res.status(400).send( "{Please Enter OS UserName.}");
             return;
         }
         var vmimageData = {
@@ -364,7 +364,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
             masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
                 if (err) {
-                    res.send(500, "Failed to fetch User.");
+                    res.status(500).send( "Failed to fetch User.");
                 }
                 logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
                 if (anUser) {
@@ -379,7 +379,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         VMImage.getImageById(imageId, function(err, anImage) {
                             if (err) {
                                 logger.error(err);
-                                res.send(500, errorResponses.db.error);
+                                res.status(500).send( errorResponses.db.error);
                                 return;
                             }
                             vmimageData.vType = 'openstack';
@@ -392,7 +392,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             VMImage.updateImageById(imageId, vmimageData, function(err, updateCount) {
                                 if (err) {
                                     logger.error(err);
-                                    res.send(500, errorResponses.db.error);
+                                    res.status(500).send( errorResponses.db.error);
                                     return;
                                 }
                                 if (updateCount) {
@@ -410,14 +410,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         AWSProvider.getAWSProviderById(providerId, function(err, aProvider) {
                             if (err) {
                                 logger.error(err);
-                                res.send(500, "Image creation failed due to Image name already exist.");
+                                res.status(500).send( "Image creation failed due to Image name already exist.");
                                 return;
                             }
                             logger.debug("Returned Provider: ", aProvider);
                             AWSKeyPair.getAWSKeyPairByProviderId(providerId, function(err, keyPair) {
                                 logger.debug("keyPairs length::::: ", keyPair[0].region);
                                 if (err) {
-                                    res.send(500, "Error getting to fetch Keypair.")
+                                    res.status(500).send( "Error getting to fetch Keypair.")
                                 }
                                 logger.debug("vmimageData <<<<<<<<<<<<<<<<<<<<< %s", vmimageData);
                                 var keys = [];
@@ -437,13 +437,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     ec2.checkImageAvailability(vmimageData.imageIdentifier, function(err, data) {
                                         if (err) {
                                             logger.debug("Unable to describeImages from AWS.", err);
-                                            res.send(500, "Invalid Image Id.");
+                                            res.status(500).send( "Invalid Image Id.");
                                             return;
                                         }
                                         VMImage.getImageById(imageId, function(err, anImage) {
                                             if (err) {
                                                 logger.error(err);
-                                                res.send(500, errorResponses.db.error);
+                                                res.status(500).send( errorResponses.db.error);
                                                 return;
                                             }
                                             if (anImage) {
@@ -453,7 +453,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                             VMImage.updateImageById(imageId, vmimageData, function(err, updateCount) {
                                                 if (err) {
                                                     logger.error(err);
-                                                    res.send(500, errorResponses.db.error);
+                                                    res.status(500).send( errorResponses.db.error);
                                                     return;
                                                 }
                                                 if (updateCount) {
@@ -483,7 +483,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var permissionto = 'delete';
         var imageId = req.params.imageId.trim();
         if (typeof imageId === 'undefined' || imageId.length === 0) {
-            res.send(500, "Please Enter ImageId.");
+            res.status(500).send( "Please Enter ImageId.");
             return;
         }
         usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
@@ -502,7 +502,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
             masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
                 if (err) {
-                    res.send(500, "Failed to fetch User.");
+                    res.status(500).send( "Failed to fetch User.");
                 }
                 logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
                 if (anUser) {
@@ -526,7 +526,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         VMImage.removeImageById(req.params.imageId, function(err, deleteCount) {
                             if (err) {
                                 logger.error(err);
-                                res.send(500, errorResponses.db.error);
+                                res.status(500).send( errorResponses.db.error);
                                 return;
                             }
                             if (deleteCount) {
@@ -549,13 +549,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         logger.debug("Enter get() for /vmimages/providers/%s", req.params.providerId);
         var providerId = req.params.providerId.trim();
         if (typeof providerId === 'undefined' || providerId.length === 0) {
-            res.send(500, "Please Enter providerId.");
+            res.status(500).send( "Please Enter providerId.");
             return;
         }
         VMImage.getImageByProviderId(providerId, function(err, images) {
             if (err) {
                 logger.error(err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             if (images) {

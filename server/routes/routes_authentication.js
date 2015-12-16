@@ -48,7 +48,7 @@ module.exports.setRoutes = function(app) {
         if (req.body && req.body.username && req.body.pass) {
             /*GlobalSettings.getGolbalSettings(function(err, globalSettings) {
                 if (err) {
-                    res.send(500, errorResponses.db.error);
+                    res.status(500).send( errorResponses.db.error);
                     return;
                 }
                 if (globalSettings.length) {
@@ -221,7 +221,7 @@ module.exports.setRoutes = function(app) {
             AuthToken.removeByToken(token, function(err, removeCount) {
                 if (err) {
                     logger.error("Unable to remove token");
-                    res.send(500, {
+                    res.status(500).send( {
                         message: 'unable to remove auth token'
                     });
                     return;

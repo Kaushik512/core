@@ -135,7 +135,7 @@ hppubliccloudProviderSchema.statics.createNew = function(req,providerData, callb
         ProviderUtil.saveAwsPemFiles(keyPair, inFiles, function(err, flag) {
                         if (err) {
                             logger.debug("Unable to save pem files.");
-                            res.send(500, "Unable to save pem files.");
+                            res.status(500).send( "Unable to save pem files.");
                             return;
                         }
                     });

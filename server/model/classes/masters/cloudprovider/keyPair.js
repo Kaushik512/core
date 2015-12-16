@@ -114,7 +114,7 @@ awsKeyPairSchema.statics.createNew = function(req, providerId, callback) {
                     ProviderUtil.saveAwsPemFiles(keyPair, files[count1], function(err, flag) {
                         if (err) {
                             logger.debug("Unable to save pem files.");
-                            res.send(500, "Unable to save pem files.");
+                            res.status(500).send( "Unable to save pem files.");
                             return;
                         }
                     });

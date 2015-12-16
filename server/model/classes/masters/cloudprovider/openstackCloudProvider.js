@@ -125,7 +125,7 @@ openstackProviderSchema.statics.createNew = function(req,providerData, callback)
         ProviderUtil.saveAwsPemFiles(keyPair, req.files.openstackinstancepem, function(err, flag) {
             if (err) {
                 logger.debug("Unable to save pem files.");
-                res.send(500, "Unable to save pem files.");
+                res.status(500).send( "Unable to save pem files.");
                 return;
             }
         });

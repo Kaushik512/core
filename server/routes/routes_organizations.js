@@ -40,10 +40,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
         var loggedInUser = req.session.user.cn;
         masterUtil.getLoggedInUser(loggedInUser, function(err, anUser) {
             if (err) {
-                res.send(500, "Failed to fetch User.");
+                res.status(500).send( "Failed to fetch User.");
             }
             if (!anUser) {
-                res.send(500, "Invalid User.");
+                res.status(500).send( "Invalid User.");
             }
             masterUtil.getAllSettingsForUser(loggedInUser, function(err, objperms) {
                 var orgTree = [];
@@ -469,11 +469,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
         //logger.debug("LoggedInUser:>>>>>>>>>>>>>> ", loggedInUser);
         masterUtil.getLoggedInUser(loggedInUser, function(err, anUser) {
             if (err) {
-                res.send(500, "Failed to fetch User.");
+                res.status(500).send( "Failed to fetch User.");
                 return;
             }
             if (!anUser) {
-                res.send(500, "Invalid User.");
+                res.status(500).send( "Invalid User.");
                 return;
             }
             logger.debug("anUser.orgname_rowid[0]:>>>>>>>>>> ", JSON.stringify(anUser));
@@ -1169,7 +1169,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 }
                 blueprintData.cloudFormationData = cloudFormationData;
             } else {
-                res.send(400, {
+                res.status(400).send( {
                     message: "Invalid Blueprint Type"
                 });
                 return;
@@ -1180,7 +1180,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             // blueprintData.providerId = req.body.providerId;
 
             if (!blueprintData.users || !blueprintData.users.length) {
-                res.send(400, {
+                res.status(400).send( {
                     message: "User is empty"
                 });
                 return;
@@ -1196,7 +1196,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             Blueprints.createNew(blueprintData, function(err, data) {
                 if (err) {
                     logger.error('error occured while saving blueorint', err);
-                    res.send(500, {
+                    res.status(500).send( {
                         message: "DB error"
                     });
                     return;
@@ -1250,13 +1250,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
     app.get('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/applications/:applicationId/build/:buildId', function(req, res) {
         Application.getApplicationById(req.params.applicationId, function(err, application) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             if (application) {
                 application.getBuild(function(err, build) {
                     if (err) {
-                        res.send(500, errorResponses.db.error);
+                        res.status(500).send( errorResponses.db.error);
                         return;
                     }
                     res.send(build)
@@ -1474,7 +1474,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         logger.debug("Enter get() for /organizations/%s/chefRunlist", req.params.orgname);
         configmgmtDao.getChefServerDetailsByOrgname(req.params.orgname, function(err, chefDetails) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             logger.debug("chefdata", chefDetails);
@@ -1494,14 +1494,14 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
                 if (err) {
                     logger.error('Unable to fetch cookbooks : ', err);
-                    res.send(500, errorResponses.chef.connectionError);
+                    res.status(500).send( errorResponses.chef.connectionError);
                     return;
                 } else {
                     chef.getRolesList(function(err, roles) {
 
                         if (err) {
                             logger.error('Unable to fetch roles : ', err);
-                            res.send(500, errorResponses.chef.connectionError);
+                            res.status(500).send( errorResponses.chef.connectionError);
                             return;
                         } else {
                             res.send({
@@ -1596,11 +1596,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
             instancesDao.getInstanceByOrgAndNodeNameOrIP(req.params.orgId, req.body.fqdn, req.body.fqdn, function(err, instances) {
                 if (err) {
                     logger.error("error occured while fetching instances by IP", err);
-                    res.send(500, errorResponses.db.error);
+                    res.status(500).send( errorResponses.db.error);
                     return;
                 }
                 if (instances.length) {
-                    res.send(400, {
+                    res.status(400).send( {
                         message: "An Instance with the same IP already exists."
                     });
                     return;
@@ -1643,7 +1643,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             return;
                         }
                         if (!req.body.configManagmentId) {
-                            res.send(400, {
+                            res.status(400).send( {
                                 message: "Invalid Config Management Id"
                             });
                             return;
@@ -1667,7 +1667,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             waitForPort(req.body.fqdn, openport, function(err) {
                                 if (err) {
                                     logger.debug(err);
-                                    res.send(400, {
+                                    res.status(400).send( {
                                         message: "Unable to SSH into instance"
                                     });
                                     return;

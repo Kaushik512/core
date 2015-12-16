@@ -22,11 +22,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.get('/app/deploy', function(req, res) {
         AppDeploy.getAppDeploy(function(err, appDeployes) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             if (appDeployes) {
-                res.send(200, appDeployes);
+                res.status(200).send(appDeployes);
                 return;
             }
         });
@@ -37,92 +37,26 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         logger.debug("Got appDeploy data: ", JSON.stringify(req.body.appDeployData));
         AppDeploy.createNew(req.body.appDeployData, function(err, appDeploy) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             if (appDeploy) {
-                res.send(200, appDeploy);
+                res.status(200).send(appDeploy);
                 return;
             }
         });
     });
-
-    // Update AppDeploy
-    /*app.post('/app/deploy/:appId', function(req, res) {
-        logger.debug("Got appDeploy data: ", JSON.stringify(req.body.appDeployData));
-        AppDeploy.getAppDeployById(req.params.appId, function(err, appDeploy) {
-            if (err) {
-                res.send(500, errorResponses.db.error);
-                return;
-            }
-            if (!appDeploy) {
-                res.send(404, "appDeploy not found!");
-                return;
-            }
-            AppDeploy.updateAppDeploy(req.params.appId, req.body.appDeployData, function(err, appDeployes) {
-                if (err) {
-                    res.send(500, errorResponses.db.error);
-                    return;
-                }
-                res.send(200, "Success");
-            });
-        });
-    });
-*/
-    // Get AppDeploy w.r.t. Id
-    /*app.get('/app/deploy/:appId', function(req, res) {
-        AppDeploy.getAppDeployById(req.params.appId, function(err, appDeploy) {
-            if (err) {
-                res.send(500, errorResponses.db.error);
-                return;
-            }
-            if (appDeploy) {
-                res.send(200, appDeploy);
-                return;
-            } else {
-                res.send(404, "appDeploy not found!");
-                return;
-            }
-        });
-    });*/
-
-    // Delete AppDeploy w.r.t. Id
-    /*app.delete('/app/deploy/:appId', function(req, res) {
-        AppDeploy.getAppDeployById(req.params.appId, function(err, appDeploy) {
-            if (err) {
-                res.send(500, errorResponses.db.error);
-                return;
-            }
-            if (appDeploy) {
-                AppDeploy.removeAppDeploy(req.params.appId, function(err, appDeployes) {
-                    if (err) {
-                        logger.debug("Error while removing appDeploy: ", JSON.stringify(appDeployes));
-                        res(500, "Error while removing appDeploy:");
-                        return;
-                    }
-                    if (appDeployes) {
-                        logger.debug("Successfully Removed appDeploy.");
-                        res.send(200, "Successfully Removed appDeploy.");
-                        return;
-                    }
-                });
-            } else {
-                res.send(404, "appDeploy not found!");
-                return;
-            }
-        });
-    });*/
 
     // Get AppDeploy w.r.t. appName and env
     app.get('/app/deploy/env/:envId/project/:projectId/list', function(req, res) {
         logger.debug("/app/deploy/env/:envId/list called...");
         masterUtil.getAppDataWithDeployList(req.params.envId,req.params.projectId, function(err, appDeploy) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             if (appDeploy.length) {
-                res.send(200, appDeploy);
+                res.status(200).send(appDeploy);
                 return;
             } else {
                 res.send([]);
@@ -131,38 +65,16 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
 
-    // Update AppDeploy by Name
-    /*app.post('/app/deploy/:appName/update', function(req, res) {
-        logger.debug("Got appDeploy data: ", JSON.stringify(req.body));
-        AppDeploy.getAppDeployByName(req.params.appName, function(err, appDeploy) {
-            if (err) {
-                res.send(500, "errorResponses.db.error");
-                return;
-            }
-            if (!appDeploy) {
-                res.send(404, "Record not found for: "+req.params.appName);
-                return;
-            }
-            AppDeploy.updateAppDeployByName(req.params.appName, req.body.appDeployData, function(err, appDeployes) {
-                if (err) {
-                    res.send(500, errorResponses.db.error);
-                    return;
-                }
-                res.send(200, appDeployes);
-            });
-        });
-    });*/
-
     // Get all AppData
     app.get('/app/deploy/data/list', function(req, res) {
         logger.debug("Data list api called...");
         AppData.getAppData(function(err, appDeployes) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             if (appDeployes) {
-                res.send(200, appDeployes);
+                res.status(200).send(appDeployes);
                 return;
             }
         });
@@ -172,11 +84,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.post('/app/deploy/data/create', function(req, res) {
         AppData.createNew(req.body.appDeployData, function(err, appDeployes) {
             if (err) {
-                res.send(403, "Application Already Exist.");
+                res.status(403).send("Application Already Exist.");
                 return;
             }
             if (appDeployes) {
-                res.send(200, appDeployes);
+                res.status(200).send(appDeployes);
                 return;
             }
         });
@@ -186,11 +98,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.get('/app/deploy/data/env/:envName/:appName/project/:projectId/list', function(req, res) {
         masterUtil.getAppDataByName(req.params.envName,req.params.appName,req.params.projectId, function(err, appDatas) {
             if (err) {
-                res.send(500, "Please add app name.");
+                res.status(500).send( "Please add app name.");
                 return;
             }
             if (appDatas) {
-                res.send(200, appDatas);
+                res.status(200).send(appDatas);
                 return;
             }
         });
@@ -200,11 +112,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.get('/app/deploy/list', function(req, res) {
         AppData.getAppDataWithDeploy(function(err, appDeployes) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             if (appDeployes) {
-                res.send(200, appDeployes);
+                res.status(200).send(appDeployes);
                 return;
             }
         });
@@ -215,23 +127,23 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         logger.debug("Logs api called...");
         AppDeploy.getAppDeployById(req.params.appId, function(err, appDeploy) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             if (!appDeploy) {
-                res.send(404, "appDeploy not found!");
+                res.status(404).send("appDeploy not found!");
                 return;
             }
             AppDeploy.getAppDeployLogById(req.params.appId, function(err, logs) {
                 if (err) {
-                    res.send(500, errorResponses.db.error);
+                    res.status(500).send( errorResponses.db.error);
                     return;
                 }
                 if (logs) {
-                    res.send(200, logs);
+                    res.status(200).send(logs);
                     return;
                 } else {
-                    res.send(404, "Logs not available.");
+                    res.status(404).send("Logs not available.");
                     return;
                 }
             });
@@ -243,11 +155,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         logger.debug("Filtered by env called..");
         AppDeploy.getAppDeployByEnvId(req.params.envId, function(err, appDeploy) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
             if (appDeploy) {
-                res.send(200, appDeploy);
+                res.status(200).send(appDeployes);
                 return;
             } else {
                 res.send([]);

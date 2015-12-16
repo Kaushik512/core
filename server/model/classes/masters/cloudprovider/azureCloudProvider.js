@@ -95,7 +95,7 @@ azurecloudProviderSchema.statics.createNew = function(req, providerData, callbac
 
             if (err) {
                 logger.debug("Unable to save pem files.");
-                res.send(500, "Unable to save pem files.");
+                res.status(500).send( "Unable to save pem files.");
                 return;
             }
 
@@ -110,7 +110,7 @@ azurecloudProviderSchema.statics.createNew = function(req, providerData, callbac
             ProviderUtil.saveAwsPemFiles(keyPair, req.files.azurekey, function(err, flag) {
                 if (err) {
                     logger.debug("Unable to save pem files.");
-                    res.send(500, "Unable to save pem files.");
+                    res.status(500).send( "Unable to save pem files.");
                     return;
                 }
 
