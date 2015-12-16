@@ -27,17 +27,17 @@ util.inherits(ADPassportstrategy, Strategy);
 ADPassportstrategy.prototype.authenticate = function(req, options) {
     var self = this;
     var opts = this.getOptions();
-    console.log(opts);
+    logger.debug(opts);
     var adClient = new ADClient({
         host: opts.host,
         port: opts.port,
         baseDn: opts.baseDn,
         ou: opts.ou
     });
-    console.log(req.body);
+    logger.debug(req.body);
     var username = req.body[opts.usernameField];
     var password = req.body[opts.passwordField];
-    console.log(username, ' == ', password);
+    logger.debug(username, ' == ', password);
     if (!(username && password)) {
         return self.fail({
             message: 'Missing credentials'

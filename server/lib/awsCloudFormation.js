@@ -96,13 +96,13 @@ var AWSCloudFormation = function(awsSettings) {
 
     this.waitForStackCompleteStatus = function(stackId, callback) {
         var self = this;
-        console.log('Checking status ==>');
+        logger.debug('Checking status ==>');
         this.getStack(stackId, function(err, stack) {
             if (err) {
                 callback(err, null);
                 return;
             }
-            console.log('status ==>', stack.StackStatus);
+            logger.debug('status ==>', stack.StackStatus);
             switch (stack.StackStatus) {
                 case 'CREATE_IN_PROGRESS':
                     setTimeout(function() {

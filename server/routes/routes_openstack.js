@@ -206,7 +206,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
       getopenstackprovider(req.params.providerid,function(err,openstackconfig){
 
       	var openstack = new Openstack(openstackconfig);
-        console.log("serverId:",req.params.serverId);
+        logger.debug("serverId:",req.params.serverId);
 
         openstack.getServerById(req.params.tenantId, req.params.serverId, function(err,data){
       		 if(err){

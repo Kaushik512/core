@@ -15,7 +15,7 @@ var D4DfolderPath = currentDirectory.substring(0, indexOfSlash + 1);
 
 
 
-console.log(D4DfolderPath);
+logger.debug(D4DfolderPath);
 java.classpath.push(D4DfolderPath + '/java/lib/jsch-0.1.51.jar');
 java.classpath.push(D4DfolderPath + '/java/lib/commons-lang-2.3.jar');
 
@@ -35,11 +35,11 @@ function LogFileTail(logFile, onChangeCallback) {
     var tail = new Tail(logFile);
 
     tail.on("line", function(data) {
-        //console.log("FileData ==>", data);
+        //logger.debug("FileData ==>", data);
         onChangeCallback(data);
     });
     tail.on("error", function(error) {
-        console.log('ERROR: ', error);
+        logger.debug('ERROR: ', error);
     });
 
     this.stopTailing = function() {
@@ -97,8 +97,8 @@ function JavaSSH(javaSSHInstance, options) {
                         fs.unlink(stdErrLogFile);
                     }
                     if (err) {
-                        console.log("error in runnnig method");
-                        console.log(err);
+                        logger.debug("error in runnnig method");
+                        logger.debug(err);
                         if (typeof onComplete === 'function') {
                             onComplete(err, null);
                         }
@@ -157,8 +157,8 @@ function JavaSSH(javaSSHInstance, options) {
                         fs.unlink(stdErrLogFile);
                     }
                     if (err) {
-                        console.log("error in runnnig method");
-                        console.log(err);
+                        logger.debug("error in runnnig method");
+                        logger.debug(err);
                         if (typeof onComplete === 'function') {
                             onComplete(err, null);
                         }
@@ -215,9 +215,9 @@ function JavaSSH(javaSSHInstance, options) {
                         fs.unlink(stdErrLogFile);
                     }
                     if (err) {
-                        console.log("error in runnnig method");
+                        logger.debug("error in runnnig method");
 
-                        console.log(err);
+                        logger.debug(err);
                         if (typeof onComplete === 'function') {
                             onComplete(err, null);
                         }
@@ -242,11 +242,11 @@ module.exports.getNewInstance = function(options, callback) {
     } else {
         options.password = null;
     }
-    console.log('Initializing class');
+    logger.debug('Initializing class');
     java.newInstance('com.relevancelab.catalyst.security.ssh.SSHExec', options.host, options.port, options.username, options.password, options.pemFilePath, function(err, javaSSHInstance) {
 
         if (err) {
-            console.log(err);
+            logger.debug(err);
             callback(err, null);
             return;
         }

@@ -142,7 +142,7 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusD
             }
             instanceResultList.push(result);
             if (!(count < instances.length)) {
-                console.log('Type of onComplete ============> ' + typeof onComplete);
+                logger.debug('Type of onComplete ============> ' + typeof onComplete);
                 if (typeof onComplete === 'function') {
                     onComplete(null, overallStatus, {
                         instancesResults: instanceResultList

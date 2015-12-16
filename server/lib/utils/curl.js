@@ -9,16 +9,16 @@ var curl = function(){
 	this.executecurl = function(cmd,callback){
 		child = process(cmd,function(error,stdout,stderr){
 			if(error){
-				console.log("error:" + error);
+				logger.debug("error:" + error);
 				callback(error,null);
 			}
 			if(stderr){
-				console.log("stderr:" + stderr + "end of errr");
+				logger.debug("stderr:" + stderr + "end of errr");
 				callback(stderr,null);
 
 			}
 			if(stdout){
-				console.log("Out:" + stdout);
+				logger.debug("Out:" + stdout);
 				callback(null,stdout);
 			}
 		});
@@ -34,7 +34,7 @@ var curl = function(){
 
 			}
 			if(stdout){
-				console.log("Out:" + stdout);
+				logger.debug("Out:" + stdout);
 				callback(null,stdout);
 			}
 		});

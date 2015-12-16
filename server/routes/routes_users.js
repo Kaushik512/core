@@ -12,7 +12,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 res.send(500);
                 return;
             }
-            console.log('userlist ==> ',usersList);
+            logger.debug('userlist ==> ',usersList);
             if (usersList) {
                 res.send(usersList);
             } else {

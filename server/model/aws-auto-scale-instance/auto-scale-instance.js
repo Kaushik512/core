@@ -85,7 +85,7 @@ AutoScaleInstanceSchema.statics.removeById = function(id, callback) {
             callback(err, null);
             return;
         }
-        //console.log('data ==>', data);
+        //logger.debug('data ==>', data);
         callback(null, deleteCount);
 
     });
@@ -107,7 +107,7 @@ AutoScaleInstanceSchema.statics.removeByAutoScaleResourceAndInstanceId = functio
             callback(err, null);
             return;
         }
-        //console.log('data ==>', data);
+        //logger.debug('data ==>', data);
         callback(null, deleteCount);
 
     });

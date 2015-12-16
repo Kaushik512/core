@@ -88,7 +88,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             logger.debug('req.body.blueprintData.blueprintType ==>', req.body.blueprintData.blueprintType);
 
             if (req.body.blueprintData.blueprintType === 'docker') {
-                console.log('heree 1');
+                logger.debug('heree 1');
                 dockerData = {
                     dockerContainerPathsTitle: req.body.blueprintData.dockercontainerpathstitle,
                     dockerContainerPaths: req.body.blueprintData.dockercontainerpaths,
@@ -303,7 +303,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 });
                                 return;
                             }
-                            console.log('envName', envName);
+                            logger.debug('envName', envName);
                             configmgmtDao.getChefServerDetails(infraManager.infraManagerId, function(err, chefDetails) {
                                 if (err) {
                                     logger.error("Failed to getChefServerDetails", err);
@@ -950,7 +950,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                 }
                                                                             }
 
-                                                                            console.log('resources === >', resources);
+                                                                            logger.debug('resources === >', resources);
 
 
                                                                             var ec2 = new EC2(awsSettings);
@@ -982,7 +982,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                     ec2Resources[autoScaleInstances[i].awsInstanceId] = 'autoScaleAwsInstance';
                                                                                 }
                                                                                 var instanceIds = Object.keys(ec2Resources);
-                                                                                console.log("instanceIDS length ==>", instanceIds.length);
+                                                                                logger.debug("instanceIDS length ==>", instanceIds.length);
                                                                                 if (instanceIds.length) {
                                                                                     var instances = [];
 
@@ -1003,7 +1003,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                             }
 
 
-                                                                                            console.log(awsRes);
+                                                                                            logger.debug(awsRes);
 
                                                                                         }
                                                                                         logger.debug('Instances length ==>', instances.length, instanceIds);

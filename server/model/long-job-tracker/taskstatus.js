@@ -12,7 +12,7 @@ function TaskStatusClass(taskId) {
             }
         }, function(err, data) {
             if (err) {
-                console.log('unable to update taskstatus', err);
+                logger.debug('unable to update taskstatus', err);
                 if (typeof callback === 'function') {
                     callback(err, null);
                 }
@@ -41,7 +41,7 @@ function TaskStatusClass(taskId) {
         }
         taskStatusDao.updateTaskStatus(taskId, updateObj, function(err, data) {
             if (err) {
-                console.log('unable to update taskstatus', err);
+                logger.debug('unable to update taskstatus', err);
                 if (typeof callback === 'function') {
                     callback(err, null);
                 }
@@ -58,7 +58,7 @@ function TaskStatusClass(taskId) {
 
         taskStatusDao.getTaskStatusById(taskId, function(err, taskStatus) {
             if (err) {
-                console.log('unable to get taskstatus', err);
+                logger.debug('unable to get taskstatus', err);
                 if (typeof callback === 'function') {
                     callback(err, null);
                 }
@@ -72,13 +72,13 @@ function TaskStatusClass(taskId) {
             }
             /*taskStatusDao.getStatusByTimestamp(taskId, timestamp, function(err, data) {
                 if (err) {
-                    console.log('unable to get taskstatus', err);
+                    logger.debug('unable to get taskstatus', err);
                     if (typeof callback === 'function') {
                         callback(err, null);
                     }
                     return;
                 }
-                console.log('statusList ==>', data);
+                logger.debug('statusList ==>', data);
                 taskStatus[0].statusList = [];
                 if (data.length) {
                     taskStatus[0].statusList = data[0].statusList;
@@ -110,11 +110,11 @@ function createNewTask(callback) {
         successful: false,
     }, function(err, data) {
         if (err) {
-            console.log(err);
+            logger.debug(err);
             callback(err, null);
             return
         }
-        console.log(data);
+        logger.debug(data);
         callback(null, new TaskStatusClass(data._id));
     });
 }

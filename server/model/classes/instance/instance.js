@@ -502,7 +502,7 @@ var InstancesDao = function() {
                 callback(err, null);
                 return;
             }
-            console.log(JSON.stringify(data));
+            logger.debug(JSON.stringify(data));
             logger.debug("Exit getInstanceByProjectId (%s)", ProjectId);
             callback(null, data);
         });
@@ -584,7 +584,7 @@ var InstancesDao = function() {
     };
 
     this.addAppUrls = function(instanceId, appUrls, callback) {
-        console.log(appUrls);
+        logger.debug(appUrls);
         for (var i = 0; i < appUrls.length; i++) {
             appUrls[i]._id = new ObjectId();
         }
@@ -1385,7 +1385,7 @@ var InstancesDao = function() {
         if (!nodeNames) {
             nodeNames = [];
         }
-        console.log('serverId -->', chefServerId);
+        logger.debug('serverId -->', chefServerId);
         Instances.find({
             "chef.serverId": chefServerId,
             "chef.chefNodeName": {

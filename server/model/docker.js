@@ -8,15 +8,15 @@ var configmgmtDao = require('../model/d4dmasters/configmgmt');
 var Docker = function(){
 	var that = this;
 	this.runDockerCommands = function (cmd,instanceid, callback, callbackOnStdOut, callbackOnStdErr) {
-		console.log(instanceid);
+		logger.debug(instanceid);
 		  instancesDao.getInstanceById(instanceid, function(err, data) {
             if (err) {
                 res.send(500);
                 return;
             }
             if (data.length) {
-            			console.log(data[0]);
-				        console.log('reached docker cmd');
+            			logger.debug(data[0]);
+				        logger.debug('reached docker cmd');
 				        var instanceoptions = data[0];
 				        credentialCrpto.decryptCredential(instanceoptions.credentials,function(err,decrptedCredentials){
 				        	if(err) {
@@ -48,7 +48,7 @@ var Docker = function(){
 				            sshConnection.exec(cmd, function(err,code){
 				            	if(decrptedCredentials.pemFileLocation) {
 				            	  fileIo.removeFile(decrptedCredentials.pemFileLocation,function(){
-				            	  	console.log('temp file deleted');
+				            	  	logger.debug('temp file deleted');
 				            	  });
 	
 				            	}
@@ -67,7 +67,7 @@ var Docker = function(){
 	}
 
 	this.checkDockerStatus = function(instanceid,callback,callbackOnStdOut,callbackOnStdErr){
-		console.log(instanceid);
+		logger.debug(instanceid);
 		var cmd = "sudo docker ps";
 		
 		instancesDao.getInstanceById(instanceid, function(err, data) {
@@ -76,8 +76,8 @@ var Docker = function(){
                 return;
             }
             if (data.length) {
-            			console.log(data[0]);
-				        console.log('reached docker cmd');
+            			logger.debug(data[0]);
+				        logger.debug('reached docker cmd');
 				        var instanceoptions = data[0];
 				        credentialCrpto.decryptCredential(instanceoptions.credentials,function(err,decrptedCredentials){
 				        	if(err) {
@@ -109,7 +109,7 @@ var Docker = function(){
 				            sshConnection.exec(cmd, function(err,code){
 				            	if(decrptedCredentials.pemFileLocation) {
 				            	  fileIo.removeFile(decrptedCredentials.pemFileLocation,function(){
-				            	  	console.log('temp file deleted');
+				            	  	logger.debug('temp file deleted');
 				            	  });
 	
 				            	}

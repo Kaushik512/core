@@ -335,7 +335,7 @@ ApplicationSchema.statics.getApplicationById = function(applicationId, callback)
             callback(err, null);
             return;
         }
-        //console.log('data ==>', data);
+        //logger.debug('data ==>', data);
         if (applications.length) {
             var application = applications[0];
             /*if (!(application.appInstances && applications.length)) {
@@ -384,7 +384,7 @@ ApplicationSchema.statics.createNew = function(appData, callback) {
             return;
         }
         logger.debug('build saved ==>');
-        console.log(data);
+        logger.debug(data);
         appData.buildId = data._id;
         var application = new self(appData);
 

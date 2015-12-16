@@ -117,7 +117,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         logger.debug("Enter get() for /instances");
         instancesDao.getInstances(null, function(err, data) {
             if (err) {
-                console.log(err);
+                logger.debug(err);
                 res.send(500);
                 return;
             }
@@ -168,7 +168,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         res.send(500, errorResponses.db.error);
                         return;
                     }
-                    console.log('length ==>', tasks.length);
+                    logger.debug('length ==>', tasks.length);
                     if (tasks.length) {
                         res.send(400, {
                             message: "Instance is associated with task"
@@ -202,7 +202,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 res.send(500, errorResponses.db.error);
                                 return;
                             }
-                            console.log('infraManager ==>', infraManagerDetails);
+                            logger.debug('infraManager ==>', infraManagerDetails);
                             if (!infraManagerDetails) {
                                 logger.debug("Infra Manager details not found", err);
                                 res.send(500, {
@@ -610,10 +610,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     //res.end('200');
 
                 }
-                console.log('this ret:' + retCode);
+                logger.debug('this ret:' + retCode);
                 if (retCode == '0') {
                     instancesDao.updateInstanceDockerStatus(req.params.instanceid, "success", '', function(data) {
-                        console.log('Instance Docker Status set to Success');
+                        logger.debug('Instance Docker Status set to Success');
                         logger.debug("Exit get() for /instances/checkfordocker/%s", req.params.instanceid);
                         res.send('OK');
                         return;
@@ -761,7 +761,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     log: stdOutErr.toString('ascii'),
                                     timestamp: new Date().getTime()
                                 });
-                                console.log("docker return ", stdOutErr);
+                                logger.debug("docker return ", stdOutErr);
                                 res.send(stdOutErr);
 
                             });
@@ -1046,7 +1046,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         log: stdOutErr.toString('ascii'),
                                         timestamp: new Date().getTime()
                                     });
-                                    console.log("docker return ", stdOutErr);
+                                    logger.debug("docker return ", stdOutErr);
                                     //res.send(stdOutErr);
 
                                 });
@@ -1217,7 +1217,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     objectArray.push(req.body.jsonAttributes[i].jsonObj);
                                                 }
                                                 attributeObj = utils.mergeObjects(objectArray);
-                                                console.log('json ==> ', attributeObj);
+                                                logger.debug('json ==> ', attributeObj);
                                             } else {
                                                 req.body.jsonAttributes = [];
                                             }
@@ -1259,7 +1259,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                             } else {
                                                 puppetSettings.password = infraManagerDetails.puppetpassword;
                                             }
-                                            console.log('puppet pemfile ==> ' + puppetSettings.pemFileLocation);
+                                            logger.debug('puppet pemfile ==> ' + puppetSettings.pemFileLocation);
                                             infraManager = new Puppet(puppetSettings);
                                             var runOptions = {
                                                 username: decryptedCredentials.username,
@@ -1274,8 +1274,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                             }
 
                                         }
-                                        console.log('here === >');
-
 
                                         logsDao.insertLog({
                                             referenceId: logReferenceIds,
@@ -1295,7 +1293,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                             }
 
                                             if (err) {
-                                                //console.log(err);
                                                 var timestampEnded = new Date().getTime();
                                                 logsDao.insertLog({
                                                     referenceId: logReferenceIds,
@@ -2269,7 +2266,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 res.send(500);
                 return;
             }
-            console.log(deleteCount);
             if (deleteCount) {
                 logger.debug("Exit delete() for /instances/%s/services/%s", req.params.instanceId, req.params.serviceId);
                 res.send({
@@ -2636,7 +2632,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         res.send(500, "Failed to update instance name");
                         return;
                     }
-                    console.log(updateCount);
+                    logger.debug(updateCount);
                     res.send(200, {
                         updateCount: updateCount
                     });
@@ -2877,7 +2873,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     var scpClient = new SCPClient(params);
                     scpClient.upload(chefDetails.chefRepoLocation + '/.chef/', '/home/' + decryptedCredentials.username + '/.chef/', function(err) {
                         if (err) {
-                            console.log(err);
+                            logger.debug(err);
                             res.send(500, err);
                             return;
                         }
@@ -3015,7 +3011,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         sshParamObj.password = decryptedCredentials.password;
                                     }
                                     var sshConnection = new SSH(sshParamObj);
-                                    console.log(cmd);
+                                    logger.debug(cmd);
                                     sshConnection.exec(cmd, function(err, retCode) {
                                         if (err) {
                                             res.send(500, {
@@ -3050,10 +3046,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         }
 
                                     }, function(stdOut) {
-                                        console.log('err ==> ', stdOut.toString());
+                                        logger.debug('err ==> ', stdOut.toString());
 
                                     }, function(stdErr) {
-                                        console.log('err ==> ', stdErr.toString());
+                                        logger.debug('err ==> ', stdErr.toString());
                                     });
 
                                 } else { //windows

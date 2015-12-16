@@ -20,7 +20,7 @@ var TaskStatus = mongoose.model('taskstatuses', TaskStatusSchema);
 var TaskStatusDao = function() {
 
     this.getTaskStatusById = function(taskId, callback) {
-        console.log(taskId);
+        logger.debug(taskId);
         TaskStatus.find({
             "_id": new ObjectId(taskId)
         }, function(err, data) {
@@ -28,7 +28,7 @@ var TaskStatusDao = function() {
                 callback(err, null);
                 return;
             }
-            //console.log('data ==>', data);
+            //logger.debug('data ==>', data);
             callback(null, data);
 
         });
@@ -77,7 +77,7 @@ var TaskStatusDao = function() {
                 callback(err, null);
                 return;
             }
-            console.log('updated ==>', data);
+            logger.debug('updated ==>', data);
             callback(null, data);
         });
     };
@@ -104,7 +104,7 @@ var TaskStatusDao = function() {
                 return;
             }
 
-            console.log('status', data);
+            logger.debug('status', data);
 
             callback(null, data);
         });

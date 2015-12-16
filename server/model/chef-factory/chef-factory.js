@@ -109,7 +109,7 @@ var ChefFactory = function ChefFactory(chefSettings) {
             fileIo.readFile(chefSettings.userChefRepoLocation + '/cookbooks/' + cookbookName + '/' + fileName, function(err, fileData) {
                 fileCount++;
                 if (err) {
-                    console.log(err);
+                    logger.debug(err);
                     if (fileCount < 2) {
                         readNameFromFile('metadata.json', 'json', callback);
                     } else {
@@ -127,7 +127,7 @@ var ChefFactory = function ChefFactory(chefSettings) {
 
                     while (matches = regEx.exec(fileDataString)) {
                         if (matches.length == 2) {
-                            //console.log('matches',matches);
+                            //logger.debug('matches',matches);
                             metaDatacookbookName = matches[1];
                             break;
                         }
@@ -262,7 +262,7 @@ var ChefFactory = function ChefFactory(chefSettings) {
 
     this.saveRoleFile = function(filePath, fileContent, callback) {
         filePath = fixPath(filePath);
-        console.log(filePath);
+        logger.debug(filePath);
         if (filePath) {
             fileIo.writeFile(chefSettings.userChefRepoLocation + '/roles/' + filePath, fileContent, 'utf-8', function(err) {
                 if (err) {

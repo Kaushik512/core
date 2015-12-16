@@ -12,36 +12,36 @@ function Env() {
         //var envField = "{\"field\":[{\"name\":\"environmentname\",\"values\":{\"value\":\"" + name + "\"}},{\"name\":\"orgname\",\"values\":{\"value\":\"" + orgname + "\"}},{\"name\":\"rowid\",\"values\":{\"value\":\"" + uuid1 + "\"}}]}";
 
         var tempObj = JSON.parse(envField);
-        console.log('tempObj ==>', envField);
+        logger.debug('tempObj ==>', envField);
 
         d4dModel.findOne({
             id: '3'
         }, function(err, d4dMasterJson) {
             if (err) {
-                console.log("Hit and error:" + err);
+                logger.debug("Hit and error:" + err);
             }
             if (d4dMasterJson) {
                 var hasOrg = false;
                 d4dMasterJson.masterjson.rows.row.forEach(function(itm, i) {
-                    console.log("found" + itm.field.length);
+                    logger.debug("found" + itm.field.length);
                     var fieldOrgName = null;
                     var fieldEnvName = null;
                     for (var j = 0; j < itm.field.length; j++) {
                         if (itm.field[j]["name"] == 'environmentname') {
-                            //console.log("found:" + itm.field[j]["values"].value);
+                            //logger.debug("found:" + itm.field[j]["values"].value);
                             if (itm.field[j]["values"].value == name) {
-                                console.log("found: " + i + " -- " + itm.field[j]["values"].value);
+                                logger.debug("found: " + i + " -- " + itm.field[j]["values"].value);
                                 fieldEnvName = itm.field[j]["values"].value;
                             }
                         } else if (itm.field[j]["name"] == 'orgname') {
-                            console.log("found: " + i + " -- " + itm.field[j]["values"].value);
+                            logger.debug("found: " + i + " -- " + itm.field[j]["values"].value);
                             fieldOrgName = itm.field[j]["values"].value;
 
                         }
                     }
-                    console.log('org====>', orgname, fieldOrgName, fieldEnvName, name);
+                    logger.debug('org====>', orgname, fieldOrgName, fieldEnvName, name);
                     if (orgname == fieldOrgName && fieldEnvName == name) {
-                        console.log('has org true');
+                        logger.debug('has org true');
                         hasOrg = true;
                     }
 
@@ -49,7 +49,7 @@ function Env() {
                 });
                 if (hasOrg == false) {
                     //Creating org
-                    console.log('Creating');
+                    logger.debug('Creating');
                     d4dMasterJson.masterjson.rows.row.push(JSON.parse(envField));
 
 
@@ -74,7 +74,7 @@ function Env() {
 
             } else {
                 callback(true, name);
-                console.log("none found");
+                logger.debug("none found");
             }
 
         });
@@ -105,18 +105,18 @@ function Env() {
             orgname_rowid: orgname,
             id:'3'
         },function(err,envdata){
-                console.log(JSON.stringify(envdata));
+                logger.debug(JSON.stringify(envdata));
                 if(!envdata)
                 {
                     var mastersrdb =  new d4dModelNew.d4dModelMastersEnvironments(FLD);
                     mastersrdb.save(function(err,data){
                         if(err){
-                            console.log('Hit Save in createEnv error' + err);
+                            logger.debug('Hit Save in createEnv error' + err);
                             callback(err, null);
                             return;
                         }
-                        console.log('New Env Master Saved');
-                        console.log('Need to update project with : o' + orgname + ' b' + bgname + ' e' + uuid1 + ' p' + projname);
+                        logger.debug('New Env Master Saved');
+                        logger.debug('Need to update project with : o' + orgname + ' b' + bgname + ' e' + uuid1 + ' p' + projname);
                         //Step to add env to project.
                         d4dModelNew.d4dModelMastersProjects.findOne({
                             orgname_rowid: orgname,
@@ -129,11 +129,11 @@ function Env() {
                                 var newenv = '';
                                 if(data2.environmentname_rowid != '')
                                     {
-                                        console.log("Env Names found :========> " +data2.environmentname_rowid );
+                                        logger.debug("Env Names found :========> " +data2.environmentname_rowid );
                                         var _data2env = data2.environmentname_rowid.split(',');
                                         if(_data2env.indexOf(uuid1) >= 0){
                                             //found an env in the list exit
-                                             console.log("In Callback Env found in list");
+                                             logger.debug("In Callback Env found in list");
                                              callback(null, uuid1);
 
                                                return;
@@ -142,7 +142,7 @@ function Env() {
                                     }
                                 var newenv = data2.environmentname_rowid + uuid1;
 
-                                console.log('Newenv ====>',newenv);
+                                logger.debug('Newenv ====>',newenv);
                                 d4dModelNew.d4dModelMastersProjects.update({
                                     orgname_rowid: orgname,
                                     productgroupname_rowid: bgname,
@@ -184,12 +184,12 @@ function Env() {
 
                                 if(data2.environmentname_rowid != '')
                                     {
-                                        console.log("Env Names found :========> " +data2.environmentname_rowid );
-                                        console.log("Env rowid rcvd :========> " +envdata.rowid);
+                                        logger.debug("Env Names found :========> " +data2.environmentname_rowid );
+                                        logger.debug("Env rowid rcvd :========> " +envdata.rowid);
                                         var _data2env = data2.environmentname_rowid.split(',');
                                         if(_data2env.indexOf(envdata.rowid) >= 0){
                                             //found an env in the list exit
-                                             console.log("In Callback Env found in list");
+                                             logger.debug("In Callback Env found in list");
                                              callback(null, envdata.rowid);
 
                                                return;

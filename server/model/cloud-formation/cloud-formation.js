@@ -182,7 +182,7 @@ CloudFormationSchema.statics.getById = function(cfId, callback) {
             callback(err, null);
             return;
         }
-        //console.log('data ==>', data);
+        //logger.debug('data ==>', data);
         if (data.length) {
             callback(null, data[0]);
         } else {
@@ -222,7 +222,7 @@ CloudFormationSchema.statics.removeById = function(cfId, callback) {
             callback(err, null);
             return;
         }
-        //console.log('data ==>', data);
+        //logger.debug('data ==>', data);
         callback(null, deleteCount);
 
     });
@@ -244,7 +244,7 @@ CloudFormationSchema.statics.findByAutoScaleTopicArn = function(topicArn, callba
             callback(err, null);
             return;
         }
-        //console.log('data ==>', data);
+        //logger.debug('data ==>', data);
         callback(null, cloudFormations);
 
     });
@@ -266,7 +266,7 @@ CloudFormationSchema.statics.findByAutoScaleResourceId = function(resourceId, ca
             callback(err, null);
             return;
         }
-        //console.log('data ==>', data);
+        //logger.debug('data ==>', data);
         callback(null, cloudFormations);
 
     });

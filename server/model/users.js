@@ -29,7 +29,7 @@ module.exports.createUser = function(username, fname, lname, groupId, roleId, ca
       callback(err, null);
       return;
     }
-    console.log("User Document Created");
+    logger.debug("User Document Created");
     callback(null, data);
   });
 
@@ -121,7 +121,7 @@ module.exports.getUser = function(username, req, callback) {
     }, function(err, d4dMasterJson) {
         logger.debug('Completed query on masters users.');
         if (err) {
-            console.log("Hit and error:" + err);
+            logger.debug("Hit and error:" + err);
         }
         if (d4dMasterJson && d4dMasterJson.length) {
             //Fetching the permission set for the role defined for the user
@@ -148,7 +148,7 @@ module.exports.getUser = function(username, req, callback) {
             });
             //res.end();
         } else {
-            console.log("none found");
+            logger.debug("none found");
             callback(err, null);
         }
 

@@ -112,7 +112,7 @@ buildSchema.statics.getBuildById = function(buildId, callback) {
             callback(err, null);
             return;
         }
-        //console.log('data ==>', data);
+        //logger.debug('data ==>', data);
         if (data.length) {
             callback(null, data[0]);
         } else {
@@ -130,7 +130,7 @@ buildSchema.statics.getBuildsByTaskId = function(taskId, callback) {
             callback(err, null);
             return;
         }
-        //console.log('data ==>', data);
+        //logger.debug('data ==>', data);
         if (data.length) {
             callback(null, data);
         } else {

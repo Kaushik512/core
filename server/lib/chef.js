@@ -563,7 +563,7 @@ var Chef = function(settings) {
                 sudoCmd = 'echo \"' + options.password + '\" | sudo -S ';
             }
             cmdString = sudoCmd + cmdString;
-            console.log(cmdString);
+            logger.debug(cmdString);
             var sshExec = new SSHExec(options);
             sshExec.exec(cmdString, callback, callbackOnStdOut, callbackOnStdErr);
 

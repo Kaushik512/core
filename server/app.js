@@ -167,7 +167,7 @@ socketIORoutes.setRoutes(io);
 // checking authorization for socket.io
 /*
 io.set('authorization', function(data, callback) {
-    console.log('socket data ==>',data);
+    logger.debug('socket data ==>',data);
     
 });*/
 io.set('log level', 1);
@@ -175,15 +175,15 @@ io.set('log level', 1);
 io.sockets.on('connection', function(socket) {
     // socket.emit('log',"testing the log");
     //  logger.debug('sent out socket message');
-    //console.log('file :' + './logs/catalyst.log.' + dt.getFullYear() + '-' + (dt.getMonth() + 1) + '-' + dt.getDate());
+    //logger.debug('file :' + './logs/catalyst.log.' + dt.getFullYear() + '-' + (dt.getMonth() + 1) + '-' + dt.getDate());
     // logger.on('log',function(msg){
-    //      console.log('>>>>>>>>>>>>>' + msg); 
+    //      logger.debug('>>>>>>>>>>>>>' + msg); 
     // });
     var dt = new Date();
     var month = dt.getMonth() + 1;
     if (month < 10)
         month = '0' + month;
-    console.log('file :' + './logs/catalyst.log.' + dt.getFullYear() + '-' + month + '-' + dt.getDate());
+    logger.debug('file :' + './logs/catalyst.log.' + dt.getFullYear() + '-' + month + '-' + dt.getDate());
 
     var tail;
     if (fs.existsSync('./logs/catalyst.log.' + dt.getFullYear() + '-' + month + '-' + dt.getDate() + '.2'))

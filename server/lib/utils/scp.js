@@ -95,7 +95,7 @@ module.exports = function(options) {
             }
             connectionParamsObj.path = destPath;
             scpClient.scp(srcPath, connectionParamsObj, function(err) {
-            	console.log('here ===> ');
+            	logger.debug('here ===> ');
                 callback(err);
             });
 

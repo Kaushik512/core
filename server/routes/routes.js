@@ -1,3 +1,4 @@
+var logger = require('_pr/logger')(module);
 var express = require("express");
 var path = require("path");
 
@@ -160,22 +161,22 @@ module.exports.setRoutes = function(app,socketIo) {
             if (req.session.user.authorizedfiles) {
                 var authfiles = req.session.user.authorizedfiles.split(','); //To be moved to login page an hold a static variable.
                 authfiles += ',index.html,settings.html,design.html,Tracker.html,noaccess.html'
-                    // console.log(authfiles.length, req.originalUrl.indexOf('.html'));
+                    // logger.debug(authfiles.length, req.originalUrl.indexOf('.html'));
                 if (req.originalUrl.indexOf('.html') > 0) //its a html file.
                 {
                     var urlpart = req.originalUrl.split('/');
-                    //  console.log(urlpart[urlpart.length -1], authfiles.length, authfiles.indexOf(urlpart[urlpart.length -1]));
+                    //  logger.debug(urlpart[urlpart.length -1], authfiles.length, authfiles.indexOf(urlpart[urlpart.length -1]));
                     if (authfiles.indexOf(urlpart[urlpart.length - 1]) < 0 && req.session.user.cn != 'sd1') {
-                        console.log('not authorized');
+                        logger.debug('not authorized');
                         //              res.redirect('/private/ajax/noaccess.html'); //To be fixed when micro authentication is implemented.
                         //            return;
                     } else {
-                        console.log('Authorized');
+                        logger.debug('Authorized');
                     }
 
                 }
             }
-            console.log('req received ' + req.originalUrl);
+            logger.debug('req received ' + req.originalUrl);
             next();
         } else {
             //res.redirect('/login');

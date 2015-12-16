@@ -197,7 +197,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
         gethppubliccloudprovider(req.params.providerid, function(err, hppubliccloudconfig) {
 
             var hppubliccloud = new Hppubliccloud(hppubliccloudconfig);
-            console.log("serverId:", req.params.serverId);
+            logger.debug("serverId:", req.params.serverId);
 
             hppubliccloud.getServerById(req.params.tenantId, req.params.serverId, function(err, data) {
                 if (err) {

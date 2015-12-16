@@ -55,7 +55,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     }
                 });
             } else {
-                console.log(req.body.trackData);
+                logger.debug(req.body.trackData);
                 var items = tracks[0].itemUrls.concat(req.body.trackData.itemUrls);
                 tracks[0].itemUrls = items;
                 logger.debug("tracks[0]",items);

@@ -28,7 +28,7 @@ var Puppet = function(settings) {
         var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
         sshOptions.password = cryptography.decryptText(settings.password, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding);
         settings.password = sshOptions.password;
-        console.log(settings.password);
+        logger.debug(settings.password);
     }
 
     function runSSHCmd(sshOptions, cmds, onComplete, onStdOut, onStdErr) {
@@ -106,7 +106,7 @@ var Puppet = function(settings) {
         if (sshOptions.privateKey) {
             fs.chmod(sshOptions.privateKey, 0600, function(err) {
                 if (err) {
-                    console.log(err);
+                    logger.debug(err);
                     callback(err);
                     return;
                 }
@@ -254,7 +254,7 @@ var Puppet = function(settings) {
                             var scp = new SCP(sshOptions);
                             scp.upload(__dirname + '/../cookbooks.tar', '/tmp', function(err) {
                                 if (err) {
-                                    console.log(err);
+                                    logger.debug(err);
                                     callback({
                                         message: "Unable to upload cookbooks onto the node",
                                         err: err
@@ -336,7 +336,7 @@ var Puppet = function(settings) {
                                                         },
                                                         onStdOut: function(stdOut) {
                                                             callbackStdOut(stdOut);
-                                                            console.log(stdOut.toString());
+                                                            logger.debug(stdOut.toString());
                                                         }
                                                     });
                                                     proc.start();
@@ -405,7 +405,7 @@ var Puppet = function(settings) {
                 callback(err, null);
                 return;
             }
-            console.log('envPath  == >' + puppetConfig.environmentpath);
+            logger.debug('envPath  == >' + puppetConfig.environmentpath);
             runSSHCmdOnMaster('ls ' + puppetConfig.environmentpath, function(err, retCode) {
                 if (err) {
                     callback(err, null);
@@ -600,7 +600,7 @@ var Puppet = function(settings) {
     };
 
     this.runClient = function(options, callback, onStdOut, onStdErr) {
-        console.log('running client');
+        logger.debug('running client');
         var sshOptions = {
             username: options.username,
             host: options.host,
@@ -611,7 +611,7 @@ var Puppet = function(settings) {
         } else {
             sshOptions.password = options.password;
         }
-        console.log(sshOptions);
+        logger.debug(sshOptions);
 
         runSSHCmdOnAgent(sshOptions, 'puppet agent -t', function(err, retCode) {
             if (err) {
@@ -635,7 +635,7 @@ var Puppet = function(settings) {
     };
 
     this.cleanClient = function(options, callback, onStdOut, onStdErr) {
-        console.log('cleaning client');
+        logger.debug('cleaning client');
         var sshOptions = {
             username: options.username,
             host: options.host,
@@ -646,7 +646,7 @@ var Puppet = function(settings) {
         } else {
             sshOptions.password = options.password;
         }
-        console.log(sshOptions);
+        logger.debug(sshOptions);
 
         runSSHCmdOnAgent(sshOptions, ['rm -rf /etc/puppet', 'rm -rf /var/lib/puppet', 'rm -rf $HOME/.puppet', 'service puppet stop'], function(err, retCode) {
             if (err) {

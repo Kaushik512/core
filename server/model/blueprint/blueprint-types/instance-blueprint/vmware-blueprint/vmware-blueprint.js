@@ -164,7 +164,7 @@ vmwareInstanceBlueprintSchema.statics.createNew = function(awsData) {
     awsData.infraManagerId = awsData.infraManagerId;
     awsData.dataStore = awsData.dataStore;
     awsData.imageId = awsData.imageId;
-    console.log(awsData);
+    logger.debug(awsData);
     awsData.cloudProviderData = {
         instanceCount: awsData.instanceCount,
         instanceOS: awsData.instanceOS,

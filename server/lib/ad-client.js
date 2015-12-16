@@ -15,7 +15,7 @@ function createDnObject(dnString) {
     var obj = {};
     for (var i = 0; i < parts.length; i++) {
         var keyValue = parts[i].split('=');
-        console.log(keyValue);
+        logger.debug(keyValue);
         if (obj[keyValue[0]]) {
             obj[keyValue[0]] = [].concat(obj[keyValue[0]]);
             obj[keyValue[0]].push(keyValue[1]);
@@ -37,7 +37,7 @@ function createDnString(username, baseDn, ou) {
 }
 
 var ADClient = function(options) {
-    console.log('options ==>', options);
+    logger.debug('options ==>', options);
     if (!options) {
         options = {};
     }
@@ -53,14 +53,14 @@ var ADClient = function(options) {
 
     this.authenticate = function(username, password, callback) {
 
-        //console.log('hit authenticate =========>' + dnString);
+        //logger.debug('hit authenticate =========>' + dnString);
 
         client.authenticate(username, password, function(err, auth) {
             if (err) {
-                console.log("err ==> ", err);
+                logger.debug("err ==> ", err);
                 callback(err, null);
             } else {
-                console.log("User String:{" + dnString + '}');
+                logger.debug("User String:{" + dnString + '}');
                 var dnString = createDnString(username, options.baseDn, options.ou);
                 callback(null, createDnObject(dnString));
             }

@@ -82,7 +82,7 @@ awsKeyPairSchema.statics.createNew = function(req, providerId, callback) {
     if (keyPairs) {
         logger.debug("Inside if>>>> ", typeof keyPairs);
         var inFiles = req.files.fileObject;
-        console.log("Incomming files:  ", typeof inFiles.length);
+        logger.debug("Incomming files:  ", typeof inFiles.length);
         if (typeof inFiles.length === 'undefined') {
             logger.debug("Inside undefined...")
             files.push(inFiles);

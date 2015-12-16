@@ -1,3 +1,4 @@
+var logger = require('_pr/logger')(module);
 var spawn = require('child_process').spawn;
 var exec = require('child_process').exec;
 var readline = require('readline');
@@ -249,7 +250,7 @@ function parseArguments() {
     });
 
     if (options.help) {
-        console.log(usage);
+        logger.debug(usage);
         process.exit(0);
     }
 
@@ -288,10 +289,10 @@ function getConfig(config, options) {
 
 
 function installPackageJson() {
-    console.log("Installing node packages from pacakge.json");
+    logger.debug("Installing node packages from pacakge.json");
     var procInstall = spawn('npm', ['install', '--unsafe-perm']);
     procInstall.stdout.on('data', function(data) {
-        console.log("" + data);
+        logger.debug("" + data);
     });
 
     procInstall.stderr.on('data', function(data) {
@@ -299,10 +300,10 @@ function installPackageJson() {
     });
     procInstall.on('close', function(pacakgeInstallRetCode) {
         if (pacakgeInstallRetCode === 0) {
-            console.log("Installation Successfull.");
+            logger.debug("Installation Successfull.");
             process.exit(0);
         } else {
-            console.log("Error occured while installing packages from package.json");
+            logger.debug("Error occured while installing packages from package.json");
             process.exit(1);
         }
     });
@@ -314,16 +315,16 @@ function restoreSeedData(config, callback) {
         console.error("mongorestore error ==> ", mongoRestoreError);
     });
     procMongoRestore.stdout.on('data', function(data) {
-        console.log("" + data);
+        logger.debug("" + data);
     });
     procMongoRestore.stderr.on('data', function(data) {
-        console.log("" + data);
+        logger.debug("" + data);
     });
     procMongoRestore.on('close', function(mongoRestoreCode) {
         if (mongoRestoreCode === 0) {
-            console.log('mongo restore successfull');
+            logger.debug('mongo restore successfull');
             fse = require('fs-extra');
-            console.log('copying seed data');
+            logger.debug('copying seed data');
             fse.copySync('../seed/catalyst', config.catalystHome);
             callback();
         } else {
@@ -346,7 +347,7 @@ function setupLdapUser(config, callback) {
         if (!ldapUser) {
             throw 'Invalid ldap user input'
         }
-        console.log('Checking for ldap User : ' + ldapUser);
+        logger.debug('Checking for ldap User : ' + ldapUser);
         var ldapjs = require('ldapjs');
         var client = ldapjs.createClient({
             url: 'ldap://' + config.ldap.host + ':' + config.ldap.port
@@ -374,7 +375,7 @@ function setupLdapUser(config, callback) {
             });
 
             res.on('end', function(result) {
-                console.log('status: ' + result.status);
+                logger.debug('status: ' + result.status);
                 if (!userFound) {
                     console.error('Unable to find user ' + ldapUser);
                     process.exit(1);
@@ -391,14 +392,14 @@ function setupLdapUser(config, callback) {
 }
 
 function createConfigFile(config) {
-    console.log('creating configuration json file');
+    logger.debug('creating configuration json file');
     configJson = JSON.stringify(config);
     var fs = require('fs');
     fs.writeFileSync('config/catalyst-config.json', configJson);
 }
 
 
-console.log('Installing node packages required for installation');
+logger.debug('Installing node packages required for installation');
 proc = spawn('npm', ['install', "command-line-args@0.5.3", 'mkdirp@0.5.0', 'fs-extra@0.18.0', 'ldapjs@0.7.1']);
 proc.on('close', function(code) {
     if (code !== 0) {
@@ -408,7 +409,7 @@ proc.on('close', function(code) {
         var options = parseArguments();
         var defaultConfig = getDefaultsConfig();
         var config = getConfig(defaultConfig, options);
-        console.log('creating catalyst home directory');
+        logger.debug('creating catalyst home directory');
 
         var fsExtra = require('fs-extra');
 
@@ -443,7 +444,7 @@ proc.on('close', function(code) {
     }
 });
 proc.stdout.on('data', function(data) {
-    console.log("" + data);
+    logger.debug("" + data);
 });
 
 proc.stderr.on('data', function(data) {

@@ -49,13 +49,13 @@ var EC2 = function(awsSettings) {
     this.getInstanceState = function(instanceId, callback) {
         this.describeInstances([instanceId], function(err, data) {
             if (err) {
-                console.log("error occured while checking instance state. instance Id ==> " + instanceId);
+                logger.debug("error occured while checking instance state. instance Id ==> " + instanceId);
                 callback(err, null);
                 return;
             }
             if (data.Reservations.length && data.Reservations[0].Instances.length) {
                 var instanceState = data.Reservations[0].Instances[0].State.Name
-                console.log("instance state ==> " + instanceState);
+                logger.debug("instance state ==> " + instanceState);
                 callback(null, instanceState);
             } else {
                 callback(true, null);
@@ -85,8 +85,8 @@ var EC2 = function(awsSettings) {
         // return;
         ec.runInstances(param, function(err, data) {
             if (err) {
-                console.log("error occured while launching instance");
-                console.log(err);
+                logger.debug("error occured while launching instance");
+                logger.debug(err);
                 callback(err, null);
                 return;
             }
@@ -104,7 +104,7 @@ var EC2 = function(awsSettings) {
                     }]
                 };
                 ec.createTags(params, function(err) {
-                    console.log("Tagging instance", err ? "failure" : "success");
+                    logger.debug("Tagging instance", err ? "failure" : "success");
                 });
                 if(j >= data.Instances.length - 1)
                     callback(null, data.Instances);
@@ -116,20 +116,20 @@ var EC2 = function(awsSettings) {
     this.waitForInstanceRunnnigState = function(instanceId, callback) {
 
         function timeoutFunc(instanceId) {
-            console.log("checking state of instance ==> " + instanceId);
+            logger.debug("checking state of instance ==> " + instanceId);
             var t_timeout = setTimeout(function() {
                 ec.describeInstances({
                     InstanceIds: [instanceId]
                 }, function(err, data) {
                     if (err) {
-                        console.log("error occured while checking instance state. instance Id ==> " + instanceId);
+                        logger.debug("error occured while checking instance state. instance Id ==> " + instanceId);
                         callback(err, null);
                         return;
                     }
                     var instanceState = data.Reservations[0].Instances[0].State.Name
-                    console.log("instance state ==> " + instanceState);
+                    logger.debug("instance state ==> " + instanceState);
                     if (instanceState === instanceStateList.RUNNING) {
-                        console.log("instance has started running ");
+                        logger.debug("instance has started running ");
                         var instanceData = data.Reservations[0].Instances[0];
                          callback(null, instanceData);                        
 
@@ -151,7 +151,7 @@ var EC2 = function(awsSettings) {
             var timeout = setTimeout(function() {
                 that.getInstanceState(instanceId, function(err, instanceState) {
                     if (err) {
-                        console.log('Unable to get instance state', err);
+                        logger.debug('Unable to get instance state', err);
                         callback(err, null);
                         return;
                     }
@@ -171,12 +171,12 @@ var EC2 = function(awsSettings) {
             InstanceIds: instanceIds
         }, function(err, data) {
             if (err) {
-                console.log("unable to stop instance : " + instanceIds);
-                console.log(err);
+                logger.debug("unable to stop instance : " + instanceIds);
+                logger.debug(err);
                 callback(err, null)
                 return;
             }
-            console.log("number of instances stopped " + data.StoppingInstances.length);
+            logger.debug("number of instances stopped " + data.StoppingInstances.length);
             callback(null, data.StoppingInstances);
             pollInstanceState(instanceIds[0], instanceStateList.STOPPED, function(err, state) {
                 onStateChangedCompleteCallback(err, state);
@@ -190,12 +190,12 @@ var EC2 = function(awsSettings) {
             InstanceIds: instanceIds
         }, function(err, data) {
             if (err) {
-                console.log("unable to start instances : " + instanceIds);
-                console.log(err);
+                logger.debug("unable to start instances : " + instanceIds);
+                logger.debug(err);
                 callback(err, null)
                 return;
             }
-            console.log("number of instances stopped " + data.StartingInstances.length);
+            logger.debug("number of instances stopped " + data.StartingInstances.length);
             callback(null, data.StartingInstances);
             pollInstanceState(instanceIds[0], instanceStateList.RUNNING, function(err, state) {
                 onStateChangedCompleteCallback(err, state);
@@ -209,12 +209,12 @@ var EC2 = function(awsSettings) {
             InstanceIds: instanceIds
         }, function(err, data) {
             if (err) {
-                console.log("unable to reboot instance : " + instanceIds);
-                console.log(err);
+                logger.debug("unable to reboot instance : " + instanceIds);
+                logger.debug(err);
                 callback(err, null)
                 return;
             }
-            console.log("number of instances stopped " + data.length);
+            logger.debug("number of instances stopped " + data.length);
             callback(null, data);
             pollInstanceState(instanceIds[0], instanceStateList.RUNNING, function(err, state) {
                 onStateChangedCompleteCallback(err, state);
@@ -228,8 +228,8 @@ var EC2 = function(awsSettings) {
             InstanceIds: instanceIds
         }, function(err, data) {
             if (err) {
-                console.log("unable to terminate instance : " + instanceId);
-                console.log(err);
+                logger.debug("unable to terminate instance : " + instanceId);
+                logger.debug(err);
                 callback(err, null)
                 return;
             }
@@ -245,7 +245,7 @@ var EC2 = function(awsSettings) {
     this.getSecurityGroups = function(callback) {
         ec.describeSecurityGroups({}, function(err, data) {
             if (err) {
-                console.log(err);
+                logger.debug(err);
                 callback(err, null);
                 return;
             }
@@ -324,7 +324,7 @@ var EC2 = function(awsSettings) {
       };
         ec.describeSecurityGroups(params, function(err, data) {
             if (err) {
-                console.log(err);
+                logger.debug(err);
                 callback(err, null);
                 return;
             }
@@ -333,15 +333,15 @@ var EC2 = function(awsSettings) {
     };
 
     this.waitForEvent = function(instanceId, eventName, callback) {
-        console.log("waiting for ==> ",instanceId,eventName);
+        logger.debug("waiting for ==> ",instanceId,eventName);
         ec.waitFor(eventName, {
             InstanceIds: [instanceId]
         }, function(err, data) {
             if (err) {
-                console.log(err, err.stack); // an error occurred
+                logger.debug(err, err.stack); // an error occurred
                 callback(err, null);
             } else {
-                console.log(data);
+                logger.debug(data);
                 callback(null, data);
             } // successful response
         });

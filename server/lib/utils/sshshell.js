@@ -122,7 +122,7 @@ function SSHShell(connectionParamsObj) {
 
     if (connectionParamsObj.interactiveKeyboardPassword) {
         connection.on('keyboard-interactive', function(name, instructions, instructionsLang, prompts, finish) {
-            console.log('Connection :: keyboard-interactive');
+            logger.debug('Connection :: keyboard-interactive');
             finish([connectionParamsObj.interactiveKeyboardPassword]);
         });
 

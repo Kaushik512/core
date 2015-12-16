@@ -106,7 +106,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 for (var k = 0; k < docbgs.length; k++) {
                                     for (var i = 0; i < orgTree.length; i++) {
                                         if (orgTree[i]['orgid'] == docbgs[k]['orgname_rowid']) {
-                                            //  console.log('found' );
+                                            //  logger.debug('found' );
                                             bgname = configmgmtDao.convertRowIDToValue(docbgs[k]['rowid'], rowidlist);
                                             orgTree[i]['businessGroups'].push({
                                                 name: bgname,
@@ -222,7 +222,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     /*app.get('/organizations/getTreeForbtv', function(req, res) {
         logger.debug("Enter get() for /organizations/getTreeForbtv");
-        //console.log("Enter /organizations/getTreeForbtv");
+        //logger.debug("Enter /organizations/getTreeForbtv");
         configmgmtDao.getTeamsOrgBuProjForUser(req.session.user.cn, function(err, objperms) {
             var orgTree = [];
             if (err) {
@@ -287,7 +287,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 for (var i = 0; i < orgTree.length; i++) {
                                     //var orgname = configmgmtDao.convertRowIDToValue(docbgs[k]['orgname_rowid'],rowidlist);
                                     if (orgTree[i]['rowid'] == docbgs[k]['orgname_rowid']) {
-                                        //  console.log('found' );
+                                        //  logger.debug('found' );
                                         var bgname = configmgmtDao.convertRowIDToValue(docbgs[k]['rowid'], rowidlist);
                                         orgTree[i]['businessGroups'].push({
                                             name: bgname,
@@ -319,7 +319,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 $in: objperms[0].projects
                                             }
                                         }, function(err, docprojs) {
-                                            // console.log('Projects:' + docprojs);
+                                            // logger.debug('Projects:' + docprojs);
 
                                             var prjids = docprojs.map(function(docprojs1) {
                                                 return docprojs1.rowid;
@@ -367,7 +367,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                     var prjname = configmgmtDao.convertRowIDToValue(docprojs[_prj]['rowid'], rowidlist);
                                                                     // get features.appcard from app.config
 
-                                                                    //console.log(appConfig);
+                                                                    //logger.debug(appConfig);
 
 
                                                                     var selectable = !!appConfig.features.appcard
@@ -393,7 +393,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
                                                             }
 
-                                                            //   console.log("Env:" + docprojs[_bg]['environmentname']);
+                                                            //   logger.debug("Env:" + docprojs[_bg]['environmentname']);
                                                             // if(orgTree[_i]['environments'].length <=0){
                                                             //     for(var envname in docprojs[_bg]['environmentname'])
                                                             //          orgTree[_i]['environments'].push(docprojs[_bg]['environmentname'][envname]);
@@ -441,16 +441,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             // orgTree.forEach(function(k1,v1){
 
                             //     // orgTree[v1].forEach(function(k2,v2){
-                            //     //         console.log(orgTree[v1][v2]);
+                            //     //         logger.debug(orgTree[v1][v2]);
                             //     // });
 
                             // });
                             //     var orgj = JSON.parse(k1);
                             //     Object.keys(orgj).forEach(function(vals,keys){
-                            //        console.log('key' + keys + ' ' + vals);
+                            //        logger.debug('key' + keys + ' ' + vals);
 
                             //    });
-                            //    // console.log("orgTree:" + JSON.stringify(orgTree));
+                            //    // logger.debug("orgTree:" + JSON.stringify(orgTree));
                             // });
 
                             // orgTree.businessGroups.push(docbgs.)
@@ -464,7 +464,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });*/
     app.get('/organizations/getTreeForbtv', function(req, res) {
         logger.debug("Enter get() for /organizations/getTreeForbtv");
-        //console.log("Enter /organizations/getTreeForbtv");
+        //logger.debug("Enter /organizations/getTreeForbtv");
         var loggedInUser = req.session.user.cn;
         //logger.debug("LoggedInUser:>>>>>>>>>>>>>> ", loggedInUser);
         masterUtil.getLoggedInUser(loggedInUser, function(err, anUser) {
@@ -633,7 +633,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                                                 var prjname = configmgmtDao.convertRowIDToValue(docprojs[_prj]['rowid'], rowidlist);
                                                                                 // get features.appcard from app.config
 
-                                                                                //console.log(appConfig);
+                                                                                //logger.debug(appConfig);
 
 
                                                                                 var selectable = !!appConfig.features.appcard
@@ -746,7 +746,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 for (var k = 0; k < docbgs.length; k++) {
                     for (var i = 0; i < orgTree.length; i++) {
                         if (orgTree[i]['name'] == docbgs[k]['orgname']) {
-                            //  console.log('found' );
+                            //  logger.debug('found' );
                             orgTree[i]['businessGroups'].push({
                                 name: docbgs[k]['productgroupname'],
                                 projects: []
@@ -756,7 +756,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 orgname: orgTree[i]['name'],
                                 productgroupname: docbgs[k]['productgroupname']
                             }, function(err, docprojs) {
-                                // console.log('Projects:' + docprojs);
+                                // logger.debug('Projects:' + docprojs);
 
                                 var prjnames = docprojs.map(function(docprojs1) {
                                     return docprojs1.projectname;
@@ -821,16 +821,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 // orgTree.forEach(function(k1,v1){
 
                 //     // orgTree[v1].forEach(function(k2,v2){
-                //     //         console.log(orgTree[v1][v2]);
+                //     //         logger.debug(orgTree[v1][v2]);
                 //     // });
 
                 // });
                 //     var orgj = JSON.parse(k1);
                 //     Object.keys(orgj).forEach(function(vals,keys){
-                //        console.log('key' + keys + ' ' + vals);
+                //        logger.debug('key' + keys + ' ' + vals);
 
                 //    });
-                //    // console.log("orgTree:" + JSON.stringify(orgTree));
+                //    // logger.debug("orgTree:" + JSON.stringify(orgTree));
                 // });
 
                 // orgTree.businessGroups.push(docbgs.)
@@ -1012,7 +1012,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         var user = req.session.user;
         var category = 'blueprints';
         var permissionto = 'create';
-        console.log('body == >', req.body,'typeof ==> ',typeof req.body);
+        logger.debug('body == >', req.body,'typeof ==> ',typeof req.body);
 
         usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
             if (!err) {
@@ -1044,7 +1044,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 users: req.body.blueprintData.users,
                 blueprintType: req.body.blueprintData.blueprintType
             };
-            console.log('req== >', blueprintData);
+            logger.debug('req== >', blueprintData);
             //var blueprintData = req.body.blueprintData;
             var dockerData, instanceData;
             logger.debug('req.body.blueprintData.blueprintType ===>', req.body.blueprintData.blueprintType);
@@ -1154,7 +1154,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 }
                 blueprintData.instanceData = instanceData;
             }else if (req.body.blueprintData.blueprintType === 'aws_cf') {
-                console.log('templateFile ==> ', req.body.blueprintData.cftTemplateFile);
+                logger.debug('templateFile ==> ', req.body.blueprintData.cftTemplateFile);
                 cloudFormationData = {
                     cloudProviderId: req.body.blueprintData.cftProviderId,
                     infraManagerType: 'chef',
@@ -1270,8 +1270,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.post('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/applications', function(req, res) {
-        console.log(req.files);
-        console.log(req.body.appData);
+        logger.debug(req.files);
+        logger.debug(req.body.appData);
         logger.debug("Enter post() for /organizations/%s/businessgroups/%s/projects/%s/applications", req.params.orgId, req.params.bgId, req.params.projectId);
         var appData = req.body.appData;
         appData.orgId = req.params.orgId;
@@ -1312,7 +1312,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             }
 
                             Blueprints.getBlueprintsByOrgBgProject(req.params.orgId, req.params.bgId, req.params.projectId, req.query.blueprintType, function(err, blueprintsData) {
-                                console.log(req.params.orgId, req.params.projectId, req.params.envId);
+                                logger.debug(req.params.orgId, req.params.projectId, req.params.envId);
                                 if (err) {
                                     res.send(500);
                                     return;
@@ -1666,13 +1666,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             }
                             waitForPort(req.body.fqdn, openport, function(err) {
                                 if (err) {
-                                    console.log(err);
+                                    logger.debug(err);
                                     res.send(400, {
                                         message: "Unable to SSH into instance"
                                     });
                                     return;
                                 }
-                                //    console.log('node ===>', node);
+                                //    logger.debug('node ===>', node);
                                 credentialCryptography.encryptCredential(credentials, function(err, encryptedCredentials) {
                                     if (err) {
                                         logger.error("unable to encrypt credentials", err);
@@ -1767,7 +1767,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             var bootstarpOption;
                                             var deleteOptions;
                                             if (infraManagerDetails.configType === 'chef') {
-                                                console.log('In chef ');
+                                                logger.debug('In chef ');
                                                 infraManager = new Chef({
                                                     userChefRepoLocation: infraManagerDetails.chefRepoLocation,
                                                     chefUserName: infraManagerDetails.loginname,
@@ -1809,7 +1809,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 } else {
                                                     puppetSettings.password = infraManagerDetails.puppetpassword;
                                                 }
-                                                console.log('puppet pemfile ==> ' + puppetSettings.pemFileLocation);
+                                                logger.debug('puppet pemfile ==> ' + puppetSettings.pemFileLocation);
                                                 bootstarpOption = {
                                                     host: instance.instanceIP,
                                                     username: instance.credentials.username,

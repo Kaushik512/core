@@ -428,7 +428,7 @@ taskSchema.statics.getTaskById = function(taskId, callback) {
             callback(err, null);
             return;
         }
-        //console.log('data ==>', data);
+        //logger.debug('data ==>', data);
         if (data.length) {
             callback(null, data[0]);
         } else {
@@ -448,7 +448,7 @@ taskSchema.statics.getTaskByIds = function(taskIds, callback) {
     queryObj._id = {
         $in: taskIds
     }
-    console.log(taskIds);
+    logger.debug(taskIds);
     this.find(queryObj, function(err, tasks) {
         if (err) {
             logger.error(err);
@@ -469,7 +469,7 @@ taskSchema.statics.removeTaskById = function(taskId, callback) {
             callback(err, null);
             return;
         }
-        //console.log('data ==>', data);
+        //logger.debug('data ==>', data);
         callback(null, deleteCount);
 
     });
@@ -535,7 +535,7 @@ taskSchema.statics.updateTaskById = function(taskId, taskData, callback) {
             callback(err, null);
             return;
         }
-        //console.log('data ==>', data);
+        //logger.debug('data ==>', data);
         logger.debug('Updated task:' + JSON.stringify(Tasks));
         callback(null, updateCount);
 
@@ -547,7 +547,7 @@ taskSchema.statics.getTasksByNodeIds = function(nodeIds, callback) {
     if (!nodeIds) {
         nodeIds = [];
     }
-    console.log("nodeids ==> ", nodeIds, typeof nodeIds[0]);
+    logger.debug("nodeids ==> ", nodeIds, typeof nodeIds[0]);
     Tasks.find({
         "taskConfig.nodeIds": {
             "$in": nodeIds
@@ -557,7 +557,7 @@ taskSchema.statics.getTasksByNodeIds = function(nodeIds, callback) {
             callback(err, null);
             return;
         }
-        //console.log('data ==>', data);
+        //logger.debug('data ==>', data);
         callback(null, tasks);
 
     });

@@ -20,7 +20,7 @@ var D4DfolderPath = currentDirectory.substring(0, indexOfSlash + 1);
 
 
 
-console.log(D4DfolderPath);
+logger.debug(D4DfolderPath);
 java.classpath.push(D4DfolderPath + '/java/lib/jsch-0.1.51.jar');
 java.classpath.push(D4DfolderPath + '/java/classes');
 //java.classpath.push('/home/anshul/eclipse-workspace/catalyst-ssh/bin');
@@ -42,14 +42,14 @@ function JavaSSHShell(options, javaSSHInstance, socketServer, callback) {
     var con;
 
     socketServer.on('connection', function(socket) {
-        console.log('socket connection established');
+        logger.debug('socket connection established');
         con = socket;
         con.setEncoding('utf8');
         con.setNoDelay(true);
         //listening to socket
         con.on('data', function(data) {
 
-            //console.log('type of data ==>',typeof data);
+            //logger.debug('type of data ==>',typeof data);
             that.emit('out', data);
 
         });
@@ -64,7 +64,7 @@ function JavaSSHShell(options, javaSSHInstance, socketServer, callback) {
     //opening connection 
     java.callMethod(javaSSHInstance, 'open', function(err, retCode) {
         if (err) {
-            console.log(err);
+            logger.debug(err);
             that.close();
             callback(err, null);
             return;
@@ -83,20 +83,20 @@ function JavaSSHShell(options, javaSSHInstance, socketServer, callback) {
     this.close = function() {
         java.callMethod(javaSSHInstance, 'close', function(err, retCode) {
             if (err) {
-                console.log(err);
+                logger.debug(err);
                 //return;
             }
-            console.log('closing server');
+            logger.debug('closing server');
             try {
                 socketServer.close();
             } catch (err) {
-                console.log('socket is closed');
+                logger.debug('socket is closed');
             }
         });
 
         if (options.pemFilePath) {
             fileIo.removeFile(options.pemFilePath, function() {
-                console.log('pem file deleted');
+                logger.debug('pem file deleted');
             });
         }
     };
@@ -118,7 +118,7 @@ function openSSH(options, callback) {
 
         java.newInstance('com.relevancelab.catalyst.security.ssh.SSHShell', options.host, options.port, options.username, options.password, options.pemFilePath, serverPort, function(err, javaSSHInstance) {
             if (err) {
-                console.log(err);
+                logger.debug(err);
                 socketServer.close(); //closing server
                 callback(err, null);
                 return;
@@ -144,7 +144,7 @@ module.exports.open = function(options, callback) {
             var tempPemFileLocation = options.tempDir + '/' + uuid.v4();
             fileIo.writeFile(tempPemFileLocation, options.pemFileData, null, function(err) {
                 if (err) {
-                    console.log('unable to create pem file ', err);
+                    logger.debug('unable to create pem file ', err);
                     callback(err, null);
                     return;
                 }

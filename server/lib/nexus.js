@@ -34,7 +34,7 @@ var Nexus = function() {
 
         // Handling Exception for nexus req.
         reqSubmit.on('error', function(err) {
-            console.log('Something went wrong on req!!', err.request.options);
+            logger.debug('Something went wrong on req!!', err.request.options);
             callback([]);
         });
     }

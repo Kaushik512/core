@@ -54,7 +54,7 @@ TrackTypeSchema.statics.updateTrack = function(trackTypeId, trackTypeData, callb
 
     //logger.debug("Update Track" , JSON.stringify(trackTypeData));
     logger.debug("Update Track Id", trackTypeId);
-    console.log(trackTypeData.description);
+    logger.debug(trackTypeData.description);
     this.update({
         "_id": new ObjectId(trackTypeId)
     }, {

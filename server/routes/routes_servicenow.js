@@ -157,7 +157,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                         credentials.pemFileLocation = appConfig.tempDir + uuid.v4();
                         fileIo.writeFile(credentials.pemFileLocation, reqBody.credentials.pemFileData, null, function(err) {
                             if (err) {
-                                console.log('unable to create pem file ', err);
+                                logger.debug('unable to create pem file ', err);
                                 callback(err, null);
                                 return;
                             }
@@ -170,7 +170,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                             var tempPemFileLocation = appConfig.tempDir + uuid.v4();
                             fileIo.copyFile(appConfig.aws.pemFileLocation + appConfig.aws.pemFile, tempPemFileLocation, function() {
                                 if (err) {
-                                    console.log('unable to copy pem file ', err);
+                                    logger.debug('unable to copy pem file ', err);
                                     callback(err, null);
                                     return;
                                 }
@@ -188,7 +188,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
                 getCredentialsFromReq(function(err, credentials) {
                     if (err) {
-                        console.log("unable to get credetials from request ", err);
+                        logger.debug("unable to get credetials from request ", err);
                         return;
                     }
 
@@ -225,14 +225,14 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
                             credentialCryptography.encryptCredential(credentials, function(err, encryptedCredentials) {
                                 if (err) {
-                                    console.log("unable to encrypt credentials == >", err);
+                                    logger.debug("unable to encrypt credentials == >", err);
                                     return;
                                 }
 
                                 //var users = ;
 
-                                console.log('nodeip ==> ', nodeIp);
-                                //console.log('alive ==> ', node.isAlive);
+                                logger.debug('nodeip ==> ', nodeIp);
+                                //logger.debug('alive ==> ', node.isAlive);
                                 var instance = {
                                     name: node.name,
                                     orgId: orgId,
@@ -261,7 +261,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
                                 instancesDao.createInstance(instance, function(err, data) {
                                     if (err) {
-                                        console.log(err, 'occured in inserting node in mongo');
+                                        logger.debug(err, 'occured in inserting node in mongo');
                                         return;
                                     }
                                     logsDao.insertLog({
@@ -357,13 +357,13 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 status.message = msg;
                 status.err = err;
 
-                console.log('taskstatus updated');
+                logger.debug('taskstatus updated');
 
                 if (count == nodes.length) {
-                    console.log('setting complete');
+                    logger.debug('setting complete');
                     taskstatus.endTaskStatus(true, status);
                 } else {
-                    console.log('setting task status');
+                    logger.debug('setting task status');
                     taskstatus.updateTaskStatus(status);
                 }
 
@@ -386,18 +386,18 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                     return;
                                 } else {
 
-                                    console.log('creating env ==>', node.classification);
-                                    console.log('orgId ==>', orgId);
-                                    console.log('bgid ==>', bgId);
-                                    // console.log('node ===>', node);
+                                    logger.debug('creating env ==>', node.classification);
+                                    logger.debug('orgId ==>', orgId);
+                                    logger.debug('bgid ==>', bgId);
+                                    // logger.debug('node ===>', node);
                                     environmentsDao.createEnv(node.classification, orgId, bgId, projectId, function(err, data) {
 
                                         if (err) {
-                                            console.log(err, 'occured in creating environment in mongo');
+                                            logger.debug(err, 'occured in creating environment in mongo');
                                             updateTaskStatusNode(node.name, "Unable to import node : " + node.name, true, count);
                                             return;
                                         }
-                                        console.log('Env ID Received before instance create:' + data);
+                                        logger.debug('Env ID Received before instance create:' + data);
                                         node.envId = data;
                                         //fetching the ip of the imported node
                                         var nodeIp = 'unknown';
@@ -411,7 +411,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
                                         instancesDao.getInstanceByOrgAndNodeNameOrIP(orgId, node.name, nodeIp, function(err, instances) {
                                             if (err) {
-                                                console.log('Unable to fetch instance', err);
+                                                logger.debug('Unable to fetch instance', err);
                                                 updateTaskStatusNode(node.name, "Unable to import node : " + node.name, true, count);
                                                 return;
                                             }
@@ -433,7 +433,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
                                             waitForPort(nodeIp, openport, function(err) {
                                                 if (err) {
-                                                    console.log(err);
+                                                    logger.debug(err);
                                                     updateTaskStatusNode(node.name, "Unable to ssh/winrm into node " + node.name + ". Cannot import this node.", true, count);
                                                     return;
                                                 }

@@ -57,18 +57,18 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 vmware.getDatastores(vmwareconfig.serviceHost,function(err,data){
                     if(!err)
                     {
-                        console.log('Recvd:',JSON.stringify(JSON.parse(data)));
+                        logger.debug('Recvd:',JSON.stringify(JSON.parse(data)));
                         res.send('200',JSON.parse(data));
                     }
                     else{
-                        console.log('Error in datastores query :',err);
+                        logger.debug('Error in datastores query :',err);
                         res.send('500',null);
                     }
                 });
             }
             else{
                 //no provider found.
-                console.log('No Provider found :');
+                logger.debug('No Provider found :');
                 res.send('400','No Provider found');
             }
 
@@ -93,18 +93,18 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     vmware.startstopVM(vmwareconfig.serviceHost,req.params.vmname,action,function(err,data){
                         if(!err)
                         {
-                            console.log('Recvd:',JSON.stringify(JSON.parse(data)));
+                            logger.debug('Recvd:',JSON.stringify(JSON.parse(data)));
                             res.send('200',JSON.parse(data));
                         }
                         else{
-                            console.log('Error in action query :',err);
+                            logger.debug('Error in action query :',err);
                             res.send('500',null);
                         }
                     });
                 }
                 else{
                     //no provider found.
-                    console.log('No Provider found :');
+                    logger.debug('No Provider found :');
                     res.send('400','No Provider found');
                 }
 

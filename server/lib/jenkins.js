@@ -80,7 +80,7 @@ var Jenkins = function(options) {
     };
 
     this.getLastBuildInfo = function(jobName, callback) {
-        console.log(jobName);
+        logger.debug(jobName);
         jenkins.last_build_info(jobName, function(err, data) {
             if (err) {
                 logger.error(err, data);

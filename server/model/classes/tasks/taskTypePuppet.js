@@ -82,7 +82,7 @@ puppetTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexu
             }
             instanceResultList.push(result);
             if (!(count < instances.length)) {
-                console.log('Type of onComplete ============> ' + typeof onComplete);
+                logger.debug('Type of onComplete ============> ' + typeof onComplete);
                 if (typeof onComplete === 'function') {
                     onComplete(null, overallStatus, {
                         instancesResults: instanceResultList
@@ -179,7 +179,7 @@ puppetTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexu
                         } else {
                             puppetSettings.password = infraManagerDetails.puppetpassword;
                         }
-                        console.log('puppet pemfile ==> ' + puppetSettings.pemFileLocation);
+                        logger.debug('puppet pemfile ==> ' + puppetSettings.pemFileLocation);
                         var runOptions = {
                             username: decryptedCredentials.username,
                             host: instance.instanceIP,

@@ -1,3 +1,4 @@
+var logger = require('_pr/logger')(module);
 var mongoose = require('mongoose');
 var extend = require('extend');
 
@@ -10,8 +11,8 @@ var defaults = {
 module.exports = function(options, callback) {
 	var def = extend({},defaults);
 	options = extend(def,options);
-	console.log(options);
-	console.log(defaults);
+	logger.debug(options);
+	logger.debug(defaults);
 	var connectionString = 'mongodb://';
 
 	connectionString += options.host;
@@ -19,7 +20,7 @@ module.exports = function(options, callback) {
 	connectionString += ':' + options.port;
 
 	connectionString += '/' + options.dbName;
-	console.log(connectionString);
+	logger.debug(connectionString);
 	mongoose.connect(connectionString,{auto_reconnect: true});
 
 	mongoose.connection.on('connected', function() {

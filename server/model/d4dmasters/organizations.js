@@ -11,7 +11,7 @@ function Orgs() {
 		}, function(err, d4dMasterJson) {
 			if (err) {
 				callback(err,null);
-				console.log("Hit and error:" + err);
+				logger.debug("Hit and error:" + err);
 			    return;
 			}
 			if (d4dMasterJson) {
@@ -34,33 +34,33 @@ function Orgs() {
 			id: '1'
 		}, function(err, d4dMasterJson) {
 			if (err) {
-				console.log("Hit and error:" + err);
+				logger.debug("Hit and error:" + err);
 			}
 			if (d4dMasterJson) {
 				var hasOrg = false;
 				d4dMasterJson.masterjson.rows.row.forEach(function(itm, i) {
-					console.log("found" + itm.field.length);
+					logger.debug("found" + itm.field.length);
 
 					for (var j = 0; j < itm.field.length; j++) {
 						if (itm.field[j]["name"] == 'orgname') {
-							//console.log("found:" + itm.field[j]["values"].value);
+							//logger.debug("found:" + itm.field[j]["values"].value);
 							if (itm.field[j]["values"].value == name) {
-								console.log("found: " + i + " -- " + itm.field[j]["values"].value);
+								logger.debug("found: " + i + " -- " + itm.field[j]["values"].value);
 								hasOrg = true;
 							}
 						}
 
-						// console.log();
+						// logger.debug();
 					}
 
 					/*JSON.parse(itm).findOne({ name: req.params.fieldname }, function (err, itmjson) {
-                    console.log(" Innner: " + JSON.stringify(itmjson));
+                    logger.debug(" Innner: " + JSON.stringify(itmjson));
                 });*/
 
 				});
 				if (hasOrg == false) {
 					//Creating org
-					console.log('Creating');
+					logger.debug('Creating');
 					d4dMasterJson.masterjson.rows.row.push(JSON.parse(orgField));
 					d4dModel.update({
 						"id": "1"
@@ -85,7 +85,7 @@ function Orgs() {
 
 			} else {
 				callback(true,null);
-				console.log("none found");
+				logger.debug("none found");
 			}
 
 		});

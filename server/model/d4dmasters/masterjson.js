@@ -8,7 +8,7 @@ var MasterJson = function() {
         }, function(err, d4dMasterJson) {
             if (err) {
                 callback(err, null);
-                console.log("Hit and error:" + err);
+                logger.debug("Hit and error:" + err);
                 return;
             }
             if (d4dMasterJson) {

@@ -27,12 +27,12 @@ module.exports.setRoutes = function(app) {
                 adminUser: appConfig.ldap.adminUser,
                 adminPass: appConfig.ldap.adminPass
             });
-            console.log('Create User request received:', req.body.username, req.body.password.length, req.body.fname, req.body.lname);
+            logger.debug('Create User request received:', req.body.username, req.body.password.length, req.body.fname, req.body.lname);
 
             //Hardcoding to be removed....
             ldapClient.createUser(req.body.username, req.body.password, req.body.fname, req.body.lname, function(err, user) {
                 if (err) {
-                    console.log('In Error', err);
+                    logger.debug('In Error', err);
                     res.send(err);
                 } else {
 
@@ -306,7 +306,7 @@ module.exports.setRoutes = function(app) {
 
     var adminVerificationFunc = function(req, res, next) {
         //logger.debug("Enter adminVerificationFunc");
-        console.log('here ==>', req.session);
+        logger.debug('here ==>', req.session);
         if (req.session && req.session.user) {
             //logger.debug("Has Session && Session Has User");
             if (req.session.user.cn == 'admin') {

@@ -2,7 +2,7 @@ var Client = require('node-rest-client').Client;
 var SSHExec = require('./utils/sshexec');
 
 function getAuthToken(host, username, password, tenantName, callback) {
-    console.log("START:: getAuthToken");
+    logger.debug("START:: getAuthToken");
     var args = {
         data: {
             "auth": {
@@ -21,16 +21,16 @@ function getAuthToken(host, username, password, tenantName, callback) {
     client = new Client();
     var authUrl = host + '/tokens';
     client.registerMethod("postMethod", authUrl, "POST");
-    console.log('Auth Url:', authUrl);
-    console.log('args', JSON.stringify(args));
+    logger.debug('Auth Url:', authUrl);
+    logger.debug('args', JSON.stringify(args));
     client.methods.postMethod(args, function(data, response) {
         if (data.access) {
-            console.log("Auth Token: " + data.access.token.id);
-            console.log("END:: getAuthToken");
+            logger.debug("Auth Token: " + data.access.token.id);
+            logger.debug("END:: getAuthToken");
             callback(null, data.access.token.id);
             return;
         } else {
-            console.log("Error in getAuthToken", data);
+            logger.debug("Error in getAuthToken", data);
             callback(data, null);
         }
     });
@@ -40,11 +40,11 @@ function getAuthToken(host, username, password, tenantName, callback) {
 var Openstack = function(options) {
 
     this.getProjects = function(callback) {
-        console.log("START:: getProjects");
+        logger.debug("START:: getProjects");
 
         getAuthToken(options.host, options.username, options.password, options.tenantName, function(err, token) {
             if (token) {
-                console.log("token::" + token);
+                logger.debug("token::" + token);
                 var args = {
                     headers: {
                         "X-Auth-Token": token
@@ -54,18 +54,18 @@ var Openstack = function(options) {
                 var projectsUrl = 'http://' + options.host + ':5000/v3/projects';
                 client.registerMethod("jsonMethod", projectsUrl, "GET");
                 client.methods.jsonMethod(args, function(data, response) {
-                    console.log("get Projects response::" + data);
+                    logger.debug("get Projects response::" + data);
                     if (data.projects) {
-                        console.log("END:: getProjects");
+                        logger.debug("END:: getProjects");
                         callback(null, data);
                         return;
                     } else {
-                        console.log("Error in getProjects");
+                        logger.debug("Error in getProjects");
                         callback(data, null);
                     }
                 });
             } else {
-                console.log(err);
+                logger.debug(err);
                 callback(err, null);
                 return;
             }
@@ -74,11 +74,11 @@ var Openstack = function(options) {
     }
 
     this.getTenants = function(callback) {
-        console.log("START:: getTenants");
+        logger.debug("START:: getTenants");
 
         getAuthToken(options.host, options.username, options.password, options.tenantName, function(err, token) {
             if (token) {
-                console.log("token::" + token);
+                logger.debug("token::" + token);
                 var args = {
                     headers: {
                         "X-Auth-Token": token
@@ -90,16 +90,16 @@ var Openstack = function(options) {
                 client.methods.jsonMethod(args, function(data, response) {
                     if (data.tenants) {
                         var tenants = data.tenants;
-                        console.log("END:: getTenants");
+                        logger.debug("END:: getTenants");
                         callback(null, data);
                         return;
                     } else {
-                        console.log("Error in getTenants");
+                        logger.debug("Error in getTenants");
                         callback(data, null);
                     }
                 });
             } else {
-                console.log(err);
+                logger.debug(err);
                 callback(err, null);
                 return;
             }
@@ -107,12 +107,12 @@ var Openstack = function(options) {
     }
 
     this.getImages = function(tenantId, callback) {
-        console.log("START:: getImages");
+        logger.debug("START:: getImages");
 
         getAuthToken(options.host, options.username, options.password, options.tenantName, function(err, token) {
             if (token) {
-                console.log("Token Id::" + token);
-                console.log("Tenant Id::" + tenantId);
+                logger.debug("Token Id::" + token);
+                logger.debug("Tenant Id::" + tenantId);
 
                 var args = {
                     headers: {
@@ -124,22 +124,22 @@ var Openstack = function(options) {
 
                 var imagesUrl = 'http://' + options.host + ':8774/v2/' + tenantId + '/images';
 
-                console.log("imagesUrl:" + imagesUrl);
+                logger.debug("imagesUrl:" + imagesUrl);
                 client.registerMethod("jsonMethod", imagesUrl, "GET");
 
                 client.methods.jsonMethod(args, function(data, response) {
-                    console.log("get Images Response::" + data);
+                    logger.debug("get Images Response::" + data);
                     if (data.images) {
-                        console.log("END:: getImages");
+                        logger.debug("END:: getImages");
                         callback(null, data);
                         return;
                     } else {
-                        console.log("Error in getImages");
+                        logger.debug("Error in getImages");
                         callback(data, null);
                     }
                 });
             } else {
-                console.log(err);
+                logger.debug(err);
                 callback(err, null);
                 return;
             }
@@ -148,12 +148,12 @@ var Openstack = function(options) {
 
     this.getServers = function(tenantId, callback) {
 
-        console.log("START:: getServers");
+        logger.debug("START:: getServers");
 
         getAuthToken(options.host, options.username, options.password, options.tenantName, function(err, token) {
             if (token) {
-                console.log("Token Id::" + token);
-                console.log("Tenant Id::" + tenantId);
+                logger.debug("Token Id::" + token);
+                logger.debug("Tenant Id::" + tenantId);
 
                 var args = {
                     headers: {
@@ -165,22 +165,22 @@ var Openstack = function(options) {
 
                 var serversUrl = 'http://' + options.host + ':8774/v2/' + tenantId + '/servers';
 
-                console.log("serversUrl:" + serversUrl);
+                logger.debug("serversUrl:" + serversUrl);
                 client.registerMethod("jsonMethod", serversUrl, "GET");
 
                 client.methods.jsonMethod(args, function(data, response) {
-                    console.log("get Servers Response::" + data);
+                    logger.debug("get Servers Response::" + data);
                     if (data.servers) {
-                        console.log("END:: getServers");
+                        logger.debug("END:: getServers");
                         callback(null, data);
                         return;
                     } else {
-                        console.log("Error in getServers");
+                        logger.debug("Error in getServers");
                         callback(data, null);
                     }
                 });
             } else {
-                console.log("error:" + err);
+                logger.debug("error:" + err);
                 callback(err, null);
                 return;
             }
@@ -190,12 +190,12 @@ var Openstack = function(options) {
     }
 
     this.getFlavors = function(tenantId, callback) {
-        console.log("START:: getFlavors");
+        logger.debug("START:: getFlavors");
 
         getAuthToken(options.serviceendpoints.identity, options.username, options.password, options.tenantName, function(err, token) {
             if (token) {
-                console.log("Token Id::" + token);
-                console.log("Tenant Id::" + tenantId);
+                logger.debug("Token Id::" + token);
+                logger.debug("Tenant Id::" + tenantId);
 
                 var args = {
                     headers: {
@@ -207,23 +207,23 @@ var Openstack = function(options) {
 
                 var flavorsUrl = options.serviceendpoints.compute + '/' + tenantId + '/flavors';
 
-                console.log("flavorsUrl:" + flavorsUrl);
+                logger.debug("flavorsUrl:" + flavorsUrl);
                 client.registerMethod("jsonMethod", flavorsUrl, "GET");
 
                 client.methods.jsonMethod(args, function(data, response) {
-                    console.log("getFlavors Response::" + data);
+                    logger.debug("getFlavors Response::" + data);
                     //var json = JSON.parse(data);
                     if (data.flavors) {
-                        console.log("END:: getFlavors");
+                        logger.debug("END:: getFlavors");
                         callback(null, data);
                         return;
                     } else {
-                        console.log("Error in getFlavors");
+                        logger.debug("Error in getFlavors");
                         callback(data, null);
                     }
                 });
             } else {
-                console.log(err);
+                logger.debug(err);
                 callback(err, null);
                 return;
             }
@@ -231,12 +231,12 @@ var Openstack = function(options) {
     }
 
     this.getNetworks = function(callback) {
-        console.log("START:: getNetworks");
+        logger.debug("START:: getNetworks");
 
         getAuthToken(options.serviceendpoints.identity, options.username, options.password, options.tenantName, function(err, token) {
             if (token) {
-                console.log("Token Id::" + token);
-                //	console.log("Tenant Id::"+tenantId);
+                logger.debug("Token Id::" + token);
+                //	logger.debug("Tenant Id::"+tenantId);
                 var args = {
                     headers: {
                         "X-Auth-Token": token
@@ -244,22 +244,22 @@ var Openstack = function(options) {
                 };
                 client = new Client();
                 var networksUrl = options.serviceendpoints.network + '/networks'; //9696
-                console.log('networksUrl: ' + networksUrl);
+                logger.debug('networksUrl: ' + networksUrl);
                 client.registerMethod("jsonMethod", networksUrl, "GET");
                 client.methods.jsonMethod(args, function(data, response) {
-                    console.log("getNetworks response:: " + JSON.stringify(JSON.parse(data)));
+                    logger.debug("getNetworks response:: " + JSON.stringify(JSON.parse(data)));
                     var json = JSON.parse(data);
                     if (json.networks) {
-                        console.log("END:: getNetworks");
+                        logger.debug("END:: getNetworks");
                         callback(null, json);
                         return;
                     } else {
-                        console.log("Error in getNetworks");
+                        logger.debug("Error in getNetworks");
                         callback(data, null);
                     }
                 });
             } else {
-                console.log(err);
+                logger.debug(err);
                 callback(err, null);
                 return;
             }
@@ -268,11 +268,11 @@ var Openstack = function(options) {
     }
 
     this.getSecurityGroups = function(callback) {
-        console.log("START:: getSecurityGroups");
+        logger.debug("START:: getSecurityGroups");
 
         getAuthToken(options.serviceendpoints.identity, options.username, options.password, options.tenantName, function(err, token) {
             if (token) {
-                console.log("token::" + token);
+                logger.debug("token::" + token);
                 var args = {
                     headers: {
                         "X-Auth-Token": token,
@@ -281,22 +281,22 @@ var Openstack = function(options) {
                 };
                 client = new Client();
                 var securityGroupsUrl = options.serviceendpoints.network + '/security-groups';
-                console.log('securityGroupsUrl: ' + securityGroupsUrl);
+                logger.debug('securityGroupsUrl: ' + securityGroupsUrl);
                 client.registerMethod("jsonMethod", securityGroupsUrl, "GET");
                 client.methods.jsonMethod(args, function(data, response) {
-                    //console.log("getSecurityGroups response:: "+data);
+                    //logger.debug("getSecurityGroups response:: "+data);
                     var json = JSON.parse(data);
                     if (json.security_groups) {
-                        console.log("END:: getSecurityGroups");
+                        logger.debug("END:: getSecurityGroups");
                         callback(null, json);
                         return;
                     } else {
-                        console.log("Error in getSecurityGroups");
+                        logger.debug("Error in getSecurityGroups");
                         callback(data, null);
                     }
                 });
             } else {
-                console.log(err);
+                logger.debug(err);
                 callback(err, null);
                 return;
             }
@@ -304,12 +304,12 @@ var Openstack = function(options) {
     }
 
     this.createServerold = function(tenantId, createServerJson, callback) {
-        console.log("START:: createServer");
+        logger.debug("START:: createServer");
 
-        console.log(JSON.stringify(options));
+        logger.debug(JSON.stringify(options));
         getAuthToken(options.serviceendpoints.identity, options.username, options.password, options.tenantName, function(err, token) {
             if (token) {
-                console.log("token::" + token);
+                logger.debug("token::" + token);
                 var args = {
                     data: createServerJson,
                     headers: {
@@ -318,22 +318,22 @@ var Openstack = function(options) {
                     }
                 };
                 client = new Client();
-                console.log("createServerJson before");
-                console.log(JSON.stringify(createServerJson));
+                logger.debug("createServerJson before");
+                logger.debug(JSON.stringify(createServerJson));
                 //Removing network and security group if not present - assuming nova will take care
                 if (!createServerJson.server.networks[0]["uuid"]) {
                     delete createServerJson.server.networks;
                     delete createServerJson.server.security_groups;
                 }
-                console.log("createServerJson after");
-                console.log(JSON.stringify(createServerJson));
+                logger.debug("createServerJson after");
+                logger.debug(JSON.stringify(createServerJson));
                 var createServerUrl = options.serviceendpoints.compute + '/' + tenantId + '/servers';
-                console.log('CreateServerURL:' + createServerUrl);
+                logger.debug('CreateServerURL:' + createServerUrl);
                 client.registerMethod("jsonMethod", createServerUrl, "POST");
                 client.methods.jsonMethod(args, function(data, response) {
-                    console.log("createServer response:: " + data);
+                    logger.debug("createServer response:: " + data);
                     if (data.server) {
-                        console.log("END:: createServer");
+                        logger.debug("END:: createServer");
                         callback(null, data);
                         return;
                     } else {
@@ -342,7 +342,7 @@ var Openstack = function(options) {
 
                 });
             } else {
-                console.log(err);
+                logger.debug(err);
                 callback(err, null);
                 return;
             }
@@ -350,11 +350,11 @@ var Openstack = function(options) {
     }
 
     this.createfloatingip = function(tenantId, networkid, callback) {
-        console.log("START:: createfloatingip");
-        console.log(JSON.stringify(options));
+        logger.debug("START:: createfloatingip");
+        logger.debug(JSON.stringify(options));
         this.getNetworks(function(err, data) {
-        	console.log('Cameout from getNetworks');
-            console.log(JSON.stringify(data));
+        	logger.debug('Cameout from getNetworks');
+            logger.debug(JSON.stringify(data));
             if (data) {
 
                 for (var i = 0; i < data.networks.length; i++) {
@@ -376,14 +376,14 @@ var Openstack = function(options) {
                                     }
                                 };
                                 var createfloatip = options.serviceendpoints.network + '/floatingips';
-                                console.log('createfloatip:' + createfloatip);
-                                console.log('args:' + JSON.stringify(args));
+                                logger.debug('createfloatip:' + createfloatip);
+                                logger.debug('args:' + JSON.stringify(args));
                                 client = new Client();
                                 client.registerMethod("jsonMethod", createfloatip, "POST");
                                 client.methods.jsonMethod(args, function(data, response) {
-                                    console.log("createfloatingip response:: " + data);
+                                    logger.debug("createfloatingip response:: " + data);
                                     if (data) {
-                                        console.log("END:: createfloatingip");
+                                        logger.debug("END:: createfloatingip");
                                         callback(null, data);
                                         return;
                                     } else {
@@ -401,12 +401,12 @@ var Openstack = function(options) {
         });
     }
     this.createServer = function(tenantId, createServerJson, callback) {
-        console.log("START:: createServer");
+        logger.debug("START:: createServer");
         var that = this;
-        console.log(JSON.stringify(options));
+        logger.debug(JSON.stringify(options));
         getAuthToken(options.serviceendpoints.identity, options.username, options.password, options.tenantName, function(err, token) {
             if (token) {
-                console.log("token::" + token);
+                logger.debug("token::" + token);
                 var args = {
                     data: createServerJson,
                     headers: {
@@ -415,8 +415,8 @@ var Openstack = function(options) {
                     }
                 };
                 client = new Client();
-                console.log("createServerJson before");
-                console.log(JSON.stringify(createServerJson));
+                logger.debug("createServerJson before");
+                logger.debug(JSON.stringify(createServerJson));
                 //Removing network and security group if not present - assuming nova will take care
                 if (!createServerJson.server.networks[0]["uuid"]) {
                     delete createServerJson.server.networks;
@@ -426,21 +426,21 @@ var Openstack = function(options) {
                 if(typeof createServerJson.server.networks[0] != "undefined"){
                         that.createfloatingip(tenantId, createServerJson.server.networks[0]["uuid"], function(err, floatingipdata) {
                             if (!err) {
-                                console.log('Added an ip', JSON.stringify(JSON.parse(floatingipdata)));
+                                logger.debug('Added an ip', JSON.stringify(JSON.parse(floatingipdata)));
 
                                 //create an instance and wait for server ready state
 
-                                console.log("createServerJson after");
-                                console.log(JSON.stringify(createServerJson));
+                                logger.debug("createServerJson after");
+                                logger.debug(JSON.stringify(createServerJson));
                                 var createServerUrl = options.serviceendpoints.compute + '/' + tenantId + '/servers';
-                                console.log('CreateServerURL:' + createServerUrl);
+                                logger.debug('CreateServerURL:' + createServerUrl);
                                 client.registerMethod("jsonMethod", createServerUrl, "POST");
                                 client.methods.jsonMethod(args, function(data, response) {
-                                    console.log("createServer response:: " + data);
+                                    logger.debug("createServer response:: " + data);
                                     data['floatingipdata'] = JSON.parse(floatingipdata);
                                     if (data.server) {
-                                        console.log("END:: createServer");
-                                        console.log(JSON.stringify(data));
+                                        logger.debug("END:: createServer");
+                                        logger.debug(JSON.stringify(data));
                                         callback(null, data);
                                         return;
                                     } else {
@@ -453,16 +453,16 @@ var Openstack = function(options) {
                 }
                 else{ //cannot create floating ip no external network found
 
-                    console.log("createServerJson after");
-                    console.log(JSON.stringify(createServerJson));
+                    logger.debug("createServerJson after");
+                    logger.debug(JSON.stringify(createServerJson));
                     var createServerUrl = options.serviceendpoints.compute + '/' + tenantId + '/servers';
-                    console.log('CreateServerURL:' + createServerUrl);
+                    logger.debug('CreateServerURL:' + createServerUrl);
                     client.registerMethod("jsonMethod", createServerUrl, "POST");
                     client.methods.jsonMethod(args, function(data, response) {
-                        console.log("createServer response:: " + data);
+                        logger.debug("createServer response:: " + data);
                         if (data.server) {
-                            console.log("END:: createServer");
-                            console.log(JSON.stringify(data));
+                            logger.debug("END:: createServer");
+                            logger.debug(JSON.stringify(data));
                             callback(null, data);
                             return;
                         } else {
@@ -473,7 +473,7 @@ var Openstack = function(options) {
                 }
 
             } else {
-                console.log(err);
+                logger.debug(err);
                 callback(err, null);
                 return;
             }
@@ -481,11 +481,11 @@ var Openstack = function(options) {
     }
 
     this.getServerById = function(tenantId, serverId, callback) {
-        console.log("START:: Getting server details by id");
+        logger.debug("START:: Getting server details by id");
 
         getAuthToken(options.serviceendpoints.identity, options.username, options.password, options.tenantName, function(err, token) {
             if (token) {
-                console.log("token:" + token);
+                logger.debug("token:" + token);
 
                 var args = {
                     headers: {
@@ -499,9 +499,9 @@ var Openstack = function(options) {
                 client = new Client();
                 client.registerMethod("getServerDetails", serverDetailUrl, "GET");
                 client.methods.getServerDetails(args, function(data, response) {
-                    console.log("getServerDetails response:" + data);
+                    logger.debug("getServerDetails response:" + data);
                     if (data.server) {
-                        console.log("END:: Getting server details by id");
+                        logger.debug("END:: Getting server details by id");
                         callback(null, data);
                         return;
                     } else {
@@ -509,7 +509,7 @@ var Openstack = function(options) {
                     }
                 });
             } else {
-                console.log(err);
+                logger.debug(err);
                 callback(err, null);
                 return;
             }
@@ -555,18 +555,18 @@ var Openstack = function(options) {
             cmdswin: ["del "]
         }
         var cmdString = opts.cmds.join(' && ');
-        console.log(JSON.stringify(opts));
+        logger.debug(JSON.stringify(opts));
         var sshExec = new SSHExec(opts);
         sshExec.exec(cmdString, function(err, stdout) {
-            console.log(stdout);
+            logger.debug(stdout);
             callback(stdout);
             return;
         }, function(err, stdout) {
-            console.log('Out:', stdout); //assuming that receiving something out would be a goog sign :)
+            logger.debug('Out:', stdout); //assuming that receiving something out would be a goog sign :)
             callback('ok');
             return;
         }, function(err, stdout) {
-            console.log('Error Out:', stdout);
+            logger.debug('Error Out:', stdout);
         });
 
     }
@@ -575,7 +575,7 @@ var Openstack = function(options) {
 
     this.waitforserverready = function(tenantId, instanceData, callback) {
         var self = this;
-        console.log('instanceData received:', JSON.stringify(instanceData));
+        logger.debug('instanceData received:', JSON.stringify(instanceData));
         var wfsr = function() {
             self.getServerById(tenantId, instanceData.server.id, function(err, data) {
                 if (err) {
@@ -583,7 +583,7 @@ var Openstack = function(options) {
                     return;
                 }
                 if (!err) {
-                    console.log('Quried server:', JSON.stringify(data));
+                    logger.debug('Quried server:', JSON.stringify(data));
                     if (data.server.status == 'ACTIVE') {
                         //set the floating ip to instance
                         if(instanceData.floatingipdata)
@@ -592,7 +592,7 @@ var Openstack = function(options) {
                                 self.updatefloatingip(tenantId, instanceData.floatingipdata.floatingip.floating_ip_address, instanceData.server.id, function(err, data) {
                                     if (!err) {
                                         self.updatedfloatingip = true;
-                                        console.log('Updated with floating ip');
+                                        logger.debug('Updated with floating ip');
                                     }
                                 });
                         }
@@ -600,18 +600,18 @@ var Openstack = function(options) {
                             if(server.addresses.private){
                                  self.updatedfloatingip = true; 
                                  instanceData.floatingipdata.floatingip.floating_ip_address = data.server.addresses.private[0].addr;
-                                 console.log('Updated with private with floating ip');
+                                 logger.debug('Updated with private with floating ip');
                             }
                         }
                     }
                     if (self.updatedfloatingip) {
                         self.trysshoninstance(instanceData, function(cdata) {
-                            console.log('End trysshoninstance:', cdata);
+                            logger.debug('End trysshoninstance:', cdata);
                             if (cdata == 'ok') {
                                 //Clearing all timeouts
-                                console.log('Time outs found :', self.timeouts.length);
+                                logger.debug('Time outs found :', self.timeouts.length);
                                 for (var i = 0; i < self.timeouts.length; i++) {
-                                    console.log('Clearing timeout : ', self.timeouts[i]);
+                                    logger.debug('Clearing timeout : ', self.timeouts[i]);
                                     clearTimeout(self.timeouts[i]);
                                 }
                                 self.timeouts = [];
@@ -622,13 +622,13 @@ var Openstack = function(options) {
 
                                 return;
                             } else {
-                                console.log('Timeout 1 set');
+                                logger.debug('Timeout 1 set');
                                 if (!self.callbackdone)
                                     self.timeouts.push(setTimeout(wfsr, 30000));
                             }
                         });
                     } else {
-                        console.log('Timeout 2 set');
+                        logger.debug('Timeout 2 set');
                         if (!self.callbackdone)
                             self.timeouts.push(setTimeout(wfsr, 30000));
                     }
@@ -636,13 +636,13 @@ var Openstack = function(options) {
                 }
             });
         };
-        console.log('Timeout 3 set');
+        logger.debug('Timeout 3 set');
         self.timeouts.push(setTimeout(wfsr, 15000));
     }
 
     this.updatefloatingip = function(tenantId, floatingip, serverid, callback) {
-        console.log("START:: updatefloatingip");
-        console.log(JSON.stringify(options));
+        logger.debug("START:: updatefloatingip");
+        logger.debug(JSON.stringify(options));
         getAuthToken(options.serviceendpoints.identity, options.username, options.password, options.tenantName, function(err, token) {
             if (token) {
                 var fip = {
@@ -659,18 +659,18 @@ var Openstack = function(options) {
                     }
                 };
                 var updatefloatip = options.serviceendpoints.compute + '/' + tenantId + '/servers/' + serverid + '/action';
-                console.log('updatefloatingip:' + updatefloatip);
-                console.log('args:' + JSON.stringify(args));
+                logger.debug('updatefloatingip:' + updatefloatip);
+                logger.debug('args:' + JSON.stringify(args));
                 client = new Client();
                 client.registerMethod("jsonMethod", updatefloatip, "POST");
                 client.methods.jsonMethod(args, function(data, response) {
-                    console.log("updatefloatingip response:: " + data);
+                    logger.debug("updatefloatingip response:: " + data);
                     if (data) {
-                        console.log("END:: updatefloatingip");
+                        logger.debug("END:: updatefloatingip");
                         callback(null, data);
                         return;
                     } else {
-                        console.log("END:: updatefloatingip with error", data);
+                        logger.debug("END:: updatefloatingip with error", data);
                         callback(null, null);
                     }
 

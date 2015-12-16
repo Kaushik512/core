@@ -31,7 +31,7 @@ try {
 
 if (configJson) {
     var config = JSON.parse(configJson);
-    //console.log(config);
+    //logger.debug(config);
 }
 
 if (appUrlsConfig) {

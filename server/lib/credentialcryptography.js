@@ -7,7 +7,7 @@ var uuid = require('node-uuid');
 var fileIo = require('./utils/fileio');
 var fs = require('fs');
 module.exports.encryptCredential = function(credentials, callback) {
-    console.log(credentials);
+    logger.debug(credentials);
     var cryptoConfig = appConfig.cryptoSettings;
     var encryptedCredentials = {};
 
@@ -22,9 +22,9 @@ module.exports.encryptCredential = function(credentials, callback) {
             cryptography.encryptFile(credentials.pemFileLocation, cryptoConfig.encryptionEncoding, encryptedPemFileLocation, cryptoConfig.decryptionEncoding, function(err) {
                 fileIo.removeFile(credentials.pemFileLocation, function(err) {
                     if (err) {
-                        console.log("Unable to delete temp pem file =>", err);
+                        logger.debug("Unable to delete temp pem file =>", err);
                     } else {
-                        console.log("temp pem file deleted =>");
+                        logger.debug("temp pem file deleted =>");
                     }
                 });
 
@@ -53,13 +53,13 @@ module.exports.decryptCredential = function(credentials, callback) {
 
         cryptography.decryptFile(credentials.pemFileLocation, cryptoConfig.decryptionEncoding, tempUncryptedPemFileLoc, cryptoConfig.encryptionEncoding, function(err) {
             if (err) {
-                console.log(err);
+                logger.debug(err);
                 callback(err, null);
                 return;
             }
             fs.chmod(tempUncryptedPemFileLoc, 0600, function(err) {
                 if (err) {
-                    console.log(err);
+                    logger.debug(err);
                     callback(err, null);
                     return;
                 }

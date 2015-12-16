@@ -215,7 +215,7 @@ BlueprintSchema.statics.createNew = function(blueprintData, callback) {
         });
         return;
     }
-    console.log('blueprin type ', blueprintData);
+    logger.debug('blueprin type ', blueprintData);
     var blueprintObj = {
         orgId: blueprintData.orgId,
         bgId: blueprintData.bgId,
@@ -233,7 +233,7 @@ BlueprintSchema.statics.createNew = function(blueprintData, callback) {
     logger.debug('-------------blueprintObj',JSON.stringify(blueprintObj));
 
     var blueprint = new Blueprints(blueprintObj);
-    console.log('saving');
+    logger.debug('saving');
     blueprint.save(function(err, blueprint) {
         if (err) {
             logger.error(err);

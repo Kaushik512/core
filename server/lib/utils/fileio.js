@@ -101,7 +101,7 @@ module.exports.writeFile = function(path, data, encoding, callback) {
 
 module.exports.exists = function(path, callback) {
     fs.exists(path, function(exists, err) {
-        console.log(exists, err);
+        logger.debug(exists, err);
         if (exists) {
             callback(exists);
         } else {
@@ -123,7 +123,7 @@ module.exports.mkdir = function(path, callback) {
 module.exports.copyFile = function(src, dst, callback) {
     fsExtra.copy(src, dst, function(err) {
         if (err) {
-            console.log(err);
+            logger.debug(err);
             return;
         }
         callback(null);

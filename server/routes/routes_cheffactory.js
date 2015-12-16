@@ -93,7 +93,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
     app.get('/cheffactory/:serverId/roles/', verificationFunc, function(req, res) {
         var path = req.query.path;
         var chefFactory = req.chefFactory;
-        console.log('path ===> ',path);
+        logger.debug('path ===> ',path);
         chefFactory.getRoleData(path, function(err, cookbookData) {
             if (err) {
                 res.send(500, {

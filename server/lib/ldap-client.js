@@ -1,3 +1,4 @@
+var logger = require('_pr/logger')(module);
 var ldap = require('ldapjs');
 
 
@@ -19,7 +20,7 @@ function createDnObject(dnString) {
     var obj = {};
     for (var i = 0; i < parts.length; i++) {
         var keyValue = parts[i].split('=');
-        console.log(keyValue);
+        logger.debug(keyValue);
         if (obj[keyValue[0]]) {
             obj[keyValue[0]] = [].concat(obj[keyValue[0]]);
             obj[keyValue[0]].push(keyValue[1]);
@@ -41,7 +42,7 @@ function createDnString(username, baseDn, ou) {
 }
 
 var Ldap = function(options) {
-    console.log('options ==>', options);
+    logger.debug('options ==>', options);
     if (!options) {
         options = {};
     }
@@ -54,13 +55,13 @@ var Ldap = function(options) {
     this.authenticate = function(username, password, callback) {
 
         var dnString = createDnString(username, options.baseDn, options.ou);
-        console.log('hit authenticate =========>' + dnString);
+        logger.debug('hit authenticate =========>' + dnString);
         client.bind(dnString, password, function(err, user) {
             if (err) {
-                console.log("err ==> ", err);
+                logger.debug("err ==> ", err);
                 callback(err, null);
             } else {
-                console.log("User String:{" + dnString + '}');
+                logger.debug("User String:{" + dnString + '}');
                 callback(null, createDnObject(dnString));
             }
         });
@@ -74,7 +75,7 @@ var Ldap = function(options) {
             if (err) {
                 callback(null, "false");
             } else {
-                console.log('matched: ' + matched);
+                logger.debug('matched: ' + matched);
                 callback(null, "true");
             }
         });
@@ -89,7 +90,7 @@ var Ldap = function(options) {
     };
 
     this.createUser = function(username, password, fname, lname, callback) {
-        console.log('Entered Create User in Ldap', username, password, fname, lname);
+        logger.debug('Entered Create User in Ldap', username, password, fname, lname);
 
         var entry = {
             cn: username,
@@ -107,23 +108,23 @@ var Ldap = function(options) {
         client.bind(dnString, options.adminPass, function(err) {
             if (err) {
                 self.close();
-                console.log('Error in binding for createuser' + err);
+                logger.debug('Error in binding for createuser' + err);
                 return;
             }
             var userDnsString = createDnString(username, options.baseDn, options.ou);
             client.add(userDnsString, entry, function(err, user) {
                 self.close();
                 if (err) {
-                    console.log('err in creating user');
-                    console.log('dn == >', err.dn);
-                    console.log('code == >', err.code);
-                    console.log('name == >', err.name);
-                    console.log('message == >', err.message);
+                    logger.debug('err in creating user');
+                    logger.debug('dn == >', err.dn);
+                    logger.debug('code == >', err.code);
+                    logger.debug('name == >', err.name);
+                    logger.debug('message == >', err.message);
 
                     callback(err.message, null);
                 } else {
-                    console.log('created');
-                    // console.log('user ==> ', user);
+                    logger.debug('created');
+                    // logger.debug('user ==> ', user);
                     callback(null, 200);
                 }
             });

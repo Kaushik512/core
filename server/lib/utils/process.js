@@ -50,10 +50,10 @@ var Process = function(appPath, argList, options) {
     }
 
     this.start = function() {
-        console.log(appPath + " " + argList.join(' '));
+        logger.debug(appPath + " " + argList.join(' '));
         proc = exec(appPath + " " + argList.join(' '), options, function(err, stdOut, stdErr) {
             if (err) {
-                console.log(err);
+                logger.debug(err);
                 return;
             }
         });
@@ -63,20 +63,20 @@ var Process = function(appPath, argList, options) {
         processRunning = true;
         if (typeof onStdOut === 'function') {
             proc.stdout.on('data', function(data) {
-                console.log('process stdout: ==> ' + data);
+                logger.debug('process stdout: ==> ' + data);
                 onStdOut(data);
             });
         }
 
         if (typeof onStdErr === 'function') {
             proc.stderr.on('data', function(errData) {
-                console.log('process stderr: ==> ' + errData);
+                logger.debug('process stderr: ==> ' + errData);
                 onStdErr(errData);
             });
         }
         if (typeof onClose === 'function') {
             proc.on('close', function(code) {
-                console.log('process return code ==> '+code);
+                logger.debug('process return code ==> '+code);
                 processRunning = false;
                 onClose(code);
             });
@@ -85,8 +85,8 @@ var Process = function(appPath, argList, options) {
         if (typeof onError === 'function') {
             proc.on('error', function(error) {
                 processRunning = false;
-                console.log("Error is spawning process");
-                console.log(error);
+                logger.debug("Error is spawning process");
+                logger.debug(error);
                 onError(error);
             });
         }

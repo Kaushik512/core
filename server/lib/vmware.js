@@ -4,7 +4,7 @@ var logger = require('_pr/logger')(module);
 var waitForPort = require('wait-for-port');
 
 function getAuthToken(host, username, password, tenantName, callback) {
-    console.log("START:: getAuthToken");
+    logger.debug("START:: getAuthToken");
     var args = {
         data: {
             "auth": {
@@ -22,17 +22,17 @@ function getAuthToken(host, username, password, tenantName, callback) {
 
     client = new Client();
     var authUrl = host + 'tokens';
-    console.log('authUrl', authUrl);
+    logger.debug('authUrl', authUrl);
     client.registerMethod("postMethod", authUrl, "POST");
     client.methods.postMethod(args, function(data, response) {
-        //console.log('Auth Response:',response);
+        //logger.debug('Auth Response:',response);
         if (data.access) {
-            console.log("Auth Token: " + data.access.token.id);
-            console.log("END:: getAuthToken");
+            logger.debug("Auth Token: " + data.access.token.id);
+            logger.debug("END:: getAuthToken");
             callback(null, data.access.token.id);
             return;
         } else {
-            console.log("Error in getAuthToken");
+            logger.debug("Error in getAuthToken");
             callback(data, null);
         }
     });
@@ -59,11 +59,11 @@ var vmwareservice = function(options) {
         //to do
         client = new Client();
         var datastoresUrl = servicehost + '/' + vm_name + '/' + action + '?ip=' + options.host + '&user=' + options.username + '&passwd=' + options.password + '&dc=' + options.dc;
-        console.log(datastoresUrl);
+        logger.debug(datastoresUrl);
         client.registerMethod("jsonMethod", datastoresUrl, "PUT");
         var args = {};
         client.methods.jsonMethod(args, function(data, response) {
-            console.log("get datastoresUrl response::" + data);
+            logger.debug("get datastoresUrl response::" + data);
             callback(null, data);
         });
 
@@ -72,13 +72,13 @@ var vmwareservice = function(options) {
 
     this.getDatastores = function(servicehost, callback) {
         client = new Client();
-        console.log(servicehost);
+        logger.debug(servicehost);
         var datastoresUrl = servicehost + '/datastores?ip=' + options.host + '&user=' + options.username + '&passwd=' + options.password + '&dc=' + options.dc;
-        console.log(datastoresUrl);
+        logger.debug(datastoresUrl);
         client.registerMethod("jsonMethod", datastoresUrl, "GET");
         var args = {};
         client.methods.jsonMethod(args, function(data, response) {
-            console.log("get datastoresUrl response::" + data);
+            logger.debug("get datastoresUrl response::" + data);
             callback(null, data);
         });
     }
@@ -99,7 +99,7 @@ var vmwareservice = function(options) {
         } */
         client = new Client();
         var datastoresUrl = servicehost + '/' + templatename + '/clone?ip=' + options.host + '&user=' + options.username + '&passwd=' + options.password + '&dc=' + options.dc;
-        console.log(datastoresUrl);
+        logger.debug(datastoresUrl);
 
         client.registerMethod("postMethod", datastoresUrl, "POST");
         var args = {
@@ -108,10 +108,10 @@ var vmwareservice = function(options) {
                 "Content-Type": "application/json"
             }
         };
-        //console.log(JSON.stringify(args));
+        //logger.debug(JSON.stringify(args));
         // callback(null,serverjson);
         client.methods.postMethod(args, function(data, response) {
-            console.log("get create server response::" + data);
+            logger.debug("get create server response::" + data);
             try {
                 data = JSON.parse(data);
             } catch (err) {
@@ -130,16 +130,16 @@ var vmwareservice = function(options) {
     this.getServerDetails = function(servicehost, servername, callback) {
         client = new Client();
         var datastoresUrl = servicehost + '/' + servername + '/info?ip=' + options.host + '&user=' + options.username + '&passwd=' + options.password + '&dc=' + options.dc;
-        console.log(datastoresUrl);
+        logger.debug(datastoresUrl);
         client.registerMethod("jsonMethod", datastoresUrl, "GET");
         var args = {};
         client.methods.jsonMethod(args, function(data, response) {
             data = data.toString();
             if (data.indexOf('Not Found') > 0) {
-                console.log("No VM Found - Response :" + data);
+                logger.debug("No VM Found - Response :" + data);
                 callback(null, null);
             } else {
-                console.log("get getServerDetails response::" + data);
+                logger.debug("get getServerDetails response::" + data);
                 callback(null, data);
             }
         });
@@ -161,7 +161,7 @@ var vmwareservice = function(options) {
             cmdswin: ["del "]
         }
         var cmdString = opts.cmds.join(' && ');
-        console.log(JSON.stringify(opts));
+        logger.debug(JSON.stringify(opts));
         var sshExec = new SSHExec(opts);
         sshExec.exec(cmdString, function(err, retCode) {
             if(err) {
@@ -179,10 +179,10 @@ var vmwareservice = function(options) {
             }
             return;
         }, function(err, stdout) {
-            console.log('Out:', stdout);
+            logger.debug('Out:', stdout);
             return;
         }, function(err, stdout) {
-            console.log('Error Out:', stdout);
+            logger.debug('Error Out:', stdout);
         });
 
     };
@@ -190,7 +190,7 @@ var vmwareservice = function(options) {
     this.waitForPortOnInstance = function(hostip, callback) {
          waitForPort(hostip, 22, function(err) {
                                             if (err) {
-                                                console.log(err);
+                                                logger.debug(err);
                                                 callback(err);
                                                 return;
                                             }
@@ -201,7 +201,7 @@ var vmwareservice = function(options) {
     
     this.waitforserverready = function(servicehost, servername, username, password, callback) {
         var self = this;
-        console.log('Waiting for :', servername);
+        logger.debug('Waiting for :', servername);
         var count = 0;
         var limit = 20;
         function wfsr() {
@@ -214,7 +214,7 @@ var vmwareservice = function(options) {
                     try {
                       data = JSON.parse(data);
                     } catch(err){
-                        console.log(err);
+                        logger.debug(err);
                         logger.debug('Timeout set in catch');
                         if (count<limit) {
                              logger.debug('Timeout 4 set in catch count ==> '+count);
@@ -227,7 +227,7 @@ var vmwareservice = function(options) {
                         return;
                     }
 
-                    console.log('Quried server:', JSON.stringify(data));
+                    logger.debug('Quried server:', JSON.stringify(data));
                     //response {"name":"D4D-MYVMWBP1_2015-10-21_00_12_59_159","ip":"192.168.102.154","OS":"Ubuntu Linux (64-bit)","toolsStatus":"guestToolsRunning","state":"poweredOn","cpuUsage":{"used":0,"num":1},"memory":{"avail":1024,"used":0},"uptime":1195}
                     if (data && data.toolsStatus && data.ip && data.toolsStatus == 'guestToolsRunning') {
                         self.waitForPortOnInstance(data.ip, function(err) {
@@ -263,7 +263,7 @@ var vmwareservice = function(options) {
                
             });
         };
-        console.log('Timeout 3 set');
+        logger.debug('Timeout 3 set');
         setTimeout(wfsr, 15000);
     }
 }

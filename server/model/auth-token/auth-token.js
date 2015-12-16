@@ -34,7 +34,7 @@ var AuthTokenSchema = new Schema({
 
 // creates a new task
 AuthTokenSchema.statics.createNew = function(sessionData, callback) {
-    console.log('here === >>> anshul');
+    logger.debug('here === >>> anshul');
     var token = uuid.v4();
     var that = this;
     var authToken = new that({
@@ -43,7 +43,7 @@ AuthTokenSchema.statics.createNew = function(sessionData, callback) {
         sessionData: sessionData
     });
 
-    console.log('auth == > ',authToken);
+    logger.debug('auth == > ',authToken);
 
     authToken.save(function(err, data) {
         if (err) {

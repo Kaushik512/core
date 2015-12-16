@@ -29,7 +29,7 @@ module.exports.setRoutes = function(socketIo) {
 
     sshShell.on('connection', function(socket) {
         socketList.push[socket];
-        //console.log('socket ==>',socket);
+        //logger.debug('socket ==>',socket);
         socket.on('open', function(instanceData) {
             logger.debug("instanceData:", instanceData);
             instancesDao.getInstanceById(instanceData.id, function(err, instances) {
@@ -73,7 +73,7 @@ module.exports.setRoutes = function(socketIo) {
                     var timestampEnded = new Date().getTime();
                     if (err) {
                         socket.shellInstance = null;
-                        console.log("error ==>", err);
+                        logger.debug("error ==>", err);
                         if (err.errCode === -5000) {
                             socket.emit('conErr', {
                                 message: "Host Unreachable",

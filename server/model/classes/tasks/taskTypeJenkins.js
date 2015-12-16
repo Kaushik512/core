@@ -168,7 +168,7 @@ jenkinsTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nex
                                 }
                                 return;
                             }
-                            //console.log('buildRes ==> ', buildRes);
+                            //logger.debug('buildRes ==> ', buildRes);
                             logger.debug("buildRes ==> ", JSON.stringify(buildRes));
                             if (typeof onExecute === 'function') {
                                 onExecute(null, {

@@ -30,7 +30,7 @@ function execute(cmd, isJsonResponse, callback) {
 
     //    if(isJsonResponse){   
     //       var json = JSON.parse(stdout);
-    //       //console.log("Json:", json)
+    //       //logger.debug("Json:", json)
     //       callback(null,json); 
     //       return;
     //     }
@@ -45,7 +45,7 @@ function execute(cmd, isJsonResponse, callback) {
             if (code === 0) {
                 if (isJsonResponse) {
                     var json = JSON.parse(output);
-                    //console.log("Json:", json)
+                    //logger.debug("Json:", json)
                     callback(null, json);
                     return;
                 }
@@ -475,10 +475,10 @@ var AzureCloud = function(options) {
 
                 request.post(opts, function(err, response, body) {
 
-                    console.log("response.statusCode: ", response.statusCode);
+                    logger.debug("response.statusCode: ", response.statusCode);
 
                     if (err) {
-                        //console.log("Error...",err);
+                        //logger.debug("Error...",err);
                         callback(err, null);
                         return;
                     }
@@ -536,10 +536,10 @@ var AzureCloud = function(options) {
 
                 request.post(opts, function(err, response, body) {
 
-                    console.log("response.statusCode: ", response.statusCode);
+                    logger.debug("response.statusCode: ", response.statusCode);
 
                     if (err) {
-                        //console.log("Error...",err);
+                        //logger.debug("Error...",err);
                         callback(err, null);
                         return;
                     }
@@ -719,10 +719,10 @@ var AzureCloud = function(options) {
 
                 request.post(opts, function(err, response, body) {
 
-                    console.log("response.statusCode: ", response.statusCode);
+                    logger.debug("response.statusCode: ", response.statusCode);
 
                     if (err) {
-                        //console.log("Error...",err);
+                        //logger.debug("Error...",err);
                         callback(err, null);
                         return;
                     }
@@ -771,10 +771,10 @@ var AzureCloud = function(options) {
 
                 request.post(opts, function(err, response, body) {
 
-                    console.log("response.statusCode: ", response.statusCode);
+                    logger.debug("response.statusCode: ", response.statusCode);
 
                     if (err) {
-                        console.log("Error in Cloud Service creation", err);
+                        logger.debug("Error in Cloud Service creation", err);
                         callback(err, null);
                         return;
                     }
@@ -784,7 +784,7 @@ var AzureCloud = function(options) {
                         callback(null, "Created Cloud Service Successfully");
                         return;
                     } else {
-                        console.log("Error in Cloud Service creation:", body);
+                        logger.debug("Error in Cloud Service creation:", body);
                         callback(body, null);
                         return;
                     }
@@ -934,12 +934,12 @@ var AzureCloud = function(options) {
                 request.get(opts, function(err, response, body) {
 
                     if (err) {
-                        //console.log("Error...",err);
+                        //logger.debug("Error...",err);
                         callback(err, null);
                         return;
                     }
 
-                    console.log("response.statusCode: ", response.statusCode);
+                    logger.debug("response.statusCode: ", response.statusCode);
 
                     if (response.statusCode == '200') {
                         logger.debug("END:: getServerByName");
@@ -1013,7 +1013,7 @@ var AzureCloud = function(options) {
 
         } else {
             cmdString = opts.cmds.join(' && ');
-            //console.log(JSON.stringify(opts));
+            //logger.debug(JSON.stringify(opts));
             logger.debug("cmdString >>>", cmdString);
             var sshExec = new SSHExec(opts);
             sshExec.exec(cmdString, function(err, stdout) {
@@ -1058,7 +1058,7 @@ var AzureCloud = function(options) {
 
         } else {
             cmdString = opts.cmds.join(' && ');
-            //console.log(JSON.stringify(opts));
+            //logger.debug(JSON.stringify(opts));
             var sshExec = new SSHExec(opts);
             sshExec.exec(cmdString, function(err, stdout) {
                 logger.debug(stdout);
@@ -1186,7 +1186,7 @@ var AzureCloud = function(options) {
             var timeout = setTimeout(function() {
                 that.getServerByName(instanceName, function(err, data) {
                     if (err) {
-                        console.log('Unable to get instance state', err);
+                        logger.debug('Unable to get instance state', err);
                         callback(err, null);
                         return;
                     }
