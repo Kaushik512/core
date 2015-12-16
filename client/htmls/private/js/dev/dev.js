@@ -21,7 +21,7 @@ function devCall() {
             if (objID == "divapplicationcardview" || objID == "defaultViewButtonAppCard") {
                 $("#divapplicationtableview").removeClass("visibleClass").hide();
                 $(".createAppConfigure").show();
-                $('#defaultViewButtonAppCard').hide();   
+                $('#defaultViewButtonAppCard').hide();
                 $('#defaultViewButtonNewDeploy').show();
                 $("#divapplicationcardview").addClass("visibleClass").show();
                 //$('#defaultViewButtonAppCard').parents().eq(2).find('span:nth-child(2)').removeClass('margintop2right8').addClass('margintopright8');
@@ -166,7 +166,6 @@ function devCall() {
 
 
 
-
         function disableImportLaunch() {
             var hasIPPermission = false;
             if (haspermission("instancelaunch", "execute")) {
@@ -237,7 +236,6 @@ function devCall() {
                 onkeyup: false,
                 errorClass: "error",
             });
-
 
 
 
@@ -744,24 +742,24 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                 tableinstanceview = $('#tableinstanceview').DataTable({
                     "pagingType": "full_numbers",
                     "aoColumns": [{
-                            "bSortable": false
-                        },
-                        null, {
-                            "bSortable": false
-                        }, {
-                            "bSortable": false
-                        }, {
-                            "bSortable": false
-                        }, {
-                            "bSortable": false
-                        }, {
-                            "bSortable": false
-                        }, {
-                            "bSortable": false,
-                            "sWidth": "20%"
-                        }
-                    ]
-                    /*"fnRowCallback": function(nRow, aData, iDisplayIndex) {
+                                "bSortable": false
+                            },
+                            null, {
+                                "bSortable": false
+                            }, {
+                                "bSortable": false
+                            }, {
+                                "bSortable": false
+                            }, {
+                                "bSortable": false
+                            }, {
+                                "bSortable": false
+                            }, {
+                                "bSortable": false,
+                                "sWidth": "20%"
+                            }
+                        ]
+                        /*"fnRowCallback": function(nRow, aData, iDisplayIndex) {
 
                       $("td:first", nRow).html(iDisplayIndex + 1);
                       return nRow;
@@ -1142,11 +1140,11 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                 }
                 var $ccrs = $chefCookbookRoleSelector(urlParams.org, function(data) {
 
-                }, runlist, readMode,{
-                     cookbooks: true,
-                     roles: true,
-                     templates: true,
-                     all: true
+                }, runlist, readMode, {
+                    cookbooks: true,
+                    roles: true,
+                    templates: true,
+                    all: true
                 });
                 $ccrs.find('#cookbooksrecipesselectedList').attr('data-instanceid', instanceId);
 
@@ -2378,7 +2376,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                 $imgprovider = $('<li><img src="img/azure-card.png" style="margin-left: -94px;margin-right: 7px;margin-top: 48px;" title="Windows Azure"></li>');
                             if (data[i].blueprintType == 'vmware_launch')
                                 $imgprovider = $('<li><img src="img/vmware-card.png" style="margin-left: -94px;margin-right: 7px;margin-top: 48px;" title="Vmware"></li>');
-                            
+
                             // alert(data[i].blueprintType);
                             var $liImage = $('<li></li>').append($img);
                             $ul.append($liImage);
@@ -2568,14 +2566,14 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                                 }
                                             });
 
-                                            if(blueprint.blueprintConfig.cloudProviderData.cloudProviderType == 'azure'){
+                                            if (blueprint.blueprintConfig.cloudProviderData.cloudProviderType == 'azure') {
 
                                                 $.ajax({
                                                     type: "GET",
                                                     url: "/azure/providers/" + blueprint.blueprintConfig.cloudProviderId,
                                                     success: function(data) {
                                                         data = JSON.parse(data);
-                                                        
+
                                                         $blueprintReadContainer.find('.modal-body #instanceProviderName').val(data.providerName).parents('tr').show();;
                                                         $blueprintReadContainer.find('.modal-body #instanceProviderType').val(data.providerType).parents('tr').show();;
 
@@ -2586,7 +2584,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                                         //$blueprintReadContainer.find('tr.keyPair').hide();
                                                         //$blueprintReadContainer.find('tr.managementPemKey').removeClass('hidden');
                                                         $blueprintReadContainer.find('.modal-body #managementPem').val(data.pemFileName).parents('tr').show();;
-                                                        
+
                                                         $blueprintReadContainer.find('.modal-body #managementKey').val(data.keyFileName).parents('tr').show();
 
                                                         //console.log(data);
@@ -2596,7 +2594,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                                     }
                                                 });
 
-                                            } else if(blueprint.blueprintConfig.cloudProviderData.cloudProviderType == 'vmware'){
+                                            } else if (blueprint.blueprintConfig.cloudProviderData.cloudProviderType == 'vmware') {
 
 
                                                 $.ajax({
@@ -2605,7 +2603,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                                     success: function(data) {
                                                         //data = JSON.parse(data);
 
-                                                        
+
                                                         $blueprintReadContainer.find('.modal-body #instanceProviderName').val(data.providerName).parents('tr').show();;
                                                         $blueprintReadContainer.find('.modal-body #instanceProviderType').val(data.providerType).parents('tr').show();;
 
@@ -2639,7 +2637,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                                         alert(data.toString());
                                                     }
                                                 });
-                                           }
+                                            }
 
                                             var $parent = $(this).parents('.cardimage');
 
@@ -2662,23 +2660,22 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                                 //for getting the VPC
                                                 $blueprintReadContainer.find('.modal-body #instanceVPC').val(blueprint.blueprintConfig.cloudProviderData.vpcId).parents('tr').show();
 
-                                            } 
-                                            
+                                            }
+
                                             // loop for getting runlist
                                             var versionsList = blueprint.blueprintConfig.infraManagerData.versionsList;
                                             if (versionsList && versionsList.length) {
-                                                
-                                                var runlistName = $chefCookbookRoleSelector.getRunlistNames(versionsList[versionsList.length-1].runlist);
+
+                                                var runlistName = $chefCookbookRoleSelector.getRunlistNames(versionsList[versionsList.length - 1].runlist);
                                                 $blueprintReadContainer.find('.modal-body #instanceRunlist').val(runlistName.join(' , ')).parents('tr').show();
 
                                                 //for getting the version
-                                                $blueprintReadContainer.find('.modal-body #instanceVersion').val(versionsList[versionsList.length-1].ver).parents('tr').show();
+                                                $blueprintReadContainer.find('.modal-body #instanceVersion').val(versionsList[versionsList.length - 1].ver).parents('tr').show();
 
                                             }
                                             $blueprintReadContainer.find('.modal-body #blueprintTemplateType').val(blueprint.templateType).parents('tr').show();
 
                                             getOrgProjDetails($blueprintReadContainer);
-
 
 
 
@@ -3198,8 +3195,6 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
 
 
-
-
                                     }).error(function(jxhr) {
                                         var message = "Server Behaved Unexpectedly";
                                         if (jxhr.responseJSON && jxhr.responseJSON.message) {
@@ -3400,7 +3395,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                 for (var i = 0; i < runlist.length; i++) {
 
                     if (runlist[i].indexOf('template') === 0) {
-                         var templateRunlist = $chefCookbookRoleSelector.getRunlistFromTemplate(runlist[i]);
+                        var templateRunlist = $chefCookbookRoleSelector.getRunlistFromTemplate(runlist[i]);
                         runlist = runlist.concat(templateRunlist);
                         continue;
                     }
@@ -3414,11 +3409,11 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                         }
                     }
                     if (runlist[i].indexOf('recipe') === 0) {
-                        if(reqBody.cookbooks.indexOf(name) === -1) {
+                        if (reqBody.cookbooks.indexOf(name) === -1) {
                             reqBody.cookbooks.push(name);
                         }
                     } else {
-                        if(reqBody.roles.indexOf(name) === -1) {
+                        if (reqBody.roles.indexOf(name) === -1) {
                             reqBody.roles.push(name);
                         }
                     }
@@ -4244,9 +4239,9 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                         //if(headerCount === 1) {
 
                         setTimeout(function() {
-                            $liHeader.find('a').click();
-                        }, 2000)
-                        //}
+                                $liHeader.find('a').click();
+                            }, 2000)
+                            //}
                     });
 
                 }
@@ -4303,7 +4298,6 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                     }
                 });
             }
-
 
 
 
@@ -4415,7 +4409,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
                     //method for executing the chef and jenkins job...
                     var $tdExecute = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Execute" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-play bigger-120"></i></a>');
-                    $tdExecute.find('a').data('taskId', data[i]._id).attr('data-executeTaskId', data[i]._id).click(function(e,nexusData) {
+                    $tdExecute.find('a').data('taskId', data[i]._id).attr('data-executeTaskId', data[i]._id).click(function(e, nexusData) {
                         var taskId = $(this).data('taskId');
 
                         if (data[i].taskType === 'jenkins' || data[i].taskType === 'chef' || data[i].taskType === 'puppet' || data[i].taskType === 'composite') {
@@ -4424,13 +4418,14 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
                                 var $modalForSelect = $('#modalForSelect');
                                 var $tableBody = $('#paramTableList').empty();
-                                $('#executeJob').unbind('submit').bind('submit',function(e) {
+                                $('#executeJob').unbind('submit').bind('submit', function(e) {
 
                                     $modalForSelect.modal('hide');
                                     console.log('firing');
                                     executeJob();
                                     return false;
                                 });
+
                                 function executeJob() {
                                     var $selects = $modalForSelect.find('.modal-body select');
                                     //alert($select);
@@ -4513,15 +4508,14 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
                                             } //for loop for default value ends here..
 
-                                            
+
                                         } //if ends here for default value..
 
-                                        
+
                                     } //if loop for choice ends here..
-                                    
 
 
-                        
+
                                 } //for ends here..
                                 //new else starts here..
                             } else {
@@ -4564,8 +4558,6 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                 });
                             }
                         } //if ends here..
-
-
 
 
 
@@ -5276,8 +5268,6 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
 
 
-
-
         $('.dockerinstancestart').click(function(e) {
             function generateCompositeJsonfromtable() {
                 var dockercompose = [];
@@ -5401,14 +5391,13 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
 
 
-
             //socketAutoScale.on('connect', function() {
-                window.socketAutoScale.emit('joinCFRoom', {
-                    orgId: orgId,
-                    bgId: urlParams['bg'],
-                    projId: projectId,
-                    envId: envId
-                });
+            window.socketAutoScale.emit('joinCFRoom', {
+                orgId: orgId,
+                bgId: urlParams['bg'],
+                projId: projectId,
+                envId: envId
+            });
             //});
 
             window.socketAutoScale.on('cfAutoScaleInstanceRemoved', function(instanceData) {
@@ -5419,7 +5408,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
             });
             window.socketAutoScale.on('cfAutoScaleInstanceAdded', function(instanceData) {
                 console.log('add event fired ==> ', instanceData);
-                if(orgId === instanceData.orgId && urlParams['bg'] === instanceData.bgId &&projectId ===  instanceData.projectId && envId === instanceData.envId) {
+                if (orgId === instanceData.orgId && urlParams['bg'] === instanceData.bgId && projectId === instanceData.projectId && envId === instanceData.envId) {
                     addInstanceToDOM(instanceData);
                 }
             });
@@ -5428,24 +5417,24 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                 console.log('State changed event fired ==> ', instanceData);
                 var instanceId = instanceData._id;
                 var title = '';
-                if(orgId === instanceData.orgId && urlParams['bg'] === instanceData.bgId &&projectId ===  instanceData.projectId && envId === instanceData.envId) {
-                     var $card = $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + instanceData._id + ']');
-                      /*$card.find('.instance-state').removeClass().addClass('instance-state instance-state-text-stopped').html(instanceData.instanceState);
-                      disableInstanceActionBtns(instanceData._id);
-                      $card.find('.componentlistContainer').removeClass().addClass('componentlistContainer stopped');
-                      $('#tableinstanceview').find('tr[data-instanceid="'+instanceData._id+'"]').find('.instancestatusindicator').removeClass().addClass('instancestatusindicator stopped');
-                      */
-                      
+                if (orgId === instanceData.orgId && urlParams['bg'] === instanceData.bgId && projectId === instanceData.projectId && envId === instanceData.envId) {
+                    var $card = $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + instanceData._id + ']');
+                    /*$card.find('.instance-state').removeClass().addClass('instance-state instance-state-text-stopped').html(instanceData.instanceState);
+                    disableInstanceActionBtns(instanceData._id);
+                    $card.find('.componentlistContainer').removeClass().addClass('componentlistContainer stopped');
+                    $('#tableinstanceview').find('tr[data-instanceid="'+instanceData._id+'"]').find('.instancestatusindicator').removeClass().addClass('instancestatusindicator stopped');
+                    */
+
                     var $tableViewInstanceId = $("tr[data-instanceId='" + instanceId + "']");
-                      title = instanceData.instanceState == "running" ? "Stop" : instanceData.instanceState == "stopped" ? "Start" : "";
-                      $('[instanceID="' + instanceId + '"]').removeClass('stopped running pending stopping unknown').addClass(instanceData.instanceState).attr('data-original-title', title);
-                      
+                    title = instanceData.instanceState == "running" ? "Stop" : instanceData.instanceState == "stopped" ? "Start" : "";
+                    $('[instanceID="' + instanceId + '"]').removeClass('stopped running pending stopping unknown').addClass(instanceData.instanceState).attr('data-original-title', title);
+
                     if (instanceData.instanceState == 'stopped') {
                         enableInstanceActionStopBtn(instanceData._id);
                     }
                     if (instanceData.instanceState == 'running') {
                         enableInstanceActionStartBtn(instanceData._id, instanceData.hardware.os);
-                        
+
                     }
                     if (instanceData.instanceState == 'pending' || instanceData.instanceState == 'stopping' || instanceData.instanceState == 'terminated') {
                         disableInstanceActionBtns(instanceData._id);
@@ -5454,10 +5443,10 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                         disableInstanceStartStopActionBtns(instanceData._id, instanceData.hardware.os);
                     }
                     var cssClassed = getCssClassFromStatus(instanceData.instanceState);
-                            $card.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
-                            //disableInstanceActionBtns(instanceData._id);
-                            $card.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(instanceData.instanceState);
-                            $('.instancestatusindicator[data-instanceId="' + instanceId + '"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
+                    $card.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
+                    //disableInstanceActionBtns(instanceData._id);
+                    $card.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(instanceData.instanceState);
+                    $('.instancestatusindicator[data-instanceId="' + instanceId + '"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
 
                     //addInstanceaddInstanceToDOMToDOMaddInstanceToDOM(instanceData);
                 }

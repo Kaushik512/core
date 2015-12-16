@@ -1,4 +1,4 @@
-var sys = require('sys');
+//var sys = require('sys');
 var exec = require('child_process').exec;
 var SSHExec = require('./utils/sshexec');
 var logger = require('_pr/logger')(module);

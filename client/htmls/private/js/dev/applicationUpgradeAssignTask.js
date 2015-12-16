@@ -141,8 +141,6 @@ $(document).ready(function() {
 
 
 
-
-
 var urlParams = {};
 (window.onpopstate = function() {
     var url = window.location.href;
@@ -211,7 +209,7 @@ $(document).ready(function() {
             roles: false,
             cookbooks: false,
             templates: true,
-            
+
         });
         if (taskData) {
             console.log("I am in loadUIData inside taskData");
@@ -746,7 +744,6 @@ $(document).ready(function() {
 
 
 
-
         var reqBody = {
             taskData: taskData
         };
@@ -1212,7 +1209,7 @@ $(document).ready(function() {
             cookbooks: [],
             roles: []
         }
-        
+
         for (var i = 0; i < runlist.length; i++) {
 
             if (runlist[i].indexOf('template') === 0) {
@@ -1230,11 +1227,11 @@ $(document).ready(function() {
                 }
             }
             if (runlist[i].indexOf('recipe') === 0) {
-                if(reqBody.cookbooks.indexOf(name) === -1) {
+                if (reqBody.cookbooks.indexOf(name) === -1) {
                     reqBody.cookbooks.push(name);
                 }
             } else {
-                if(reqBody.roles.indexOf(name) === -1) {
+                if (reqBody.roles.indexOf(name) === -1) {
                     reqBody.roles.push(name);
                 }
             }
@@ -1529,7 +1526,6 @@ $(document).ready(function() {
         }).fail(function(jxhr) {
             alert("TaskLists load Failed");
         });
-
 
 
 
