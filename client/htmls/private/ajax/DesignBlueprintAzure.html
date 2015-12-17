@@ -2664,15 +2664,15 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                                         $inputContainer.find('.cftParameterLabel').append(keys[i]);
 
                                         if (parameter.metadata && parameter.metadata.description) {
-                                            var $desc = $('<span></span>').attr('title', parameter.Description).append('&nbsp;&nbsp;<i class="fa fa-question"/>');
+                                            var $desc = $('<span></span>').attr('title', parameter.metadata.description).append('&nbsp;&nbsp;<i class="fa fa-question"/>');
                                             $inputContainer.find('.cftParameterLabelContainer').append($desc);
                                         }
                                         $panelBody.append($inputContainer);
 
                                     }
                                 }
-                                var resources = templateData.Resources;
-                                var resourceKeys = Object.keys(resources);
+                                var resources = templateData.resources;
+                                //var resourceKeys = Object.keys(resources);
                                 var $panelGroup = $('<div class="panel-group smart-accordion-default col-lg-12 col-md-12" id="cft-resource-editArea" style="margin-top:5px"></div>');
 
                                 var $panel = $('<div class="panel panel-default cft-resource-editPanel"><div class="panel-heading"><h4 class="panel-title"><a class="panel-toggle" data-toggle="collapse" data-parent="#cft-resource-editArea" href="#" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><span class="heading-text"></span></a></h4></div><div id="CollapseEditorgParam" class="panel-collapse collapse" style="height: auto;"><div class="panel-body" style="padding-left: 8px;"></div></div></div>');
@@ -2699,25 +2699,25 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                                 });
 
 
-                                for (var i = 0; i < resourceKeys.length; i++) {
-                                    if (resources[resourceKeys[i]].Type === "AWS::EC2::Instance") {
+                                for (var i = 0; i < resources.length; i++) {
+                                    if (resources[i].type === "Microsoft.Compute/virtualMachines") {
                                         var $clone = $panel.clone();
-                                        $clone.find('.heading-text').html('Configure Resource : ' + resourceKeys[i]);
-                                        $clone.find('.panel-collapse').attr('id', 'cftResource-' + resourceKeys[i]);
-                                        $clone.find('.panel-toggle').attr('href', '#cftResource-' + resourceKeys[i]);
+                                        $clone.find('.heading-text').html('Configure Resource : ' + "azure-vm");
+                                        $clone.find('.panel-collapse').attr('id', 'cftResource-' + "azure-vm");
+                                        $clone.find('.panel-toggle').attr('href', '#cftResource-' + "azure-vm");
 
                                         // for username
-                                        var $inputUsernameContainer = $inputContainerTemplate.clone();
-                                        var $inputUsername = $resourceInputTemplate.clone();
-                                        $inputUsername.addClass('cftResourceUsernameInput');
-                                        $inputUsernameContainer.find('.input-groups').append($inputUsername);
-                                        $inputUsernameContainer.find('.cftResourceLabel').html('Instance Username');
+                                        // var $inputUsernameContainer = $inputContainerTemplate.clone();
+                                        // var $inputUsername = $resourceInputTemplate.clone();
+                                        // $inputUsername.addClass('cftResourceUsernameInput');
+                                        // $inputUsernameContainer.find('.input-groups').append($inputUsername);
+                                        // $inputUsernameContainer.find('.cftResourceLabel').html('Instance Username');
 
                                         //for resourceLogicalId 
-                                        var $inputLogicalId = $resourceInputTemplate.clone();
-                                        $inputLogicalId.addClass('cftResourceLogicalIdInput');
-                                        $inputLogicalId.attr('type', 'hidden');
-                                        $inputLogicalId.val(resourceKeys[i]);
+                                        // var $inputLogicalId = $resourceInputTemplate.clone();
+                                        // $inputLogicalId.addClass('cftResourceLogicalIdInput');
+                                        // $inputLogicalId.attr('type', 'hidden');
+                                        // $inputLogicalId.val(resourceKeys[i]);
 
                                         // for chefRunlist
 
@@ -2733,8 +2733,8 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 
 
 
-                                        $clone.find('.panel-body').append($inputUsernameContainer);
-                                        $clone.find('.panel-body').append($inputLogicalId);
+                                        //$clone.find('.panel-body').append($inputUsernameContainer);
+                                        //$clone.find('.panel-body').append($inputLogicalId);
                                         $clone.find('.panel-body').append($inputChefRunlistContainer);
 
 
