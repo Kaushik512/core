@@ -55,9 +55,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 
     app.post('/dashboard/providers/dashboardmongopush', function(req, res) {
-        console.log(req.body.managedinstancesCount);
+        //console.log(req.body.managedinstancesCount);
         console.log(req.body.averageUsagesCount);
-        dashboardmanagedInstances.createNew(req.body.managedinstancesCount, function(err, dashboardmanagedinstancesdata) {
+        /*dashboardmanagedInstances.createNew(req.body.managedinstancesCount, function(err, dashboardmanagedinstancesdata) {
             if (err) {
                 res.send(403, "dashboard managedinstances Data Already Exist.");
                 return;
@@ -67,7 +67,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 res.send(200, dashboardmanagedinstancesdata);
                 return;
             }
-        });
+        });*/
         dashboardusages.createNew(req.body.averageUsagesCount, function(err, dashboardusagesdata) {
             if (err) {
                 res.send(403, "dashboard dashboardusagesdata Data Already Exist.");
@@ -213,7 +213,16 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });
     //API to get totalmanagedinstances count for dashboard.
     app.get('/dashboard/providers/totalmanagedinstances', function(req, res) {
-        dashboardmanagedInstances.getLatestManagedInstancesInfo(function(err, managedInstancesDataLatest) {
+        instancesDao.getAllInstances(function(err, instances) {
+            if (err) {
+                logger.debug("Error while getElementBytting instance!");
+            }
+            if(instances){
+                console.log("I am in count of total managed instances ##############"+instances.length);
+                res.send(200, instances.length);
+            }
+        });
+        /*dashboardmanagedInstances.getLatestManagedInstancesInfo(function(err, managedInstancesDataLatest) {
             if (err) {
                 return;
             }
@@ -222,7 +231,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 res.send(200, managedInstancesDataLatest);
                 return;
             }
-        });
+        });*/
     });
     //API to get totalcost count for dashboard.
     app.get('/dashboard/providers/totalcosts', function(req, res) {

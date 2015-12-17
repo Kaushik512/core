@@ -245,7 +245,6 @@
           </div>
           <div class="modal-body">
             <form id="formconfigureapplication">
-              
               <table class="table table-bordered" cellpadding="5px" width="100%" id="tableconfigureapplication">
                   <thead>
                       <tr style="background-color: #2c3742;color: #fff;">
@@ -442,7 +441,17 @@
     </div>
   </div>
 </div> -->
-
+<style type="text/css">
+.h3class{
+  font-size: 20px !important;
+  height: 40px;
+}
+.ptagclass{
+  height: 45px;
+  text-align: center;
+  font-size: 18px !important;
+}
+</style>
 <div class="panel-group smart-accordion-default">
   <div class="panel panel-default" id="accordion-Infrastructure">
       <div class="panel-heading">
@@ -466,8 +475,10 @@
                   <div class="col-lg-3 col-xs-6">
                     <div class="small-box bg-aqua">
                       <div class="inner">
-                        <h3 id="totalInstances">&nbsp;</h3>
-                        <p>Total <br>No. of Instances</p>
+                        <!-- <h3 id="totalInstances">&nbsp;</h3>
+                        <p>Total <br>No. of Instances</p> -->
+                        <h3 class="h3class">No. of Instances</h3>
+                        <p id="totalInstances" class="ptagclass">&nbsp;</p>
                       </div>
                       <div class="icon">
                         <i class="fa fa-laptop"></i>
@@ -480,8 +491,8 @@
                   <div class="col-lg-3 col-xs-6">
                     <div class="small-box bg-aqua">
                       <div class="inner">
-                        <h3 id="managedInstances">&nbsp;</h3>
-                        <p>Total <br>No. of Managed Instances</p>
+                        <h3 class="h3class">Managed Instances</h3>
+                        <p class="ptagclass" id="managedInstances">&nbsp;</p>
                       </div>
                       <div class="icon">
                         <i class="fa fa-cube"></i>
@@ -495,8 +506,8 @@
                   <div class="col-lg-3 col-xs-6">
                     <div class="small-box bg-aqua">
                       <div class="inner">
-                        <h3 id="totalCosts">&nbsp;</h3>
-                        <p>Total <br>Spend in Today</p>
+                        <h3 class="h3class">Spend in Today</h3>
+                        <p class="ptagclass" id="totalCosts">&nbsp;</p>
                       </div>
                       <div class="icon">
                         <i class="fa fa-dollar"></i>
@@ -506,12 +517,26 @@
                       </a>
                     </div>
                   </div>
-
                   <div class="col-lg-3 col-xs-6">
                     <div class="small-box bg-aqua">
                       <div class="inner">
-                        <h3 id="totalUsages">&nbsp;</h3>
-                        <p>Total <br>Average Usages/Utilizations</p>
+                        <h3 class="h3class">Instances Daily Trends</h3>
+                        <p class="ptagclass" id="totaldailyTrends">&nbsp;</p>
+                      </div>
+                      <div class="icon">
+                        <i class="fa fa-shield"></i>
+                      </div>
+                      <a class="small-box-footer" href="#">
+                        More info <i class="fa fa-arrow-circle-right"></i>
+                      </a>
+                    </div>
+                  </div>
+
+                  <!-- <div class="col-lg-3 col-xs-6">
+                    <div class="small-box bg-aqua">
+                      <div class="inner">
+                        <h3 >&nbsp;</h3>
+                        <p class="ptagclass" id="totalUsages">Total <br>Average Usages/Utilizations</p>
                       </div>
                       <div class="icon">
                         <i class="fa fa-pie-chart"></i>
@@ -520,7 +545,7 @@
                         Usages More info <i class="fa fa-arrow-circle-right"></i>
                       </a>
                     </div>
-                  </div>
+                  </div> -->
                 </div>  
               </div>
               <div class="item">
@@ -610,8 +635,8 @@
           <div class="col-lg-3 col-xs-6">
               <div class="small-box bg-green">
                 <div class="inner">
-                  <h3 id="totalBuilds">&nbsp;</h3>
-                  <p>Total<br>No. of Builds</p>
+                  <h3 class="h3class">Total Builds</h3>
+                  <p class="ptagclass" id="totalBuilds">&nbsp;</p>
                 </div>
                 <div class="icon">
                   <i class="fa fa-location-arrow"></i>
@@ -624,8 +649,8 @@
             <div class="col-lg-3 col-xs-6">
               <div class="small-box bg-green">
                 <div class="inner">
-                  <h3 id="totalbuildsPassed">&nbsp;</h3>
-                  <p>Total<br>No. of Builds Passed</p>
+                  <h3 class="h3class">Builds Passed</h3>
+                  <p class="ptagclass" id="totalbuildsPassed">&nbsp;</p>
                 </div>
                 <div class="icon">
                   <i class="fa fa-check-square-o"></i>
@@ -638,11 +663,11 @@
             <div class="col-lg-3 col-xs-6">
               <div class="small-box bg-green">
                 <div class="inner">
-                  <h3 id="totalbuildsDeployed">&nbsp;</h3>
-                  <p>Total<br>No. of Builds Deployed</p>
+                  <h3 class="h3class">Builds Deployed</h3>
+                  <p class="ptagclass" id="totalbuildsDeployed">&nbsp;</p>
                 </div>
                 <div class="icon">
-                  <i class="fa fa-externa"></i>
+                  <i class="fa fa-external-link"></i>
                 </div>
                 <a class="small-box-footer" href="#">
                   Builds More Info <i class="fa fa-arrow-circle-right"></i>
@@ -652,8 +677,8 @@
             <div class="col-lg-3 col-xs-6">
               <div class="small-box bg-green">
                 <div class="inner">
-                  <h3 id="totalUptime">&nbsp;</h3>
-                  <p>Total<br>Uptime</p>
+                  <h3 class="h3class">Uptime</h3>
+                  <p class="ptagclass" id="totalUptime">&nbsp;</p>
                 </div>
                 <div class="icon">
                   <i class="fa fa-line-chart"></i>
@@ -685,7 +710,7 @@
     <div id="collapseNotification" class="panel-collapse collapse in">
       <div class="panel-body">
         <div class="row">
-          <div class="col-lg-3 col-xs-6">
+          <!-- <div class="col-lg-3 col-xs-6">
             <div class="small-box bg-red">
               <div class="inner">
                 <h3 id="totaldailyTrends"></h3>
@@ -698,12 +723,12 @@
                 More info <i class="fa fa-arrow-circle-right"></i>
               </a>
             </div>
-          </div>
+          </div> -->
           <div class="col-lg-3 col-xs-6">
             <div class="small-box bg-red">
               <div class="inner">
-                <h3 id="totalAlerts"></h3>
-                <p>Total<br>No. of Alerts</p>
+                <h3 class="h3class">No. of Alerts</h3>
+                <p class="ptagclass" id="totalAlerts"></p>
               </div>
               <div class="icon">
                 <i class="fa fa-tags"></i>
@@ -723,7 +748,7 @@
   
 </div>
 <script type="text/javascript">
-  /*$(document).ready(function() {
+	/*$(document).ready(function() {
     $.get('../allproviders/list', function(dataforallproviders) {
 
 
