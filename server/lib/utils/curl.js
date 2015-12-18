@@ -1,3 +1,4 @@
+var logger = require('_pr/logger')(module);
 var util = require('util');
 var process = require('child_process').exec;
 

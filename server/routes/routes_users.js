@@ -9,14 +9,16 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
         congigMgmntDao.getListNew('7', 'loginname', function(err, usersList) {
             if (err) {
-                res.send(500);
+                res.status(500).send("Failed to fetch User.");
                 return;
             }
             logger.debug('userlist ==> ',usersList);
             if (usersList) {
                 res.send(usersList);
+                return;
             } else {
                 res.send(404);
+                return;
             }
         });
 

@@ -118,13 +118,43 @@ var haspermission = function(category, permissionto) {
 };
 
 
-function validatedockeruser(usernameInput, passwordInput) {
+/*function validatedockeruser(usernameInput, passwordInput) {
     var retval = false;
     $.ajax({
         type: "get",
         dataType: "text",
         async: false,
         url: '/d4dmasters/dockervalidate/' + usernameInput.val() + '/' + passwordInput.val(),
+        success: function(data) {
+            if (data == '200')
+                retval = true;
+            else {
+                errormessageforInput(usernameInput.attr('id'), "Not a valid Docker UserID / Password");
+                retval = false;
+            }
+        },
+        failure: function(data) {
+            errormessageforInput(usernameInput.attr('id'), "Not a valid Docker UserID / Password");
+            retval = false;
+        }
+    });
+
+
+    return (retval);
+}*/
+
+function validatedockeruser(usernameInput, passwordInput) {
+    var dockerData = {
+        "userName": usernameInput.val(),
+        "password": passwordInput.val()
+    };
+    var retval = false;
+    $.ajax({
+        type: "post",
+        dataType: "text",
+        async: false,
+        data: dockerData,
+        url: '/d4dmasters/docker/validate',
         success: function(data) {
             if (data == '200')
                 retval = true;

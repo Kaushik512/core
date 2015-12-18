@@ -25,17 +25,43 @@ var errorResponses = require('./error_responses.js');
 var bcrypt = require('bcryptjs');
 var authUtil = require('../lib/utils/authUtil.js');
 var Cryptography = require('../lib/utils/cryptography');
-
+var Client = require('node-rest-client').Client;
 var cryptoConfig = appConfig.cryptoSettings;
 var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
-
+var waitForPort = require('wait-for-port');
 module.exports.setRoutes = function(app, sessionVerification) {
 
     app.all('/d4dMasters/*', sessionVerification);
 
-    app.get('/d4dmasters/dockervalidate/:username/:password', function(req, res) {
-        logger.debug("Enter get() for /d4dmasters/dockervalidate/%s/%s", req.params.username, req.params.password);
-        var cmd = 'curl --raw -L --user ' + req.params.username + ':' + req.params.password + ' https://index.docker.io/v1/users';
+    // New implementation for docker authentication: Gobinda Das
+    app.post('/d4dmasters/docker/validate', function(req, res) {
+        logger.debug("Docker crudentials: ",JSON.stringify(req.body));
+        var userName = req.body.userName;
+        var password = req.body.password;
+
+        var options_auth = {
+            user: userName,
+            password: password
+        };
+        client = new Client(options_auth);
+        var dockerUrl = 'https://index.docker.io/v1/users';
+        client.registerMethod("jsonMethod", dockerUrl, "GET");
+        var reqSubmit = client.methods.jsonMethod(function(data, response) {
+            logger.debug("response: ", response);
+            logger.debug("data: ", JSON.stringify(data));
+            res.send('200');
+            return;
+        });
+
+        // Handling Exception for nexus req.
+        reqSubmit.on('error', function(err) {
+            logger.debug('Something went wrong on req!!', err.request.options);
+            res.send('402');
+        });
+
+        // Old code need to remove after verified 
+        //var cmd = 'curl --raw -L --user ' + req.params.username + ':' + req.params.password + ' https://index.docker.io/v1/users';
+        /*var cmd = 'curl --raw -L --user ' + userName + ':' + password + ' https://index.docker.io/v1/users';
         var curl = new Curl();
         curl.executecurl(cmd, function(err, stdout) {
             if (err) {
@@ -49,14 +75,24 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     res.end('402');
                 }
             }
-        });
-        logger.debug("Exit get() for /d4dmasters/dockervalidate/%s/%s", req.params.username, req.params.password);
-
+        });*/
     });
 
+    // Used npm library instead of curl to check ip is alive or not: Gobinda Das
     app.get('/d4dmasters/instanceping/:ip', function(req, res) {
         logger.debug("Enter get() for /d4dmasters/instanceping/%s", req.params.ip);
-        var cmd = 'ping -c 1 -w 1 ' + req.params.ip;
+        // 80 port will be open for all instances.
+        waitForPort(req.params.ip, 80, function(err) {
+          if (err){
+            logger.error("Error to ping ip: ",err);
+            res.status(500).send('Not Alive');
+            return;
+          }
+          res.send('Alive');
+        });
+
+        // Old code need to remove after verified which port is open default?
+        /*var cmd = 'ping -c 1 -w 1 ' + req.params.ip;
         var curl = new Curl();
         logger.debug("Pinging Node to check if alive :" + cmd);
         curl.executecurl(cmd, function(err, stdout) {
@@ -75,7 +111,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     return;
                 }
             }
-        });
+        });*/
     });
 
     app.get('/d4dmasters/getdockertags/:repopath/:dockerreponame', function(req, res) {

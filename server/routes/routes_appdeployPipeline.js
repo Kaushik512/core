@@ -56,7 +56,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     });
     app.get('/app/deploy/pipeline/project/:projectId', function(req, res) {
-        //logger.debug(req.params.projectId);
         AppDeployPipeline.getAppDeployPipeline(req.params.projectId, function(err, appDeployes) {
             if (err) {
                 res.status(500).send( errorResponses.db.error);
@@ -69,7 +68,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
     app.post('/app/deploy/data/pipeline/update/configure/project/:projectId', function(req, res) {
-        //var loggedInUser = req.session.user.cn;
         AppDeployPipeline.updateConfigurePipeline(req.params.projectId, req.body.appDeployPipelineUpdateData, function(err, appDeployes) {
             if (err) {
                 res.send(403, "Pipeline Data Already Exist.");

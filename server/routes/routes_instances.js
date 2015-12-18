@@ -22,42 +22,30 @@ var usersDao = require('../model/users.js');
 var credentialCryptography = require('../lib/credentialcryptography')
 var fileIo = require('../lib/utils/fileio');
 var uuid = require('node-uuid');
-//var javaSSHWrapper = require('../model/javaSSHWrapper.js');
 var errorResponses = require('./error_responses');
 var logger = require('_pr/logger')(module);
 var waitForPort = require('wait-for-port');
-
 var AWSProvider = require('_pr/model/classes/masters/cloudprovider/awsCloudProvider.js');
 var AWSKeyPair = require('../model/classes/masters/cloudprovider/keyPair.js');
 var VMware = require('_pr/lib/vmware');
 var vmwareCloudProvider = require('_pr/model/classes/masters/cloudprovider/vmwareCloudProvider.js');
 var azureProvider = require('_pr/model/classes/masters/cloudprovider/azureCloudProvider.js');
 var AzureCloud = require('_pr/lib/azure');
-
 var ChefClientExecution = require('../model/classes/instance/chefClientExecution/chefClientExecution.js');
-
 var Cryptography = require('../lib/utils/cryptography');
-
-
 var Task = require('../model/classes/tasks/tasks.js');
 var utils = require('../model/classes/utils/utils.js');
 var SCPClient = require('../lib/utils/scp');
 var shellEscape = require('shell-escape');
-
 var Puppet = require('_pr/lib/puppet.js');
 var masterUtil = require('_pr/lib/utils/masterUtil');
-
 var fs = require('fs');
-
-//var WINRM = require('../lib/utils/winrmexec');
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     app.get('/instances/:instanceId', function(req, res) {
-        // logger.debug("Enter get() for /instances/%s", req.params.instanceId);
         instancesDao.getInstanceById(req.params.instanceId, function(err, data) {
             if (err) {
-                //         logger.error("Instance fetch Failed >> ", err);
                 res.send(500);
                 return;
             }

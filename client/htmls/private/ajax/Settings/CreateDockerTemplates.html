@@ -240,8 +240,8 @@
     }
     //return;
       setTimeout(function(){
-        /*if(validatedockeruser($('#dockeruserid'),$('#dockerpassword')))
-           {*/
+        if(validatedockeruser($('#dockeruserid'),$('#dockerpassword')))
+           {
             //alert('here');
             $("#masterssavespinner").detach();
             button.removeAttr('disabled');   
@@ -249,10 +249,10 @@
                    setfolderpath(); 
                    saveform('18');
                }
-           /*} else {
+        } else {
             $("#masterssavespinner").detach();
             button.removeAttr('disabled');
-           }*/
+           }
       },500)
        
    }
