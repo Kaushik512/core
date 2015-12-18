@@ -232,7 +232,7 @@
   </div><!-- /.modal-dialog -->
 </div>
 <div class="modal fade" id="modaldashboardbuildcardConfigure" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <form role="form" id="appCardForm" autocomplete="off">
           <div class="modal-header">
@@ -245,7 +245,31 @@
           </div>
           <div class="modal-body">
             <form id="formconfigureapplication">
-              
+              <div class="row" style="margin-bottom:15px;">
+                <div class="col-lg-6 col-md-6">
+                  <label for="chooseJenkinsReference">Jenkin's Reference Name:
+                    <span style="color:red">*</span>
+                  </label>
+                  <div class="input-groups">
+                      <select id="chooseJenkinsReference" name="" class="required width-100 form-control">
+
+                      </select>
+                  </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6">
+                  <label for="chooseJenkinsJob">Jenkin's Job Name:
+                    <span style="color:red">*</span>
+                    <span>
+                          <img id="jenkinsjobSpinner" src="img/select2-spinner.gif">
+                    </span>
+                  </label>
+                  <div class="input-groups">
+                      <select id="jobListJenkins" name="chooseJenkinsJob" class="required form-control width-100">
+                      </select>
+                  </div>
+                </div>
+              </div>
               <table class="table table-bordered" cellpadding="5px" width="100%" id="tableconfigureapplication">
                   <thead>
                       <tr style="background-color: #2c3742;color: #fff;">
@@ -733,7 +757,92 @@
 </script>
 <script type="text/javascript">
   $(document).ready(function() {
-    
+  $.get('/jenkins/', function(jenkinsList) {
+    jenkinsList = JSON.parse(jenkinsList);
+    //console.log("ffffffffffffffffff" + jenkinsList);
+    $jenkinsServerListDropdown = $('#chooseJenkinsReference');
+    $jenkinsServerListDropdown.empty();
+    $jenkinsServerListDropdown.append('<option value="choose">Choose Jenkins Server</option>');
+    for (var i = 0; i < jenkinsList.length; i++) {
+      var keys = Object.keys(jenkinsList[i]);
+      var $option = $('<option></option>').val(jenkinsList[i][keys[0]]).html(keys[0]);
+      $jenkinsServerListDropdown.append($option);
+    }
+    var $spinnerJob = $('#jenkinsjobSpinner').addClass('hidden');
+
+    var $jobsList = $('#jobListJenkins');
+    $jobsList.prop("disabled", true);
+    $jenkinsServerListDropdown.change(function(e) {
+      if ($(this).val() == 'choose') {
+        $spinnerJob.addClass('hidden');
+        $jobsList.prop("disabled", true);
+      } else {
+        var jenkinsServerId = $(this).val();
+
+        console.log(jenkinsServerId);
+
+        $spinnerJob.removeClass('hidden');
+        $jobsList.prop("disabled", true);
+
+        //this is a condition for getting the list of jenkins job for a particular jenkins server..
+        $.get('/jenkins/' + jenkinsServerId + '/jobs', function(jobsList) {
+          if (jobsList) {
+            $jobsList.append('<option value="">Select Job</option>');
+            for (var i = 0; i < jobsList.length; i++) {
+              var $option = $('<option></option>').val(jobsList[i].name).html(jobsList[i].name);
+              $jobsList.append($option);
+            }
+            $jobsList.prop("disabled", false);
+            $spinnerJob.addClass('hidden');
+          }
+        }).fail(function(jxhr) {
+          $spinnerJob.addClass('hidden');
+          var msg = "Jenkins Job Behaved Unexpectedly.";
+          if (jxhr.responseJSON && jxhr.responseJSON.message) {
+            msg = jxhr.responseJSON.message;
+          } else if (jxhr.responseText) {
+            msg = jxhr.responseText;
+          }
+          bootbox.alert(msg);
+        });
+      }
+    });
+    $jobsList.change(function(e) {
+      var jobName = $('#jobListJenkins').val();
+      var jenkinsServerId;
+      for (var i = 0; i < jenkinsList.length; i++) {
+        var keys = Object.keys(jenkinsList[i]);
+        console.log("=========== " + JSON.stringify(jenkinsList[i][keys[0]]));
+        jenkinsServerId = jenkinsList[i][keys[0]];
+      }
+      if (jobName) {
+        $('.jenkinsJobURL').empty();
+        $.get('/jenkins/' + jenkinsServerId + '/dashboardjobs/' + jobName, function(jobsList) {
+          //console.log("Joblist are====>",jobsList);
+          $('#totalBuilds').empty();
+          $('#totalbuildsPassed').empty();
+          $('#totalbuildsDeployed').empty();
+          $('#totalBuilds').append(jobsList.buildCount);
+          $('#totalbuildsPassed').append(jobsList.sucessbuildCount);
+          $('#totalbuildsDeployed').append(jobsList.sucessbuildCount);
+        }).fail(function(jxhr) {
+          var msg = "Jenkins Server Behaved Unexpectedly.";
+          if (jxhr.responseJSON && jxhr.responseJSON.message) {
+            msg = jxhr.responseJSON.message;
+          } else if (jxhr.responseText) {
+            msg = jxhr.responseText;
+          }
+          bootbox.alert(msg);
+        });
+      }
+    });
+  });
+
+
+
+
+
+
     //Total Instances API
     $.get('../dashboard/providers/totalinstances', function(totalinstances) {
       $('#totalInstances').empty();
@@ -765,26 +874,26 @@
     }).fail(function() {});
 
     //Total Builds API
-    $.get('../dashboard/providers/totalbuilds', function(totalbuilds) {
+    /*$.get('../dashboard/providers/totalbuilds', function(totalbuilds) {
       $('#totalBuilds').empty();
       var totalbuildsCount = totalbuilds[0].totaltotalbuildcount;
       $('#totalBuilds').append(totalbuildsCount);
-    }).fail(function() {});
+    }).fail(function() {});*/
 
     
     //Total totalbuildspassed API
-    $.get('../dashboard/providers/totalbuildspassed', function(totalbuildspassed) {
+    /*$.get('../dashboard/providers/totalbuildspassed', function(totalbuildspassed) {
       $('#totalbuildsPassed').empty();
       var totalbuildspassedCount = totalbuildspassed[0].totalpassedbuildcount;
       $('#totalbuildsPassed').append(totalbuildspassedCount);
-    }).fail(function() {});
+    }).fail(function() {});*/
 
-    //Total totalbuildspassed API
-    $.get('../dashboard/providers/totalbuildsdeployed', function(totalbuildsdeployed) {
+    //Total totalbuildsdeployed API
+    /*$.get('../dashboard/providers/totalbuildsdeployed', function(totalbuildsdeployed) {
       $('#totalbuildsDeployed').empty();
       var totalbuildsdeployedCount = totalbuildsdeployed[0].totaldeployedbuildcount;
       $('#totalbuildsDeployed').append(totalbuildsdeployedCount);
-    }).fail(function() {});
+    }).fail(function() {});*/
 
     //Total uptime API
     $.get('../dashboard/providers/totaluptime', function(totaluptime) {
