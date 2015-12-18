@@ -74,7 +74,7 @@ Catalyst Import a Node From ConfigManagement(Chef) in to the Environment
 
 
 Catalyst Verify Node Imported from Config Management(Chef Server) & Delete
-    [Tags]       Sanity       Smoke1
+    [Tags]       Sanity       Smoke
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Verify and Delete the InportedNode from Environment

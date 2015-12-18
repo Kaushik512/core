@@ -23,13 +23,17 @@ Test Validation of Creation of New Templates
     Validate the No Organization Creating Template
     Template Creation with no Organization
 
-Catalyst User New Template Creation
+Catalyst User New Template Creation,Editing
+    Clicks on Settings
+    Clicks on Gallery Setup
+    Clicks on Templates
     Clicks on New Button
     Sleep    3s
     Enters Template Name
     Chooses Icon
     Chooses Template Type
     Select Created organization
+    Sleep    4s
     Select CookBooks
     Clicks on >> Button
     Clicks on Save Button
@@ -49,13 +53,12 @@ Catalyst Unique Template Validation Setup
     Chooses Icon
     Chooses Template Type
     Select Created organization
+    Sleep    4s
     Select CookBooks
     #Select Roles
     Clicks on >> Button
     Clicks on Save Button
     Verify the Error Message displayed while duplicating the Template
-
-
 
 
 
