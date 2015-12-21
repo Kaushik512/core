@@ -1,3 +1,13 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
+// This file act as a Controller which contains organization related all end points.
+
+
 var masterjsonDao = require('../model/d4dmasters/masterjson.js');
 var configmgmtDao = require('../model/d4dmasters/configmgmt.js');
 var Chef = require('_pr/lib/chef');

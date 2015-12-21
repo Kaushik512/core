@@ -1,3 +1,13 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
+// This file act as a Controller which contains aplication related all end points.
+
+
 var Application = require('../model/classes/application/application');
 
 var logger = require('_pr/logger')(module);
@@ -8,7 +18,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     app.get('/applications/:applicationId', function(req, res) {
         Application.getApplicationById(req.params.applicationId, function(err, application) {
             if (err) {
-                res.status(500).send( errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (!application) {
@@ -23,7 +33,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     app.get('/applications/:applicationId/build', function(req, res) {
         Application.getApplicationById(req.params.applicationId, function(err, application) {
             if (err) {
-                res.status(500).send( errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (!application) {
@@ -33,7 +43,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
             application.build(req.session.user.cn, req.protocol + '://' + req.get('host'), function(err, buildRes) {
                 if (err) {
-                    res.status(500).send( err);
+                    res.status(500).send(err);
                     return;
                 }
                 res.send(buildRes);
@@ -44,13 +54,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
     app.get('/applications/:applicationId/buildConf', function(req, res) {
         Application.getApplicationById(req.params.applicationId, function(err, application) {
             if (err) {
-                res.status(500).send( errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (application) {
                 application.getBuild(function(err, build) {
                     if (err) {
-                        res.status(500).send( errorResponses.db.error);
+                        res.status(500).send(errorResponses.db.error);
                         return;
                     }
                     res.send(build)
@@ -65,20 +75,20 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     app.post('/applications/:applicationId/buildConf/buildParameters', function(req, res) {
         if (!req.body.buildParameters) {
-            res.status(400).send( {
+            res.status(400).send({
                 message: "Invalid buildParameters"
             });
             return;
         }
         Application.getApplicationById(req.params.applicationId, function(err, application) {
             if (err) {
-                res.status(500).send( errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (application) {
                 application.updateBuildParameters(req.body.buildParameters, function(err, build) {
                     if (err) {
-                        res.status(500).send( errorResponses.db.error);
+                        res.status(500).send(errorResponses.db.error);
                         return;
                     }
                     res.send(build)
@@ -94,7 +104,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     app.get('/applications/:applicationId/lastBuildInfo', function(req, res) {
         Application.getApplicationById(req.params.applicationId, function(err, application) {
             if (err) {
-                res.status(500).send( errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (!application) {
@@ -104,7 +114,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
             application.getLastBuildInfo(function(err, lastBuildInfo) {
                 if (err) {
-                    res.status(500).send( err);
+                    res.status(500).send(err);
                     return;
                 }
                 if (lastBuildInfo) {
@@ -121,7 +131,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     app.get('/applications/:applicationId/buildHistory', function(req, res) {
         Application.getApplicationById(req.params.applicationId, function(err, application) {
             if (err) {
-                res.status(500).send( errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (!application) {
@@ -131,7 +141,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
             application.getBuildHistory(function(err, buildHistories) {
                 if (err) {
-                    res.status(500).send( err);
+                    res.status(500).send(err);
                     return;
                 }
                 res.send(buildHistories);
@@ -142,7 +152,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     app.get('/applications/:applicationId/lastDeployInfo', function(req, res) {
         Application.getApplicationById(req.params.applicationId, function(err, application) {
             if (err) {
-                res.status(500).send( errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (!application) {
@@ -152,7 +162,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
             application.getLastDeploy(function(err, history) {
                 if (err) {
-                    res.status(500).send( err);
+                    res.status(500).send(err);
                     return;
                 }
                 res.send(history);
@@ -163,7 +173,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     app.get('/applications/:applicationId/deployHistory', function(req, res) {
         Application.getApplicationById(req.params.applicationId, function(err, application) {
             if (err) {
-                res.status(500).send( errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (!application) {
@@ -173,7 +183,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
             application.getDeployHistory(function(err, deployHistories) {
                 if (err) {
-                    res.status(500).send( err);
+                    res.status(500).send(err);
                     return;
                 }
                 res.send(deployHistories);
@@ -184,7 +194,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     app.get('/applications/:applicationId/deployHistory/:deployHistoryId', function(req, res) {
         Application.getApplicationById(req.params.applicationId, function(err, application) {
             if (err) {
-                res.status(500).send( errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (!application) {
@@ -194,7 +204,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
             application.getDeployHistoryById(req.params.deployHistoryId, function(err, history) {
                 if (err) {
-                    res.status(500).send( err);
+                    res.status(500).send(err);
                     return;
                 }
                 res.send(history);
@@ -210,7 +220,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         }
         Application.getApplicationById(req.params.applicationId, function(err, application) {
             if (err) {
-                res.status(500).send( errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (!application) {
@@ -221,7 +231,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             application.addAppInstance(appInstanceData, function(err, appInstance) {
                 logger.debug('added ', err);
                 if (err) {
-                    res.status(500).send( err);
+                    res.status(500).send(err);
                     return;
                 }
                 res.send(appInstance);
@@ -233,7 +243,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
         Application.getApplicationById(req.params.applicationId, function(err, application) {
             if (err) {
-                res.status(500).send( errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (!application) {
@@ -243,7 +253,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
             application.removeAppInstance(req.params.appInstanceId, function(err, appInstance) {
                 if (err) {
-                    res.status(500).send( err);
+                    res.status(500).send(err);
                     return;
                 }
                 res.send(appInstance);
@@ -255,7 +265,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
         Application.getApplicationById(req.params.applicationId, function(err, application) {
             if (err) {
-                res.status(500).send( errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (!application) {
@@ -280,7 +290,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
         Application.getApplicationById(req.params.applicationId, function(err, application) {
             if (err) {
-                res.status(500).send( errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (!application) {
@@ -304,7 +314,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
         Application.getApplicationById(req.params.applicationId, function(err, application) {
             if (err) {
-                res.status(500).send( errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (!application) {
@@ -340,7 +350,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
         Application.getApplicationById(req.params.applicationId, function(err, application) {
             if (err) {
-                res.status(500).send( errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (!application) {
@@ -351,7 +361,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             application.deploy(req.params.appInstanceId, req.params.workflowId, req.session.user.cn, req.protocol + '://' + req.get('host'), function(err, tasks) {
                 logger.debug('Workflow executed');
                 if (err) {
-                    res.status(500).send( err);
+                    res.status(500).send(err);
                     return;
                 }
                 res.send(tasks);

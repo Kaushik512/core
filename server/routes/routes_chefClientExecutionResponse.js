@@ -1,3 +1,13 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
+// This file act as a Controller which contains chef-client execution related all end points.
+
+
 var ChefClientExecution = require('../model/classes/instance/chefClientExecution/chefClientExecution.js');
 var errorResponses = require('./error_responses');
 

@@ -1,8 +1,14 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
 var jenkinsApi = require('jenkins-api');
 var logger = require('_pr/logger')(module);
 var url = require('url');
 var fs = require('fs');
-//var http = require('http');
 var Client = require('node-rest-client').Client;
 
 

@@ -1,3 +1,13 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
+// This file act as a Controller which contains azure related all end points.
+
+
 var AzureCloud = require('_pr/lib/azure');
 var logger = require('_pr/logger')(module);
 var xml2json = require('xml2json');
@@ -5,11 +15,7 @@ var azureProvider = require('_pr/model/classes/masters/cloudprovider/azureCloudP
 var fs = require('fs');
 var appConfig = require('_pr/config');
 var Cryptography = require('../lib/utils/cryptography');
-
 var uuid = require('node-uuid');
-
-//var hppubliccloudProvider = require('_pr/model/classes/masters/cloudprovider/hppublicCloudProvider.js');
-//var openstackProvider = require('_pr/model/classes/masters/cloudprovider/openstackCloudProvider.js');
 
 module.exports.setRoutes = function(app, verificationFunc) {
 

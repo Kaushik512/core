@@ -1,3 +1,10 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
 var mongoose = require('mongoose');
 var d4dModelNew = require('../model/d4dmasters/d4dmastersmodelnew.js');
 var d4dModelNew = require('../model/d4dmasters/d4dmastersmodelnew.js');

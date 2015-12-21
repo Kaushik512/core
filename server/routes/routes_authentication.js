@@ -1,3 +1,13 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
+// This file act as a Controller which contains Authentication logics.
+
+
 var LdapClient = require('../lib/ldap-client');
 var usersDao = require('../model/users.js');
 var usersGroups = require('../model/user-groups.js');
@@ -15,9 +25,6 @@ var AuthToken = require('_pr/model/auth-token');
 
 module.exports.setRoutes = function(app) {
     app.post('/auth/createldapUser', function(req, res) {
-        //logger.debug('post /auth/createldapUser : Request', req);
-        //var settings = ldapSettings;
-        //   chefRepoPath = settings.chefReposLocation;
         if (req.body) {
             var ldapClient = new LdapClient({
                 host: appConfig.ldap.host,

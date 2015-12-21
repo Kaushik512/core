@@ -1,3 +1,13 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
+// This file act as a Controller which contains notification related all end points.
+
+
 var https = require('https');
 var instancesDao = require('../model/classes/instance/instance');
 var EC2 = require('../lib/ec2.js');
@@ -15,30 +25,17 @@ var AWSProvider = require('../model/classes/masters/cloudprovider/awsCloudProvid
 var VMImage = require('../model/classes/masters/vmImage.js');
 var currentDirectory = __dirname;
 var AWSKeyPair = require('../model/classes/masters/cloudprovider/keyPair.js');
-
 var CloudFormation = require('_pr/model/cloud-formation');
 var AwsAutoScaleInstance = require('_pr/model/aws-auto-scale-instance');
 var AWSCloudFormation = require('_pr/lib/awsCloudFormation.js');
 var masterUtil = require('_pr/lib/utils/masterUtil.js');
 var credentialCryptography = require('_pr/lib/credentialcryptography');
-
-
 var crontab = require('node-crontab');
-
 var vmwareProvider = require('_pr/model/classes/masters/cloudprovider/vmwareCloudProvider.js');
 var VmwareCloud = require('_pr/lib/vmware.js');
 
-
-
-
-
-
-
 module.exports.setRoutes = function(app, socketIo) {
-
-
     // setting up socket.io
-
     var socketCloudFormationAutoScate = socketIo.of('/cloudFormationAutoScaleGroup');
 
     socketCloudFormationAutoScate.on('connection', function(socket) {
@@ -750,7 +747,7 @@ module.exports.setRoutes = function(app, socketIo) {
                                                 keys.push(aProvider.secretKey);
                                                 cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
                                                     if (err) {
-                                                        res.status(500).send( "Failed to decrypt accessKey or secretKey");
+                                                        res.status(500).send("Failed to decrypt accessKey or secretKey");
                                                         return;
                                                     }
                                                     var ec2 = new EC2({
