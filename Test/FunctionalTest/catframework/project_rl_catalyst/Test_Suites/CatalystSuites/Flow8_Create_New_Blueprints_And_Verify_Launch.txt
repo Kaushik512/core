@@ -227,7 +227,7 @@ Catalyst Validation of BlueprintPage(AZURE Provider)               #AZURE Bluepr
     [Teardown]     Close Browser
 
 
-Catalyst ubuntu Blueprint Create Setup and create successive blueprint and deletion(AWS Provider)
+Catalyst ubuntu Blueprint Create Setup and create successive blueprint and deletion(Azure Provider)
     [Tags]       Sanity               Settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
