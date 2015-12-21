@@ -13100,6 +13100,14 @@ form.cmxform .gray * {
     display: inline-block;
     height: 35px;
 }
+.dockerImgValue {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 158px;
+    display: inline-block;
+    height: 35px;
+}
 
 .paramValue {
     overflow: hidden;

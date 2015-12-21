@@ -5611,16 +5611,13 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
             //alert('called');
             //debugger;
             console.log('called');
-            //  $('#dockercontainertablerefreshspinner').addClass('fa-spin');
             $dockercontainertable = $('#dockercontainertable tbody');
-
             $('.docctrempty').detach();
-            var $docctrempty = $('#dockercontainertabletemplatetr').clone().empty().append('<td class="spinnerLoadForDocker" colspan="8" style="text-align:center">No containers found</td>').removeClass('hidden');
+            var $docctrempty = $('#dockercontainertabletemplatetr').clone().empty().append('<td class="spinnerLoadForDocker" colspan="8" style="text-align:center">No containers found</td>');
             $docctrempty.addClass('docctrempty');
             $dockercontainertable.append($docctrempty);
 
-            //Shwoing the loader spinner and clearing the rows.
-            $('tr[id*="trfordockercontainer_"]').remove();
+            
             //$('.loadingimagefordockertable').removeClass('hidden');
             $dockercontainertable = $('#dockercontainertable tbody');
 
@@ -5632,11 +5629,17 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                     var instanceid = $(this).find('[data-instanceid]').attr('data-instanceid');
                     $.get('/instances/dockercontainerdetails/' + instanceid, function(data) {
                         if (!data) {
+                        	$('.spinnerDocker').addClass('hidden');
+                        	$('.dockerContainerBody').removeClass('hidden');
                             $('.loadingimagefordockertable').addClass('hidden');
                             $('#dockercontainertablerefreshspinner').removeClass('fa-spin');
                             return;
                         }
                         if (data) {
+                        	//Shwoing the loader spinner and clearing the rows.
+                        	$('tr[id*="trfordockercontainer_"]').remove();
+                        	$('.spinnerDocker').addClass('hidden');
+                        	$('.dockerContainerBody').removeClass('hidden');       				
                             $('.docctrempty').detach();
                             $('.loadingimagefordockertable').addClass('hidden');
                             $('#dockercontainertablerefreshspinner').removeClass('fa-spin');
@@ -5645,6 +5648,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                         //   alert(JSON.stringify(dockerContainerData));
                         //Setting empty message
                         if (dockerContainerData.length <= 0) {
+                        	alert('ehere');
                             $('.docctrempty').detach();
                             var $docctrempty = $('#dockercontainertabletemplatetr').clone().empty().append('<td colspan="8" style="text-align:center">No Containers Found</td>').removeClass('hidden');
                             $docctrempty.addClass('docctrempty');
@@ -5768,12 +5772,14 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                 return;
                             }
                         });
-                    });
+                    })
                 } else { //no docker found
                     $('.loadingimagefordockertable').addClass('hidden');
                     //$('li.Containers').addClass('hidden');
                 }
-            });
+            }); 
+			
+			
             //dockercontaineraction
 
 
@@ -5828,7 +5834,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
             $docctr.attr('containerid', dockerContainerItem.Id.substring(0, 12));
             $docctr.find('.dockercontainerhostip').html(instanceip);
             $docctr.find('.dockercontainerid').attr('containerid', dockerContainerItem.Id).html(dockerContainerItem.Id.substring(0, 12));
-            $docctr.find('.dockercontainerimagename').html(dockerContainerItem.Image);
+            $docctr.find('.dockercontainerimagename').addClass('dockerImgValue').attr('title',dockerContainerItem.Image).html(dockerContainerItem.Image);
             //Updating the more info popup event
             $docctr.find('.modelcontainermoreinfo').click(function() {
                 $.get('/instances/dockercontainerdetails/' + instanceid + '/' + dockerContainerItem.Id, function(data) {
