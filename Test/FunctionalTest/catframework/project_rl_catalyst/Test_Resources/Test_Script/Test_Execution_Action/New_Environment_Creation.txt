@@ -167,9 +167,10 @@ Verfiy Node Deleted
 
 
 Delete the Node
-    Click Element    xpath=.//*[@id='removeInstance']/i
+    #Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=//span[text()='10.0.1.200']
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='removeInstance']/i
     Sleep   2s
-    Click Element    xpath=.//*[text()='Delete']
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[text()='Delete']
 
 
 Select the CheckBox to Import
@@ -188,7 +189,7 @@ Input the Environment Name in the Search
 Node is Inported in the Environment
     Sleep    4s
     #Element Should Contain    xpath=//div[@class='domain-roles-heading']//span[text()='{IP Centos}']    ${IP Centos}
-    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${NODE}")]/div/div/div/div[3]/div/span[1]/strong    null       #${IP Centos}
+    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${NODE}")]/div/div/div/div[3]/div/span[1]/strong    ${NODE}
 
 
 Clicks on Workzone
