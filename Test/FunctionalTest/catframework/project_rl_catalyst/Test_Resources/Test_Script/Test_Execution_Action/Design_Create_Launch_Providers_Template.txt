@@ -136,6 +136,7 @@ Catalyst Creation of New Blueprint and Delete
     #Select the VPC
     Select the Subnet
     Select the Key Pair
+    Sleep    3s
     Choose Instance Size
     Select the Security Group
     Clicks on Configure Provider Parameters
@@ -2312,11 +2313,15 @@ Select the Key Pair
     
 
 Choose Instance Size
+    #Sleep    1s
+    #Click Element    id=instancesize
     Sleep    1s
     Click Element    xpath=.//*[@id='instancesize']/option[text()='${CentosInstanceSize}']
     
 
 Choose Instance Size for Ubuntu
+    #Sleep    1s
+    #Click Element    id=instancesize
     Sleep    1s
     Click Element    xpath=.//*[@id='instancesize']/option[text()='${UbuntuInstanceSize}']
 
@@ -2679,6 +2684,7 @@ Select the CentosTesingBlueprint
     Click Element    xpath=//*[text()='${BLUEPRINT TESTNAME}']
 
 Select the ubuntuAzureTesingBlueprint
+    Sleep    3s
     Click Element    xpath=//*[text()='${EDIT AZURE BLUEPRINTNANE}']
 
 Select the BlueprintUbuntu
