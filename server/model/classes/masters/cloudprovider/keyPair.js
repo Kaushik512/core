@@ -16,8 +16,6 @@ var uniqueValidator = require('mongoose-unique-validator');
 var ProviderUtil = require('../../../../lib/utils/providerUtil.js');
 
 var Schema = mongoose.Schema;
-
-
 var awsKeyPairSchema = new Schema({
     id: {
         type: Number,
@@ -57,8 +55,8 @@ awsKeyPairSchema.statics.createNew = function(req, providerId, callback) {
     var keyPairNames = req.body.keyPairName;
     var regions = req.body.region;
     var fileNames = req.body.fileName;
+
     if (typeof keyPairNames === "object") {
-        logger.debug("Inside array>>>>");
         for (var p = 0; p < keyPairNames.length; p++) {
             var keyPairs1 = {
                 keyPairName: keyPairNames[p],
@@ -69,18 +67,17 @@ awsKeyPairSchema.statics.createNew = function(req, providerId, callback) {
         }
     } else {
         var keyPairs1 = {
-            keyPairName: req.body.keyPairName,
-            region: req.body.region,
-            fileName: req.body.fileName
+            keyPairName: keyPairNames,
+            region: regions,
+            fileName: fileNames
         };
         keyPairs.push(keyPairs1);
     }
-    logger.debug("Create Keypair called:>>>> %s", keyPairs);
+    logger.debug("Create Keypair called: %s", keyPairs);
     var returnKeyPair = [];
     var files = [];
     var count = 0;
     if (keyPairs) {
-        logger.debug("Inside if>>>> ", typeof keyPairs);
         var inFiles = req.files.fileObject;
         logger.debug("Incomming files:  ", typeof inFiles.length);
         if (typeof inFiles.length === 'undefined') {
@@ -91,7 +88,6 @@ awsKeyPairSchema.statics.createNew = function(req, providerId, callback) {
                 files.push(inFiles[x]);
             }
         }
-        logger.debug("Files>>>>>>>>>>>>>>>>>> ", JSON.stringify(files));
         var that = this;
         for (var i = 0; i < keyPairs.length; i++) {
             (function(count1) {
@@ -101,14 +97,11 @@ awsKeyPairSchema.statics.createNew = function(req, providerId, callback) {
 
                 var keyPair = new that(keyPairObj);
                 keyPair.save(function(err, aKeyPair) {
-                    logger.debug("Save called......");
                     if (err) {
                         logger.error(err);
                         callback(err, null);
                         return;
                     }
-                    logger.debug("created kepair::::::::::", JSON.stringify(aKeyPair));
-
                     returnKeyPair.push(keyPair);
                     count++;
                     ProviderUtil.saveAwsPemFiles(keyPair, files[count1], function(err, flag) {
@@ -128,7 +121,6 @@ awsKeyPairSchema.statics.createNew = function(req, providerId, callback) {
         }
     }
 };
-
 
 awsKeyPairSchema.statics.getKeyPairs = function(callback) {
     logger.debug("get all KeyPair.");

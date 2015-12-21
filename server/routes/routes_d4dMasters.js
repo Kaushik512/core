@@ -29,13 +29,15 @@ var Client = require('node-rest-client').Client;
 var cryptoConfig = appConfig.cryptoSettings;
 var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
 var waitForPort = require('wait-for-port');
+var parser = require('xml2json');
+
 module.exports.setRoutes = function(app, sessionVerification) {
 
     app.all('/d4dMasters/*', sessionVerification);
 
     // New implementation for docker authentication: Gobinda Das
     app.post('/d4dmasters/docker/validate', function(req, res) {
-        logger.debug("Docker crudentials: ",JSON.stringify(req.body));
+        logger.debug("Docker crudentials: ", JSON.stringify(req.body));
         var userName = req.body.userName;
         var password = req.body.password;
 
@@ -81,14 +83,14 @@ module.exports.setRoutes = function(app, sessionVerification) {
     // Used npm library instead of curl to check ip is alive or not: Gobinda Das
     app.get('/d4dmasters/instanceping/:ip', function(req, res) {
         logger.debug("Enter get() for /d4dmasters/instanceping/%s", req.params.ip);
-        // 80 port will be open for all instances.
-        waitForPort(req.params.ip, 80, function(err) {
-          if (err){
-            logger.error("Error to ping ip: ",err);
-            res.status(500).send('Not Alive');
-            return;
-          }
-          res.send('Alive');
+        // make sure 22 port should be open for all instances.
+        waitForPort(req.params.ip, 22, function(err) {
+            if (err) {
+                logger.error("Error to ping ip: ", err);
+                res.status(500).send('Not Alive');
+                return;
+            }
+            res.send('Alive');
         });
 
         // Old code need to remove after verified which port is open default?
@@ -125,7 +127,34 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 var dockerRepo = JSON.parse(data);
                 logger.debug("Docker Repo ->%s", JSON.stringify(dockerRepo));
                 logger.debug("Docker Repopath ->%s", req.params.repopath);
-                var cmd = '';
+
+                // Tried with http rest call but api did not working from docker side, so commenting and keeping old code: Gobinda
+                
+                var userName = dockerRepo.dockeruserid;
+                var password = dockerRepo.dockerpassword;
+                var dockerUrl = 'https://index.docker.io/v1/repositories/' + req.params.repopath.replace(/\$\$/g, '/') + '/tags';
+                var options_auth = {
+                    user: userName,
+                    password: password
+                };
+                client = new Client(options_auth);
+                client.registerMethod("jsonMethod", dockerUrl, "GET");
+                var reqSubmit = client.methods.jsonMethod(function(data, response) {
+                    logger.debug("response: ", response);
+                    //logger.debug("data: ", data);
+                    res.send(JSON.stringify(response));
+                    return;
+                });
+
+                // Handling Exception for nexus req.
+                reqSubmit.on('error', function(err) {
+                    logger.debug('Something went wrong on req!!', err.request.options);
+                    res.send('402');
+                }); 
+
+                // end rest call
+
+                /*var cmd = '';
                 //Below is for public repository
                 cmd = 'curl -v -H "Accept: application/json" -X GET https://' + dockerRepo.dockeruserid + ':' + dockerRepo.dockerpassword + '@index.docker.io/v1/repositories/' + req.params.repopath.replace(/\$\$/g, '/') + '/tags';
                 //Below is for private repository
@@ -148,7 +177,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             res.end(stdout);
                         }
                     }
-                });
+                });*/
 
             } else {
                 logger.error("Error:", err);
@@ -170,12 +199,14 @@ module.exports.setRoutes = function(app, sessionVerification) {
     //getAccessFilesForRole
     app.get('/d4dMasters/getaccessroles/:loginname', function(req, res) {
         logger.debug("Enter get() for /d4dMasters/getaccessroles/%s", req.params.loginname);
-        configmgmtDao.getAccessFilesForRole(req.params.loginname, req, res, function(err, getAccessFiles) {
+        var authorizedFiles = req.session.user.authorizedfiles;
+        var loggedInUser = req.params.loginname;
+        configmgmtDao.getAccessFilesForRole(loggedInUser, req, res, function(err, getAccessFiles) {
             if (getAccessFiles) {
                 getAccessFiles = getAccessFiles.replace(/\"/g, '').replace(/\:/g, '')
                 logger.debug("Rcvd in call: %s", getAccessFiles);
-                req.session.user.authorizedfiles = getAccessFiles;
-                res.end(req.session.user.authorizedfiles);
+                authorizedFiles = getAccessFiles;
+                res.end(authorizedFiles);
             }
         });
         logger.debug("Exit get() for /d4dMasters/getaccessroles/%s", req.params.loginname);
@@ -205,35 +236,35 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     // Get the current loggedin user details with permissionset and authorized files
-     app.get('/d4dMasters/loggedin/user', function(req, res) {
-         if (req.session.user) {
+    app.get('/d4dMasters/loggedin/user', function(req, res) {
+        if (req.session.user) {
             var pSet = req.session.user.permissionset;
-            if(pSet.length > 1){
+            if (pSet.length > 1) {
                 var pSetList = [];
-                for(var i=0; i < pSet.length; i++){
-                    if(pSet[i].rolename === "Admin"){
+                for (var i = 0; i < pSet.length; i++) {
+                    if (pSet[i].rolename === "Admin") {
                         req.session.user.permissionset = pSet[i];
                         res.send(req.session.user);
                         return;
-                    }else{
+                    } else {
                         pSetList.push(pSet[i]);
                     }
                 }
                 req.session.user.permissionset = pSetList;
                 res.send(req.session.user);
                 return;
-            }else{
+            } else {
                 res.send(req.session.user);
                 return;
             }
-         } else {
+        } else {
             res.status(404).send({
-                 "errorCode": 404,
-                 "message": "User not found in session."
+                "errorCode": 404,
+                "message": "User not found in session."
             });
             return;
-         }
-     });
+        }
+    });
 
 
     app.get('/d4dMasters/authorizedfiles', function(req, res) {
@@ -257,7 +288,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         var category = configmgmtDao.getCategoryFromID(req.params.id);
         var permissionto = 'delete';
         usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
-            if (err) {                
+            if (err) {
                 logger.error("Hit and error in haspermission:", err);
                 res.send(500);
                 return;
@@ -265,9 +296,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
             masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
                 if (err) {
-                    res.status(500).send( "Failed to fetch User.");
+                    res.status(500).send("Failed to fetch User.");
                 }
-                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
                 if (anUser) {
                     var tocheck = [];
                     var fieldname = '';
@@ -304,13 +334,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
                     masterUtil.getTemplateTypesById(req.params.fieldvalue, function(err, templateTypeData) {
                         if (err) {
-                            res.status(500).send( "Error from DB");
+                            res.status(500).send("Error from DB");
                             return;
                         }
                         if (templateTypeData.length > 0) {
                             blueprintsDao.getBlueprintByTemplateType(templateTypeData[0].templatetypename, function(err, bpData) {
                                 if (err) {
-                                    res.status(500).send( "Error from DB.");
+                                    res.status(500).send("Error from DB.");
                                     return;
                                 }
                                 configmgmtDao.deleteCheck(req.params.fieldvalue, tocheck, fieldname, function(err, data) {
@@ -429,7 +459,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 res.end(JSON.stringify(d4dMasterJson));
                 logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
             } else {
-                res.status(400).send( {
+                res.status(400).send({
                     "error": err
                 });
                 logger.debug("none found");
@@ -513,7 +543,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 logger.debug("sent response %s", JSON.stringify(d4dMasterJson));
                 logger.debug("Exit get() for /d4dMasters/readmasterjsonnew__/%s", req.params.id);
             } else {
-                res.status(400).send( {
+                res.status(400).send({
                     "error": err
                 });
                 logger.debug("none found");
@@ -524,15 +554,15 @@ module.exports.setRoutes = function(app, sessionVerification) {
     app.get('/d4dMasters/readmasterjsonnew/:id', function(req, res) {
         logger.debug("Enter get() for /d4dMasters/readmasterjsonnew/%s", req.params.id);
         logger.debug("Logged in user: ", req.session.user.cn);
-        logger.debug("incomming id:>>>>>>>>>>>>>>>>>>>> ", req.params.id);
+        logger.debug("incomming id: ", req.params.id);
         var loggedInUser = req.session.user.cn;
         masterUtil.getLoggedInUser(loggedInUser, function(err, anUser) {
             if (err) {
-                res.status(500).send( "Failed to fetch User.");
+                res.status(500).send("Failed to fetch User.");
                 return;
             }
             if (!anUser) {
-                res.status(500).send( "Invalid User.");
+                res.status(500).send("Invalid User.");
                 return;
             }
             if (anUser.orgname_rowid[0] === "") {
@@ -540,17 +570,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 masterUtil.getAllActiveOrg(function(err, orgList) {
                     logger.debug("got org list ==>", JSON.stringify(orgList));
                     if (err) {
-                        res.status(500).send( 'Not able to fetch Orgs.');
+                        res.status(500).send('Not able to fetch Orgs.');
                         return;
                     } else if (req.params.id === '1') {
                         res.send(orgList);
                         return;
-                    }
-                    else if (req.params.id === '2') {
+                    } else if (req.params.id === '2') {
                         // For BusinessGroup
                         masterUtil.getBusinessGroups(orgList, function(err, bgList) {
                             if (err) {
-                                res.status(500).send( 'Not able to fetch BG.');
+                                res.status(500).send('Not able to fetch BG.');
                             }
                             res.send(bgList);
                             return;
@@ -559,7 +588,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         // For Environment
                         masterUtil.getEnvironments(orgList, function(err, envList) {
                             if (err) {
-                                res.status(500).send( 'Not able to fetch ENV.');
+                                res.status(500).send('Not able to fetch ENV.');
                             }
                             res.send(envList);
                             return;
@@ -568,7 +597,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         // For Projects
                         masterUtil.getProjects(orgList, function(err, projectList) {
                             if (err) {
-                                res.status(500).send( 'Not able to fetch Project.');
+                                res.status(500).send('Not able to fetch Project.');
                             }
                             res.send(projectList);
                             return;
@@ -577,7 +606,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         // For ConfigManagement
                         masterUtil.getCongifMgmts(orgList, function(err, configMgmtList) {
                             if (err) {
-                                res.status(500).send( 'Not able to fetch ConfigManagement.');
+                                res.status(500).send('Not able to fetch ConfigManagement.');
                             }
                             res.send(configMgmtList);
                             return;
@@ -585,10 +614,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
                     } else if (req.params.id === '18') {
                         // For Docker
-                        logger.debug("Id for docker:>> ", req.params.id);
+                        logger.debug("Id for docker: ", req.params.id);
                         masterUtil.getDockers(orgList, function(err, dockerList) {
                             if (err) {
-                                res.status(500).send( 'Not able to fetch Dockers.');
+                                res.status(500).send('Not able to fetch Dockers.');
                             }
                             res.send(dockerList);
                             return;
@@ -596,10 +625,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
                     } else if (req.params.id === '17') {
                         // For Template
-                        logger.debug("Id for template:>> ", req.params.id);
+                        logger.debug("Id for template: ", req.params.id);
                         masterUtil.getTemplates(orgList, function(err, templateList) {
                             if (err) {
-                                res.status(500).send( 'Not able to fetch Template.');
+                                res.status(500).send('Not able to fetch Template.');
                             }
                             res.send(templateList);
                             return;
@@ -607,10 +636,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
                     } else if (req.params.id === '16') {
                         // For Template
-                        logger.debug("Id for templateType:>> ", req.params.id);
+                        logger.debug("Id for templateType: ", req.params.id);
                         masterUtil.getTemplateTypes(orgList, function(err, templateList) {
                             if (err) {
-                                res.status(500).send( 'Not able to fetch TemplateType.');
+                                res.status(500).send('Not able to fetch TemplateType.');
                             }
                             res.send(JSON.stringify(templateList));
                             return;
@@ -619,7 +648,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         // For ServiceCommand
                         masterUtil.getServiceCommands(orgList, function(err, serviceCommandList) {
                             if (err) {
-                                res.status(500).send( 'Not able to fetch ServiceCommand.');
+                                res.status(500).send('Not able to fetch ServiceCommand.');
                             }
                             res.send(serviceCommandList);
                             return;
@@ -629,7 +658,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         // For Jenkins
                         masterUtil.getJenkins(orgList, function(err, jenkinList) {
                             if (err) {
-                                res.status(500).send( 'Not able to fetch Jenkins.');
+                                res.status(500).send('Not able to fetch Jenkins.');
                             }
                             res.send(jenkinList);
                             return;
@@ -639,7 +668,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         // For User Role
                         masterUtil.getUserRoles(function(err, userRoleList) {
                             if (err) {
-                                res.status(500).send( 'Not able to fetch UserRole.');
+                                res.status(500).send('Not able to fetch UserRole.');
                             }
                             res.send(userRoleList);
                             return;
@@ -649,7 +678,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         // For User
                         masterUtil.getUsersForOrgOrAll(orgList, function(err, userList) {
                             if (err) {
-                                res.status(500).send( 'Not able to fetch User.');
+                                res.status(500).send('Not able to fetch User.');
                             }
                             res.send(userList);
                             return;
@@ -659,7 +688,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         // For Team
                         masterUtil.getTeams(orgList, function(err, teamList) {
                             if (err) {
-                                res.status(500).send( 'Not able to fetch Team.');
+                                res.status(500).send('Not able to fetch Team.');
                             }
                             res.send(teamList);
                             return;
@@ -668,7 +697,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         // For Puppet Server
                         masterUtil.getPuppetServers(orgList, function(err, pList) {
                             if (err) {
-                                res.status(500).send( 'Not able to fetch Puppet Server.');
+                                res.status(500).send('Not able to fetch Puppet Server.');
                             }
                             res.send(pList);
                             return;
@@ -677,7 +706,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         // For Puppet Server
                         masterUtil.getNexusServers(orgList, function(err, pList) {
                             if (err) {
-                                res.status(500).send( 'Not able to fetch Nexus Server.');
+                                res.status(500).send('Not able to fetch Nexus Server.');
                             }
                             res.send(pList);
                             return;
@@ -690,22 +719,21 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
                 // For non-catalystadmin
             } else {
-                logger.debug("incomming id:>>>>>>>>>>>>>>>>>>>> ", req.params.id);
+                logger.debug("incomming id: ", req.params.id);
                 // For Org
                 masterUtil.getOrgs(loggedInUser, function(err, orgList) {
-                    logger.debug("got org list ==>", JSON.stringify(orgList));
+                    logger.debug("got org list: ", JSON.stringify(orgList));
                     if (err) {
-                        res.status(500).send( 'Not able to fetch Orgs.');
+                        res.status(500).send('Not able to fetch Orgs.');
                         return;
                     } else if (req.params.id === '1') {
                         res.send(orgList);
                         return;
-                    }
-                    else if (req.params.id === '2') {
+                    } else if (req.params.id === '2') {
                         // For BusinessGroup
                         masterUtil.getBusinessGroups(orgList, function(err, bgList) {
                             if (err) {
-                                res.status(500).send( 'Not able to fetch BG.');
+                                res.status(500).send('Not able to fetch BG.');
                             }
                             res.send(bgList);
                             return;
@@ -714,7 +742,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         // For Environment
                         masterUtil.getEnvironments(orgList, function(err, envList) {
                             if (err) {
-                                res.status(500).send( 'Not able to fetch ENV.');
+                                res.status(500).send('Not able to fetch ENV.');
                             }
                             res.send(envList);
                             return;
@@ -723,7 +751,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         // For Projects
                         masterUtil.getProjects(orgList, function(err, projectList) {
                             if (err) {
-                                res.status(500).send( 'Not able to fetch Project.');
+                                res.status(500).send('Not able to fetch Project.');
                             }
                             res.send(projectList);
                             return;
@@ -732,7 +760,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         // For ConfigManagement
                         masterUtil.getCongifMgmts(orgList, function(err, configMgmtList) {
                             if (err) {
-                                res.status(500).send( 'Not able to fetch ConfigManagement.');
+                                res.status(500).send('Not able to fetch ConfigManagement.');
                             }
                             res.send(configMgmtList);
                             return;
@@ -740,10 +768,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
                     } else if (req.params.id === '18') {
                         // For Docker
-                        logger.debug("Id for docker:>> ", req.params.id);
+                        logger.debug("Id for docker: ", req.params.id);
                         masterUtil.getDockers(orgList, function(err, dockerList) {
                             if (err) {
-                                res.status(500).send( 'Not able to fetch Dockers.');
+                                res.status(500).send('Not able to fetch Dockers.');
                             }
                             res.send(dockerList);
                             return;
@@ -751,10 +779,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
                     } else if (req.params.id === '17') {
                         // For Template
-                        logger.debug("Id for template:>> ", req.params.id);
+                        logger.debug("Id for template: ", req.params.id);
                         masterUtil.getTemplates(orgList, function(err, templateList) {
                             if (err) {
-                                res.status(500).send( 'Not able to fetch Template.');
+                                res.status(500).send('Not able to fetch Template.');
                             }
                             res.send(templateList);
                             return;
@@ -762,10 +790,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
                     } else if (req.params.id === '16') {
                         // For Template
-                        logger.debug("Id for templateType:>> ", req.params.id);
+                        logger.debug("Id for templateType: ", req.params.id);
                         masterUtil.getTemplateTypes(orgList, function(err, templateList) {
                             if (err) {
-                                res.status(500).send( 'Not able to fetch TemplateType.');
+                                res.status(500).send('Not able to fetch TemplateType.');
                             }
                             res.send(JSON.stringify(templateList));
                             return;
@@ -775,7 +803,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         // For ServiceCommand
                         masterUtil.getServiceCommands(orgList, function(err, serviceCommandList) {
                             if (err) {
-                                res.status(500).send( 'Not able to fetch ServiceCommand.');
+                                res.status(500).send('Not able to fetch ServiceCommand.');
                             }
                             res.send(serviceCommandList);
                             return;
@@ -785,7 +813,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         // For Jenkins
                         masterUtil.getJenkins(orgList, function(err, jenkinList) {
                             if (err) {
-                                res.status(500).send( 'Not able to fetch Jenkins.');
+                                res.status(500).send('Not able to fetch Jenkins.');
                             }
                             res.send(jenkinList);
                             return;
@@ -795,7 +823,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         // For User Role
                         masterUtil.getUserRoles(function(err, userRoleList) {
                             if (err) {
-                                res.status(500).send( 'Not able to fetch UserRole.');
+                                res.status(500).send('Not able to fetch UserRole.');
                             }
                             res.send(userRoleList);
                             return;
@@ -805,7 +833,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         // For User
                         masterUtil.getUsersForOrg(orgList, function(err, userList) {
                             if (err) {
-                                res.status(500).send( 'Not able to fetch User.');
+                                res.status(500).send('Not able to fetch User.');
                             }
                             res.send(userList);
                             return;
@@ -815,7 +843,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         // For Team
                         masterUtil.getTeams(orgList, function(err, teamList) {
                             if (err) {
-                                res.status(500).send( 'Not able to fetch Team.');
+                                res.status(500).send('Not able to fetch Team.');
                             }
                             res.send(teamList);
                             return;
@@ -824,7 +852,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         // For Puppet Server
                         masterUtil.getPuppetServers(orgList, function(err, pList) {
                             if (err) {
-                                res.status(500).send( 'Not able to fetch Puppet Server.');
+                                res.status(500).send('Not able to fetch Puppet Server.');
                             }
                             res.send(pList);
                             return;
@@ -833,7 +861,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         // For Puppet Server
                         masterUtil.getNexusServers(orgList, function(err, pList) {
                             if (err) {
-                                res.status(500).send( 'Not able to fetch Nexus Server.');
+                                res.status(500).send('Not able to fetch Nexus Server.');
                             }
                             res.send(pList);
                             return;
@@ -853,10 +881,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
         var loggedInUser = req.session.user.cn;
         masterUtil.getLoggedInUser(loggedInUser, function(err, anUser) {
             if (err) {
-                res.status(500).send( "Failed to fetch User.");
+                res.status(500).send("Failed to fetch User.");
             }
             if (!anUser) {
-                res.status(500).send( "Invalid User.");
+                res.status(500).send("Invalid User.");
             }
             if (anUser.orgname_rowid[0] === "") {
                 configmgmtDao.getRowids(function(err, rowidlist) {
@@ -944,7 +972,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 // For non-catalystadmin
                 masterUtil.getOrgs(loggedInUser, function(err, orgList) {
                     if (orgList) {
-                        logger.debug("Returned Org List: >>>>>> ", JSON.stringify(orgList));
+                        logger.debug("Returned Org List: ", JSON.stringify(orgList));
                         res.send(orgList);
                     }
                 });
@@ -955,7 +983,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     app.get('/d4dMasters/readmasterjsonnewk_/:id', function(req, res) {
         logger.debug("Enter get() for /d4dMasters/readmasterjsonnewk_/%s", req.params.id);
         configmgmtDao.getRowids(function(err, rowidlist) {
-            logger.debug("Rowid List-->", rowidlist);
+            logger.debug("Rowid List: ", rowidlist);
             d4dModelNew.d4dModelMastersOrg.find({
                 id: 1
             }, function(err, docorgs) {
@@ -1058,10 +1086,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
         var counts = [];
         masterUtil.getLoggedInUser(req.session.user.cn, function(err, anUser) {
             if (err) {
-                res.status(500).send( "Failed to fetch User.");
+                res.status(500).send("Failed to fetch User.");
             }
             if (!anUser) {
-                res.status(500).send( "Invalid User.");
+                res.status(500).send("Invalid User.");
             }
             if (anUser.orgname_rowid[0] === "") {
                 for (var i = 1; i < 5; i++)
@@ -1098,7 +1126,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 ret.push('{"' + i + '":"' + counts[i] + '"}');
                             }
                             ret.push('{"1":"' + orgnames.length + '"}');
-                            logger.debug("Configured json:>>>>> ", '[' + ret.join(',') + ']');
+                            logger.debug("Configured json: ", '[' + ret.join(',') + ']');
                             res.end('[' + ret.join(',') + ']');
                             return;
                         } else {
@@ -1117,7 +1145,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 masterUtil.getActiveOrgs(loggedInUser, function(err, orgs) {
                     logger.debug("got org list ==>", JSON.stringify(orgs));
                     if (err) {
-                        res.status(500).send( "Failed to fetch Org.");
+                        res.status(500).send("Failed to fetch Org.");
                     }
                     if (orgs) {
                         orgCount = orgs.length;
@@ -1141,7 +1169,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         }
                         masterUtil.getBusinessGroups(orgs, function(err, bgs) {
                             if (err) {
-                                res.status(500).send( "Failed to fetch BGroups");
+                                res.status(500).send("Failed to fetch BGroups");
                                 return;
                             }
                             if (bgs) {
@@ -1167,7 +1195,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             }
                             masterUtil.getEnvironments(orgs, function(err, envs) {
                                 if (err) {
-                                    res.status(500).send( "Failed to fetch ENVs.");
+                                    res.status(500).send("Failed to fetch ENVs.");
                                     return;
                                 }
                                 if (envs) {
@@ -1194,7 +1222,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 // });
                                 masterUtil.getProjects(orgs, function(err, projects) {
                                     if (err) {
-                                        res.status(500).send( "Failed to fetch Projects.");
+                                        res.status(500).send("Failed to fetch Projects.");
                                         return;
                                     }
                                     if (projects) {
@@ -1475,6 +1503,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
 
 
+
     app.get('/d4dMasters/configmgmt/:rowid', function(req, res) {
         logger.debug("Enter get() for  /d4dMasters/configmgmt/%s", req.params.rowid);
         d4dModel.findOne({
@@ -1577,8 +1606,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     var mkdirSync1 = function(path) {
         try {
             fs.mkdirSync(path, 0777);
-        } catch (e) {
-        }
+        } catch (e) {}
     }
 
     function updateProjectWithEnv(projects, bodyJson) {
@@ -1847,8 +1875,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
         }
         logger.debug("Before ssl fetch");
-        if (req.params.id == '10')
-        {
+        if (req.params.id == '10') {
             logger.debug("In ssl fetch");
             var options = {
                 cwd: chefRepoPath + req.params.orgid + folderpath,
@@ -2159,13 +2186,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
         usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
             if (err) {
                 logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
-                res.status(500).send( "Server Error");
+                res.status(500).send("Server Error");
                 return;
             }
 
             masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
                 if (err) {
-                    res.status(500).send( "Failed to fetch User.");
+                    res.status(500).send("Failed to fetch User.");
                 }
                 logger.debug("LoggedIn User: ", JSON.stringify(anUser));
                 if (anUser) {
@@ -2197,7 +2224,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                         } else {
                             bodyJson["folderpath"] = "/" + bodyJson["username"] + "/.puppet/";
                         }
-                        logger.debug("encryptText:>>>>>>>>>>>>> ", bodyJson["puppetpassword"]);
+                        logger.debug("encryptText: ", bodyJson["puppetpassword"]);
                     }
                     if (req.params.id === "3") {
                         if (!bodyJson["environmentname"]) {
@@ -2219,7 +2246,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 }
                                 if (d4dMasterJson) {
                                     rowtoedit = JSON.parse(JSON.stringify(d4dMasterJson));
-                                    logger.debug('<<<<< Reached here >>>> %s', (rowtoedit == null));
+                                    logger.debug('<<<<< Reached here %s', (rowtoedit == null));
                                 }
                                 var frmkeys = Object.keys(bodyJson);
                                 var orgid = '';
@@ -2286,7 +2313,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         var orgObj = new d4dModelNew.d4dModelMastersOrg(orgData);
                                         orgObj.save(function(err, anOrg) {
                                             if (err) {
-                                                res.status(500).send( "Failed to save Org.");
+                                                res.status(500).send("Failed to save Org.");
                                                 return;
                                             }
                                             for (var x1 = 0; x1 < 4; x1++) {
@@ -2367,7 +2394,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                         if (err) {
                                                             logger.debug("Failed to save Team.");
                                                         }
-                                                        logger.debug("Auto created Team:>>>>>>>> ", JSON.stringify(aTeam));
+                                                        logger.debug("Auto created Team: ", JSON.stringify(aTeam));
                                                     });
                                                     if (x === 3) {
                                                         res.send(200);
@@ -2448,7 +2475,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             res.send(200);
                                             return;
                                         });
-                                    }else {
+                                    } else {
                                         eval('var mastersrdb =  new d4dModelNew.' + dbtype + '({' + JSON.parse(FLD) + '})');
                                         mastersrdb.save(function(err, data) {
                                             if (err) {
@@ -2523,7 +2550,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         }, function(err, anUser) {
                                             if (err) {
                                                 logger.debug("Error to fetch user.");
-                                                res.status(500).send( "Error to fetch User.");
+                                                res.status(500).send("Error to fetch User.");
                                                 return;
                                             }
                                             logger.debug("Fetched User: ", JSON.stringify(anUser));
@@ -2748,9 +2775,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
             var teamModel = new d4dModelNew.d4dModelMastersTeams(teamData);
             teamModel.save(function(err, aTeam) {
                 if (err) {
-                    logger.debug("Failed to save Team.");
+                    logger.error("Failed to save Team: ", err);
                 }
-                logger.debug("Auto created Team:>>>>>>>> ", JSON.stringify(aTeam));
+                logger.debug("Auto created Team: ", JSON.stringify(aTeam));
             });
 
         }
@@ -2885,7 +2912,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 }
 
             } else {
-                res.status(500).send( {
+                res.status(500).send({
                     "error": err
                 });
             }
@@ -2901,8 +2928,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         db.on('error', console.error.bind(console, 'connection error:'));
         logger.debug(JSON.stringify(projField));
         db.once('open', function callback() {
-
-            logger.debug('in once');
+        logger.debug('in once');
         });
         logger.debug('received request %s', req.params.orgname);
         d4dModel.findOne({
@@ -2950,7 +2976,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 }
 
             } else {
-                res.status(500).send( {
+                res.status(500).send({
                     "error": err
                 });
             }
@@ -3014,7 +3040,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 }
 
             } else {
-                res.status(500).send( {
+                res.status(500).send({
                     "error": err
                 });
             }
@@ -3074,7 +3100,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 }
 
             } else {
-                res.status(500).send( {
+                res.status(500).send({
                     "error": err
                 });
             }
@@ -3168,10 +3194,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
         var loggedInUser = req.session.user.cn;
         masterUtil.getLoggedInUser(loggedInUser, function(err, anUser) {
             if (err) {
-                res.status(500).send( "Failed to fetch User.");
+                res.status(500).send("Failed to fetch User.");
             }
             if (!anUser) {
-                res.status(500).send( "Invalid User.");
+                res.status(500).send("Invalid User.");
             }
             if (anUser.orgname_rowid[0] === "") {
                 res.send({
@@ -3190,7 +3216,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     app.get('/d4dMasters/orgs/all/users/7', function(req, res) {
         masterUtil.getUsersForAllOrg(function(err, users) {
             if (err) {
-                res.status(500).send( "Failed to fetch User.");
+                res.status(500).send("Failed to fetch User.");
             }
             res.send(users);
             return;
@@ -3204,7 +3230,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         fs.readFile(chefRepoPath + 'catalyst_files/' + templateFile, function(err, data) {
             if (err) {
                 logger.error("Unable to read template file " + templateFile, err);
-                res.status(500).send( {
+                res.status(500).send({
                     message: "Unable to read file"
                 });
                 return;
@@ -3217,13 +3243,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
         masterUtil.getAllActiveOrg(function(err, orgList) {
             logger.debug("got org list ==>", JSON.stringify(orgList));
             if (err) {
-                res.status(500).send( 'Not able to fetch Orgs.');
+                res.status(500).send('Not able to fetch Orgs.');
                 return;
             }
             masterUtil.getAllCongifMgmts(orgList, function(err, list) {
                 if (err) {
                     logger.debug("Failed to fetch all configmanagement", err);
-                    res.status(500).send( "Failed to fetch all configmanagement");
+                    res.status(500).send("Failed to fetch all configmanagement");
                     return;
                 }
                 res.send(list);
@@ -3236,7 +3262,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         masterUtil.getAllCongifMgmtsForOrg(req.params.orgId, function(err, list) {
             if (err) {
                 logger.debug("Failed to fetch all configmanagement", err);
-                res.status(500).send( "Failed to fetch all configmanagement");
+                res.status(500).send("Failed to fetch all configmanagement");
                 return;
             }
             res.send(list);
@@ -3246,7 +3272,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     app.get('/d4dMasters/configmanagement/:anId', function(req, res) {
         if (!req.params.anId) {
-            res.status(400).send( {
+            res.status(400).send({
                 message: "Invalid Config Management Id"
             });
             return;
@@ -3254,7 +3280,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         masterUtil.getCongifMgmtsById(req.params.anId, function(err, data) {
             if (err) {
                 logger.debug("Failed to fetch all configmanagement", err);
-                res.status(500).send( "Failed to fetch all configmanagement");
+                res.status(500).send("Failed to fetch all configmanagement");
                 return;
             }
             if (!data) {
@@ -3271,7 +3297,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         masterUtil.getEnvironmentName(req.params.anId, function(err, data) {
             if (err) {
                 logger.debug("Failed to fetch  Environment", err);
-                res.status(500).send( "Failed to fetch  Environment");
+                res.status(500).send("Failed to fetch  Environment");
                 return;
             }
             if (!data) {
@@ -3288,7 +3314,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         masterUtil.getParticularProject(req.params.anId, function(err, data) {
             if (err) {
                 logger.debug("Failed to fetch  Environment", err);
-                res.status(500).send( "Failed to fetch  Environment");
+                res.status(500).send("Failed to fetch  Environment");
                 return;
             }
             if (!data) {
@@ -3305,7 +3331,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         masterUtil.getProjectName(req.params.anId, function(err, data) {
             if (err) {
                 logger.debug("Failed to fetch  Environment", err);
-                res.status(500).send( "Failed to fetch  Environment");
+                res.status(500).send("Failed to fetch  Environment");
                 return;
             }
             if (!data) {
@@ -3322,7 +3348,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         masterUtil.getDockerById(req.params.anId, function(err, data) {
             if (err) {
                 logger.debug("Failed to fetch  Docker", err);
-                res.status(500).send( "Failed to fetch  Docker");
+                res.status(500).send("Failed to fetch  Docker");
                 return;
             }
             if (!data.length) {
@@ -3343,20 +3369,20 @@ module.exports.setRoutes = function(app, sessionVerification) {
         d4dModelNew.d4dModelMastersProjects.find({
             rowid: projectId,
             id: '4'
-        },function(err,project){
-            if(err){
-                logger.debug("Failed to find Project",err);
+        }, function(err, project) {
+            if (err) {
+                logger.debug("Failed to find Project", err);
                 return;
             }
-            if(project.length){
+            if (project.length) {
                 var appdeploy = project[0].appdeploy;
-                if(appdeploy.length){
-                    for(var i=0; i< appdeploy.length;i++){
-                        if(appdeploy[i].applicationname === appName){
+                if (appdeploy.length) {
+                    for (var i = 0; i < appdeploy.length; i++) {
+                        if (appdeploy[i].applicationname === appName) {
                             count++;
                         }
                     }
-                    if(!count){
+                    if (!count) {
                         d4dModelNew.d4dModelMastersProjects.update({
                             rowid: projectId,
                             id: '4'
@@ -3379,43 +3405,46 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             res.send(data);
                             return;
                         });
-                    }else{
+                    } else {
                         res.send(200);
                         return;
                     }
-                }else{
+                } else {
                     d4dModelNew.d4dModelMastersProjects.update({
-                            rowid: projectId,
-                            id: '4'
-                        }, {
-                            $push: {
-                                "appdeploy": {
-                                    applicationname: appName,
-                                    appdescription: appDescription
-                                }
+                        rowid: projectId,
+                        id: '4'
+                    }, {
+                        $push: {
+                            "appdeploy": {
+                                applicationname: appName,
+                                appdescription: appDescription
                             }
-                        }, {
-                            upsert: false
-                        }, function(err, data) {
-                            if (err) {
-                                logger.debug('Err while updating d4dModelMastersProjects' + err);
-                                res.send(err);
-                                return;
-                            }
-                            logger.debug('Updated project ' + req.params.anId + ' with App Name : ' + req.body.appName);
-                            res.send(data);
+                        }
+                    }, {
+                        upsert: false
+                    }, function(err, data) {
+                        if (err) {
+                            logger.debug('Err while updating d4dModelMastersProjects' + err);
+                            res.send(err);
                             return;
-                        });
+                        }
+                        logger.debug('Updated project ' + req.params.anId + ' with App Name : ' + req.body.appName);
+                        res.send(data);
+                        return;
+                    });
                 }
             }
         });
     });
 
     app.get('/d4dMasters/org/:orgId/templateType/:templateType/templates', function(req, res) {
-        masterUtil.getTemplatesByOrgAndTemplateType(req.params.orgId,req.params.templateType,function(err,templates){
-            if(err){
-                logger.debug("Error getting templates",err);
-                res.status(500).send({"errorCode": 500,"message":"Error getting templates"});
+        masterUtil.getTemplatesByOrgAndTemplateType(req.params.orgId, req.params.templateType, function(err, templates) {
+            if (err) {
+                logger.debug("Error getting templates", err);
+                res.status(500).send({
+                    "errorCode": 500,
+                    "message": "Error getting templates"
+                });
                 return;
             }
             res.send(templates);

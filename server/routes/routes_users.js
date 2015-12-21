@@ -1,3 +1,4 @@
+var logger = require('_pr/logger')(module);
 var congigMgmntDao = require('../model/d4dmasters/configmgmt.js');
 
 
