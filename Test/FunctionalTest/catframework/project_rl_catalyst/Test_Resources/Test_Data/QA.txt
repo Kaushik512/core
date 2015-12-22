@@ -138,16 +138,16 @@ ${JAVA}                      Java
 ${EDIT STACK INSTANCE NAME}      JavaStack
 
 
-${USERPEMFILE}              ${ROOTPATH}//Chef//mycatqa.pem
-${VALIDATORPEMFILE}         ${ROOTPATH}//Chef//cattest-validator.pem
-${KNIFERBFILE}                ${ROOTPATH}//Chef//knife.rb
-${CATALYSTPEM}                ${ROOTPATH}//Chef//catalyst.pem
-${CAT_INSTANCES}              ${ROOTPATH}//Chef//cat_instances.pem
-${CATALYST STACKFILE}         ${ROOTPATH}//Chef//JavaStack.template
-${GOLDEN PEM}                 ${ROOTPATH}//Chef//GoldenDemo.pem
-${MANAGEMENT PEM}             ${ROOTPATH}//Chef//management.pem
-${PRIVATE KEYFILE}            ${ROOTPATH}//Chef//management.key
-
+${ROOT}                      /home/ubuntu/Functionaltest_pemfiles
+${USERPEMFILE}              ${ROOT}//mycatqa.pem
+${VALIDATORPEMFILE}         ${ROOT}//cattest-validator.pem
+${KNIFERBFILE}                ${ROOT}//knife.rb
+${CATALYSTPEM}                ${ROOT}//catalyst.pem
+${CAT_INSTANCES}              ${ROOT}//cat_instances.pem
+${CATALYST STACKFILE}         ${ROOT}//JavaStack.template
+${GOLDEN PEM}                 ${ROOT}//GoldenDemo.pem
+${MANAGEMENT PEM}             ${ROOT}//management.pem
+${PRIVATE KEYFILE}            ${ROOT}//management.key
 
 
 ${CENTOSIMG}                  ${ROOTPATH}//Images//centos.jpg
@@ -170,8 +170,8 @@ ${RECIPE}                  recipe[apt]
 ${RECIPE1}                 recipe[apt]
 ${Template Type}           Chef
 ${OPERATING SYSTEM}        Cent OS
-${CentosInstanceSize}          t2.micro        #m1.small
-${UbuntuInstanceSize}      t2.small      
+${CentosInstanceSize}          t1.micro        #m1.small
+${UbuntuInstanceSize}          t2.small      
 ${BLUEPRINT NAME}          ApacheNew
 ${BLUEPRINT NAME1}         UbuntuApac
 ${NEW BLUEPRINT NAME}      ApacheNew-Edited
@@ -247,10 +247,10 @@ ${CONSUMER_NAME}            Consumer01
 ${CONSUMER_PASWD}           Consumer01
 ${CENTOS NAME}              Instance_Centos
 ${UBUNTU NAME}              Instance_Ubuntu
-${IP ADD UBUNTU}            54.68.147.50
-${IP Ubuntu}                54.68.147.50
+${IP ADD UBUNTU}            10.0.1.200
+${IP Ubuntu}                10.0.1.200
 
-${IP ADD CENTOS}              52.24.178.71
+${IP ADD CENTOS}              10.0.1.92
 ${IP Centos}                   10.0.1.92
 
 

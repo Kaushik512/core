@@ -136,6 +136,7 @@ Catalyst Creation of New Blueprint and Delete
     #Select the VPC
     Select the Subnet
     Select the Key Pair
+    Sleep    3s
     Choose Instance Size
     Select the Security Group
     Clicks on Configure Provider Parameters
@@ -1072,18 +1073,18 @@ CentOS Blueprint Launched and verify IP,Status,Chef,SSH,Stop,BootStrap
     
 
 Ubuntu Blueprint Launched and verify IP,Status,Chef,SSH,Stop,BootStrap of azure
-#    Sleep    5s
-#    Clicks on the Infrastructure Tab to select Bluperints section
-#    #Clicks on Blueprint Section
-#    Select the ubuntu azure blueprint
-#    Sleep    1s
-#    Clicks on Launch Button
-#    Sleep    2s
-#    Confirmation to launch Blueprint
-#    Sleep    1s
-#    Clicks on Instance Close Button
-#    Clicks on the Infrastructure Button to go to Instances    
-#    #Clicks on Instances Button
+    Sleep    5s
+    Clicks on the Infrastructure Tab to select Bluperints section
+    #Clicks on Blueprint Section
+    Select the ubuntu azure blueprint
+    Sleep    1s
+    Clicks on Launch Button
+    Sleep    2s
+    Confirmation to launch Blueprint
+    Sleep    1s
+    Clicks on Instance Close Button
+    Clicks on the Infrastructure Button to go to Instances    
+    #Clicks on Instances Button
     Verify the IP Address of the ubuntu azure Instance
     Verfiy the Status of the ubuntu azure Instance
     Sleep    30s
@@ -2312,11 +2313,15 @@ Select the Key Pair
     
 
 Choose Instance Size
+    #Sleep    1s
+    #Click Element    id=instancesize
     Sleep    1s
     Click Element    xpath=.//*[@id='instancesize']/option[text()='${CentosInstanceSize}']
     
 
 Choose Instance Size for Ubuntu
+    #Sleep    1s
+    #Click Element    id=instancesize
     Sleep    1s
     Click Element    xpath=.//*[@id='instancesize']/option[text()='${UbuntuInstanceSize}']
 
@@ -2679,6 +2684,7 @@ Select the CentosTesingBlueprint
     Click Element    xpath=//*[text()='${BLUEPRINT TESTNAME}']
 
 Select the ubuntuAzureTesingBlueprint
+    Sleep    3s
     Click Element    xpath=//*[text()='${EDIT AZURE BLUEPRINTNANE}']
 
 Select the BlueprintUbuntu

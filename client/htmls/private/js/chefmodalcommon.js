@@ -159,9 +159,9 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
 
 
     var $row = $("<div></div>").addClass('row margin0');
-    var $divFilterChefContainer = $("<div></div>").addClass('col-lg-12 col-md-12 divtablemarginpadding');
+    var $divFilterChefContainer = $("<div></div>").addClass('col-lg-12 col-md-12 col-sm-12 divtablemarginpadding');
     var $divtable = $("<div></div>").addClass('divtablemarginpadding');
-    var $firstcol6 = $("<div></div>").addClass('col-lg-6 availableRunlistContainer');
+    var $firstcol6 = $("<div></div>").addClass('col-lg-6 col-md-6 col-sm-6 availableRunlistContainer');
 
     var $inputgroup = $("<div></div>").addClass('input-group width100');
     var $firstlabelinput = $("<label></label>").addClass('input searchCookbooksRolesLabel');
@@ -248,7 +248,7 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
     $divtable.append($firstcol6);
 
 
-    var $secondcol6 = $("<div></div>").addClass('col-lg-6');
+    var $secondcol6 = $("<div></div>").addClass('col-lg-6 col-md-6 col-sm-6');
     var $inputgroupsecond = $("<div></div>").addClass('input-group width100');
     var $firstlabelinput = $("<label id='loadimageandtextlabel'></label>").addClass('input runlistLabel');
     //var $secondcolimage = $("<img id='secondcolimage'/>").attr('src', 'img/templateicons/Create-run-list---deployment.png');

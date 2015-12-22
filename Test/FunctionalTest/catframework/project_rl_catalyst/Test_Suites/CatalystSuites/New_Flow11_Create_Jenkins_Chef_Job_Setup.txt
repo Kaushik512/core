@@ -20,7 +20,7 @@ Catalyst Validation of Jenkins Configuration setup
 
 
 Catalyst new Jenkins Configuration setup
-    [Tags]       Sanity               Smoke
+    [Tags]       Sanity               Settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Create New Jenkins Configuration Setup       
@@ -30,7 +30,7 @@ Catalyst new Jenkins Configuration setup
 
 
 Catalyst Creation of Jenkins Task in the Environment 
-    [Tags]       Sanity               Jen
+    [Tags]       Sanity               Settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Creation of Jenkins Task in Environment       
@@ -39,7 +39,7 @@ Catalyst Creation of Jenkins Task in the Environment
 
 
 Catalyst Creation of Chef Task in the Environment 
-    [Tags]       Sanity               Smoke
+    [Tags]       Sanity               Settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catlayst Creation of Chef Task in the Environment       
@@ -49,7 +49,7 @@ Catalyst Creation of Chef Task in the Environment
 
 
 Catalyst Execution of Jenkins Task in Environment 
-    [Tags]       Sanity               Smoke
+    [Tags]       Sanity               Settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Execution of the Jenkins Job

@@ -4333,7 +4333,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
                         var $tdNodeList = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a class="assignedNodesList" rel="tooltip" data-placement="top" data-original-title="View Nodes" style="cursor:pointer;text-decoration:none;" data-toggle="modal"><i style="font-size:20px;color:#40baf1" class="ace-icon fa fa-sitemap"></i></a>');
                         if (data[i].taskType === 'chef') {
-                            $tdNodeList.append('<a class="assignedRunlistTable" style="margin-top:5px;text-decoration:none;margin-left:20px;" rel="tooltip" data-placement="top" data-original-title="Assigned Runlists" data-toggle="modal" href="#assignedRunlist"><i style="font-size:20px;color:#40baf1;margin-left:5px;" class="ace-icon fa fa-list-ul"></i></a>');
+                            $tdNodeList.append('<a class="assignedRunlistTable" rel="tooltip" data-placement="top" data-original-title="Assigned Runlists" data-toggle="modal" href="#assignedRunlist"><i style="font-size:20px;color:#40baf1;margin-left:5px;" class="ace-icon fa fa-list-ul"></i></a>');
                         }
                         $tdNodeList.find('a.assignedNodesList').data('nodeList', data[i].taskConfig.nodeIds).click(function(e) {
                             $.post('../instances/', {
