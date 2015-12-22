@@ -74,8 +74,9 @@ Catalyst deletion of New Blueprint
     Clicks on RL_QA Environment
     Sleep    2s
     Clicks on Infrastructure Tab
+    Sleep    2s
     Clicks on Blueprints Section
-    Sleep    1s
+    Sleep    15s
     Verify the Blueprint is created
     Delete the Blueprint
     Sleep    3s

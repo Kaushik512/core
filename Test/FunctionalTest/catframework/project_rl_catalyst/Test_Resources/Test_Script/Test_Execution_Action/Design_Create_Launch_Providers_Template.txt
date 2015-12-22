@@ -1073,18 +1073,18 @@ CentOS Blueprint Launched and verify IP,Status,Chef,SSH,Stop,BootStrap
     
 
 Ubuntu Blueprint Launched and verify IP,Status,Chef,SSH,Stop,BootStrap of azure
-#    Sleep    5s
-#    Clicks on the Infrastructure Tab to select Bluperints section
-#    #Clicks on Blueprint Section
-#    Select the ubuntu azure blueprint
-#    Sleep    1s
-#    Clicks on Launch Button
-#    Sleep    2s
-#    Confirmation to launch Blueprint
-#    Sleep    1s
-#    Clicks on Instance Close Button
-#    Clicks on the Infrastructure Button to go to Instances    
-#    #Clicks on Instances Button
+    Sleep    5s
+    Clicks on the Infrastructure Tab to select Bluperints section
+    #Clicks on Blueprint Section
+    Select the ubuntu azure blueprint
+    Sleep    1s
+    Clicks on Launch Button
+    Sleep    2s
+    Confirmation to launch Blueprint
+    Sleep    1s
+    Clicks on Instance Close Button
+    Clicks on the Infrastructure Button to go to Instances    
+    #Clicks on Instances Button
     Verify the IP Address of the ubuntu azure Instance
     Verfiy the Status of the ubuntu azure Instance
     Sleep    30s
