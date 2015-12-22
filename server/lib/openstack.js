@@ -7,6 +7,7 @@
 
 var Client = require('node-rest-client').Client;
 var SSHExec = require('./utils/sshexec');
+var logger = require('_pr/logger')(module);
 
 function getAuthToken(host, username, password, tenantName, callback) {
     logger.debug("START:: getAuthToken");
@@ -243,7 +244,6 @@ var Openstack = function(options) {
         getAuthToken(options.serviceendpoints.identity, options.username, options.password, options.tenantName, function(err, token) {
             if (token) {
                 logger.debug("Token Id::" + token);
-                //	logger.debug("Tenant Id::"+tenantId);
                 var args = {
                     headers: {
                         "X-Auth-Token": token
@@ -291,7 +291,6 @@ var Openstack = function(options) {
                 logger.debug('securityGroupsUrl: ' + securityGroupsUrl);
                 client.registerMethod("jsonMethod", securityGroupsUrl, "GET");
                 client.methods.jsonMethod(args, function(data, response) {
-                    //logger.debug("getSecurityGroups response:: "+data);
                     var json = JSON.parse(data);
                     if (json.security_groups) {
                         logger.debug("END:: getSecurityGroups");
@@ -500,8 +499,6 @@ var Openstack = function(options) {
                         "Content-Type": "application/json"
                     }
                 };
-
-                //var serverDetailUrl = 'http://' + options.host + ':8774/v2/' + tenantId + '/servers/' + serverId;
                 var serverDetailUrl = options.serviceendpoints.compute + '/' + tenantId + '/servers/' + serverId;
                 client = new Client();
                 client.registerMethod("getServerDetails", serverDetailUrl, "GET");
@@ -557,7 +554,6 @@ var Openstack = function(options) {
             host: instanceData.floatingipdata.floatingip.floating_ip_address,
             instanceOS: 'linux',
             port: 22,
-           // cmds: ["ls -al"],
            cmds: ["sudo ntpdate -s ntp.ubuntu.com;ls -al"],
             cmdswin: ["del "]
         }

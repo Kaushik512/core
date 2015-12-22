@@ -62,33 +62,9 @@ function getDefaultsConfig() {
             }
         },
         aws: {
-            access_key: "AKIAI6TVFFD23LMBJUPA",
-            secret_key: "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",
-            region: "us-west-2",
-            keyPairName: "catalyst",
-            securityGroupId: "sg-c00ee1a5",
             pemFileLocation: __dirname + '/config/',
             pemFile: "catalyst.pem",
             instanceUserName: "root",
-            os: [{
-                amiid: 'ami-b6bdde86',
-                username: 'root',
-                osType: 'linux',
-                name: 'Cent OS',
-                supportedInstanceType: ['t1.micro', 'm1.small', 'm1.medium', 'm1.large', 'm1.xlarge']
-            }, {
-                amiid: 'ami-21732111',
-                username: 'administrator',
-                osType: 'windows',
-                name: 'Windows 2008',
-                supportedInstanceType: ['t2.micro', 'm1.small']
-            }, {
-                amiid: 'ami-3d50120d',
-                username: 'ubuntu',
-                osType: 'linux',
-                name: 'ubuntu',
-                supportedInstanceType: ['t2.micro']
-            }],
             virtualizationType: [{
                 hvm: ['t2.micro', 't2.small', 't2.medium', 'm3.medium', 'm3.large', 'm3.xlarge', 'm3.2xlarge',
                     'c3.large', 'c3.xlarge', 'c3.2xlarge', 'c3.4xlarge', 'c3.8xlarge', 'c4.large', 'c4.xlarge',

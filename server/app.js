@@ -148,12 +148,12 @@ app.use(passport.session());
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
-var options = {
+/*var options = {
     key: fs.readFileSync('rlcatalyst.key'),
     cert: fs.readFileSync('rlcatalyst.cert'),
     requestCert: true,
     rejectUnauthorized: false
-}
+}*/
 
 
 

@@ -116,7 +116,6 @@ function openSSH(options, callback) {
             var javaSSHSHell = new JavaSSHShell(options, javaSSHInstance, socketServer, callback);
         });
     });
-
 }
 
 

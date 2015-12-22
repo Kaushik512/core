@@ -111,15 +111,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 if (err) {
                     res.status(500).send( "Failed to fetch User.");
                 }
-                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
                 if (anUser) {
-                    //data == true (create permission)
-                    /*if(data && anUser.orgname_rowid[0] !== ""){
-                    logger.debug("Inside check not authorized.");
-                    res.send(401,"You don't have permission to perform this operation.");
-                    return;
-                }*/
-
                     if(providerType == "openstack" || providerType == "hppubliccloud" || providerType == "azure" || providerType == "vmware"){
                     
                         logger.debug('Provider Type',providerType);
@@ -130,7 +122,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 return;
                             }
                             logger.debug("Returned Provider: ", aProvider);
-                            logger.debug("vmimageData <<<<<<<<<<<<<<<<<<<<< %s", vmimageData);
                             vmimageData.vType = 'openstack';
                             if(providerType == "azure"){
                               vmimageData.vType = 'azure';
@@ -156,11 +147,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             }
                             logger.debug("Returned Provider: ", aProvider);
                             AWSKeyPair.getAWSKeyPairByProviderId(providerId, function(err, keyPair) {
-                                logger.debug("keyPairs length::::: ", keyPair[0].region);
                                 if (err) {
                                     res.status(500).send( "Error getting to fetch Keypair.")
                                 }
-                                logger.debug("vmimageData <<<<<<<<<<<<<<<<<<<<< %s", vmimageData);
                                 var keys = [];
                                 keys.push(aProvider.accessKey);
                                 keys.push(aProvider.secretKey);
@@ -174,7 +163,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         "secret_key": decryptedKeys[1],
                                         "region": keyPair[0].region
                                     });
-                                    logger.debug("ec2>>>>>>>>>>>>>>>>> ", JSON.stringify(ec2));
                                     ec2.checkImageAvailability(vmimageData.imageIdentifier, function(err, data) {
                                         if (err) {
                                             logger.debug("Unable to describeImages from AWS.", err);
@@ -186,7 +174,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                             vmimageData.vType = data.Images[0].VirtualizationType;
                                             VMImage.createNew(vmimageData, function(err, anImage) {
                                                 if (err) {
-                                                    logger.debug("err.....", err);
+                                                    logger.error("err. ", err);
                                                     res.status(500).send( "Selected is already registered.");
                                                     return;
                                                 }
@@ -347,7 +335,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             providerType: providerType,
             instancePassword: password
         };
-        logger.debug("image >>>>>>>>>>>>", vmimageData);
         usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
             if (!err) {
                 logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
@@ -366,14 +353,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 if (err) {
                     res.status(500).send( "Failed to fetch User.");
                 }
-                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
                 if (anUser) {
-                    //data == true (create permission)
-                    /*if(data && anUser.orgname_rowid[0] !== "" && anUser.userrolename !== "Admin"){
-                    logger.debug("Inside check not authorized.");
-                    res.send(401,"You don't have permission to perform this operation.");
-                    return;
-                }*/
                     if(providerType == "openstack" || providerType == "hppubliccloud" || providerType == "azure" || providerType == "vmware"){
                         logger.debug('Provider Type',providerType);
                         VMImage.getImageById(imageId, function(err, anImage) {
@@ -388,7 +368,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 vmimageData.vType = 'azure';
                             }
 
-                            logger.debug("ImageData:>>>>>>>>>>> ", JSON.stringify(vmimageData));
                             VMImage.updateImageById(imageId, vmimageData, function(err, updateCount) {
                                 if (err) {
                                     logger.error(err);
@@ -415,11 +394,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             }
                             logger.debug("Returned Provider: ", aProvider);
                             AWSKeyPair.getAWSKeyPairByProviderId(providerId, function(err, keyPair) {
-                                logger.debug("keyPairs length::::: ", keyPair[0].region);
                                 if (err) {
                                     res.status(500).send( "Error getting to fetch Keypair.")
                                 }
-                                logger.debug("vmimageData <<<<<<<<<<<<<<<<<<<<< %s", vmimageData);
                                 var keys = [];
                                 keys.push(aProvider.accessKey);
                                 keys.push(aProvider.secretKey);
@@ -433,7 +410,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         "secret_key": decryptedKeys[1],
                                         "region": keyPair[0].region
                                     });
-                                    logger.debug("ec2>>>>>>>>>>>>>>>>> ", JSON.stringify(ec2));
                                     ec2.checkImageAvailability(vmimageData.imageIdentifier, function(err, data) {
                                         if (err) {
                                             logger.debug("Unable to describeImages from AWS.", err);
@@ -449,7 +425,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                             if (anImage) {
                                                 vmimageData.vType = anImage.vType;
                                             }
-                                            logger.debug("ImageData:>>>>>>>>>>> ", JSON.stringify(vmimageData));
                                             VMImage.updateImageById(imageId, vmimageData, function(err, updateCount) {
                                                 if (err) {
                                                     logger.error(err);
@@ -503,15 +478,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
                 if (err) {
                     res.status(500).send( "Failed to fetch User.");
-                }
-                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
-                if (anUser) {
-                    //data == true (create permission)
-                    /*if(data && anUser.orgname_rowid[0] !== ""){
-                    logger.debug("Inside check not authorized.");
-                    res.send(401,"You don't have permission to perform this operation.");
                     return;
-                }*/
+                }
+                if (anUser) {
                     blueprintsDao.getBlueprintByImageId(imageId, function(err, data) {
                         if (err) {
                             logger.error('Failed to getBlueprint. Error = ', err);
@@ -519,7 +488,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             return;
                         }
                         if (data) {
-                            logger.debug("Returned Blueprint:>>>>> %s", data.imageId);
                             res.send(403, "Image already used by some Blueprints.To delete Image please delete respective Blueprints first.");
                             return;
                         }
@@ -578,7 +546,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
         ec2.checkImageAvailability(req.body.imageId, function(err, data) {
             if (err) {
-                logger.debug("Unable to describeImages from AWS.", err);
+                logger.error("Unable to describeImages from AWS.", err);
                 res.send("Unable to Describe Images from AWS.", 500);
                 return;
             }
