@@ -13,6 +13,7 @@ var AzureBlueprint = require('./blueprint-types/instance-blueprint/azure-bluepri
 var VmwareBlueprint = require('./blueprint-types/instance-blueprint/vmware-blueprint/vmware-blueprint');
 
 var CloudFormationBlueprint = require('./blueprint-types/cloud-formation-blueprint/cloud-formation-blueprint');
+var ARMTemplateBlueprint = require('./blueprint-types/arm-template-blueprint/arm-template-blueprint');
 
 var BLUEPRINT_TYPE = {
     DOCKER: 'docker',
@@ -21,7 +22,8 @@ var BLUEPRINT_TYPE = {
     OPENSTACK_LAUNCH: "openstack_launch",
     HPPUBLICCLOUD_LAUNCH: "hppubliccloud_launch",
     AZURE_LAUNCH: "azure_launch",
-    VMWARE_LAUNCH: "vmware_launch"
+    VMWARE_LAUNCH: "vmware_launch",
+    AZURE_ARM_TEMPLATE: "azure_arm"
 };
 
 var Schema = mongoose.Schema;
@@ -91,6 +93,8 @@ function getBlueprintConfigType(blueprint) {
         BlueprintConfigType = DockerBlueprint;
     } else if ((blueprint.blueprintType === BLUEPRINT_TYPE.AWS_CLOUDFORMATION) && blueprint.blueprintConfig) {
         BlueprintConfigType = CloudFormationBlueprint;
+    } else if ((blueprint.blueprintType === BLUEPRINT_TYPE.AZURE_ARM_TEMPLATE) && blueprint.blueprintConfig) {
+        BlueprintConfigType = ARMTemplateBlueprint;
     } else if ((blueprint.blueprintType === BLUEPRINT_TYPE.OPENSTACK_LAUNCH || blueprint.blueprintType === BLUEPRINT_TYPE.HPPUBLICCLOUD_LAUNCH) && blueprint.blueprintConfig) {
         BlueprintConfigType = OpenstackBlueprint;
     } else if ((blueprint.blueprintType === BLUEPRINT_TYPE.AZURE_LAUNCH) && blueprint.blueprintConfig) {
@@ -98,7 +102,7 @@ function getBlueprintConfigType(blueprint) {
     } else if ((blueprint.blueprintType === BLUEPRINT_TYPE.VMWARE_LAUNCH) && blueprint.blueprintConfig) {
         logger.debug('this is test');
         BlueprintConfigType = VmwareBlueprint;
-    }else {
+    } else {
         return;
     }
     var blueprintConfigType = new BlueprintConfigType(blueprint.blueprintConfig);
@@ -177,7 +181,7 @@ BlueprintSchema.methods.launch = function(envId, ver, callback) {
 
 // static methods
 BlueprintSchema.statics.createNew = function(blueprintData, callback) {
-    logger.debug('blueprintData.cloudFormationData ==>',blueprintData.cloudFormationData);
+    logger.debug('blueprintData.cloudFormationData ==>', blueprintData.cloudFormationData);
 
     var blueprintConfig, blueprintType;
     if ((blueprintData.blueprintType === BLUEPRINT_TYPE.INSTANCE_LAUNCH) && blueprintData.instanceData) {
@@ -189,25 +193,28 @@ BlueprintSchema.statics.createNew = function(blueprintData, callback) {
     } else if ((blueprintData.blueprintType === BLUEPRINT_TYPE.AWS_CLOUDFORMATION) && blueprintData.cloudFormationData) {
         blueprintType = BLUEPRINT_TYPE.AWS_CLOUDFORMATION;
         blueprintConfig = CloudFormationBlueprint.createNew(blueprintData.cloudFormationData);
+    } else if ((blueprintData.blueprintType === BLUEPRINT_TYPE.AZURE_ARM_TEMPLATE) && blueprintData.armTemplateData) {
+        blueprintType = BLUEPRINT_TYPE.AZURE_ARM_TEMPLATE;
+        blueprintConfig = ARMTemplateBlueprint.createNew(blueprintData.armTemplateData);
     } else if ((blueprintData.blueprintType === BLUEPRINT_TYPE.OPENSTACK_LAUNCH) && blueprintData.instanceData) {
         blueprintType = BLUEPRINT_TYPE.OPENSTACK_LAUNCH;
-        logger.debug('blueprintData openstack instacedata ==>',blueprintData.instanceData);
+        logger.debug('blueprintData openstack instacedata ==>', blueprintData.instanceData);
         blueprintConfig = OpenstackBlueprint.createNew(blueprintData.instanceData);
-    }else if ((blueprintData.blueprintType === BLUEPRINT_TYPE.HPPUBLICCLOUD_LAUNCH) && blueprintData.instanceData) {
+    } else if ((blueprintData.blueprintType === BLUEPRINT_TYPE.HPPUBLICCLOUD_LAUNCH) && blueprintData.instanceData) {
         blueprintType = BLUEPRINT_TYPE.HPPUBLICCLOUD_LAUNCH;
-        logger.debug('blueprintData openstack instacedata ==>',blueprintData.instanceData);
+        logger.debug('blueprintData openstack instacedata ==>', blueprintData.instanceData);
         blueprintConfig = OpenstackBlueprint.createNew(blueprintData.instanceData);
     } else if ((blueprintData.blueprintType === BLUEPRINT_TYPE.AZURE_LAUNCH) && blueprintData.instanceData) {
         blueprintType = BLUEPRINT_TYPE.AZURE_LAUNCH;
-        logger.debug('blueprintData azure instacedata ==>',blueprintData.instanceData);
+        logger.debug('blueprintData azure instacedata ==>', blueprintData.instanceData);
         blueprintConfig = AzureBlueprint.createNew(blueprintData.instanceData);
         blueprintConfig.cloudProviderData = AzureBlueprint.createNew(blueprintData.instanceData);
     } else if ((blueprintData.blueprintType === BLUEPRINT_TYPE.VMWARE_LAUNCH) && blueprintData.instanceData) {
         blueprintType = BLUEPRINT_TYPE.VMWARE_LAUNCH;
-        logger.debug('blueprintData vmware instacedata ==>',blueprintData.instanceData);
+        logger.debug('blueprintData vmware instacedata ==>', blueprintData.instanceData);
         blueprintConfig = VmwareBlueprint.createNew(blueprintData.instanceData);
 
-    }   else {
+    } else {
         process.nextTick(function() {
             callback({
                 message: "Invalid Blueprint Type sdds"
@@ -230,7 +237,7 @@ BlueprintSchema.statics.createNew = function(blueprintData, callback) {
         blueprintType: blueprintType
     };
 
-    logger.debug('-------------blueprintObj',JSON.stringify(blueprintObj));
+    logger.debug('-------------blueprintObj', JSON.stringify(blueprintObj));
 
     var blueprint = new Blueprints(blueprintObj);
     console.log('saving');

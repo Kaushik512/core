@@ -2512,7 +2512,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                     });
                                 })(data[i]);
                                 //alert(JSON.stringify(data[i]));
-                            } else if (data[i].templateType == "cft") {
+                            } else if (data[i].templateType == "cft" || data[i].templateType =='arm') {
                                 $selectVerEdit.hide();
                                 (function(blueprint) {
                                     // alert(JSON.stringify(blueprint));

@@ -2593,8 +2593,14 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                             var $regionInputContainer = $('<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftParameterLabelContainer" for=""><span class="cftParameterLabel required">Choose Region</span></label><div class="input-groups"></div></div>');
                             $regionInputContainer.find('.input-groups').append($regionInput);
 
+                            var $resourceInput = $('<select id="cftResourceGroupInput" class="form-control"></select>');
+                            var $resourceInputContainer = $('<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftParameterLabelContainer" for=""><span class="cftParameterLabel required">Choose Resource Group</span></label><div class="input-groups"></div></div>');
+                            $resourceInputContainer.find('.input-groups').append($resourceInput);
+
+                           
+
                             function loadLocations() {
-                                alert($(this).val());
+                               
                                 $.get('/azure/'+$(this).val()+'/locations', function(regionList) {
 
 
@@ -2610,12 +2616,25 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                                     }
                                     
                                 });
+                            }
+                            function loadResourceGroups(){
+                              $.get('/azure-arm/'+$(this).val()+'/resourceGroups', function(resourceGroups) {
+                                    resourceGroups = typeof resourceGroups == "string" ? JSON.parse(resourceGroups) : resourceGroups;
+                                    if (resourceGroups.value && resourceGroups.value.length) {
+                                        resourceGroups = resourceGroups.value;
+                                        var resourceOptStr = '<option value="">Select Resource Group</option>';
+                                        for (var i = 0; i < resourceGroups.length; i++) {
+                                            resourceOptStr = resourceOptStr + '<option value="' + resourceGroups[i].name + '">' + resourceGroups[i].name + '</option>';
 
-
+                                        }
+                                        $resourceInput.html(resourceOptStr);
+                                    }
+                                    
+                                });
                             }
 
-                            $providerInput.change(loadLocations);
-                            $panelBody.empty().append($providerInputContainer).append($regionInputContainer);
+                            $providerInput.change(loadResourceGroups);
+                            $panelBody.empty().append($providerInputContainer).append($resourceInputContainer);
 
                             $.get('/d4dMasters/cftTemplate?templateFile=' + cftTemplateFileName, function(data) {
 
@@ -2702,9 +2721,21 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                                 for (var i = 0; i < resources.length; i++) {
                                     if (resources[i].type === "Microsoft.Compute/virtualMachines") {
                                         var $clone = $panel.clone();
-                                        $clone.find('.heading-text').html('Configure Resource : ' + "azure-vm");
-                                        $clone.find('.panel-collapse').attr('id', 'cftResource-' + "azure-vm");
-                                        $clone.find('.panel-toggle').attr('href', '#cftResource-' + "azure-vm");
+                                        var name = resources[i].name;
+                                        if(name.indexOf('[variables(') === 0) {
+                                            var indexOfBracketClose = name.indexOf(')');
+                                            var variableName = name.substring(12,indexOfBracketClose-1);
+                                            alert(variableName);
+                                            console.log('variables ==>',templateData.variables);
+                                            name = templateData.variables[variableName];
+                                            alert(name);
+
+                                        } else  if(name.indexOf('[parameters(') === 0) {
+
+                                        }
+                                        $clone.find('.heading-text').html('Configure Resource : ' + name);
+                                        $clone.find('.panel-collapse').attr('id', 'cftResource-' + name);
+                                        $clone.find('.panel-toggle').attr('href', '#cftResource-' + name);
 
                                         // for username
                                         // var $inputUsernameContainer = $inputContainerTemplate.clone();
@@ -2714,10 +2745,10 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                                         // $inputUsernameContainer.find('.cftResourceLabel').html('Instance Username');
 
                                         //for resourceLogicalId 
-                                        // var $inputLogicalId = $resourceInputTemplate.clone();
-                                        // $inputLogicalId.addClass('cftResourceLogicalIdInput');
-                                        // $inputLogicalId.attr('type', 'hidden');
-                                        // $inputLogicalId.val(resourceKeys[i]);
+                                        var $inputLogicalId = $resourceInputTemplate.clone();
+                                        $inputLogicalId.addClass('cftResourceLogicalIdInput');
+                                        $inputLogicalId.attr('type', 'hidden');
+                                        $inputLogicalId.val(name);
 
                                         // for chefRunlist
 
@@ -2734,7 +2765,7 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 
 
                                         //$clone.find('.panel-body').append($inputUsernameContainer);
-                                        //$clone.find('.panel-body').append($inputLogicalId);
+                                        $clone.find('.panel-body').append($inputLogicalId);
                                         $clone.find('.panel-body').append($inputChefRunlistContainer);
 
 
@@ -2818,7 +2849,7 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
             //alert('after validation ' + isValid);
             var tempType = $('.role-Selected').data('templatetype').toLowerCase();
 
-            if (tempType !== "docker" && tempType !== 'cloudformation' && !isValid) {
+            if (tempType !== "docker" && tempType !== 'cloudformation' && tempType !== 'armtemplate' && !isValid) {
 
                 bootbox.alert({
                     message: "Valiadtion failed. Do check the configuration before submitting.",
@@ -3002,14 +3033,19 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                             $('.cftParameterInput').each(function() {
                                 var $this = $(this);
                                 var parameterObj = {
-                                    ParameterKey: $this.attr('data-cftParameter-name'),
-                                    ParameterValue: $this.val(),
-                                    type: $this.attr('data-cftParameter-type')
+                                    ParameterKey:$this.attr('data-cftParameter-name'),
+                                    ParameterValue:$this.val(),
+                                    type:$this.attr('data-cftParameter-type')
                                 }
+                                // var parameterObj = {};
+                                // parameterObj[$this.attr('data-cftParameter-name')] = {
+                                //     value:$this.val()
+                                // }
                                 cftParameters.push(parameterObj);
                             });
                             reqBody.cftStackParameters = cftParameters;
                             reqBody.cftTemplateFile = $('#cftTemplateFileInput').val();
+                            reqBody.resourceGroup = $('#resourceInput').val();
                             //reqBody.cftInstanceUserName = $('#cftStackInstanceUsernameInput').val();
                             var cftInstances = [];
 
@@ -3023,7 +3059,7 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 
                                 var instanceObj = {
                                     logicalId: $this.find('.cftResourceLogicalIdInput').val(),
-                                    username: $this.find('.cftResourceUsernameInput').val(),
+                                    //username: $this.find('.cftResourceUsernameInput').val(),
                                     runlist: runlist
                                 };
                                 cftInstances.push(instanceObj);
@@ -3035,11 +3071,11 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                                 reqBody.blueprintType = "instance_launch";
                                 if (($('.role-Selected').data('templatetype')).toLowerCase() === 'cloudformation') {
                                     reqBody.blueprintType = 'aws_cf';
-                                }
-                                if ($('#providerId').find("option:selected").attr('providertype').toLowerCase() == 'hppubliccloud') {
+                                } else if (($('.role-Selected').data('templatetype')).toLowerCase() == 'armtemplate') {
+                                    reqBody.blueprintType = 'azure_arm';
+                                } else if ($('#providerId').find("option:selected").attr('providertype').toLowerCase() == 'hppubliccloud') {
                                     reqBody.blueprintType = 'hppubliccloud_launch';
-                                }
-                                if ($('#providerId').find("option:selected").attr('providertype').toLowerCase() == 'azure') {
+                                }else if ($('#providerId').find("option:selected").attr('providertype').toLowerCase() == 'azure') {
                                     reqBody.blueprintType = 'azure_launch';
                                 }
 
