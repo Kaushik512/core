@@ -30,10 +30,6 @@ var D4DfolderPath = currentDirectory.substring(0, indexOfSlash + 1);
 logger.debug(D4DfolderPath);
 java.classpath.push(D4DfolderPath + '/java/lib/jsch-0.1.51.jar');
 java.classpath.push(D4DfolderPath + '/java/classes');
-//java.classpath.push('/home/anshul/eclipse-workspace/catalyst-ssh/bin');
-
-
-
 
 var defaults = {
     port: 22,
@@ -42,12 +38,9 @@ var defaults = {
 
 
 function JavaSSHShell(options, javaSSHInstance, socketServer, callback) {
-
     var that = this;
     events.EventEmitter.call(this);
-
     var con;
-
     socketServer.on('connection', function(socket) {
         logger.debug('socket connection established');
         con = socket;
@@ -55,17 +48,12 @@ function JavaSSHShell(options, javaSSHInstance, socketServer, callback) {
         con.setNoDelay(true);
         //listening to socket
         con.on('data', function(data) {
-
-            //logger.debug('type of data ==>',typeof data);
             that.emit('out', data);
-
         });
-
         con.on('close', function() {
             that.close();
             that.emit('close');
         });
-
     });
 
     //opening connection 
@@ -79,8 +67,6 @@ function JavaSSHShell(options, javaSSHInstance, socketServer, callback) {
         callback(null, that,retCode);
     });
 
-
-
     this.write = function(cmd) {
         if (con) {
             con.write(cmd);
@@ -91,7 +77,6 @@ function JavaSSHShell(options, javaSSHInstance, socketServer, callback) {
         java.callMethod(javaSSHInstance, 'close', function(err, retCode) {
             if (err) {
                 logger.debug(err);
-                //return;
             }
             logger.debug('closing server');
             try {
@@ -109,9 +94,7 @@ function JavaSSHShell(options, javaSSHInstance, socketServer, callback) {
     };
 
 }
-
 util.inherits(JavaSSHShell, events.EventEmitter);
-
 
 function openSSH(options, callback) {
 

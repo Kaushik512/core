@@ -58,6 +58,7 @@ Catalyst Import an Ubuntu Instance By IP
     Enters the IP Address of Ubuntu Box
     Select the Operating System as Ubuntu
     Input the Ubuntu User Name for IP
+    Select the Config Management Chef Server
     Choose The Authentication Type as Pem File
     Upload the PEM File for Import By IP
     Clicks on Import Button to Import an Instance
@@ -86,6 +87,7 @@ Catalyst Verfication Ubuntu Duplicate Node
     Enters the IP Address of Ubuntu Box
     Select the Operating System as Ubuntu
     Input the Ubuntu User Name for IP
+    Select the Config Management Chef Server
     Choose The Authentication Type as Pem File
     Upload the PEM File for Import By IP
     Clicks on Import Button to Import an Instance
@@ -432,17 +434,21 @@ Clicks on Inport New IP Button
     Click Element    id=ipaddressimport
     
 Select the Config Management Chef Server
-    Click Element    css=#s2id_configManagementDropdown > a > span.select2-arrow
-    Sleep    1s
-    Input Text    css=#select2-drop > div > input    ${CONFIG MANAGEMENT NAME}
-    Sleep    1s
-    Click Element    css=.select2-result-label
+    #Click Element    css=#s2id_configManagementDropdown > a > span.select2-arrow
+    #Sleep    1s
+    #Input Text    css=#select2-drop > div > input    ${CONFIG MANAGEMENT NAME}
+    #Sleep    1s
+    #Click Element    css=.select2-result-label
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='configManagementDropdown']/option[text()='${CONFIG MANAGEMENT NAME}']
+
+
 
 
 Verfication of IP Address from card view
     Sleep    4s
     ${IP VALUE}=    Get Text    xpath=//strong[@class='instanceip']
     Log    ${IP VALUE} is the IP Address of the Centos Machine
+    Should Be Equal   ${IP VALUE}    ${IP Centos}     
 
 Verfication of IP Adres ubuntu from card view
     Sleep    4s
@@ -833,13 +839,15 @@ Enters the IP Address of Ubuntu Box
 
 
 Select the Operating System of the Box
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_importinstanceOS']/a/span[1]
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_importinstanceOS']/a/span[1]
     #-Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    xpath=.//*[@id='select2-drop']/div/input    ${OPERATING SYSTEM1}
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='importinstanceOS']/option[text()='${OPERATING SYSTEM1}']
 
 Select the Operating System as Ubuntu
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_importinstanceOS']/a/span[1]
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li[4]/div
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_importinstanceOS']/a/span[1]
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li[4]/div
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='importinstanceOS']/option[text()='${OPERATING SYSTEM2}']
 
 
 
@@ -853,13 +861,14 @@ Input the Ubuntu User Name for IP
 
 
 Choose The Authentication Type as Pem File
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_pemFileDropdown']/a/span[1]
-    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${AUTHN}
-    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_pemFileDropdown']/a/span[1]
+    #Input Text    xpath=.//*[@id='select2-drop']/div/input    ${AUTHN}
+    #Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    Click Element    xpath=.//*[@id='pemFileDropdown']/option[text()='Pem File']
 
 
 Upload the PEM File for Import By IP
-    Choose File    xpath=.//*[@id='importPemfileInput']    ${CAT_INSTANCES}
+    Choose File    xpath=.//*[@id='importPemfileInput']    ${GOLDEN PEM}        #${CAT_INSTANCES}
     #C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\cat_instances.pem
 
 Clicks on Import Button to Import an Instance
@@ -1152,7 +1161,7 @@ Clicks on Execute Button of Jenkins Job Created
 Clicks on Ok Button to Close the Button
     Click Element    xpath=//button[text()='OK']
     Sleep    9s
-    Click Element    css=button.btn.btn-primary.pull-right
+    Click Element    xpath=.//*[@id='assignedExecute']/div/div/div[3]/a
     Sleep    2s
 
 
@@ -1309,18 +1318,20 @@ Clicks on Jenknis New Button
     Click  Element    xpath=.//*[@id='content']/div/div/div/div/div[1]/div/div/a[2]
 
 Clicks on Task Bar Orchestration Tab
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='myTab3']/li[3]/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='myTab3']/li[2]/a
 
 
 Clicks on Choose Task Type of Jenkins
-    Click Element    css=#s2id_taskType > a > span.select2-arrow
-    Input Text    css=#select2-drop > div > input     ${TASK TYPE}
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    #Click Element    css=#s2id_taskType > a > span.select2-arrow
+    #Input Text    css=#select2-drop > div > input     ${TASK TYPE}
+    #Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    Click Element    xpath=.//*[@id='taskType']/option[text()='${TASK TYPE}']
 
 Clicks on Choose Task Type of Chef
-    Click Element    xpath=.//*[@id='s2id_taskType']/a
-    Input Text    xpath=.//*[@id='select2-drop']/div/input     ${TASK TYPE1}
-    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    #Click Element    xpath=.//*[@id='s2id_taskType']/a
+    #Input Text    xpath=.//*[@id='select2-drop']/div/input     ${TASK TYPE1}
+    #Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    Click Element    xpath=.//*[@id='taskType']/option[text()='${TASK TYPE1}']
 
 
 Enter the Job Name of Jenkins
@@ -1331,9 +1342,10 @@ Enter the Task Name of Chef
 
 
 Select the Job to Run
-    Click Element    css=#s2id_jobListJenkins > a > span.select2-chosen
-    Input Text     xpath=.//*[@id='select2-drop']/div/input     ${JJOB NAME}
-    Click Element    css=ul > li:first-child > div
+    #Click Element    css=#s2id_jobListJenkins > a > span.select2-chosen
+    #Input Text     xpath=.//*[@id='select2-drop']/div/input     ${JJOB NAME}
+    #Click Element    css=ul > li:first-child > div
+    Click Element    xpath=(.//*[@id='jobListJenkins']/option[@value='${JJOB NAME}'])[1]
 
 Select the AutoSync Button
     Click Element    css=#radio_yes 
@@ -1371,9 +1383,10 @@ Enters the Task Name
     Input Text    id=jenkinsTaskName     ${TASK NAME}
 
 Select the Jenkins Server
-    Click Element    css=#s2id_jenkinsServerList > a > span.select2-chosen
-    Input Text    css=#select2-drop > div > input    ${JENKINS SERVER}
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    #Click Element    css=#s2id_jenkinsServerList > a > span.select2-chosen
+    #Input Text    css=#select2-drop > div > input    ${JENKINS SERVER}
+    #Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    Click Element    xpath=.//*[@id='jenkinsServerList']/option[text()='${JENKINS SERVER}']
 
 Select Job
     Click Element    xpath=.//*[@id='select2-drop']/ul/li/div

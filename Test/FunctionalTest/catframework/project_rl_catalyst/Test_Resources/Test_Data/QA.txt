@@ -138,16 +138,16 @@ ${JAVA}                      Java
 ${EDIT STACK INSTANCE NAME}      JavaStack
 
 
-${USERPEMFILE}              ${ROOTPATH}//Chef//mycatqa.pem
-${VALIDATORPEMFILE}         ${ROOTPATH}//Chef//cattest-validator.pem
-${KNIFERBFILE}                ${ROOTPATH}//Chef//knife.rb
-${CATALYSTPEM}                ${ROOTPATH}//Chef//catalyst.pem
-${CAT_INSTANCES}              ${ROOTPATH}//Chef//cat_instances.pem
-${CATALYST STACKFILE}         ${ROOTPATH}//Chef//JavaStack.template
-${GOLDEN PEM}                 ${ROOTPATH}//Chef//GoldenDemo.pem
-${MANAGEMENT PEM}             ${ROOTPATH}//Chef//management.pem
-${PRIVATE KEYFILE}            ${ROOTPATH}//Chef//management.key
-
+${ROOT}                      /home/ubuntu/Functionaltest_pemfiles
+${USERPEMFILE}              ${ROOT}//mycatqa.pem
+${VALIDATORPEMFILE}         ${ROOT}//cattest-validator.pem
+${KNIFERBFILE}                ${ROOT}//knife.rb
+${CATALYSTPEM}                ${ROOT}//catalyst.pem
+${CAT_INSTANCES}              ${ROOT}//cat_instances.pem
+${CATALYST STACKFILE}         ${ROOT}//JavaStack.template
+${GOLDEN PEM}                 ${ROOT}//GoldenDemo.pem
+${MANAGEMENT PEM}             ${ROOT}//management.pem
+${PRIVATE KEYFILE}            ${ROOT}//management.key
 
 
 ${CENTOSIMG}                  ${ROOTPATH}//Images//centos.jpg
@@ -170,8 +170,8 @@ ${RECIPE}                  recipe[apt]
 ${RECIPE1}                 recipe[apt]
 ${Template Type}           Chef
 ${OPERATING SYSTEM}        Cent OS
-${CentosInstanceSize}           m1.small
-${UbuntuInstanceSize}      t2.small      
+${CentosInstanceSize}          t1.micro        #m1.small
+${UbuntuInstanceSize}          t2.small      
 ${BLUEPRINT NAME}          ApacheNew
 ${BLUEPRINT NAME1}         UbuntuApac
 ${NEW BLUEPRINT NAME}      ApacheNew-Edited
@@ -247,10 +247,10 @@ ${CONSUMER_NAME}            Consumer01
 ${CONSUMER_PASWD}           Consumer01
 ${CENTOS NAME}              Instance_Centos
 ${UBUNTU NAME}              Instance_Ubuntu
-${IP ADD UBUNTU}            54.68.147.50
-${IP Ubuntu}                54.68.147.50
+${IP ADD UBUNTU}            10.0.1.200
+${IP Ubuntu}                10.0.1.200
 
-${IP ADD CENTOS}              52.24.178.71
+${IP ADD CENTOS}              10.0.1.92
 ${IP Centos}                   10.0.1.92
 
 
@@ -278,27 +278,52 @@ ${SECRTY GRP4}                sg-ab6faccf | Tomcat
 ${SOFTWARE NAME}          setup-2.8.14-20.el6_4.1.noarch
 
 
-#Provider
+#AWS PROVIDER
 ${PROVIDER NAME}          AWS Prov
 ${EDIT PROVIDER NANME}    AWS RELPRO
 ${PROVIDERR}                 AWS
 ${SECRET KEY}                  qm/j8lT0/IPc1P5ud8yujUSa61+QjqeyZ/jZkIff
 ${ACCESS KEY}                  AKIAI3ETOOEFHJ62G2NQ
+
+
+#AZURE PROVIDER
 ${AZURE PROVIDERNAME}          AZUREPRO
 ${AZURE EDIT PROVIDERNAME}     AZURE PROVIDER
 ${SUBSCRIPTION ID}            f2c53cd4-5d0f-4c6d-880b-6af801de9b21
+
 
 
 ${OPENSTACK PROVIDERR}      OpenStack
 ${HP CLOUD PROVIDERR}       HP Public Cloud
 ${AZURE PROVIDERR}         Azure
 ${STOREACC ERRMSG}         atleast 3 characters required..
-
+${ADMIN ERRMSG}             Atleast a special char is required.
 
 ${Provider ErrMsg}         Provider name already exist.
 
 
 
+
+#AZURE IMAGE NAME
+${AZURE UBUNTU IMAGENAME}     UbuntuAzu
+${AZURE UBUNTU IMAGEID}       d4d-ubuntu14
+${AZURE UBUNTU USERNAME}      azureuser
+${AZURE UBUNTU PASSWORD}      Admin@1234
+${AZURE SECURITY PORTNO}      80
+${UBUNTU AZURE REGION}        Southeast Asia
+${AZURE VPC}                  RelVN
+${AZURE SUBNET}               StaticSubnet
+${AZURE INSTANCE SIZE}         Basic_A0
+${AZURE UBUNTU BLUEPRINTNAME}     AzureRelevance
+${EDIT AZURE BLUEPRINTNANE}      EditAzure
+
+${AZURE WINDOWS IMAGENAME}    WindowsAzu
+${AZURE WINDOWS IMAGEID}      rliiswin2012
+${AZURE WINDOWS USERNAME}     azureuser
+${AZURE WINDOWS PASSWORD}     Admin@1234
+${EDIT AZURE WINDOWS IMAGENAME}     WindowsAzure
+
+#AWS IMAGE NAME
 ${IMAGE NAME1}                 Cent OSIm
 ${IMAGE NAME2}                 UbuntuIm
 ${IMAGE NAME3}                 Windows
@@ -621,6 +646,22 @@ ${DATACENTRE BREADCRUMB}     DesignPROVIDERSData Centre
 ${OPENSTACK BREADCRUMB}      DesignPROVIDERSOpen Stack
 ${CLOUDSTACK BREADCRUMB}     DesignPROVIDERSCloud Stack
 ${DOCKER BREADCRUMB}         DesignPROVIDERSDocker
+
+
+
+
+
+${Alreadexist vmimage}        Selected is already registered.
+
+#AZURE
+${AZURE NAME}                           Azure
+
+
+
+
+
+
+
 
 
 
