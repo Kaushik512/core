@@ -9943,8 +9943,8 @@ table.dataTable td {
 
 .moreInfo {
     background-position: -15px -12px;
-    width: 25px;
-    height: 25px;
+    width: 27px;
+    height: 27px;
     
 }
 .moreInfoabsolute{
@@ -13104,7 +13104,7 @@ form.cmxform .gray * {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    width: 158px;
+    width: 182px;
     display: inline-block;
     height: 35px;
 }
@@ -13134,6 +13134,10 @@ form.cmxform .gray * {
         width: auto;
         display: inline-block;
         height: 35px;
+    }
+    .dockerImgValue {
+    display: table-cell;
+    height: 35px;
     }
 }
 

@@ -16,10 +16,10 @@
                                         <td>State</td>
                                         <td>Created</td>
                                         <td>Name</td>
-                                        <td>Host Instance IP</td>
+                                        <td>Instance IP</td>
                                         <td>Container ID</td>
                                         <td>Image</td>
-                                        <td>More Info</td>
+                                        <td>Info</td>
                                     </tr>
                                     </thead>
                                     <tbody style="padding:4px 4px">
@@ -284,7 +284,7 @@
                     </fieldset>
                     <footer>
                         <button class="btn btn-primary" type="submit" data-dismiss="modal">
-                            <i class="fa fa-undo fa-1x"></i>&nbsp;Close
+                            <i class="ace-icon fa fa-times bigger-110"></i>&nbsp;Close
                         </button>
                     </footer>
                 </form>
@@ -327,67 +327,64 @@
                                 <div id="myTabContent1" class="tab-content padding-10">
                                     <div class="tab-pane fade active in" id="s1">
                                         <div class="logsArea">
-                                            <section class="col col-10">
+                                            
                                                 <div class="">
                                                     <table align="left">
                                                         <thead>
-                                                        <tr style="line-height:2.3">
-                                                            <th scope="col" style="width:80%"><u style="font-size:12px;"></u>
-                                                            </th>
-                                                            <th scope="col"> <u style="font-size:12px;"></u></th>
+                                                        <tr>
+                                                            <th></th>
+                                                            <th></th>
                                                         </tr>
                                                         </thead>
 
                                                         <tbody>
-                                                        <tr style="line-height:2.1">
-                                                            <td style="font-size:12px;" width="20%" >Name&nbsp;:</td>
-                                                            <td style="font-size:12px;" width="80%"   containerdata="Config.Hostname"></td>
+                                                        <tr>
+                                                            <td>Name&nbsp;:</td>
+                                                            <td containerdata="Config.Hostname"></td>
                                                         </tr>
-                                                        <tr style="line-height:2.1">
-                                                            <td style="font-size:12px;">ContainerID&nbsp;:</td>
-                                                            <td style="font-size:12px;"  containerdata="Id"></td>
+                                                        <tr>
+                                                            <td>ContainerID&nbsp;:</td>
+                                                            <td containerdata="Id"></td>
                                                         </tr>
-                                                        <tr style="line-height:2.1">
-                                                            <td style="font-size:12px;">Created&nbsp;:</td>
-                                                            <td style="font-size:12px;"  containerdata="Created"></td>
+                                                        <tr>
+                                                            <td>Created&nbsp;:</td>
+                                                            <td containerdata="Created"></td>
                                                         </tr>
-                                                        <tr style="line-height:2.1">
-                                                            <td style="font-size:12px;">Docker Repo&nbsp;:</td>
-                                                            <td style="font-size:12px;" containerdata=""></td>
+                                                        <tr>
+                                                            <td>Docker Repo&nbsp;:</td>
+                                                            <td containerdata=""></td>
                                                         </tr>
-                                                        <tr style="line-height:2.1">
-                                                            <td style="font-size:12px;">Working Dir&nbsp;:</td>
-                                                            <td style="font-size:12px;" containerdata="Config.WorkingDir"></td>
+                                                        <tr>
+                                                            <td>Working Dir&nbsp;:</td>
+                                                            <td containerdata="Config.WorkingDir"></td>
                                                         </tr>
-                                                        <tr style="line-height:2.1">
-                                                            <td style="font-size:12px;">Entry Point&nbsp;:</td>
-                                                            <td style="font-size:12px;" containerdata="Config.Entrypoint">[&nbsp;]</td>
+                                                        <tr>
+                                                            <td>Entry Point&nbsp;:</td>
+                                                            <td containerdata="Config.Entrypoint">[&nbsp;]</td>
                                                         </tr>
-                                                        <tr style="line-height:2.1">
-                                                            <td style="font-size:12px;">Virtual Size&nbsp;:</td>
-                                                            <td style="font-size:12px;" containerdata="Config.Memory"></td>
+                                                        <tr>
+                                                            <td>Virtual Size&nbsp;:</td>
+                                                            <td containerdata="Config.Memory"></td>
                                                         </tr>
-                                                        <tr style="line-height:2.1">
-                                                            <td style="font-size:12px;">Port Specs&nbsp;:</td>
-                                                            <td style="font-size:12px;" containerdata="Config.PortSpecs"></td>
+                                                        <tr>
+                                                            <td>Port Specs&nbsp;:</td>
+                                                            <td containerdata="Config.ExposedPorts"></td>
                                                         </tr>
                                                         </tbody>
                                                     </table>
                                                 </div>
-                                            </section>
+                                            
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="s2">
                                         <div class="logsArea">
-                                            <section class="col col-10">
+                                           
                                                 <div class="">
                                                     <table align="left">
                                                         <thead>
-                                                        <tr style="line-height:2.3">
-
-                                                            <th scope="col" style="width:80%"><u style="font-size:12px;"></u>
-                                                            </th>
-                                                            <th scope="col"> <u style="font-size:12px;"></u></th>
+                                                        <tr>
+                                                            <th></th>
+                                                            <th></th>
                                                         </tr>
                                                         </thead>
 
@@ -416,12 +413,12 @@
                                                         </tbody>
                                                     </table>
                                                 </div>
-                                            </section>
+                                           
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="s3">
                                         <div class="logsArea">
-                                            <section class="col col-10">
+                                            
                                                 <div class="">
                                                     <table align="left">
                                                         <thead>
@@ -435,7 +432,7 @@
 
                                                         <tbody>
                                                         <tr style="line-height:2.1">
-                                                            <td style="font-size:12px;" width="20%" >ImageID</td>
+                                                            <td style="font-size:12px;" width="20%">ImageID</td>
                                                             <td style="font-size:12px;" width="80%"  containerdata="Image"></td>
                                                         </tr>
                                                         <tr style="line-height:2.1">
@@ -465,7 +462,7 @@
                                                         </tbody>
                                                     </table>
                                                 </div>
-                                            </section>
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -477,7 +474,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-primary" type="submit" data-dismiss="modal">
-                    <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
+                    <i class="ace-icon fa fa-times bigger-110"></i>&nbsp;Close
                 </button>
             </div>
 
