@@ -22,8 +22,8 @@ var ARM = function(options) {
         keyLocation: "/Office/Work/Azure/certs/management.key"
     };*/
 
-    var clientId = '53114209-b33b-497c-be26-6e282cad85ef'//'4c7921bf-0f41-453d-a79e-59d4af1f8a3e';
-    var clientSecret = '+1c3YrAq4DbGnRxdnlU84IyYhPtI7UC5F7s2joNmwBI='//'opCdluv+n2FVFA2bBsDHonvnKArxyfEhgDEzl4PsjCA='
+    var clientId = '53114209-b33b-497c-be26-6e282cad85ef' //'4c7921bf-0f41-453d-a79e-59d4af1f8a3e';
+    var clientSecret = '+1c3YrAq4DbGnRxdnlU84IyYhPtI7UC5F7s2joNmwBI=' //'opCdluv+n2FVFA2bBsDHonvnKArxyfEhgDEzl4PsjCA='
     var tenant = '5a96ecbd-b05f-4363-a243-713dc2588bea';
 
     var token = options.token;
@@ -92,11 +92,10 @@ var ARM = function(options) {
                 console.log("response.statusCode: ", response.statusCode);
 
                 if (response.statusCode == '200') {
-                    logger.debug("END:: getServerByName");
                     callback(null, body);
                     return;
                 } else {
-                    callback(body, null);
+                    callback(err,null);
                     return;
                 }
 
@@ -126,7 +125,7 @@ var ARM = function(options) {
                         "tagname1": "tagvalue1"
                     }
                 },
-                json:true
+                json: true
             }
 
             request.put(opts, function(err, response, body) {
@@ -139,18 +138,69 @@ var ARM = function(options) {
 
                 console.log("response.statusCode: ", response.statusCode);
 
-                if (response.statusCode == '200') {
-                    logger.debug("END:: getServerByName");
+                if (response.statusCode == '201' || response.statusCode == '200') {
+
                     callback(null, body);
                     return;
                 } else {
-                    callback(body, null);
+                    callback(err, null);
                     return;
                 }
 
             });
         });
 
+    };
+
+    this.launchTemplate = function(deployParams, callback) {
+        getToken(function(err, token) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+
+
+
+            console.log('params  ==>', deployParams);
+            var opts = {
+                uri: 'https://management.azure.com/subscriptions/' + options.subscriptionId + '/resourcegroups/' + deployParams.resourceGroup + '/providers/microsoft.resources/deployments/' + deployParams.name + '?api-version=2015-01-01',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + token
+                },
+                body: {
+                    "properties": {
+                        "mode": "Incremental",
+                        "template": deployParams.template,
+                        "parameters": deployParams.parameters
+                    }
+                },
+                json: true
+            };
+
+            request.put(opts, function(err, response, body) {
+
+                if (err) {
+                    //console.log("Error...",err);
+                    callback(err, null);
+                    return;
+                }
+
+                console.log("response.statusCode: ", response.statusCode);
+
+                if (response.statusCode == '200' || response.statusCode == '201') {
+                    callback(null, body);
+                    return;
+                } else {
+                    callback(err, null);
+                    return;
+                }
+
+            });
+
+
+
+        });
     };
 
 }

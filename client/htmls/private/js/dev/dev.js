@@ -3204,7 +3204,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                     });
                                 }
 
-                                if (blueprintType === 'aws_cf') {
+                                if (blueprintType === 'aws_cf' || blueprintType === 'azure_arm') {
                                     jQuery.validator.addMethod("noSpace", function(value, element) {
                                         return value.indexOf(" ") < 0 && value != "";
                                     }, "No space allowed and the user can't leave it empty");

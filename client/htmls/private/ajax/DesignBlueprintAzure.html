@@ -2725,11 +2725,9 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                                         if(name.indexOf('[variables(') === 0) {
                                             var indexOfBracketClose = name.indexOf(')');
                                             var variableName = name.substring(12,indexOfBracketClose-1);
-                                            alert(variableName);
                                             console.log('variables ==>',templateData.variables);
                                             name = templateData.variables[variableName];
-                                            alert(name);
-
+                                            
                                         } else  if(name.indexOf('[parameters(') === 0) {
 
                                         }
@@ -3045,7 +3043,8 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                             });
                             reqBody.cftStackParameters = cftParameters;
                             reqBody.cftTemplateFile = $('#cftTemplateFileInput').val();
-                            reqBody.resourceGroup = $('#resourceInput').val();
+                            reqBody.resourceGroup = $('#cftResourceGroupInput').val();
+                            console.log($('#cftResourceGroupInput').length, $('#cftResourceGroupInput').val());
                             //reqBody.cftInstanceUserName = $('#cftStackInstanceUsernameInput').val();
                             var cftInstances = [];
 

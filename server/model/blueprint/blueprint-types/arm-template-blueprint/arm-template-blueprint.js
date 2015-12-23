@@ -18,7 +18,7 @@ var ARMTemplateBlueprintSchema = new Schema({
 	infraMangerType: String,
 	infraManagerId: String,
 	templateFile: String,
-	parameters: [Object],
+	parameters: Object,
 	instances: [{
 		_id: false,
 		logicalId: String,
@@ -102,19 +102,18 @@ ARMTemplateBlueprintSchema.statics.createNew = function(data) {
 		infraManagerType = INFRA_MANAGER_TYPE.PUPPET;
 		return null;
 	}
-	var parameters = [];
+	var parameters = {};
+	console.log('parameters ===>  ', data.stackParameters);
 	if (data.stackParameters) {
 		for (var i = 0; i < data.stackParameters.length; i++) {
-			var parameterObj = {};
-			parameterObj[data.stackParameters[i].ParameterKey] = {};
+
+			parameters[data.stackParameters[i].ParameterKey] = {};
 
 			var value = data.stackParameters[i].ParameterValue;
 			if (data.stackParameters[i].type === 'int') {
 				value = parseFloat(data.stackParameters[i].ParameterValue);
 			}
-			parameterObj[data.stackParameters[i].ParameterKey].value = value;
-
-			parameters.push(parameterObj);
+			parameters[data.stackParameters[i].ParameterKey].value = value;
 		}
 
 	}
