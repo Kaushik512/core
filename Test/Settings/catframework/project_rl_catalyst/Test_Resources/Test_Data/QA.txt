@@ -60,13 +60,15 @@ ${SUITS}                stopped
 ${UserName}             root
 
 
-${USERPEMFILE}              ${ROOTPATH}//Chef//jagadeesh12.pem
-${VALIDATORPEMFILE}      ${ROOTPATH}//Chef//jm012-validator.pem
-${KNIFERBFILE}                ${ROOTPATH}//Chef//knife.rb
-${CATALYSTPEM}                ${ROOTPATH}//Chef//catalyst.pem
-${CAT_INSTANCES}              ${ROOTPATH}//Chef//cat_instances.pem
-${TEMPLATE FILE}              ${ROOTPATH}//Chef//CatalystStack.template
-${Goldendemo_pem}             ${ROOTPATH}//Chef//GoldenDemo.pem
+${ROOT}                /home/ubuntu/Smoketest_pemfiles
+
+${USERPEMFILE}              ${ROOT}//jagadeesh12.pem
+${VALIDATORPEMFILE}      ${ROOT}//jm012-validator.pem
+${KNIFERBFILE}                ${ROOT}//knife.rb
+${CATALYSTPEM}                ${ROOT}//catalyst.pem
+${CAT_INSTANCES}              ${ROOT}//cat_instances.pem
+${TEMPLATE FILE}              ${ROOT}//CatalystStack.template
+${Goldendemo_pem}             ${ROOT}//GoldenDemo.pem
 
 
 ${CLOUD TEMPTYPE}        CloudFormation
