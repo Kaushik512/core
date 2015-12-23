@@ -7,13 +7,7 @@
 
 var fs = require('fs');
 var fsExtra = require('fs-extra');
-
-
-module.exports.validateFilePath = function(rootPath, path) {
-
-
-
-}
+var logger = require('_pr/logger')(module);
 
 module.exports.readDir = function(root, path, callback) {
     var dirList = [];
@@ -21,7 +15,7 @@ module.exports.readDir = function(root, path, callback) {
     var totalItems = 0;
     var that = this;
     fs.readdir(root + path, function(err, files) {
-      
+
         if (err) {
             callback(err);
             return;

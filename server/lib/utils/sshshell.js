@@ -10,7 +10,7 @@ var sshConnection = require('ssh2').Client;
 var EventEmitter = require('events').EventEmitter;
 var util = require("util");
 var extend = require('extend');
-
+var logger = require('_pr/logger')(module);
 
 var HOST_UNREACHABLE = -5000;
 var INVALID_CREDENTIALS = -5001;
@@ -18,8 +18,6 @@ var JSCH_EXCEPTION = -5002;
 var UNKOWN_EXCEPTION = -5003;
 var PEM_FILE_READ_ERROR = -5004;
 var STREAM_ERROR = -5005;
-
-
 
 var EVENTS = {
     ERROR: 'error',
@@ -67,7 +65,6 @@ function getConnectionParams(options, callback) {
             } else {
                 connectionParamsObj.password = options.password;
             }
-
         }
         process.nextTick(function() {
             callback(null, connectionParamsObj);

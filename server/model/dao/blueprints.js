@@ -33,29 +33,20 @@ var BlueprintSchema = new Schema({
         trim: true,
         validate: schemaValidator.projIdValidator
     },
-    // envId: {
-    //     type: String,
-    //     required: true,
-    //     trim: true,
-    //     validate: schemaValidator.envIdValidator
-    // },
     imageId: {
         type: String,
         required: true,
         trim: true
-        //validate: schemaValidator.imageIdValidator
     },
     providerId: {
         type: String,
         required: true,
         trim: true
-        //validate: schemaValidator.imageIdValidator
     },
     keyPairId: {
         type: String,
         required: true,
         trim: true
-        //validate: schemaValidator.imageIdValidator
     },
     subnetId: {
         type: String,
@@ -96,12 +87,12 @@ var BlueprintSchema = new Schema({
         required: true,
         trim: true
     },
-    dockercompose:[{
-        dockercontainerpathstitle:String,
-        dockercontainerpaths:String,
+    dockercompose: [{
+        dockercontainerpathstitle: String,
+        dockercontainerpaths: String,
         dockerrepotags: String,
         dockerreponame: String,
-        dockerimagename: String,    
+        dockerimagename: String,
         dockerlaunchparameters: String
     }],
     dockercontainerpathstitle: {
@@ -134,15 +125,12 @@ var BlueprintSchema = new Schema({
     }],
     instanceType: {
         type: String,
-        //  required: true
     },
     instanceOS: {
         type: String,
-        // required: true
     },
     instanceAmiid: {
         type: String,
-        //  required: true
     },
     instanceUsername: {
         type: String,
@@ -312,10 +300,6 @@ var BlueprintsDao = function() {
         if (blueprintType) {
             queryObj.templateType = blueprintType;
         }
-        //Removed as a team check for the project happens at the route. - Vinod
-        // if (userName) {
-        //     queryObj.users = userName;
-        // }
 
         Blueprint.find(queryObj, function(err, data) {
             if (err) {
@@ -338,10 +322,6 @@ var BlueprintsDao = function() {
         if (blueprintType) {
             queryObj.templateType = blueprintType;
         }
-        //Removed as a team check for the project happens at the route. - Vinod
-        // if (userName) {
-        //     queryObj.users = userName;
-        // }
 
         Blueprint.find(queryObj, function(err, data) {
             if (err) {
@@ -359,7 +339,6 @@ var BlueprintsDao = function() {
             orgId: blueprintData.orgId,
             bgId: blueprintData.bgId,
             projectId: blueprintData.projectId,
-            //envId: blueprintData.envId,
             imageId: blueprintData.imageId,
             keyPairId: blueprintData.keyPairId,
             subnetId: blueprintData.subnetId,

@@ -23,7 +23,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 res.status(500).send("Failed to fetch User.");
                 return;
             }
-            logger.debug('userlist ==> ',usersList);
+            logger.debug('userlist ', usersList);
             if (usersList) {
                 res.send(usersList);
                 return;

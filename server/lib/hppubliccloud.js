@@ -7,6 +7,7 @@
 
 var Client = require('node-rest-client').Client;
 var SSHExec = require('./utils/sshexec');
+var logger = require('_pr/logger')(module);
 
 function getAuthToken(host, username, password, tenantName, callback) {
     logger.debug("START:: getAuthToken");
@@ -30,7 +31,6 @@ function getAuthToken(host, username, password, tenantName, callback) {
     logger.debug('authUrl', authUrl);
     client.registerMethod("postMethod", authUrl, "POST");
     client.methods.postMethod(args, function(data, response) {
-        //logger.debug('Auth Response:',response);
         if (data.access) {
             logger.debug("Auth Token: " + data.access.token.id);
             logger.debug("END:: getAuthToken");
@@ -45,15 +45,6 @@ function getAuthToken(host, username, password, tenantName, callback) {
 }
 
 var Hppubliccloud = function(options) {
-
-    //Url Links
-    // "serviceendpoints" : {
-    //    "compute" : "https://region-a.geo-1.block.hpcloudsvc.com/v2",
-    //    "network" : "https://region-a.geo-1.network.hpcloudsvc.com",
-    //    "image" : "https://region-a.geo-1.images.hpcloudsvc.com:443/v1.0",
-    //    "ec2" : "https://region-a.geo-1.network.hpcloudsvc.com",
-    //    "identity" : "https://region-a.geo-1.identity.hpcloudsvc.com:35357/v2.0/"
-    //  },
     this.getProjects = function(callback) {
         logger.debug("START:: getProjects");
 
@@ -206,7 +197,6 @@ var Hppubliccloud = function(options) {
 
     this.getFlavors = function(tenantId, callback) {
         logger.debug("START:: getFlavors");
-        logger.debug('----------Options------------');
         logger.debug(JSON.stringify(options));
 
         getAuthToken(options.serviceendpoints.identity, options.username, options.password, options.tenantName, function(err, token) {
@@ -221,8 +211,6 @@ var Hppubliccloud = function(options) {
                 };
 
                 client = new Client();
-
-                //var flavorsUrl = 'http://'+options.host+':8774/v2/'+tenantId+'/flavors';
                 var flavorsUrl = options.serviceendpoints.compute + '/' + tenantId + '/flavors';
 
                 logger.debug("flavorsUrl:" + flavorsUrl);
@@ -230,7 +218,6 @@ var Hppubliccloud = function(options) {
 
                 client.methods.jsonMethod(args, function(data, response) {
                     logger.debug("getFlavors Response::" + data);
-                    //var json = JSON.parse(data);
                     if (data.flavors) {
                         logger.debug("END:: getFlavors");
                         callback(null, data);
@@ -302,7 +289,6 @@ var Hppubliccloud = function(options) {
                 logger.debug('securityGroupsUrl: ' + securityGroupsUrl);
                 client.registerMethod("jsonMethod", securityGroupsUrl, "GET");
                 client.methods.jsonMethod(args, function(data, response) {
-                    //logger.debug("getSecurityGroups response:: "+data);
                     var json = JSON.parse(data);
                     if (json.security_groups) {
                         logger.debug("END:: getSecurityGroups");
@@ -337,7 +323,6 @@ var Hppubliccloud = function(options) {
                 logger.debug('securityGroupsUrl: ' + securityGroupsUrl);
                 client.registerMethod("jsonMethod", securityGroupsUrl, "GET");
                 client.methods.jsonMethod(args, function(data, response) {
-                    //logger.debug("getSecurityGroups response:: "+data);
                     var json = JSON.parse(data);
                     if (json.security_groups) {
                         logger.debug("END:: getSecurityGroups");
@@ -390,12 +375,8 @@ var Hppubliccloud = function(options) {
                     }
 
                 });
-
-
             }
         });
-
-
     };
 
 
@@ -403,9 +384,7 @@ var Hppubliccloud = function(options) {
         logger.debug("START:: createfloatingip");
         logger.debug(JSON.stringify(options));
         this.getNetworks(function(err, data) {
-            // logger.debug(JSON.stringify(data));
             if (data) {
-
                 for (var i = 0; i < data.networks.length; i++) {
                     if (data.networks[i]['router:external']) {
                         var networkid = data.networks[i]['id'];
@@ -440,8 +419,6 @@ var Hppubliccloud = function(options) {
                                     }
 
                                 });
-
-
                             }
                         });
                     }
@@ -478,7 +455,6 @@ var Hppubliccloud = function(options) {
                         logger.debug('Added an ip', JSON.stringify(JSON.parse(floatingipdata)));
 
                         //create an instance and wait for server ready state
-
                         logger.debug("createServerJson after");
                         logger.debug(JSON.stringify(createServerJson));
                         var createServerUrl = options.serviceendpoints.compute + '/' + tenantId + '/servers';
@@ -543,9 +519,7 @@ var Hppubliccloud = function(options) {
         });
 
     }
-
     this.updatedfloatingip = false;
-
 
     this.trysshoninstance = function(instanceData, callback) {
         var opts = {
@@ -633,29 +607,5 @@ var Hppubliccloud = function(options) {
         self.timeouts.push(setTimeout(wfsr, 15000));
     }
 }
-
-
-
-// this.waitforserverready1 = function(tenantId,serverId,callback){
-// 	var self = this;
-// 	var checkifserverready = function(){
-// 		 self.getServerById(tenantId,serverId,function(err,data){
-// 	                if (err) {
-// 	                	callback(err, null);
-// 	                	return;
-// 	            	}
-// 	                if(!err){
-// 	                        var networks = Object.keys(data.server.addresses);
-// 	                        if(networks.length > 0){
-
-// 	                        }
-// 	                        else{
-
-// 	                        }
-// 	                }
-// 	        });
-// 	}
-// }
-
 
 module.exports = Hppubliccloud;

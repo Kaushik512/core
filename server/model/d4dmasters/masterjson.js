@@ -6,6 +6,7 @@
  */
 
 var d4dModel = require('./d4dmastersmodel.js');
+var logger = require('_pr/logger')(module);
 
 var MasterJson = function() {
 

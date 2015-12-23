@@ -11,7 +11,6 @@ var validate = require('mongoose-validator');
 var logger = require('_pr/logger')(module);
 var schemaValidator = require('../../../dao/schema-validator');
 var utils = require('../../utils/utils');
-
 var Task = require('../../tasks/tasks.js');
 
 var Schema = mongoose.Schema;

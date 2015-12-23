@@ -11,7 +11,7 @@ var appConfig = require('../config/app_config');
 var extend = require('extend');
 var uuid = require('node-uuid');
 var fs = require('fs');
-
+var logger = require('_pr/logger')(module);
 var currentDirectory = __dirname;
 
 var indexOfSlash = currentDirectory.lastIndexOf("/");
@@ -25,11 +25,7 @@ var D4DfolderPath = currentDirectory.substring(0, indexOfSlash + 1);
 logger.debug(D4DfolderPath);
 java.classpath.push(D4DfolderPath + '/java/lib/jsch-0.1.51.jar');
 java.classpath.push(D4DfolderPath + '/java/lib/commons-lang-2.3.jar');
-
 java.classpath.push(D4DfolderPath + '/java/classes');
-//java.classpath.push('/home/anshul/eclipse-workspace/catalyst-ssh/bin');
-
-
 var defaults = {
     port: 22,
     tempDir: appConfig.tempDir
@@ -38,11 +34,8 @@ var defaults = {
 
 
 function LogFileTail(logFile, onChangeCallback) {
-    //var tail = new Tail('/home/anshul/test');
     var tail = new Tail(logFile);
-
     tail.on("line", function(data) {
-        //logger.debug("FileData ==>", data);
         onChangeCallback(data);
     });
     tail.on("error", function(error) {
@@ -63,7 +56,7 @@ function JavaSSH(javaSSHInstance, options) {
     /**
      * @param: runlist, chef runlist
      */
-    this.execChefClient = function(runlist, overrideRunlist, jsonAttributes,lockFile, onComplete, onStdOut, onStdErr) {
+    this.execChefClient = function(runlist, overrideRunlist, jsonAttributes, lockFile, onComplete, onStdOut, onStdErr) {
         var stdOutLogFile = options.tempDir + uuid.v4();
         var stdErrLogFile = options.tempDir + uuid.v4();
         var tailStdOut = null;
@@ -93,7 +86,7 @@ function JavaSSH(javaSSHInstance, options) {
                     tailStdErr.startTailing();
                 }
 
-                java.callMethod(javaSSHInstance, 'execChefClient', runlist, overrideRunlist, jsonAttributes,lockFile, stdOutLogFile, stdErrLogFile, function(err, retCode) {
+                java.callMethod(javaSSHInstance, 'execChefClient', runlist, overrideRunlist, jsonAttributes, lockFile, stdOutLogFile, stdErrLogFile, function(err, retCode) {
                     // deleting log files
                     if (tailStdOut) {
                         tailStdOut.stopTailing();

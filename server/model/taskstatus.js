@@ -6,6 +6,7 @@
  */
 
 var taskStatusDao = require('./dao/taskstatusdao');
+var logger = require('_pr/logger')(module);
 
 function TaskStatusClass(taskId) {
 
@@ -77,37 +78,12 @@ function TaskStatusClass(taskId) {
             } else {
                 callback(null, taskStatus[0]);
             }
-            /*taskStatusDao.getStatusByTimestamp(taskId, timestamp, function(err, data) {
-                if (err) {
-                    logger.debug('unable to get taskstatus', err);
-                    if (typeof callback === 'function') {
-                        callback(err, null);
-                    }
-                    return;
-                }
-                logger.debug('statusList ==>', data);
-                taskStatus[0].statusList = [];
-                if (data.length) {
-                    taskStatus[0].statusList = data[0].statusList;
-                    //taskStatus = data;
-                }
-
-                if (typeof callback === 'function') {
-                    callback(null, taskStatus[0]);
-                }
-            });*/
-
         });
-
-
     };
 
     this.getTaskId = function() {
         return taskId;
     }
-
-
-
 }
 
 function createNewTask(callback) {
@@ -125,10 +101,6 @@ function createNewTask(callback) {
         callback(null, new TaskStatusClass(data._id));
     });
 }
-
-
-
-
 
 module.exports.getTaskStatus = function(taskId, callback) {
     if (taskId) {

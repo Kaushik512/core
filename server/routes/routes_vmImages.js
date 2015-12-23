@@ -20,6 +20,7 @@ var usersDao = require('../model/users.js');
 var configmgmtDao = require('../model/d4dmasters/configmgmt.js');
 var Cryptography = require('../lib/utils/cryptography');
 var appConfig = require('_pr/config');
+
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.all('/vmimages/*', sessionVerificationFunc);
     var cryptoConfig = appConfig.cryptoSettings;
@@ -39,10 +40,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var userName = req.body.userName.trim();
 
         var password = '';
-        if(req.body.password){
-          password = req.body.password.trim();    
+        if (req.body.password) {
+            password = req.body.password.trim();
         }
-        
+
         var orgId = req.body.orgId;
         var providerType = req.body.providertype.toLowerCase().trim();
 
@@ -51,31 +52,31 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
         // Field validation for undefined and empty
         if (typeof providerId === 'undefined' || providerId.length === 0) {
-            res.status(400).send( "{Please Enter ProviderId.}");
+            res.status(400).send("{Please Enter ProviderId.}");
             return;
         }
         if (typeof imageIdentifier === 'undefined' || imageIdentifier.length === 0) {
-            res.status(400).send( "{Please Enter ImageIdentifier.}");
+            res.status(400).send("{Please Enter ImageIdentifier.}");
             return;
         }
         if (typeof name === 'undefined' || name.length === 0) {
-            res.status(400).send( "{Please Enter Name.}");
+            res.status(400).send("{Please Enter Name.}");
             return;
         }
         if (typeof osType === 'undefined' || osType.length === 0) {
-            res.status(400).send( "{Please Enter OS Type.}");
+            res.status(400).send("{Please Enter OS Type.}");
             return;
         }
         if (typeof osName === 'undefined' || osName.length === 0) {
-            res.status(400).send( "{Please Enter OS Name.}");
+            res.status(400).send("{Please Enter OS Name.}");
             return;
         }
         if (typeof userName === 'undefined' || userName.length === 0) {
-            res.status(400).send( "{Please Enter OS UserName.}");
+            res.status(400).send("{Please Enter OS UserName.}");
             return;
         }
         if (typeof providerType === 'undefined' || providerType.length === 0) {
-            res.status(400).send( "{Please Enter OS Provider Type.}");
+            res.status(400).send("{Please Enter OS Provider Type.}");
             return;
         }
 
@@ -109,27 +110,27 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
             masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
                 if (err) {
-                    res.status(500).send( "Failed to fetch User.");
+                    res.status(500).send("Failed to fetch User.");
                 }
                 if (anUser) {
-                    if(providerType == "openstack" || providerType == "hppubliccloud" || providerType == "azure" || providerType == "vmware"){
-                    
-                        logger.debug('Provider Type',providerType);
+                    if (providerType == "openstack" || providerType == "hppubliccloud" || providerType == "azure" || providerType == "vmware") {
+
+                        logger.debug('Provider Type', providerType);
                         openstackProvider.getopenstackProviderById(providerId, function(err, aProvider) {
                             if (err) {
                                 logger.error(err);
-                                res.status(500).send( "Image creation failed due to Image name already exist.");
+                                res.status(500).send("Image creation failed due to Image name already exist.");
                                 return;
                             }
                             logger.debug("Returned Provider: ", aProvider);
                             vmimageData.vType = 'openstack';
-                            if(providerType == "azure"){
-                              vmimageData.vType = 'azure';
+                            if (providerType == "azure") {
+                                vmimageData.vType = 'azure';
                             }
                             VMImage.createNew(vmimageData, function(err, anImage) {
                                 if (err) {
-                                    logger.debug("err.....", err);
-                                    res.status(500).send( "Selected is already registered.");
+                                    logger.debug("err.", err);
+                                    res.status(500).send("Selected is already registered.");
                                     return;
                                 }
                                 logger.debug("Exit post() for /vmimages");
@@ -137,18 +138,17 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 return;
                             });
                         }); //end awsprovider
-                    }
-                    else{
+                    } else {
                         AWSProvider.getAWSProviderById(providerId, function(err, aProvider) {
                             if (err) {
                                 logger.error(err);
-                                res.status(500).send( "Image creation failed due to Image name already exist.");
+                                res.status(500).send("Image creation failed due to Image name already exist.");
                                 return;
                             }
                             logger.debug("Returned Provider: ", aProvider);
                             AWSKeyPair.getAWSKeyPairByProviderId(providerId, function(err, keyPair) {
                                 if (err) {
-                                    res.status(500).send( "Error getting to fetch Keypair.")
+                                    res.status(500).send("Error getting to fetch Keypair.")
                                 }
                                 var keys = [];
                                 keys.push(aProvider.accessKey);
@@ -166,7 +166,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     ec2.checkImageAvailability(vmimageData.imageIdentifier, function(err, data) {
                                         if (err) {
                                             logger.debug("Unable to describeImages from AWS.", err);
-                                            res.status(500).send( "Invalid Image Id.");
+                                            res.status(500).send("Invalid Image Id.");
                                             return;
                                         }
                                         if (data.Images.length > 0) {
@@ -175,7 +175,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                             VMImage.createNew(vmimageData, function(err, anImage) {
                                                 if (err) {
                                                     logger.error("err. ", err);
-                                                    res.status(500).send( "Selected is already registered.");
+                                                    res.status(500).send("Selected is already registered.");
                                                     return;
                                                 }
                                                 logger.debug("Exit post() for /vmimages");
@@ -183,7 +183,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                 return;
                                             });
                                         } else {
-                                            res.status(500).send( "The image is empty for amid: " + vmimageData.imageIdentifier);
+                                            res.status(500).send("The image is empty for amid: " + vmimageData.imageIdentifier);
                                             return;
                                         }
 
@@ -203,21 +203,21 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var loggedInUser = req.session.user.cn;
         masterUtil.getLoggedInUser(loggedInUser, function(err, anUser) {
             if (err) {
-                res.status(500).send( "Failed to fetch User.");
+                res.status(500).send("Failed to fetch User.");
             }
             if (!anUser) {
-                res.status(500).send( "Invalid User.");
+                res.status(500).send("Invalid User.");
             }
             if (anUser.orgname_rowid[0] === "") {
                 masterUtil.getAllActiveOrg(function(err, orgList) {
                     if (err) {
-                        res.status(500).send( 'Not able to fetch Orgs.');
+                        res.status(500).send('Not able to fetch Orgs.');
                     }
                     if (orgList) {
                         VMImage.getImagesForOrg(orgList, function(err, images) {
                             if (err) {
                                 logger.error(err);
-                                res.status(500).send( errorResponses.db.error);
+                                res.status(500).send(errorResponses.db.error);
                                 return;
                             }
                             if (images) {
@@ -232,13 +232,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             } else {
                 masterUtil.getOrgs(loggedInUser, function(err, orgList) {
                     if (err) {
-                        res.status(500).send( 'Not able to fetch Orgs.');
+                        res.status(500).send('Not able to fetch Orgs.');
                     }
                     if (orgList) {
                         VMImage.getImagesForOrg(orgList, function(err, images) {
                             if (err) {
                                 logger.error(err);
-                                res.status(500).send( errorResponses.db.error);
+                                res.status(500).send(errorResponses.db.error);
                                 return;
                             }
                             if (images) {
@@ -259,13 +259,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         logger.debug("Enter get() for /vmimages/%s", req.params.imageId);
         var imageId = req.params.imageId.trim();
         if (typeof imageId === 'undefined' || imageId.length === 0) {
-            res.status(500).send( "Please Enter ImageId.");
+            res.status(500).send("Please Enter ImageId.");
             return;
         }
         VMImage.getImageById(imageId, function(err, anImage) {
             if (err) {
                 logger.error(err);
-                res.status(500).send( errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (anImage) {
@@ -295,32 +295,32 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var password = req.body.password.trim(); //only for azure provider
 
         if (typeof providerId === 'undefined' || providerId.length === 0) {
-            res.status(400).send( "{Please Enter ProviderId.}");
+            res.status(400).send("{Please Enter ProviderId.}");
             return;
         }
         if (typeof imageIdentifier === 'undefined' || imageIdentifier.length === 0) {
-            res.status(400).send( "{Please Enter ImageIdentifier.}");
+            res.status(400).send("{Please Enter ImageIdentifier.}");
             return;
         }
         if (typeof name === 'undefined' || name.length === 0) {
-            res.status(400).send( "{Please Enter Name.}");
+            res.status(400).send("{Please Enter Name.}");
             return;
         }
 
         if (typeof imageId === 'undefined' || imageId.length === 0) {
-            res.status(400).send( "{Please Enter ImageId.}");
+            res.status(400).send("{Please Enter ImageId.}");
             return;
         }
         if (typeof osType === 'undefined' || osType.length === 0) {
-            res.status(400).send( "{Please Enter OS Type.}");
+            res.status(400).send("{Please Enter OS Type.}");
             return;
         }
         if (typeof osName === 'undefined' || osName.length === 0) {
-            res.status(400).send( "{Please Enter OS Name.}");
+            res.status(400).send("{Please Enter OS Name.}");
             return;
         }
         if (typeof userName === 'undefined' || userName.length === 0) {
-            res.status(400).send( "{Please Enter OS UserName.}");
+            res.status(400).send("{Please Enter OS UserName.}");
             return;
         }
         var vmimageData = {
@@ -351,27 +351,27 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
             masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
                 if (err) {
-                    res.status(500).send( "Failed to fetch User.");
+                    res.status(500).send("Failed to fetch User.");
                 }
                 if (anUser) {
-                    if(providerType == "openstack" || providerType == "hppubliccloud" || providerType == "azure" || providerType == "vmware"){
-                        logger.debug('Provider Type',providerType);
+                    if (providerType == "openstack" || providerType == "hppubliccloud" || providerType == "azure" || providerType == "vmware") {
+                        logger.debug('Provider Type', providerType);
                         VMImage.getImageById(imageId, function(err, anImage) {
                             if (err) {
                                 logger.error(err);
-                                res.status(500).send( errorResponses.db.error);
+                                res.status(500).send(errorResponses.db.error);
                                 return;
                             }
                             vmimageData.vType = 'openstack';
-                            
-                            if(providerType == 'azure'){
+
+                            if (providerType == 'azure') {
                                 vmimageData.vType = 'azure';
                             }
 
                             VMImage.updateImageById(imageId, vmimageData, function(err, updateCount) {
                                 if (err) {
                                     logger.error(err);
-                                    res.status(500).send( errorResponses.db.error);
+                                    res.status(500).send(errorResponses.db.error);
                                     return;
                                 }
                                 if (updateCount) {
@@ -384,18 +384,17 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 }
                             });
                         });
-                    }
-                    else{
+                    } else {
                         AWSProvider.getAWSProviderById(providerId, function(err, aProvider) {
                             if (err) {
                                 logger.error(err);
-                                res.status(500).send( "Image creation failed due to Image name already exist.");
+                                res.status(500).send("Image creation failed due to Image name already exist.");
                                 return;
                             }
                             logger.debug("Returned Provider: ", aProvider);
                             AWSKeyPair.getAWSKeyPairByProviderId(providerId, function(err, keyPair) {
                                 if (err) {
-                                    res.status(500).send( "Error getting to fetch Keypair.")
+                                    res.status(500).send("Error getting to fetch Keypair.")
                                 }
                                 var keys = [];
                                 keys.push(aProvider.accessKey);
@@ -413,13 +412,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     ec2.checkImageAvailability(vmimageData.imageIdentifier, function(err, data) {
                                         if (err) {
                                             logger.debug("Unable to describeImages from AWS.", err);
-                                            res.status(500).send( "Invalid Image Id.");
+                                            res.status(500).send("Invalid Image Id.");
                                             return;
                                         }
                                         VMImage.getImageById(imageId, function(err, anImage) {
                                             if (err) {
                                                 logger.error(err);
-                                                res.status(500).send( errorResponses.db.error);
+                                                res.status(500).send(errorResponses.db.error);
                                                 return;
                                             }
                                             if (anImage) {
@@ -428,7 +427,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                             VMImage.updateImageById(imageId, vmimageData, function(err, updateCount) {
                                                 if (err) {
                                                     logger.error(err);
-                                                    res.status(500).send( errorResponses.db.error);
+                                                    res.status(500).send(errorResponses.db.error);
                                                     return;
                                                 }
                                                 if (updateCount) {
@@ -458,7 +457,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var permissionto = 'delete';
         var imageId = req.params.imageId.trim();
         if (typeof imageId === 'undefined' || imageId.length === 0) {
-            res.status(500).send( "Please Enter ImageId.");
+            res.status(500).send("Please Enter ImageId.");
             return;
         }
         usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
@@ -477,7 +476,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
             masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
                 if (err) {
-                    res.status(500).send( "Failed to fetch User.");
+                    res.status(500).send("Failed to fetch User.");
                     return;
                 }
                 if (anUser) {
@@ -494,7 +493,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         VMImage.removeImageById(req.params.imageId, function(err, deleteCount) {
                             if (err) {
                                 logger.error(err);
-                                res.status(500).send( errorResponses.db.error);
+                                res.status(500).send(errorResponses.db.error);
                                 return;
                             }
                             if (deleteCount) {
@@ -517,13 +516,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         logger.debug("Enter get() for /vmimages/providers/%s", req.params.providerId);
         var providerId = req.params.providerId.trim();
         if (typeof providerId === 'undefined' || providerId.length === 0) {
-            res.status(500).send( "Please Enter providerId.");
+            res.status(500).send("Please Enter providerId.");
             return;
         }
         VMImage.getImageByProviderId(providerId, function(err, images) {
             if (err) {
                 logger.error(err);
-                res.status(500).send( errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (images) {

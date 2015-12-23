@@ -15,8 +15,6 @@ var uniqueValidator = require('mongoose-unique-validator');
 
 var Schema = mongoose.Schema;
 
-
-
 var AutoScaleInstanceSchema = new Schema({
     autoScaleResourceId: {
         type: String,
@@ -29,11 +27,6 @@ var AutoScaleInstanceSchema = new Schema({
         trim: true,
     }
 });
-
-
-
-
-
 
 // Static methods :- 
 
@@ -92,7 +85,6 @@ AutoScaleInstanceSchema.statics.removeById = function(id, callback) {
             callback(err, null);
             return;
         }
-        //logger.debug('data ==>', data);
         callback(null, deleteCount);
 
     });
@@ -114,15 +106,10 @@ AutoScaleInstanceSchema.statics.removeByAutoScaleResourceAndInstanceId = functio
             callback(err, null);
             return;
         }
-        //logger.debug('data ==>', data);
         callback(null, deleteCount);
 
     });
 };
-
-
-
-
 
 
 var AutoScaleInstance = mongoose.model('AutoScaleInstance', AutoScaleInstanceSchema);

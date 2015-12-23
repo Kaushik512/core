@@ -73,7 +73,7 @@ var vmwareInstanceBlueprintSchema = new Schema({
     },
     instanceUsername: {
         type: String
-        //required: true
+            //required: true
     },
     infraMangerType: String,
     infraManagerId: String,
@@ -154,9 +154,6 @@ vmwareInstanceBlueprintSchema.methods.getCloudProviderData = function() {
     };
 };
 
-
-
-
 // static methods
 vmwareInstanceBlueprintSchema.statics.createNew = function(awsData) {
     var self = this;
@@ -179,8 +176,6 @@ vmwareInstanceBlueprintSchema.statics.createNew = function(awsData) {
         dataStore: awsData.dataStore,
         cloudProviderType: awsData.cloudProviderType
     };
-    logger.debug('--------------->>>>>' + JSON.stringify(awsData));
-
     var awsInstanceBlueprint = new self(awsData);
 
     return awsInstanceBlueprint;

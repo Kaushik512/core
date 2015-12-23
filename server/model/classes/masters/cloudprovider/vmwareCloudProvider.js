@@ -19,7 +19,7 @@ var Schema = mongoose.Schema;
 
 
 var vmwareProviderSchema = new Schema({
-    id:{
+    id: {
         type: Number,
         required: true
     },
@@ -53,7 +53,7 @@ var vmwareProviderSchema = new Schema({
         required: true,
         trim: true
     },
-    
+
     orgId: {
         type: [String],
         required: true,
@@ -84,7 +84,7 @@ vmwareProviderSchema.statics.createNew = function(providerData, callback) {
 vmwareProviderSchema.statics.getvmwareProviders = function(callback) {
     logger.debug("Enter getvmwareProviders");
     this.find({
-        "id" : 9
+        "id": 9
     }, function(err, providers) {
         if (err) {
             logger.error(err);
@@ -104,15 +104,17 @@ vmwareProviderSchema.statics.getvmwareProviders = function(callback) {
     });
 };
 
-vmwareProviderSchema.statics.getvmwareProvidersForOrg = function(orgList,callback) {
+vmwareProviderSchema.statics.getvmwareProvidersForOrg = function(orgList, callback) {
     logger.debug("Enter getAWSProvidersForOrg");
     var orgIds = [];
-        for(var x=0;x<orgList.length;x++){
-            orgIds.push(orgList[x]._id);
-        }
-        logger.debug("org id: ",orgIds);
+    for (var x = 0; x < orgList.length; x++) {
+        orgIds.push(orgList[x]._id);
+    }
+    logger.debug("org id: ", orgIds);
     this.find({
-        orgId : {$in:orgIds}
+        orgId: {
+            $in: orgIds
+        }
     }, function(err, providers) {
         if (err) {
             logger.error(err);
@@ -155,7 +157,7 @@ vmwareProviderSchema.statics.getvmwareProviderById = function(providerId, callba
     });
 };
 
-vmwareProviderSchema.statics.getvmwareProviderByName = function(providerName,orgId, callback) {
+vmwareProviderSchema.statics.getvmwareProviderByName = function(providerName, orgId, callback) {
     logger.debug("Enter getvmwareProviderById");
     this.find({
         "providerName": providerName,
@@ -227,11 +229,11 @@ vmwareProviderSchema.statics.removevmwareProviderById = function(providerId, cal
 };
 
 
-vmwareProviderSchema.statics.getvmwareProvidersByOrgId = function(orgId,callback) {
+vmwareProviderSchema.statics.getvmwareProvidersByOrgId = function(orgId, callback) {
     logger.debug("Enter getvmwareProvidersByOrgId");
-        logger.debug("org id: ",orgId);
+    logger.debug("org id: ", orgId);
     this.find({
-        orgId : orgId
+        orgId: orgId
     }, function(err, providers) {
         if (err) {
             logger.error(err);

@@ -19,24 +19,17 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
     var getvmwareprovider = function(providerid, callback) {
 
-        var host = "192.168.102.12";
-        var username = "admin";
-        var password = "ADMIN_PASS";
-        var dc = "DC1";
-        var servicehost = "http://192.168.102.43:3000";
         var vmwareconfig = {
-            host: host,
-            username: username,
-            password: password,
-            dc:dc,
-            serviceHost:servicehost
+            host: "",
+            username: "",
+            password: "",
+            dc:"",
+            serviceHost:""
         };
 
         vmwareCloudProvider.getvmwareProviderById(providerid, function(err, data) {
-
             logger.debug('IN getvmwareProviderById: data: ');
             logger.debug(JSON.stringify(data));
-            logger.debug('------------------------');
             if(data)
             {
                 vmwareconfig.host = data.host;
@@ -51,14 +44,12 @@ module.exports.setRoutes = function(app, verificationFunc) {
             else{
                 vmwareconfig = null;
             }
-            //  data.tenantName = "demo";
             callback(null, vmwareconfig);
         });
 
     }
 
 	app.get('/vmware/:providerid/datastores', function(req, res) {
-
         logger.debug('Inside vmware get datastores');
         getvmwareprovider(req.params.providerid,function(err,vmwareconfig){
             if(vmwareconfig){
@@ -124,7 +115,4 @@ module.exports.setRoutes = function(app, verificationFunc) {
             res.send('400','No Action defined');
         }
     });
-
-	
-
 }

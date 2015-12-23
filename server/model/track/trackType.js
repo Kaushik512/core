@@ -42,7 +42,7 @@ TrackTypeSchema.statics.createNew = function(trackTypeData, callback) {
             callback(err, null);
         }
         if (trackType) {
-            logger.debug("trackTypeData",JSON.stringify(trackTypeData));
+            logger.debug("trackTypeData", JSON.stringify(trackTypeData));
             logger.debug("Creating Track: ", JSON.stringify(trackType));
             callback(null, trackType);
         }
@@ -51,8 +51,6 @@ TrackTypeSchema.statics.createNew = function(trackTypeData, callback) {
 
 // Update all Track informations.
 TrackTypeSchema.statics.updateTrack = function(trackTypeId, trackTypeData, callback) {
-
-    //logger.debug("Update Track" , JSON.stringify(trackTypeData));
     logger.debug("Update Track Id", trackTypeId);
     logger.debug(trackTypeData.description);
     this.update({
@@ -62,14 +60,13 @@ TrackTypeSchema.statics.updateTrack = function(trackTypeId, trackTypeData, callb
             type: trackTypeData.type,
             description: trackTypeData.description
         }
-    },{
+    }, {
         upsert: false
     }, function(err, updateCount) {
         if (err) {
             logger.debug("Got error while creating trackType: ", err);
             callback(err, null);
         }
-       // logger.debug('updateCount:', updateCount);
         callback(null, updateCount);
 
     });
@@ -94,10 +91,10 @@ TrackTypeSchema.statics.getTrackTypeById = function(trackTypeId, callback) {
 
 // Remove Track informations.
 TrackTypeSchema.statics.removeTracks = function(trackTypeId, callback) {
-    logger.debug("trackTypeId",trackTypeId);
+    logger.debug("trackTypeId", trackTypeId);
     this.remove({
         "_id": trackTypeId
-    },  function(err, trackType) {
+    }, function(err, trackType) {
         if (err) {
             logger.debug("Got error while removing Tracks: ", err);
             callback(err, null);

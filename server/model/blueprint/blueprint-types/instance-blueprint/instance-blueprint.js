@@ -162,8 +162,6 @@ InstanceBlueprintSchema.statics.createNew = function(data) {
         infraManagerId: data.infraManagerId,
         infraManagerData: infraManagerBlueprint,
     });
-
-
     return instanceBlueprint;
 };
 

@@ -54,11 +54,9 @@ var Nexus = function() {
                     password: nexus[0].nexuspassword
                 };
                 client = new Client(options_auth);
-                //var nexusUrl = nexus[0].hostname + '/service/local/all_repositories';
                 var nexusUrl = nexus[0].hostname + '/service/local/repositories';
                 client.registerMethod("jsonMethod", nexusUrl, "GET");
                 var reqSubmit = client.methods.jsonMethod(function(data, response) {
-                    //logger.debug("response: ", response);
                     var json = parser.toJson(data);
                     logger.debug("data: ", JSON.stringify(json));
                     callback(null, json);
@@ -84,15 +82,13 @@ var Nexus = function() {
                     password: nexus[0].nexuspassword
                 };
                 client = new Client(options_auth);
-                //var nexusUrl = nexus[0].hostname + '/service/local/data_index?q=org.javaee7.sample';
                 var nexusUrl = nexus[0].hostname + '/service/local/data_index?q=' + nexus[0].groupid;
                 client.registerMethod("jsonMethod", nexusUrl, "GET");
                 client.methods.jsonMethod(function(data, response) {
-                    //logger.debug("response: ", response);
                     var json = parser.toJson(data);
                     logger.debug("data: ", typeof json);
                     json = JSON.parse(json);
-                    logger.debug("Parsed json: ",JSON.stringify(json));
+                    logger.debug("Parsed json: ", JSON.stringify(json));
                     var artifactList = [];
                     if (json) {
                         var artifacts = json['search-results'].data.artifact;
@@ -160,14 +156,13 @@ var Nexus = function() {
                                     }
                                     var lines = fileData.trim().split('\n');
                                     var lastLine = lines.splice(-1)[0];
-                                    logger.debug("======= ",JSON.stringify(lines));
-                                    if(lastLine.indexOf("url    ") === -1){
-                                    	fileData=fileData+'\r\n'+reqBody.url;
-                                    }else{
-                                    	lines.push(reqBody.url);
-                                    	fileData = lines.join('\n');
+                                    if (lastLine.indexOf("url    ") === -1) {
+                                        fileData = fileData + '\r\n' + reqBody.url;
+                                    } else {
+                                        lines.push(reqBody.url);
+                                        fileData = lines.join('\n');
                                     }
-                                    logger.debug("File Data: ",fileData);
+                                    logger.debug("File Data: ", fileData);
                                     fs.writeFile(chefServer.chefRepoLocation + '.chef/knife.rb', fileData, function(err) {
                                         if (err) {
                                             logger.debug("Failed to update kinfe.rb: ", err);

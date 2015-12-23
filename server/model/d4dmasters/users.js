@@ -6,11 +6,9 @@
  */
 
 var d4dModel = require('./d4dmastersmodel.js');
-
-
+var logger = require('_pr/logger')(module);
 
 function cusers() {
-
 	this.getUserRole = function(callback,username,req) {
 		var userrole;
 		d4dModel.findOne({
@@ -28,7 +26,6 @@ function cusers() {
 					for (var j = 0; j < itm.field.length; j++) {
 						logger.debug(itm.field[j]["name"] == 'loginname');
 						if (itm.field[j]["name"] == 'loginname') {
-							//logger.debug("found:" + itm.field[j]["values"].value);
 							if (itm.field[j]["values"].value == username) {
 								logger.debug("found username: " + i + " -- " + itm.field[j]["values"].value);
 								hasOrg = true;
@@ -43,13 +40,7 @@ function cusers() {
 							}
 						}
 
-						// logger.debug();
 					}
-
-					/*JSON.parse(itm).findOne({ name: req.params.fieldname }, function (err, itmjson) {
-                    logger.debug(" Innner: " + JSON.stringify(itmjson));
-                });*/
-
 				});
 
 

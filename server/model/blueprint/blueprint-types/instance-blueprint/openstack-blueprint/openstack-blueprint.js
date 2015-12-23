@@ -57,13 +57,13 @@ var openstackInstanceBlueprintSchema = new Schema({
     subnet: {
         type: String,
         required: true,
-         trim: true
+        trim: true
     },
     instanceOS: {
         type: String,
         // required: true
     },
-    instanceCount:{
+    instanceCount: {
         type: String,
     },
     instanceImageName: {
@@ -72,7 +72,7 @@ var openstackInstanceBlueprintSchema = new Schema({
     },
     instanceUsername: {
         type: String
-        //required: true
+            //required: true
     },
     infraMangerType: String,
     infraManagerId: String,
@@ -150,18 +150,13 @@ openstackInstanceBlueprintSchema.methods.getCloudProviderData = function() {
     };
 };
 
-
-
-
 // static methods
 openstackInstanceBlueprintSchema.statics.createNew = function(awsData) {
     var self = this;
     logger.debug('In openstackInstanceBlueprintSchema createNew');
-   
-
     var infraManagerBlueprint = CHEFInfraBlueprint.createNew({
-            runlist: awsData.runlist
-        });
+        runlist: awsData.runlist
+    });
     awsData.infraManagerData = infraManagerBlueprint;
     awsData.infraMangerType = "chef";
     awsData.infraManagerId = awsData.infraManagerId;

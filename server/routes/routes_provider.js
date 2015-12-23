@@ -1952,7 +1952,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     });
                 }
             });
-        }); //
+        });
     });
 
 
@@ -2386,7 +2386,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     });
                 }
             });
-        }); //
+        });
     });
 
     // Delete a particular AWS Provider.

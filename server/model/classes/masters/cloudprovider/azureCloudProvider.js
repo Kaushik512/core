@@ -49,11 +49,6 @@ var azurecloudProviderSchema = new Schema({
         required: true,
         trim: true
     },
-    /*    storageAccount: {
-        type: String,
-        required: true,
-        trim : true
-    },*/
     orgId: {
         type: [String],
         required: true,
@@ -95,7 +90,7 @@ azurecloudProviderSchema.statics.createNew = function(req, providerData, callbac
 
             if (err) {
                 logger.debug("Unable to save pem files.");
-                res.status(500).send( "Unable to save pem files.");
+                res.status(500).send("Unable to save pem files.");
                 return;
             }
 
@@ -110,7 +105,7 @@ azurecloudProviderSchema.statics.createNew = function(req, providerData, callbac
             ProviderUtil.saveAwsPemFiles(keyPair, req.files.azurekey, function(err, flag) {
                 if (err) {
                     logger.debug("Unable to save pem files.");
-                    res.status(500).send( "Unable to save pem files.");
+                    res.status(500).send("Unable to save pem files.");
                     return;
                 }
 
@@ -233,7 +228,6 @@ azurecloudProviderSchema.statics.updateAzureCloudProviderById = function(provide
             id: providerData.id,
             providerName: providerData.providerName,
             subscriptionId: providerData.azureSubscriptionId,
-            //storageAccount: providerData.azureStorageAccount,
             pemFileName: providerData.pemFileName,
             keyFileName: providerData.keyFileName,
             providerType: providerData.providerType,

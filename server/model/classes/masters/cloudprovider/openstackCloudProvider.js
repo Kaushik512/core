@@ -19,7 +19,7 @@ var Schema = mongoose.Schema;
 
 
 var openstackProviderSchema = new Schema({
-    id:{
+    id: {
         type: Number,
         required: true
     },
@@ -48,7 +48,7 @@ var openstackProviderSchema = new Schema({
         required: true,
         trim: true
     },
-    serviceendpoints:{
+    serviceendpoints: {
         compute: {
             type: String,
             trim: true
@@ -80,10 +80,10 @@ var openstackProviderSchema = new Schema({
         required: true,
         trim: true
     },
-    keyname:{
+    keyname: {
         type: String,
         required: true,
-        trim : true
+        trim: true
     },
     projectname: {
         type: String,
@@ -100,16 +100,16 @@ var openstackProviderSchema = new Schema({
 // Static methods :- 
 
 // creates a new Provider
-openstackProviderSchema.statics.createNew = function(req,providerData, callback) {
+openstackProviderSchema.statics.createNew = function(req, providerData, callback) {
     logger.debug("Enter createNew");
     var providerObj = providerData;
     var that = this;
     logger.debug(JSON.stringify(providerObj));
 
     var provider = new that(providerObj);
-    
+
     var inFiles = req.files.openstackinstancepem;
-     
+
     logger.debug('Files found: ' + req.files.openstackinstancepem);
 
     provider.save(function(err, aProvider) {
@@ -120,11 +120,11 @@ openstackProviderSchema.statics.createNew = function(req,providerData, callback)
         }
         var keyPair = {
             _id: aProvider['_id']
-         }
+        }
         ProviderUtil.saveAwsPemFiles(keyPair, req.files.openstackinstancepem, function(err, flag) {
             if (err) {
                 logger.debug("Unable to save pem files.");
-                res.status(500).send( "Unable to save pem files.");
+                res.status(500).send("Unable to save pem files.");
                 return;
             }
         });
@@ -139,7 +139,7 @@ openstackProviderSchema.statics.createNew = function(req,providerData, callback)
 openstackProviderSchema.statics.getopenstackProviders = function(callback) {
     logger.debug("Enter getopenstackProviders");
     this.find({
-        "id" : 9
+        "id": 9
     }, function(err, providers) {
         if (err) {
             logger.error(err);
@@ -159,15 +159,17 @@ openstackProviderSchema.statics.getopenstackProviders = function(callback) {
     });
 };
 
-openstackProviderSchema.statics.getopenstackProvidersForOrg = function(orgList,callback) {
+openstackProviderSchema.statics.getopenstackProvidersForOrg = function(orgList, callback) {
     logger.debug("Enter getAWSProvidersForOrg");
     var orgIds = [];
-        for(var x=0;x<orgList.length;x++){
-            orgIds.push(orgList[x]._id);
-        }
-        logger.debug("org id: ",orgIds);
+    for (var x = 0; x < orgList.length; x++) {
+        orgIds.push(orgList[x]._id);
+    }
+    logger.debug("org id: ", orgIds);
     this.find({
-        orgId : {$in:orgIds}
+        orgId: {
+            $in: orgIds
+        }
     }, function(err, providers) {
         if (err) {
             logger.error(err);
@@ -210,7 +212,7 @@ openstackProviderSchema.statics.getopenstackProviderById = function(providerId, 
     });
 };
 
-openstackProviderSchema.statics.getopenstackProviderByName = function(providerName,orgId, callback) {
+openstackProviderSchema.statics.getopenstackProviderByName = function(providerName, orgId, callback) {
     logger.debug("Enter getopenstackProviderById");
     this.find({
         "providerName": providerName,
@@ -249,11 +251,11 @@ openstackProviderSchema.statics.updateopenstackProviderById = function(providerI
             tenantname: providerData.tenantname,
             providerType: providerData.providerType,
             keyname: providerData.keyname,
-            serviceendpoints:{
+            serviceendpoints: {
                 compute: providerData.serviceendpoints.compute,
                 network: providerData.serviceendpoints.network,
                 image: providerData.serviceendpoints.image,
-                ec2:providerData.serviceendpoints.ec2 ,
+                ec2: providerData.serviceendpoints.ec2,
                 identity: providerData.serviceendpoints.identity
             }
         }
@@ -289,11 +291,11 @@ openstackProviderSchema.statics.removeopenstackProviderById = function(providerI
     });
 };
 
-openstackProviderSchema.statics.getopenstackProvidersByOrgId = function(orgId,callback) {
+openstackProviderSchema.statics.getopenstackProvidersByOrgId = function(orgId, callback) {
     logger.debug("Enter getopenstackProvidersByOrgId");
-        logger.debug("org id: ",orgId);
+    logger.debug("org id: ", orgId);
     this.find({
-        orgId : orgId
+        orgId: orgId
     }, function(err, providers) {
         if (err) {
             logger.error(err);

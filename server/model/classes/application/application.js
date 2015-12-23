@@ -144,15 +144,6 @@ ApplicationSchema.methods.addAppInstance = function(appInstanceData, callback) {
             callback(err, null);
             return;
         }
-        /*application.getNodes(function(err, nodes) {
-            if (err) {
-                logger.error(err);
-                callback(err, null);
-                return;
-            }
-            application.nodes = nodes;
-            callback(null, application);
-        });*/
         callback(null, appInstance);
     });
 };
@@ -189,8 +180,6 @@ ApplicationSchema.methods.removeAppInstance = function(appInstanceId, callback) 
         callback(null, appInstance);
     });
 };
-
-
 
 ApplicationSchema.methods.getAppInstance = function(appInstanceId) {
     var appInstances = this.appInstances;
@@ -342,34 +331,8 @@ ApplicationSchema.statics.getApplicationById = function(applicationId, callback)
             callback(err, null);
             return;
         }
-        //logger.debug('data ==>', data);
         if (applications.length) {
             var application = applications[0];
-            /*if (!(application.appInstances && applications.length)) {
-                callback(err, application);
-                return;
-            }
-            var count = 0;
-
-            function getAppInstancesNodes(appInstance) {
-                appInstance.getNodes(function(err, nodes) {
-                    count++;
-                    if (err) {
-                        callback(err, null);
-                        return;
-                    }
-                    appInstance.nodes = nodes;
-                    if (count < application.appInstances.length) {
-                        getAppInstancesNodes(application.appInstances[count]);
-                    } else {
-                        callback(null, application);
-                    }
-
-                });
-
-            }
-            getAppInstancesNodes(application.appInstances[count]);
-            */
             callback(null, application);
         } else {
             callback(null, null);

@@ -73,7 +73,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     azureCloud.getNetworks(function(err, networks) {
                         if (err) {
                             logger.error('azurecloud networks fetch error', err);
-                            res.status(500).send( err);
+                            res.status(500).send(err);
                             return;
                         }
                         var json = xml2json.toJson(networks);
@@ -152,7 +152,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     azureCloud.getLocations(function(err, locations) {
                         if (err) {
                             logger.error('azurecloud locations fetch error', err);
-                            res.status(500).send( err);
+                            res.status(500).send(err);
                             return;
                         }
                         var json = xml2json.toJson(locations);

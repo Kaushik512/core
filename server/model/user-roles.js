@@ -6,6 +6,7 @@
  */
 
 var mongoose = require('mongoose');
+var logger = require('_pr/logger')(module);
 
 var Schema = mongoose.Schema;
 

@@ -60,24 +60,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
             logger.debug('Something went wrong on req!!', err.request.options);
             res.send('402');
         });
-
-        // Old code need to remove after verified 
-        //var cmd = 'curl --raw -L --user ' + req.params.username + ':' + req.params.password + ' https://index.docker.io/v1/users';
-        /*var cmd = 'curl --raw -L --user ' + userName + ':' + password + ' https://index.docker.io/v1/users';
-        var curl = new Curl();
-        curl.executecurl(cmd, function(err, stdout) {
-            if (err) {
-                res.end(err);
-            }
-            if (stdout) {
-                if (stdout.indexOf('OK') > 0) {
-                    res.end('200');
-                } else {
-                    logger.debug("No User");
-                    res.end('402');
-                }
-            }
-        });*/
     });
 
     // Used npm library instead of curl to check ip is alive or not: Gobinda Das
@@ -92,28 +74,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
             res.send('Alive');
         });
-
-        // Old code need to remove after verified which port is open default?
-        /*var cmd = 'ping -c 1 -w 1 ' + req.params.ip;
-        var curl = new Curl();
-        logger.debug("Pinging Node to check if alive :" + cmd);
-        curl.executecurl(cmd, function(err, stdout) {
-            if (err) {
-                res.end(err);
-            }
-            if (stdout) {
-                if (stdout.indexOf('1 received') > 0) {
-                    res.end('Alive');
-                    logger.debug("Exit get() for /d4dmasters/instanceping/%s", req.params.ip);
-                    return;
-
-                } else {
-                    logger.debug('Not Found');
-                    res.end('Not Alive');
-                    return;
-                }
-            }
-        });*/
     });
 
     app.get('/d4dmasters/getdockertags/:repopath/:dockerreponame', function(req, res) {
@@ -129,7 +89,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 logger.debug("Docker Repopath ->%s", req.params.repopath);
 
                 // Tried with http rest call but api did not working from docker side, so commenting and keeping old code: Gobinda
-                
+
                 var userName = dockerRepo.dockeruserid;
                 var password = dockerRepo.dockerpassword;
                 var dockerUrl = 'https://index.docker.io/v1/repositories/' + req.params.repopath.replace(/\$\$/g, '/') + '/tags';
@@ -141,7 +101,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 client.registerMethod("jsonMethod", dockerUrl, "GET");
                 var reqSubmit = client.methods.jsonMethod(function(data, response) {
                     logger.debug("response: ", response);
-                    //logger.debug("data: ", data);
                     res.send(JSON.stringify(response));
                     return;
                 });
@@ -150,34 +109,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 reqSubmit.on('error', function(err) {
                     logger.debug('Something went wrong on req!!', err.request.options);
                     res.send('402');
-                }); 
+                });
 
                 // end rest call
-
-                /*var cmd = '';
-                //Below is for public repository
-                cmd = 'curl -v -H "Accept: application/json" -X GET https://' + dockerRepo.dockeruserid + ':' + dockerRepo.dockerpassword + '@index.docker.io/v1/repositories/' + req.params.repopath.replace(/\$\$/g, '/') + '/tags';
-                //Below is for private repository
-                //cmd = 'curl --user ' + dockerRepo.dockeruserid + ':' + dockerRepo.dockerpassword + ' -X GET https://index.docker.io/v1/' + dockerRepo.dockerrepopath + '/' + req.params.repopath +  '/tags';
-                logger.debug("executing - %s", cmd);
-                var curl = new Curl();
-                curl.executecurl(cmd, function(err, stdout) {
-                    if (err) {
-                        logger.error("Error occured: ", err);
-                        res.end(err);
-                    }
-                    if (stdout) {
-                        if (stdout.indexOf('404:') > 0) {
-                            logger.debug("No Data");
-                            res.end('402');
-
-                        } else {
-                            logger.debug("Received JSON");
-                            logger.debug("Exit get() for /d4dmasters/getdockertags/%s/%s", req.params.repopath, req.params.dockerreponame);
-                            res.end(stdout);
-                        }
-                    }
-                });*/
 
             } else {
                 logger.error("Error:", err);
@@ -2246,7 +2180,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 }
                                 if (d4dMasterJson) {
                                     rowtoedit = JSON.parse(JSON.stringify(d4dMasterJson));
-                                    logger.debug('<<<<< Reached here %s', (rowtoedit == null));
+                                    logger.debug('Reached here %s', (rowtoedit == null));
                                 }
                                 var frmkeys = Object.keys(bodyJson);
                                 var orgid = '';
@@ -2928,7 +2862,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         db.on('error', console.error.bind(console, 'connection error:'));
         logger.debug(JSON.stringify(projField));
         db.once('open', function callback() {
-        logger.debug('in once');
+            logger.debug('in once');
         });
         logger.debug('received request %s', req.params.orgname);
         d4dModel.findOne({

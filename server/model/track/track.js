@@ -142,7 +142,6 @@ TrackSchema.statics.getTrackByType = function(trackType, callback) {
             return;
         }
         if (tracks) {
-            //logger.debug("Got Track: ", JSON.stringify(tracks));
             callback(null, tracks);
         }
     });

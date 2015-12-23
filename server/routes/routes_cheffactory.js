@@ -7,8 +7,6 @@
 
 // This file act as a Controller which contains chef-factory related all end points.
 
-
-
 var masterUtil = require('_pr/lib/utils/masterUtil.js');
 var ChefFactory = require('_pr/model/chef-factory');
 var longJobTracker = require('_pr/model/taskstatus');
@@ -22,7 +20,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
         masterUtil.getCongifMgmtsById(req.params.serverId, function(err, infraManagerDetails) {
             if (err) {
-                res.status(500).send( {
+                res.status(500).send({
                     message: "Server Behaved Unexpectedly"
                 });
                 return;
@@ -58,7 +56,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
         var chefFactory = req.chefFactory;
         chefFactory.sync(function(err, cookbooks) {
             if (err) {
-                res.status(500).send( {
+                res.status(500).send({
                     message: "Server Behaved Unexpectedly"
                 });
                 return;
@@ -72,7 +70,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
         var chefFactory = req.chefFactory;
         chefFactory.getCookbookData(path, function(err, cookbookData) {
             if (err) {
-                res.status(500).send( {
+                res.status(500).send({
                     message: "Server Behaved Unexpectedly"
                 });
                 return;
@@ -94,7 +92,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 if (err.stdErrMsg) {
                     errRespJson.stdErrMsg = err.stdErrMsg;
                 }
-                res.status(500).send( errRespJson);
+                res.status(500).send(errRespJson);
                 return;
             }
             res.send(200);
@@ -104,10 +102,10 @@ module.exports.setRoutes = function(app, verificationFunc) {
     app.get('/cheffactory/:serverId/roles/', verificationFunc, function(req, res) {
         var path = req.query.path;
         var chefFactory = req.chefFactory;
-        logger.debug('path ===> ',path);
+        logger.debug('path ===> ', path);
         chefFactory.getRoleData(path, function(err, cookbookData) {
             if (err) {
-                res.status(500).send( {
+                res.status(500).send({
                     message: "Server Behaved Unexpectedly"
                 });
                 return;
@@ -129,7 +127,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 if (err.stdErrMsg) {
                     errRespJson.stdErrMsg = err.stdErrMsg;
                 }
-                res.status(500).send( errRespJson);
+                res.status(500).send(errRespJson);
                 return;
             }
             res.send(200);
@@ -142,7 +140,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
         var chefFactory = req.chefFactory;
         chefFactory.getFactoryItems(function(err, factoryItems) {
             if (err) {
-                res.status(500).send( {
+                res.status(500).send({
                     message: "Server Behaved Unexpectedly"
                 });
                 return;
@@ -154,7 +152,6 @@ module.exports.setRoutes = function(app, verificationFunc) {
     app.post('/cheffactory/:serverId/factoryItems/sync', verificationFunc, function(req, res) {
         var path = req.query.path;
         var chefFactory = req.chefFactory;
-
         var cookbookCount = 0;
         var roleCount = 0;
         var cookbooks = req.body.cookbooks;
@@ -162,13 +159,11 @@ module.exports.setRoutes = function(app, verificationFunc) {
         var jobTracker;
 
         if (!((cookbooks && cookbooks.length) || (roles && roles.length))) {
-            res.status(400).send( {
+            res.status(400).send({
                 message: "cookbooks/roles list is empty"
             });
             return;
         }
-
-
 
         function downloadCookbook(cookbookName) {
             chefFactory.downloadFactoryItem(cookbookName, 'cookbook', function(err) {
@@ -235,7 +230,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
         longJobTracker.getTaskStatus(null, function(err, obj) {
             if (err) {
-                res.status(500).send( {
+                res.status(500).send({
                     message: "unable to initialize Job tracker"
                 });
                 return;
@@ -250,10 +245,6 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 jobId: jobTracker.getTaskId()
             });
         });
-
-
     });
-
-
 
 };

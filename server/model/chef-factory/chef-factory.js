@@ -7,6 +7,7 @@
 
 var Chef = require('_pr/lib/chef');
 var fileIo = require('_pr/lib/utils/fileio');
+var logger = require('_pr/logger')(module);
 
 
 function fixPath(path) {
@@ -128,13 +129,11 @@ var ChefFactory = function ChefFactory(chefSettings) {
                 var fileDataString = fileData.toString();
                 if (fileType === 'rb') {
                     var regEx = /name\s*['"](.*?)['"]/g;
-                    //nodes = stdOutStr.match(regEx)
                     var matches;
                     var metaDatacookbookName;
 
                     while (matches = regEx.exec(fileDataString)) {
                         if (matches.length == 2) {
-                            //logger.debug('matches',matches);
                             metaDatacookbookName = matches[1];
                             break;
                         }
@@ -398,8 +397,6 @@ var ChefFactory = function ChefFactory(chefSettings) {
             });
         }
     };
-
-
 
 };
 

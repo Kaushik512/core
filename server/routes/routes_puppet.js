@@ -204,7 +204,6 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
     app.post('/puppet/:puppetServerId/sync/nodes', function(req, res) {
 
-
         var taskStatusObj = null;
         var puppet = null;
         var reqBody = req.body;
@@ -254,7 +253,6 @@ module.exports.setRoutes = function(app, verificationFunc) {
             hardwareData.architecture = nodeValues.hardwaremodel;
             hardwareData.platform = nodeValues.operatingsystem;
             hardwareData.platformVersion = nodeValues.operatingsystemrelease;
-
             hardwareData.memory.total = nodeValues.memorysize;
             hardwareData.memory.free = nodeValues.memoryfree;
 
@@ -314,7 +312,6 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     }
 
                     logger.debug('nodeip ==> ', nodeIp);
-
                     var instance = {
                         name: nodeName,
                         orgId: orgId,
@@ -402,9 +399,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                 logger.debug('creating env ==>', node.environment);
                                 logger.debug('orgId ==>', orgId);
                                 logger.debug('bgid ==>', bgId);
-                                // logger.debug('node ===>', node);
                                 environmentsDao.createEnv(node.environment, orgId, bgId, projectId, function(err, data) {
-
                                     if (err) {
                                         logger.debug(err, 'occured in creating environment in mongo');
                                         updateTaskStatusNode(nodeName, "Error while creating environment in catalyst. Unable to import node : " + nodeName, true, count);
@@ -506,9 +501,5 @@ module.exports.setRoutes = function(app, verificationFunc) {
             }
 
         });
-
     });
-
-
-
 };

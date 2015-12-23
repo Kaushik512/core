@@ -14,7 +14,6 @@ var schemaValidator = require('../../../dao/schema-validator');
 
 var Schema = mongoose.Schema;
 
-
 var chefClientExecutionSchema = new Schema({
     instanceId: String,
     timestampStarted: Number,
@@ -55,7 +54,7 @@ chefClientExecutionSchema.statics.createNew = function(executionData, callback) 
 };
 
 chefClientExecutionSchema.statics.getExecutionById = function(executionId, callback) {
-    
+
     this.find({
         "_id": new ObjectId(executionId)
     }, function(err, chefClientExecution) {
@@ -70,8 +69,6 @@ chefClientExecutionSchema.statics.getExecutionById = function(executionId, callb
         }
     });
 };
-
-
 
 var ChefClientExecution = mongoose.model('chefClientExecution', chefClientExecutionSchema);
 

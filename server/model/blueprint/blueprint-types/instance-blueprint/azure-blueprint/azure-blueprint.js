@@ -62,7 +62,7 @@ var azureInstanceBlueprintSchema = new Schema({
         type: String,
         // required: true
     },
-    instanceCount:{
+    instanceCount: {
         type: String,
     },
     instanceAmiid: {
@@ -73,7 +73,7 @@ var azureInstanceBlueprintSchema = new Schema({
         type: String,
         required: true
     },
-    cloudProviderData : Schema.Types.Mixed,
+    cloudProviderData: Schema.Types.Mixed,
     infraMangerType: String,
     infraManagerId: String,
     infraManagerData: Schema.Types.Mixed
@@ -153,10 +153,10 @@ azureInstanceBlueprintSchema.methods.getCloudProviderData = function() {
 azureInstanceBlueprintSchema.statics.createNew = function(data) {
     var self = this;
     logger.debug('In azureInstanceBlueprintSchema createNew');
-   
+
     var infraManagerBlueprint = CHEFInfraBlueprint.createNew({
-            runlist: data.runlist
-        });
+        runlist: data.runlist
+    });
 
     logger.debug(JSON.stringify(data));
 

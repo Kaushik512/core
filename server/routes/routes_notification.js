@@ -42,12 +42,6 @@ module.exports.setRoutes = function(app, socketIo) {
         socket.on('joinCFRoom', function(data) {
             logger.debug('room joined', data);
             socket.join(data.orgId + ':' + data.bgId + ':' + data.projId + ':' + data.envId);
-            // setTimeout(function(){
-            //  logger.debug('firing timeout');
-            //  socketCloudFormationAutoScate.to(data.orgId + ':' + data.bgId + ':' + data.projId + ':' + data.envId).emit('cfAutoScaleInstanceRemoved',{
-            //     instanceId:'560d17697c5a558126d5b1df'
-            //  });
-            // },15000)
         });
 
     });
@@ -147,7 +141,6 @@ module.exports.setRoutes = function(app, socketIo) {
                                                 logger.error("Unable to fetch infra manager details ", err);
                                                 return;
                                             }
-                                            //logger.debug("infraManagerDetails", infraManagerDetails);
                                             if (!infraManagerDetails) {
                                                 logger.error("infra manager details is null");
                                                 return;
@@ -204,7 +197,6 @@ module.exports.setRoutes = function(app, socketIo) {
                                                         for (var k = 0; k < reservations.length; k++) {
 
                                                             if (reservations[k].Instances && reservations[k].Instances.length) {
-                                                                //instances = reservations[k].Instances;
                                                                 instances = instances.concat(reservations[k].Instances);
                                                             }
 
@@ -217,10 +209,6 @@ module.exports.setRoutes = function(app, socketIo) {
                                                         var jsonAttributesObj = {
                                                             instances: {}
                                                         };
-
-                                                        /*for (var i = 0; i < instances.length; i++) {
-                                                            jsonAttributesObj.instances[ec2Resources[instances[i].InstanceId]] = instances[i].PublicIpAddress;
-                                                        }*/
                                                         for (var i = 0; i < instances.length; i++) {
                                                             addAndBootstrapInstance(instances[i], jsonAttributesObj);
                                                         }
@@ -261,16 +249,6 @@ module.exports.setRoutes = function(app, socketIo) {
 
                                                                 var runlist = cloudFormation.autoScaleRunlist || [];
                                                                 var instanceUsername = cloudFormation.autoScaleUsername || 'ubuntu';
-                                                                /*
-                                                                for (var count = 0; count < blueprint.blueprintConfig.instances.length; count++) {
-                                                                if (logicalId === blueprint.blueprintConfig.instances[count].logicalId) {
-                                                                    instanceUsername = blueprint.blueprintConfig.instances[count].username;
-                                                                    runlist = blueprint.blueprintConfig.instances[count].runlist;
-                                                                    break;
-                                                                }
-                                                                }*/
-
-
 
                                                                 var instance = {
                                                                     name: instanceName,
@@ -302,14 +280,6 @@ module.exports.setRoutes = function(app, socketIo) {
                                                                         username: instanceUsername,
                                                                         pemFileLocation: encryptedPemFileLocation,
                                                                     },
-                                                                    /*blueprintData: {
-                                                                    blueprintId: blueprint._id,
-                                                                    blueprintName: blueprint.name,
-                                                                    templateId: blueprint.templateId,
-                                                                    templateType: blueprint.templateType,
-                                                                    templateComponents: blueprint.templateComponents,
-                                                                    iconPath: blueprint.iconpath
-                                                                },*/
                                                                     cloudFormationId: cloudFormation._id
                                                                 };
 
@@ -321,11 +291,8 @@ module.exports.setRoutes = function(app, socketIo) {
                                                                 } else {
                                                                     instance.puppet = {
                                                                         serverId: infraManagerDetails.rowid
-                                                                            /*chefNodeName: req.body.fqdn*/
                                                                     }
                                                                 }
-
-
 
                                                                 logger.debug('Creating instance in catalyst');
                                                                 instancesDao.createInstance(instance, function(err, data) {
@@ -401,7 +368,6 @@ module.exports.setRoutes = function(app, socketIo) {
                                                                                     logger.error('Unable to fetch env name from envId', err);
                                                                                     return;
                                                                                 }
-
 
                                                                                 var infraManager;
                                                                                 var bootstrapOption;
@@ -601,8 +567,6 @@ module.exports.setRoutes = function(app, socketIo) {
 
                                                                                             }
 
-
-
                                                                                         } else {
                                                                                             instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
                                                                                                 if (err) {
@@ -644,20 +608,15 @@ module.exports.setRoutes = function(app, socketIo) {
                                                                                 });
                                                                             });
 
-
-
                                                                         });
                                                                     });
                                                                 });
 
                                                             });
 
-
                                                         }
 
                                                     });
-
-
 
                                                 });
                                             });
@@ -722,7 +681,6 @@ module.exports.setRoutes = function(app, socketIo) {
             }
 
             if (instances.length > 0) {
-                //var instanceIds = [];
                 for (var ins = 0; ins < instances.length; ins++) {
                     (function(ins) {
                         //proceed only if the instance is part of the aws provider
@@ -778,7 +736,6 @@ module.exports.setRoutes = function(app, socketIo) {
                                                             return;
                                                         }
 
-                                                        //logger.debug("Described Instances from AWS: ", JSON.stringify(awsInstances));
                                                         if (awsInstances) {
                                                             if (awsInstances.Reservations.length === 0) {
                                                                 if (instances[ins].instanceState != "terminated") {

@@ -42,7 +42,6 @@ var CloudFormationBlueprintSchema = new Schema({
         username: String,
         runlist: [String]
     }],
-    //stackName: String,
     templateFile: String,
     region: String,
 });
@@ -100,7 +99,7 @@ CloudFormationBlueprintSchema.methods.getInfraManagerData = function() {
     return {
         infraMangerType: this.infraManagerType,
         infraManagerId: this.infraManagerId
-        //   infraManagerData: this.infraManagerData
+            //   infraManagerData: this.infraManagerData
     };
 };
 
@@ -148,15 +147,12 @@ CloudFormationBlueprintSchema.statics.createNew = function(data) {
         templateFile: data.templateFile,
         region: data.region,
         instances: data.instances
-        // instanceUsername: data.instanceUsername
+            // instanceUsername: data.instanceUsername
     });
 
 
     return cftBlueprint;
 };
-
-
-
 
 var CloudFormationBlueprint = mongoose.model('CloudFormationBlueprint', CloudFormationBlueprintSchema);
 

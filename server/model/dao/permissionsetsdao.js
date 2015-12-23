@@ -38,19 +38,21 @@ var permissionsetsschema = new Schema({
 var Permissionsets = mongoose.model('permissionsets', permissionsetsschema);
 
 var PermissionsetsDao = function() {
-    this.getPermissionSet = function(roles,callback){
+    this.getPermissionSet = function(roles, callback) {
         logger.debug('Entering getPermissionSet. roles rcvd:' + roles);
         roles = roles.split(',');
-        Permissionsets.find({rolename:{$in:roles}},function(err,data){
-            if(!err){
-               // logger.debug('Permissionsets : ' + JSON.stringify(data));
-                logger.debug('Exiting getPermissionSet');
-                callback(null,data);
+        Permissionsets.find({
+            rolename: {
+                $in: roles
             }
-            else{
+        }, function(err, data) {
+            if (!err) {
+                logger.debug('Exiting getPermissionSet');
+                callback(null, data);
+            } else {
                 logger.debug('Permissionsets Err : ' + err);
                 logger.debug('Exiting on error getPermissionSet');
-                callback(err,null);
+                callback(err, null);
                 return;
             }
         });

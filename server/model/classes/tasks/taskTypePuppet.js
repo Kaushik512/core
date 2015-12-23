@@ -9,18 +9,14 @@ var logger = require('_pr/logger')(module);
 var mongoose = require('mongoose');
 var extend = require('mongoose-schema-extend');
 var ObjectId = require('mongoose').Types.ObjectId;
-
 var intanceDao = require('../instance/instance');
 var instancesDao = require('../instance/instance');
 var logsDao = require('../../dao/logsdao.js');
 var credentialCryptography = require('_pr/lib/credentialcryptography')
 var fileIo = require('_pr/lib/utils/fileio');
 var configmgmtDao = require('_pr/model/d4dmasters/configmgmt.js');
-
 var Puppet = require('_pr/lib/puppet');
-
 var taskTypeSchema = require('./taskTypeSchema');
-
 var utils = require('../utils/utils.js');
 var masterUtil = require('_pr/lib/utils/masterUtil');
 
@@ -56,8 +52,6 @@ puppetTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexu
             }
             return;
         }
-
-
         var count = 0;
         var overallStatus = 0;
         var instanceResultList = [];
@@ -89,7 +83,7 @@ puppetTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexu
             }
             instanceResultList.push(result);
             if (!(count < instances.length)) {
-                logger.debug('Type of onComplete ============> ' + typeof onComplete);
+                logger.debug('Type of onComplete: ' + typeof onComplete);
                 if (typeof onComplete === 'function') {
                     onComplete(null, overallStatus, {
                         instancesResults: instanceResultList
@@ -100,11 +94,8 @@ puppetTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexu
         for (var i = 0; i < instances.length; i++) {
             (function(instance) {
                 var timestampStarted = new Date().getTime();
-
                 var actionLog = instancesDao.insertOrchestrationActionLog(instance._id, null, userName, timestampStarted);
                 instance.tempActionLogId = actionLog._id;
-
-
                 var logsReferenceIds = [instance._id, actionLog._id];
                 if (!instance.instanceIP) {
                     var timestampEnded = new Date().getTime();

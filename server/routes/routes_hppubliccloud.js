@@ -7,8 +7,6 @@
 
 // This file act as a Controller which contains hpcloud related all end points.
 
-
-
 var Hppubliccloud = require('_pr/lib/hppubliccloud');
 var logger = require('_pr/logger')(module);
 var hppubliccloudProvider = require('_pr/model/classes/masters/cloudprovider/hppublicCloudProvider.js');
@@ -185,7 +183,6 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     return;
                 }
                 if (images.length) {
-                    //var json = "{\"server\": {\"name\": \"server-testa\",\"imageRef\": \"0495d8b6-1746-4e0d-a44e-010e41db0caa\",\"flavorRef\": \"2\",\"max_count\": 1,\"min_count\": 1,\"networks\": [{\"uuid\": \"a3bf46aa-20fa-477e-a2e5-e3d3a3ea1122\"}],\"security_groups\": [{\"name\": \"default\"}]}}";
                     var opnstackBody = {
                         server: {
                             name: "server-test",

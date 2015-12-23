@@ -7,6 +7,7 @@
 
 var mongoose = require('mongoose');
 var ObjectId = require('mongoose').Types.ObjectId;
+var logger = require('_pr/logger')(module);
 
 var Schema = mongoose.Schema;
 
@@ -27,31 +28,30 @@ var TaskStatus = mongoose.model('taskstatuses', TaskStatusSchema);
 var TaskStatusDao = function() {
 
     this.getTaskStatusById = function(taskId, callback) {
-        logger.debug(taskId);
-        TaskStatus.find({
-            "_id": new ObjectId(taskId)
-        }, function(err, data) {
-            if (err) {
-                callback(err, null);
-                return;
-            }
-            //logger.debug('data ==>', data);
-            callback(null, data);
+            logger.debug(taskId);
+            TaskStatus.find({
+                "_id": new ObjectId(taskId)
+            }, function(err, data) {
+                if (err) {
+                    callback(err, null);
+                    return;
+                }
+                callback(null, data);
 
-        });
-    },
+            });
+        },
 
-    this.createTaskStatus = function(taskStatusData, callback) {
-        var taskStatus = new TaskStatus(taskStatusData);
+        this.createTaskStatus = function(taskStatusData, callback) {
+            var taskStatus = new TaskStatus(taskStatusData);
 
-        taskStatus.save(function(err, data) {
-            if (err) {
-                callback(err, null);
-                return;
-            }
-            callback(null, data);
-        });
-    };
+            taskStatus.save(function(err, data) {
+                if (err) {
+                    callback(err, null);
+                    return;
+                }
+                callback(null, data);
+            });
+        };
 
     this.updateTaskStatus = function(taskId, updateData, callback) {
         var updateObj = {

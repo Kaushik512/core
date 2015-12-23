@@ -7,7 +7,6 @@
 
 var winrm = require('winrm');
 
-
 module.exports.exec = function(cmd, options, callback) {
     var path = options.path | '';
     var port = options.port | 5985;
@@ -17,9 +16,6 @@ module.exports.exec = function(cmd, options, callback) {
             callback(err, null);
             return;
         }
-
         callback(null, res);
-
-
     });
 };

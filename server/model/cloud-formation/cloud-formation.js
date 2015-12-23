@@ -11,12 +11,10 @@ var extend = require('mongoose-schema-extend');
 var ObjectId = require('mongoose').Types.ObjectId;
 var schemaValidator = require('_pr/model/utils/schema-validator');
 var uniqueValidator = require('mongoose-unique-validator');
-
 var ChefInfraManager = require('./chef-infra-manager/chef-infra-manager');
 
 
 var Schema = mongoose.Schema;
-
 
 var INFRA_MANAGER_TYPE = {
     CHEF: 'chef',
@@ -103,10 +101,6 @@ CloudFormationSchema.methods.getHistory = function(callback) {
 
 };
 
-
-
-
-
 // Static methods :- 
 
 // creates a new task
@@ -124,7 +118,6 @@ CloudFormationSchema.statics.createNew = function(cfData, callback) {
         return null;
     }
 
-
     var cfObj = {
         orgId: cfData.orgId,
         bgId: cfData.bgId,
@@ -137,7 +130,6 @@ CloudFormationSchema.statics.createNew = function(cfData, callback) {
         templateFile: cfData.templateFile,
         cloudProviderId: cfData.cloudProviderId,
         infraManagerId: cfData.infraManagerId,
-        //infraManagerData: infraManager,
         infraManagerType: infraManagerType,
         stackParameters: cfData.stackParameters,
         region: cfData.region,
@@ -189,7 +181,6 @@ CloudFormationSchema.statics.getById = function(cfId, callback) {
             callback(err, null);
             return;
         }
-        //logger.debug('data ==>', data);
         if (data.length) {
             callback(null, data[0]);
         } else {
@@ -229,14 +220,12 @@ CloudFormationSchema.statics.removeById = function(cfId, callback) {
             callback(err, null);
             return;
         }
-        //logger.debug('data ==>', data);
         callback(null, deleteCount);
 
     });
 };
 
 //Get by autoscale Id CloudFormation
-
 CloudFormationSchema.statics.findByAutoScaleTopicArn = function(topicArn, callback) {
     if (!topicArn) {
         process.nextTick(function() {
@@ -251,7 +240,6 @@ CloudFormationSchema.statics.findByAutoScaleTopicArn = function(topicArn, callba
             callback(err, null);
             return;
         }
-        //logger.debug('data ==>', data);
         callback(null, cloudFormations);
 
     });
@@ -273,13 +261,10 @@ CloudFormationSchema.statics.findByAutoScaleResourceId = function(resourceId, ca
             callback(err, null);
             return;
         }
-        //logger.debug('data ==>', data);
         callback(null, cloudFormations);
 
     });
 };
-
-
 
 
 var CloudFormation = mongoose.model('cloudFormation', CloudFormationSchema);

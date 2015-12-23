@@ -46,7 +46,6 @@ function getAuthToken(host, username, password, tenantName, callback) {
 }
 
 var Openstack = function(options) {
-
     this.getProjects = function(callback) {
         logger.debug("START:: getProjects");
 
@@ -157,7 +156,6 @@ var Openstack = function(options) {
     this.getServers = function(tenantId, callback) {
 
         logger.debug("START:: getServers");
-
         getAuthToken(options.host, options.username, options.password, options.tenantName, function(err, token) {
             if (token) {
                 logger.debug("Token Id::" + token);
@@ -220,7 +218,6 @@ var Openstack = function(options) {
 
                 client.methods.jsonMethod(args, function(data, response) {
                     logger.debug("getFlavors Response::" + data);
-                    //var json = JSON.parse(data);
                     if (data.flavors) {
                         logger.debug("END:: getFlavors");
                         callback(null, data);
@@ -433,9 +430,7 @@ var Openstack = function(options) {
                         that.createfloatingip(tenantId, createServerJson.server.networks[0]["uuid"], function(err, floatingipdata) {
                             if (!err) {
                                 logger.debug('Added an ip', JSON.stringify(JSON.parse(floatingipdata)));
-
                                 //create an instance and wait for server ready state
-
                                 logger.debug("createServerJson after");
                                 logger.debug(JSON.stringify(createServerJson));
                                 var createServerUrl = options.serviceendpoints.compute + '/' + tenantId + '/servers';
@@ -678,12 +673,8 @@ var Openstack = function(options) {
                     }
 
                 });
-
-
             }
         });
-
-
     };
 }
 

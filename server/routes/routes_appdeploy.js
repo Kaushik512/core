@@ -22,7 +22,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.get('/app/deploy', function(req, res) {
         AppDeploy.getAppDeploy(function(err, appDeployes) {
             if (err) {
-                res.status(500).send( errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (appDeployes) {
@@ -37,7 +37,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         logger.debug("Got appDeploy data: ", JSON.stringify(req.body.appDeployData));
         AppDeploy.createNew(req.body.appDeployData, function(err, appDeploy) {
             if (err) {
-                res.status(500).send( errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (appDeploy) {
@@ -50,9 +50,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     // Get AppDeploy w.r.t. appName and env
     app.get('/app/deploy/env/:envId/project/:projectId/list', function(req, res) {
         logger.debug("/app/deploy/env/:envId/list called...");
-        masterUtil.getAppDataWithDeployList(req.params.envId,req.params.projectId, function(err, appDeploy) {
+        masterUtil.getAppDataWithDeployList(req.params.envId, req.params.projectId, function(err, appDeploy) {
             if (err) {
-                res.status(500).send( errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (appDeploy.length) {
@@ -70,7 +70,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         logger.debug("Data list api called...");
         AppData.getAppData(function(err, appDeployes) {
             if (err) {
-                res.status(500).send( errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (appDeployes) {
@@ -96,9 +96,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     // Get all AppData by name
     app.get('/app/deploy/data/env/:envName/:appName/project/:projectId/list', function(req, res) {
-        masterUtil.getAppDataByName(req.params.envName,req.params.appName,req.params.projectId, function(err, appDatas) {
+        masterUtil.getAppDataByName(req.params.envName, req.params.appName, req.params.projectId, function(err, appDatas) {
             if (err) {
-                res.status(500).send( "Please add app name.");
+                res.status(500).send("Please add app name.");
                 return;
             }
             if (appDatas) {
@@ -112,7 +112,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.get('/app/deploy/list', function(req, res) {
         AppData.getAppDataWithDeploy(function(err, appDeployes) {
             if (err) {
-                res.status(500).send( errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (appDeployes) {
@@ -127,7 +127,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         logger.debug("Logs api called...");
         AppDeploy.getAppDeployById(req.params.appId, function(err, appDeploy) {
             if (err) {
-                res.status(500).send( errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (!appDeploy) {
@@ -136,7 +136,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             }
             AppDeploy.getAppDeployLogById(req.params.appId, function(err, logs) {
                 if (err) {
-                    res.status(500).send( errorResponses.db.error);
+                    res.status(500).send(errorResponses.db.error);
                     return;
                 }
                 if (logs) {
@@ -155,7 +155,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         logger.debug("Filtered by env called..");
         AppDeploy.getAppDeployByEnvId(req.params.envId, function(err, appDeploy) {
             if (err) {
-                res.status(500).send( errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (appDeploy) {

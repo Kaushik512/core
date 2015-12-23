@@ -48,7 +48,7 @@ module.exports = function(opts) {
 
         con.on('ready', function() {
             isConnected = true;
-            callback(null,null,con);
+            callback(null, null, con);
         });
 
         con.on('error', function(err) {
@@ -58,11 +58,11 @@ module.exports = function(opts) {
 
             if (err.level === 'client-authentication') {
                 logger.debug('Error msg:' + err);
-                callback(err, INVALID_CREDENTIALS,null);
+                callback(err, INVALID_CREDENTIALS, null);
             } else if (err.level === 'client-timeout') {
-                callback(err, HOST_UNREACHABLE,null);
+                callback(err, HOST_UNREACHABLE, null);
             } else {
-                callback(err, UNKOWN_EXCEPTION,null);
+                callback(err, UNKOWN_EXCEPTION, null);
             }
             logger.debug('ssh error');
         });
@@ -88,42 +88,35 @@ module.exports = function(opts) {
 
     function initializeConnection(callback) {
         logger.debug("In SSH Initilize");
-        //logger.debug('con ..>', con);
-        //if (!con) {
-            var connectionParamsObj = {
-                host: options.host,
-                port: options.port,
-                username: options.username
-            };
+        var connectionParamsObj = {
+            host: options.host,
+            port: options.port,
+            username: options.username
+        };
 
-            if (options.privateKey) {
-                if (options.passphrase) {
-                    connectionParamsObj.passphrase = options.passphrase;
-                }
-                fileIo.readFile(options.privateKey, function(err, key) {
-                    if (err) {
-                        callback(err, PEM_FILE_READ_ERROR);
-                        return;
-                    }
-                    connectionParamsObj.privateKey = key;
-                    connect(connectionParamsObj, callback);
-                });
-            } else {
-                logger.debug("SSh password...");
-
-                if (options.interactiveKeyboard) {
-                    connectionParamsObj.tryKeyboard = true;
-                    connect(connectionParamsObj, callback);
-                } else {
-                    connectionParamsObj.password = options.password;
-                    connect(connectionParamsObj, callback);
-                }
+        if (options.privateKey) {
+            if (options.passphrase) {
+                connectionParamsObj.passphrase = options.passphrase;
             }
-        /*} else {
-            process.nextTick(function() {
-                callback(null);
+            fileIo.readFile(options.privateKey, function(err, key) {
+                if (err) {
+                    callback(err, PEM_FILE_READ_ERROR);
+                    return;
+                }
+                connectionParamsObj.privateKey = key;
+                connect(connectionParamsObj, callback);
             });
-        }*/
+        } else {
+            logger.debug("SSh password...");
+
+            if (options.interactiveKeyboard) {
+                connectionParamsObj.tryKeyboard = true;
+                connect(connectionParamsObj, callback);
+            } else {
+                connectionParamsObj.password = options.password;
+                connect(connectionParamsObj, callback);
+            }
+        }
     }
 
 
@@ -182,10 +175,8 @@ module.exports = function(opts) {
                         }
                     });
 
-
                     if (typeof onStdOut === 'function') {
                         stream.on('data', function(data) {
-                            // logger.debug('SSH STDOUT: ' + data);
                             onStdOut(data);
                         })
                     }
@@ -203,6 +194,5 @@ module.exports = function(opts) {
             }
 
         });
-
     }
 }

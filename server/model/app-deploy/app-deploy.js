@@ -166,11 +166,11 @@ AppDeploySchema.statics.updateAppDeployByName = function(appName, appDeployData,
         if (appDeploy) {
             that.find({
                 applicationName: appName
-            },function(err,list){
-                if(err){
-                    logger.debug("Failed to fetch appDeploy",err);
+            }, function(err, list) {
+                if (err) {
+                    logger.debug("Failed to fetch appDeploy", err);
                 }
-                callback(null,list);
+                callback(null, list);
             });
         }
     });
@@ -202,9 +202,8 @@ AppDeploySchema.statics.getAppDeployLogById = function(appId, callback) {
             callback(err, null);
         }
         if (appDeploy.length) {
-            //logger.debug("Got AppDeploy: for log ", JSON.stringify(appDeploy));
             callback(null, appDeploy[0].appLogs);
-        }else{
+        } else {
             callback(null, []);
         }
     });
@@ -238,7 +237,7 @@ AppDeploySchema.statics.getAppDeployListByEnvId = function(envId, callback) {
         if (appDeploys.length) {
             logger.debug("Got AppDeploy: ", JSON.stringify(appDeploys));
             callback(null, appDeploys);
-        }else{
+        } else {
             callback(null, []);
         }
     });

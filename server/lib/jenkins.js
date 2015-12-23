@@ -23,11 +23,8 @@ var Jenkins = function(options) {
     }
 
     jenkinsUrl += parsedUrl.host + parsedUrl.path;
-
-
     logger.debug(jenkinsUrl);
     var jenkins = jenkinsApi.init(jenkinsUrl);
-
 
     this.getJobs = function(callback) {
         jenkins.all_jobs(function(err, data) {
@@ -133,9 +130,7 @@ var Jenkins = function(options) {
 
     this.updateJob = function(jobName, callback) {
         //var config = fs.readFileSync("/home/gobinda/Gobinda/config.xml", 'ascii');
-        jenkins.update_job(jobName, function(config) {
-            //return config.replace('development',"dev");
-        }, function(err, data) {
+        jenkins.update_job(jobName, function(config) {}, function(err, data) {
             if (err) {
                 logger.debug("Error while updating job in jenkins: ", err);
                 callback(err, null);
@@ -146,14 +141,17 @@ var Jenkins = function(options) {
 
     };
     this.getDepthJobInfo = function(jobName, callback) {
-        logger.debug("parsedUrl: ",parsedUrl.href);
-        var options_auth={user:options.username,password:options.password};
+        logger.debug("parsedUrl: ", parsedUrl.href);
+        var options_auth = {
+            user: options.username,
+            password: options.password
+        };
         client = new Client(options_auth);
-        var jenkinsUrl1 = parsedUrl.href+'job/'+jobName+'/api/json?depth=1';
-        logger.debug('jenkinsUrl',jenkinsUrl1);
+        var jenkinsUrl1 = parsedUrl.href + 'job/' + jobName + '/api/json?depth=1';
+        logger.debug('jenkinsUrl', jenkinsUrl1);
         client.registerMethod("jsonMethod", jenkinsUrl1, "GET");
-        client.methods.jsonMethod(function(data,response){
-            callback(null,data);
+        client.methods.jsonMethod(function(data, response) {
+            callback(null, data);
         });
     }
 }

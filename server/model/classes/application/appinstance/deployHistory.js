@@ -13,9 +13,6 @@ var schemaValidator = require('../../../dao/schema-validator');
 
 var Schema = mongoose.Schema;
 
-
-
-
 var DeployHistorySchema = new Schema({
     applicationId: String,
     appInstanceId: String,
@@ -33,19 +30,17 @@ DeployHistorySchema.statics.DEPLOY_STATUS = {
     FAILED: 'failed'
 };
 
-
 DeployHistorySchema.methods.updateBuildStatus = function(status, callback) {
     this.status.status = status,
-    this.save(function(err, history) {
-        if (err) {
-            logger.error(err);
-            callback(err, null);
-            return;
-        }
-        callback(null, history);
-    });
+        this.save(function(err, history) {
+            if (err) {
+                logger.error(err);
+                callback(err, null);
+                return;
+            }
+            callback(null, history);
+        });
 };
-
 
 // Do a build
 DeployHistorySchema.statics.createNew = function(historyData, callback) {
@@ -72,7 +67,6 @@ DeployHistorySchema.statics.getHistoryByAppInstanceId = function(appInstanceId, 
             callback(err, null);
             return;
         }
-        //logger.debug(data);
         logger.debug("Exit getHistoryByAppInstanceId :: ", appInstanceId);
         callback(null, histories);
     });
@@ -90,19 +84,16 @@ DeployHistorySchema.statics.getHistoryByApplicationId = function(applicationId, 
             callback(err, null);
             return;
         }
-        //logger.debug(data);
         logger.debug("Exit getHistoryByApplicationId :: ", applicationId);
         callback(null, histories);
     });
 
 };
 
-
 DeployHistorySchema.statics.getHistoryById = function(id, callback) {
-
     this.findById(id, function(err, history) {
         if (err) {
-            logger.error("Failed to getHistoryById :: ", id, err);
+            logger.error("Failed to getHistoryById :: ", err);
             callback(err, null);
             return;
         }

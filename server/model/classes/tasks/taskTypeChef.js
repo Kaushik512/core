@@ -42,15 +42,13 @@ chefTaskSchema.methods.getNodes = function() {
 // Instance Method :- run task
 chefTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData, onExecute, onComplete) {
     var self = this;
-    logger.debug("self: ",JSON.stringify(self));
+    logger.debug("self: ", JSON.stringify(self));
     //merging attributes Objects
     var attributeObj = {};
     var objectArray = [];
     for (var i = 0; i < self.attributes.length; i++) {
         objectArray.push(self.attributes[i].jsonObj);
     }
-    //var cookbookName = self.runlist[0].split("role[")[1].split("]")[0];
-    //logger.debug("cookbook name: ",cookbookName);
     // While passing extra attribute to chef cookbook "rlcatalyst" is used as attribute.
     if (nexusData) {
         objectArray.push({
@@ -95,10 +93,6 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusD
     }
 
     var attributeObj = utils.mergeObjects(objectArray);
-
-    logger.debug("-===============-------------========== ", JSON.stringify(attributeObj));
-
-
     var instanceIds = this.nodeIds;
     if (!(instanceIds && instanceIds.length)) {
         if (typeof onExecute === 'function') {
@@ -149,7 +143,7 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusD
             }
             instanceResultList.push(result);
             if (!(count < instances.length)) {
-                logger.debug('Type of onComplete ============> ' + typeof onComplete);
+                logger.debug('Type of onComplete: ' + typeof onComplete);
                 if (typeof onComplete === 'function') {
                     onComplete(null, overallStatus, {
                         instancesResults: instanceResultList
@@ -255,9 +249,6 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusD
                                 chefValidationPemFile: chefDetails.validatorpemfile,
                                 hostedChefUrl: chefDetails.url,
                             });
-                            // if(self.attributesjson.toString().indexOf('"\\') <= 0)
-                            // self.attributesjson = JSON.stringify(self.attributesjson);
-
 
                             var chefClientOptions = {
                                 privateKey: decryptedCredentials.pemFileLocation,

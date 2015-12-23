@@ -8,6 +8,7 @@
 var childProcess = require('child_process');
 var util = require('util');
 var extend = require('extend');
+var logger = require('_pr/logger')(module);
 
 var defaults = {
     cwd: null,
@@ -23,8 +24,6 @@ var Process = function(appPath, argList, options) {
     var onStdErr = null;
     var onClose = null;
     var onError = null;
-
-
 
     if (options) {
         var def = extend({}, defaults);
@@ -64,8 +63,6 @@ var Process = function(appPath, argList, options) {
                 return;
             }
         });
-        //proc = spawn(appPath, argList, options);
-
         
         processRunning = true;
         if (typeof onStdOut === 'function') {
@@ -108,7 +105,5 @@ var Process = function(appPath, argList, options) {
     }
 
 }
-
-
 
 module.exports = Process;

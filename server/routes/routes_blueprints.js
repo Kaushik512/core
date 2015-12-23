@@ -8,7 +8,6 @@
 // This file act as a Controller which contains blueprint related all end points.
 
 var Blueprints = require('_pr/model/blueprint');
-
 var instancesDao = require('../model/classes/instance/instance');
 var EC2 = require('../lib/ec2.js');
 var Chef = require('../lib/chef.js');
@@ -25,28 +24,19 @@ var AWSProvider = require('../model/classes/masters/cloudprovider/awsCloudProvid
 var VMImage = require('../model/classes/masters/vmImage.js');
 var currentDirectory = __dirname;
 var AWSKeyPair = require('../model/classes/masters/cloudprovider/keyPair.js');
-
 var credentialcryptography = require('../lib/credentialcryptography');
-
 var CloudFormation = require('_pr/model/cloud-formation');
-
 var AWSCloudFormation = require('_pr/lib/awsCloudFormation.js');
 var errorResponses = require('./error_responses');
 var Openstack = require('_pr/lib/openstack');
 var openstackProvider = require('_pr/model/classes/masters/cloudprovider/openstackCloudProvider.js');
-
 var Hppubliccloud = require('_pr/lib/hppubliccloud.js');
 var hppubliccloudProvider = require('_pr/model/classes/masters/cloudprovider/hppublicCloudProvider.js');
-
 var AzureCloud = require('_pr/lib/azure.js');
 var azureProvider = require('_pr/model/classes/masters/cloudprovider/azureCloudProvider.js');
-
-
 var VmwareCloud = require('_pr/lib/vmware.js');
 var vmwareProvider = require('_pr/model/classes/masters/cloudprovider/vmwareCloudProvider.js');
-
 var AwsAutoScaleInstance = require('_pr/model/aws-auto-scale-instance');
-
 var fs = require('fs');
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
@@ -102,7 +92,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 templateType: templateType,
                 users: users,
                 blueprintType: blueprintType
-
             };
 
             var dockerData, instanceData, cloudFormationData;
@@ -146,10 +135,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     infraManagerId: req.body.blueprintData.chefServerId,
                     runlist: req.body.blueprintData.runlist,
                     stackParameters: req.body.blueprintData.cftStackParameters,
-                    //stackName: req.body.blueprintData.stackName,
                     templateFile: req.body.blueprintData.cftTemplateFile,
                     region: req.body.blueprintData.region,
-                    //instanceUsername: req.body.blueprintData.cftInstanceUserName
                     instances: req.body.blueprintData.cftInstances
                 }
                 blueprintData.cloudFormationData = cloudFormationData;
@@ -159,7 +146,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 });
                 return;
             }
-
 
             if (!blueprintData.users || !blueprintData.users.length) {
                 res.send(400);
@@ -192,9 +178,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         if (!blueprintUpdateData.runlist) {
             blueprintUpdateData.runlist = [];
         }
-
-        //blueprintUpdateData.runlist.splice(0, 0, 'recipe[ohai]');
-
 
         Blueprints.getById(req.params.blueprintId, function(err, blueprint) {
             if (err) {
@@ -236,8 +219,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
             var versionData = blueprint.getVersionData(req.params.version);
             res.send(200, versionData);
-
-
         });
 
     });
@@ -437,7 +418,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                                                                 logger.debug("Instance Launched -- . Runlist = ", version.runlist);
                                                                 logger.debug("Instance Launched -- . Instance data = ", instanceDataAll);
-                                                                logger.debug("UserName:::::::::: ", anImage.userName);
                                                                 if (!blueprint.appUrls) {
                                                                     blueprint.appUrls = [];
                                                                 }
@@ -448,7 +428,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                 var newinstanceIDs = [];
 
                                                                 function addinstancewrapper(instanceData, instancesLength) {
-                                                                    logger.debug('Entered addinstancewrapper ++++++' + instancesLength);
+                                                                    logger.debug('Entered addinstancewrapper ' + instancesLength);
                                                                     var instance = {
                                                                         name: blueprint.name,
                                                                         orgId: blueprint.orgId,

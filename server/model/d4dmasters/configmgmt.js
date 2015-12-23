@@ -6,10 +6,7 @@
  */
 
 var d4dModel = require('./d4dmastersmodel.js');
-
 var d4dModelNew = require('./d4dmastersmodelnew.js');
-
-
 var codelist = require('../../codelist.json');
 var appConfig = require('_pr/config');
 var chefSettings = appConfig.chef;
@@ -105,76 +102,76 @@ function Configmgmt() {
         }
     };
 
-    this.getCategoryFromID = function(id){
+    this.getCategoryFromID = function(id) {
         logger.log('Entering getDBModelFromID');
         switch (id.toString()) {
             case "1":
                 logger.log('Exting getDBModelFromID ' + id.toString());
-               return('organization');
+                return ('organization');
                 break;
             case "2":
-                 logger.log('Exting getDBModelFromID ' + id.toString());
-               return('businessgroups');
+                logger.log('Exting getDBModelFromID ' + id.toString());
+                return ('businessgroups');
                 break;
             case "3":
-                 logger.log('Exting getDBModelFromID ' + id.toString());
-               return('environment');
+                logger.log('Exting getDBModelFromID ' + id.toString());
+                return ('environment');
                 break;
             case "4":
-                 logger.log('Exting getDBModelFromID ' + id.toString());
-               return('projects');
+                logger.log('Exting getDBModelFromID ' + id.toString());
+                return ('projects');
                 break;
             case "5":
-                 logger.log('Exting getDBModelFromID ' + id.toString());
-               return('organization');
+                logger.log('Exting getDBModelFromID ' + id.toString());
+                return ('organization');
                 break;
             case "7":
-                 logger.log('Exting getDBModelFromID ' + id.toString());
-               return('users');
+                logger.log('Exting getDBModelFromID ' + id.toString());
+                return ('users');
                 break;
-             case "9":
-                 logger.log('Exting getDBModelFromID ' + id.toString());
-               return('provider');
+            case "9":
+                logger.log('Exting getDBModelFromID ' + id.toString());
+                return ('provider');
                 break;
             case "10":
-                 logger.log('Exting getDBModelFromID ' + id.toString());
-               return('chefserver');
+                logger.log('Exting getDBModelFromID ' + id.toString());
+                return ('chefserver');
                 break;
             case "17":
-                 logger.log('Exting getDBModelFromID ' + id.toString());
-               return('templates');
+                logger.log('Exting getDBModelFromID ' + id.toString());
+                return ('templates');
                 break;
             case "18":
-                 logger.log('Exting getDBModelFromID ' + id.toString());
-               return('dockerrepository');
+                logger.log('Exting getDBModelFromID ' + id.toString());
+                return ('dockerrepository');
                 break;
             case "19":
-                 logger.log('Exting getDBModelFromID ' + id.toString());
-               return('services');
+                logger.log('Exting getDBModelFromID ' + id.toString());
+                return ('services');
                 break;
             case "20":
-                 logger.log('Exting getDBModelFromID ' + id.toString());
-               return('buildservers');
+                logger.log('Exting getDBModelFromID ' + id.toString());
+                return ('buildservers');
                 break;
             case "21":
-                 logger.log('Exting getDBModelFromID ' + id.toString());
-               return('teams');
+                logger.log('Exting getDBModelFromID ' + id.toString());
+                return ('teams');
                 break;
             case "22":
-                 logger.log('Exting getDBModelFromID ' + id.toString());
-               return('imagegallery');
+                logger.log('Exting getDBModelFromID ' + id.toString());
+                return ('imagegallery');
                 break;
             case "23":
-                 logger.log('Exting getDBModelFromID ' + id.toString());
-               return('jiraserver');
+                logger.log('Exting getDBModelFromID ' + id.toString());
+                return ('jiraserver');
                 break;
             case "25":
-                 logger.log('Exting getDBModelFromID ' + id.toString());
-               return('puppetserver');
+                logger.log('Exting getDBModelFromID ' + id.toString());
+                return ('puppetserver');
                 break;
             case "26":
-                 logger.log('Exting getDBModelFromID ' + id.toString());
-               return('nexusserver');
+                logger.log('Exting getDBModelFromID ' + id.toString());
+                return ('nexusserver');
                 break;
 
         };
@@ -280,8 +277,6 @@ function Configmgmt() {
                                 var k = keys[i];
                                 if (keys[i].indexOf("login") >= 0)
                                     loginname = outJson[k] + "/";
-                                // if (keys[i].indexOf("orgname") >= 0)
-                                //     orgname = outJson[k] + "/";
                                 if (keys[i].indexOf("orgname_rowid") >= 0) {
                                     liveorgname = that.convertRowIDToValue(outJson[k], rowidlist);
                                     orgname = outJson[k] + "/";
@@ -294,18 +289,11 @@ function Configmgmt() {
                                         keys[i] = keys[i].replace('_filename', '');
                                         outJson[k] = chefRepoPath + orgname + loginname + '.chef/' + outJson[k];
                                     }
-                                    // if (keys[i].indexOf('orgname') >= 0) {
-
-                                    //     outJson[k]  =  liveorgname;
-                                    //     logger.debug('>>>>>>>>>>>>>>>>>>>>>>>> Hit Here <<<<<<<<<<<<<<<<' + outJson[k]);
-                                    // }
-
                                     if (configmgmt == '')
                                         configmgmt = '\"' + keys[i] + '\":\"' + outJson[k] + '\"';
                                     else
                                         configmgmt += ',\"' + keys[i] + '\":\"' + outJson[k] + '\"';
 
-                                    //logger.debug('>>>>>' + keys[i] + ':' + outJson[keys[i]] );
                                 }
                                 if (configmgmt != '') {
                                     configmgmt += ',\"chefRepoLocation\":\"' + chefRepoPath + orgname + loginname + '\"';
@@ -360,8 +348,6 @@ function Configmgmt() {
                                 var k = keys[i];
                                 if (keys[i].indexOf("login") >= 0)
                                     loginname = outJson[k] + "/";
-                                // if (keys[i].indexOf("orgname") >= 0)
-                                //     orgname = outJson[k] + "/";
                                 if (keys[i].indexOf("orgname_rowid") >= 0) {
                                     liveorgname = that.convertRowIDToValue(outJson[k], rowidlist);
                                     orgname = outJson[k] + "/";
@@ -374,18 +360,11 @@ function Configmgmt() {
                                         keys[i] = keys[i].replace('_filename', '');
                                         outJson[k] = chefRepoPath + orgname + loginname + '.chef/' + outJson[k];
                                     }
-                                    // if (keys[i].indexOf('orgname') >= 0) {
-
-                                    //     outJson[k]  =  liveorgname;
-                                    //     logger.debug('>>>>>>>>>>>>>>>>>>>>>>>> Hit Here <<<<<<<<<<<<<<<<' + outJson[k]);
-                                    // }
-
                                     if (configmgmt == '')
                                         configmgmt = '\"' + keys[i] + '\":\"' + outJson[k] + '\"';
                                     else
                                         configmgmt += ',\"' + keys[i] + '\":\"' + outJson[k] + '\"';
 
-                                    //logger.debug('>>>>>' + keys[i] + ':' + outJson[keys[i]] );
                                 }
                                 if (configmgmt != '') {
                                     configmgmt += ',\"chefRepoLocation\":\"' + chefRepoPath + orgname + loginname + '\"';
@@ -435,9 +414,7 @@ function Configmgmt() {
                         logger.debug("globalaccessname : " + globalaccessname.toString());
                         var ga = globalaccessname.replace(/\"/g, '').split(':')[0].split(',');
                         if (ga) {
-
                             ga.forEach(function(ga1) {
-
                                 logger.debug('Access Type : ' + ga1);
                                 mainRef.getListFilteredNew(8, "files", "globalaccessname", ga1, function(err, jlt) {
                                     countInner++;
@@ -539,15 +516,6 @@ function Configmgmt() {
                 logger.debug("Hit and error:" + err);
             }
             if (globalaccessname) {
-
-                //"\"Projects,Groups,Environments,Providers,ChefServer,Gallery,UserManagement,Design\":
-                /* var ga = globalaccessname.substring(1,globalaccessname.length);
-                logger.debug("First pass: " + ga);
-                ga = ga.substring(0,ga.length-2).split(',');
-                logger.debug("Second pass: " + ga);
-                for(var k = 0; k < ga.length;k++){
-                    //logger.debug(ga[k]);
-                }*/
                 var ga = globalaccessname.replace(/\"/g, '').split(':')[0].split(',');
                 if (ga) {
                     var testing = function(ga, callback) {
@@ -574,8 +542,6 @@ function Configmgmt() {
                     }
 
                 }
-                // callback(null,accessibleFiles);
-                //var obj1 = JSON.parse(globalaccessname);
             }
         }); //end call back getlistfiltereed
         logger.debug('Final :' + accessibleFiles);
@@ -598,9 +564,6 @@ function Configmgmt() {
                 logger.debug("Repopath:" + chefRepoPath);
                 logger.debug("paramorgname :" + paramorgname);
                 var hasOrg = false;
-                //JSON.parse(d4dMasterJson).forEach(function(itm, i) 
-
-                // logger.debug("found by org " + itm);
                 var outJson = JSON.parse(JSON.stringify(d4dMasterJson));
                 logger.debug('outJson:' + JSON.stringify(d4dMasterJson));
                 var keys = Object.keys(outJson);
@@ -611,7 +574,6 @@ function Configmgmt() {
 
 
                     if (keys[i].indexOf("_filename") >= 0) {
-                        //loginname = outJson[k] + "/";
                         if (configmgmt == '')
                             configmgmt += "\"" + keys[i].replace('_filename', '') + "\":\"" + chefRepoPath + orgname + '/' + loginname + '/.chef/' + outJson[k] + "\"";
                         else
@@ -621,7 +583,6 @@ function Configmgmt() {
                             configmgmt += "\"" + keys[i] + "\":\"" + outJson[k] + "\"";
                         else
                             configmgmt += ",\"" + keys[i] + "\":\"" + outJson[k] + "\"";
-                        // logger.debug("configmgmt ==>  ",configmgmt);
                     }
 
                 }
@@ -658,9 +619,6 @@ function Configmgmt() {
                 logger.debug("Repopath:" + chefRepoPath);
                 logger.debug("paramorgname :" + paramorgname);
                 var hasOrg = false;
-                //JSON.parse(d4dMasterJson).forEach(function(itm, i) 
-
-                // logger.debug("found by org " + itm);
                 var outJson = JSON.parse(JSON.stringify(d4dMasterJson));
                 logger.debug('outJson:' + JSON.stringify(d4dMasterJson));
                 var keys = Object.keys(outJson);
@@ -671,7 +629,6 @@ function Configmgmt() {
 
 
                     if (keys[i].indexOf("_filename") >= 0) {
-                        //loginname = outJson[k] + "/";
                         if (configmgmt == '')
                             configmgmt += "\"" + keys[i].replace('_filename', '') + "\":\"" + chefRepoPath + orgname + '/' + loginname + '/.chef/' + outJson[k] + "\"";
                         else
@@ -681,7 +638,6 @@ function Configmgmt() {
                             configmgmt += "\"" + keys[i] + "\":\"" + outJson[k] + "\"";
                         else
                             configmgmt += ",\"" + keys[i] + "\":\"" + outJson[k] + "\"";
-                        // logger.debug("configmgmt ==>  ",configmgmt);
                     }
 
                 }
@@ -691,8 +647,6 @@ function Configmgmt() {
                 logger.debug('Read Config:' + configmgmt);
                 callback(null, JSON.parse(configmgmt));
                 return;
-
-
             } else {
                 callback(true, null);
             }
@@ -742,47 +696,6 @@ function Configmgmt() {
     };
 
     this.getMasterRow = function(masterid, fieldname, fieldvalue, callback) {
-
-        // d4dModel.findOne({
-        //     id: masterid
-        // }, function(err, d4dMasterJson) {
-        //     if (err) {
-        //         logger.debug("Hit and error:" + err);
-        //     }
-        //     if (d4dMasterJson) {
-        //         var configmgmt = '';
-        //         var chefRepoPath = '';
-        //         var hasOrg = false;
-        //         d4dMasterJson.masterjson.rows.row.forEach(function(itm, i) {
-        //             logger.debug("found" + itm.field.length);
-        //             for (var j = 0; j < itm.field.length; j++) {
-        //                 if (itm.field[j]["name"] == fieldname) {
-        //                     if (itm.field[j]["values"].value == fieldvalue) {
-        //                         logger.debug("found: " + i + " -- " + itm.field[j]["values"].value);
-        //                         hasOrg = true;
-        //                         //Re-construct the json with the item found
-        //                         var configmgmt = '';
-        //                         for (var k = 0; k < itm.field.length; k++) {
-
-        //                             if (configmgmt == '')
-        //                                 configmgmt += "\"" + itm.field[k]["name"] + "\":\"" + itm.field[k]["values"].value + "\"";
-        //                             else
-        //                                 configmgmt += ",\"" + itm.field[k]["name"] + "\":\"" + itm.field[k]["values"].value + "\"";
-
-        //                         }
-        //                         configmgmt = "{" + configmgmt + "}";
-        //                         logger.debug('Before Call back ->' + JSON.stringify(configmgmt));
-        //                         //return(configmgmt);
-        //                         //return;
-        //                     }
-        //                 }
-        //             }
-        //             callback(null, configmgmt);
-
-        //         }); // rows loop
-
-        //     }
-        // }); //end find one
         logger.debug('In getMasterRow : ' + masterid + ' ' + fieldname + ' ' + fieldvalue);
         this.getDBModelFromID(masterid, function(err, dbtype) {
             if (err) {
@@ -807,9 +720,6 @@ function Configmgmt() {
                 });
             } //end dbtype
         }); //end get dbmodel
-
-
-
     };
 
     this.getList = function(masterid, fieldname, callback) {
@@ -848,7 +758,7 @@ function Configmgmt() {
             }
         });
     };
-    this.getProjectsForTeams  = function(teamids,callback){
+    this.getProjectsForTeams = function(teamids, callback) {
         logger.debug('rcvd teamids: ' + teamids);
         var query = {};
         teamids = teamids.split(',');
@@ -856,58 +766,45 @@ function Configmgmt() {
             '$in': teamids
         }
         query['id'] = '21';
-
-       // logger.debug("Master Type: " + dbtype);
-       var projects = [];
+        var projects = [];
         d4dModelNew.d4dModelMastersTeams.find(query, function(err, teamjson) {
             if (err) {
                 logger.error('d4dModelMastersTeams' + err);
                 callback(err, null);
                 return;
             }
-            teamjson.forEach(function(k,v){
-                if(k['projectname_rowid'].indexOf(',') > 0){
+            teamjson.forEach(function(k, v) {
+                if (k['projectname_rowid'].indexOf(',') > 0) {
                     var projs = k['projectname_rowid'].split(',');
-                    for(var prj in projs){
-                        if(projects.indexOf(projs) < 0)
+                    for (var prj in projs) {
+                        if (projects.indexOf(projs) < 0)
                             projects.push(projs);
                     }
-                }
-                else{
-                    if(projects.indexOf(k['projectname_rowid']) < 0)
+                } else {
+                    if (projects.indexOf(k['projectname_rowid']) < 0)
                         projects.push(k['projectname_rowid']);
                 }
-                if(v >= teamjson.length - 1){
-                    logger.debug('teamjson',JSON.stringify(projects));
-                   callback(null, projects); 
+                if (v >= teamjson.length - 1) {
+                    logger.debug('teamjson', JSON.stringify(projects));
+                    callback(null, projects);
                 }
             });
-            
+
         });
     };
 
-    this.getProjectsForOrgs  = function(orgId,callback){
+    this.getProjectsForOrgs = function(orgId, callback) {
         d4dModelNew.d4dModelMastersProjects.find({
             orgname_rowid: orgId,
             id: "4"
-        },function(err,data){
-            if(err){
-                callback(err,null);
+        }, function(err, data) {
+            if (err) {
+                callback(err, null);
             }
-            callback(null,data);
+            callback(null, data);
         });
     };
     this.convertRowIDToValue = function(rowid, rowidcont) {
-        // if(rowidcont.length > 0)
-        // { 
-        //     rowidcont.forEach(function(k,v){
-        //            var k1 = Object.keys(k);
-        //            if(k1[0] == rowid)
-        //                callback(null,rowidcont[v]);
-        //        });
-        // }
-        // else
-        //     callback(null,[]);
         var toreturn = '';
         var jobj = JSON.parse(JSON.stringify(rowidcont));
         for (var k1 in jobj) {
@@ -915,7 +812,6 @@ function Configmgmt() {
             for (var k2 in jobj[k1]) {
                 if (k2 == rowid)
                     toreturn = jobj[k1][k2];
-                //logger.debug("key##:",k2," val:##",jobj[k1][k2]);
             }
 
         }
@@ -931,14 +827,10 @@ function Configmgmt() {
         }, function(err, orgdata) {
             if (orgdata) {
                 var orgdata_ = JSON.parse(JSON.stringify(orgdata));
-
                 orgdata_.forEach(function(k, v) {
-                    //rowidval[k['rowid']] = k['orgname'];
-                    // rowidval += '{\"' + k['rowid'] + '\" : \"' +  k['orgname'] + '\"}';
                     var rid = {};
                     rid[k['rowid']] = k['orgname'];
                     rowidval.push(rid);
-                    //  logger.debug(k['rowid'], k['orgname']);
                 });
 
             }
@@ -948,12 +840,7 @@ function Configmgmt() {
             }, function(err, bgdata) {
                 if (bgdata) {
                     var bgdata_ = JSON.parse(JSON.stringify(bgdata));
-
                     bgdata_.forEach(function(k, v) {
-                        // rowidval[k['rowid']] = k['productgroupname'];
-                        // rowidval += '{\"' + k['rowid'] + '\" : \"' + k['productgroupname'] + '\"}';
-                        //  logger.debug(k['rowid'], k['productgroupname']);
-
                         var rid = {};
                         rid[k['rowid']] = k['productgroupname'];
                         rowidval.push(rid);
@@ -965,11 +852,7 @@ function Configmgmt() {
                 }, function(err, prjdata) {
                     if (prjdata) {
                         var prjdata_ = JSON.parse(JSON.stringify(prjdata));
-
                         prjdata_.forEach(function(k, v) {
-                            // rowidval[k['rowid']] = k['projectname'];
-                            // rowidval += '{\"' +k['rowid'] + '\" : \"' + k['projectname'] + '\"}';
-                            // logger.debug(k['rowid'], k['projectname']);
                             var rid = {};
                             rid[k['rowid']] = k['projectname'];
                             rowidval.push(rid);
@@ -981,11 +864,7 @@ function Configmgmt() {
                     }, function(err, cfgdata) {
                         if (cfgdata) {
                             var cfgdata_ = JSON.parse(JSON.stringify(cfgdata));
-
                             cfgdata_.forEach(function(k, v) {
-                                // rowidval[k['rowid']] = k['projectname'];
-                                // rowidval += '{\"' +k['rowid'] + '\" : \"' + k['projectname'] + '\"}';
-                                // logger.debug(k['rowid'], k['projectname']);
                                 var rid = {};
                                 rid[k['rowid']] = k['configname'];
                                 rowidval.push(rid);
@@ -1003,72 +882,58 @@ function Configmgmt() {
                                     callback(null, rowidval);
                                     return;
                                 }
-                                
+
                                 envdata_.forEach(function(k, v) {
-                                    // rowidval[k['rowid']] = k['environmentname'];
-                                    //rowidval.push('{\"' +k['rowid'] + '\" : \"' +  k['environmentname'] + '\"}');
                                     var rid = {};
                                     rid[k['rowid']] = k['environmentname'];
                                     rowidval.push(rid);
-                                    //  logger.debug(k['rowid'], k['environmentname'],envdata_.length);
                                 });
-                            } 
+                            }
 
                             d4dModelNew.d4dModelMastersUsers.find({
                                 id: "7"
                             }, function(err, userdata) {
-                            if (userdata) {
-                                var userdata_ = JSON.parse(JSON.stringify(userdata));
-                                if (userdata_.length <= 0) {
-                                    logger.debug('rowidval' + JSON.stringify(rowidval));
-                                    callback(null, rowidval);
-                                    return;
+                                if (userdata) {
+                                    var userdata_ = JSON.parse(JSON.stringify(userdata));
+                                    if (userdata_.length <= 0) {
+                                        logger.debug('rowidval' + JSON.stringify(rowidval));
+                                        callback(null, rowidval);
+                                        return;
+                                    }
+
+                                    userdata_.forEach(function(k, v) {
+                                        var rid = {};
+                                        rid[k['rowid']] = k['loginname'];
+                                        rowidval.push(rid);
+                                    });
                                 }
-                                
-                                userdata_.forEach(function(k, v) {
-                                    // rowidval[k['rowid']] = k['environmentname'];
-                                    //rowidval.push('{\"' +k['rowid'] + '\" : \"' +  k['environmentname'] + '\"}');
-                                    var rid = {};
-                                    rid[k['rowid']] = k['loginname'];
-                                    rowidval.push(rid);
-                                    //  logger.debug(k['rowid'], k['environmentname'],envdata_.length);
-                                });
 
+                                d4dModelNew.d4dModelMastersTeams.find({
+                                    id: "21"
+                                }, function(err, teamdata) {
+                                    if (teamdata) {
+                                        var teamdata_ = JSON.parse(JSON.stringify(teamdata));
+                                        if (teamdata_.length <= 0) {
+                                            logger.debug('rowidval' + JSON.stringify(rowidval));
+                                            callback(null, rowidval);
+                                            return;
+                                        }
+                                        var i = 0;
+                                        teamdata_.forEach(function(k, v) {
+                                            var rid = {};
+                                            rid[k['rowid']] = k['teamname'];
+                                            rowidval.push(rid);
+                                        });
 
-                            } 
-
-                             d4dModelNew.d4dModelMastersTeams.find({
-                                id: "21"
-                            }, function(err, teamdata) {
-                            if (teamdata) {
-                                var teamdata_ = JSON.parse(JSON.stringify(teamdata));
-                                if (teamdata_.length <= 0) {
-                                    logger.debug('rowidval' + JSON.stringify(rowidval));
-                                    callback(null, rowidval);
-                                    return;
-                                }
-                                var i = 0;
-                                teamdata_.forEach(function(k, v) {
-                                    // rowidval[k['rowid']] = k['environmentname'];
-                                    //rowidval.push('{\"' +k['rowid'] + '\" : \"' +  k['environmentname'] + '\"}');
-                                    var rid = {};
-                                    rid[k['rowid']] = k['teamname'];
-                                    rowidval.push(rid);
-                                   
-                                    //  logger.debug(k['rowid'], k['environmentname'],envdata_.length);
-                                });
-
-                                logger.debug("End of Team.");
-                                callback(null, rowidval);
-                                return;
-                            } else{
-                                logger.debug("Else in Team.");
-                                callback(null, rowidval);
-                                return;
-                            }
-                               
-
-                            }); //teams
+                                        logger.debug("End of Team.");
+                                        callback(null, rowidval);
+                                        return;
+                                    } else {
+                                        logger.debug("Else in Team.");
+                                        callback(null, rowidval);
+                                        return;
+                                    }
+                                }); //teams
 
                             }); //userdata 
                         }); //env
@@ -1078,7 +943,7 @@ function Configmgmt() {
         }); //org
     };
 
-    
+
     this.getListNew = function(mastername, fieldname, callback) {
         logger.debug(mastername);
         this.getDBModelFromID(mastername, function(err, dbtype) {
@@ -1087,7 +952,6 @@ function Configmgmt() {
             }
             if (dbtype) {
                 var query = {};
-                // query[comparedfieldname] = comparedfieldvalue; //building the query 
                 query['id'] = mastername;
 
                 logger.debug("Master Type: " + dbtype);
@@ -1097,7 +961,6 @@ function Configmgmt() {
                     }
                     var d4d = JSON.parse(JSON.stringify(d4dMasterJson));
                     var jsonlist = '';
-                    //logger.debug(JSON.stringify(d4dMasterJson));
                     d4d.forEach(function(k, v) {
                         var ke = Object.keys(k);
                         logger.debug(k[fieldname], k['rowid'], v);
@@ -1107,26 +970,6 @@ function Configmgmt() {
                             jsonlist += ",{\"" + k[fieldname] + "\":\"" + k['rowid'] + "\"}";
 
                     });
-                    // d4d.forEach(function(k,v){
-                    //         var ke = Object.keys(k);
-                    //         logger.debug(ke.length + ' ' +k[fieldname]);
-                    //          if (jsonlist == '')
-                    //             jsonlist += "\"" + k[fieldname] + "\":\"" + k['rowid'] + "\"";
-                    //         else
-                    //             jsonlist += ",\"" + k[fieldname] + "\":\"" + k['rowid'] + "\"";
-                    //         //ke['']
-                    //         //for(var j = 0; j < ke.length)
-                    //                             // var bodyItems = Object.keys(req.body);
-                    //                             // var saveAsfileName = '';
-                    //                             // for (var i = 0; i < bodyItems.length; i++) {
-                    //                             // if (bodyItems[i].indexOf("_filename") > 0)
-                    //                             // saveAsfileName = req.body[bodyItems[i]];
-                    //                             // }
-
-
-
-                    // });
-                    //logger.debug(d4d.length);
                     configmgmt = "[" + jsonlist + "]";
                     logger.debug("sent response" + JSON.stringify(configmgmt));
                     callback(null, configmgmt);
@@ -1146,23 +989,17 @@ function Configmgmt() {
             if (d4dMasterJson) {
                 var jsonlist = '';
                 d4dMasterJson.masterjson.rows.row.forEach(function(itm, i) {
-                    //logger.debug("found" + itm.field.length);
-                    //logger.debug("Item Json" + JSON.stringify(itm));
                     var rowid = '';
                     var fieldvalue = '';
                     var isFilteredRow = false;
                     //filtering for the correct rows
                     for (var j = 0; j < itm.field.length; j++) {
-                        //    logger.debug(JSON.stringify("in the loop : " + itm.field[j][]) + ":" + itm.field[j]['name'] + ':' + comparedfieldvalue);
-
                         if (itm.field[j]["name"] == comparedfieldname) {
                             if (itm.field[j]["values"].value == comparedfieldvalue) {
                                 logger.debug("In Field [ " + itm.field[j]["name"] + "]" + itm.field[j]["values"].value);
                                 isFilteredRow = true;
 
                             }
-
-
                         }
                     }
                     if (isFilteredRow) {
@@ -1214,19 +1051,7 @@ function Configmgmt() {
                             jsonlist += "\"" + k[fieldname] + "\":\"" + k['rowid'] + "\"";
                         else
                             jsonlist += ",\"" + k[fieldname] + "\":\"" + k['rowid'] + "\"";
-                        //ke['']
-                        //for(var j = 0; j < ke.length)
-                        // var bodyItems = Object.keys(req.body);
-                        // var saveAsfileName = '';
-                        // for (var i = 0; i < bodyItems.length; i++) {
-                        // if (bodyItems[i].indexOf("_filename") > 0)
-                        // saveAsfileName = req.body[bodyItems[i]];
-                        // }
-
-
-
                     });
-                    //logger.debug(d4d.length);
                     configmgmt = "{" + jsonlist + "}";
                     logger.debug("sent response" + JSON.stringify(configmgmt));
                     callback(null, jsonlist);
@@ -1257,159 +1082,138 @@ function Configmgmt() {
                 if (count >= codelist.length) {
                     logger.debug('reached callback');
                     callback(null, list);
-                    //return;
                 }
             });
         }
     };
 
-    this.deactivateOrg = function(orgid,action,callback){
-        
-        logger.debug("Orgid:" + orgid + ' action: ' + action );
-        d4dModelNew.d4dModelMastersGeneric.update(
-                {
-                    $or : [{orgname_rowid: orgid},{rowid:orgid}]
-                }                    
-                , {
-                    $set: {
-                        active:action
-                    }
-                }, {
-                    upsert: false,
-                    multi: true   
-                }, function(err, data) {
-                    if (err) {
-                        logger.debug(err);
-                        callback(err, null);
-                        return;
-                    }
-                    logger.debug('Deactivated ' + orgid + ' in masters. Count: ' + data);
-                    callback(null,"done");
-                    return;
-                });
-    
+    this.deactivateOrg = function(orgid, action, callback) {
+        logger.debug("Orgid:" + orgid + ' action: ' + action);
+        d4dModelNew.d4dModelMastersGeneric.update({
+            $or: [{
+                orgname_rowid: orgid
+            }, {
+                rowid: orgid
+            }]
+        }, {
+            $set: {
+                active: action
+            }
+        }, {
+            upsert: false,
+            multi: true
+        }, function(err, data) {
+            if (err) {
+                logger.debug(err);
+                callback(err, null);
+                return;
+            }
+            logger.debug('Deactivated ' + orgid + ' in masters. Count: ' + data);
+            callback(null, "done");
+            return;
+        });
     };
 
-    this.deleteCheck = function(rowid,formids,fieldname,callback){
-        logger.debug("Delete Check request rcvd." + rowid +  ' : ' + formids.toString() + ' : ' + fieldname);
+    this.deleteCheck = function(rowid, formids, fieldname, callback) {
+        logger.debug("Delete Check request rcvd." + rowid + ' : ' + formids.toString() + ' : ' + fieldname);
         var count = 0;
-        var exitloop  = false;
+        var exitloop = false;
         //Building dynamic schema
-        var checkmasters = function(rowid,formids,fieldname){
+        var checkmasters = function(rowid, formids, fieldname) {
             var delcheckquery = {};
-            delcheckquery.id = {$in:formids};
-            if(fieldname.indexOf(',') > 0)
-            {
+            delcheckquery.id = {
+                $in: formids
+            };
+            if (fieldname.indexOf(',') > 0) {
                 var fldn = fieldname.split(',');
-                for(flds in fldn){
-                    delcheckquery[flds] = {$regex : ".*" + rowid + "*"};
+                for (flds in fldn) {
+                    delcheckquery[flds] = {
+                        $regex: ".*" + rowid + "*"
+                    };
                 }
-            }
-            else
-                delcheckquery[fieldname] = {$regex : ".*" + rowid + "*"};
-            //delcheckschema.rowid = {type:String};
-            //var dynaschema = new d4dModelNew.d4dModelMastersGeneric(delcheckschema);
-            d4dModelNew.d4dModelMastersGeneric.find(delcheckquery,function(err,d4dMasterJson){
-                if(!err)
-                {
+            } else
+                delcheckquery[fieldname] = {
+                    $regex: ".*" + rowid + "*"
+                };
+            d4dModelNew.d4dModelMastersGeneric.find(delcheckquery, function(err, d4dMasterJson) {
+                if (!err) {
                     logger.debug(JSON.stringify(d4dMasterJson));
-                    if(d4dMasterJson.length > 0){
+                    if (d4dMasterJson.length > 0) {
                         logger.debug('Found in ' + d4dMasterJson[0]['id'] + ' returning : ');
-                        callback(null,'found');
+                        callback(null, 'found');
+                        return;
+                    } else {
+                        callback(null, 'none');
                         return;
                     }
 
-                    else{
-                        callback(null,'none');
-                        return;
-                    }
-
-                }
-                else{
+                } else {
                     logger.debug("Hit an error in deleteCheck:" + err);
-                    callback(err,null);
+                    callback(err, null);
                     return;
                 }
-                    
+
             });
         };
-        var checkBPInstances = function(rowid,tempplatescheck){
-            blueprintdao.getBlueprintsByProjectId(rowid,function(err,data){
-                if(!err){
+        var checkBPInstances = function(rowid, tempplatescheck) {
+            blueprintdao.getBlueprintsByProjectId(rowid, function(err, data) {
+                if (!err) {
                     logger.debug(JSON.stringify(data));
-                        if(data.length > 0){
-                            logger.debug('Found in ' + data['name'] + ' returning : ');
-                            callback(null,'found blueprints');
+                    if (data.length > 0) {
+                        logger.debug('Found in ' + data['name'] + ' returning : ');
+                        callback(null, 'found blueprints');
+                        return;
+                    } else {
+                        if (formids.indexOf('instances') < 0 && formids.indexOf('all') < 0) {
+                            callback(null, 'none');
                             return;
-                        }
-                        else{
-                            if(formids.indexOf('instances') < 0 && formids.indexOf('all') < 0){
-                                callback(null,'none');
-                                return;
-                            }
-                            else{
-                                instancedao.getInstanceByProjectId(rowid,function(err,data){
-                                    if(!err){
-                                        //logger.debug(JSON.stringify(data));
-                                            if(data.length > 0){
-                                                logger.debug('Found in ' + data['chefNodeName'] + ' returning : ');
-                                                callback(null,'found instances');
-                                                return;
-                                            }
-                                            else{
-                                                if(tempplatescheck != null){
-                                                    var ids =[];
-                                                    ids.push('17');
-                                                    ids.push('19');
-
-                                                      checkmasters(rowid,ids,'configname_rowid');
-                                                }
-                                                else
-                                                {
-                                                        callback(null,'none');
-                                                         return;
-                                                }
-                                            }
-                                    }
-                                    else
-                                    {
-                                        logger.debug("Hit an error in deleteCheck getInstanceByProjectId:" + err);
-                                        callback(err,null);
+                        } else {
+                            instancedao.getInstanceByProjectId(rowid, function(err, data) {
+                                if (!err) {
+                                    if (data.length > 0) {
+                                        logger.debug('Found in ' + data['chefNodeName'] + ' returning : ');
+                                        callback(null, 'found instances');
                                         return;
+                                    } else {
+                                        if (tempplatescheck != null) {
+                                            var ids = [];
+                                            ids.push('17');
+                                            ids.push('19');
+
+                                            checkmasters(rowid, ids, 'configname_rowid');
+                                        } else {
+                                            callback(null, 'none');
+                                            return;
+                                        }
                                     }
-                                });
-                            }
+                                } else {
+                                    logger.debug("Hit an error in deleteCheck getInstanceByProjectId:" + err);
+                                    callback(err, null);
+                                    return;
+                                }
+                            });
                         }
-                }
-                else
-                {
+                    }
+                } else {
                     logger.debug("Hit an error in deleteCheck getBlueprintsByProjectId:" + err);
-                    callback(err,null);
+                    callback(err, null);
                     return;
                 }
             });
         };
 
-        if(formids.indexOf('blueprints') < 0 && formids.indexOf('instances') < 0  && formids.indexOf('all') < 0)
-            {
-                
-                checkmasters(rowid,formids,fieldname);
-            }
-        else{
-            if(formids.indexOf('blueprints') >= 0)
-            {
-                
-                checkBPInstances(rowid,null);
-            }
-            else if(formids.indexOf('all') >= 0){
+        if (formids.indexOf('blueprints') < 0 && formids.indexOf('instances') < 0 && formids.indexOf('all') < 0) {
+
+            checkmasters(rowid, formids, fieldname);
+        } else {
+            if (formids.indexOf('blueprints') >= 0) {
+
+                checkBPInstances(rowid, null);
+            } else if (formids.indexOf('all') >= 0) {
                 logger.debug('Entering all');
-                checkBPInstances(rowid,"checktemplates");
+                checkBPInstances(rowid, "checktemplates");
             }
-            
-
         }
-
-        
     };
 
     this.getServiceFromId = function(serviceId, callback) {
@@ -1417,7 +1221,6 @@ function Configmgmt() {
             if (err) {
                 callback(err, null);
                 return;
-                //logger.debug("Hit and error:" + err);
             }
             if (dbtype) {
                 var query = {};
@@ -1447,7 +1250,6 @@ function Configmgmt() {
             if (err) {
                 callback(err, null);
                 return;
-                //logger.debug("Hit and error:" + err);
             }
             if (dbtype) {
                 var query = {};
@@ -1482,12 +1284,12 @@ function Configmgmt() {
             } else {
                 var envName = self.convertRowIDToValue(envId, rowidlist)
                 logger.debug(envName);
-                callback(null,envName);
+                callback(null, envName);
             }
         });
     };
 
-    this.getOrgBgProjEnvNameFromIds = function(orgId,bgId,projId,envId, callback) {
+    this.getOrgBgProjEnvNameFromIds = function(orgId, bgId, projId, envId, callback) {
         var self = this;
         this.getRowids(function(err, rowidlist) {
             if (err) {
@@ -1500,9 +1302,9 @@ function Configmgmt() {
                 names.orgName = self.convertRowIDToValue(orgId, rowidlist);
                 names.bgName = self.convertRowIDToValue(bgId, rowidlist);
                 names.projName = self.convertRowIDToValue(projId, rowidlist);
-                
+
                 logger.debug(names);
-                callback(null,names);
+                callback(null, names);
             }
         });
     };
@@ -1529,17 +1331,9 @@ function Configmgmt() {
                     projects: [],
                     bunits: [],
                 });
-                //callback(null,userd);
                 var qry = {};
                 qry['id'] = '21';
                 qry['loginname_rowid'] = userd[0]['rowid'];
-                /*if(userd[0]['userrolename'] != 'Admin')
-                qry['loginname_rowid'] = {$regex:userd[0]['rowid']};*/
-                // {
-                //     loginname_rowid: {
-                //         $regex: userd[0]['rowid']
-                //     }
-                // }
                 d4dModelNew.d4dModelMastersTeams.find({
                     id: "21",
                     loginname_rowid: {
@@ -1551,14 +1345,9 @@ function Configmgmt() {
                         callback(err, null);
                         return;
                     }
-                    //logger.debug("Team....... ",JSON.stringify(teamd));
                     if (teamd.length > 0) {
-                        // logger.debug('In d4dModelMastersTeams teadd :' + JSON.stringify(teamd));
                         teamd.forEach(function(k, v) {
-                            //logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>> ", k['projectname_rowid']);
                             if (typeof k['projectname_rowid'] != "undefined") {
-                                //logger.debug("Called..... >>>>>>>>> ", k['projectname_rowid']);
-                                //logger.debug('k:' + k + 'v:' + v);
                                 outJ[0].teams.push(k['rowid']);
                                 var projs = k['projectname_rowid'].split(',');
                                 for (var i = 0; i < projs.length; i++) {
@@ -1568,7 +1357,6 @@ function Configmgmt() {
 
                                     }
                                     if (v >= teamd.length - 1 && i >= (projs.length - 1)) {
-                                        //logger.debug('Printing outJ : ' + JSON.stringify(outJ));
                                         //All projects added.
                                         var qry1 = {};
                                         qry1['id'] = '4';
@@ -1583,13 +1371,11 @@ function Configmgmt() {
                                                 callback(err, null);
                                                 return;
                                             }
-                                            logger.debug("No Projects..... ",JSON.stringify(projd));
+                                            logger.debug("No Projects..... ", JSON.stringify(projd));
                                             if (projd.length > 0) {
                                                 for (var j = 0; j < projd.length; j++) {
-                                                    //var orglist = projd[j]['orgname_rowid'].split(',');
                                                     var orglist = projd[j]['orgname_rowid'];
                                                     var bulist = projd[j]['productgroupname_rowid'].split(',');
-                                                    //var bulist = projd[j]['productgroupname_rowid'];
                                                     for (var k = 0; k < orglist.length; k++) {
                                                         if (outJ[0]['orgs'].indexOf(orglist[k]) < 0)
                                                             outJ[0]['orgs'].push(orglist[k]);
@@ -1601,7 +1387,6 @@ function Configmgmt() {
                                                     if (j >= projd.length - 1) {
                                                         logger.debug('Came to the last project');
                                                         logger.debug('Exiting getTeamsOrgBuProjForUser');
-                                                        // logger.debug('Printing outJ : ' + JSON.stringify(outJ));
                                                         callback(null, outJ);
                                                     }
                                                 }
@@ -1615,7 +1400,7 @@ function Configmgmt() {
                                     }
                                 }
                             } else {
-                                logger.debug("Return proj value: ",outJ);
+                                logger.debug("Return proj value: ", outJ);
                                 callback(null, outJ);
                                 return;
                             }

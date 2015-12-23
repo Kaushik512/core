@@ -8,7 +8,6 @@
 var aws = require('aws-sdk');
 var logger = require('_pr/logger')(module);
 
-
 if (process.env.http_proxy) {
     aws.config.update({
         httpOptions: {
@@ -17,7 +16,6 @@ if (process.env.http_proxy) {
     });
 }
 var AWSCloudFormation = function(awsSettings) {
-
     var cloudFormation = new aws.CloudFormation({
         "accessKeyId": awsSettings.access_key,
         "secretAccessKey": awsSettings.secret_key,
@@ -25,7 +23,6 @@ var AWSCloudFormation = function(awsSettings) {
     });
 
     var that = this;
-
     this.createStack = function(stackOptions, callback) {
         var options = {
             StackName: stackOptions.name,
@@ -58,8 +55,6 @@ var AWSCloudFormation = function(awsSettings) {
         });
     };
 
-
-
     function describeStacks(stackNameOrId, nextToken, callback) {
         cloudFormation.describeStacks({
             StackName: stackNameOrId,
@@ -70,7 +65,6 @@ var AWSCloudFormation = function(awsSettings) {
                 return;
             };
             callback(null, res.Stacks);
-
 
         });
 

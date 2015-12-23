@@ -105,7 +105,7 @@ function getBlueprintConfigType(blueprint) {
     } else if ((blueprint.blueprintType === BLUEPRINT_TYPE.VMWARE_LAUNCH) && blueprint.blueprintConfig) {
         logger.debug('this is test');
         BlueprintConfigType = VmwareBlueprint;
-    }else {
+    } else {
         return;
     }
     var blueprintConfigType = new BlueprintConfigType(blueprint.blueprintConfig);
@@ -133,8 +133,6 @@ BlueprintSchema.methods.update = function(updateData, callback) {
     });
 };
 
-
-
 BlueprintSchema.methods.getVersionData = function(ver) {
     var blueprintConfigType = getBlueprintConfigType(this);
     if (!blueprintConfigType) {
@@ -143,8 +141,6 @@ BlueprintSchema.methods.getVersionData = function(ver) {
 
     return blueprintConfigType.getVersionData(ver);
 };
-
-
 
 BlueprintSchema.methods.getLatestVersion = function() {
     var blueprintConfigType = getBlueprintConfigType(this);
@@ -162,7 +158,6 @@ BlueprintSchema.methods.getInfraManagerData = function() {
     }
 
     return blueprintConfigType.getInfraManagerData();
-
 }
 
 BlueprintSchema.methods.getCloudProviderData = function() {
@@ -172,7 +167,6 @@ BlueprintSchema.methods.getCloudProviderData = function() {
     }
 
     return blueprintConfigType.getCloudProviderData();
-
 }
 
 BlueprintSchema.methods.launch = function(envId, ver, callback) {
@@ -184,7 +178,7 @@ BlueprintSchema.methods.launch = function(envId, ver, callback) {
 
 // static methods
 BlueprintSchema.statics.createNew = function(blueprintData, callback) {
-    logger.debug('blueprintData.cloudFormationData ==>',blueprintData.cloudFormationData);
+    logger.debug('blueprintData.cloudFormationData ==>', blueprintData.cloudFormationData);
 
     var blueprintConfig, blueprintType;
     if ((blueprintData.blueprintType === BLUEPRINT_TYPE.INSTANCE_LAUNCH) && blueprintData.instanceData) {
@@ -198,23 +192,23 @@ BlueprintSchema.statics.createNew = function(blueprintData, callback) {
         blueprintConfig = CloudFormationBlueprint.createNew(blueprintData.cloudFormationData);
     } else if ((blueprintData.blueprintType === BLUEPRINT_TYPE.OPENSTACK_LAUNCH) && blueprintData.instanceData) {
         blueprintType = BLUEPRINT_TYPE.OPENSTACK_LAUNCH;
-        logger.debug('blueprintData openstack instacedata ==>',blueprintData.instanceData);
+        logger.debug('blueprintData openstack instacedata ==>', blueprintData.instanceData);
         blueprintConfig = OpenstackBlueprint.createNew(blueprintData.instanceData);
-    }else if ((blueprintData.blueprintType === BLUEPRINT_TYPE.HPPUBLICCLOUD_LAUNCH) && blueprintData.instanceData) {
+    } else if ((blueprintData.blueprintType === BLUEPRINT_TYPE.HPPUBLICCLOUD_LAUNCH) && blueprintData.instanceData) {
         blueprintType = BLUEPRINT_TYPE.HPPUBLICCLOUD_LAUNCH;
-        logger.debug('blueprintData openstack instacedata ==>',blueprintData.instanceData);
+        logger.debug('blueprintData openstack instacedata ==>', blueprintData.instanceData);
         blueprintConfig = OpenstackBlueprint.createNew(blueprintData.instanceData);
     } else if ((blueprintData.blueprintType === BLUEPRINT_TYPE.AZURE_LAUNCH) && blueprintData.instanceData) {
         blueprintType = BLUEPRINT_TYPE.AZURE_LAUNCH;
-        logger.debug('blueprintData azure instacedata ==>',blueprintData.instanceData);
+        logger.debug('blueprintData azure instacedata ==>', blueprintData.instanceData);
         blueprintConfig = AzureBlueprint.createNew(blueprintData.instanceData);
         blueprintConfig.cloudProviderData = AzureBlueprint.createNew(blueprintData.instanceData);
     } else if ((blueprintData.blueprintType === BLUEPRINT_TYPE.VMWARE_LAUNCH) && blueprintData.instanceData) {
         blueprintType = BLUEPRINT_TYPE.VMWARE_LAUNCH;
-        logger.debug('blueprintData vmware instacedata ==>',blueprintData.instanceData);
+        logger.debug('blueprintData vmware instacedata ==>', blueprintData.instanceData);
         blueprintConfig = VmwareBlueprint.createNew(blueprintData.instanceData);
 
-    }   else {
+    } else {
         process.nextTick(function() {
             callback({
                 message: "Invalid Blueprint Type sdds"
@@ -236,8 +230,6 @@ BlueprintSchema.statics.createNew = function(blueprintData, callback) {
         blueprintConfig: blueprintConfig,
         blueprintType: blueprintType
     };
-
-    logger.debug('-------------blueprintObj',JSON.stringify(blueprintObj));
 
     var blueprint = new Blueprints(blueprintObj);
     logger.debug('saving');
@@ -297,8 +289,6 @@ BlueprintSchema.statics.getBlueprintsByOrgBgProject = function(orgId, bgId, proj
         callback(null, blueprints);
     });
 };
-
-
 
 var Blueprints = mongoose.model('blueprints', BlueprintSchema);
 

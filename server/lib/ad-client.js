@@ -6,7 +6,7 @@
  */
 
 var ActiveDirectory = require('activedirectory');
-
+var logger = require('_pr/logger')(module);
 
 var setDefaults = function(options) {
     options.host || (options.host = 'localhost');
@@ -40,7 +40,6 @@ function createDnString(username, baseDn, ou) {
     }
     str += baseDn;
     return str;
-    //'cn='+username+',ou=SCLT_Group3,dc=d4d-ldap,dc=relevancelab,dc=com';
 }
 
 var ADClient = function(options) {
@@ -53,18 +52,13 @@ var ADClient = function(options) {
     var client = new ActiveDirectory({
         url: 'ldap://' + options.host + ':' + options.port,
         baseDN: options.baseDn,
-        //username: 'username@domain.com',
-        //password: 'password'
     });
 
 
     this.authenticate = function(username, password, callback) {
-
-        //logger.debug('hit authenticate =========>' + dnString);
-
         client.authenticate(username, password, function(err, auth) {
             if (err) {
-                logger.debug("err ==> ", err);
+                logger.error("err ==> ", err);
                 callback(err, null);
             } else {
                 logger.debug("User String:{" + dnString + '}');
@@ -74,8 +68,6 @@ var ADClient = function(options) {
         });
 
     };
-
-
 }
 
 module.exports = ADClient;

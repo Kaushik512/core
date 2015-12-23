@@ -41,7 +41,6 @@ var AuthTokenSchema = new Schema({
 
 // creates a new task
 AuthTokenSchema.statics.createNew = function(sessionData, callback) {
-    logger.debug('here === >>> anshul');
     var token = uuid.v4();
     var that = this;
     var authToken = new that({
@@ -50,7 +49,7 @@ AuthTokenSchema.statics.createNew = function(sessionData, callback) {
         sessionData: sessionData
     });
 
-    logger.debug('auth == > ',authToken);
+    logger.debug('auth == > ', authToken);
 
     authToken.save(function(err, data) {
         if (err) {
@@ -117,11 +116,6 @@ AuthTokenSchema.statics.removeByToken = function(token, callback) {
         callback(null, deleteCount);
     });
 };
-
-
-
-
-
 
 
 var AuthToken = mongoose.model('AuthToken', AuthTokenSchema);

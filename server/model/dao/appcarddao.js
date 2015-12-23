@@ -12,7 +12,6 @@ var logger = require('_pr/logger')(module);
 var schemaValidator = require('./schema-validator');
 
 
-
 var Schema = mongoose.Schema;
 
 var AppCardSchema = new Schema({
@@ -83,19 +82,11 @@ var AppCardSchema = new Schema({
     unitTestUrl: String,
     codeCoverageTestUrl: String,
     codeAnalysisUrl: String
-
-
-
-
-
-
-
 });
 
 var AppCards = mongoose.model('appcard', AppCardSchema);
 
 var AppCardsDao = function() {
-
 
     this.createAppCard = function(appCardData, callback) {
         logger.debug("Enter createAppCard");

@@ -35,8 +35,6 @@ module.exports.setRoutes = function(app) {
                 adminPass: appConfig.ldap.adminPass
             });
             logger.debug('Create User request received:', req.body.username, req.body.password.length, req.body.fname, req.body.lname);
-
-            //Hardcoding to be removed....
             ldapClient.createUser(req.body.username, req.body.password, req.body.fname, req.body.lname, function(err, user) {
                 if (err) {
                     logger.debug('In Error', err);
@@ -53,14 +51,6 @@ module.exports.setRoutes = function(app) {
     });
     app.post('/auth/signin', function(req, res, next) {
         if (req.body && req.body.username && req.body.pass) {
-            /*GlobalSettings.getGolbalSettings(function(err, globalSettings) {
-                if (err) {
-                    res.status(500).send( errorResponses.db.error);
-                    return;
-                }
-                if (globalSettings.length) {
-                    logger.debug("Authentication Strategy: ", globalSettings[0].authStrategy.externals);
-                    if (globalSettings[0].authStrategy.externals) {*/
             if (appConfig.authStrategy.externals) {
                 logger.debug("LDAP Authentication>>>>>");
                 passport.authenticate('ldap-custom-auth', function(err, user, info) {
@@ -127,7 +117,7 @@ module.exports.setRoutes = function(app) {
                 })(req, res, next);
             } else { // Local Authentication
 
-                logger.debug("Local Authentication>>>>>");
+                logger.debug("Local Authentication");
                 var password = req.body.pass;
                 var userName = req.body.username;
                 var user = {
@@ -204,9 +194,6 @@ module.exports.setRoutes = function(app) {
                     }
                 });
             }
-            //}
-            //});
-
         } else {
             if (req.body.authType === 'token') {
                 return res.status(400).send({
@@ -221,14 +208,13 @@ module.exports.setRoutes = function(app) {
         logger.debug("/auth/signout. Signing out user")
         req.logout(); //passport logout
         req.session.destroy();
-        //res.send(200);
         //checking for any auth token in header
         if (req.headers[appConfig.catalystAuthHeaderName]) {
             var token = req.headers[appConfig.catalystAuthHeaderName];
             AuthToken.removeByToken(token, function(err, removeCount) {
                 if (err) {
                     logger.error("Unable to remove token");
-                    res.status(500).send( {
+                    res.status(500).send({
                         message: 'unable to remove auth token'
                     });
                     return;
@@ -244,9 +230,7 @@ module.exports.setRoutes = function(app) {
 
     });
 
-
     app.get('/login', function(req, res) {
-        //res.render('login');
         res.redirect('/public/login.html');
 
     });
@@ -262,7 +246,6 @@ module.exports.setRoutes = function(app) {
             adminPass: appConfig.ldap.adminPass
         });
         ldapClient.compare(req.params.username, function(err, status) {
-            // logger.debug("/auth/userexists/:username. LDAP Response = " + status);
             res.send(status)
         });
     });
@@ -280,9 +263,7 @@ module.exports.setRoutes = function(app) {
     });
 
     var verifySession = function(req, res, next) {
-        //logger.debug("Enter verifySession");
         if (req.session && req.session.user) {
-            //logger.debug("Has Session && Session Has User");
             next();
         } else {
             //checking for token authentication
@@ -299,25 +280,20 @@ module.exports.setRoutes = function(app) {
                         next();
                     } else {
                         logger.debug("No Valid Session for User - 403");
-                        //res.redirect('/login');
                         res.send(403);
                     }
                 });
             } else {
                 logger.debug("No Valid Session for User - 403");
-                //res.redirect('/login');
                 res.send(403);
             }
         }
     };
 
     var adminVerificationFunc = function(req, res, next) {
-        //logger.debug("Enter adminVerificationFunc");
         logger.debug('here ==>', req.session);
         if (req.session && req.session.user) {
-            //logger.debug("Has Session && Session Has User");
             if (req.session.user.cn == 'admin') {
-                //logger.debug("Has Session && Session Has User and User is Admin");
                 next();
             } else {
                 logger.debug("Has Session && Session Has User But User is not Admin");

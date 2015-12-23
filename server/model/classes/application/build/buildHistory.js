@@ -31,14 +31,14 @@ buildHistorySchema.methods.getLogs = function() {
 
 buildHistorySchema.methods.updateBuildStatus = function(status, callback) {
     this.status.status = status,
-    this.save(function(err, history) {
-        if (err) {
-            logger.error(err);
-            callback(err, null);
-            return;
-        }
-        callback(null, history);
-    });
+        this.save(function(err, history) {
+            if (err) {
+                logger.error(err);
+                callback(err, null);
+                return;
+            }
+            callback(null, history);
+        });
 };
 
 buildHistorySchema.statics.BUILD_STATUS = {
@@ -92,9 +92,6 @@ buildHistorySchema.statics.getHistoryById = function(id, callback) {
     });
 
 };
-
-
-
 
 var BuildHistory = mongoose.model('appBuildHistory', buildHistorySchema);
 

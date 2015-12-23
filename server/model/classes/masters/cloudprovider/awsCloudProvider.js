@@ -18,7 +18,7 @@ var Schema = mongoose.Schema;
 
 
 var awsProviderSchema = new Schema({
-    id:{
+    id: {
         type: Number,
         required: true
     },
@@ -90,15 +90,17 @@ awsProviderSchema.statics.getAWSProviders = function(callback) {
     });
 };
 
-awsProviderSchema.statics.getAWSProvidersForOrg = function(orgList,callback) {
+awsProviderSchema.statics.getAWSProvidersForOrg = function(orgList, callback) {
     logger.debug("Enter getAWSProvidersForOrg");
     var orgIds = [];
-        for(var x=0;x<orgList.length;x++){
-            orgIds.push(orgList[x]._id);
-        }
-        logger.debug("org id: ",orgIds);
+    for (var x = 0; x < orgList.length; x++) {
+        orgIds.push(orgList[x]._id);
+    }
+    logger.debug("org id: ", orgIds);
     this.find({
-        orgId : {$in:orgIds}
+        orgId: {
+            $in: orgIds
+        }
     }, function(err, providers) {
         if (err) {
             logger.error(err);
@@ -141,7 +143,7 @@ awsProviderSchema.statics.getAWSProviderById = function(providerId, callback) {
     });
 };
 
-awsProviderSchema.statics.getAWSProviderByName = function(providerName,orgId, callback) {
+awsProviderSchema.statics.getAWSProviderByName = function(providerName, orgId, callback) {
     logger.debug("Enter getAWSProviderById");
     this.find({
         "providerName": providerName,
@@ -209,11 +211,11 @@ awsProviderSchema.statics.removeAWSProviderById = function(providerId, callback)
     });
 };
 
-awsProviderSchema.statics.getAWSProvidersByOrgId = function(orgId,callback) {
+awsProviderSchema.statics.getAWSProvidersByOrgId = function(orgId, callback) {
     logger.debug("Enter getAWSProvidersByOrgId");
-        logger.debug("org id: ",orgId);
+    logger.debug("org id: ", orgId);
     this.find({
-        orgId : orgId
+        orgId: orgId
     }, function(err, providers) {
         if (err) {
             logger.error(err);

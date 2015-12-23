@@ -40,12 +40,12 @@ LDAPPassportstrategy.prototype.authenticate = function(req, options) {
         host: opts.host,
         port: opts.port,
         baseDn: opts.baseDn,
-        ou:opts.ou
+        ou: opts.ou
     });
     logger.debug(req.body);
     var username = req.body[opts.usernameField];
     var password = req.body[opts.passwordField];
-    
+
     if (!(username && password)) {
         return self.fail({
             message: 'Missing credentials'

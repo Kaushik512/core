@@ -183,7 +183,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             }
         });
     });
-    
+
     app.post('/openstack/:providerid/:tenantId/createServer', function(req, res) {
         var providerId = req.params.providerid;
         getopenstackprovider(req.params.providerid, function(err, openstackconfig) {
@@ -196,21 +196,20 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     return;
                 }
                 if (images.length) {
-                    //var json = "{\"server\": {\"name\": \"server-test\",\"imageRef\": \"'+images[0].imageIdentifier+'\",\"flavorRef\": \"2\",\"max_count\": 1,\"min_count\": 1,\"networks\": [{\"uuid\": \"'+uuid.v4()+'\"}],\"security_groups\": [{\"name\": \"default\"}]}}";
                     var opnstackBody = {
-                    	server: {
-                    		name: "server-test",
-                    		imageRef: images[0].imageIdentifier,
-                    		flavorRef: 2,
-                    		max_count: 1,
-                    		min_count: 1,
-                    		networks: [{
-                    			uuid: uuid.v4()
-                    		}],
-                    		security_groups: [{
-                    			name: "default"
-                    		}]
-                    	}
+                        server: {
+                            name: "server-test",
+                            imageRef: images[0].imageIdentifier,
+                            flavorRef: 2,
+                            max_count: 1,
+                            min_count: 1,
+                            networks: [{
+                                uuid: uuid.v4()
+                            }],
+                            security_groups: [{
+                                name: "default"
+                            }]
+                        }
                     };
                     openstack.createServer(openstackconfig.tenantId, JSON.stringify(opnstackBody.server), function(err, data) {
                         if (err) {
@@ -222,9 +221,9 @@ module.exports.setRoutes = function(app, verificationFunc) {
                         res.send(data);
                         return;
                     });
-                }else{
-                	res.status(404).send("Image not found.");
-                	return;
+                } else {
+                    res.status(404).send("Image not found.");
+                    return;
                 }
             });
         });

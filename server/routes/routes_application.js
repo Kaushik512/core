@@ -9,7 +9,6 @@
 
 
 var Application = require('../model/classes/application/application');
-
 var logger = require('_pr/logger')(module);
 
 module.exports.setRoutes = function(app, sessionVerification) {
@@ -285,7 +284,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
         });
     });
 
-
     app.get('/applications/:applicationId/appInstances/:appInstanceId/workflows', function(req, res) {
 
         Application.getApplicationById(req.params.applicationId, function(err, application) {
@@ -347,7 +345,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/applications/:applicationId/appInstances/:appInstanceId/workflows/:workflowId/execute', function(req, res) {
-
         Application.getApplicationById(req.params.applicationId, function(err, application) {
             if (err) {
                 res.status(500).send(errorResponses.db.error);

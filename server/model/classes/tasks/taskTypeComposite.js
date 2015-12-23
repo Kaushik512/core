@@ -74,7 +74,7 @@ compositeTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, n
                     return;
                 }
                 count++;
-                logger.debug("count======= ", count);
+                logger.debug("count ", count);
                 if (count < tasks.length) {
                     if (status === 0) {
                         executeTasks(count);
@@ -84,7 +84,7 @@ compositeTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, n
                 } else {
                     if (status === 0) {
                         onComplete(null, 0);
-                    }else{
+                    } else {
                         logger.debug('firing failure');
                         onComplete(null, 1);
                     }

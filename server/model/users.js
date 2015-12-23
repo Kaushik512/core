@@ -22,7 +22,6 @@ var UserSchema = new Schema({
 
 var Users = mongoose.model('users', UserSchema);
 
-
 module.exports.createUser = function(username, fname, lname, groupId, roleId, callback) {
   var user = new Users({
     username: username,
@@ -46,19 +45,13 @@ module.exports.createUser = function(username, fname, lname, groupId, roleId, ca
 
 var getpermissionforcategory = function(category,permissionto, permissionset) {
     var perms = [];
-   // logger.debug(JSON.stringify(permissionset));
- //   logger.debug('Category : ' + category);
     if (permissionset) {
-      // logger.debug('About to call getObjects u:' + username + ' c:' + category);
-       //permissionset = JSON.parse(permissionset);
         for(var i = 0; i< permissionset.length; i++){
           var obj = permissionset[i].permissions;
           for(var j = 0; j < obj.length;j++){
             if(obj[j].category == category){
-              //perms.push(obj[j].access);
               var acc = obj[j].access.toString().split(',');
               for(var ac in acc){
-               // logger.debug('Array : ' +acc[ac]);
                 if(perms.indexOf(acc[ac]) < 0)
                   perms.push(acc[ac]);
               }
@@ -153,7 +146,6 @@ module.exports.getUser = function(username, req, callback) {
                     callback(err, null);
                 }
             });
-            //res.end();
         } else {
             logger.debug("none found");
             callback(err, null);
@@ -162,8 +154,6 @@ module.exports.getUser = function(username, req, callback) {
 
     });
 };
-
-
 
 module.exports.getUser__ = function(username, callback) {
   Users.find({
@@ -179,7 +169,6 @@ module.exports.getUser__ = function(username, callback) {
 
 module.exports.getUsersInGroup = function(groupId, roleId, callback) {
   Users.find({
-    //roleId:roleId,
     groupId: groupId,
   }, function(err, data) {
     if (err) {

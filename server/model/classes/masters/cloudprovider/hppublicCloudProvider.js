@@ -20,7 +20,7 @@ var Schema = mongoose.Schema;
 
 
 var hppubliccloudProviderSchema = new Schema({
-    id:{
+    id: {
         type: Number,
         required: true
     },
@@ -49,7 +49,7 @@ var hppubliccloudProviderSchema = new Schema({
         required: true,
         trim: true
     },
-    serviceendpoints:{
+    serviceendpoints: {
         compute: {
             type: String,
             trim: true
@@ -86,15 +86,15 @@ var hppubliccloudProviderSchema = new Schema({
         required: true,
         trim: true
     },
-    region:{
+    region: {
         type: String,
         required: true,
-        trim : true
+        trim: true
     },
-    keyname:{
+    keyname: {
         type: String,
         required: true,
-        trim : true
+        trim: true
     },
     hpFileName: {
         type: String,
@@ -111,16 +111,16 @@ var hppubliccloudProviderSchema = new Schema({
 // Static methods :- 
 
 // creates a new Provider
-hppubliccloudProviderSchema.statics.createNew = function(req,providerData, callback) {
+hppubliccloudProviderSchema.statics.createNew = function(req, providerData, callback) {
     logger.debug("Enter createNew");
     var providerObj = providerData;
     var that = this;
     logger.debug(JSON.stringify(providerObj));
     var provider = new that(providerObj);
-     var inFiles = req.files.hpFileName;
-     
+    var inFiles = req.files.hpFileName;
+
     logger.debug('Files found: ' + inFiles.fieldName);
-    
+
     provider.save(function(err, aProvider) {
         if (err) {
             logger.error(err);
@@ -130,14 +130,14 @@ hppubliccloudProviderSchema.statics.createNew = function(req,providerData, callb
         logger.debug(JSON.stringify(aProvider));
         var keyPair = {
             _id: aProvider['_id']
-         }
+        }
         ProviderUtil.saveAwsPemFiles(keyPair, inFiles, function(err, flag) {
-                        if (err) {
-                            logger.debug("Unable to save pem files.");
-                            res.status(500).send( "Unable to save pem files.");
-                            return;
-                        }
-                    });
+            if (err) {
+                logger.debug("Unable to save pem files.");
+                res.status(500).send("Unable to save pem files.");
+                return;
+            }
+        });
         logger.debug("Exit createNew with provider present");
         callback(null, aProvider);
         return;
@@ -147,7 +147,7 @@ hppubliccloudProviderSchema.statics.createNew = function(req,providerData, callb
 hppubliccloudProviderSchema.statics.gethppubliccloudProviders = function(callback) {
     logger.debug("Enter gethppubliccloudProviders");
     this.find({
-        "id" : 9
+        "id": 9
     }, function(err, providers) {
         if (err) {
             logger.error(err);
@@ -167,15 +167,17 @@ hppubliccloudProviderSchema.statics.gethppubliccloudProviders = function(callbac
     });
 };
 
-hppubliccloudProviderSchema.statics.gethppubliccloudProvidersForOrg = function(orgList,callback) {
+hppubliccloudProviderSchema.statics.gethppubliccloudProvidersForOrg = function(orgList, callback) {
     logger.debug("Enter getAWSProvidersForOrg");
     var orgIds = [];
-        for(var x=0;x<orgList.length;x++){
-            orgIds.push(orgList[x]._id);
-        }
-        logger.debug("org id: ",orgIds);
+    for (var x = 0; x < orgList.length; x++) {
+        orgIds.push(orgList[x]._id);
+    }
+    logger.debug("org id: ", orgIds);
     this.find({
-        orgId : {$in:orgIds}
+        orgId: {
+            $in: orgIds
+        }
     }, function(err, providers) {
         if (err) {
             logger.error(err);
@@ -218,7 +220,7 @@ hppubliccloudProviderSchema.statics.gethppubliccloudProviderById = function(prov
     });
 };
 
-hppubliccloudProviderSchema.statics.gethppubliccloudProviderByName = function(providerName,orgId, callback) {
+hppubliccloudProviderSchema.statics.gethppubliccloudProviderByName = function(providerName, orgId, callback) {
     logger.debug("Enter gethppubliccloudProviderById");
     this.find({
         "providerName": providerName,
@@ -258,11 +260,11 @@ hppubliccloudProviderSchema.statics.updatehppubliccloudProviderById = function(p
             providerType: providerData.providerType,
             keyname: providerData.keyname,
             hpFileName: providerData.hpFileName,
-            serviceendpoints:{
+            serviceendpoints: {
                 compute: providerData.serviceendpoints.compute,
                 network: providerData.serviceendpoints.network,
                 image: providerData.serviceendpoints.image,
-                ec2:providerData.serviceendpoints.ec2 ,
+                ec2: providerData.serviceendpoints.ec2,
                 identity: providerData.serviceendpoints.identity
             }
         }
@@ -274,7 +276,7 @@ hppubliccloudProviderSchema.statics.updatehppubliccloudProviderById = function(p
             callback(err, null);
             return;
         }
-        
+
         logger.debug("Exit updatehppubliccloudProviderById with update success.");
         callback(null, updateCount);
         return;
@@ -299,11 +301,11 @@ hppubliccloudProviderSchema.statics.removehppubliccloudProviderById = function(p
     });
 };
 
-hppubliccloudProviderSchema.statics.gethppubliccloudProvidersByOrgId = function(orgId,callback) {
+hppubliccloudProviderSchema.statics.gethppubliccloudProvidersByOrgId = function(orgId, callback) {
     logger.debug("Enter gethppubliccloudProvidersByOrgId");
-        logger.debug("org id: ",orgId);
+    logger.debug("org id: ", orgId);
     this.find({
-        orgId : orgId
+        orgId: orgId
     }, function(err, providers) {
         if (err) {
             logger.error(err);

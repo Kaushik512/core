@@ -660,8 +660,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     }
                 });
 
-                //getting business groups
-
             } else {
                 res.send(orgTree);
             }
@@ -1343,7 +1341,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     });
                                     return;
                                 }
-                                //    logger.debug('node ===>', node);
                                 credentialCryptography.encryptCredential(credentials, function(err, encryptedCredentials) {
                                     if (err) {
                                         logger.error("unable to encrypt credentials", err);
@@ -1359,7 +1356,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     if (appConfig.appUrls && appConfig.appUrls.length) {
                                         appUrls = appUrls.concat(appConfig.appUrls);
                                     }
-
 
                                     var instance = {
                                         name: req.body.fqdn,

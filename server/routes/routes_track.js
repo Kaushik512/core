@@ -20,7 +20,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.get('/track', function(req, res) {
         Track.getTracks(function(err, tracks) {
             if (err) {
-                res.status(500).send( errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (tracks) {
@@ -37,16 +37,16 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         //updating the record when type is present.
         Track.getTrackByType(req.body.trackData.type, function(err, tracks) {
             if (err) {
-                logger.debug("error Type:>>>>>");
-                res.status(500).send( errorResponses.db.error);
+                logger.debug("error ", errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (tracks.length === 0) {
                 //creating new record when type is not present.
                 Track.createNew(req.body.trackData, function(err, tracks) {
                     if (err) {
-                        logger.debug("error Type New:>>>>>");
-                        res.status(500).send( errorResponses.db.error);
+                        logger.debug("error ", errorResponses.db.error);
+                        res.status(500).send(errorResponses.db.error);
                         return;
                     }
                     if (tracks) {
@@ -58,11 +58,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 logger.debug(req.body.trackData);
                 var items = tracks[0].itemUrls.concat(req.body.trackData.itemUrls);
                 tracks[0].itemUrls = items;
-                logger.debug("tracks[0]",items);
+                logger.debug("tracks[0]", items);
                 tracks[0].save(function(err, track) {
                     if (err) {
-                        logger.debug("error Type Update:>>>>>", err);
-                        res.status(500).send( errorResponses.db.error);
+                        logger.debug("error ", err);
+                        res.status(500).send(errorResponses.db.error);
                         return;
                     }
                     res.send(200, track);
@@ -78,7 +78,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         logger.debug("Got tracks data: ", JSON.stringify(req.body.trackData), req.params.trackId);
         Track.getTrackById(req.params.trackId, function(err, tracks) {
             if (err) {
-                res.status(500).send( errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (!tracks) {
@@ -86,14 +86,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (!req.body.trackData.itemUrls) {
-                res.status(400).send( {
+                res.status(400).send({
                     message: "Bad Request"
                 })
                 return;
             }
             Track.updateTrack(req.params.trackId, req.body.trackData.itemUrls, function(err, updateCount) {
                 if (err) {
-                    res.status(500).send( errorResponses.db.error);
+                    res.status(500).send(errorResponses.db.error);
                     return;
                 }
                 res.send(200, {
@@ -107,7 +107,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.get('/track/:trackId', function(req, res) {
         Track.getTrackById(req.params.trackId, function(err, tracks) {
             if (err) {
-                res.status(500).send( errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (tracks) {
@@ -124,7 +124,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.delete('/track/:trackId/:itemId', function(req, res) {
         Track.getTrackById(req.params.trackId, function(err, track) {
             if (err) {
-                res.status(500).send( errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (track) {

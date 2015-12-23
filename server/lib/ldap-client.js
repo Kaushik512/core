@@ -8,8 +8,6 @@
 var logger = require('_pr/logger')(module);
 var ldap = require('ldapjs');
 
-
-
 var setDefaults = function(options) {
     options.host || (options.host = 'localhost');
     options.port || (options.port = '389');
@@ -17,8 +15,6 @@ var setDefaults = function(options) {
     options.ou || (options.ou = '');
     options.adminUser || (options.adminUser = 'admin');
     options.adminPass || (options.adminPass = 'SomePass');
-
-
     return options;
 };
 
@@ -45,7 +41,6 @@ function createDnString(username, baseDn, ou) {
     }
     str += baseDn;
     return str;
-    //'cn='+username+',ou=SCLT_Group3,dc=d4d-ldap,dc=relevancelab,dc=com';
 }
 
 var Ldap = function(options) {
@@ -60,9 +55,7 @@ var Ldap = function(options) {
     });
 
     this.authenticate = function(username, password, callback) {
-
         var dnString = createDnString(username, options.baseDn, options.ou);
-        logger.debug('hit authenticate =========>' + dnString);
         client.bind(dnString, password, function(err, user) {
             if (err) {
                 logger.debug("err ==> ", err);
@@ -72,9 +65,6 @@ var Ldap = function(options) {
                 callback(null, createDnObject(dnString));
             }
         });
-
-
-
     };
     this.compare = function(username, callback) {
         var dnString = createDnString(username, options.baseDn, options.ou);
@@ -98,7 +88,6 @@ var Ldap = function(options) {
 
     this.createUser = function(username, password, fname, lname, callback) {
         logger.debug('Entered Create User in Ldap', username, password, fname, lname);
-
         var entry = {
             cn: username,
             gn: fname,
@@ -106,9 +95,6 @@ var Ldap = function(options) {
             userPassword: password,
             uid: username,
             objectclass: ['inetOrgPerson'],
-            //uidNumber: new Date().getTime()
-            //homeDirectory: '/home/users/' + username
-            //dc=['d4d-ldap','relevancelab','com']
         };
         var dnString = createDnString(options.adminUser, options.baseDn, options.ou);
         var self = this;
@@ -131,7 +117,6 @@ var Ldap = function(options) {
                     callback(err.message, null);
                 } else {
                     logger.debug('created');
-                    // logger.debug('user ==> ', user);
                     callback(null, 200);
                 }
             });
