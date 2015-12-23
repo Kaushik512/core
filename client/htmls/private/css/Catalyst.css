@@ -13104,9 +13104,9 @@ form.cmxform .gray * {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    width: 182px;
+    width: 250px;
     display: inline-block;
-    height: 35px;
+    height: 42px;
 }
 
 .paramValue {
