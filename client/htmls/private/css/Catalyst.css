@@ -13166,3 +13166,12 @@ form.cmxform .gray * {
     display: inline-block;
     height: 35px;
 }
+.trLineHeight{
+    line-height: 2.3;
+}
+.spinnerStyle{
+    height:50px;
+    width:50px;
+    margin-top: 10%;
+    margin-bottom: 10%;
+}

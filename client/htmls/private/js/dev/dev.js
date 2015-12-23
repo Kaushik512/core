@@ -5607,14 +5607,17 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
 			$dockercontainertable = $('#dockercontainertable tbody');
 			$('.docctrempty').detach();
-			var $docctrempty = $('#dockercontainertabletemplatetr').clone().empty().append('<td class="spinnerLoadForDocker" colspan="8" style="text-align:center">No containers found</td>');
-			$docctrempty.addClass('docctrempty');
-			$dockercontainertable.append($docctrempty);
+			function showNoContainerRow(){
+				var $docctrempty = $('#dockercontainertabletemplatetr').clone().empty().append('<td class="spinnerLoadForDocker" colspan="8" style="text-align:center">No containers found</td>').removeClass('hidden');
+				$docctrempty.addClass('docctrempty');
+				$dockercontainertable.append($docctrempty);
+			}
 			$dockercontainertable = $('#dockercontainertable tbody');
 			var $dockerContainer = $('.container').find('.dockerenabledinstacne');
 			if($dockerContainer.length <= 0){
 				$('.spinnerDocker').addClass('hidden');
 				$('.dockerContainerBody').removeClass('hidden');
+				showNoContainerRow();
 			}
 			$('.container').each(function() {
 				var $docker = $(this).find('.dockerenabledinstacne');
@@ -5626,6 +5629,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 						if (!data) {
 							$('.spinnerDocker').addClass('hidden');
 							$('.dockerContainerBody').removeClass('hidden');
+							showNoContainerRow();
 							$('.loadingimagefordockertable').addClass('hidden');
 							$('#dockercontainertablerefreshspinner').removeClass('fa-spin');
 							return;
@@ -5642,11 +5646,8 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 						var dockerContainerData = JSON.parse(data);
 
 						if (dockerContainerData.length <= 0) {
-
 							$('.docctrempty').detach();
-							var $docctrempty = $('#dockercontainertabletemplatetr').clone().empty().append('<td colspan="8" style="text-align:center">No Containers Found</td>').removeClass('hidden');
-							$docctrempty.addClass('docctrempty');
-							$dockercontainertable.append($docctrempty);
+							showNoContainerRow();
 						}
 						$.each(dockerContainerData, function(i, item) {
 							var $docctr = createdockercontainerrow(item, instanceid);
@@ -5827,6 +5828,8 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 				$.get('/instances/dockercontainerdetails/' + instanceid + '/' + dockerContainerItem.Id, function(data) {
 					var dockerContainerData = JSON.parse(data);
 					console.log("dockerLogs" + JSON.stringify(dockerContainerData));
+					$('.spinnerDockerInfo').addClass('hidden');
+					$('.dockerLogsArea').removeClass('hidden');
 					$('#modalContainermoreInfo').find('td[containerdata]').each(function() {
 						console.log("dockerContainerData." + $(this).attr('containerdata'));
 						if ($(this).attr('containerdata') != '')
