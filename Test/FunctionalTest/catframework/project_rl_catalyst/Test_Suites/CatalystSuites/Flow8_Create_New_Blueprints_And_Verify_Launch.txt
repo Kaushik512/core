@@ -249,11 +249,48 @@ Catalyst Ubuntu Instance Launch Blueprint Setup(Azure Provider)
 
 
 
+Catalyst Inspect Functionality after Bootstrap Setup(AZURE Provider)
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Sleep    3s
+    Catalyst Inspect Functionality Setup for Azure
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+Catalyst Ubuntu Instance CHEFCLIENT setup(AZURE Provider)
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst CHEF CLIENT Action on Ubuntu Instance of Azure
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+Catalyst Ubuntu Instance SSH setup(AZURE Provider)
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst SSH Action on Ubuntu Azure Instance
+    Catalyst Logout                      
+    [Teardown]     Close Browser
 
 
 
+Catalyst Ubuntu Instance STOP setup(AZURE Provider)
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst STOP Action on Ubuntu Instance of Azure
+    Catalyst Logout                      
+    [Teardown]     Close Browser
 
 
-
-
-
+Catalyst Ubuntu EDIT NAME setup(AZURE Provider)
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst EDIT Instance Name of Ubuntu Instance of Azure
+    Catalyst Logout                      
+    [Teardown]     Close Browser
