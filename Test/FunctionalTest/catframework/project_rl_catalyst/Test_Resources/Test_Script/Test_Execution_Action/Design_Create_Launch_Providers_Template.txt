@@ -1081,10 +1081,11 @@ Ubuntu Blueprint Launched and verify IP,Status,Chef,SSH,Stop,BootStrap of azure
     Clicks on Launch Button
     Sleep    2s
     Confirmation to launch Blueprint
-    Sleep    1s
+    Sleep    5s
     Clicks on Instance Close Button
     Clicks on the Infrastructure Button to go to Instances    
     #Clicks on Instances Button
+    Sleep    5 minute
     Verify the IP Address of the ubuntu azure Instance
     Verfiy the Status of the ubuntu azure Instance
     Sleep    30s
@@ -1105,7 +1106,7 @@ Ubuntu Blueprint Launched and verify IP,Status,Chef,SSH,Stop,BootStrap of azure
 
 
 Checking THe BootStrpa Status for azure ubuntu instance
-    Sleep    7 minute
+    Sleep    2 minute
     Clicks on Back To Instances
     Sleep    5s
     Clicks on Contreol Panel
@@ -1158,6 +1159,20 @@ Catalyst Inspect Functionality Setup
     Verify the Particular Software is listed in list 
 
     
+Catalyst Inspect Functionality Setup for Azure
+    Sleep    5s
+    Selects the Ubuntu Blueprint to go to Controlpanel
+    Clicks on Contreol Panel
+    Clicks on Inspect Button
+    Sleep    5s
+    Enter the Azure Installed Software Name in the Filter
+    Verify the Particular Azure Software is listed in list     
+
+
+Enter the Azure Installed Software Name in the Filter
+    Input Text    css=label > input.form-control    ${AZURE INSPECT SOFTWARE}    
+
+
 
 Clicks on the Infrastructure Button to go to Instances
     Click Element    xpath=.//*[@id='myTab3']/li[1]/a/b
@@ -1166,6 +1181,11 @@ Clicks on the Infrastructure Button to go to Instances
     Sleep    2s
 
 
+Verify the Particular Azure Software is listed in list
+    Sleep    2s 
+    Element Should Contain    css=#paragraphs > p:nth-child(2)    ${AZURE INSPECT SOFTWARE}
+    Sleep    3s
+    Click Element    css=#installedSoftwareModalContainer > div > div > div.modal-footer > button
 
 
 Verify the Particular Software is listed in list
@@ -1188,6 +1208,11 @@ Clicks on Inspect Button
 Selects the CentOS Blueprint to go to Controlpanel
     Click Element    xpath=//div[@data-blueprintname='${BLUEPRINT NAME}']
     Sleep    1s
+
+Selects the Ubuntu Blueprint to go to Controlpanel
+    Click Element    xpath=//div[@data-blueprintname='${AZURE UBUNTU BLUEPRINTNAME}']
+    Sleep    1s    
+
 
 
 Clicks on the Project to go to Environment
@@ -1256,6 +1281,19 @@ Catalyst STOP Action on CentOS Instance
     Steps to Run Stopping the Instance
     Sleep    20s
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 Catalyst EDIT Instance Name of CentOS Instance
     Clicks on the Project to go to Environment
     Clicks on the Environment to Launch
@@ -1266,7 +1304,35 @@ Catalyst EDIT Instance Name of CentOS Instance
     Sleep    3s
 
 
+Catalyst EDIT Instance Name of Ubuntu Instance of Azure
+    Sleep    4s
+    Clicks on Edit Button of the Ubuntu Instance of azure
+    Enters the New Instance Name for ubuntu Azure
+    Clicks on Save Button of Edddited Instance
+    Sleep    3s
 
+
+
+
+
+
+Catalyst CHEF CLIENT Action on Ubuntu Instance of Azure
+    Sleep    3s
+    Steps To Run Chef Client on ubuntu instance azure provider
+    Sleep    3s
+
+
+Steps To Run Chef Client on ubuntu instance azure provider
+    Sleep    3s
+    Click on RUNNN of Chef Client of Azure
+    Sleep    5s
+    Update the Run List with Cookbook
+    Clicks on Update Button of Runlist
+    Sleep    1s
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Checking the BChefClient Run Status
+    Clicks on Back To Instances
 
 
 Steps To Run Chef Client
@@ -1400,9 +1466,9 @@ Ubuntu Blueprint Launched and verify the IP,Status,Chef,SSH,Stop,BootStrap
     Clicks on Launch Button
     Sleep    2s
     Confirmation to launch Blueprint
-    Sleep    1s
+    Sleep    6s
     Clicks on Instance Close Button
-    Sleep    1 minute
+    Sleep    2 minute
     Clicks on the Infrastructure Button to go to Instances
     #Clicks on Instances Button
     Verify the IP Address of the Ubuntu Instance
@@ -1551,6 +1617,11 @@ Clicks on Edit Button of the CentosInstance Imported
     Sleep    2s
     Click Element    xpath=//div[@class='domain-roles-heading'][//span[text()='${BLUEPRINT NAME}']]/a
 
+Clicks on Edit Button of the Ubuntu Instance of azure
+    Sleep    2s
+    Click Element    xpath=//div[@class='domain-roles-heading'][//span[text()='${AZURE UBUNTU BLUEPRINTNAME}']]/a
+
+
 Clicks on Edit Button of the UbuntuInstance Imported
     Sleep    2s
     Click Element    xpath=//div[@class='domain-roles-heading'][//span[text()='${BLUEPRINT NAME1}']]/a
@@ -1558,6 +1629,9 @@ Clicks on Edit Button of the UbuntuInstance Imported
 
 Enters the New Instance Name for Centos
     Input Text    id=instanceEditName    ${NEW BLUEPRINT NAME}
+
+Enters the New Instance Name for ubuntu Azure
+    Input Text    id=instanceEditName    ${EDIT UBUNTU AZUREBP NAME}
 
 Enters the New Instance Name for Ubuntu
     Input Text    id=instanceEditName    ${NEW UBUNTU BLUPRNT}    
@@ -1718,6 +1792,11 @@ Catalyst SSH Action on the Ubuntu Instance
     Sleep    3s
 
 
+Catalyst SSH Action on Ubuntu Azure Instance
+    Sleep    5s
+    Steps to Run SSH of Ubuntu on Azure Instance
+    Sleep    3s    
+
 Catalyst STOP Action on the Ubuntu Instance
     Sleep    5s
     #Clicks on the Project to go to Environment
@@ -1762,6 +1841,36 @@ Steps to Run SSH of Ubuntu
     Verfify the status of SSH Shell
     Clicks Back Burtton of Instances
 
+
+Steps to Run SSH of Ubuntu on Azure Instance
+    Click on Verified SSH Instance of Ubuntu on Azure
+    Enters the Ubuntu Username in the Terminal for azure
+    Select Authentication Type as passwd
+    #Upload the Catalyst PEM File for azure
+    Enters the Azure SSH passwd
+    Clicks on Terminlal Submit Button
+    Close the SSH Terminal
+    Sleep    4s
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Sleep    7s
+    Verfify the status of SSH Shell
+    Clicks Back Burtton of Instances    
+
+
+Enters the Ubuntu Username in the Terminal for azure
+    Input Text    id=ssh-username    ${AZURE SSH USERNAME}
+
+Enters the Azure SSH passwd
+    Input Text    id=ssh-password    ${AZURE SSH PASSWORD}
+
+Select Authentication Type as passwd
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_ssh-pemFileCheckbox']/a
+    #Input Text    xpath=.//*[@id='select2-drop']/div/input  
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li[1]/div  
+
+
+
 Steps to Run Stopping the Instance of Ubuntu
     Clicks Ubuntu STOP Machine of Verfied Instance    
     Verfified the Ubuntu STOPPED Status
@@ -1769,6 +1878,19 @@ Steps to Run Stopping the Instance of Ubuntu
     Clicks on Action History
     Verfiy the Table contains the Status
     Clicks on Back To Instances
+
+
+Catalyst STOP Action on Ubuntu Instance of Azure
+    #Clicks Ubuntu STOP Machine of Verfied Instance of Azure
+    Clicks on Contreol Panel
+    Clicks on Back To Instances
+    Verfified the Ubuntu STOPPED Status of azure
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Verfiy the Table contains the Status
+    Clicks on Back To Instances
+
+
 
 Catlayst verfication of Instance Stop Setup and Disable of Ubuntu
     #Clicks on Workzone Button
@@ -1968,6 +2090,7 @@ Checking the BChefClient Run Status
     #Sleep    2 minutes
     #Wait Until Keyword Succeeds    3 minute     1 seconds    Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[2]    ${SATSS}
 
+
 Checking the Ubuntu BChefClient Run Status
     Sleep    2 minute
     Clicks on Back To Instances
@@ -2055,11 +2178,27 @@ Clicks Ubuntu STOP Machine of Verfied Instance
     Wait Until Keyword Succeeds    2 minute     5 seconds      Click Element    xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button
     Sleep    15 seconds
 
+Clicks Ubuntu STOP Machine of Verfied Instance of Azure
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${AZURE UBUNTU BLUEPRINTNAME}")]/div/div/div/div[4]/div[5]
+    Wait Until Keyword Succeeds    1 minute     5 seconds      Click Element    xpath=//*[text()='OK']
+    Sleep    2s
+    Wait Until Keyword Succeeds    2 minute     5 seconds      Click Element    xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button
+    Sleep    15 seconds
+
+
+
+
 Verfified the STOPPED Status
     Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div[3]/div/span[2]/span    ${STOPD}
 
 Verfified the Ubuntu STOPPED Status
     Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div[3]/div/span[2]/span    ${STOPD}
+
+Verfified the Ubuntu STOPPED Status of azure
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${AZURE UBUNTU BLUEPRINTNAME}")]/div/div/div/div[3]/div/span[2]/span    ${STOPD}
+
+
+
 
 Verfified the STOPPED Status of Ubuntu
     Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div[3]/div/span[2]/span    ${STOPD}
@@ -2109,6 +2248,12 @@ Click on RUNNN of Chef Client of Ubuntu
     Wait Until Keyword Succeeds    2 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div[4]/div[1]/a    
 
 
+
+Click on RUNNN of Chef Client of Azure
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${AZURE UBUNTU BLUEPRINTNAME}")]/div/div/div/div[4]/div[1]/a    
+
+
+
 Verify the SSH
     Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div//ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div/div/div[4]/div[2]/a[@class='devTOP sshIcon']
 
@@ -2122,7 +2267,8 @@ Click on Verified SSH Instance
 Click on Verified SSH Instance of Ubuntu
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div//ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div[4]/div[2]/a
 
-
+Click on Verified SSH Instance of Ubuntu on Azure
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div//ul/li[contains(.,"${AZURE UBUNTU BLUEPRINTNAME}")]/div/div/div/div[4]/div[2]/a    
 
 
 Verify the IP Address of the Instance
@@ -2646,6 +2792,9 @@ Clicks on Terminlal Submit Button
 Upload the Catalyst PEM File
     Choose File     xpath=.//*[@id='ssh-pemfileInput']    ${CAT_INSTANCES}
     #C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\cat_instances.pem
+
+Upload the Catalyst PEM File for azure
+    Choose File     xpath=.//*[@id='ssh-pemfileInput']    ${GOLDEN PEM}
 
 Close the SSH Terminal
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='modalSSHShellContainer']/div/div/div[1]/button
