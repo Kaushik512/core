@@ -1,4 +1,4 @@
-var CloudFormation = require('_pr/model/cloud-formation');
+var AzureArm = require('_pr/model/azure-arm');
 var errorResponses = require('./error_responses');
 var AWSCloudFormation = require('_pr/lib/awsCloudFormation');
 var appConfig = require('_pr/config');
@@ -131,14 +131,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
 
-    app.get('/azure-arm/:cfId', function(req, res) {
-        CloudFormation.getById(req.params.cfId, function(err, cloudFormation) {
+    app.get('/azure-arm/:armId', function(req, res) {
+        AzureArm.getById(req.params.armId, function(err, azureArm) {
             if (err) {
                 res.send(500, errorResponses.db.error);
                 return;
             }
-            if (cloudFormation) {
-                res.send(200, cloudFormation);
+            if (azureArm) {
+                res.send(200, azureArm);
 
             } else {
                 res.send(404, {
@@ -148,32 +148,16 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
 
-    app.get('/azure-arm/:cfId', function(req, res) {
-        CloudFormation.getById(req.params.cfId, function(err, cloudFormation) {
+
+    app.get('/azure-arm/:armId/status', function(req, res) {
+        AzureArm.getById(req.params.armId, function(err, azureArm) {
             if (err) {
                 res.send(500, errorResponses.db.error);
                 return;
             }
-            if (cloudFormation) {
-                res.send(200, cloudFormation);
-
-            } else {
-                res.send(404, {
-                    message: "Not Found"
-                })
-            }
-        });
-    });
-
-    app.get('/azure-arm/:cfId/status', function(req, res) {
-        CloudFormation.getById(req.params.cfId, function(err, cloudFormation) {
-            if (err) {
-                res.send(500, errorResponses.db.error);
-                return;
-            }
-            if (cloudFormation) {
+            if (azureArm) {
                 res.send(200, {
-                    status: cloudFormation.status
+                    status: azureArm.status
                 });
 
             } else {

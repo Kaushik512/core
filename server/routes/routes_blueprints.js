@@ -39,6 +39,7 @@ var vmwareProvider = require('_pr/model/classes/masters/cloudprovider/vmwareClou
 var AwsAutoScaleInstance = require('_pr/model/aws-auto-scale-instance');
 var ARM = require('_pr/lib/azure-arm.js');
 var fs = require('fs');
+var AzureARM = require('_pr/model/azure-arm');
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
@@ -1466,14 +1467,16 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                             keyLocation: decryptedKeyFile
                                                         };
 
-                                                        var arm = new ARM(options);
-                                                        
+                                                        var azureCloud = new AzureCloud(options);
 
-                                                        arm.launchTemplate({
+                                                        var arm = new ARM(options);
+
+
+                                                        arm.deployTemplate({
                                                             name: stackName,
                                                             parameters: blueprint.blueprintConfig.parameters,
                                                             template: fileData,
-                                                            resourceGroup:blueprint.blueprintConfig.resourceGroup
+                                                            resourceGroup: blueprint.blueprintConfig.resourceGroup
                                                         }, function(err, stackData) {
                                                             if (err) {
                                                                 logger.error("Unable to launch CloudFormation Stack", err);
@@ -1482,7 +1485,99 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                 });
                                                                 return;
                                                             }
-                                                            res.status(200).send(stackData);
+                                                             console.log('stackData ==> ', stackData);
+
+                                                            arm.getDeployedTemplate({
+                                                                name: stackName,
+                                                                resourceGroup: blueprint.blueprintConfig.resourceGroup
+                                                            }, function(err, deployedTemplateData) {
+                                                                if (err) {
+                                                                    logger.error("Unable to get arm deployed template", err);
+                                                                    res.status(500).send({
+                                                                        message: "Error occured while fetching deployed template status"
+                                                                    });
+                                                                    return;
+                                                                }
+
+                                                                console.log('deployedTemplateData ==> ', deployedTemplateData);
+
+
+                                                                AzureARM.createNew({
+                                                                    orgId: blueprint.orgId,
+                                                                    bgId: blueprint.bgId,
+                                                                    projectId: blueprint.projectId,
+                                                                    envId: req.query.envId,
+                                                                    parameters: blueprint.blueprintConfig.parameters,
+                                                                    templateFile: blueprint.blueprintConfig.templateFile,
+                                                                    cloudProviderId: blueprint.blueprintConfig.cloudProviderId,
+                                                                    infraManagerId: infraManager.infraManagerId,
+                                                                    //runlist: version.runlist,
+                                                                    infraManagerType: 'chef',
+                                                                    deploymentName: stackName,
+                                                                    deploymentId: deployedTemplateData.id,
+                                                                    status: deployedTemplateData.properties.provisioningState,
+                                                                    users: blueprint.users,
+                                                                    resourceGroup: blueprint.blueprintConfig.resourceGroup,
+
+                                                                }, function(err, azureArmDeployement) {
+                                                                    if (err) {
+                                                                        logger.error("Unable to save arm data in DB", err);
+                                                                        res.status(500).send(errorResponses.db.error);
+                                                                        return;
+                                                                    }
+                                                                    res.status(200).send({
+                                                                        armId: azureArmDeployement._id
+                                                                    });
+
+                                                                    arm.waitForDeploymentCompleteStatus({
+                                                                        name: stackName,
+                                                                        resourceGroup: blueprint.blueprintConfig.resourceGroup
+                                                                    }, function(err, deployedTemplateData) {
+                                                                        if (err) {
+                                                                            logger.error('Unable to wait for deployed template status', err);
+                                                                            if (err.status) {
+                                                                                azureArmDeployement.status = err.status;
+                                                                                azureArmDeployement.save();
+                                                                            }
+                                                                            return;
+                                                                        }
+
+                                                                        azureArmDeployement.status = deployedTemplateData.properties.provisioningState;
+                                                                        azureArmDeployement.save();
+
+                                                                        logger.debug('deployed ==>', JSON.stringify(deployedTemplateData));
+
+                                                                        var dependencies = deployedTemplateData.properties.dependencies;
+                                                                        for (var i = 0; i < dependencies.length; i++) {
+                                                                            var resource = dependencies[i];
+                                                                            if (resource.resourceType == 'Microsoft.Compute/virtualMachines') {
+                                                                                logger.debug('resource name ==>', resource.resourceName);
+                                                                                arm.getDeploymentVMData({
+                                                                                    name: resource.resourceName,
+                                                                                    resourceGroup: blueprint.blueprintConfig.resourceGroup
+                                                                                }, function(err, resourceData) {
+                                                                                    if (err) {
+                                                                                        logger.error("Unable to fetch azure vm resource");
+                                                                                        return;
+                                                                                    }
+
+                                                                                    logger.debug('resource ===>', JSON.stringify(resourceData));
+
+                                                                                })
+                                                                            }
+
+                                                                        }
+
+
+
+                                                                    });
+
+
+                                                                });
+
+
+
+                                                            });
 
                                                             /*
                                                             awsCF.getStack(stackData.StackId, function(err, stack) {

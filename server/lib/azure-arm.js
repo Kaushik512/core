@@ -37,7 +37,7 @@ var ARM = function(options) {
             var resource = 'https://management.azure.com/';
             var authorityUrl = authorityHostUrl + '/' + tenant;
 
-            console.log("authorityUrl: ", authorityUrl);
+            logger.debug("authorityUrl: ", authorityUrl);
 
             var AuthenticationContext = adal.AuthenticationContext;
 
@@ -48,7 +48,7 @@ var ARM = function(options) {
                     callback(err, null);
                     return;
                 } else {
-                    console.log('token ==> ', tokenResponse);
+                    logger.debug('token ==> ', tokenResponse);
                     token = tokenResponse.accessToken;
                     callback(null, tokenResponse.accessToken);
                 }
@@ -71,7 +71,7 @@ var ARM = function(options) {
                 return;
             }
 
-            console.log('subscrition ID ==>' + options.subscriptionId);
+            logger.debug('subscrition ID ==>' + options.subscriptionId);
 
             var opts = {
                 uri: 'https://management.azure.com/subscriptions/' + options.subscriptionId + '/resourcegroups?api-version=2015-01-01',
@@ -84,18 +84,18 @@ var ARM = function(options) {
             request.get(opts, function(err, response, body) {
 
                 if (err) {
-                    //console.log("Error...",err);
+                    //logger.debug("Error...",err);
                     callback(err, null);
                     return;
                 }
 
-                console.log("response.statusCode: ", response.statusCode);
+                logger.debug("response.statusCode: ", response.statusCode);
 
                 if (response.statusCode == '200') {
                     callback(null, body);
                     return;
                 } else {
-                    callback(err,null);
+                    callback(err, null);
                     return;
                 }
 
@@ -131,12 +131,12 @@ var ARM = function(options) {
             request.put(opts, function(err, response, body) {
 
                 if (err) {
-                    //console.log("Error...",err);
+                    //logger.debug("Error...",err);
                     callback(err, null);
                     return;
                 }
 
-                console.log("response.statusCode: ", response.statusCode);
+                logger.debug("response.statusCode: ", response.statusCode);
 
                 if (response.statusCode == '201' || response.statusCode == '200') {
 
@@ -152,16 +152,13 @@ var ARM = function(options) {
 
     };
 
-    this.launchTemplate = function(deployParams, callback) {
+    this.deployTemplate = function(deployParams, callback) {
         getToken(function(err, token) {
             if (err) {
                 callback(err, null);
                 return;
             }
 
-
-
-            console.log('params  ==>', deployParams);
             var opts = {
                 uri: 'https://management.azure.com/subscriptions/' + options.subscriptionId + '/resourcegroups/' + deployParams.resourceGroup + '/providers/microsoft.resources/deployments/' + deployParams.name + '?api-version=2015-01-01',
                 headers: {
@@ -181,12 +178,11 @@ var ARM = function(options) {
             request.put(opts, function(err, response, body) {
 
                 if (err) {
-                    //console.log("Error...",err);
                     callback(err, null);
                     return;
                 }
 
-                console.log("response.statusCode: ", response.statusCode);
+                logger.debug("response.statusCode: ", response.statusCode);
 
                 if (response.statusCode == '200' || response.statusCode == '201') {
                     callback(null, body);
@@ -202,6 +198,132 @@ var ARM = function(options) {
 
         });
     };
+
+    this.getDeployedTemplate = function(deployParams, callback) {
+        getToken(function(err, token) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+
+            var opts = {
+                uri: 'https://management.azure.com/subscriptions/' + options.subscriptionId + '/resourcegroups/' + deployParams.resourceGroup + '/providers/microsoft.resources/deployments/' + deployParams.name + '?api-version=2015-01-01',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + token
+                },
+            };
+
+            request.get(opts, function(err, response, body) {
+
+                if (err) {
+                    //logger.debug("Error...",err);
+                    callback(err, null);
+                    return;
+                }
+
+                logger.debug("response.statusCode: ", response.statusCode);
+
+                if (response.statusCode == '200' || response.statusCode == '201') {
+                    if (typeof body === 'string') {
+                        body = JSON.parse(body)
+                    }
+                    callback(null, body);
+                    return;
+                } else {
+                    callback(err, null);
+                    return;
+                }
+
+            });
+        });
+    };
+
+    this.waitForDeploymentCompleteStatus = function(deployParams, callback) {
+        var self = this;
+        logger.debug('Checking status ==>');
+        this.getDeployedTemplate(deployParams, function(err, deployedTemplate) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            logger.debug('status ==>', deployedTemplate.properties.provisioningState);
+            switch (deployedTemplate.properties.provisioningState) {
+                case 'Succeeded':
+                    callback(null, deployedTemplate);
+                    break;
+                case 'Failed':
+                    callback({
+                        status: deployedTemplate.properties.provisioningState
+                    }, null);
+                    break;
+                case 'Canceled':
+                    callback({
+                        status: deployedTemplate.properties.provisioningState
+                    }, null);
+                    break;
+                case 'Deleted':
+                    callback({
+                        status: deployedTemplate.properties.provisioningState
+                    }, null);
+                    break;
+                default:
+                    setTimeout(function() {
+                        self.waitForDeploymentCompleteStatus(deployParams, callback);
+                    }, 3000);
+                    return;
+            }
+
+        });
+    };
+
+    this.getDeploymentVMData = function(deployParams, callback) {
+
+        getToken(function(err, token) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+
+       
+            var uri = 'https://management.azure.com/subscriptions/'+options.subscriptionId +'/resourceGroups/'+deployParams.resourceGroup+'/providers/Microsoft.Compute/virtualMachines/'+deployParams.name+'/InstanceView?api-version=2015-06-15';
+            console.log('uri ==> ',uri);
+
+            var opts = {
+                uri: uri,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + token
+                },
+            };
+
+            request.get(opts, function(err, response, body) {
+
+                if (err) {
+                    //logger.debug("Error...",err);
+                    callback(err, null);
+                    return;
+                }
+
+                logger.debug("response.statusCode: ", response.statusCode, body);
+
+                if (response.statusCode == '200' || response.statusCode == '201') {
+                    if (typeof body === 'string') {
+                        body = JSON.parse(body)
+                    }
+                    callback(null, body);
+                    return;
+                } else {
+                    callback(err, null);
+                    return;
+                }
+
+            });
+        });
+
+    }
+
+
 
 }
 

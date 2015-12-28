@@ -31,6 +31,7 @@ var Task = require('../model/classes/tasks/tasks.js');
 var masterUtil = require('../lib/utils/masterUtil.js');
 
 var CloudFormation = require('_pr/model/cloud-formation');
+var AzureArm = require('_pr/model/azure-arm');
 
 module.exports.setRoutes = function(app, sessionVerification) {
     app.all('/organizations/*', sessionVerification);
@@ -1046,7 +1047,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             };
             console.log('req== >', blueprintData);
             //var blueprintData = req.body.blueprintData;
-            var dockerData, instanceData, cloudFormationData,armTemplateData;
+            var dockerData, instanceData, cloudFormationData, armTemplateData;
             logger.debug('req.body.blueprintData.blueprintType ===>', req.body.blueprintData.blueprintType);
             if (req.body.blueprintData.blueprintType === 'docker') {
                 dockerData = {
@@ -1338,12 +1339,25 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         return;
                                     }
 
-                                    res.send({
-                                        tasks: tasksData,
-                                        instances: instancesData,
-                                        blueprints: blueprintsData,
-                                        stacks: stacks
+                                    AzureArm.findByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, function(err, arms) {
+
+                                        if (err) {
+                                            res.send(500);
+                                            return;
+                                        }
+
+                                        res.send({
+                                            tasks: tasksData,
+                                            instances: instancesData,
+                                            blueprints: blueprintsData,
+                                            stacks: stacks,
+                                            arms: arms
+                                        });
+
                                     });
+
+
+
                                 });
 
 

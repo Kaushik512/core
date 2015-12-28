@@ -842,8 +842,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
             //     }
             // }
             if ($divinstancescardview.find('.domain-role-thumbnailDev').length > 0) {
-                //Arab
-                console.log("I am here there");
+
                 $divinstancescardview.find('.container').removeClass('role-Selectedcard');
                 var cardIndexInfo = localStorage.getItem("cardIndex");
                 console.log(cardIndexInfo);
@@ -2512,7 +2511,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                     });
                                 })(data[i]);
                                 //alert(JSON.stringify(data[i]));
-                            } else if (data[i].templateType == "cft" || data[i].templateType =='arm') {
+                            } else if (data[i].templateType == "cft" || data[i].templateType == 'arm') {
                                 $selectVerEdit.hide();
                                 (function(blueprint) {
                                     // alert(JSON.stringify(blueprint));
@@ -2921,7 +2920,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                 $('#myModalLabelDockerContainer').attr('saveto', lpinput).css('z-index', '9999').modal('show');
             };
 
-
+            var eventAdded = false;
             $('.launchBtn').click(function(e) {
                 var $selectedItems = $('.role-Selected1');
                 if (!$selectedItems.length) {
@@ -3072,6 +3071,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                 var version = $($selectedItems.get(0)).find('.blueprintVersionDropDown').val();
                                 var blueprintType = $($selectedItems.get(0)).attr('data-blueprintType');
                                 // alert('launching -> ' +'../blueprints/' + blueprintId + '/launch?version=' + version);
+
                                 function launchBP(stackName) {
                                     //   alert(JSON.stringify(stackName));
                                     var $launchResultContainer = $('#launchResultContainer');
@@ -3084,6 +3084,8 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                         var msgStr = 'Instance Id : ';
                                         if (blueprintType === 'aws_cf') {
                                             msgStr = 'Stack Id : ' + data.stackId + '. You can view your stack in cloudformation tab';
+                                        } else if (blueprintType === 'azure_arm') {
+                                            msgStr = 'Deployment Id : ' + data.armId + '. You can view your deployment in ARM tab';
                                         } else {
                                             msgStr = 'Instance Id : ';
 
@@ -3099,10 +3101,14 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                         $launchResultContainer.find('.modal-body').append($msg);
                                         if (blueprintType === 'aws_cf') {
                                             $.get('/cloudformation/' + data.stackId, function(stack) {
-
                                                 addStackToDom(stack);
-
                                             })
+                                            return;
+                                        } else if (blueprintType === 'azure_arm') {
+                                            $.get('/azure-arm/' + data.armId, function(armData) {
+                                                addARMToDom(armData);
+                                            })
+                                            
                                             return;
                                         }
 
@@ -3202,6 +3208,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                         }
                                         $launchResultContainer.find('.modal-body').empty().append('<span>' + message + '</span>');
                                     });
+
                                 }
 
                                 if (blueprintType === 'aws_cf' || blueprintType === 'azure_arm') {
@@ -3222,22 +3229,25 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
                                         validator.resetForm();
                                     });
-                                    $("#cftForm").submit(function(e) {
-                                        var stackName = $('#cftInput').val();
-                                        var isValid = $('#cftForm').valid();
-                                        if (!isValid) {
-                                            e.preventDefault();
-                                            return false;
-                                        } else {
+                                    if (!eventAdded) {
+                                        $("#cftForm").submit(function(e) {
+                                            var stackName = $('#cftInput').val();
+                                            var isValid = $('#cftForm').valid();
+                                            if (!isValid) {
+                                                e.preventDefault();
+                                                return false;
+                                            } else {
 
-                                            launchBP(stackName);
-                                            $('#cftContainer').modal('hide');
-                                            e.preventDefault();
+                                                launchBP(stackName);
+                                                $('#cftContainer').modal('hide');
+                                                e.preventDefault();
 
-                                            return false;
-                                        }
+                                                return false;
+                                            }
+                                        });
+                                        eventAdded = true;
+                                    }
 
-                                    });
                                 } else if (blueprintType === 'openstack_launch' || blueprintType === 'hppubliccloud_launch') {
                                     //alert('attempt launch of openstack');
                                     launchBP();
@@ -3634,6 +3644,143 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
             });
         }
+
+        function pollARMStatus(stackId) {
+            $.get('/azure-arm/' + stackId + '/status', function(msg) {
+                switch (msg.status) {
+                    case 'Succeeded':
+                        $('[data-armId=' + stackId + ']').find('.stackStatus').html('Succeeded').css({
+                            'color': 'green'
+                        });
+                        break;
+                    case 'Failed':
+                        $('[data-armId=' + stackId + ']').find('.stackStatus').html('Failed').css({
+                            'color': 'red'
+                        });
+                        break;
+                    case 'Canceled':
+                        $('[data-armId=' + stackId + ']').find('.stackStatus').html('Canceled').css({
+                            'color': 'red'
+                        });
+                        break;
+                    case 'Deleted':
+                        $('[data-armId=' + stackId + ']').find('.stackStatus').html('Deleted').css({
+                            'color': 'red'
+                        });
+                        break;
+                    default:
+                        setTimeout(function() {
+                            pollARMStatus(stackId);
+                        }, 3000);
+                        return;
+                }
+
+            });
+
+        }
+
+        function addARMToDom(arm) {
+            var $clonedDiv = $(' <div class="productdiv4"><div class="productdiv1 cardimage" ><ul class="list-unstyled system-prop" style="text-align: center;"><li><img src="img/cf-icon.png" alt="stack" class="stackLogo" /><span style="float:right;margin-top:4px;margin-left:8px;padding-right:9px;"><a rel="tooltip" class="stackInfo" href="javascript:void(0)" data-instanceid="55b74cff83fd0ca711303e61" data-placement="top" data-original-title="Stack Info"></a></span></li><li title="" class="Cardtextoverflow"><u><b class="stackNameContainer"></b></u></li></ul><div class="stack-details-list"><span class="stack-details"><strong class="stackId"></strong></span><span class="stack-details">status : <span class="stackStatus"></span></span></div></div></div>');
+            var $cftStackContainer = $('#azureDeploymentContainer');
+
+            $clonedDiv.find('.productdiv1').attr({
+                'data-armId': arm._id,
+                'data-armName': arm.deploymentName
+            });
+            $clonedDiv.find('.stackNameContainer').append(arm.deploymentName);
+            //$clonedDiv.find('.stackId').append(stack.stackId);
+            switch (arm.status) {
+                case 'CREATE_IN_PROGRESS':
+                    $clonedDiv.find('.stackStatus').html(arm.status);
+                    break;
+                case 'CREATE_FAILED':
+                    $clonedDiv.find('.stackStatus').html('CREATE_FAILED').css({
+                        'color': 'red'
+                    });
+                    break;
+                case 'CREATE_COMPLETE':
+                    $clonedDiv.find('.stackStatus').html('CREATE_COMPLETE').css({
+                        'color': 'green'
+                    });
+                    break;
+
+                default:
+                    $clonedDiv.find('.stackStatus').html(arm.status).css({
+                        'color': 'yellow'
+                    });
+                    break;
+            }
+
+
+            $cftStackContainer.append($clonedDiv);
+             pollARMStatus(arm._id);
+            
+            $clonedDiv.find('.productdiv1').click(function() {
+                $('.role-Selected1').removeClass('role-Selected1');
+                $(this).addClass('role-Selected1');
+            });
+
+            // $clonedDiv.find('.stackInfo').click(function(e) {
+            //     var $modal = $('#cftEventModalContainer');
+            //     var $logContainer = $modal.find('.logsArea').show();
+            //     var $modalBody = $modal.find('.modal-body');
+            //     $modal.find('.fromTemplate').remove();
+            //     var $table = $modal.find('.templateTable').clone();
+            //     $table.removeClass('templateTable').addClass('fromTemplate');
+            //     $modalBody.append($table);
+            //     var $tBody = $table.find('tbody');
+
+            //     function pollStackEvents(stackId) {
+
+
+            //         $.get('/cloudformation/' + stackId + '/events', function(events) {
+            //             if (!$.contains($modal[0], $table[0])) {
+            //                 return;
+            //             }
+            //             $tBody.empty();
+            //             $logContainer.hide();
+            //             $table.show();
+            //             for (var i = 0; i < events.length; i++) {
+            //                 var $rowTr = $('<tr/>');
+            //                 $rowTr.append('<td>' + events[i].Timestamp + '</td>');
+            //                 $rowTr.append('<td>' + events[i].LogicalResourceId + '</td>');
+            //                 $rowTr.append('<td>' + events[i].ResourceType + '</td>');
+            //                 $rowTr.append('<td>' + events[i].ResourceStatus + '</td>');
+            //                 $tBody.append($rowTr);
+            //             }
+            //             if ($modal.is(':visible')) {
+            //                 setTimeout(function() {
+            //                     pollStackEvents(stackId);
+            //                 }, 5000);
+            //             }
+            //         }).fail(function(jxhr) {
+            //             var msg = "Server Behaved Unexpectedly.";
+            //             if (jxhr.responseJSON && jxhr.responseJSON.message) {
+            //                 msg = jxhr.responseJSON.message;
+            //             }
+            //             $logContainer.empty().append(msg).show();
+            //             $table.hide();
+            //         });
+            //     }
+            //     $logContainer.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
+            //     $modal.modal('show');
+            //     pollStackEvents(stack._id);
+
+            // });
+
+        }
+
+        function initializeARMArea(stacks) {
+
+            for (var i = 0; i < stacks.length; i++) {
+                addARMToDom(stacks[i]);
+                //  alert(JSON.stringify(stacks[i]));
+            }
+
+        }
+
+
+
 
         function pollStackStatus(stackId) {
             $.get('/cloudformation/' + stackId + '/status', function(msg) {
@@ -4778,7 +4925,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                             //$modal.find('.outputArea').hide();
 
                         });
-                    } else if(data[i].taskType === 'jenkins') {
+                    } else if (data[i].taskType === 'jenkins') {
                         //history for jenkins job type...description mentioned above..
                         var $tdHistory = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="History" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-header bigger-120"></i></a>');
                         $tdHistory.find('a').data('taskId', data[i]._id).data('autosyncFlag', data[i].taskConfig.autoSyncFlag).attr('data-historyTaskId', data[i]._id).click(function(e) {
@@ -5367,6 +5514,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                 x = data.instances;
                 initializeInstanceArea(data.instances);
                 initializeStackArea(data.stacks);
+                initializeARMArea(data.arms);
             });
             if (orgId) {
                 $.get('/d4dMasters/organization/' + orgId + '/configmanagement/list', function(configMgmntList) {
@@ -5597,47 +5745,50 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
         //Loading the containers table in Docker.
         function loadContainersTable() {
 
-            //alert('called');
-            //debugger;
-            console.log('called');
-            //  $('#dockercontainertablerefreshspinner').addClass('fa-spin');
             $dockercontainertable = $('#dockercontainertable tbody');
-
             $('.docctrempty').detach();
-            var $docctrempty = $('#dockercontainertabletemplatetr').clone().empty().append('<td class="spinnerLoadForDocker" colspan="8" style="text-align:center">No containers found</td>').removeClass('hidden');
-            $docctrempty.addClass('docctrempty');
-            $dockercontainertable.append($docctrempty);
 
-            //Shwoing the loader spinner and clearing the rows.
-            $('tr[id*="trfordockercontainer_"]').remove();
-            //$('.loadingimagefordockertable').removeClass('hidden');
+            function showNoContainerRow() {
+                var $docctrempty = $('#dockercontainertabletemplatetr').clone().empty().append('<td class="spinnerLoadForDocker" colspan="8" style="text-align:center">No containers found</td>').removeClass('hidden');
+                $docctrempty.addClass('docctrempty');
+                $dockercontainertable.append($docctrempty);
+            }
             $dockercontainertable = $('#dockercontainertable tbody');
-
+            var $dockerContainer = $('.container').find('.dockerenabledinstacne');
+            if ($dockerContainer.length <= 0) {
+                $('.spinnerDocker').addClass('hidden');
+                $('.dockerContainerBody').removeClass('hidden');
+                showNoContainerRow();
+            }
             $('.container').each(function() {
                 var $docker = $(this).find('.dockerenabledinstacne');
                 if ($docker.html() != undefined) {
                     //Get the instance ID
-                    //$('li.Containers').removeClass('hidden');
+
                     var instanceid = $(this).find('[data-instanceid]').attr('data-instanceid');
                     $.get('/instances/dockercontainerdetails/' + instanceid, function(data) {
                         if (!data) {
+                            $('.spinnerDocker').addClass('hidden');
+                            $('.dockerContainerBody').removeClass('hidden');
+                            showNoContainerRow();
                             $('.loadingimagefordockertable').addClass('hidden');
                             $('#dockercontainertablerefreshspinner').removeClass('fa-spin');
                             return;
                         }
                         if (data) {
+                            //Shwoing the loader spinner and clearing the rows.
+                            $('tr[id*="trfordockercontainer_"]').remove();
+                            $('.spinnerDocker').addClass('hidden');
+                            $('.dockerContainerBody').removeClass('hidden');
                             $('.docctrempty').detach();
                             $('.loadingimagefordockertable').addClass('hidden');
                             $('#dockercontainertablerefreshspinner').removeClass('fa-spin');
                         }
                         var dockerContainerData = JSON.parse(data);
-                        //   alert(JSON.stringify(dockerContainerData));
-                        //Setting empty message
+
                         if (dockerContainerData.length <= 0) {
                             $('.docctrempty').detach();
-                            var $docctrempty = $('#dockercontainertabletemplatetr').clone().empty().append('<td colspan="8" style="text-align:center">No Containers Found</td>').removeClass('hidden');
-                            $docctrempty.addClass('docctrempty');
-                            $dockercontainertable.append($docctrempty);
+                            showNoContainerRow();
                         }
                         $.each(dockerContainerData, function(i, item) {
                             var $docctr = createdockercontainerrow(item, instanceid);
@@ -5757,12 +5908,14 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                 return;
                             }
                         });
-                    });
+                    })
                 } else { //no docker found
                     $('.loadingimagefordockertable').addClass('hidden');
                     //$('li.Containers').addClass('hidden');
                 }
             });
+
+
             //dockercontaineraction
 
 
@@ -5771,13 +5924,6 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
 
         function createdockercontainerrow(dockerContainerItem, instanceid) {
-            // <td class="dockercontainerstatus"></td>
-            // <td  class="dockercontainerstartedon"></td>
-            // <td  class="dockercontainername"></td>
-            // <td  class="dockercontainerhostip"></td>
-            // <td  class="dockercontainerid"></td>
-            // <td  class="dockercontainerimagename"></td>
-            //alert(instanceid); $modalDesktopProvisioning.modal('show');
             var $cadvisor = $('<a class="linkcadvisor hidden pull-right" target="_blank" title="Open cAdvisor"></a>');
 
 
@@ -5817,12 +5963,14 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
             $docctr.attr('containerid', dockerContainerItem.Id.substring(0, 12));
             $docctr.find('.dockercontainerhostip').html(instanceip);
             $docctr.find('.dockercontainerid').attr('containerid', dockerContainerItem.Id).html(dockerContainerItem.Id.substring(0, 12));
-            $docctr.find('.dockercontainerimagename').html(dockerContainerItem.Image);
+            $docctr.find('.dockercontainerimagename').addClass('dockerImgValue').attr('title', dockerContainerItem.Image).html(dockerContainerItem.Image);
             //Updating the more info popup event
             $docctr.find('.modelcontainermoreinfo').click(function() {
                 $.get('/instances/dockercontainerdetails/' + instanceid + '/' + dockerContainerItem.Id, function(data) {
                     var dockerContainerData = JSON.parse(data);
-                    //alert(JSON.stringify(dockerContainerData));
+                    console.log("dockerLogs" + JSON.stringify(dockerContainerData));
+                    $('.spinnerDockerInfo').addClass('hidden');
+                    $('.dockerLogsArea').removeClass('hidden');
                     $('#modalContainermoreInfo').find('td[containerdata]').each(function() {
                         console.log("dockerContainerData." + $(this).attr('containerdata'));
                         if ($(this).attr('containerdata') != '')
