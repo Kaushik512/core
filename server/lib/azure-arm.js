@@ -285,9 +285,9 @@ var ARM = function(options) {
                 return;
             }
 
-       
-            var uri = 'https://management.azure.com/subscriptions/'+options.subscriptionId +'/resourceGroups/'+deployParams.resourceGroup+'/providers/Microsoft.Compute/virtualMachines/'+deployParams.name+'/InstanceView?api-version=2015-06-15';
-            console.log('uri ==> ',uri);
+
+            var uri = 'https://management.azure.com/subscriptions/' + options.subscriptionId + '/resourceGroups/' + deployParams.resourceGroup + '/providers/Microsoft.Compute/virtualMachines/' + deployParams.name + '?api-version=2015-06-15';
+            console.log('uri ==> ', uri);
 
             var opts = {
                 uri: uri,
@@ -321,7 +321,107 @@ var ARM = function(options) {
             });
         });
 
-    }
+    };
+
+    this.getNetworkInterface = function(deployParams, callback) {
+        getToken(function(err, token) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+
+            var uri;
+            if (deployParams.id) {
+                uri = 'https://management.azure.com' + deployParams.id + '?api-version=2015-06-15';
+            } else {
+                uri = 'https://management.azure.com/subscriptions/' + options.subscriptionId + '/resourceGroups/' + deployParams.resourceGroup + '/providers/Microsoft.Network/networkInterfaces/' + deployParams.name + '?api-version=2015-06-15';
+            }
+
+            var opts = {
+                uri: uri,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + token
+                },
+            };
+
+            request.get(opts, function(err, response, body) {
+
+                if (err) {
+                    //logger.debug("Error...",err);
+                    callback(err, null);
+                    return;
+                }
+
+                logger.debug("response.statusCode: ", response.statusCode, body);
+
+                if (response.statusCode == '200' || response.statusCode == '201') {
+                    if (typeof body === 'string') {
+                        body = JSON.parse(body)
+                    }
+                    callback(null, body);
+                    return;
+                } else {
+                    callback(err, null);
+                    return;
+                }
+
+            });
+        });
+
+    };
+
+    this.getPublicIpAddress = function(deployParams, callback) {
+        getToken(function(err, token) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            var uri;
+            if (deployParams.id) {
+                uri = 'https://management.azure.com' + deployParams.id + '?api-version=2015-06-15';
+
+            } else {
+                uri = 'https://management.azure.com/subscriptions/' + options.subscriptionId + '/resourceGroups/' + deployParams.resourceGroup + '/providers/Microsoft.Network/publicIPAddresses/' + deployParams.name + '?api-version=2015-06-15';
+
+            }
+
+
+            console.log('uri ==> ', uri);
+
+            var opts = {
+                uri: uri,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + token
+                },
+            };
+
+            request.get(opts, function(err, response, body) {
+
+                if (err) {
+                    //logger.debug("Error...",err);
+                    callback(err, null);
+                    return;
+                }
+
+                logger.debug("response.statusCode: ", response.statusCode, body);
+
+                if (response.statusCode == '200' || response.statusCode == '201') {
+                    if (typeof body === 'string') {
+                        body = JSON.parse(body)
+                    }
+                    callback(null, body);
+                    return;
+                } else {
+                    callback(err, null);
+                    return;
+                }
+
+            });
+        });
+
+    };
 
 
 

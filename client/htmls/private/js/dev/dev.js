@@ -3652,6 +3652,16 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                         $('[data-armId=' + stackId + ']').find('.stackStatus').html('Succeeded').css({
                             'color': 'green'
                         });
+                    setTimeout(function() {
+                        $.get('/azure-arm/' + stackId + '/instances', function(instances) {
+                            if (instances.length) {
+                                $('#tabInstanceStatus').hide();
+                            }
+                            for (var i = 0; i < instances.length; i++) {
+                                addInstanceToDOM(instances[i]);
+                            }
+                        });
+                    }, 20000);
                         break;
                     case 'Failed':
                         $('[data-armId=' + stackId + ']').find('.stackStatus').html('Failed').css({

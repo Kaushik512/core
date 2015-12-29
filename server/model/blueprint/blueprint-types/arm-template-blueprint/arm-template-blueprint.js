@@ -19,11 +19,7 @@ var ARMTemplateBlueprintSchema = new Schema({
 	infraManagerId: String,
 	templateFile: String,
 	parameters: Object,
-	instances: [{
-		_id: false,
-		logicalId: String,
-		runlist: [String]
-	}],
+	instances: Object,
 	//stackName: String,
 	resourceGroup: String,
 });

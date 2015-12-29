@@ -2747,6 +2747,14 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                                         $inputLogicalId.addClass('cftResourceLogicalIdInput');
                                         $inputLogicalId.attr('type', 'hidden');
                                         $inputLogicalId.val(name);
+                                        if(resources[i].properties.osProfile) {
+                                            var username = resources[i].properties.osProfile.adminUsername;
+                                            var password =  resources[i].properties.osProfile.adminPassword;
+                                            $inputLogicalId.attr('data-username',username);
+                                            $inputLogicalId.attr('data-password',password);
+                                                
+                                        } 
+                                        
 
                                         // for chefRunlist
 
@@ -3046,8 +3054,8 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                             reqBody.resourceGroup = $('#cftResourceGroupInput').val();
                             console.log($('#cftResourceGroupInput').length, $('#cftResourceGroupInput').val());
                             //reqBody.cftInstanceUserName = $('#cftStackInstanceUsernameInput').val();
-                            var cftInstances = [];
-
+                            //var cftInstances = [];
+                            var instanceObj = {}; 
                             $('.cft-resource-editPanel').each(function() {
                                 var $this = $(this);
                                 var runlist = [];
@@ -3056,14 +3064,15 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                                     runlist = $ccrs.getSelectedRunlist();
                                 }
 
-                                var instanceObj = {
-                                    logicalId: $this.find('.cftResourceLogicalIdInput').val(),
-                                    //username: $this.find('.cftResourceUsernameInput').val(),
-                                    runlist: runlist
+                                var $inputResource = $this.find('.cftResourceLogicalIdInput');
+                                instanceObj[$inputResource.val()] = {
+                                    username:$inputResource.attr('data-username'),
+                                    password:$inputResource.attr('data-password'),
+                                    runlist:runlist
                                 };
-                                cftInstances.push(instanceObj);
+                                //cftInstances.push(instanceObj);
                             });
-                            reqBody.cftInstances = cftInstances;
+                            reqBody.cftInstances = instanceObj;
 
                             $('.blueprintMsgContainer').hide();
                             if (($('.role-Selected').data('templatetype')).toLowerCase() != "docker") {

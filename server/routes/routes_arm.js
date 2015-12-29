@@ -134,16 +134,16 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.get('/azure-arm/:armId', function(req, res) {
         AzureArm.getById(req.params.armId, function(err, azureArm) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (azureArm) {
-                res.send(200, azureArm);
+                res.status(200).send(azureArm);
 
             } else {
-                res.send(404, {
+                res.status(404).send({
                     message: "Not Found"
-                })
+                });
             }
         });
     });
@@ -152,18 +152,18 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.get('/azure-arm/:armId/status', function(req, res) {
         AzureArm.getById(req.params.armId, function(err, azureArm) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (azureArm) {
-                res.send(200, {
+                res.status(200).send({
                     status: azureArm.status
                 });
 
             } else {
-                res.send(404, {
+                res.status(404).send({
                     message: "Not Found"
-                })
+                });
             }
         });
     });
@@ -293,22 +293,22 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });
 
     app.get('/azure-arm/:cfId/instances', function(req, res) {
-        CloudFormation.getById(req.params.cfId, function(err, cloudFormation) {
+        AzureArm.getById(req.params.cfId, function(err, azureArm) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
-            if (cloudFormation) {
-                instancesDao.getInstancesByCloudformationId(cloudFormation.id, function(err, instances) {
+            if (azureArm) {
+                instancesDao.getInstancesByARMId(azureArm.id, function(err, instances) {
                     if (err) {
-                        res.send(500, errorResponses.db.error);
+                        res.status(500).send(errorResponses.db.error);
                         return;
                     }
-                    res.send(200, instances);
+                    res.status(200).send(instances);
                 });
             } else {
-                res.send(404, {
-                    message: "stack not found"
+                res.status(404).send({
+                    message: "not found"
                 });
             }
 

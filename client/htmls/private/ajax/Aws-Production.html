@@ -2386,6 +2386,8 @@
 
 
              for (var i = 0; i < rowLength; i += 1) {
+                if (data[i]['templatetype'] && data[i]['templatetype'] == 'arm')
+                    continue;
                  getDesignTypeImg = data[i]['designtemplateicon_filename'];
 
                  switch (data[i].templatetypename) {
