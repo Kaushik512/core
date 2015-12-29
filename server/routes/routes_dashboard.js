@@ -45,6 +45,8 @@ var dashboardopenstackinstances = require('../model/dashboard/dashboardopenstack
 var dashboarddailytrends = require('../model/dashboard/dashboarddailytrends.js');
 var dashboardalerts = require('../model/dashboard/dashboardalerts.js');
 
+var dashboardlandings = require('../model/dashboard/dashboardlandings.js');
+
 
 
 var instancesDao = require('../model/classes/instance/instance');
@@ -53,6 +55,57 @@ var CW = require('../lib/cloudwatch.js');
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.all("/dashboard/providers/*", sessionVerificationFunc);
 
+    app.post('/dashboard/providers/dashboardlanding', function(req, res) {
+
+        dashboardlandings.getLandingDataInfo(function(err, landingData) {
+            if (err) {
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+
+            if (landingData.length) {
+                landingData[0].jenkinsReferenceValue = req.body.jenkinsReferenceValue;
+                landingData[0].jobsListValue = req.body.jobsListValue;
+                
+                landingData[0].save(function(err, landingDashboarddata) {
+                    if (err) {
+                        res.send(500, "landingData Already Exist.");
+                        return;
+                    }
+                    if (landingDashboarddata) {
+                        res.send(200, landingDashboarddata);
+                        return;
+                    }
+                });
+            } else {
+                dashboardlandings.createNew(req.body, function(err, landingDashboarddata) {
+                    if (err) {
+                        res.send(500, "Landing Data Already Exist.");
+                        return;
+                    }
+                    if (landingDashboarddata) {
+                        console.log("dashboarddashboarddata+++++++++++++"+landingDashboarddata);
+                        res.send(200, landingDashboarddata);
+                        return;
+                    }
+                });
+            }
+        });
+    });
+
+    app.get('/dashboard/providers/dashboardlanding', function(req, res) {
+        //logger.debug(req.params.projectId);
+        dashboardlandings.getLandingDataInfo(function(err, dashboardLandingData) {
+            if (err) {
+                res.send(500, errorResponses.db.error);
+                return;
+            }
+            if (dashboardLandingData) {
+                res.send(200, dashboardLandingData);
+                return;
+            }
+        });
+    });
 
     app.post('/dashboard/providers/dashboardmongopush', function(req, res) {
         //console.log(req.body.managedinstancesCount);
