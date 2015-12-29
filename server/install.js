@@ -167,7 +167,7 @@ function getDefaultsConfig() {
         //logServerUrl: 'http://54.186.108.35/index.html#/dashboard/file/logstash.json',
         logServerUrl: '',
         features: {
-            appcard: false
+            appcard: true
         },
         maxInstanceCount: 0,
 
