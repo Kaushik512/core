@@ -90,8 +90,16 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusD
                 }
             });
         }
-    }
 
+        if (nexusData.projectId) {
+            objectArray.push({
+                "rlcatalyst": {
+                    "projectId": nexusData.projectId
+                }
+            });
+        }
+    }
+    logger.debug("AppDeploy attributes: ",JSON.stringify(objectArray));
     var attributeObj = utils.mergeObjects(objectArray);
     var instanceIds = this.nodeIds;
     if (!(instanceIds && instanceIds.length)) {
@@ -102,6 +110,7 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusD
         }
         return;
     }
+    
     instancesDao.getInstances(instanceIds, function(err, instances) {
         if (err) {
             logger.error(err);

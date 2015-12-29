@@ -159,7 +159,25 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (appDeploy) {
-                res.status(200).send(appDeployes);
+                res.status(200).send(appDeploy);
+                return;
+            } else {
+                res.send([]);
+                return;
+            }
+        });
+    });
+
+    // Get AppDeploy w.r.t. projectId
+    app.get('/app/deploy/project/:projectId/list', function(req, res) {
+        logger.debug("Filtered by projectId called..");
+        masterUtil.getAppDeployListForProject(req.params.projectId, function(err, appDeploy) {
+            if (err) {
+                res.status(500).send(errorResponses.db.error);
+                return;
+            }
+            if (appDeploy) {
+                res.status(200).send(appDeploy);
                 return;
             } else {
                 res.send([]);

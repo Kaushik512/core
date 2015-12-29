@@ -1857,6 +1857,8 @@ var MasterUtil = function() {
 
 
     // Get all appDeploy informations for project.
+    // Note: This method logic has to change with stored procedure for better performance.
+    // For now due to time constraints implementing with for loop.(Gobinda) 
     this.getAppDeployListForProject = function(projectId, callback) {
         logger.debug("projectId: ", projectId);
         d4dModelNew.d4dModelMastersProjects.find({
@@ -1882,7 +1884,75 @@ var MasterUtil = function() {
                         }
                         logger.debug("App deploy: ", JSON.stringify(appData));
                         if (appData.length) {
-                            
+                            var filterArray = [];
+                            var finalJson = [];
+                            for(var j=0;j<appData.length;j++){
+                                var str = appData[j].applicationName+"@"+appData[j].applicationVersion;
+                                if(filterArray.length === 0){
+                                    filterArray.push(str);
+                                }
+                                if(filterArray.indexOf(str) === -1){
+                                    filterArray.push(str);
+                                }
+                            }
+                            logger.debug("created array: ",JSON.stringify(filterArray));
+                            var count = 0;
+                            for(var k=0;k<filterArray.length;k++){
+                                (function(k){
+                                    var arrayValue = filterArray[k].split("@");
+                                    logger.debug("name: ",arrayValue[0]);
+                                    logger.debug("Version: ",arrayValue[1]);
+                                    AppDeploy.getAppDeployByAppNameAndVersion(arrayValue[0],arrayValue[1],function(err,filteredData){
+                                        count++;
+                                        if(err){
+                                            logger.error("Failed to get filteredData: ",err);
+                                            return;
+                                        }
+                                        logger.debug("filteredData array: ",JSON.stringify(filteredData));
+                                        if(filteredData.length){
+                                            var applicationName = filteredData[0].applicationName;
+                                            var applicationVersion = filteredData[0].applicationVersion;
+                                            var projectId = filteredData[0].projectId;
+                                            var applicationInstanceName = [];
+                                            var applicationNodeIP = [];
+                                            var applicationLastDeploy = [];
+                                            var applicationStatus = [];
+                                            var containerId = [];
+                                            var hostName = [];
+                                            var envId = [];
+                                            for(var l=0;l<filteredData.length;l++){
+                                                applicationInstanceName.push(filteredData[l].applicationInstanceName);
+                                                applicationNodeIP.push(filteredData[l].applicationNodeIP);
+                                                applicationLastDeploy.push(filteredData[l].applicationLastDeploy);
+                                                applicationStatus.push(filteredData[l].applicationStatus);
+                                                containerId.push(filteredData[l].containerId);
+                                                hostName.push(filteredData[l].hostName);
+                                                envId.push(filteredData[l].envId);
+                                            }
+                                            var tempJson = {
+                                                "applicationName":applicationName,
+                                                "applicationVersion":applicationVersion,                                                
+                                                "projectId":projectId,
+                                                "applicationInstanceName":applicationInstanceName,
+                                                "applicationNodeIP":applicationNodeIP,
+                                                "applicationLastDeploy":applicationLastDeploy,
+                                                "applicationStatus":applicationStatus,
+                                                "containerId":containerId,
+                                                "hostName":hostName,
+                                                "envId":envId,
+                                            };
+                                            finalJson.push(tempJson);
+                                            if(filterArray.length === count){
+                                                logger.debug("Send finalJson: ",JSON.stringify(finalJson));
+                                                callback(null,finalJson);
+                                            }
+                                        }else{
+                                            return;
+                                        }
+                                    });
+                                })(k);
+                            }
+
                         } else {
                             callback(null, []);
                         }
