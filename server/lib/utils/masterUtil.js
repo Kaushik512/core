@@ -1671,7 +1671,9 @@ var MasterUtil = function() {
                             appdeploy: {
                                 $elemMatch: {
                                     // The regex will enable case-insensitive
-                                    applicationname: { $regex : new RegExp(appName, "i")}
+                                    applicationname: {
+                                        $regex: new RegExp(appName, "i")
+                                    }
                                 }
                             },
                             rowid: projectId
@@ -1810,18 +1812,18 @@ var MasterUtil = function() {
             rowid: anId,
             id: "18"
         }, function(err, dockers) {
-            if(err){
-                logger.debug("Error to get Docker: ",err);
-                callback(err,null);
+            if (err) {
+                logger.debug("Error to get Docker: ", err);
+                callback(err, null);
                 return;
             }
-            callback(null,dockers);
+            callback(null, dockers);
             return;
         });
     }
 
     // Return all Templates for Org and TemplateType
-    this.getTemplatesByOrgAndTemplateType = function(orgId,templateType, callback) {
+    this.getTemplatesByOrgAndTemplateType = function(orgId, templateType, callback) {
         var templateList = [];
         var rowIds = [];
         rowIds.push(orgId);
@@ -1852,6 +1854,47 @@ var MasterUtil = function() {
             }
         });
     }
+
+
+    // Get all appDeploy informations for project.
+    this.getAppDeployListForProject = function(projectId, callback) {
+        logger.debug("projectId: ", projectId);
+        d4dModelNew.d4dModelMastersProjects.find({
+            rowid: projectId
+        }, function(err, project) {
+            if (err) {
+                logger.error("Failed to get project. ", err);
+                callback(err, null);
+            }
+            if (project.length) {
+                var appDeploy = project[0].appdeploy;
+                if (appDeploy.length) {
+                    var appName = [];
+                    for (var i = 0; i < appDeploy.length; i++) {
+                        if (appDeploy[i].applicationname) {
+                            appName.push(appDeploy[i].applicationname);
+                        }
+                    }
+                    AppDeploy.getAppDeployByProjectId(projectId, appName, function(err, appData) {
+                        if (err) {
+                            logger.debug("App deploy fetch error.", err);
+                            callback(err, null);
+                        }
+                        logger.debug("App deploy: ", JSON.stringify(appData));
+                        if (appData.length) {
+                            
+                        } else {
+                            callback(null, []);
+                        }
+                    });
+                } else {
+                    callback(null, null);
+                }
+            } else {
+                callback(null, null);
+            }
+        })
+    };
 }
 
 module.exports = new MasterUtil();

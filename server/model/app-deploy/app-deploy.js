@@ -186,7 +186,6 @@ AppDeploySchema.statics.getAppDeployByName = function(appName, callback) {
             callback(err, null);
         }
         if (appDeploy) {
-            //logger.debug("Got AppDeploy: ", JSON.stringify(appDeploy));
             callback(null, appDeploy);
         }
     });
@@ -239,6 +238,25 @@ AppDeploySchema.statics.getAppDeployListByEnvId = function(envId, callback) {
             callback(null, appDeploys);
         } else {
             callback(null, []);
+        }
+    });
+};
+
+// Get all AppDeploy informations by Project.
+AppDeploySchema.statics.getAppDeployByProjectId = function(projectId,appName, callback) {
+    this.find({
+        "applicationName": {
+            $in: appName
+        },
+        "projectId": projectId
+    }, function(err, appDeploy) {
+        if (err) {
+            logger.debug("Got error while fetching AppDeploy: ", err);
+            callback(err, null);
+        }
+        if (appDeploy) {
+            logger.debug("Got AppDeploy: ", JSON.stringify(appDeploy));
+            callback(null, appDeploy);
         }
     });
 };
