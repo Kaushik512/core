@@ -31,6 +31,7 @@ var Task = require('../model/classes/tasks/tasks.js');
 var masterUtil = require('../lib/utils/masterUtil.js');
 
 var CloudFormation = require('_pr/model/cloud-formation');
+var AzureArm = require('_pr/model/azure-arm');
 
 module.exports.setRoutes = function(app, sessionVerification) {
     app.all('/organizations/*', sessionVerification);
@@ -117,7 +118,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 id: 4,
                                                 orgname_rowid: orgTree[i]['rowid'],
                                                 productgroupname_rowid: docbgs[k]['rowid']
-                                                //,rowid: {$in: objperms.projects}
+                                                    //,rowid: {$in: objperms.projects}
                                             }, function(err, docprojs) {
                                                 //logger.debug("Projects:%s", JSON.stringify(docprojs));
 
@@ -1012,7 +1013,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         var user = req.session.user;
         var category = 'blueprints';
         var permissionto = 'create';
-        console.log('body == >', req.body,'typeof ==> ',typeof req.body);
+        console.log('body == >', req.body, 'typeof ==> ', typeof req.body);
 
         usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
             if (!err) {
@@ -1046,7 +1047,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             };
             console.log('req== >', blueprintData);
             //var blueprintData = req.body.blueprintData;
-            var dockerData, instanceData;
+            var dockerData, instanceData, cloudFormationData, armTemplateData;
             logger.debug('req.body.blueprintData.blueprintType ===>', req.body.blueprintData.blueprintType);
             if (req.body.blueprintData.blueprintType === 'docker') {
                 dockerData = {
@@ -1083,42 +1084,42 @@ module.exports.setRoutes = function(app, sessionVerification) {
             } else if (req.body.blueprintData.blueprintType === 'openstack_launch') {
                 logger.debug('req.body.blueprintData.blueprintType ==>', req.body.blueprintData.blueprintType);
                 instanceData = {
-                    instanceImageID:req.body.blueprintData.imageIdentifier,
-                    flavor:req.body.blueprintData.openstackflavor,
-                    network:req.body.blueprintData.openstacknetwork,
-                    securityGroupIds:req.body.blueprintData.openstacksecurityGroupIds,
-                    subnet:req.body.blueprintData.openstacksubnet,
-                    instanceOS:req.body.blueprintData.instanceOS,
-                    instanceCount:req.body.blueprintData.instanceCount,
+                    instanceImageID: req.body.blueprintData.imageIdentifier,
+                    flavor: req.body.blueprintData.openstackflavor,
+                    network: req.body.blueprintData.openstacknetwork,
+                    securityGroupIds: req.body.blueprintData.openstacksecurityGroupIds,
+                    subnet: req.body.blueprintData.openstacksubnet,
+                    instanceOS: req.body.blueprintData.instanceOS,
+                    instanceCount: req.body.blueprintData.instanceCount,
                     cloudProviderType: 'openstack',
                     cloudProviderId: req.body.blueprintData.providerId,
                     infraManagerType: 'chef',
                     infraManagerId: req.body.blueprintData.chefServerId,
                     runlist: req.body.blueprintData.runlist,
-                    instanceImageName:req.body.blueprintData.instanceImageName
-                    
+                    instanceImageName: req.body.blueprintData.instanceImageName
+
                 }
                 blueprintData.instanceData = instanceData;
-            }else if (req.body.blueprintData.blueprintType === 'hppubliccloud_launch') {
+            } else if (req.body.blueprintData.blueprintType === 'hppubliccloud_launch') {
                 logger.debug('req.body.blueprintData.blueprintType ==>', req.body.blueprintData.blueprintType);
                 instanceData = {
-                    instanceImageID:req.body.blueprintData.imageIdentifier,
-                    flavor:req.body.blueprintData.openstackflavor,
-                    network:req.body.blueprintData.openstacknetwork,
-                    securityGroupIds:req.body.blueprintData.openstacksecurityGroupIds,
-                    subnet:req.body.blueprintData.openstacksubnet,
-                    instanceOS:req.body.blueprintData.instanceOS,
-                    instanceCount:req.body.blueprintData.instanceCount,
+                    instanceImageID: req.body.blueprintData.imageIdentifier,
+                    flavor: req.body.blueprintData.openstackflavor,
+                    network: req.body.blueprintData.openstacknetwork,
+                    securityGroupIds: req.body.blueprintData.openstacksecurityGroupIds,
+                    subnet: req.body.blueprintData.openstacksubnet,
+                    instanceOS: req.body.blueprintData.instanceOS,
+                    instanceCount: req.body.blueprintData.instanceCount,
                     cloudProviderType: 'hppubliccloud',
                     cloudProviderId: req.body.blueprintData.providerId,
                     infraManagerType: 'chef',
                     infraManagerId: req.body.blueprintData.chefServerId,
                     runlist: req.body.blueprintData.runlist,
-                    instanceImageName:req.body.blueprintData.instanceImageName
-                    
+                    instanceImageName: req.body.blueprintData.instanceImageName
+
                 }
                 blueprintData.instanceData = instanceData;
-            }else if (req.body.blueprintData.blueprintType === 'azure_launch') {
+            } else if (req.body.blueprintData.blueprintType === 'azure_launch') {
                 logger.debug('req.body.blueprintData.blueprintType ==>', req.body.blueprintData);
                 instanceData = {
                     //keyPairId: req.body.blueprintData.keyPairId,
@@ -1138,7 +1139,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     instanceCount: req.body.blueprintData.instanceCount
                 }
                 blueprintData.instanceData = instanceData;
-            }else if (req.body.blueprintData.blueprintType === 'vmware_launch') {
+            } else if (req.body.blueprintData.blueprintType === 'vmware_launch') {
                 logger.debug('req.body.blueprintData.blueprintType ==>', req.body.blueprintData);
                 instanceData = {
                     //keyPairId: req.body.blueprintData.keyPairId,
@@ -1153,7 +1154,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     instanceCount: req.body.blueprintData.instanceCount
                 }
                 blueprintData.instanceData = instanceData;
-            }else if (req.body.blueprintData.blueprintType === 'aws_cf') {
+            } else if (req.body.blueprintData.blueprintType === 'aws_cf') {
                 console.log('templateFile ==> ', req.body.blueprintData.cftTemplateFile);
                 cloudFormationData = {
                     cloudProviderId: req.body.blueprintData.cftProviderId,
@@ -1168,6 +1169,21 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     instances: req.body.blueprintData.cftInstances
                 }
                 blueprintData.cloudFormationData = cloudFormationData;
+            } else if (req.body.blueprintData.blueprintType === 'azure_arm') {
+                console.log('templateFile ==> ', req.body.blueprintData.cftTemplateFile);
+                armTemplateData = {
+                    cloudProviderId: req.body.blueprintData.cftProviderId,
+                    infraManagerType: 'chef',
+                    infraManagerId: req.body.blueprintData.chefServerId,
+                    runlist: req.body.blueprintData.runlist,
+                    stackParameters: req.body.blueprintData.cftStackParameters,
+                    //stackName: req.body.blueprintData.stackName,
+                    templateFile: req.body.blueprintData.cftTemplateFile,
+                    resourceGroup: req.body.blueprintData.resourceGroup,
+                    //instanceUsername: req.body.blueprintData.cftInstanceUserName
+                    instances: req.body.blueprintData.cftInstances
+                }
+                blueprintData.armTemplateData = armTemplateData;
             } else {
                 res.send(400, {
                     message: "Invalid Blueprint Type"
@@ -1201,7 +1217,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     });
                     return;
                 }
-                
+
                 res.send(data);
             });
 
@@ -1323,12 +1339,25 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         return;
                                     }
 
-                                    res.send({
-                                        tasks: tasksData,
-                                        instances: instancesData,
-                                        blueprints: blueprintsData,
-                                        stacks: stacks
+                                    AzureArm.findByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, function(err, arms) {
+
+                                        if (err) {
+                                            res.send(500);
+                                            return;
+                                        }
+
+                                        res.send({
+                                            tasks: tasksData,
+                                            instances: instancesData,
+                                            blueprints: blueprintsData,
+                                            stacks: stacks,
+                                            arms: arms
+                                        });
+
                                     });
+
+
+
                                 });
 
 
@@ -1728,7 +1757,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     } else {
                                         instance.puppet = {
                                             serverId: infraManagerDetails.rowid
-                                            /*chefNodeName: req.body.fqdn*/
+                                                /*chefNodeName: req.body.fqdn*/
                                         }
                                     }
                                     instancesDao.createInstance(instance, function(err, data) {
@@ -2110,7 +2139,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
             logger.debug("Exit post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/providers/%s/images/%s/blueprints", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, req.params.providerId, req.params.imageId);
         });
     });
-    
+
     // End point which will give list of all Docker instances for Org,BG,Proj and Env.
     app.get('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/environments/:envId/docker/instances', function(req, res) {
         instancesDao.getInstancesByOrgBgProjectAndEnvForDocker(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, function(err, instances) {

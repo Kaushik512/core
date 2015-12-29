@@ -1,0 +1,275 @@
+
+<!--blueprint tab-->
+<div class="tab-pane" id="l7">
+    <div class="panel-heading">
+        <h5 class="panel-title" style="font-size:12px !important">Azure ARM</h5>
+    </div>
+                    <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-10" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+
+                        <div>
+
+                            <div class="widget-body no-padding">
+<div class="panel-group smart-accordion-default"  style="overflow-y: auto;">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h4 class="panel-title">
+                                            <a data-toggle="collapse">Deployments</a>
+                                            </h4>
+
+
+
+                                
+                               
+                                        </div>
+                                        <div class="panel-collapse collapse in">
+                                            <div class="panel-body" style="padding:0px !important;">
+                                                
+
+                                                <div id="azureDeploymentContainer" class="">
+                                                    <!--<div class="productdiv4"><div class="productdiv1 cardimage" ><ul class="list-unstyled system-prop" style="text-align: center;"><li><img src="/d4dMasters/image/627d8e9f-8846-4fc9-8274-8a9e50d90c5e__templatesicon__lamp.jpg" alt="cfTEST" class="cardLogo"></li><li title="cfTEST" class="Cardtextoverflow"><u><b>cfTEST</b></u></li></ul><div class="stack-details-list"><span class="stack-details">Id : <strong class="stackId">52.24.249.238</strong></span><span class="stack-details">status : <span class="stackStatus">running</span></span></div></div>-->
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+                    <footer class="footer">
+                        <div class="clearfix form-actions" style="text-align:center">
+                            <button class="btn pull-right btn-danger right-button" title="Delete Stack" onclick="removeStack()"> <i class="fa fa-trash-o"></i></button>
+                        </div>
+
+                    </footer><!--Launch div ends here-->
+                </div> <!--tab-pane l2 gets over -->
+
+              
+
+
+
+
+
+<!--modal for help-->
+
+<div class="modal fade" id="modalForHelp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog " style="">
+        <div class="modal-content"> 
+            
+             <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">
+                    &nbsp;CookBook Information
+                </h4>
+
+            </div> 
+            
+            
+             <div class="modal-body" style="height:400px;overflow-y:auto">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                        <th>CookBook Name</th>
+                        <th>Description</th>
+                        <tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                        <td>apache2-windows</td>
+                        <td>Installation &amp; Configuration of Apache Server</td>
+                        </tr>
+                            <tr>
+                                <td>apache2</td>
+                                <td>Installation &amp; Configuration of Apache Server</td>
+                            </tr>
+                        <!--2nd set-->
+                        <tr>
+                        <td>cassandra</td>
+                        <td>Installation and configuration of Cassandra Server</td>
+                        </tr>
+                            <tr>
+                                <td>eclipse_windows</td>
+                                <td>Installtion of Eclispe on Windows</td>
+                            </tr>   
+                            <!--3rd set-->
+
+                        <tr>
+                        <td>visualstudio_windows</td>
+                        <td>Installation of Visual Studio</td>
+                        </tr>
+                            <tr>
+                                <td>iis</td>
+                                <td>Installation and configuration of IIS Server</td>
+                            </tr>
+                            <!--4th set-->
+                        <tr>
+                        <td>jboss7</td>
+                        <td>Installation and Configuration of JBOSS7 Server</td>
+                        </tr>
+                            <tr>
+                                <td>tomcat</td>
+                                <td>Installs and configures Tomcat, Java servlet engine and webserver</td>
+                            </tr>
+                            <!--5th set-->
+                            <tr>
+                        <td>weblogic</td>
+                        <td>Installation and Configuration of weblogic</td>
+                        </tr>
+                            <tr>
+                                <td>java</td>
+                                <td>Installation of Java</td>
+                            </tr>
+                            <!--6th set-->
+                            <tr>
+                        <td>java_windows</td>
+                        <td>Installation of Java</td>
+                        </tr>
+                            <tr>
+                                <td>nodejs</td>
+                                <td>Installation of NodeJS and npm package</td>
+                            </tr>   
+                            <!--7th set-->
+
+                            <tr>
+                        <td>php</td>
+                        <td>Installation and Configuration of PHP</td>
+                        </tr>
+                            <tr>
+                                <td>lamp_role</td>
+                                <td>Installation and Configuration of LAMP stack</td>
+                            </tr>   
+
+                            <!--8th set-->
+                            <tr>
+                        <td>mysql-windows</td>
+                        <td>Installation and Configuration of Mysql</td>
+                        </tr>
+                            <tr>
+                                <td>mysql</td>
+                                <td>Installation and Configuration of Mysql</td>
+                            </tr>   
+                            <!--9th set-->
+
+                            <tr>
+                        <td>oracle_windows</td>
+                        <td>Installation and Configuration of Oracle</td>
+                        </tr>
+                            <tr>
+                                <td>postgresql</td>
+                                <td>Installation and Configurationof postgresql</td>
+                            </tr>   
+                            <!--10th set-->
+                            <tr>
+                        <td>service_apache</td>
+                        <td>Service cookbook for apache server</td>
+                        </tr>
+                            <tr>
+                                <td>service_iptables</td>
+                                <td>Service cookbook for firewall</td>
+                            </tr>   
+
+                            <!--11th set-->
+                            <tr>
+                        <td>service_jboss</td>
+                        <td>Service cookbook for Jboss server</td>
+                        </tr>
+                            <tr>
+                                <td>service_mysql</td>
+                                <td>Service cookbook for Mysql</td>
+                            </tr>   
+                            <!--12th set-->
+                            <tr>
+                        <td>service_nginx</td>
+                        <td>Service cookbook for nginx </td>
+                        </tr>
+                            <tr>
+                                <td>service_tomcat</td>
+                                <td>Service cookbook for tomcat</td>
+                            </tr>   
+                            <!--13th set-->
+                            <tr>
+                        <td>service_weblogic</td>
+                        <td>service cookbook for weblogic</td>
+                        </tr>
+                            <tr>
+                                <td>seven_zip</td>
+                                <td>Installation of 7Zip</td>
+                            </tr>
+                            <!--14th set-->
+                            <tr>
+                        <td>git</td>
+                        <td>Installs git and optionally sets up a git server as a daemon under runit</td>
+                        </tr>
+                            <tr>
+                                <td>wget_windows</td>
+                                <td>Installs wget on windows</td>
+                            </tr>
+                            <!--15th set-->
+                            <tr>
+                        <td>toad_windows</td>
+                        <td>Installation and Configuration of TOAD</td>
+                        </tr>
+                            <tr>
+                                <td>docker</td>
+                                <td>Installation and Configuration of docker engine</td>
+                            </tr>   
+                            <tr>
+                                <td>jenkins</td>
+                                <td>Installs and configures Jenkins CI master &amp; node slaves</td>
+                            </tr>   
+                    </tbody>
+                </table>
+
+            </div>
+            
+                <div class="modal-footer">
+        
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>   
+  
+         </div>
+    </div>
+</div>
+
+<!--cloudforamtion events area-->
+<div class="modal fade" id="cftEventModalContainer" tabindex="-1" style='z-index:1800' role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">
+                    <i class="fa fa-bar-chart-o txt-color-blue"></i>&nbsp;&nbsp;Event History
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="logsArea" style="font-size:12px !important;">
+
+                </div>
+                <table class="templateTable table table-striped table-bordered table-hover dataTable no-footer text-align-center table-condensed tablesorter" cellpadding="5px" width="100%" style="display:none">
+                                                    <thead>
+                                                    <tr class="rowCustomStyle">
+                                                        <td>Timestamp</td>
+                                                        <td>Resource Name</td>
+                                                        <td>Resource Type</td>
+                                                        <td>Resource Status</td>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                    </tbody>
+                                                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div> 
+

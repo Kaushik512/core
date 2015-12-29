@@ -43,7 +43,7 @@
 
                                        <div class="col-lg-6 col-md-6" style="margin-top:5px;">
                                           <label for="">Template Type:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-                                          <select id="templatetypename" ignoreoption="OSImage" class="choosetemplateType width-100" sourcepath="16"  cdata="catalyst" datapath="masterjson.rows.row" onChange="if($(this).val().indexOf('Docker') >= 0) {$('.forDocker').show(); $('.notforDocker').hide();$('.notCFT').hide();}else {$('.forDocker').hide();$('.notforDocker').show();$('.forCFT').hide();}if($(this).val().indexOf('CloudFormation') >=0){$('.forDocker').hide(); $('.notforDocker').hide(); $('.forCFT').show();}">
+                                          <select id="templatetypename" ignoreoption="OSImage" class="choosetemplateType width-100" sourcepath="16"  cdata="catalyst" datapath="masterjson.rows.row" onChange="if($(this).val().indexOf('Docker') >= 0) {$('.forDocker').show(); $('.notforDocker').hide();$('.notCFT').hide();}else {$('.forDocker').hide();$('.notforDocker').show();$('.forCFT').hide();}if($(this).val().indexOf('CloudFormation') >=0 || $(this).val().indexOf('ARMTemplate') >=0){$('.forDocker').hide(); $('.notforDocker').hide(); $('.forCFT').show();}">
                                           </select>
                                        </div>
                                        <div class="col-lg-6 col-md-6" hidden>
@@ -799,7 +799,7 @@
                        } else {
                            alert('invalid valid form submitted'); // for demo
                        }
-                   } else if (templateType === 'CloudFormation'){
+                   } else if (templateType === 'CloudFormation' || templateType === 'ARMTemplate' ){
                      
                            $('#template').attr('cat-validation', 'required');
                            if ($(this).valid) {
