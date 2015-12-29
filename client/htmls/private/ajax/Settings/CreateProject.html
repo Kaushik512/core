@@ -1,7 +1,4 @@
-<script>
-//   $(".tree-view").hide();
-   
-</script>
+<link rel="stylesheet" type="text/css" href="css/application.css">
 <div class="row">
    <div class="col-md-12">
       <div class="col-md-12">
@@ -11,7 +8,7 @@
                <h4 class="widget-margin" style="color:black;">Create Project</h4>
             </div>
             <div class="widget-body">
-               <div class="widget-main" style="min-height:300px">
+               <div class="widget-main widgetHeight">
                   <div>
                      <section id="widget-grid" class="">
                         <!-- START ROW -->
@@ -25,7 +22,7 @@
                                  <div class="widget-body no-padding">
                                     
                                        <div class="col-lg-6 col-md-6">
-                                          <label for="name">Name:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                          <label for="name">Name:<span class="control-label redSpan">&nbsp;*</span></label>
                                           <label id="msgOrgName" style="display:none;color:red;float:right;">Required</label>
                                           <br>
                                           <input autofocus name="ctl00$MainContent$orgname" value="" id="projectname" class="form-control" type="text"  cdata="catalyst" cat-validation="required,nospecial,max15,nospace"  unique="true"  uniqueconditionedby="projectname,orgname,productgroupname">
@@ -36,13 +33,13 @@
                                        </div>
                                        
                                        <div class="col-lg-6 col-md-6" style="margin-top:25px;">
-                                          <label for="">Organization:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                          <label for="">Organization:<span class="control-label redSpan">&nbsp;*</span></label>
                                           <select id="orgname" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" linkedfields="['productgroupname','environmentname','teamname']"  cdata="catalyst" cat-validation="required">
                                              <option value="">Select Organization</option>
                                           </select>
                                        </div>
                                        <div class="col-lg-6 col-md-6" style="margin-top:25px;">
-                                          <label for="">Business Group:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                          <label for="">Business Group:<span class="control-label redSpan">&nbsp;*</span></label>
                                           <select id="productgroupname" class="chooseBG width-100" sourcepath="2" datapath="masterjson.rows.row" linkedto="orgname"  cdata="catalyst" cat-validation="required">
                                              <option value="">Select Business Group</option>
                                           </select>
@@ -96,7 +93,7 @@
                                        </div> -->
 
                                  <!-- <div class="col-lg-6 col-md-6 smart-form" style="margin-top:25px;">
-                                    <label for="category">Assign Teams:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                    <label for="category">Assign Teams:<span class="control-label redSpan">&nbsp;*</span></label>
                                     <div id="teamname" multiselect="multiselect" datatype="select" datapath="masterjson.rows.row" class="input-group from-control col-md-12 widthBox"  sourcepath="21" cdata="catalyst" linkedto="orgname" cat-validation="onechecked">
                                     </div>
                                 </div> -->

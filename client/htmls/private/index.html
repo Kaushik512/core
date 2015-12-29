@@ -9,38 +9,13 @@
         <meta name="author" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
         <link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.css">
-        <link rel="stylesheet" type="text/css" media="screen" href="css/Catalyst.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="css/catalyst.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="css/smartCustom.min.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="css/jqueryUI.min.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="css/font-awesome.min.css">
         <link rel="stylesheet" href="js/jquery-filetree/jqueryFileTree.css" />
-
-
-<style>
-
-#clickdisabler{
-    width:100%;
-    position:absolute;
-    z-index: 100;
-    height:100px;
-    display: none;
-}
-#setting_tree > .icon{
-    font-size:18px;
-}
-</style>
-<script>
-function showLoader(){
-    $('#clickdisabler').show();
-}
-function hideLoader(){
-$('#clickdisabler').hide(); 
-}
-var a,b,x;
-String.prototype.capitalizeFirstLetter = function() {
-    return this.charAt(0).toUpperCase() + this.slice(1);
-}
-</script>
 </head>
 <body class="custom-theme">
-<div id="clickdisabler"></div>
 <!-- possible classes: minified, fixed-ribbon, fixed-header, fixed-width-->
 <!-- HEADER -->
 <!-- Header starts here -->
@@ -164,10 +139,10 @@ String.prototype.capitalizeFirstLetter = function() {
                     </a>
                     <ul style="display:block">
                         <li>
-                            <a href="ajax/DesignBlueprintAzure.html?provider=azure" onclick="$('#blueprints').attr('providerselected','azure');"  class="devops_providers"><div class="azure" title="Azure"><span class="menu-item-parent provider-images trackAlign">&nbsp;&nbsp;Azure</span></div></a>
+                            <a href="ajax/Aws-Production.html" onclick="$('#blueprints').attr('providerselected','aws');" class="devops_providers"><div class="aws" title="AWS"><span class="menu-item-parent provider-images trackAlign">&nbsp;&nbsp;AWS</span></div></a>
                         </li>
                         <li>
-                            <a href="ajax/Aws-Production.html" onclick="$('#blueprints').attr('providerselected','aws');" class="devops_providers"><div class="aws" title="AWS"><span class="menu-item-parent provider-images trackAlign">&nbsp;&nbsp;AWS</span></div></a>
+                            <a href="ajax/DesignBlueprintAzure.html?provider=azure" onclick="$('#blueprints').attr('providerselected','azure');"  class="devops_providers"><div class="azure" title="Azure"><span class="menu-item-parent provider-images trackAlign">&nbsp;&nbsp;Azure</span></div></a>
                         </li>
                         <li>
                             <a href="ajax/DesignBlueprint.html?provider=os" onclick="$('#blueprints').attr('providerselected','openstack');"  class="devops_providers"><div class="openstack" title="Open Stack"><span class="menu-item-parent provider-images trackAlign">&nbsp;Open Stack</span></div></a>
@@ -278,9 +253,7 @@ String.prototype.capitalizeFirstLetter = function() {
     <script src="js/jquery.tablesorter.min.js"></script>
     <script src="js/jquery.validate.min.js"></script>
     <script src="js/additional-methods.min.js"></script>
-   <script src="/socket.io/socket.io.js"></script>
-   <!-- <script src="js/plugin/modalcollapse/modalcollapse.js"></script>-->
-
+    <script src="/socket.io/socket.io.js"></script>
     <script src="js/app.js"></script>
 
     <script src="js/dev/dev.js"></script>
@@ -291,6 +264,10 @@ String.prototype.capitalizeFirstLetter = function() {
     <!-- MAIN APP JS FILE -->
     <script type="text/javascript">
 
+var a,b,x;
+String.prototype.capitalizeFirstLetter = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+}
 
 
 $(document).ready(function() {
@@ -619,15 +596,7 @@ var SettingTreeJson = [{
     }, {
         "name": "track",
         "text": "Track Setup",
-        "nodes": [/*{
-            "name": "templates",
-            "text": "Dashboard Types",
-            "borderColor": "#000",
-            "href": "#ajax/Settings/DashboardList.html",
-            "selectable": true,
-            "icon": "fa fa-lg fa-fw fa-files-o"
-
-        },*/{
+        "nodes": [{
             "name": "templates",
             "text": "Dashboard Items",
             "borderColor": "#000",

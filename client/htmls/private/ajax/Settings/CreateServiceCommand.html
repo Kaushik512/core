@@ -11,7 +11,7 @@
                   <h4 class="widget-margin" style="color:black;">Create Services</h4>
                </div>
                <div class="widget-body">
-                  <div class="widget-main" style="min-height:300px">
+                  <div class="widget-main widgetHeight">
                      <div>
                         <section id="widget-grid" class="">
                            <!-- START ROW -->
@@ -24,14 +24,14 @@
                                        <!-- widget content -->
                                        <div class="widget-body no-padding">
                                              <div class="col-lg-6 col-md-6">
-                                          <label for="">Organization:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                          <label for="">Organization:<span class="control-label redSpan">&nbsp;*</span></label>
                                           <select id="orgname" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row"  cdata="catalyst" cat-validation="required">
                                              <option value="">Select Organization</option>
                                           </select>
                                        </div>
                                              <div class="col-lg-6 col-md-6">
                                                 <label for="name">Name:
-                                                <span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                                <span class="control-label redSpan">&nbsp;*</span></label>
                                                 <input type="text" id="servicename" class="form-control" cdata="catalyst" unique="true" uniqueconditionedby="servicename"  cat-validation="required,max15,nospecial,nospace">
                                              </div>
                                              <div class="col-lg-5 CommandName hidden" style="padding-top:10px;">
@@ -50,7 +50,7 @@
                                              </div>
                                              <div class="col-lg-6 col-md-6 chooseChefServer margintop15">
                                                 <label class="">
-                                                Select Chefserver<span style="color:Red;" class="control-label">&nbsp;*</span>
+                                                Select Chefserver<span class="control-label redSpan">&nbsp;*</span>
                                                 </label>
                                                 <select class="chooseChefServerdropdown width-100" cdata="catalyst"  id="configname"  sourcepath="10" onchange="loadcookbooksinto('servicecookbook','configname');" datapath="masterjson.rows.row" >
                                                 </select>
@@ -58,7 +58,7 @@
                                              </div>
                                              <div class="col-lg-6 col-md-6 ServiceCookbooks margintop15">
                                                 <label class="">
-                                                Service Cookbooks <span style="color:Red;" class="control-label">&nbsp;*</span> <img class="servicecookbookspinner hidden" style="margin-left:5px" src="img/select2-spinner.gif">
+                                                Service Cookbooks <span class="control-label redSpan">&nbsp;*</span> <img class="servicecookbookspinner hidden" style="margin-left:5px" src="img/select2-spinner.gif">
                                                 </label>
                                                 <select class="chooseServiceCookbooks width-100" id="servicecookbook" cdata="catalyst" onchange="$('#servicecookbookspinner').removeClass('hidden');loadreceipesinto(['servicestart','servicestop','servicerestart','servicekill','servicestatus'],$(this).val(),'configname','loadactioncheckboxes');">
                                                 </select>

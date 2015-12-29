@@ -11,7 +11,7 @@
                   <h4 class="widget-margin" style="color:black;">Create Templates <span id="spnbuildservername"></span></h4>
                </div>
                <div class="widget-body">
-                  <div class="widget-main" style="min-height:300px">
+                  <div class="widget-main widgetHeight">
                      <div>
                         <section id="widget-grid" class="">
                         <!-- START ROW -->
@@ -24,7 +24,7 @@
                                  <div class="widget-body no-padding">
                                     <div class="row zero-margin" >
                                        <div class="col-lg-6 col-md-6">
-                                          <label for="">Template Name:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                          <label for="">Template Name:<span class="control-label redSpan">&nbsp;*</span></label>
                                           <label id="msgOrgName"></label>
                                           <input name="ctl00$MainContent$orgname" value="" id="templatename" class="form-control"  cdata="catalyst" unique="true" uniqueconditionedby="templatename,templatetypename" type="text" cat-validation="required,max15"><span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
                                        </div>
@@ -42,7 +42,7 @@
          
 
                                        <div class="col-lg-6 col-md-6" style="margin-top:5px;">
-                                          <label for="">Template Type:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                          <label for="">Template Type:<span class="control-label redSpan">&nbsp;*</span></label>
                                           <select id="templatetypename" ignoreoption="OSImage" class="choosetemplateType width-100" sourcepath="16"  cdata="catalyst" datapath="masterjson.rows.row" onChange="if($(this).val().indexOf('Docker') >= 0) {$('.forDocker').show(); $('.notforDocker').hide();$('.notCFT').hide();}else {$('.forDocker').hide();$('.notforDocker').show();$('.forCFT').hide();}if($(this).val().indexOf('CloudFormation') >=0 || $(this).val().indexOf('ARMTemplate') >=0){$('.forDocker').hide(); $('.notforDocker').hide(); $('.forCFT').show();}">
                                           </select>
                                        </div>
@@ -55,7 +55,7 @@
                                     
                                        <div class="col-lg-6 col-md-6" style="margin-top:5px;">
 
-                                                        <label for="category">Organization:<span style="color:Red;" class="control-label">&nbsp;*</span>
+                                                        <label for="category">Organization:<span class="control-label redSpan">&nbsp;*</span>
                                                         </label>
 
                                                         <!-- <select id="orgname" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central" cdata="catalyst" cat-validation="required" cat-validation="required" linkedfields="['configname']" onchange="$('#configname').change();">
@@ -71,7 +71,7 @@
                                           
                                              <label for="">
 
-                                             Select Docker Repo <span style="color:Red;" class="control-label">&nbsp;*</span>
+                                             Select Docker Repo <span class="control-label redSpan">&nbsp;*</span>
                                              </label>
                                              
                                              <select id="dockerreponame" class="choosedockerRepo width-100" sourcepath="18" datapath="masterjson.rows.row"  cdata="catalyst">
@@ -82,7 +82,7 @@
 
                                        <!-- <div class="col-lg-6 col-md-6 margintop15 notforDocker notCFT">
                                           
-                                             <label for="">Chef Server <span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                             <label for="">Chef Server <span class="control-label redSpan">&nbsp;*</span></label>
                                           
                                            <select id="configname" class="choosechefserver width-100" sourcepath="10" datapath="masterjson.rows.row"  cdata="catalyst" onchange="loadCookbookSelectorControl('configname');" >
                                           </select> 
@@ -91,7 +91,7 @@
 
                                        <div class="col-lg-6 col-md-6 notforDocker forCFT" style="margin-top:20px">
                                                 <div class="smart-forms">
-                                                   <label>Template File:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                                   <label>Template File:<span class="control-label redSpan">&nbsp;*</span></label>
                                                    <label for="validatorpemfile" class="field file">
                                                       <div class="imgdiv" value="1"></div>
                                                       <span class="button btn-primary">Browse</span><input id="template" keyfield="configname" type="file" onchange="this.nextSibling.value = this.value" cdata="catalyst" class="gui-file"><input type="text" readonly="" class="gui-input">
