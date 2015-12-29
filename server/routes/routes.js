@@ -64,6 +64,8 @@ var chefFactory = require('./routes_cheffactory');
 
 var expressServeStatic = require('serve-static');
 
+var dashboardProvider = require('./routes_dashboard');
+
 
 
 module.exports.setRoutes = function(app,socketIo) {
@@ -137,6 +139,8 @@ module.exports.setRoutes = function(app,socketIo) {
     appdeployPipeline.setRoutes(app, sessionVerificationFunc);
 
     chefFactory.setRoutes(app,sessionVerificationFunc);
+    
+    dashboardProvider.setRoutes(app, sessionVerificationFunc);
 
     app.get('/', function(req, res) {
         res.redirect('/private/index.html');

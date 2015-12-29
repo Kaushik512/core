@@ -80,8 +80,6 @@ module.exports.setRoutes = function(app, verificationFunc) {
             }
             res.send(jobsList);
         });
-
-
     });
 
     app.get('/jenkins/:jenkinsId/jobs/:jobName', function(req, res) {
@@ -99,6 +97,76 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 return;
             }
             res.send(job);
+        });
+    });
+
+    //API to get the count of dashboard build number per day.
+    app.get('/jenkins/:jenkinsId/dashboardjobs/:jobName', function(req, res) {
+        var jenkinsData = req.CATALYST.jenkins;
+
+        var jenkins = new Jenkins({
+            url: jenkinsData.jenkinsurl,
+            username: jenkinsData.jenkinsusername,
+            password: jenkinsData.jenkinspassword
+        });
+        /*jenkins.buildJob(req.params.jobName, function(err, job) {
+            console.log("Job=======>"+job);
+        });*/
+        jenkins.getJobInfo(req.params.jobName, function(err, job) {
+            if (err) {
+                logger.error('jenkins jobs fetch error', err);
+                res.send(500, errorResponses.jenkins.serverError);
+                return;
+            }
+            //logger.debug("firstBuild number====="+job.firstBuild.number);
+            jenkins.getLastBuildInfo(req.params.jobName, function(err, buildLatest) {
+                if (err) {
+                    logger.error('jenkins jobs fetch error', err);
+                    res.send(500, errorResponses.jenkins.serverError);
+                    return;
+                }
+                //logger.debug("LastBuild details====>"+buildLatest.timestamp);
+                var todaytimestamp = new Date().getTime();
+                //logger.debug("Today timestamp=====>"+todaytimestamp);
+                var yesterdaytimestamp = todaytimestamp - 86400000;
+                var buildCount = 0;
+                var successfulBuildCount = 0;
+                var buildDetails = function(number) {
+                    jenkins.getBuildInfo(req.params.jobName, number, function(err, buildData) {
+                        if (number && number > job.firstBuild.number) {
+                            if (err) {
+                                logger.error('jenkins jobs fetch error testing====>', err);
+                                //res.send(500, errorResponses.jenkins.serverError);
+                                buildDetails(number - 1);
+                                return;
+                            }
+                            if (buildData.timestamp > yesterdaytimestamp) {
+                                buildCount++;
+                                logger.debug("Successful build=====>"+buildData.result);
+                                if(buildData.result == 'SUCCESS'){
+                                    successfulBuildCount++;
+                                }
+                                //logger.debug("buildCOunt=====>" + buildCount);
+                                buildDetails(number - 1);
+                            } else {
+                                res.send(200, {
+                                    buildCount: buildCount,
+                                    sucessbuildCount: successfulBuildCount
+                                });
+                                return;
+                            }
+                        } else {
+                            res.send(200, {
+                                buildCount: buildCount,
+                                sucessbuildCount: successfulBuildCount
+                            });
+                            return;
+                        }
+
+                    });
+                };
+                buildDetails(buildLatest.number);
+            });
         });
     });
 

@@ -359,6 +359,30 @@ var EC2 = function(awsSettings) {
         });
     };
 
+    this.listActiveInstances = function(callback){
+        var params = {
+            Filters: [{
+                Name: 'instance-state-name',
+                Values: ['running']
+            }
+            // ,{
+            //     Name: 'key-name',
+            //     Values: ['GoldenDemo']
+            // }
+            ]
+        };
+        ec.describeInstances(params,function(err,instances){
+            if(err){
+                logger.debug("Error occurred for listing aws instances: ",err);
+                callback(err,null);
+            }else{
+                logger.debug("Able to list all aws instances: ");
+                callback(null,instances);
+            }
+        });
+    };
+
+
 }
 
 module.exports = EC2;
