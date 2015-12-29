@@ -4,7 +4,8 @@
                     <div class="panel-heading" style="padding-bottom: 0px;">
                         <h5 class="panel-title" style="font-size:12px !important">Containers</h5>
                     </div>
-                    <div class="widget-body">
+                    <div class="spinnerDocker"><img class="center-block spinnerStyle" src="img/loading.gif" /></div>
+                    <div class="widget-body dockerContainerBody hidden">
                         <div class="widget-main" style="min-height:300px">
                             <div class="col-md-12 table-responsive" style="padding-left:0px; padding-right:0px;">
                                 <div class="col-md-12"><a href="#" style="float:right" title="Refresh view" id="dockercontainertablerefreshbutton"><i class="fa fa-refresh fa-lg " id="dockercontainertablerefreshspinner"></i></a></div>
@@ -15,10 +16,10 @@
                                         <td>State</td>
                                         <td>Created</td>
                                         <td>Name</td>
-                                        <td>Host Instance IP</td>
+                                        <td>Instance IP</td>
                                         <td>Container ID</td>
                                         <td>Image</td>
-                                        <td>More Info</td>
+                                        <td>Info</td>
                                     </tr>
                                     </thead>
                                     <tbody style="padding:4px 4px">
@@ -283,7 +284,7 @@
                     </fieldset>
                     <footer>
                         <button class="btn btn-primary" type="submit" data-dismiss="modal">
-                            <i class="fa fa-undo fa-1x"></i>&nbsp;Close
+                            <i class="ace-icon fa fa-times bigger-110"></i>&nbsp;Close
                         </button>
                     </footer>
                 </form>
@@ -325,146 +326,127 @@
 
                                 <div id="myTabContent1" class="tab-content padding-10">
                                     <div class="tab-pane fade active in" id="s1">
-                                        <div class="logsArea">
-                                            <section class="col col-10">
-                                                <div class="">
-                                                    <table align="left">
-                                                        <thead>
-                                                        <tr style="line-height:2.3">
-                                                            <th scope="col" style="width:80%"><u style="font-size:12px;"></u>
-                                                            </th>
-                                                            <th scope="col"> <u style="font-size:12px;"></u></th>
-                                                        </tr>
-                                                        </thead>
+                                        <div class="spinnerDockerInfo"><img class="center-block spinnerStyle" style="margin-left:256px;" src="img/loading.gif" /></div>
+                                        <div class="logsArea dockerLogsArea hidden">
+                                            
+                                                
+                                                    <table class="table table-bordered" align="left">
+                                                        
 
                                                         <tbody>
-                                                        <tr style="line-height:2.1">
-                                                            <td style="font-size:12px;" width="20%" >Name&nbsp;:</td>
-                                                            <td style="font-size:12px;" width="80%"   containerdata="Config.Hostname"></td>
+                                                        <tr class="trLineHeight">
+                                                            <td>Name&nbsp;:</td>
+                                                            <td containerdata="Config.Hostname"></td>
                                                         </tr>
-                                                        <tr style="line-height:2.1">
-                                                            <td style="font-size:12px;">ContainerID&nbsp;:</td>
-                                                            <td style="font-size:12px;"  containerdata="Id"></td>
+                                                        <tr class="trLineHeight">
+                                                            <td>ContainerID&nbsp;:</td>
+                                                            <td containerdata="Id"></td>
                                                         </tr>
-                                                        <tr style="line-height:2.1">
-                                                            <td style="font-size:12px;">Created&nbsp;:</td>
-                                                            <td style="font-size:12px;"  containerdata="Created"></td>
+                                                        <tr class="trLineHeight">
+                                                            <td>Created&nbsp;:</td>
+                                                            <td containerdata="Created"></td>
                                                         </tr>
-                                                        <tr style="line-height:2.1">
-                                                            <td style="font-size:12px;">Docker Repo&nbsp;:</td>
-                                                            <td style="font-size:12px;" containerdata=""></td>
+                                                        <tr class="trLineHeight">
+                                                            <td>Docker Repo&nbsp;:</td>
+                                                            <td containerdata=""></td>
                                                         </tr>
-                                                        <tr style="line-height:2.1">
-                                                            <td style="font-size:12px;">Working Dir&nbsp;:</td>
-                                                            <td style="font-size:12px;" containerdata="Config.WorkingDir"></td>
+                                                        <tr class="trLineHeight">
+                                                            <td>Working Dir&nbsp;:</td>
+                                                            <td containerdata="Config.WorkingDir"></td>
                                                         </tr>
-                                                        <tr style="line-height:2.1">
-                                                            <td style="font-size:12px;">Entry Point&nbsp;:</td>
-                                                            <td style="font-size:12px;" containerdata="Config.Entrypoint">[&nbsp;]</td>
+                                                        <tr class="trLineHeight">
+                                                            <td>Entry Point&nbsp;:</td>
+                                                            <td containerdata="Config.Entrypoint">[&nbsp;]</td>
                                                         </tr>
-                                                        <tr style="line-height:2.1">
-                                                            <td style="font-size:12px;">Virtual Size&nbsp;:</td>
-                                                            <td style="font-size:12px;" containerdata="Config.Memory"></td>
+                                                        <tr class="trLineHeight">
+                                                            <td>Virtual Size&nbsp;:</td>
+                                                            <td containerdata="Config.Memory"></td>
                                                         </tr>
-                                                        <tr style="line-height:2.1">
-                                                            <td style="font-size:12px;">Port Specs&nbsp;:</td>
-                                                            <td style="font-size:12px;" containerdata="Config.PortSpecs"></td>
+                                                        <tr class="trLineHeight">
+                                                            <td>Port Specs&nbsp;:</td>
+                                                            <td containerdata="Config.ExposedPorts"></td>
                                                         </tr>
                                                         </tbody>
                                                     </table>
-                                                </div>
-                                            </section>
+                                                
+                                            
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="s2">
-                                        <div class="logsArea">
-                                            <section class="col col-10">
-                                                <div class="">
-                                                    <table align="left">
-                                                        <thead>
-                                                        <tr style="line-height:2.3">
-
-                                                            <th scope="col" style="width:80%"><u style="font-size:12px;"></u>
-                                                            </th>
-                                                            <th scope="col"> <u style="font-size:12px;"></u></th>
-                                                        </tr>
-                                                        </thead>
+                                        <div class="logsArea dockerLogsArea hidden">
+                                           
+                                                
+                                                    <table align="left" class="table table-bordered">
+                                                        
 
                                                         <tbody>
-                                                        <tr style="line-height:2.1">
-                                                            <td style="font-size:12px;" width="20%" >Running&nbsp;:</td>
-                                                            <td style="font-size:12px;"  width="80%" containerdata="State.Running"></td>
+                                                        <tr class="trLineHeight">
+                                                            <td>Running&nbsp;:</td>
+                                                            <td containerdata="State.Running"></td>
                                                         </tr>
 
-                                                        <tr style="line-height:2.1">
-                                                            <td style="font-size:12px;">PID&nbsp;:</td>
-                                                            <td style="font-size:12px;"  containerdata="State.Pid"></td>
+                                                        <tr class="trLineHeight">
+                                                            <td>PID&nbsp;:</td>
+                                                            <td containerdata="State.Pid"></td>
                                                         </tr>
-                                                        <tr style="line-height:2.1">
-                                                            <td style="font-size:12px;">ExitCode(If Stopped)&nbsp;:</td>
-                                                            <td style="font-size:12px;" containerdata="State.ExitCode"></td>
+                                                        <tr class="trLineHeight">
+                                                            <td>ExitCode(If Stopped)&nbsp;:</td>
+                                                            <td containerdata="State.ExitCode"></td>
                                                         </tr>
-                                                        <tr style="line-height:2.1">
-                                                            <td style="font-size:12px;">Started At&nbsp;:</td>
-                                                            <td style="font-size:12px;"  containerdata="State.StartedAt"></td>
+                                                        <tr class="trLineHeight">
+                                                            <td>Started At&nbsp;:</td>
+                                                            <td containerdata="State.StartedAt"></td>
                                                         </tr>
-                                                        <tr style="line-height:2.1">
-                                                            <td style="font-size:12px;">Finished At&nbsp;:</td>
-                                                            <td style="font-size:12px;"  containerdata="State.FinishedAt">-</td>
+                                                        <tr class="trLineHeight">
+                                                            <td>Finished At&nbsp;:</td>
+                                                            <td containerdata="State.FinishedAt">-</td>
                                                         </tr>
                                                         </tbody>
                                                     </table>
-                                                </div>
-                                            </section>
+                                               
+                                           
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="s3">
-                                        <div class="logsArea">
-                                            <section class="col col-10">
-                                                <div class="">
-                                                    <table align="left">
-                                                        <thead>
-                                                        <tr style="line-height:2.3">
-
-                                                            <th scope="col" style="width:80%"><u style="font-size:12px;"></u>
-                                                            </th>
-                                                            <th scope="col"> <u style="font-size:12px;"></u></th>
-                                                        </tr>
-                                                        </thead>
+                                        <div class="logsArea dockerLogsArea hidden">
+                                            
+                                                
+                                                    <table align="left" class="table table-bordered">
+                                                        
 
                                                         <tbody>
-                                                        <tr style="line-height:2.1">
-                                                            <td style="font-size:12px;" width="20%" >ImageID</td>
-                                                            <td style="font-size:12px;" width="80%"  containerdata="Image"></td>
+                                                        <tr class="trLineHeight">
+                                                            <td>ImageID&nbsp;:</td>
+                                                            <td containerdata="Image"></td>
                                                         </tr>
-                                                        <tr style="line-height:2.1">
-                                                            <td style="font-size:12px;">Storage Driver</td>
-                                                            <td style="font-size:12px;"  containerdata=""></td>
+                                                        <tr class="trLineHeight">
+                                                            <td>Storage Driver&nbsp;:</td>
+                                                            <td containerdata=""></td>
                                                         </tr>
-                                                        <tr style="line-height:2.1">
-                                                            <td style="font-size:12px;">Execution Driver</td>
-                                                            <td style="font-size:12px;" containerdata="ExecDriver"></td>
+                                                        <tr class="trLineHeight">
+                                                            <td>Execution Driver&nbsp;:</td>
+                                                            <td containerdata="ExecDriver"></td>
                                                         </tr>
-                                                        <tr style="line-height:2.1">
-                                                            <td style="font-size:12px;">Kernel Version</td>
-                                                            <td style="font-size:12px;"  containerdata=""></td>
+                                                        <tr class="trLineHeight">
+                                                            <td>Kernel Version&nbsp;:</td>
+                                                            <td containerdata=""></td>
                                                         </tr>
-                                                        <tr style="line-height:2.1">
-                                                            <td style="font-size:12px;">Operating System</td>
-                                                            <td style="font-size:12px;"  containerdata=""></td>
+                                                        <tr class="trLineHeight">
+                                                            <td>Operating System&nbsp;:</td>
+                                                            <td containerdata=""></td>
                                                         </tr>
-                                                        <tr style="line-height:2.1">
-                                                            <td style="font-size:12px;">Pool Name</td>
-                                                            <td style="font-size:12px;"  containerdata=""></td>
+                                                        <tr class="trLineHeight">
+                                                            <td>Pool Name&nbsp;:</td>
+                                                            <td containerdata=""></td>
                                                         </tr>
-                                                        <tr style="line-height:2.1">
-                                                            <td style="font-size:12px;">Pool Block Size</td>
-                                                            <td style="font-size:12px;"  containerdata=""></td>
+                                                        <tr class="trLineHeight">
+                                                            <td>Pool Block Size&nbsp;:</td>
+                                                            <td containerdata=""></td>
                                                         </tr>
                                                         </tbody>
                                                     </table>
-                                                </div>
-                                            </section>
+                                                
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -476,7 +458,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-primary" type="submit" data-dismiss="modal">
-                    <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
+                    <i class="ace-icon fa fa-times bigger-110"></i>&nbsp;Close
                 </button>
             </div>
 

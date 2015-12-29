@@ -1,3 +1,4 @@
+
 *** Settings ***
 Documentation     A resource file with test data input by the user
 ...
@@ -137,8 +138,9 @@ ${STACK INSTANCE NAME}       Node
 ${JAVA}                      Java
 ${EDIT STACK INSTANCE NAME}      JavaStack
 
-
+#PEM FILES
 ${ROOT}                      /home/ubuntu/Functionaltest_pemfiles
+
 ${USERPEMFILE}              ${ROOT}//mycatqa.pem
 ${VALIDATORPEMFILE}         ${ROOT}//cattest-validator.pem
 ${KNIFERBFILE}                ${ROOT}//knife.rb
@@ -316,6 +318,12 @@ ${AZURE SUBNET}               StaticSubnet
 ${AZURE INSTANCE SIZE}         Basic_A0
 ${AZURE UBUNTU BLUEPRINTNAME}     AzureRelevance
 ${EDIT AZURE BLUEPRINTNANE}      EditAzure
+${AZURE INSPECT SOFTWARE}        acpid install
+${AZURE SSH USERNAME}            azureuser
+${AZURE SSH PASSWORD}            Admin@1234
+${EDIT UBUNTU AZUREBP NAME}     AZUREBP
+
+
 
 ${AZURE WINDOWS IMAGENAME}    WindowsAzu
 ${AZURE WINDOWS IMAGEID}      rliiswin2012
