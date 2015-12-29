@@ -66,6 +66,8 @@ var expressServeStatic = require('serve-static');
 
 var arm = require('./routes_arm');
 
+var dashboardProvider = require('./routes_dashboard');
+
 
 
 module.exports.setRoutes = function(app,socketIo) {
@@ -139,6 +141,8 @@ module.exports.setRoutes = function(app,socketIo) {
     appdeployPipeline.setRoutes(app, sessionVerificationFunc);
 
     chefFactory.setRoutes(app,sessionVerificationFunc);
+    
+    dashboardProvider.setRoutes(app, sessionVerificationFunc);
 
     arm.setRoutes(app,sessionVerificationFunc);
 
