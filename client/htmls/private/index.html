@@ -25,11 +25,8 @@
 #setting_tree > .icon{
     font-size:18px;
 }
-/*#content{
-    height:100%!important;
-}*/
 </style>
-        <script>
+<script>
 function showLoader(){
     $('#clickdisabler').show();
 }
@@ -40,71 +37,75 @@ var a,b,x;
 String.prototype.capitalizeFirstLetter = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }
-        </script>
-    </head>
-    <body class="custom-theme">
-    <div id="clickdisabler"></div>
-        <!-- possible classes: minified, fixed-ribbon, fixed-header, fixed-width-->
-        <!-- HEADER -->
-        <!-- Header starts here -->
-        <header>
-            <nav class="navbar navbar-default">
-                <div class="navbar-header">
-                  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                  </button>
-                    <div class="navbar-brand" style="width:220px;"><!-- <div class="logo"></div> --><img src="img/logo.png" style="width:112px;height:40px" alt="logo"></div>
-                </div>
+</script>
+</head>
+<body class="custom-theme">
+<div id="clickdisabler"></div>
+<!-- possible classes: minified, fixed-ribbon, fixed-header, fixed-width-->
+<!-- HEADER -->
+<!-- Header starts here -->
+<header>
+   <nav class="navbar navbar-default">
+      <div class="navbar-header">
+         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+         <span class="sr-only">Toggle navigation</span>
+         <span class="icon-bar"></span>
+         <span class="icon-bar"></span>
+         <span class="icon-bar"></span>
+         </button>
+      </div>
+      <div class="navbar-brand"><img src="img/logo.png" class="iconLogo" alt="logo"></div>
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+         <!--left side navbar-->
+         <ul class="nav navbar-nav">
+            <li class="left-projects-links hidden" data-target="#Workspace" navigation="Workspace,Workspace1">
+                <a class="active navigationTab" id="workZoneNew" href="#" onclick="setleftnavigation(this,'org');">
+               <i class="fa fa-credit-card txt-color-blue"></i>&nbsp;WORKZONE 
+               </a>
+            </li>
 
-    
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <!--left side navbar-->
-                  <ul class="nav navbar-nav" style="margin-top:20px;margin-left:28px">
-                    <li class="left-projects-links hidden" data-target="#Workspace" navigation="Workspace,Workspace1">
-                        <a class="active navigationTab" id="workZoneNew" style="font-size:14px!important" href="#" onclick="setleftnavigation(this,'org');">
-                            <i class="fa fa-credit-card txt-color-blue"></i>&nbsp;WORKZONE 
-                        </a>
-                    </li>
-                    <li class="left-projects-links hidden" style="margin-left:16px;" data-target="#blueprints"  navigation="blueprints">
-                            <a href="#ajax/Aws-Production.html" style="font-size:14px!important" id="designNew" onclick="setleftnavigation(this,'Design');" class="navigationTab">
-                                <i class="fa fa-puzzle-piece"></i>&nbsp;DESIGN
-                            </a>
-                        </li>
+            <!--design starts here-->
+            <li class="left-projects-links hidden" id="designStyle" data-target="#blueprints"  navigation="blueprints">
+               <a href="#ajax/Aws-Production.html" id="designNew" onclick="setleftnavigation(this,'Design');" class="navigationTab">
+               <i class="fa fa-puzzle-piece"></i>&nbsp;DESIGN
+               </a>
+            </li>
 
-                        <!--track-->
-                    <li class="left-projects-links hidden" style="margin-left:16px;margin-right:16px;" data-target="#Track" navigation="Track">
-                                <a class="dropdown-toggle navigationTab" style="font-size:14px!important" href="#ajax/trackSettings.html" id="trackNew"  onclick="setleftnavigation(this,'Track');"><i class="fa fa-anchor"></i>&nbsp;TRACK</a>
-                            </li>
-                            <!--track ends here-->
-                    
-                  </ul>
-                  <!--right side navbar-->
-                  <ul class="nav navbar-nav navbar-right" style="font-size:14px!important;margin-top:20px">
-                    <li class="left-projects-links active" id="liuserinfo" style="color:white;margin-right:16px;"></li>
-                    <!-- <li class="left-projects-links"></li> -->
-                    
-                    <!--Settings tab-->
-                    <li class="left-projects-links hidden" data-target="#Settings"   navigation="Settings">
-                                <a class="dropdown-toggle navigationTab" style="font-size:14px!important" href="#ajax/Settings/Dashboard.html" id="settingsNew"  onclick="setleftnavigation(this,'Settings');"><i class="fa fa-cog"></i>&nbsp;SETTINGS</a>
-                            </li>
-                            <li class="left-projects-links"><a style="font-size:14px!important" href="http://help.relevancelab.com/dokuwiki" target="_blank" id="dokuNew"><i class="fa fa-question"></i>&nbsp;Help</a>
-                            </li>
+            <!--track-->
+            <li class="left-projects-links hidden" id="trackStyle" data-target="#Track" navigation="Track">
+               <a class="dropdown-toggle navigationTab" href="#ajax/trackSettings.html" id="trackNew"  onclick="setleftnavigation(this,'Track');"><i class="fa fa-anchor"></i>&nbsp;TRACK</a>
+            </li>
+            <!--track ends here-->
 
-                        <li id="logout" class="btn-header transparent pull-right logouttop">
-                            <!-- ../auth/signout -->
-                        <span><a href="#" logoutlink="/auth/signout" title="Sign Out" style="font-size:16px!important;">
-                            <i class="fa fa-sign-out"></i>
-                            </a></span></li>
-                    </ul>
-                </div>
-            </nav>
-        </header>
-    <!--HEADER ends here -->
-    <!-- Left panel : Navigation area -->
-    <!-- Note: This width of the aside area can be adjusted through LESS variables -->
+            <!--right side navbar-->
+            
+            <span class="navRight">
+            <li class="left-projects-links active" id="liuserinfo"></li>
+
+            <!--Settings tab-->
+            <li class="left-projects-links hidden" data-target="#Settings"   navigation="Settings">
+               <a class="dropdown-toggle navigationTab" href="#ajax/Settings/Dashboard.html" id="settingsNew"  onclick="setleftnavigation(this,'Settings');"><i class="fa fa-cog"></i>&nbsp;SETTINGS</a>
+            </li>
+
+            <!--help-->
+            <li class="left-projects-links"><a href="http://help.relevancelab.com/dokuwiki" target="_blank" id="dokuNew"><i class="fa fa-question"></i>&nbsp;Help</a>
+            </li>
+
+            <!--logout-->
+            <li id="logout" class="btn-header transparent pull-right logouttop">
+               <!-- ../auth/signout -->
+               <span><a href="#" logoutlink="/auth/signout" title="Sign Out">
+               <i class="fa fa-sign-out"></i>
+               </a></span>
+            </li>
+         </span>
+         </ul>
+      </div>
+   </nav>
+</header>
+<!--HEADER ends here -->
+<!-- Left panel : Navigation area -->
+<!-- Note: This width of the aside area can be adjusted through LESS variables -->
     <aside id="left-panel">
 
         <div id="Workspace1">
@@ -250,7 +251,7 @@ String.prototype.capitalizeFirstLetter = function() {
             </li>
             
             <li>
-                <a href="#ajax/Dashboard.html"><span>TRACK</span></a>
+                <!-- <a href="#ajax/Dashboard.html"><span>TRACK</span></a> -->
             </li>
             
             <li>
@@ -531,7 +532,7 @@ var SettingTreeJson = [{
                 "name": "organizations",
                 "text": "CMDB",
                 "borderColor": "#000",
-                "href": "#ajax/Settings/CMDBList.html",
+                "href": "#ajax/Settings/cmdbList.html",
                 "selectable": true,
                 "icon": "fa fa-lg fa-fw fa-database"
             },

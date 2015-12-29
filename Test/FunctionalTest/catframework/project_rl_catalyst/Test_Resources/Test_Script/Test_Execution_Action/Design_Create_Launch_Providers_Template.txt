@@ -133,10 +133,10 @@ Catalyst Creation of New Blueprint and Delete
     Choose the Provider
     Choose the Available Images
     Choose the Region
-    
     #Select the VPC
     Select the Subnet
     Select the Key Pair
+    Sleep    3s
     Choose Instance Size
     Select the Security Group
     Clicks on Configure Provider Parameters
@@ -167,6 +167,61 @@ Catalyst Creation of New Blueprint and Delete
     Deleting the Testing Blueprint
 
 
+Catalyst Creation of Azure Ubuntu New Blueprint and Delete
+    Clicks on Add New Blueprint Button
+    Sleep    3s
+    Clicks on Azure link
+    Sleep    3s
+    Choose the Template Type Created
+    Sleep    3s
+    Clicks on Next Button
+    Chooses the Template User Created
+    Clicks on Next Button
+    Chooses the Operating System as Ubuntu
+    Sleep    4s
+    Choose the Azure Provider
+    Choose the Available Image of ubuntu
+    Enter the Security group ports
+    Choose the Azure ubuntu Region
+    Select the Azure VPC
+    Select the Azure Subnet
+    #Select the Key Pair
+    Choose Instance Size for azure ubuntu
+    #Select the Security Group
+    Clicks on Configure Provider Parameters
+    Clicks on Configure Organization Parameters
+    #Chooses Organization
+    Enters The Edit Blueprint Name for azure ubuntu
+    Chooses The Business Group
+    Chooses The Project
+    #Select WorkCookBooks
+    #Clicks on >>T Button
+    Clicks on close of Configure Organization Parameters
+    #Chooses The Environment
+    Clicks on Configure Application URL
+    Clicks on AppNew Button
+    Enters the Application URL Name
+    Enters the AppURL
+    Clicks on AppADD Button
+    Enable the Next Button 
+    Clicks on Next Button
+    Clicks on Confirm OK Button
+    Clicks on Workzone Button
+    #Clicks on the Project to go to Environment
+    #Clicks on the Environment to Launch
+    Sleep    5s
+    Clicks on the Infrastructure Tab to select Bluperints section
+    #Clicks on Blueprint Section
+    Select the ubuntuAzureTesingBlueprint
+    Deleting the ubuntu azure Testing Blueprint
+
+
+
+
+Enters The Edit Blueprint Name for azure ubuntu
+    Input Text    id=blueprintNameInput    ${EDIT AZURE BLUEPRINTNANE}
+
+
 Clicks on the Infrastructure Tab to select Bluperints section
     Click Element    xpath=.//*[@id='myTab3']/li[1]/a/b
     Sleep    1s
@@ -186,7 +241,17 @@ Clicks on Add New Blueprint Button
 Deleting the Testing Blueprint
     Click Element    xpath=.//*[@id='l2']/footer/div/button
     Sleep    1s
+    Click Element    xpath=//*[text()='OK']
+    Page Should Not Contain    ${BLUEPRINT TESTNAME}
+
+
+
+Deleting the ubuntu azure Testing Blueprint
+    Click Element    xpath=.//*[@id='l2']/footer/div/button
+    Sleep    1s
     Click Element    xpath=//*[text()='OK']   
+    Page Should Not Contain    ${EDIT AZURE BLUEPRINTNANE}
+
 
 
 Catalyst Creation of Providers Setup 
@@ -431,7 +496,7 @@ Verfiy the Provider is Created
     Sleep    2s
     Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${EDIT PROVIDER NANME}']    ${EDIT PROVIDER NANME}
 
-Validation of Creation of New Image
+Validation of Creation of AWS New Image
     Validation of Empty Image Name  ${ValidEmptyImageName}
     Image Name Left Empty  ${ValidEmptImgNameErrMsg}
     Validation of No Selection organzation  ${ValidEmptyNoProvider}
@@ -442,7 +507,55 @@ Validation of Creation of New Image
     Image ID Left Empty  ${ValidEmptImgIDErrMsg}
     Validation of Image No User Name  ${ValidEmptyIUserName}
     Image User Name Left Empty  ${ValidEmptyIUserNameErrMsg}
-            
+
+
+
+
+Validation of Creation of AZURE New Image
+    Validation of Azure VM image creation page
+    Verfiy the error message displayed in vm image creation page
+    Validation of Azure VM image creation page after selecting Organization and Azure provider
+    Verfiy the error message displayed after selecting org and Azureprovider
+
+
+
+Validation of Azure VM image creation page
+    Clicks on Settings
+    Clicks on Gallery Setup
+    Clicks on VMImage
+    Clicks on New Button of VMImage
+    Clicks on Save Button of Providers
+
+
+Verfiy the error message displayed in vm image creation page
+    Element Should Contain    id=errmsg_name    ${ERRORMESSAGE}
+    Element Should Contain    id=errmsg_orgId    ${ERRORMESSAGE}
+    Element Should Contain    id=errmsg_osType    ${ERRORMESSAGE}
+    Element Should Contain    id=errmsg_imageidentifire    ${ERRORMESSAGE}
+    Element Should Contain    id=errmsg_UserName    ${ERRORMESSAGE}
+    Clicks on Image Cancel Button
+
+Validation of Azure VM image creation page after selecting Organization and Azure provider
+    Clicks on New Button of VMImage
+    Select the Organizatn to Create Cent OS Img
+    select the Azure provider from deopdown
+    Clicks on Save Button of Providers
+
+
+Verfiy the error message displayed after selecting org and Azureprovider
+    Element Should Contain    id=errmsg_name    ${ERRORMESSAGE}
+    Element Should Contain    id=errmsg_osType    ${ERRORMESSAGE}
+    Element Should Contain    id=errmsg_imageidentifire    ${ERRORMESSAGE}
+    Element Should Contain    id=errmsg_UserName    ${ERRORMESSAGE}
+    Element Should Contain    id=errmsg_password    ${ADMIN ERRMSG}
+    Clicks on Image Cancel Button
+
+
+select the Azure provider from deopdown
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=(//span[@class='select2-chosen'])[2]
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=//*[text()='${AZURE PROVIDERNAME}']
+
+
 
 Catalyst Creation of VM Image Process for CentOS
     Sleep    5s    
@@ -456,10 +569,116 @@ Catalyst Creation of VM Image Process for CentOS
     Clicks on Save Button of Providers
     Sleep    4s
     Verfiy the Centos Img is Created
+   
+
+Catalyst Creation of Azure VM Image Process for Ubuntu
+    Sleep    5s    
+    Clicks on New Button of VMImage
+    Enters the image name for ubuntu azure
+    Select the Organizatn to Create Cent OS Img
+    select the Azure provider from deopdown
+    Select the Operating System to Image for Ubuntu
+    Enters the Image ID for azure ubuntu
+    Enters the Admin Usernane for Azure ubuntu
+    Enters the Admin password for azure ubuntu
+    Clicks on Save Button of Providers
+    Sleep    4s
+    Verfiy the azure Ubuntu vm image is created
+
+
+
+Catalyst Creation of Azure VM Image Process for Windows
+    Sleep    5s    
+    Clicks on New Button of VMImage
+    Enters the image name for windows azure
+    Select the Organizatn to Create Cent OS Img
+    select the Azure provider from deopdown
+    Select the Operating System to Image for Windows
+    Enters the Image ID for azure windows
+    Enters the Admin user name for azure windows
+    Enters the Admin password for azure windows
+    Clicks on Save Button of Providers
+    Sleep    4s
+    Verfiy the azure windows vm image is created
+
+Catalyst Azure VM Image Edit Setup
+    Clicks on Settings
+    Clicks on Gallery Setup
+    Clicks on VMImage
+    clicks on Edit button of windows vm image created
+    Enters the new edit image name for windows
+    Clicks on Save Button of Providers
+    Sleep    4s
+    Verfiy the edited azure windows vm image is created
+
+Catalyst Unique Azure VM Image Validation Setup
+    Clicks on Settings
+    Clicks on Gallery Setup
+    Clicks on VMImage
+    Sleep    5s    
+    Clicks on New Button of VMImage
+    Enters the new edit image name for windows
+    Select the Organizatn to Create Cent OS Img
+    select the Azure provider from deopdown
+    Select the Operating System to Image for Windows
+    Enters the Image ID for azure windows
+    Enters the Admin user name for azure windows
+    Enters the Admin password for azure windows
+    Clicks on Save Button of Providers
+    Verfiy the error message displayed for dupliting azure vm image
+
+
+Verfiy the error message displayed for dupliting azure vm image
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Contain    xpath=//div[text()='${Alreadexist vmimage}']    ${Alreadexist vmimage}
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=//*[text()='OK']
+
+Verfiy the edited azure windows vm image is created
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${AZURE UBUNTU IMAGENAME}']    ${AZURE UBUNTU IMAGENAME}
+
+clicks on Edit button of windows vm image created
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${AZURE WINDOWS IMAGENAME}']/../td[6]/div/a[@title='Edit']
+
+Enters the new edit image name for windows
+    Input Text    id=name    ${EDIT AZURE WINDOWS IMAGENAME}
+
+Enters the image name for windows azure
+    Input Text    id=name    ${AZURE WINDOWS IMAGENAME}
+
+Verfiy the azure Ubuntu vm image is created
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${EDIT AZURE WINDOWS IMAGENAME}']    ${EDIT AZURE WINDOWS IMAGENAME}
+
+Enters the Admin password for azure ubuntu
+    Input Text    id=password    ${AZURE UBUNTU PASSWORD}
+
+
+Enters the Admin password for azure windows
+    Input Text    id=password    ${AZURE WINDOWS PASSWORD}    
+
+
+Enters the Image ID for azure ubuntu
+    Input Text    id=imageidentifire    ${AZURE UBUNTU IMAGEID}
+
+Enters the Image ID for azure windows
+    Input Text    id=imageidentifire    ${AZURE WINDOWS IMAGEID}    
+
+Enters the Admin Usernane for Azure ubuntu
+    Input Text    id=UserName    ${AZURE UBUNTU USERNAME}
+
+Enters the Admin user name for azure windows
+    Input Text    id=UserName    ${AZURE WINDOWS USERNAME}    
+
+Enters the image name for ubuntu azure
+    Input Text    id=name    ${AZURE UBUNTU IMAGENAME}
+
 
 Verfiy the Centos Img is Created
     Sleep    2s
     Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${IMAGE NAME1}']    ${IMAGE NAME1}
+
+
+Verfiy the azure windows vm image is created
+    Sleep    2s
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${AZURE WINDOWS IMAGENAME}']    ${AZURE WINDOWS IMAGENAME}
 
 
 Catalyst Creation of VM Image Process for Ubutnu
@@ -588,6 +807,56 @@ Catalyst Form validation of Blueprint
     Sleep    3s
 
 
+Catalyst Form validation of Azure Blueprint
+    Sleep    6s
+    Clicks on Design
+    Sleep    10s
+    Clicks on Azure link
+    Clicks on OK Button to Validate in loop
+    Sleep    1s
+    Choose the Template Type Created
+    Sleep    3s
+    Clicks on Next Button
+    Chooses the Template User Created
+    Clicks on Next Button
+    Sleep    1s
+    Clicks on Next Button
+    Verfiy the dropdown and handle it
+    Verify the No Operating System selected Error Message
+    Verify the No Provider Error selected Message
+    Verify the No Available Images selected Error Message
+    Verify the No Location selected Error Message
+    Verify the No VPC selected Error Message
+    Verify the No Subnet selected Error Message
+    #Verify the No KeyPair selected Error Message
+    Verify the No Instance Size selected Error Message
+    Clicks on Configure Provider Parameters
+    Clicks on Configure Organization Parameters
+    Verify the No Blueprint Name Error Message
+    Verify the No BusinessGroup selected Error Message
+    Verify the No Project selected Error Message
+    Sleep    3s
+
+
+Clicks on Azure link
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=//div[@title='${AZURE NAME}']
+
+Verfiy the dropdown and handle it
+    ${said}=    Run Keyword and Return Status     Page Should Contain Element    xpath=.//*[text()='OK']
+    Run Keyword If    '${said}' == 'True'     
+    ...    Click Element    xpath=.//*[text()='OK']
+    ...    ELSE IF   '${said}' == 'False'
+    ...    Log    "Valiadtion failed. Do check the configuration before submitting." is not displayed
+
+
+
+
+
+
+
+
+
+
 
 
 Verify the No Operating System selected Error Message
@@ -601,6 +870,10 @@ Verify the No Available Images selected Error Message
 
 Verify the No Region selected Error Message
     Element should Contain    id=region-error    ${ERRROR MESSAGE}
+
+Verify the No Location selected Error Message
+    Element should Contain    id=location-error    ${ERRROR MESSAGE}    
+
 
 Verify the No VPC selected Error Message
     Element should Contain    id=vpcId-error    ${ERRROR MESSAGE}
@@ -666,9 +939,87 @@ Catalyst Choose Template and Save Setup of CentOS Blueprint
     Clicks on Next Button
     Clicks on Confirm OK Button
 
+
+
+Catalyst Choose Template and Save Setup of ubuntu Blueprint for azure
+    Sleep    6s
+    Clicks on Design
+    Sleep    10s
+    Clicks on Azure link
+    Clicks on OK Button to Validate in loop
+    Sleep    1s
+    Choose the Template Type Created
+    Sleep    3s
+    Clicks on Next Button
+    Chooses the Template User Created
+    Clicks on Next Button
+    Chooses the Operating System as Ubuntu
+    Sleep    4s
+    Choose the Azure Provider
+    Choose the Available Image of ubuntu
+    Enter the Security group ports 
+    Choose the Azure ubuntu Region
+    Select the Azure VPC
+    Select the Azure Subnet
+    #Select the Key Pair
+    Choose Instance Size for azure ubuntu
+    #Select the Security Group
+    Clicks on Configure Provider Parameters
+    Clicks on Configure Organization Parameters
+    #Chooses Organization
+    Enters The Blueprint Name for azure ubuntu
+    Chooses The Business Group
+    Chooses The Project
+    #Select WorkCookBooks
+    #Clicks on >>T Button
+    Clicks on close of Configure Organization Parameters
+    #Chooses The Environment
+    Clicks on Configure Application URL
+    Clicks on AppNew Button
+    Enters the Application URL Name
+    Enters the AppURL
+    Clicks on AppADD Button
+    Enable the Next Button 
+    Clicks on Next Button
+    Clicks on Confirm OK Button
+
+
+Choose Instance Size for azure ubuntu
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=//span[text()='Choose Instanace Size']
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=//*[text()='${AZURE INSTANCE SIZE}']
+
+
+Enters The Blueprint Name for azure ubuntu
+    Input Text    id=blueprintNameInput    ${AZURE UBUNTU BLUEPRINTNAME}
+
+Select the Azure VPC
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=//span[text()='Select VPC']
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=//*[text()='${AZURE VPC}']
+
+
+Select the Azure Subnet
+    Sleep    1s
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=//span[text()='Select Subnet']
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=//*[text()='${AZURE SUBNET}']
+
+
+Enter the Security group ports
+    Input Text    id=securotyGrp    ${AZURE SECURITY PORTNO}
+
+Choose the Azure ubuntu Region
+    Sleep    4s
+    Click Element    xpath=//*[text()='${UBUNTU AZURE REGION}']
+
+Choose the Azure Provider
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//span[text()='Select Provider']
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='providerId']/option[text()='${AZURE PROVIDERNAME}']
+
+
 Clicks on OK Button to Create the New Blueprint
     Click Element    xpath=.//*[text()='OK']
 
+Choose the Available Image of ubuntu
+    Click Element    xpath=.//*[@id='imageId']/option[text()='${AZURE UBUNTU IMAGENAME}']
 
 
 Clicks on OK Button to Validate in loop
@@ -721,6 +1072,81 @@ CentOS Blueprint Launched and verify IP,Status,Chef,SSH,Stop,BootStrap
     Sleep    4s
     
 
+Ubuntu Blueprint Launched and verify IP,Status,Chef,SSH,Stop,BootStrap of azure
+    Sleep    5s
+    Clicks on the Infrastructure Tab to select Bluperints section
+    #Clicks on Blueprint Section
+    Select the ubuntu azure blueprint
+    Sleep    1s
+    Clicks on Launch Button
+    Sleep    2s
+    Confirmation to launch Blueprint
+    Sleep    5s
+    Clicks on Instance Close Button
+    Clicks on the Infrastructure Button to go to Instances    
+    #Clicks on Instances Button
+    Sleep    5 minute
+    Verify the IP Address of the ubuntu azure Instance
+    Verfiy the Status of the ubuntu azure Instance
+    Sleep    30s
+    Clicks on Design
+    Sleep    7s
+    Clicks on Workzone Button
+    Sleep    6s
+    Verify the CHEF Client Run of azure ubuntu instance
+    Verfiy the SSH is Enabled for azure ubuntu instance
+    Verfiy the STOP Button is Enabled for azure ubuntu instance
+    Verfiy the AppLink Button is Dispalyed for azure ubuntu instance
+    Sleep    2s
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Checking THe BootStrpa Status for azure ubuntu instance
+    Clicks on Back To Instances
+    Sleep    4s
+
+
+Checking THe BootStrpa Status for azure ubuntu instance
+    Sleep    2 minute
+    Clicks on Back To Instances
+    Sleep    5s
+    Clicks on Contreol Panel
+    Clicks on Action History
+    ${BOOTSTRAP STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[2]/img@title
+    Log    ${BOOTSTRAP STATUSS}
+    Should Be Equal    ${BOOTSTRAP STATUSS}     ${ACTBOOT2}
+
+
+
+Select the ubuntu azure blueprint
+    Click Element    xpath=//*[text()='${AZURE UBUNTU BLUEPRINTNAME}']
+
+Verfiy the AppLink Button is Dispalyed for azure ubuntu instance
+    Wait Until Keyword Succeeds    1 minute     1 seconds     Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${AZURE UBUNTU BLUEPRINTNAME}")]/div/div/div/div/div/a[@class='btn1 showmenuAppTaskAnchor']
+
+
+Verify the CHEF Client Run of azure ubuntu instance
+    Sleep    5s
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${AZURE UBUNTU BLUEPRINTNAME}")]/div/div/div/div/div[1]/a[@class='chefClientRunlistImage actionbuttonChefClientRun instance-bootstrap-list-image']
+
+Verfiy the STOP Button is Enabled for azure ubuntu instance
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible     xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${AZURE UBUNTU BLUEPRINTNAME}")]/div/div/div/div/div[@class='startstoptoggler running']
+
+
+Verfiy the SSH is Enabled for azure ubuntu instance
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${AZURE UBUNTU BLUEPRINTNAME}")]/div/div/div/div/div[2]/a[@class='sshIcon devTOP']
+
+
+Verify the IP Address of the ubuntu azure Instance
+    Sleep    1s
+    ${IP ADRS AZUREUBUNTU}=    Get Text    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${AZURE UBUNTU BLUEPRINTNAME}")]/div/div/div/div/div/span/strong
+    Log    ${IP ADRS AZUREUBUNTU}
+
+Verfiy the Status of the ubuntu azure Instance
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${AZURE UBUNTU BLUEPRINTNAME}")]/div/div/div/div/div/span/span    ${STATUS RUN}
+
+
+
+
 Catalyst Inspect Functionality Setup
     Clicks on the Project to go to Environment
     Clicks on the Environment to Launch
@@ -733,6 +1159,20 @@ Catalyst Inspect Functionality Setup
     Verify the Particular Software is listed in list 
 
     
+Catalyst Inspect Functionality Setup for Azure
+    Sleep    5s
+    Selects the Ubuntu Blueprint to go to Controlpanel
+    Clicks on Contreol Panel
+    Clicks on Inspect Button
+    Sleep    5s
+    Enter the Azure Installed Software Name in the Filter
+    Verify the Particular Azure Software is listed in list     
+
+
+Enter the Azure Installed Software Name in the Filter
+    Input Text    css=label > input.form-control    ${AZURE INSPECT SOFTWARE}    
+
+
 
 Clicks on the Infrastructure Button to go to Instances
     Click Element    xpath=.//*[@id='myTab3']/li[1]/a/b
@@ -741,6 +1181,11 @@ Clicks on the Infrastructure Button to go to Instances
     Sleep    2s
 
 
+Verify the Particular Azure Software is listed in list
+    Sleep    2s 
+    Element Should Contain    css=#paragraphs > p:nth-child(2)    ${AZURE INSPECT SOFTWARE}
+    Sleep    3s
+    Click Element    css=#installedSoftwareModalContainer > div > div > div.modal-footer > button
 
 
 Verify the Particular Software is listed in list
@@ -763,6 +1208,11 @@ Clicks on Inspect Button
 Selects the CentOS Blueprint to go to Controlpanel
     Click Element    xpath=//div[@data-blueprintname='${BLUEPRINT NAME}']
     Sleep    1s
+
+Selects the Ubuntu Blueprint to go to Controlpanel
+    Click Element    xpath=//div[@data-blueprintname='${AZURE UBUNTU BLUEPRINTNAME}']
+    Sleep    1s    
+
 
 
 Clicks on the Project to go to Environment
@@ -831,6 +1281,19 @@ Catalyst STOP Action on CentOS Instance
     Steps to Run Stopping the Instance
     Sleep    20s
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 Catalyst EDIT Instance Name of CentOS Instance
     Clicks on the Project to go to Environment
     Clicks on the Environment to Launch
@@ -841,7 +1304,35 @@ Catalyst EDIT Instance Name of CentOS Instance
     Sleep    3s
 
 
+Catalyst EDIT Instance Name of Ubuntu Instance of Azure
+    Sleep    4s
+    Clicks on Edit Button of the Ubuntu Instance of azure
+    Enters the New Instance Name for ubuntu Azure
+    Clicks on Save Button of Edddited Instance
+    Sleep    3s
 
+
+
+
+
+
+Catalyst CHEF CLIENT Action on Ubuntu Instance of Azure
+    Sleep    3s
+    Steps To Run Chef Client on ubuntu instance azure provider
+    Sleep    3s
+
+
+Steps To Run Chef Client on ubuntu instance azure provider
+    Sleep    3s
+    Click on RUNNN of Chef Client of Azure
+    Sleep    5s
+    Update the Run List with Cookbook
+    Clicks on Update Button of Runlist
+    Sleep    1s
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Checking the BChefClient Run Status
+    Clicks on Back To Instances
 
 
 Steps To Run Chef Client
@@ -975,8 +1466,9 @@ Ubuntu Blueprint Launched and verify the IP,Status,Chef,SSH,Stop,BootStrap
     Clicks on Launch Button
     Sleep    2s
     Confirmation to launch Blueprint
-    Sleep    1s
+    Sleep    6s
     Clicks on Instance Close Button
+    Sleep    2 minute
     Clicks on the Infrastructure Button to go to Instances
     #Clicks on Instances Button
     Verify the IP Address of the Ubuntu Instance
@@ -1125,6 +1617,11 @@ Clicks on Edit Button of the CentosInstance Imported
     Sleep    2s
     Click Element    xpath=//div[@class='domain-roles-heading'][//span[text()='${BLUEPRINT NAME}']]/a
 
+Clicks on Edit Button of the Ubuntu Instance of azure
+    Sleep    2s
+    Click Element    xpath=//div[@class='domain-roles-heading'][//span[text()='${AZURE UBUNTU BLUEPRINTNAME}']]/a
+
+
 Clicks on Edit Button of the UbuntuInstance Imported
     Sleep    2s
     Click Element    xpath=//div[@class='domain-roles-heading'][//span[text()='${BLUEPRINT NAME1}']]/a
@@ -1132,6 +1629,9 @@ Clicks on Edit Button of the UbuntuInstance Imported
 
 Enters the New Instance Name for Centos
     Input Text    id=instanceEditName    ${NEW BLUEPRINT NAME}
+
+Enters the New Instance Name for ubuntu Azure
+    Input Text    id=instanceEditName    ${EDIT UBUNTU AZUREBP NAME}
 
 Enters the New Instance Name for Ubuntu
     Input Text    id=instanceEditName    ${NEW UBUNTU BLUPRNT}    
@@ -1292,6 +1792,11 @@ Catalyst SSH Action on the Ubuntu Instance
     Sleep    3s
 
 
+Catalyst SSH Action on Ubuntu Azure Instance
+    Sleep    5s
+    Steps to Run SSH of Ubuntu on Azure Instance
+    Sleep    3s    
+
 Catalyst STOP Action on the Ubuntu Instance
     Sleep    5s
     #Clicks on the Project to go to Environment
@@ -1336,6 +1841,36 @@ Steps to Run SSH of Ubuntu
     Verfify the status of SSH Shell
     Clicks Back Burtton of Instances
 
+
+Steps to Run SSH of Ubuntu on Azure Instance
+    Click on Verified SSH Instance of Ubuntu on Azure
+    Enters the Ubuntu Username in the Terminal for azure
+    Select Authentication Type as passwd
+    #Upload the Catalyst PEM File for azure
+    Enters the Azure SSH passwd
+    Clicks on Terminlal Submit Button
+    Close the SSH Terminal
+    Sleep    4s
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Sleep    7s
+    Verfify the status of SSH Shell
+    Clicks Back Burtton of Instances    
+
+
+Enters the Ubuntu Username in the Terminal for azure
+    Input Text    id=ssh-username    ${AZURE SSH USERNAME}
+
+Enters the Azure SSH passwd
+    Input Text    id=ssh-password    ${AZURE SSH PASSWORD}
+
+Select Authentication Type as passwd
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_ssh-pemFileCheckbox']/a
+    #Input Text    xpath=.//*[@id='select2-drop']/div/input  
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li[1]/div  
+
+
+
 Steps to Run Stopping the Instance of Ubuntu
     Clicks Ubuntu STOP Machine of Verfied Instance    
     Verfified the Ubuntu STOPPED Status
@@ -1343,6 +1878,19 @@ Steps to Run Stopping the Instance of Ubuntu
     Clicks on Action History
     Verfiy the Table contains the Status
     Clicks on Back To Instances
+
+
+Catalyst STOP Action on Ubuntu Instance of Azure
+    #Clicks Ubuntu STOP Machine of Verfied Instance of Azure
+    Clicks on Contreol Panel
+    Clicks on Back To Instances
+    Verfified the Ubuntu STOPPED Status of azure
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Verfiy the Table contains the Status
+    Clicks on Back To Instances
+
+
 
 Catlayst verfication of Instance Stop Setup and Disable of Ubuntu
     #Clicks on Workzone Button
@@ -1542,6 +2090,7 @@ Checking the BChefClient Run Status
     #Sleep    2 minutes
     #Wait Until Keyword Succeeds    3 minute     1 seconds    Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[2]    ${SATSS}
 
+
 Checking the Ubuntu BChefClient Run Status
     Sleep    2 minute
     Clicks on Back To Instances
@@ -1629,11 +2178,27 @@ Clicks Ubuntu STOP Machine of Verfied Instance
     Wait Until Keyword Succeeds    2 minute     5 seconds      Click Element    xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button
     Sleep    15 seconds
 
+Clicks Ubuntu STOP Machine of Verfied Instance of Azure
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${AZURE UBUNTU BLUEPRINTNAME}")]/div/div/div/div[4]/div[5]
+    Wait Until Keyword Succeeds    1 minute     5 seconds      Click Element    xpath=//*[text()='OK']
+    Sleep    2s
+    Wait Until Keyword Succeeds    2 minute     5 seconds      Click Element    xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button
+    Sleep    15 seconds
+
+
+
+
 Verfified the STOPPED Status
     Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div[3]/div/span[2]/span    ${STOPD}
 
 Verfified the Ubuntu STOPPED Status
     Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div[3]/div/span[2]/span    ${STOPD}
+
+Verfified the Ubuntu STOPPED Status of azure
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${AZURE UBUNTU BLUEPRINTNAME}")]/div/div/div/div[3]/div/span[2]/span    ${STOPD}
+
+
+
 
 Verfified the STOPPED Status of Ubuntu
     Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div[3]/div/span[2]/span    ${STOPD}
@@ -1683,6 +2248,12 @@ Click on RUNNN of Chef Client of Ubuntu
     Wait Until Keyword Succeeds    2 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div[4]/div[1]/a    
 
 
+
+Click on RUNNN of Chef Client of Azure
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${AZURE UBUNTU BLUEPRINTNAME}")]/div/div/div/div[4]/div[1]/a    
+
+
+
 Verify the SSH
     Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div//ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div/div/div[4]/div[2]/a[@class='devTOP sshIcon']
 
@@ -1696,7 +2267,8 @@ Click on Verified SSH Instance
 Click on Verified SSH Instance of Ubuntu
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div//ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div[4]/div[2]/a
 
-
+Click on Verified SSH Instance of Ubuntu on Azure
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div//ul/li[contains(.,"${AZURE UBUNTU BLUEPRINTNAME}")]/div/div/div/div[4]/div[2]/a    
 
 
 Verify the IP Address of the Instance
@@ -1838,6 +2410,7 @@ Choose the Provider
     Click Element    xpath=.//*[@id='providerId']/option[text()='${EDIT PROVIDER NANME}']
 
 
+
     #Click Element    css=#s2id_providerId > .select2-choice
     #Sleep    2s
     #Input Text    css=#select2-search .select2-input    ${EDIT PROVIDER NANME}
@@ -1886,11 +2459,15 @@ Select the Key Pair
     
 
 Choose Instance Size
+    #Sleep    1s
+    #Click Element    id=instancesize
     Sleep    1s
     Click Element    xpath=.//*[@id='instancesize']/option[text()='${CentosInstanceSize}']
     
 
 Choose Instance Size for Ubuntu
+    #Sleep    1s
+    #Click Element    id=instancesize
     Sleep    1s
     Click Element    xpath=.//*[@id='instancesize']/option[text()='${UbuntuInstanceSize}']
 
@@ -2216,6 +2793,9 @@ Upload the Catalyst PEM File
     Choose File     xpath=.//*[@id='ssh-pemfileInput']    ${CAT_INSTANCES}
     #C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\cat_instances.pem
 
+Upload the Catalyst PEM File for azure
+    Choose File     xpath=.//*[@id='ssh-pemfileInput']    ${GOLDEN PEM}
+
 Close the SSH Terminal
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='modalSSHShellContainer']/div/div/div[1]/button
 
@@ -2252,7 +2832,9 @@ Select the CentosBlueprint
 Select the CentosTesingBlueprint
     Click Element    xpath=//*[text()='${BLUEPRINT TESTNAME}']
 
-
+Select the ubuntuAzureTesingBlueprint
+    Sleep    3s
+    Click Element    xpath=//*[text()='${EDIT AZURE BLUEPRINTNANE}']
 
 Select the BlueprintUbuntu
     #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='checkout-form']/div[2]/div/div/div[1]/div[1]/label[3]

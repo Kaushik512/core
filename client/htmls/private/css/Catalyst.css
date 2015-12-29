@@ -517,6 +517,11 @@
     overflow-y: auto;
     margin-bottom: 10px !important;
 }
+.assignedRunlistTable{
+    margin-top:5px;
+    text-decoration:none;
+    margin-left:3px;
+}
 
 .applicationNameCSS {
     text-align: center;
@@ -4054,9 +4059,9 @@ div.dataTables_filter input {
     background: url(../img/sort_both.png) no-repeat center right;
 }
 
-.dataTables_wrapper table.table thead .sorting_asc {
+/*.dataTables_wrapper table.table thead .sorting_asc {
     background: url(../img/sort_asc.png) no-repeat center right;
-}
+}*/
 
 @media screen and (max-width:450px) and (max-width:767px) {
     #divSmallBoxes {
@@ -4365,17 +4370,6 @@ nav ul li a:active {
 }
 
 
-/*nav ul {
-    
-    padding: 40px 28px 25px 0;
-    padding: 0;
-    margin: 0;
-    font-size: 13px;
-    line-height: .5em;
-    list-style: none;
-    position: relative;
-}*/
-
 nav ul .active>a {
     color: #fff!important;
     position: relative;
@@ -4408,11 +4402,7 @@ nav ul li a {
     text-decoration: none!important;
 }
 
-nav>ul>li>ul>li>a,
-nav>ul>li>ul>li>ul>li>a {
-    padding-top: 7px;
-    padding-bottom: 7px;
-}
+
 
 nav ul li a:focus {
     color: #c9c9c9;
@@ -8714,32 +8704,201 @@ nav ul {
     background-color: #2C3742!important;
 }
 
-.navbar-brand {
-    padding: 8px 12px!important;
+@media (min-width: 768px) {
+    .navbar-brand {
+        padding: 8px!important;
+        width: 19%;
+    }
+    .iconLogo{
+         height:40px;
+    }
+    .navbar-nav {
+        margin-top: 20px;
+        width:80%;
+    }
+    .navbar-nav .navRight{
+        float:right;
+    }
+    .left-projects-links {
+        display: inline!important;
+    }
+    .left-projects-links>a {
+        display: inline!important;
+        font-size: 14px!important;
+        color:#fff!important;
+    }
+    #designStyle{
+        margin-left:16px; 
+    }
+    #trackStyle{
+        margin-left:16px;
+        margin-right:16px;
+    }
+    #liuserinfo{
+        color:white;
+        margin-right:16px;
+        font-size: 14px;
+    }
+    .panelStyle{
+        width:86%;
+    }
+    .jobStyle{
+        margin-top: 5px;
+    }
+    #chefRunlistModal .modal-content{
+        width:800px;
+    }
+    .cpCardStyle{
+        padding-top:58px;
+        margin-left:17px;
+    }
+    .tabStyle{
+        padding: 10px 0 0 40px;
+        border-bottom: medium none; 
+        position: auto;  
+        background-color: #2c3742;
+        border-radius:11px 11px 0px 0px;
+        margin-left: 36px;
+    }
+    .tabContent{
+        position: auto; 
+        left: 36px; 
+        margin-bottom:60px;
+    }
 }
 
-.left-projects-links>a {
-    display: inline!important;
+
+
+
+/* Landscape tablets and medium desktops */
+@media (min-width: 992px) and (max-width: 1199px) {
+    .navbar-nav .navRight {
+        float: left;
+    }
+    .navbar-brand{
+        width:25%;
+    }
+    .left-projects-links>a {
+        font-size: 13px!important;
+    }
+    .navbar-nav {
+        margin-top: 20px;
+        width:75%;
+        margin-left: 5px;
+    }
+    #liuserinfo{
+        font-size: 12px;
+    }
+    .jarviswidget>div{
+        font-size: 12px;
+    }
+    #tableinstanceview .moreInfo{
+        margin-left: -6px;
+    }
+    #tableinstanceview .actionbuttonChefClientRundisable{
+        margin-left: -7px!important;
+    }
+    #tableinstanceview .actionbuttonChefClientRun{
+        margin-left: -7px!important;
+    }
+    .jobStyle{
+        margin-top: 15px!important;
+    }
+    #left-panel{
+        min-height: 91.6%!important;
+    }
+    .cpCardStyle{
+        margin-left: 0px!important;
+    }
+    .tabStyle{
+        margin-left: 56px!important;
+        font-size: 12px!important;
+    }
+    .tabContent{
+        margin-left: 22px!important;
+    }
+
 }
+
+/* Portrait tablets and small desktops */
+@media (min-width: 768px) and (max-width: 991px) {
+    #liuserinfo {
+        display: none!important;
+    }
+    .navbar-brand{
+        width:29%;
+    }
+    .navRight {
+        float: left;
+    }
+    .navbar-nav {
+        width:71%;
+    }
+    .left-projects-links>a {
+        font-size: 12px!important;
+    }
+    header{
+        min-height:6%!important;
+    }
+    #ribbon{
+        min-height: 4%!important;
+    }
+    .jarviswidget>div{
+        font-size: 12px;
+    }
+    .dataTables_wrapper table.table thead .sorting{
+        background: none!important;
+    }
+    #tableinstanceview .moreInfo{
+        margin-left: -6px;
+    }
+    #tableinstanceview .actionbuttonChefClientRundisable{
+        margin-left: -7px!important;
+    }
+    #tableinstanceview .actionbuttonChefClientRun{
+        margin-left: -7px!important;
+    }
+    .panelStyle{
+        width:80%!important;
+    }
+    .jobStyle{
+        margin-top: 15px!important;
+    }
+    #chefRunlistModal .modal-content{
+        width:624px!important;
+    }
+    #left-panel{
+        min-height: 94%!important;
+    }
+    #ribbon .breadcrumb{
+        font-size: 12px!important;
+    }
+    .cpCardStyle{
+        margin-left: 0px!important;
+        margin-top: 0px!important;
+        text-align: center;
+    }
+    .tabStyle{
+        margin-left: 0px!important;
+        font-size: 10px!important;
+    }
+    .tabContent{
+        margin-left: -32px!important;
+    }
+}
+
+
 
 .custom-theme .left-projects-links > a.active {
     font-weight: bold;
-    text-decoration: underline;
     border-color: #3a87ad rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.3);
-    border-image: none;
     border-style: solid;
     border-width: 3px 0px 0px;
     padding: 6px;
-    color: #000;
-    text-decoration: none;
 }
 
 .navbar-default .navbar-nav>li>a {
     color: white!important;
-}
-
-.navbar-nav {
-    padding-left: 11px;
 }
 
 .custom-theme nav ul li a b {
@@ -8922,7 +9081,6 @@ body.custom-theme {
 
 .custom-theme nav ul li a {
     color: #40baf1;
-    font-size: 12px !important;
 }
 
 .custom-theme nav > ul > li > a {
@@ -9163,7 +9321,7 @@ table.dataTable tfoot th {
 
 table.dataTable thead th,
 table.dataTable thead td {
-    padding: 10px 18px;
+    padding: 7px 8px;
     /*border-bottom: 1px solid #111111;*/
 }
 
@@ -9189,18 +9347,18 @@ table.dataTable thead .sorting {
     background: url("../images/sort_both.png") no-repeat center right;
 }
 
-table.dataTable thead .sorting_asc {
+/*table.dataTable thead .sorting_asc {
     background: url("../images/sort_asc.png") no-repeat center right;
-}
+}*/
 
 
 /*table.dataTable thead .sorting_desc {
   background: url("../images/sort_desc.png") no-repeat center right;
 }*/
 
-table.dataTable thead .sorting_desc {
+/*table.dataTable thead .sorting_desc {
     background: url("../img/sort_desc.png") no-repeat center right;
-}
+}*/
 
 table.dataTable thead .sorting_asc_disabled {
     background: url("../images/sort_asc_disabled.png") no-repeat center right;
@@ -9742,6 +9900,7 @@ table.dataTable td {
     position: relative;
     margin: 11px 40px!important;
     width: 78px;
+    font-size: 12px;
 }
 
 .customfooter {
@@ -9784,8 +9943,8 @@ table.dataTable td {
 
 .moreInfo {
     background-position: -15px -12px;
-    width: 25px;
-    height: 25px;
+    width: 27px;
+    height: 27px;
     
 }
 .moreInfoabsolute{
@@ -12682,6 +12841,9 @@ tr.selectedOne td a {
     background-color: #fff!important;
     font-size: 14px;
 }   
+ .navbar-brand{
+    width:13.5%!important;
+ }
 }
 @media (min-width:768px) and (max-width:1200px){
     .bootstrapSuccess{
@@ -12941,6 +13103,14 @@ form.cmxform .gray * {
     display: inline-block;
     height: 35px;
 }
+.dockerImgValue {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 250px;
+    display: inline-block;
+    height: 42px;
+}
 
 .paramValue {
     overflow: hidden;
@@ -12968,6 +13138,10 @@ form.cmxform .gray * {
         display: inline-block;
         height: 35px;
     }
+    .dockerImgValue {
+    display: table-cell;
+    height: 35px;
+    }
 }
 
 .widgetColor {
@@ -12994,4 +13168,13 @@ form.cmxform .gray * {
     width: 147px;
     display: inline-block;
     height: 35px;
+}
+.trLineHeight{
+    line-height: 2.3;
+}
+.spinnerStyle{
+    height:50px;
+    width:50px;
+    margin-top: 10%;
+    margin-bottom: 10%;
 }
