@@ -63,15 +63,9 @@ String.prototype.capitalizeFirstLetter = function() {
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <!--left side navbar-->
                   <ul class="nav navbar-nav" style="margin-top:20px;margin-left:28px">
-                    <li class="left-projects-links" data-target="#dashboard" navigation="dashboardnav">
-                        <a href="#ajax/Dashboard.html" class="active navigationTab" id="dashboardNew" style="font-size:14px!important" href="#" onclick="setleftnavigation(this,'Dashboard');">
-                            <i class="fa fa-dashboard txt-color-blue"></i>&nbsp;DASHBOARD 
-                        </a>
-                    </li>
-
                     <li class="left-projects-links hidden" data-target="#Workspace" navigation="Workspace,Workspace1">
-                        <a class="navigationTab" id="workZoneNew" style="font-size:14px!important" href="#" onclick="setleftnavigation(this,'org');">
-                            <i class="fa fa-credit-card"></i>&nbsp;WORKZONE 
+                        <a class="active navigationTab" id="workZoneNew" style="font-size:14px!important" href="#" onclick="setleftnavigation(this,'org');">
+                            <i class="fa fa-credit-card txt-color-blue"></i>&nbsp;WORKZONE 
                         </a>
                     </li>
                     <li class="left-projects-links hidden" style="margin-left:16px;" data-target="#blueprints"  navigation="blueprints">
@@ -112,16 +106,7 @@ String.prototype.capitalizeFirstLetter = function() {
     <!-- Left panel : Navigation area -->
     <!-- Note: This width of the aside area can be adjusted through LESS variables -->
     <aside id="left-panel">
-        <div id="Dashboard_nav" style="display:none;">
-            
-            <div style="height:40px;background-color:#40baf1;color:white;border-right:1px solid silver;"> 
-                
-                <div style="margin-top:0px;font-size:11pt;font-weight:bold;padding-left:10px;padding-top:10px" class="hiddencollapse">Dashboard</div>
-                
-            </div>
-           <!--  <div id="setting_tree" style="font-size:12px;"></div> -->
-            <!-- <span class="minifyme"> <i class="fa fa-arrow-circle-left hit"></i> </span> -->
-        </div>
+
         <div id="Workspace1">
             
             <div style="height:40px;background-color:#40baf1;color:white;border-right:1px solid silver;"> 
@@ -342,37 +327,20 @@ function foldTreeForSetting() {
 
 function setleftnavigation(toplink, breadcrumbHeader) {
     //alert('setting left navigation');
-    //debugger;
-    var TabID = $(toplink).attr('id');
-    if (TabID === "dashboardNew") {
-        //loadTreeFuncNew();
-        //$('#Dashboard_nav').show();
-        $('#Settings_nav').hide();
-        $('#Workspace1').hide();
-        $('#trackShow').hide();
-        $('#left-panel').hide();
-        $('#ribbon').hide();
-        $('#main').css('margin-left','0px');
-        // selectFirstEnv();
 
-    }else if (TabID === "workZoneNew") {
+    var TabID = $(toplink).attr('id');
+    if (TabID === "workZoneNew") {
         loadTreeFuncNew();
 
         $('#Settings_nav').hide();
         $('#Workspace1').show();
         $('#trackShow').hide();
-        $('#left-panel').show();
-        $('#ribbon').show();
-        $('#main').css('margin-left','254px');
         // selectFirstEnv();
 
     } else if (TabID === "designNew") {
         $('#Workspace1').hide();
         $('#Settings_nav').hide();
         $('#trackShow').hide();
-        $('#left-panel').show();
-        $('#ribbon').show();
-        $('#main').css('margin-left','254px');
 
     } else if (TabID === "settingsNew") {
         $('#tree').empty()
@@ -382,9 +350,6 @@ function setleftnavigation(toplink, breadcrumbHeader) {
         $('#Workspace1').hide();
         $('#trackShow').hide();
         $('#Settings_nav').show();
-        $('#left-panel').show();
-        $('#ribbon').show();
-        $('#main').css('margin-left','254px');
 
     } else if (TabID === "settingsNewClick") {
         $('#tree').empty();
@@ -394,9 +359,6 @@ function setleftnavigation(toplink, breadcrumbHeader) {
         $('#Workspace1').hide();
         $('#trackShow').hide();
         $('#Settings_nav').show();
-        $('#left-panel').show();
-        $('#ribbon').show();
-        $('#main').css('margin-left','254px');
 
     } else if (TabID === "trackNew") {
         $('#tree').empty();
@@ -406,9 +368,6 @@ function setleftnavigation(toplink, breadcrumbHeader) {
         $('#Workspace1').hide();
         $('#Settings_nav').hide();
         $('#trackShow').show();
-        $('#left-panel').show();
-        $('#ribbon').show();
-        $('#main').css('margin-left','254px');
     }
 
     if ($(toplink).hasClass('active')) {
@@ -438,10 +397,7 @@ function setleftnavigation(toplink, breadcrumbHeader) {
         window.selectedOrgName = $('.orgSelected').find('span').text();
         //selectFirstEnv();
         //selecting the first item in the org tree.
-    } else if(breadcrumbHeader == 'Dashboard'){
-        $('ol.breadcrumb').addClass('hidden');
-
-    }else {
+    } else {
         //Reverting the warning message when no org present
         $('#content').removeClass('hidden').removeAttr('style','height:100% !important');
         $('#noenvwarning').addClass('hidden');
@@ -677,14 +633,6 @@ var SettingTreeJson = [{
             "href": "#ajax/Settings/DashboardSettings.html",
             "selectable": true,
             "icon": "fa fa-lg fa-fw fa-files-o"
-
-        },{
-            "name": "templates",
-            "text": "Dashboard landing",
-            "borderColor": "#000",
-            "href": "#ajax/Settings/DashboardLandings.html",
-            "selectable": true,
-            "icon": "fa fa-lg fa-fw fa-bolt"
 
         }],
         "borderColor": "#000",
@@ -1103,8 +1051,7 @@ checkandnavigatetotab = function() {
         console.log('selecting first env');
         //selectFirstEnv();
         //selectEnv();
-        //$('#workZoneNew').trigger('click');
-        $('#dashboardNew').trigger('click'); 
+        $('#workZoneNew').trigger('click');
     }
 };
 checkandnavigatetotab();
