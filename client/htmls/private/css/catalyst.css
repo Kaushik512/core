@@ -4246,3 +4246,59 @@ form.cmxform .gray * {
     margin-top: 10%;
     margin-bottom: 10%;
 }
+.card2 {
+    display: block;
+    height: 100%;
+    width: 100%;
+    border-radius: 15px;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    font-size: 14px;
+    position: absolute;
+    transition: all 0.5s linear;
+    backface-visibility: hidden;
+}
+.card2.flipped2 {
+    -ms-transform: rotateY(360deg);
+    transform: rotateY(360deg);
+}
+.front2 {
+    background: #363636;
+}
+
+.back2 {
+    background: #996633;
+    transform: rotateY( 180deg);
+}
+.card3 {
+    display: block;
+    height: 100%;
+    width: 100%;
+    border-radius: 15px;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    font-size: 14px;
+    position: absolute;
+    transition: all 0.5s linear;
+    backface-visibility: hidden;
+}
+.front3 {
+    background: #FFCC00;
+}
+.paramStyle{
+    width:11%!important;
+    text-align:center!important;
+}
+.valueStyle{
+    width:27%!important;
+    text-align:center!important;
+}
+.tdStyleInfo{
+    padding-left:18px!important;
+    padding-top:16px!important;
+}
+.modalHeightHelp{
+    height:480px;overflow-y:auto
+}

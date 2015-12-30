@@ -26,7 +26,7 @@
 				<div class="panel-group smart-accordion-default" id="accordion-1" style="overflow-y: auto;">
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<h4 class="panel-title panelStyle">
+							<h4 class="panel-title panelStyle font-size-12">
 								<a data-toggle="collapse">Instances</a>
 								<div class="instanceloaderspinner hidden"><img   src="img/select2-spinner.gif"> Loading Instances</div>
 							</h4>
@@ -113,36 +113,6 @@
 	</div>
 </div>
 <!--SSH container ends here-->
-
-<!--modal for instance edit-->
-<div class="modal fade" id="modalforInstanceEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<form role="form" class="cmxform" id="instanceEditNew">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title">
-						&nbsp;Edit Instance Name
-					</h4>
-				</div>
-				<div class="modal-body">
-					<fieldset>
-					<div class="col-lg-6 col-md-6 col-sm-6">
-						<label for="instanceEditName">Name<span class="control-label redSpan">&nbsp;*</span></label>
-						<input type="text" name="instanceEditName" class="form-control" id="instanceEditName" autofocus/>
-					</div>
-					<input type="hidden" id="instanceIDHiddenInput">
-					</fieldset>
-				</div>
-				<div class="modal-footer">
-					<input type="submit" id="editSaveBTN" class="btn btn-primary" value="Save" />
-					<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-				</div>
-			</form>
-		</div>
-	</div>
-</div>
-<!--modal for instance edit ends-->
 
 <!-- Modal for Import By IP tab started-->
 <div class="modal fade" id="modalContainerimportInstance" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">

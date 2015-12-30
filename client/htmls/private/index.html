@@ -14,124 +14,100 @@
         <link rel="stylesheet" type="text/css" media="screen" href="css/jqueryUI.min.css">
         <link rel="stylesheet" type="text/css" media="screen" href="css/font-awesome.min.css">
         <link rel="stylesheet" href="js/jquery-filetree/jqueryFileTree.css" />
+        <style>
+        .leftSpaceStyle{
+            height:40px;background-color:#40baf1;color:white;border-right:1px solid silver;"
+        }
+        .treeStyle{
+            margin-top:0px;font-size:11pt;font-weight:bold;padding-left:10px;padding-top:10px
+        }
+        </style>
 </head>
 <body class="custom-theme">
-<!-- possible classes: minified, fixed-ribbon, fixed-header, fixed-width-->
-<!-- HEADER -->
-<!-- Header starts here -->
-<header>
-   <nav class="navbar navbar-default">
-      <div class="navbar-header">
-         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-         <span class="sr-only">Toggle navigation</span>
-         <span class="icon-bar"></span>
-         <span class="icon-bar"></span>
-         <span class="icon-bar"></span>
-         </button>
-      </div>
-      <div class="navbar-brand"><img src="img/logo.png" class="iconLogo" alt="logo"></div>
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-         <!--left side navbar-->
-         <ul class="nav navbar-nav">
-            <li class="left-projects-links hidden" data-target="#Workspace" navigation="Workspace,Workspace1">
-                <a class="active navigationTab" id="workZoneNew" href="#" onclick="setleftnavigation(this,'org');">
-               <i class="fa fa-credit-card txt-color-blue"></i>&nbsp;WORKZONE 
-               </a>
-            </li>
-
-            <!--design starts here-->
-            <li class="left-projects-links hidden" id="designStyle" data-target="#blueprints"  navigation="blueprints">
-               <a href="#ajax/Aws-Production.html" id="designNew" onclick="setleftnavigation(this,'Design');" class="navigationTab">
-               <i class="fa fa-puzzle-piece"></i>&nbsp;DESIGN
-               </a>
-            </li>
-
-            <!--track-->
-            <li class="left-projects-links hidden" id="trackStyle" data-target="#Track" navigation="Track">
-               <a class="dropdown-toggle navigationTab" href="#ajax/trackSettings.html" id="trackNew"  onclick="setleftnavigation(this,'Track');"><i class="fa fa-anchor"></i>&nbsp;TRACK</a>
-            </li>
-            <!--track ends here-->
-
-            <!--right side navbar-->
-            
-            <span class="navRight">
-            <li class="left-projects-links active" id="liuserinfo"></li>
-
-            <!--Settings tab-->
-            <li class="left-projects-links hidden" data-target="#Settings"   navigation="Settings">
-               <a class="dropdown-toggle navigationTab" href="#ajax/Settings/Dashboard.html" id="settingsNew"  onclick="setleftnavigation(this,'Settings');"><i class="fa fa-cog"></i>&nbsp;SETTINGS</a>
-            </li>
-
-            <!--help-->
-            <li class="left-projects-links"><a href="http://help.relevancelab.com/dokuwiki" target="_blank" id="dokuNew"><i class="fa fa-question"></i>&nbsp;Help</a>
-            </li>
-
-            <!--logout-->
-            <li id="logout" class="btn-header transparent pull-right logouttop">
-               <!-- ../auth/signout -->
-               <span><a href="#" logoutlink="/auth/signout" title="Sign Out">
-               <i class="fa fa-sign-out"></i>
-               </a></span>
-            </li>
-         </span>
-         </ul>
-      </div>
-   </nav>
-</header>
-<!--HEADER ends here -->
-<!-- Left panel : Navigation area -->
-<!-- Note: This width of the aside area can be adjusted through LESS variables -->
-    <aside id="left-panel">
-
-        <div id="Workspace1">
-            
-            <div style="height:40px;background-color:#40baf1;color:white;border-right:1px solid silver;"> 
-                
-                <div style="margin-top:0px;font-size:11pt;font-weight:bold;padding-left:10px;padding-top:10px" class="hiddencollapse">WORKZONE</div>
-                
+    <!-- possible classes: minified, fixed-ribbon, fixed-header, fixed-width-->
+    <!-- HEADER -->
+    <!-- Header starts here -->
+    <header>
+        <nav class="navbar navbar-default">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                </button>
             </div>
-            <div id="tree" style="font-size:12px;"></div>
-            <!-- <span class="minifyme"> <i class="fa fa-arrow-circle-left hit"></i> </span> -->
+            <div class="navbar-brand"><img src="img/logo.png" class="iconLogo" alt="logo"></div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <!--left side navbar-->
+                <ul class="nav navbar-nav">
+                    <li class="left-projects-links hidden" data-target="#Workspace" navigation="Workspace,Workspace1">
+                        <a class="active navigationTab" id="workZoneNew" href="#" onclick="setleftnavigation(this,'org');">
+                        <i class="fa fa-credit-card txt-color-blue"></i>&nbsp;WORKZONE 
+                        </a>
+                    </li>
+                    <!--design starts here-->
+                    <li class="left-projects-links hidden" id="designStyle" data-target="#blueprints"  navigation="blueprints">
+                        <a href="#ajax/Aws-Production.html" id="designNew" onclick="setleftnavigation(this,'Design');" class="navigationTab">
+                        <i class="fa fa-puzzle-piece"></i>&nbsp;DESIGN
+                        </a>
+                    </li>
+                    <!--track-->
+                    <li class="left-projects-links hidden" id="trackStyle" data-target="#Track" navigation="Track">
+                        <a class="dropdown-toggle navigationTab" href="#ajax/trackSettings.html" id="trackNew"  onclick="setleftnavigation(this,'Track');"><i class="fa fa-anchor"></i>&nbsp;TRACK</a>
+                    </li>
+                    <!--track ends here-->
+                    <!--right side navbar-->
+                    <span class="navRight">
+                        <li class="left-projects-links active" id="liuserinfo"></li>
+                        <!--Settings tab-->
+                        <li class="left-projects-links hidden" data-target="#Settings"   navigation="Settings">
+                            <a class="dropdown-toggle navigationTab" href="#ajax/Settings/Dashboard.html" id="settingsNew"  onclick="setleftnavigation(this,'Settings');"><i class="fa fa-cog"></i>&nbsp;SETTINGS</a>
+                        </li>
+                        <!--help-->
+                        <li class="left-projects-links"><a href="http://help.relevancelab.com/dokuwiki" target="_blank" id="dokuNew"><i class="fa fa-question"></i>&nbsp;Help</a>
+                        </li>
+                        <!--logout-->
+                        <li id="logout" class="btn-header transparent pull-right logouttop">
+                            <!-- ../auth/signout -->
+                            <span><a href="#" logoutlink="/auth/signout" title="Sign Out">
+                            <i class="fa fa-sign-out"></i>
+                            </a></span>
+                        </li>
+                    </span>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <!--HEADER ends here -->
+    <!-- Left panel : Navigation area -->
+    <!-- Note: This width of the aside area can be adjusted through LESS variables -->
+    <aside id="left-panel">
+        <div id="Workspace1">
+            <div class="leftSpaceStyle">
+                <div class="hiddencollapse treeStyle">WORKZONE</div>
+            </div>
+            <div id="tree" class="font-size-12"></div>
         </div>
         <!--for track-->
-
         <div id="trackShow" style="display:none;">
-            
-            <div style="height:40px;background-color:#40baf1;color:white;border-right:1px solid silver;"> 
-                
-                <div style="margin-top:0px;font-size:11pt;font-weight:bold;padding-left:10px;padding-top:10px" class="hiddencollapse">TRACK</div>
-                
+            <div class="leftSpaceStyle">
+                <div class="hiddencollapse treeStyle">TRACK</div>
             </div>
-            <div id="trackTree" style="font-size:12px;"></div>
-            <!-- <span class="minifyme"> <i class="fa fa-arrow-circle-left hit"></i> </span> -->
+            <div id="trackTree" class="font-size-12"></div>
         </div>
-
         <!--track ends here-->
         <div id="Settings_nav" style="display:none;">
-            
-            <div style="height:40px;background-color:#40baf1;color:white;border-right:1px solid silver;"> 
-                
-                <div style="margin-top:0px;font-size:11pt;font-weight:bold;padding-left:10px;padding-top:10px" class="hiddencollapse">SETTINGS</div>
-                
+            <div class="leftSpaceStyle">
+                <div class="hiddencollapse treeStyle">SETTINGS</div>
             </div>
-            <div id="setting_tree" style="font-size:12px;"></div>
-            <!-- <span class="minifyme"> <i class="fa fa-arrow-circle-left hit"></i> </span> -->
+            <div id="setting_tree" class="font-size-12"></div>
         </div>
-       
-
-        <nav style="font-size:12px!important;">
-            
-  
-                
-                
-                
+        <nav class="font-size-12">
             </ul>
             <ul class="menu-item-parentdemo" id="Workspace">
-                
-                
             </ul>
-           <ul class="menu-item-parentdemo hidden" id="Track">
-                                 
+            <ul class="menu-item-parentdemo hidden" id="Track">
             </ul>
             <ul class="menu-item-parentdemo hidden" id="blueprints" providerselected="aws">
                 <li class="active open">
@@ -139,38 +115,51 @@
                     </a>
                     <ul style="display:block">
                         <li>
-                            <a href="ajax/Aws-Production.html" onclick="$('#blueprints').attr('providerselected','aws');" class="devops_providers"><div class="aws" title="AWS"><span class="menu-item-parent provider-images trackAlign">&nbsp;&nbsp;AWS</span></div></a>
+                            <a href="ajax/Aws-Production.html" onclick="$('#blueprints').attr('providerselected','aws');" class="devops_providers">
+                                <div class="aws" title="AWS"><span class="menu-item-parent provider-images trackAlign">&nbsp;&nbsp;AWS</span></div>
+                            </a>
                         </li>
                         <li>
-                            <a href="ajax/DesignBlueprintAzure.html?provider=azure" onclick="$('#blueprints').attr('providerselected','azure');"  class="devops_providers"><div class="azure" title="Azure"><span class="menu-item-parent provider-images trackAlign">&nbsp;&nbsp;Azure</span></div></a>
+                            <a href="ajax/DesignBlueprintAzure.html?provider=azure" onclick="$('#blueprints').attr('providerselected','azure');"  class="devops_providers">
+                                <div class="azure" title="Azure"><span class="menu-item-parent provider-images trackAlign">&nbsp;&nbsp;Azure</span></div>
+                            </a>
                         </li>
                         <li>
-                            <a href="ajax/DesignBlueprint.html?provider=os" onclick="$('#blueprints').attr('providerselected','openstack');"  class="devops_providers"><div class="openstack" title="Open Stack"><span class="menu-item-parent provider-images trackAlign">&nbsp;Open Stack</span></div></a>
+                            <a href="ajax/DesignBlueprint.html?provider=os" onclick="$('#blueprints').attr('providerselected','openstack');"  class="devops_providers">
+                                <div class="openstack" title="Open Stack"><span class="menu-item-parent provider-images trackAlign">&nbsp;Open Stack</span></div>
+                            </a>
                         </li>
                         <li>
-                            <a href="ajax/DesignBlueprintpc.html?provider=hp" onclick="$('#blueprints').attr('providerselected','hppubliccloud');"  class="devops_providers"><div class="hppubliccloud" title="HP Public Cloud"><span class="menu-item-parent provider-images trackAlign">&nbsp;HP Helion</span></div></a>
+                            <a href="ajax/DesignBlueprintpc.html?provider=hp" onclick="$('#blueprints').attr('providerselected','hppubliccloud');"  class="devops_providers">
+                                <div class="hppubliccloud" title="HP Public Cloud"><span class="menu-item-parent provider-images trackAlign">&nbsp;HP Helion</span></div>
+                            </a>
                         </li>
                         <!-- <li>
                             <a href="ajax/DesignBlueprintAzure.html?provider=azure" onclick="$('#blueprints').attr('providerselected','azure');"  class="devops_providers"><div class="azure" title="Azure"><span class="menu-item-parent provider-images trackAlign">&nbsp;&nbsp;Azure</span></div></a>
-                        </li> -->
-                         <li>
-                            <a href="ajax/DesignBlueprintVmware.html?provider=vmware" onclick="$('#blueprints').attr('providerselected','vmware');" class="devops_providers"><div class="vmware" title="Vmware"><span class="menu-item-parent provider-images trackAlign">&nbsp;VMware</span></div></a>
+                            </li> -->
+                        <li>
+                            <a href="ajax/DesignBlueprintVmware.html?provider=vmware" onclick="$('#blueprints').attr('providerselected','vmware');" class="devops_providers">
+                                <div class="vmware" title="Vmware"><span class="menu-item-parent provider-images trackAlign">&nbsp;VMware</span></div>
+                            </a>
                         </li>
                         <li>
-                            <a href="ajax/RL-DevOps.html" class="devops_providers"><div class="rl" title="Data Centre"><span class="menu-item-parent provider-images trackAlign">&nbsp;Data Centre</span></div></a>
-                        </li>
-                        
-                        
-                        <li>
-                            <a href="ajax/cloudstack.html" class="devops_providers"><div class="cloudstack" title="Cloud Stack"><span class="menu-item-parent provider-images trackAlign">&nbsp;Cloud Stack</span></div></a>
+                            <a href="ajax/RL-DevOps.html" class="devops_providers">
+                                <div class="rl" title="Data Centre"><span class="menu-item-parent provider-images trackAlign">&nbsp;Data Centre</span></div>
+                            </a>
                         </li>
                         <li>
-                            <a href="ajax/Docker.html" class="devops_providers"><div class="dock" title="Docker"><span class="menu-item-parent provider-images trackAlign">&nbsp;Docker</span></div></a>
+                            <a href="ajax/cloudstack.html" class="devops_providers">
+                                <div class="cloudstack" title="Cloud Stack"><span class="menu-item-parent provider-images trackAlign">&nbsp;Cloud Stack</span></div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="ajax/Docker.html" class="devops_providers">
+                                <div class="dock" title="Docker"><span class="menu-item-parent provider-images trackAlign">&nbsp;Docker</span></div>
+                            </a>
                         </li>
                     </ul>
                 </li>
             </ul>
-            
         </nav>
         <span class="minifyme"> <i class="fa fa-arrow-circle-left hit"></i> </span>
     </aside>
@@ -190,15 +179,18 @@
                 <!-- This is auto generated -->
             </ol>
         </div>
-        
         <!-- MAIN CONTENT -->
         <div id="content">
-        </div> 
-        <!--hiding the comment for no org available when the organization and environments are present-->
-        <div id="noenvwarning" class="hidden alert alert-warning noEnvWarning"><img style="width:50px;height:40px" src="img/warning.png" alt="warning"/><span style="margin-left:20px;">There are no Workzone items to display. Please check your </span><ul style="list-style-type:none;text-align:center"><li class="left-projects-links hidden" data-target="#Settings" navigation="Settings">
-                                <a class="navigationTab" href="#ajax/Settings/Dashboard.html" id="settingsNewClick"  onclick="setleftnavigation(this,'Settings');">&nbsp;SETTINGS</a></li></ul>
         </div>
-
+        <!--hiding the comment for no org available when the organization and environments are present-->
+        <div id="noenvwarning" class="hidden alert alert-warning noEnvWarning">
+            <img style="width:50px;height:40px" src="img/warning.png" alt="warning"/><span style="margin-left:20px;">There are no Workzone items to display. Please check your </span>
+            <ul style="list-style-type:none;text-align:center">
+                <li class="left-projects-links hidden" data-target="#Settings" navigation="Settings">
+                    <a class="navigationTab" href="#ajax/Settings/Dashboard.html" id="settingsNewClick"  onclick="setleftnavigation(this,'Settings');">&nbsp;SETTINGS</a>
+                </li>
+            </ul>
+        </div>
         <!--noEnv Error for consumer and designer-->
         <div id="noEnvError" class="hidden alert alert-warning noEnvWarningConsumerDesigner"><img style="width:50px;height:40px" src="img/warning.png" alt="warning"/><span style="margin-left:20px;">There are no Workzone items to display.</span>
         </div>
@@ -206,34 +198,409 @@
         <!-- END MAIN CONTENT -->
     </div>
     <!-- END MAIN PANEL -->
-    
     <div id="shortcut" style="margin-left: 100px;margin-top: 90px;">
         <ul class="orgsList">
-            
-            
         </ul>
     </div>
     <!-- END SHORTCUT AREA -->
     <div id="main-collapse" style="margin-top: 50px;">
         <ul class="" style="width:100%">
-            
             <li class="collapseActive">
                 <a href="#ajax/Dev.html">WORKZONE</a>
             </li>
-            
             <li>
                 <a href="#ajax/Aws-Production.html">DESIGN</a>
             </li>
-            
             <li>
                 <!-- <a href="#ajax/Dashboard.html"><span>TRACK</span></a> -->
             </li>
-            
             <li>
                 <a href="#ajax/Settings/OrgList.html"><span>SETTINGS</span></a>
             </li>
         </ul>
     </div>
+    <!--modal for instance edit-->
+    <div class="modal fade" id="modalforInstanceEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form role="form" class="cmxform" id="instanceEditNew">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">
+                            &nbsp;Edit Instance Name
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <fieldset>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <label for="instanceEditName">Name<span class="control-label redSpan">&nbsp;*</span></label>
+                                <input type="text" name="instanceEditName" class="form-control" id="instanceEditName" autofocus/>
+                            </div>
+                            <input type="hidden" id="instanceIDHiddenInput">
+                        </fieldset>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <input type="submit" id="editSaveBTN" class="btn btn-primary" value="Save" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--modal for instance edit ends-->
+    <!--modal for blueprint read-->
+    <div class="modal fade bs-example-modal-lg" id="modalForRead" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel"></h4>
+                </div>
+                <div class="modal-body modalHeightHelp">
+                    <!--os and the 1st tier-->
+                    <table class="table table-bordered">
+                        <thead>
+                            <th class="paramStyle">Parameters</th>
+                            <th class="valueStyle">Values</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdStyleInfo">Blueprint Name:</td>
+                                <td>
+                                    <input  id="blueprintNameInputNew" disabled="disabled" class="form-control">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdStyleInfo">Template Type:</td>
+                                <td>
+                                    <input id="blueprintTemplateType" disabled="disabled" class="form-control">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdStyleInfo">Organisation Name:</td>
+                                <td>
+                                    <input id="blueprintORG" disabled="disabled" class="form-control">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdStyleInfo">Business Group:</td>
+                                <td>
+                                    <input id="blueprintBU" disabled="disabled" class="form-control">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdStyleInfo">Project Name:</td>
+                                <td>
+                                    <input id="blueprintProject" disabled="disabled" class="form-control">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdStyleInfo">Operating System:</td>
+                                <td>
+                                    <input id="instanceOSNew" class="form-control" disabled="disabled">                                                      
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdStyleInfo">Instance Type:</td>
+                                <td>
+                                    <input id="instancesizeNew" disabled="disabled" class="form-control">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdStyleInfo">Provider Type:</td>
+                                <td>
+                                    <input id="instanceProviderType" disabled="disabled" class="form-control">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdStyleInfo">Provider Name:</td>
+                                <td>
+                                    <input id="instanceProviderName" disabled="disabled" class="form-control">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdStyleInfo">Region:</td>
+                                <td>
+                                    <input id="instanceRegion" disabled="disabled" class="form-control">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdStyleInfo">Image:</td>
+                                <td>
+                                    <input id="instanceImage" disabled="disabled" class="form-control">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdStyleInfo">Keypair:</td>
+                                <td> 
+                                    <input id="instancekeyPair" disabled="disabled" class="form-control">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdStyleInfo">VPC ID:</td>
+                                <td>
+                                    <input id="instanceVPC" class="form-control" disabled="disabled">                                               
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdStyleInfo">Subnet:</td>
+                                <td>
+                                    <input id="instanceSubnetId" class="form-control" disabled="disabled">                                          
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdStyleInfo">Security Group:</td>
+                                <td>
+                                    <input id="instanceSecurityGroupId" class="form-control" disabled="disabled">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdStyleInfo">Version:</td>
+                                <td>
+                                    <input id="instanceVersion" class="form-control" disabled="disabled">                                    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdStyleInfo">Runlist:</td>
+                                <td>
+                                    <input id="instanceRunlist" class="form-control" disabled="disabled">                                           
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--modal for blueprint edit read-->
+    <!--modal for blueprint read-->
+    <div class="modal fade bs-example-modal-lg" id="modalForReadCFT" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" class="titleCFTDocker" id="myModalLabel"></h4>
+            </div>
+            <div class="modal-body">
+                <fieldset>
+                    <!--os and the 1st tier-->
+                    <table class="table table-bordered">
+                        <thead>
+                            <th class="paramStyle">Parameters</th>
+                            <th class="valueStyle">Values</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdStyleInfo">Blueprint Name:</td>
+                                <td>
+                                    <input  id="blueprintNameCFT" disabled="disabled" class="form-control">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdStyleInfo">Template Type:</td>
+                                <td>
+                                    <input id="blueprintTemplateTypeCFT" disabled="disabled" class="form-control">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdStyleInfo">Organisation Name:</td>
+                                <td>
+                                    <input id="blueprintORG" disabled="disabled" class="form-control">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdStyleInfo">Business Group:</td>
+                                <td>
+                                    <input id="blueprintBU" disabled="disabled" class="form-control">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdStyleInfo">Project Name:</td>
+                                <td>
+                                    <input id="blueprintProject" disabled="disabled" class="form-control">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </fieldset>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+    <!--modal for blueprint edit read-->
+    <!--modal for help-->
+    <div class="modal fade" id="modalForHelp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog " style="">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">
+                        &nbsp;CookBook Information
+                    </h4>
+                </div>
+                <div class="modal-body modalHeightHelp">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>CookBook Name</th>
+                                <th>Description</th>
+                            <tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>apache2-windows</td>
+                                <td>Installation &amp; Configuration of Apache Server</td>
+                            </tr>
+                            <tr>
+                                <td>apache2</td>
+                                <td>Installation &amp; Configuration of Apache Server</td>
+                            </tr>
+                            <!--2nd set-->
+                            <tr>
+                                <td>cassandra</td>
+                                <td>Installation and configuration of Cassandra Server</td>
+                            </tr>
+                            <tr>
+                                <td>eclipse_windows</td>
+                                <td>Installtion of Eclispe on Windows</td>
+                            </tr>
+                            <!--3rd set-->
+                            <tr>
+                                <td>visualstudio_windows</td>
+                                <td>Installation of Visual Studio</td>
+                            </tr>
+                            <tr>
+                                <td>iis</td>
+                                <td>Installation and configuration of IIS Server</td>
+                            </tr>
+                            <!--4th set-->
+                            <tr>
+                                <td>jboss7</td>
+                                <td>Installation and Configuration of JBOSS7 Server</td>
+                            </tr>
+                            <tr>
+                                <td>tomcat</td>
+                                <td>Installs and configures Tomcat, Java servlet engine and webserver</td>
+                            </tr>
+                            <!--5th set-->
+                            <tr>
+                                <td>weblogic</td>
+                                <td>Installation and Configuration of weblogic</td>
+                            </tr>
+                            <tr>
+                                <td>java</td>
+                                <td>Installation of Java</td>
+                            </tr>
+                            <!--6th set-->
+                            <tr>
+                                <td>java_windows</td>
+                                <td>Installation of Java</td>
+                            </tr>
+                            <tr>
+                                <td>nodejs</td>
+                                <td>Installation of NodeJS and npm package</td>
+                            </tr>
+                            <!--7th set-->
+                            <tr>
+                                <td>php</td>
+                                <td>Installation and Configuration of PHP</td>
+                            </tr>
+                            <tr>
+                                <td>lamp_role</td>
+                                <td>Installation and Configuration of LAMP stack</td>
+                            </tr>
+                            <!--8th set-->
+                            <tr>
+                                <td>mysql-windows</td>
+                                <td>Installation and Configuration of Mysql</td>
+                            </tr>
+                            <tr>
+                                <td>mysql</td>
+                                <td>Installation and Configuration of Mysql</td>
+                            </tr>
+                            <!--9th set-->
+                            <tr>
+                                <td>oracle_windows</td>
+                                <td>Installation and Configuration of Oracle</td>
+                            </tr>
+                            <tr>
+                                <td>postgresql</td>
+                                <td>Installation and Configurationof postgresql</td>
+                            </tr>
+                            <!--10th set-->
+                            <tr>
+                                <td>service_apache</td>
+                                <td>Service cookbook for apache server</td>
+                            </tr>
+                            <tr>
+                                <td>service_iptables</td>
+                                <td>Service cookbook for firewall</td>
+                            </tr>
+                            <!--11th set-->
+                            <tr>
+                                <td>service_jboss</td>
+                                <td>Service cookbook for Jboss server</td>
+                            </tr>
+                            <tr>
+                                <td>service_mysql</td>
+                                <td>Service cookbook for Mysql</td>
+                            </tr>
+                            <!--12th set-->
+                            <tr>
+                                <td>service_nginx</td>
+                                <td>Service cookbook for nginx </td>
+                            </tr>
+                            <tr>
+                                <td>service_tomcat</td>
+                                <td>Service cookbook for tomcat</td>
+                            </tr>
+                            <!--13th set-->
+                            <tr>
+                                <td>service_weblogic</td>
+                                <td>service cookbook for weblogic</td>
+                            </tr>
+                            <tr>
+                                <td>seven_zip</td>
+                                <td>Installation of 7Zip</td>
+                            </tr>
+                            <!--14th set-->
+                            <tr>
+                                <td>git</td>
+                                <td>Installs git and optionally sets up a git server as a daemon under runit</td>
+                            </tr>
+                            <tr>
+                                <td>wget_windows</td>
+                                <td>Installs wget on windows</td>
+                            </tr>
+                            <!--15th set-->
+                            <tr>
+                                <td>toad_windows</td>
+                                <td>Installation and Configuration of TOAD</td>
+                            </tr>
+                            <tr>
+                                <td>docker</td>
+                                <td>Installation and Configuration of docker engine</td>
+                            </tr>
+                            <tr>
+                                <td>jenkins</td>
+                                <td>Installs and configures Jenkins CI master &amp; node slaves</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--modal for help ends here-->
     
     <script src="js/libs/jquery-2.0.2.min.js"></script>
     <script src="js/libs/jquery-ui-1.10.3.min.js"></script>
@@ -261,10 +628,9 @@
 
     
     
-    <!-- MAIN APP JS FILE -->
-    <script type="text/javascript">
-
-var a,b,x;
+<!-- MAIN APP JS FILE -->
+<script type="text/javascript">
+var a, b, x;
 String.prototype.capitalizeFirstLetter = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }
@@ -349,16 +715,11 @@ function setleftnavigation(toplink, breadcrumbHeader) {
     }
 
     if ($(toplink).hasClass('active')) {
-        //alert('about to return setleftnavigation:' + $(toplink).attr('href'));
         if ($(toplink).attr('id') == 'workZoneNew') {
-            //selectFirstEnv();
             selectEnv();
         }
-        // alert('returning');
         return;
     }
-    //showLoader();
-    //$('a[onclick*="setleftnavigation"]').removeClass('active').find("i").removeClass('txt-color-blue');
     $('.navigationTab').removeClass('active').find("i").removeClass('txt-color-blue');
     $(toplink).addClass('active').find('i').addClass('txt-color-blue');
     $('nav > ul').addClass('hidden'); //hiding all navigation elements
@@ -373,11 +734,9 @@ function setleftnavigation(toplink, breadcrumbHeader) {
     }
     if (breadcrumbHeader == 'org') {
         window.selectedOrgName = $('.orgSelected').find('span').text();
-        //selectFirstEnv();
-        //selecting the first item in the org tree.
     } else {
         //Reverting the warning message when no org present
-        $('#content').removeClass('hidden').removeAttr('style','height:100% !important');
+        $('#content').removeClass('hidden').removeAttr('style', 'height:100% !important');
         $('#noenvwarning').addClass('hidden');
         $('#noEnvError').addClass('hidden');
         $('ol.breadcrumb').removeClass('hidden');
@@ -386,19 +745,11 @@ function setleftnavigation(toplink, breadcrumbHeader) {
     //Setting local storage with last selected tab
     localStorage.setItem("lasttabselected", $(toplink).attr('id'));
     if ($(toplink).attr('id') == 'workZoneNew') {
-        //alert('about to call selectFirstEnv');
-        // alert('selecting first env from setleftnavigation');
-        //selectFirstEnv();
         selectEnv();
     }
-    //alert($(toplink).attr('id'));
-
 }
 
 //Expanding the providers tree
-
-/*$('#blueprints').find('li a').first().trigger('click');
-    $('#blueprints').find('ul li a').first().trigger('click');*/
 var serviceURL = "../d4dMasters/";
 window.selectedOrgName = $('.orgSelected').text().trim();
 //alert('in');
@@ -456,7 +807,7 @@ var SettingTreeJson = [{
                 "selectable": true,
                 "icon": "fa fa-lg fa-fw fa-random"
 
-            },{
+            }, {
                 "name": "organizations",
                 "text": "Puppet Server",
                 "borderColor": "#000",
@@ -464,7 +815,7 @@ var SettingTreeJson = [{
                 "selectable": true,
                 "icon": "fa fa-lg fa-fw fa-random"
 
-            },{
+            }, {
                 "name": "organizations",
                 "text": "Nexus Server",
                 "borderColor": "#000",
@@ -472,7 +823,7 @@ var SettingTreeJson = [{
                 "selectable": true,
                 "icon": "fa fa-lg fa-fw fa-random"
 
-            },{
+            }, {
                 "name": "organizations",
                 "text": "Environments",
                 "borderColor": "#000",
@@ -505,7 +856,7 @@ var SettingTreeJson = [{
                 "href": "#ajax/Settings/ProvidersList.html",
                 "selectable": true,
                 "icon": "fa fa-lg fa-fw fa-sitemap"
-            },{
+            }, {
                 "name": "organizations",
                 "text": "CMDB",
                 "borderColor": "#000",
@@ -620,8 +971,8 @@ var SettingTreeJson = [{
             "href": "ajax/Settings/Catalyst-Guide.html",
             "selectable": true,
             "icon": "fa fa-lg fa-fw fa-file-pdf-o",
-            "target": "_blank",            
-        },{
+            "target": "_blank",
+        }, {
             "name": "Guide",
             "text": "Videos",
             "borderColor": "#000",
@@ -644,27 +995,15 @@ function loadSettingsTree() {
         expandIcon: 'fa fa-angle-right',
         levels: -1,
         onNodeSelected: function(event, node) {
-            /*Draw the braedcrumb from ol*/
-            //var ol = $("#ribbon ol.breadcrumb");
-            //if(ol.children().length == 0){
-
             drawBreadCrumb1();
             event.stopPropagation();
-            //  }
         }
     });
 
 }
-
-//changes for track Tree....
-
-
-
-
 var trackTree;
 
 function getTrackTreeDetails() {
-    //  alert('getting tree details');
     $.ajax({
         type: "get",
         dataType: "json",
@@ -674,7 +1013,7 @@ function getTrackTreeDetails() {
             trackTree = [];
 
             for (var i = 0; i < data.length; i++) {
-              //  console.table(trackTree);
+                //  console.table(trackTree);
                 trackTree.push({
                     "name": "data",
                     "text": data[i].type,
@@ -686,7 +1025,7 @@ function getTrackTreeDetails() {
                     "href": "javascript:void(0);"
                 });
                 for (var j = 0; j < data[i].itemUrls.length; j++) {
-                    
+
                     if (data[i].itemUrls[j].childItem.length > 0) {
                         trackTree[i].nodes.push({
                             "name": "parentData",
@@ -700,7 +1039,7 @@ function getTrackTreeDetails() {
                             "icon": "icon fa fa-lg fa-fw fa-files-o",
                             "nodes": []
                         });
-                        console.log("TrackAfter"+JSON.stringify(trackTree));
+                        console.log("TrackAfter" + JSON.stringify(trackTree));
                     } else {
                         trackTree[i].nodes.push({
                             "name": "parentData",
@@ -714,11 +1053,9 @@ function getTrackTreeDetails() {
                             "icon": "icon fa fa-lg fa-fw fa-files-o"
                         });
                     }
-                    console.log("TrackTree"+JSON.stringify(trackTree[0].nodes));
-                    
-                    for (var k = 0; k < data[i].itemUrls[j].childItem.length; k++) {
-                        //alert(JSON.stringify(trackTree));
+                    console.log("TrackTree" + JSON.stringify(trackTree[0].nodes));
 
+                    for (var k = 0; k < data[i].itemUrls[j].childItem.length; k++) {
                         trackTree[i].nodes[j].nodes.push({
                             "name": "childData",
                             "text": data[i].itemUrls[j].childItem[k].name,
@@ -731,13 +1068,8 @@ function getTrackTreeDetails() {
                             "icon": "fa fa-fw fa-1x fa-desktop"
                         });
                     }
-                    // alert('child');
                 }
-
-
             }
-
-
             console.log(JSON.stringify(trackTree));
         }
     })
@@ -746,10 +1078,10 @@ function getTrackTreeDetails() {
 
 
 
-function loadTrackTree(){
-   // alert('tree loading');
+function loadTrackTree() {
+    // alert('tree loading');
     $('#trackTree').treeview({
-        data: trackTree, 
+        data: trackTree,
         enableLinks: true,
         collapseIcon: 'fa fa-angle-down',
         expandIcon: 'fa fa-angle-right',
@@ -758,7 +1090,7 @@ function loadTrackTree(){
             //alert(JSON.stringify(node));
             //alert('click');
             $("#content").empty();
-            $("#content").attr('style', 'height: 100%!important').append('<iframe src='+ node['data-href']+' style="width: 101% ! important; height: 97%! important; border: medium none;"></iframe>');
+            $("#content").attr('style', 'height: 100%!important').append('<iframe src=' + node['data-href'] + ' style="width: 101% ! important; height: 97%! important; border: medium none;"></iframe>');
             console.log($("#content")[0].innerHTML);
             event.stopPropagation();
             event.preventDefault();
@@ -771,9 +1103,9 @@ function loadTrackTree(){
 
 
 
-
 var treeData;
-function getTreeData(){
+
+function getTreeData() {
     $.ajax({
         type: "get",
         dataType: "json",
@@ -784,58 +1116,58 @@ function getTreeData(){
             console.log('ajax success');
             //alert('New Json' + JSON.stringify(data1));
             //lol=data1;
-                     
+
             //alert('loading tree');
             console.log(data1);
-           
+
         }
     });
 
 }
 
-function buildTree(){
-     $('#tree').empty().treeview({
-                data: treeData,
-                enableLinks: true,
-                collapseIcon: 'fa fa-angle-down',
-                expandIcon: 'fa fa-angle-right',
-                levels: 1,
-                onNodeSelected: function(event, node) {
-                     
-                    window.selectedOrgName = $('li[data-nodeid="' + node.nodeId + '"]').first().find('a').first().attr('orgname');
-                    //console.log("Org Selected:" + window.selectedOrgName );
-                    localStorage.setItem('selectedOrgName', $('li[data-nodeid="' + node.nodeId + '"]').first().find('a').first().attr('orgname'));
-                    localStorage.setItem('selectedOrgId', $('li[data-nodeid="' + node.nodeId + '"]').first().find('a').first().attr('orgid'));
-                    /*Description from the node*/
-                    localStorage.setItem("orgname", node.orgname);
-                    localStorage.setItem("projname", node.projname ? node.projname : node.text);
-                    localStorage.setItem("bgname", node.bgname);
-                    localStorage.setItem("envname", node.text);
-                    localStorage.setItem('itProjectActive', 'no');
+function buildTree() {
+    $('#tree').empty().treeview({
+        data: treeData,
+        enableLinks: true,
+        collapseIcon: 'fa fa-angle-down',
+        expandIcon: 'fa fa-angle-right',
+        levels: 1,
+        onNodeSelected: function(event, node) {
 
-                    /*Draw the braedcrumb from ol*/
-                    var ol = $("#ribbon ol.breadcrumb");
-                    if (ol.children().length == 0) {
-                        drawBreadCrumb();
-                    }
-                    if (node.hasOwnProperty('itemtype') && node.itemtype === "proj") {
-                        localStorage.setItem('itProjectActive', 'yes');
-                    }
+            window.selectedOrgName = $('li[data-nodeid="' + node.nodeId + '"]').first().find('a').first().attr('orgname');
+            //console.log("Org Selected:" + window.selectedOrgName );
+            localStorage.setItem('selectedOrgName', $('li[data-nodeid="' + node.nodeId + '"]').first().find('a').first().attr('orgname'));
+            localStorage.setItem('selectedOrgId', $('li[data-nodeid="' + node.nodeId + '"]').first().find('a').first().attr('orgid'));
+            /*Description from the node*/
+            localStorage.setItem("orgname", node.orgname);
+            localStorage.setItem("projname", node.projname ? node.projname : node.text);
+            localStorage.setItem("bgname", node.bgname);
+            localStorage.setItem("envname", node.text);
+            localStorage.setItem('itProjectActive', 'no');
 
-                }
-            });
+            /*Draw the braedcrumb from ol*/
+            var ol = $("#ribbon ol.breadcrumb");
+            if (ol.children().length == 0) {
+                drawBreadCrumb();
+            }
+            if (node.hasOwnProperty('itemtype') && node.itemtype === "proj") {
+                localStorage.setItem('itProjectActive', 'yes');
+            }
+
+        }
+    });
 }
 
 var loadTreeFuncNew = function(lazy) {
-   // alert('load tree');
+    // alert('load tree');
     console.log('Loaded a tree');
-    if(lazy) {
+    if (lazy) {
         buildTree();
     } else {
         getTreeData();
         buildTree();
     }
-    
+
 }
 
 
@@ -880,12 +1212,9 @@ function getUrlParameter(sParam) {
 
 //Special key to bring up the logs window
 
-$(document).keypress("l",function(e) {
-  if(e.ctrlKey && e.altKey && ( String.fromCharCode(e.which) === 'l' || String.fromCharCode(e.which) === 'L' ))
-    {
-        // viewlogger();
-        // $('#myModal').modal('show');    
-        window.open('/private/catlog.html','Catalyst Log');
+$(document).keypress("l", function(e) {
+    if (e.ctrlKey && e.altKey && (String.fromCharCode(e.which) === 'l' || String.fromCharCode(e.which) === 'L')) {  
+        window.open('/private/catlog.html', 'Catalyst Log');
     }
 });
 
@@ -909,13 +1238,11 @@ window.getUrlParams = function(url) {
 };
 
 function selectFirstEnvironment() {
-    //alert('selecting first env');
     var $workspaceTree = $('#Workspace1');
     var $orgLink = $workspaceTree.find('a[itemtype="org"][bgId][projId][envId]');
-    //alert($orgLink.length);
     if ($orgLink.length) {
         $orgLink = $orgLink.first().click();
-        console.log(' envIds===   ',$orgLink.attr('bgId'),$orgLink.attr('projId'),$orgLink.attr('envId'));
+        console.log(' envIds===   ', $orgLink.attr('bgId'), $orgLink.attr('projId'), $orgLink.attr('envId'));
         var $bgLink = $workspaceTree.find('a[rowid="' + $orgLink.attr('bgId') + '"]').click();
         var $projLink = $workspaceTree.find('a[rowid="' + $orgLink.attr('projId') + '"]').click();
         var $envLink = $workspaceTree.find('a[rowid="' + $orgLink.attr('envId') + '"]');
@@ -923,7 +1250,7 @@ function selectFirstEnvironment() {
         $envLink.click();
         return true;
     } else {
-        $('#workZoneNew').attr('href','#');
+        $('#workZoneNew').attr('href', '#');
         return false;
     }
 }
@@ -937,7 +1264,6 @@ function selectEnv() {
     if (!url) {
         url = window.location.href;
     }
-   // alert(url);
     var urlParams = getUrlParams(url);
     console.log(urlParams);
     var $orgLink;
@@ -972,14 +1298,12 @@ function selectEnv() {
         }
         //alert(envFound);
         if (!envFound) {
-            console.log('treenodes',treeNodes);
+            console.log('treenodes', treeNodes);
             for (var i = treeNodes.length - 1; i >= 0; i--) {
-                //alert('clicking' + treeNodes[i].text() + treeNodes[i].parents('li').length);
-
                 treeNodes[i].click();
             }
             loadTreeFuncNew(true);
-           envFound = selectFirstEnvironment();
+            envFound = selectFirstEnvironment();
         }
 
 
@@ -992,49 +1316,26 @@ function selectEnv() {
         $('#noenvwarning').removeClass('hidden');
         $('ol.breadcrumb').addClass('hidden');
     } else {
-        $('#content').removeClass('hidden').removeAttr('style','height:100% !important');
+        $('#content').removeClass('hidden').removeAttr('style', 'height:100% !important');
     }
-
-
-
 }
-
-
-/*Created a new Method for selecting any enviornment*/
-
-/*End of selectAnyEnviornment*/
-//loadTreeFuncNew();
-
 
 //Renavigate to the tab that was previously selected.
 checkandnavigatetotab = function() {
     //has tab in LS
     var ltab = localStorage.getItem("lasttabselected");
-    //alert(ltab);
     if (ltab) {
-        //trigger click on tab
-        //alert('about to click on ' + ltab);
-        //alert('tab loading');
         $('#' + ltab).trigger('click');
         drawBreadCrumb();
     } else { //will be a first time load
         console.log('selecting first env');
-        //selectFirstEnv();
-        //selectEnv();
         $('#workZoneNew').trigger('click');
     }
 };
 checkandnavigatetotab();
 loadSettingsTree();
-//getTrackTreeDetails();
-//loadTrackTree();
 foldTreeForSetting();
-
-
-
-
-//function ends
-</script>
+    </script>
 
 <script src="js/chefmodalcommon.js"></script>
 <script src="js/jquerytemplatemin.js"></script>
