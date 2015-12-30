@@ -28,16 +28,13 @@ try {
     appUrlsConfig = null;
 }
 
-
 if (configJson) {
     var config = JSON.parse(configJson);
-    //console.log(config);
 }
 
 if (appUrlsConfig) {
     appUrlsConfig = JSON.parse(appUrlsConfig);
 }
-
 
 config.appUrls = appUrlsConfig.appUrls;
 

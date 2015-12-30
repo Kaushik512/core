@@ -1,3 +1,12 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
+// This file act as a Controller which contains puppet related all end points.
+
 var Puppet = require('_pr/lib/puppet.js');
 var masterUtil = require('_pr/lib/utils/masterUtil');
 var errorResponses = require('./error_responses');
@@ -20,7 +29,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
         if(req.params.puppetServerId) {
             next();
         } else {
-            res.send(400,{
+            res.status(400).send({
                 message:"Invalid puppet server id"
             })
             return;
@@ -32,10 +41,10 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
         masterUtil.getCongifMgmtsById(req.params.puppetServerId, function(err, puppetData) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
-            console.log('puppet db ==> ', puppetData);
+            logger.debug('puppet db ==> ', puppetData);
             if (!puppetData || puppetData.configType !== 'puppet') {
                 res.send(404, {
                     message: "puppet server not found"
@@ -50,10 +59,10 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
         masterUtil.getCongifMgmtsById(req.params.puppetServerId, function(err, puppetData) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
-            console.log('puppet db ==> ', puppetData);
+            logger.debug('puppet db ==> ', puppetData);
             if (!puppetData || puppetData.configType !== 'puppet') {
                 res.send(404, {
                     message: "puppet server not found"
@@ -70,11 +79,11 @@ module.exports.setRoutes = function(app, verificationFunc) {
             } else {
                 puppetSettings.password = puppetData.puppetpassword;
             }
-            console.log('puppet pemfile ==> ' + puppetSettings.pemFileLocation);
+            logger.debug('puppet pemfile ==> ' + puppetSettings.pemFileLocation);
             var puppet = new Puppet(puppetSettings);
             puppet.getEnvironments(function(err, data) {
                 if (err) {
-                    res.send(500, err);
+                    res.status(500).send( err);
                     return;
                 }
                 res.send(200, data);
@@ -86,10 +95,10 @@ module.exports.setRoutes = function(app, verificationFunc) {
     app.post('/puppet/:puppetServerId/environments', function(req, res) {
         masterUtil.getCongifMgmtsById(req.params.puppetServerId, function(err, puppetData) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
-            console.log('puppet db ==> ', puppetData);
+            logger.debug('puppet db ==> ', puppetData);
             if (!puppetData || puppetData.configType !== 'puppet') {
                 res.send(404, {
                     message: "puppet server not found"
@@ -107,11 +116,11 @@ module.exports.setRoutes = function(app, verificationFunc) {
             } else {
                 puppetSettings.password = puppetData.puppetpassword;
             }
-            console.log('puppet pemfile ==> ' + puppetSettings.pemFileLocation);
+            logger.debug('puppet pemfile ==> ' + puppetSettings.pemFileLocation);
             var puppet = new Puppet(puppetSettings);
             puppet.createEnvironment(req.body.envName, function(err, data) {
                 if (err) {
-                    res.send(500, err);
+                    res.status(500).send( err);
                     return;
                 }
                 res.send(200, data);
@@ -123,10 +132,10 @@ module.exports.setRoutes = function(app, verificationFunc) {
     app.get('/puppet/:puppetServerId/nodes', function(req, res) {
         masterUtil.getCongifMgmtsById(req.params.puppetServerId, function(err, puppetData) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
-            console.log('puppet db ==> ', puppetData);
+            logger.debug('puppet db ==> ', puppetData);
             if (!puppetData || puppetData.configType !== 'puppet') {
                 res.send(404, {
                     message: "puppet server not found"
@@ -143,11 +152,11 @@ module.exports.setRoutes = function(app, verificationFunc) {
             } else {
                 puppetSettings.password = puppetData.puppetpassword;
             }
-            console.log('puppet pemfile ==> ' + puppetSettings.pemFileLocation);
+            logger.debug('puppet pemfile ==> ' + puppetSettings.pemFileLocation);
             var puppet = new Puppet(puppetSettings);
             puppet.getNodesList(function(err, data) {
                 if (err) {
-                    res.send(500, err);
+                    res.status(500).send( err);
                     return;
                 }
                 res.send(200, data);
@@ -160,10 +169,10 @@ module.exports.setRoutes = function(app, verificationFunc) {
     app.get('/puppet/:puppetServerId/nodes/:nodeName', function(req, res) {
         masterUtil.getCongifMgmtsById(req.params.puppetServerId, function(err, puppetData) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send( errorResponses.db.error);
                 return;
             }
-            console.log('puppet db ==> ', puppetData);
+            logger.debug('puppet db ==> ', puppetData);
             if (!puppetData || puppetData.configType !== 'puppet') {
                 res.send(404, {
                     message: "puppet server not found"
@@ -180,11 +189,11 @@ module.exports.setRoutes = function(app, verificationFunc) {
             } else {
                 puppetSettings.password = puppetData.puppetpassword;
             }
-            console.log('puppet pemfile ==> ' + puppetSettings.pemFileLocation);
+            logger.debug('puppet pemfile ==> ' + puppetSettings.pemFileLocation);
             var puppet = new Puppet(puppetSettings);
             puppet.getNode(req.params.nodeName, function(err, data) {
                 if (err) {
-                    res.send(500, err);
+                    res.status(500).send( err);
                     return;
                 }
                 res.send(200, data);
@@ -194,7 +203,6 @@ module.exports.setRoutes = function(app, verificationFunc) {
     });
 
     app.post('/puppet/:puppetServerId/sync/nodes', function(req, res) {
-
 
         var taskStatusObj = null;
         var puppet = null;
@@ -245,7 +253,6 @@ module.exports.setRoutes = function(app, verificationFunc) {
             hardwareData.architecture = nodeValues.hardwaremodel;
             hardwareData.platform = nodeValues.operatingsystem;
             hardwareData.platformVersion = nodeValues.operatingsystemrelease;
-
             hardwareData.memory.total = nodeValues.memorysize;
             hardwareData.memory.free = nodeValues.memoryfree;
 
@@ -261,7 +268,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     credentials.pemFileLocation = appConfig.tempDir + uuid.v4();
                     fileIo.writeFile(credentials.pemFileLocation, reqBody.credentials.pemFileData, null, function(err) {
                         if (err) {
-                            console.log('unable to create pem file ', err);
+                            logger.debug('unable to create pem file ', err);
                             callback(err, null);
                             return;
                         }
@@ -274,7 +281,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                         var tempPemFileLocation = appConfig.tempDir + uuid.v4();
                         fileIo.copyFile(appConfig.aws.pemFileLocation + appConfig.aws.pemFile, tempPemFileLocation, function() {
                             if (err) {
-                                console.log('unable to copy pem file ', err);
+                                logger.debug('unable to copy pem file ', err);
                                 callback(err, null);
                                 return;
                             }
@@ -304,8 +311,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                         return;
                     }
 
-                    console.log('nodeip ==> ', nodeIp);
-
+                    logger.debug('nodeip ==> ', nodeIp);
                     var instance = {
                         name: nodeName,
                         orgId: orgId,
@@ -357,13 +363,13 @@ module.exports.setRoutes = function(app, verificationFunc) {
             status.message = msg;
             status.err = err;
 
-            console.log('taskstatus updated');
+            logger.debug('taskstatus updated');
 
             if (count == reqBody.selectedNodes.length) {
-                console.log('setting complete');
+                logger.debug('setting complete');
                 taskstatus.endTaskStatus(true, status);
             } else {
-                console.log('setting task status');
+                logger.debug('setting task status');
                 taskstatus.updateTaskStatus(status);
             }
 
@@ -393,9 +399,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                 logger.debug('creating env ==>', node.environment);
                                 logger.debug('orgId ==>', orgId);
                                 logger.debug('bgid ==>', bgId);
-                                // console.log('node ===>', node);
                                 environmentsDao.createEnv(node.environment, orgId, bgId, projectId, function(err, data) {
-
                                     if (err) {
                                         logger.debug(err, 'occured in creating environment in mongo');
                                         updateTaskStatusNode(nodeName, "Error while creating environment in catalyst. Unable to import node : " + nodeName, true, count);
@@ -424,7 +428,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
                                     instancesDao.getInstanceByOrgAndNodeNameOrIP(orgId, nodeName, nodeIp, function(err, instances) {
                                         if (err) {
-                                            console.log('Unable to fetch instance', err);
+                                            logger.debug('Unable to fetch instance', err);
                                             updateTaskStatusNode(node.name, "Unable to import node : " + node.name, true, count);
                                             return;
                                         }
@@ -445,7 +449,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                         logger.debug('checking port for node with ip : ' + nodeIp);
                                         waitForPort(nodeIp, openport, function(err) {
                                             if (err) {
-                                                console.log(err);
+                                                logger.debug(err);
                                                 updateTaskStatusNode(node.name, "Unable to ssh/winrm into node " + node.name + ". Cannot import this node.", true, count);
                                                 return;
                                             }
@@ -487,7 +491,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             } else {
                 puppetSettings.password = puppetData.puppetpassword;
             }
-            console.log('puppet pemfile ==> ' + puppetSettings.pemFileLocation);
+            logger.debug('puppet pemfile ==> ' + puppetSettings.pemFileLocation);
             puppet = new Puppet(puppetSettings);
             if (reqBody.selectedNodes.length) {
                 importNodes(reqBody.selectedNodes);
@@ -497,9 +501,5 @@ module.exports.setRoutes = function(app, verificationFunc) {
             }
 
         });
-
     });
-
-
-
 };

@@ -1,6 +1,14 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
 var childProcess = require('child_process');
 var util = require('util');
 var extend = require('extend');
+var logger = require('_pr/logger')(module);
 
 var defaults = {
     cwd: null,
@@ -16,8 +24,6 @@ var Process = function(appPath, argList, options) {
     var onStdErr = null;
     var onClose = null;
     var onError = null;
-
-
 
     if (options) {
         var def = extend({}, defaults);
@@ -50,33 +56,31 @@ var Process = function(appPath, argList, options) {
     }
 
     this.start = function() {
-        console.log(appPath + " " + argList.join(' '));
+        logger.debug(appPath + " " + argList.join(' '));
         proc = exec(appPath + " " + argList.join(' '), options, function(err, stdOut, stdErr) {
             if (err) {
-                console.log(err);
+                logger.debug(err);
                 return;
             }
         });
-        //proc = spawn(appPath, argList, options);
-
         
         processRunning = true;
         if (typeof onStdOut === 'function') {
             proc.stdout.on('data', function(data) {
-                console.log('process stdout: ==> ' + data);
+                logger.debug('process stdout: ==> ' + data);
                 onStdOut(data);
             });
         }
 
         if (typeof onStdErr === 'function') {
             proc.stderr.on('data', function(errData) {
-                console.log('process stderr: ==> ' + errData);
+                logger.debug('process stderr: ==> ' + errData);
                 onStdErr(errData);
             });
         }
         if (typeof onClose === 'function') {
             proc.on('close', function(code) {
-                console.log('process return code ==> '+code);
+                logger.debug('process return code ==> '+code);
                 processRunning = false;
                 onClose(code);
             });
@@ -85,8 +89,8 @@ var Process = function(appPath, argList, options) {
         if (typeof onError === 'function') {
             proc.on('error', function(error) {
                 processRunning = false;
-                console.log("Error is spawning process");
-                console.log(error);
+                logger.debug("Error is spawning process");
+                logger.debug(error);
                 onError(error);
             });
         }
@@ -101,7 +105,5 @@ var Process = function(appPath, argList, options) {
     }
 
 }
-
-
 
 module.exports = Process;

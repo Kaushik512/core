@@ -1,3 +1,11 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
+// This file act as a Controller which contains blueprint related all end points.
 var Blueprints = require('_pr/model/blueprint');
 
 var instancesDao = require('../model/classes/instance/instance');
@@ -16,26 +24,18 @@ var AWSProvider = require('../model/classes/masters/cloudprovider/awsCloudProvid
 var VMImage = require('../model/classes/masters/vmImage.js');
 var currentDirectory = __dirname;
 var AWSKeyPair = require('../model/classes/masters/cloudprovider/keyPair.js');
-
 var credentialcryptography = require('../lib/credentialcryptography');
-
 var CloudFormation = require('_pr/model/cloud-formation');
-
 var AWSCloudFormation = require('_pr/lib/awsCloudFormation.js');
 var errorResponses = require('./error_responses');
 var Openstack = require('_pr/lib/openstack');
 var openstackProvider = require('_pr/model/classes/masters/cloudprovider/openstackCloudProvider.js');
-
 var Hppubliccloud = require('_pr/lib/hppubliccloud.js');
 var hppubliccloudProvider = require('_pr/model/classes/masters/cloudprovider/hppublicCloudProvider.js');
-
 var AzureCloud = require('_pr/lib/azure.js');
 var azureProvider = require('_pr/model/classes/masters/cloudprovider/azureCloudProvider.js');
-
-
 var VmwareCloud = require('_pr/lib/vmware.js');
 var vmwareProvider = require('_pr/model/classes/masters/cloudprovider/vmwareCloudProvider.js');
-
 var AwsAutoScaleInstance = require('_pr/model/aws-auto-scale-instance');
 var ARM = require('_pr/lib/azure-arm.js');
 var fs = require('fs');
@@ -53,7 +53,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var user = req.session.user;
         var category = 'blueprints';
         var permissionto = 'create';
-
+        var blueprintType = req.body.blueprintData.blueprintType;
         usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
             if (!err) {
                 logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
@@ -81,14 +81,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 templateId: req.body.blueprintData.templateId,
                 templateType: req.body.blueprintData.templateType,
                 users: req.body.blueprintData.users,
-                blueprintType: req.body.blueprintData.blueprintType
+                blueprintType: blueprintType
 
             };
 
             var dockerData, instanceData, cloudFormationData;
-            logger.debug('req.body.blueprintData.blueprintType ==>', req.body.blueprintData.blueprintType);
 
-            if (req.body.blueprintData.blueprintType === 'docker') {
+            if (blueprintType === 'docker') {
                 console.log('heree 1');
                 dockerData = {
                     dockerContainerPathsTitle: req.body.blueprintData.dockercontainerpathstitle,
@@ -101,8 +100,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 };
                 blueprintData.dockerData = dockerData;
 
-            } else if (req.body.blueprintData.blueprintType === 'instance_launch') {
-                logger.debug('req.body.blueprintData.blueprintType ==>', req.body.blueprintData.blueprintType);
+            } else if (blueprintType === 'instance_launch') {
                 instanceData = {
                     keyPairId: req.body.blueprintData.keyPairId,
                     securityGroupIds: req.body.blueprintData.securityGroupIds,
@@ -119,7 +117,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     runlist: req.body.blueprintData.runlist
                 }
                 blueprintData.instanceData = instanceData;
-            } else if (req.body.blueprintData.blueprintType === 'aws_cf') {
+            } else if (blueprintType === 'aws_cf') {
 
                 cloudFormationData = {
                     cloudProviderId: req.body.blueprintData.cftProviderId,

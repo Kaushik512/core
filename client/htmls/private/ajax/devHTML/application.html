@@ -1509,140 +1509,157 @@ $('.saveNewAppDeploy').on('click', function() {
 });
 
 // Deploy New App for Docker Container
-function deployNewForDocker() {
-	var nexusId = $('#chooseNexusServer').find('option:selected').val();
-	if (!nexusId) {
-		alert("Please select repository server.");
-		return false;
-	}
-	var repoId = $('#chooseRepository').find('option:selected').val();
-	if (!repoId) {
-		alert("Please select repository.");
-		return false;
-	}
-	var containerId = $('#containerIdInput').val();
-	var containerPort = $('#containerPort').val();
+function deployNewForDocker(){
+    var nexusId = $('#chooseNexusServer').find('option:selected').val();
+    if(!nexusId){
+        alert("Please select repository server.");
+        return false;
+    }
+    var repoId = $('#chooseRepository').find('option:selected').val();
+    if(!repoId){
+        alert("Please select repository.");
+        return false;
+    }
+    var containerId = $('#containerIdInput').val();
+    var containerPort = $('#containerPort').val();
 
-	if (!containerPort) {
-		alert("Please specify port.");
-		return false;
-	}
-	var taskId = $('#chooseJobType').find('option:selected').val();
-	if (!taskId) {
-		alert("Please select job.");
-		return false;
-	}
-	var orgId = urlParams.org;
-	var bgId = urlParams.bg;
-	var projectId = urlParams.projid;
-	var envId = urlParams.envid;
-	var appName = repoId.split("/")[1];
-	var upgrade = $('#upgradeValue').val();
-	var nexusData = {
-		"nexusData": {
-			"nexusUrl": "",
-			"version": "",
-			"containerId": containerId,
-			"containerPort": containerPort,
-			"dockerRepo": repoId,
-			"upgrade": upgrade
-		}
-	};
+    if(!containerPort){
+        alert("Please specify port.");
+        return false;
+    }
+    var taskId = $('#chooseJobType').find('option:selected').val();
+    if(!taskId){
+        alert("Please select job.");
+        return false;
+    }
+    var orgId = urlParams.org;
+    var bgId = urlParams.bg;
+    var projectId = urlParams.projid;
+    var envId = urlParams.envid;
+    var appName = repoId.split("/")[1];
+    var upgrade = $('#upgradeValue').val();
+    var nexusData={
+        "nexusData":{
+            "nexusUrl": "",
+            "version": "",
+            "containerId": containerId,
+            "containerPort": containerPort,
+            "dockerRepo": repoId,
+            "upgrade": upgrade,
+            "projectId": projectId
+        }
+    };
 
-	$.get('/d4dMasters/project/' + projectId, function(projData) {
-		if (projData.length) {
-			var reqBody = {
-				"appName": appName,
-				"description": appName + " deployed."
-			};
-			$.ajax({
-				url: '/d4dMasters/project/' + projectId + '/appdeploy/appName/update',
-				data: JSON.stringify(reqBody),
-				type: 'POST',
-				contentType: "application/json",
-				success: function(data) {},
-				error: function(jqxhr) {
-					//alert("Failed to update update appName in Project.")
-				}
-			});
-		}
-	});
-	$('a[data-executetaskid=' + taskId + ']').trigger('click', nexusData);
-	$('#modalUpgradeAppDeploy').modal('hide');
-	var $containerIdName = $('#containerIdInput').val('');
+    $.get('/d4dMasters/project/'+projectId, function(projData) {
+        if(projData.length){
+                var reqBody = {
+                    "appName": appName,
+                    "description": appName+" deployed."
+                };
+                $.ajax({
+                    url: '/d4dMasters/project/'+projectId+'/appdeploy/appName/update',
+                    data: JSON.stringify(reqBody),
+                    type: 'POST',
+                    contentType: "application/json",
+                    success: function(data) { 
+                    },
+                    error: function(jqxhr) {
+                        //alert("Failed to update update appName in Project.")
+                    }
+                });
+        }
+    });
+        $('a[data-executetaskid='+taskId+']').trigger('click',nexusData);
+        $('#modalUpgradeAppDeploy').modal('hide');
+        var $containerIdName = $('#containerIdInput').val('');
 }
 
-function upgradeOrDeploy() {
-	var nexusId = $('#chooseNexusServer').find('option:selected').val();
-	if (!nexusId) {
-		alert("Please select repository server.");
-		return false;
-	}
-	var repoId = $('#chooseRepository').find('option:selected').val();
-	if (!repoId) {
-		alert("Please select repository.");
-		return false;
-	}
-	var artifactId = $('#chooseArtifacts').find('option:selected').val();
-	if (!artifactId) {
-		alert("Please select artifact.");
-		return false;
-	}
-	var versionId = $('#chooseVersions').find('option:selected').val();
-	if (!versionId) {
-		alert("Please select version.");
-		return false;
-	}
-	var taskId = $('#chooseJobType').find('option:selected').val();
-	if (!taskId) {
-		alert("Please select job.");
-		return false;
-	}
-	var orgId = urlParams.org;
-	var bgId = urlParams.bg;
-	var projectId = urlParams.projid;
-	var envId = urlParams.envid;
-	var groupId = $('#chooseArtifacts').find('option:selected').attr('data-groupId').replace(/\./g, '/');
-	var nexusUrl = $('#chooseNexusServer').find('option:selected').attr('data-nexusUrl');
-	var nexusRepoUrl = "";
-	if (repoId === "petclinic") {
-		nexusRepoUrl = nexusUrl + "/service/local/repositories/" + repoId + "/content/" + groupId + "/" + artifactId + "/" + versionId + "/" + artifactId + "-" + versionId + ".war";
-	} else {
-		nexusRepoUrl = nexusUrl + "/service/local/repositories/" + repoId + "/content/" + groupId + "/" + artifactId + "/" + versionId + "/" + artifactId + "-" + versionId + ".zip";
-	}
-	var upgrade = $('#upgradeValue').val();
-	var nexusData = {
-		"nexusData": {
-			"nexusUrl": nexusRepoUrl,
-			"version": versionId,
-			"containerId": "",
-			"containerPort": "",
-			"dockerRepo": "",
-			"upgrade": upgrade
-		}
-	};
+function upgradeOrDeploy(){
+    var nexusId = $('#chooseNexusServer').find('option:selected').val();
+    if(!nexusId){
+        alert("Please select repository server.");
+        return false;
+    }
+    var repoId = $('#chooseRepository').find('option:selected').val();
+    if(!repoId){
+        alert("Please select repository.");
+        return false;
+    }
+    var artifactId = $('#chooseArtifacts').find('option:selected').val();
+    if(!artifactId){
+        alert("Please select artifact.");
+        return false;
+    }
+    var versionId = $('#chooseVersions').find('option:selected').val();
+    if(!versionId){
+        alert("Please select version.");
+        return false;
+    }
+    var taskId = $('#chooseJobType').find('option:selected').val();
+    if(!taskId){
+        alert("Please select job.");
+        return false;
+    }
+    var orgId = urlParams.org;
+    var bgId = urlParams.bg;
+    var projectId = urlParams.projid;
+    var envId = urlParams.envid;
+    var groupId = $('#chooseArtifacts').find('option:selected').attr('data-groupId').replace(/\./g, '/');
+    var nexusUrl = $('#chooseNexusServer').find('option:selected').attr('data-nexusUrl');
+    var nexusRepoUrl = "";
+    if(repoId === "petclinic"){
+        nexusRepoUrl = nexusUrl+"/service/local/repositories/"+repoId+"/content/"+groupId+"/"+artifactId+"/"+versionId+"/"+artifactId+"-"+versionId+".war";
+    }else{
+        nexusRepoUrl = nexusUrl+"/service/local/repositories/"+repoId+"/content/"+groupId+"/"+artifactId+"/"+versionId+"/"+artifactId+"-"+versionId+".zip";
+    }
+    
+    /*var containerId = $('#containerIdInput').val();
+    var containerPort = $('#containerPort').val();*/
+    //alert(containerPort);
+    var upgrade = $('#upgradeValue').val();
+    var nexusData={
+        "nexusData":{
+            "nexusUrl": nexusRepoUrl,
+            "version": versionId,
+            "containerId": "",
+            "containerPort": "",
+            "dockerRepo": "",
+            "upgrade": upgrade,
+            "projectId": projectId
+        }
+    };
 
-	$.get('/d4dMasters/project/' + projectId, function(projData) {
-		if (projData.length) {
-			var reqBody = {
-				"appName": repoId,
-				"description": repoId + " deployed."
-			};
-			$.ajax({
-				url: '/d4dMasters/project/' + projectId + '/appdeploy/appName/update',
-				data: JSON.stringify(reqBody),
-				type: 'POST',
-				contentType: "application/json",
-				success: function(data) {
+    /*if(containerId && containerId != "NA"){
+        nexusData.nexusData.containerId = containerId;
+        nexusData.nexusData.containerPort = containerPort;
+        nexusData.nexusData.dockerRepo = repoId;
+    }*/
 
-				},
-				error: function(jqxhr) {}
-			});
-		}
-	});
-	$('a[data-executetaskid=' + taskId + ']').trigger('click', nexusData);
-	$('#modalUpgradeAppDeploy').modal('hide');
-	var $containerIdName = $('#containerIdInput').val('');
+    $.get('/d4dMasters/project/'+projectId, function(projData) {
+        //alert(projData);
+        if(projData.length){
+            var reqBody = {
+                "appName": repoId,
+                "description": repoId+" deployed."
+                };
+                $.ajax({
+                    url: '/d4dMasters/project/'+projectId+'/appdeploy/appName/update',
+                    data: JSON.stringify(reqBody),
+                    type: 'POST',
+                    contentType: "application/json",
+                    success: function(data) { 
+            
+                    },
+                    error: function(jqxhr) {
+                        //alert("Failed to update update appName in Project.")
+                    }
+                });
+        }
+    });
+        //alert(JSON.stringify(nexusData));
+        $('a[data-executetaskid='+taskId+']').trigger('click',nexusData);
+        $('#modalUpgradeAppDeploy').modal('hide');
+        var $containerIdName = $('#containerIdInput').val('');
 }
 
 function saveRecord() {

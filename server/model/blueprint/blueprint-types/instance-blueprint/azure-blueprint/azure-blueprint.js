@@ -1,3 +1,10 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
 var logger = require('_pr/logger')(module);
 var mongoose = require('mongoose');
 var extend = require('mongoose-schema-extend');
@@ -55,7 +62,7 @@ var azureInstanceBlueprintSchema = new Schema({
         type: String,
         // required: true
     },
-    instanceCount:{
+    instanceCount: {
         type: String,
     },
     instanceAmiid: {
@@ -66,7 +73,7 @@ var azureInstanceBlueprintSchema = new Schema({
         type: String,
         required: true
     },
-    cloudProviderData : Schema.Types.Mixed,
+    cloudProviderData: Schema.Types.Mixed,
     infraMangerType: String,
     infraManagerId: String,
     infraManagerData: Schema.Types.Mixed
@@ -146,10 +153,10 @@ azureInstanceBlueprintSchema.methods.getCloudProviderData = function() {
 azureInstanceBlueprintSchema.statics.createNew = function(data) {
     var self = this;
     logger.debug('In azureInstanceBlueprintSchema createNew');
-   
+
     var infraManagerBlueprint = CHEFInfraBlueprint.createNew({
-            runlist: data.runlist
-        });
+        runlist: data.runlist
+    });
 
     logger.debug(JSON.stringify(data));
 

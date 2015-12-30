@@ -1,3 +1,10 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
 var mongoose = require('mongoose');
 var ObjectId = require('mongoose').Types.ObjectId;
 var validate = require('mongoose-validator');
@@ -137,15 +144,6 @@ ApplicationSchema.methods.addAppInstance = function(appInstanceData, callback) {
             callback(err, null);
             return;
         }
-        /*application.getNodes(function(err, nodes) {
-            if (err) {
-                logger.error(err);
-                callback(err, null);
-                return;
-            }
-            application.nodes = nodes;
-            callback(null, application);
-        });*/
         callback(null, appInstance);
     });
 };
@@ -182,8 +180,6 @@ ApplicationSchema.methods.removeAppInstance = function(appInstanceId, callback) 
         callback(null, appInstance);
     });
 };
-
-
 
 ApplicationSchema.methods.getAppInstance = function(appInstanceId) {
     var appInstances = this.appInstances;
@@ -335,34 +331,8 @@ ApplicationSchema.statics.getApplicationById = function(applicationId, callback)
             callback(err, null);
             return;
         }
-        //console.log('data ==>', data);
         if (applications.length) {
             var application = applications[0];
-            /*if (!(application.appInstances && applications.length)) {
-                callback(err, application);
-                return;
-            }
-            var count = 0;
-
-            function getAppInstancesNodes(appInstance) {
-                appInstance.getNodes(function(err, nodes) {
-                    count++;
-                    if (err) {
-                        callback(err, null);
-                        return;
-                    }
-                    appInstance.nodes = nodes;
-                    if (count < application.appInstances.length) {
-                        getAppInstancesNodes(application.appInstances[count]);
-                    } else {
-                        callback(null, application);
-                    }
-
-                });
-
-            }
-            getAppInstancesNodes(application.appInstances[count]);
-            */
             callback(null, application);
         } else {
             callback(null, null);
@@ -384,7 +354,7 @@ ApplicationSchema.statics.createNew = function(appData, callback) {
             return;
         }
         logger.debug('build saved ==>');
-        console.log(data);
+        logger.debug(data);
         appData.buildId = data._id;
         var application = new self(appData);
 

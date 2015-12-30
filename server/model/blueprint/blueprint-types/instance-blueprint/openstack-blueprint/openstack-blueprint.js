@@ -1,3 +1,10 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
 var logger = require('_pr/logger')(module);
 var mongoose = require('mongoose');
 var extend = require('mongoose-schema-extend');
@@ -50,13 +57,13 @@ var openstackInstanceBlueprintSchema = new Schema({
     subnet: {
         type: String,
         required: true,
-         trim: true
+        trim: true
     },
     instanceOS: {
         type: String,
         // required: true
     },
-    instanceCount:{
+    instanceCount: {
         type: String,
     },
     instanceImageName: {
@@ -65,7 +72,7 @@ var openstackInstanceBlueprintSchema = new Schema({
     },
     instanceUsername: {
         type: String
-        //required: true
+            //required: true
     },
     infraMangerType: String,
     infraManagerId: String,
@@ -143,18 +150,13 @@ openstackInstanceBlueprintSchema.methods.getCloudProviderData = function() {
     };
 };
 
-
-
-
 // static methods
 openstackInstanceBlueprintSchema.statics.createNew = function(awsData) {
     var self = this;
     logger.debug('In openstackInstanceBlueprintSchema createNew');
-   
-
     var infraManagerBlueprint = CHEFInfraBlueprint.createNew({
-            runlist: awsData.runlist
-        });
+        runlist: awsData.runlist
+    });
     awsData.infraManagerData = infraManagerBlueprint;
     awsData.infraMangerType = "chef";
     awsData.infraManagerId = awsData.infraManagerId;

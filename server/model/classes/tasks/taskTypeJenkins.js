@@ -1,3 +1,10 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
 var logger = require('_pr/logger')(module);
 var mongoose = require('mongoose');
 var extend = require('mongoose-schema-extend');
@@ -31,7 +38,6 @@ var jenkinsTaskSchema = taskTypeSchema.extend({
 jenkinsTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData, onExecute, onComplete) {
     logger.debug("Choice Param in::: ",choiceParam);
     var self = this;
-    //this.parameterized.name = choiceParam;
     configmgmtDao.getJenkinsDataFromId(this.jenkinsServerId, function(err, jenkinsData) {
         if (err) {
             logger.error('jenkins list fetch error', err);
@@ -71,7 +77,6 @@ jenkinsTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nex
                         var params = self.parameterized;
                         var param = {};
                         if (params.length > 0) {
-                            logger.debug("++++++++++++++++++++++++++++++++++ in: ",choiceParam);
                             if (choiceParam) {
                                 param = choiceParam;
                             } else {
@@ -84,17 +89,7 @@ jenkinsTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nex
                                 message: "No Parameter available for job:- " + self.jobName
                             });
                         }
-                        logger.debug("param object>>>>>>>>>>> ", JSON.stringify(param));
-                        /*var dummyObj = {
-                            "Catalyst_Setup": "testValGobinda",
-                            "mybool": false
-                        };
-                         var choiceParams = {
-                             "env": "cat3",
-                             "os": "windows",
-                             "author": "Gobinda Das"
-                         };*/
-                        
+                        logger.debug("param object: ", JSON.stringify(param));
                         jenkins.buildJobWithParams(self.jobName, param, function(err, buildRes) {
                             if (err) {
                                 logger.error(err);
@@ -168,7 +163,6 @@ jenkinsTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nex
                                 }
                                 return;
                             }
-                            //console.log('buildRes ==> ', buildRes);
                             logger.debug("buildRes ==> ", JSON.stringify(buildRes));
                             if (typeof onExecute === 'function') {
                                 onExecute(null, {

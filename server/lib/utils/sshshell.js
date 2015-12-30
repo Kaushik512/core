@@ -1,9 +1,16 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
 var fileIo = require('./fileio');
 var sshConnection = require('ssh2').Client;
 var EventEmitter = require('events').EventEmitter;
 var util = require("util");
 var extend = require('extend');
-
+var logger = require('_pr/logger')(module);
 
 var HOST_UNREACHABLE = -5000;
 var INVALID_CREDENTIALS = -5001;
@@ -11,8 +18,6 @@ var JSCH_EXCEPTION = -5002;
 var UNKOWN_EXCEPTION = -5003;
 var PEM_FILE_READ_ERROR = -5004;
 var STREAM_ERROR = -5005;
-
-
 
 var EVENTS = {
     ERROR: 'error',
@@ -60,7 +65,6 @@ function getConnectionParams(options, callback) {
             } else {
                 connectionParamsObj.password = options.password;
             }
-
         }
         process.nextTick(function() {
             callback(null, connectionParamsObj);
@@ -122,7 +126,7 @@ function SSHShell(connectionParamsObj) {
 
     if (connectionParamsObj.interactiveKeyboardPassword) {
         connection.on('keyboard-interactive', function(name, instructions, instructionsLang, prompts, finish) {
-            console.log('Connection :: keyboard-interactive');
+            logger.debug('Connection :: keyboard-interactive');
             finish([connectionParamsObj.interactiveKeyboardPassword]);
         });
 

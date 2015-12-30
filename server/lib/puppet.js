@@ -1,7 +1,13 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
 var SSHExec = require('./utils/sshexec');
 var https = require('https');
 var fs = require('fs');
-
 var Buffer = require('buffer');
 var logger = require('_pr/logger')(module);
 var util = require('util');
@@ -15,7 +21,6 @@ var config = require('_pr/config');
 var Puppet = function(settings) {
 
     var puppetConfig = null;
-
     var sshOptions = {
         username: settings.username,
         host: settings.host,
@@ -28,7 +33,7 @@ var Puppet = function(settings) {
         var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
         sshOptions.password = cryptography.decryptText(settings.password, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding);
         settings.password = sshOptions.password;
-        console.log(settings.password);
+        logger.debug(settings.password);
     }
 
     function runSSHCmd(sshOptions, cmds, onComplete, onStdOut, onStdErr) {
@@ -54,12 +59,6 @@ var Puppet = function(settings) {
     }
 
     function getPuppetConfig(callback) {
-        // if (puppetConfig) {
-        //     process.nextTick(function() {
-        //         callback(null, puppetConfig);
-        //     });
-        //     return;
-        // }
         var stdOutStr = '';
         var stdErrStr = '';
         var puppetConfig = {};
@@ -106,7 +105,7 @@ var Puppet = function(settings) {
         if (sshOptions.privateKey) {
             fs.chmod(sshOptions.privateKey, 0600, function(err) {
                 if (err) {
-                    console.log(err);
+                    logger.debug(err);
                     callback(err);
                     return;
                 }
@@ -207,30 +206,24 @@ var Puppet = function(settings) {
                         }
                         hostnamePuppetAgent = hostnamePuppetAgent.replace(/[\t\n\r\b\0\v\f\'\"\\]/g, '');
                         hostnamePuppetAgent = hostnamePuppetAgent.trim();
-                        
+
                         //deleting node from puppet agent if exist
                         self.deleteNode(hostnamePuppetAgent, function(err) {
-                            
+
                             // copying cookbook on client machine
                             var jsonAttributes = {
                                 "puppet_configure": {
                                     "cache_dir": "/var/chef/cache",
                                     "client": {
                                         "user": node.username,
-                                        //"pswd": "vagrant",
                                         "ipaddress": node.host,
                                         "fqdn": hostnamePuppetAgent,
                                         "environment": node.environment
-                                        //"ssh_pass_method": false,
-                                        //"pem_file": node.pemFileLocation
                                     },
                                     "puppet_master": {
                                         "user": settings.username,
-                                        //"pswd": "vagrant",
                                         "ipaddress": settings.host,
                                         "fqdn": hostNamePuppetMaster,
-                                        //"ssh_pass_method": false,
-                                        //"pem_file": settings.pemFileLocation
                                     }
                                 }
                             }
@@ -254,7 +247,7 @@ var Puppet = function(settings) {
                             var scp = new SCP(sshOptions);
                             scp.upload(__dirname + '/../cookbooks.tar', '/tmp', function(err) {
                                 if (err) {
-                                    console.log(err);
+                                    logger.debug(err);
                                     callback({
                                         message: "Unable to upload cookbooks onto the node",
                                         err: err
@@ -294,7 +287,6 @@ var Puppet = function(settings) {
                                             }
                                             // creating chef-solo.rb file
                                             var proc = new Process('echo "cookbook_path            [\'' + __dirname + '/../../seed/catalyst/cookbooks/' + '\']" > /etc/chef/solo.rb', [], {
-                                                //cwd: settings.userChefRepoLocation + '/.chef',
                                                 onError: function(err) {
                                                     callback({
                                                         message: "Unable to create solo.rb file on catalyst machine",
@@ -311,8 +303,6 @@ var Puppet = function(settings) {
                                                         return;
                                                     }
                                                     // running chef-solo
-
-
                                                     var argList = [];
                                                     argList.push('-o');
                                                     argList.push('recipe[puppet_configure::client_bootstrap]');
@@ -321,7 +311,6 @@ var Puppet = function(settings) {
                                                     argList.push(jsonAttributeFile);
 
                                                     var proc = new Process('chef-solo ' + argList.join(' '), [], {
-                                                        //cwd: settings.userChefRepoLocation + '/.chef',
                                                         onError: function(err) {
                                                             callback(err, null);
                                                         },
@@ -336,7 +325,7 @@ var Puppet = function(settings) {
                                                         },
                                                         onStdOut: function(stdOut) {
                                                             callbackStdOut(stdOut);
-                                                            console.log(stdOut.toString());
+                                                            logger.debug(stdOut.toString());
                                                         }
                                                     });
                                                     proc.start();
@@ -405,7 +394,7 @@ var Puppet = function(settings) {
                 callback(err, null);
                 return;
             }
-            console.log('envPath  == >' + puppetConfig.environmentpath);
+            logger.debug('envPath  == >' + puppetConfig.environmentpath);
             runSSHCmdOnMaster('ls ' + puppetConfig.environmentpath, function(err, retCode) {
                 if (err) {
                     callback(err, null);
@@ -487,11 +476,6 @@ var Puppet = function(settings) {
     };
 
     this.getNodesList = function(callback) {
-        /*getPuppetConfig(function(err, puppetConfig) {
-            if (err) {
-                callback(err, null);
-                return;
-            }*/
         var stdOutStr = '';
         var stdErrStr = '';
         this.getMasterHostName(function(err, masterHostname) {
@@ -512,10 +496,7 @@ var Puppet = function(settings) {
                     }, null);
                 } else {
                     logger.debug(stdOutStr)
-                    //stdOutStr = stdOutStr.replace(/[\t\n\r\b\0\v\f\\]/g, '');
-                    //stdOutStr = stdOutStr.split('  ');
                     var regEx = /\+\s*\"(.*?)\"/g;
-                    //nodes = stdOutStr.match(regEx)
                     var matches;
                     var nodes = [];
                     while (matches = regEx.exec(stdOutStr)) {
@@ -524,13 +505,6 @@ var Puppet = function(settings) {
                         }
 
                     }
-                    //var nodes = [];
-                    // for (var i = 0; i < stdOutStr.length; i++) {
-                    //     if (stdOutStr[i]) {
-                    //         var nodeName = stdOutStr[i].replace('.yaml', '');
-                    //         nodes.push(nodeName);
-                    //     }
-                    // }
                     callback(null, nodes);
                 }
             }, function(stdOut) {
@@ -540,7 +514,6 @@ var Puppet = function(settings) {
                 stdErrStr = stdErrStr + stdOut.toString('utf8');
             });
         });
-        //});
     };
 
     this.getNode = function(nodeName, callback) {
@@ -600,7 +573,7 @@ var Puppet = function(settings) {
     };
 
     this.runClient = function(options, callback, onStdOut, onStdErr) {
-        console.log('running client');
+        logger.debug('running client');
         var sshOptions = {
             username: options.username,
             host: options.host,
@@ -611,7 +584,7 @@ var Puppet = function(settings) {
         } else {
             sshOptions.password = options.password;
         }
-        console.log(sshOptions);
+        logger.debug(sshOptions);
 
         runSSHCmdOnAgent(sshOptions, 'puppet agent -t', function(err, retCode) {
             if (err) {
@@ -635,7 +608,7 @@ var Puppet = function(settings) {
     };
 
     this.cleanClient = function(options, callback, onStdOut, onStdErr) {
-        console.log('cleaning client');
+        logger.debug('cleaning client');
         var sshOptions = {
             username: options.username,
             host: options.host,
@@ -646,7 +619,7 @@ var Puppet = function(settings) {
         } else {
             sshOptions.password = options.password;
         }
-        console.log(sshOptions);
+        logger.debug(sshOptions);
 
         runSSHCmdOnAgent(sshOptions, ['rm -rf /etc/puppet', 'rm -rf /var/lib/puppet', 'rm -rf $HOME/.puppet', 'service puppet stop'], function(err, retCode) {
             if (err) {

@@ -6,17 +6,12 @@
  */
 
 var configmgmtDao = require('../model/d4dmasters/configmgmt.js');
-
 var Jenkins = require('../lib/jenkins');
-
 var errorResponses = require('./error_responses.js');
-
 var Tasks = require('../model/classes/tasks/tasks.js');
 var Application = require('../model/classes/application/application');
 var instancesDao = require('../model/classes/instance/instance');
 var TaskHistory = require('../model/classes/tasks/taskHistory');
-
-
 var logger = require('_pr/logger')(module);
 
 module.exports.setRoutes = function(app, sessionVerification) {
@@ -25,7 +20,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     app.get('/tasks/history/list/all', function(req, res) {
         TaskHistory.listHistory(function(err, tHistories) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             res.send(tHistories);
@@ -35,7 +30,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
     app.get('/tasks/list/all', function(req, res) {
         Tasks.listTasks(function(err, tasks) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             res.send(tasks);
@@ -46,7 +41,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         Tasks.getTaskById(req.params.taskId, function(err, task) {
             if (err) {
                 logger.error(err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (task) {
@@ -54,7 +49,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     configmgmtDao.getJenkinsDataFromId(task.taskConfig.jenkinsServerId, function(err, jenkinsData) {
                         if (err) {
                             logger.error('jenkins list fetch error', err);
-                            res.send(500, errorResponses.db.error);
+                            res.status(500).send(errorResponses.db.error);
                             return;
                         } else {
                             if (!(jenkinsData && jenkinsData.length)) {
@@ -82,19 +77,19 @@ module.exports.setRoutes = function(app, sessionVerification) {
         var choiceParam = req.body.choiceParam;
         logger.debug("Choice Param::: ", choiceParam);
         var nexusData = req.body.nexusData;
-        logger.debug("nexusData>>>>>>>>>>>>> ",JSON.stringify(nexusData));
+        logger.debug("nexusData: ", JSON.stringify(nexusData));
         Tasks.getTaskById(req.params.taskId, function(err, task) {
 
             if (err) {
                 logger.error(err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
 
-            task.execute(req.session.user.cn, req.protocol + '://' + req.get('host'), choiceParam,nexusData, function(err, taskRes, historyData) {
+            task.execute(req.session.user.cn, req.protocol + '://' + req.get('host'), choiceParam, nexusData, function(err, taskRes, historyData) {
                 if (err) {
                     logger.error(err);
-                    res.send(500, err);
+                    res.status(500).send(err);
                     return;
                 }
                 if (historyData) {
@@ -110,7 +105,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         Application.getBuildsByTaskId(req.params.taskId, function(err, builds) {
             if (err) {
                 logger.error(err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (builds && builds.length) {
@@ -122,13 +117,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 instancesDao.removeTaskIdFromAllInstances(req.params.taskId, function(err, deleteCount) {
                     if (err) {
                         logger.error(err);
-                        res.send(500, errorResponses.db.error);
+                        res.status(500).send(errorResponses.db.error);
                         return;
                     }
                     Tasks.removeTaskById(req.params.taskId, function(err, deleteCount) {
                         if (err) {
                             logger.error(err);
-                            res.send(500, errorResponses.db.error);
+                            res.status(500).send(errorResponses.db.error);
                             return;
                         }
                         if (deleteCount) {
@@ -149,7 +144,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         Tasks.getTaskById(req.params.taskId, function(err, data) {
             if (err) {
                 logger.error(err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (data) {
@@ -161,17 +156,15 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/tasks/:taskId/history', function(req, res) {
-
-
         Tasks.getTaskById(req.params.taskId, function(err, task) {
             if (err) {
                 logger.error(err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (task) {
                 var flag = false;
-                logger.debug("task.taskConfig.autoSyncFlag==== ", typeof task.taskConfig.autoSyncFlag);
+                logger.debug("autoSyncFlag: ", typeof task.taskConfig.autoSyncFlag);
                 if (task.taskConfig.autoSyncFlag === "true" || task.taskConfig.autoSyncFlag === true) {
                     flag = true;
                 }
@@ -186,10 +179,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     TaskHistory.getLast100HistoriesByTaskId(req.params.taskId, function(err, histories) {
                         if (err) {
                             logger.debug(errorResponses.db.error);
-                            res.send(500, errorResponses.db.error);
+                            res.status(500).send(errorResponses.db.error);
                             return;
                         }
-                        //logger.debug("---100 Last histories------",JSON.stringify(histories));
                         var historyResult = [];
                         var jobResult = [];
                         if (histories.length > 0) {
@@ -202,7 +194,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     logger.error('jenkins jobs fetch error', err);
 
                                 }
-                                //logger.debug("All Job info: ", JSON.stringify(job));
                                 if (job) {
                                     for (var j = 0; j < job.builds.length; j++) {
                                         var actualTimeStamp = new Date(job.builds[j].timestamp).setMilliseconds(job.builds[j].duration);
@@ -222,9 +213,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         (function(x) {
                                             count++;
                                             var resultUrl = [];
-                                            //logger.debug("------+++++---",historyResult.indexOf(jobResult[x]) == -1);
                                             if (historyResult.indexOf(jobResult[x]) === -1) {
-                                                //logger.debug("------------------ ", jobResult[x]);
                                                 for (var i = 0; i < task.jobResultURLPattern.length; i++) {
                                                     var urlPattern = task.jobResultURLPattern[i];
                                                     resultUrl.push(urlPattern.replace("$buildNumber", jobResult[x]));
@@ -248,19 +237,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
                                                 };
 
-                                                //logger.debug("hData+++++++++++++++++++++++++ ",hData);
                                                 TaskHistory.createNew(hData, function(err, taskHistoryEntry) {
-                                                    //count++;
                                                     if (err) {
                                                         logger.error("Unable to make task history entry", err);
                                                         return;
                                                     }
-                                                    //logger.debug("Task history created");
-                                                    logger.debug("Task history created====== ", count + " " + jobResult.length);
+                                                    logger.debug("Task history created: ", count + " " + jobResult.length);
                                                     if (count === jobResult.length) {
                                                         task.getHistory(function(err, tHistories) {
                                                             if (err) {
-                                                                res.send(500, errorResponses.db.error);
+                                                                res.status(500).send(errorResponses.db.error);
                                                                 return;
                                                             }
                                                             res.send(tHistories);
@@ -272,7 +258,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 if (count === jobResult.length) {
                                                     task.getHistory(function(err, tHistories) {
                                                         if (err) {
-                                                            res.send(500, errorResponses.db.error);
+                                                            res.status(500).send(errorResponses.db.error);
                                                             return;
                                                         }
                                                         res.send(tHistories);
@@ -285,7 +271,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 } else {
                                     task.getHistory(function(err, tHistories) {
                                         if (err) {
-                                            res.send(500, errorResponses.db.error);
+                                            res.status(500).send(errorResponses.db.error);
                                             return;
                                         }
                                         res.send(tHistories);
@@ -303,7 +289,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     logger.error('jenkins jobs fetch error', err);
 
                                 }
-                                //logger.debug("All Job info: ", JSON.stringify(job));
                                 if (job) {
                                     for (var j = 0; j < job.builds.length; j++) {
                                         var actualTimeStamp = new Date(job.builds[j].timestamp).setMilliseconds(job.builds[j].duration);
@@ -326,7 +311,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 var urlPattern = task.jobResultURLPattern[i];
                                                 resultUrl.push(urlPattern.replace("$buildNumber", jobResult[x]));
                                             }
-                                            //logger.debug("==================================== ",resultUrl);
                                             var hData = {
                                                 "taskId": req.params.taskId,
                                                 "taskType": "jenkins",
@@ -345,18 +329,17 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 "jobResultURL": resultUrl
 
                                             };
-                                            //logger.debug("hData+++++++++++++++++++++++++ ",hData);
                                             TaskHistory.createNew(hData, function(err, taskHistoryEntry) {
                                                 count1++;
                                                 if (err) {
                                                     logger.error("Unable to make task history entry", err);
                                                     return;
                                                 }
-                                                logger.debug("Task history created====== ", count1 + " " + jobResult.length);
+                                                logger.debug("Task history created ", count1 + " " + jobResult.length);
                                                 if (count1 === jobResult.length) {
                                                     task.getHistory(function(err, tHistories) {
                                                         if (err) {
-                                                            res.send(500, errorResponses.db.error);
+                                                            res.status(500).send(errorResponses.db.error);
                                                             return;
                                                         }
                                                         res.send(tHistories);
@@ -375,7 +358,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     logger.debug("Else part...");
                     task.getHistory(function(err, tHistories) {
                         if (err) {
-                            res.send(500, errorResponses.db.error);
+                            res.status(500).send(errorResponses.db.error);
                             return;
                         }
                         res.send(tHistories);
@@ -392,7 +375,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         Tasks.getTaskById(req.params.taskId, function(err, task) {
             if (err) {
                 logger.error(err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (!task) {
@@ -404,7 +387,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
             task.getHistoryById(req.params.historyId, function(err, history) {
                 if (err) {
-                    res.send(500, {
+                    res.status(500).send({
                         message: "Server Behaved Unexpectedly"
                     });
                     return;
@@ -413,19 +396,15 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
             });
 
-
         });
 
-
     });
-
-
 
     app.post('/tasks', function(req, res) {
         Tasks.getTaskByIds(req.body.taskIds, function(err, data) {
             if (err) {
                 logger.error(err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (data) {
@@ -454,7 +433,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         Tasks.updateTaskById(req.params.taskId, taskData, function(err, updateCount) {
             if (err) {
                 logger.error(err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (updateCount) {
@@ -471,7 +450,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
         Tasks.getTaskById(req.params.taskId, function(err, data) {
             if (err) {
                 logger.error(err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (data) {
@@ -486,7 +465,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     Tasks.updateJobUrl(req.params.taskId, tConfig, function(err, updateCount) {
                         if (err) {
                             logger.error(err);
-                            res.send(500, errorResponses.db.error);
+                            res.status(500).send(errorResponses.db.error);
                             return;
                         }
                         if (updateCount) {

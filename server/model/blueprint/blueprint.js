@@ -1,3 +1,10 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
 var logger = require('_pr/logger')(module);
 var mongoose = require('mongoose');
 var extend = require('mongoose-schema-extend');
@@ -130,8 +137,6 @@ BlueprintSchema.methods.update = function(updateData, callback) {
     });
 };
 
-
-
 BlueprintSchema.methods.getVersionData = function(ver) {
     var blueprintConfigType = getBlueprintConfigType(this);
     if (!blueprintConfigType) {
@@ -140,8 +145,6 @@ BlueprintSchema.methods.getVersionData = function(ver) {
 
     return blueprintConfigType.getVersionData(ver);
 };
-
-
 
 BlueprintSchema.methods.getLatestVersion = function() {
     var blueprintConfigType = getBlueprintConfigType(this);
@@ -159,7 +162,6 @@ BlueprintSchema.methods.getInfraManagerData = function() {
     }
 
     return blueprintConfigType.getInfraManagerData();
-
 }
 
 BlueprintSchema.methods.getCloudProviderData = function() {
@@ -169,7 +171,6 @@ BlueprintSchema.methods.getCloudProviderData = function() {
     }
 
     return blueprintConfigType.getCloudProviderData();
-
 }
 
 BlueprintSchema.methods.launch = function(envId, ver, callback) {
@@ -222,7 +223,7 @@ BlueprintSchema.statics.createNew = function(blueprintData, callback) {
         });
         return;
     }
-    console.log('blueprin type ', blueprintData);
+    logger.debug('blueprin type ', blueprintData);
     var blueprintObj = {
         orgId: blueprintData.orgId,
         bgId: blueprintData.bgId,
@@ -236,11 +237,8 @@ BlueprintSchema.statics.createNew = function(blueprintData, callback) {
         blueprintConfig: blueprintConfig,
         blueprintType: blueprintType
     };
-
-    logger.debug('-------------blueprintObj', JSON.stringify(blueprintObj));
-
     var blueprint = new Blueprints(blueprintObj);
-    console.log('saving');
+    logger.debug('saving');
     blueprint.save(function(err, blueprint) {
         if (err) {
             logger.error(err);
@@ -297,8 +295,6 @@ BlueprintSchema.statics.getBlueprintsByOrgBgProject = function(orgId, bgId, proj
         callback(null, blueprints);
     });
 };
-
-
 
 var Blueprints = mongoose.model('blueprints', BlueprintSchema);
 

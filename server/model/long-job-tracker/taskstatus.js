@@ -1,4 +1,12 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
 var taskStatusDao = require('./taskstatusdao');
+var logger = require('_pr/logger')(module);
 
 function TaskStatusClass(taskId) {
 
@@ -12,7 +20,7 @@ function TaskStatusClass(taskId) {
             }
         }, function(err, data) {
             if (err) {
-                console.log('unable to update taskstatus', err);
+                logger.debug('unable to update taskstatus', err);
                 if (typeof callback === 'function') {
                     callback(err, null);
                 }
@@ -41,7 +49,7 @@ function TaskStatusClass(taskId) {
         }
         taskStatusDao.updateTaskStatus(taskId, updateObj, function(err, data) {
             if (err) {
-                console.log('unable to update taskstatus', err);
+                logger.debug('unable to update taskstatus', err);
                 if (typeof callback === 'function') {
                     callback(err, null);
                 }
@@ -58,7 +66,7 @@ function TaskStatusClass(taskId) {
 
         taskStatusDao.getTaskStatusById(taskId, function(err, taskStatus) {
             if (err) {
-                console.log('unable to get taskstatus', err);
+                logger.debug('unable to get taskstatus', err);
                 if (typeof callback === 'function') {
                     callback(err, null);
                 }
@@ -70,36 +78,14 @@ function TaskStatusClass(taskId) {
             } else {
                 callback(null, taskStatus[0]);
             }
-            /*taskStatusDao.getStatusByTimestamp(taskId, timestamp, function(err, data) {
-                if (err) {
-                    console.log('unable to get taskstatus', err);
-                    if (typeof callback === 'function') {
-                        callback(err, null);
-                    }
-                    return;
-                }
-                console.log('statusList ==>', data);
-                taskStatus[0].statusList = [];
-                if (data.length) {
-                    taskStatus[0].statusList = data[0].statusList;
-                    //taskStatus = data;
-                }
-
-                if (typeof callback === 'function') {
-                    callback(null, taskStatus[0]);
-                }
-            });*/
 
         });
-
 
     };
 
     this.getTaskId = function() {
         return taskId;
     }
-
-
 
 }
 
@@ -110,18 +96,14 @@ function createNewTask(callback) {
         successful: false,
     }, function(err, data) {
         if (err) {
-            console.log(err);
+            logger.debug(err);
             callback(err, null);
             return
         }
-        console.log(data);
+        logger.debug(data);
         callback(null, new TaskStatusClass(data._id));
     });
 }
-
-
-
-
 
 module.exports.getTaskStatus = function(taskId, callback) {
     if (taskId) {
