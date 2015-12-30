@@ -141,8 +141,6 @@ $(document).ready(function() {
 
 
 
-
-
 var urlParams = {};
 (window.onpopstate = function() {
     var url = window.location.href;
@@ -211,7 +209,7 @@ $(document).ready(function() {
             roles: false,
             cookbooks: false,
             templates: true,
-            
+
         });
         if (taskData) {
             console.log("I am in loadUIData inside taskData");
@@ -436,7 +434,7 @@ $(document).ready(function() {
                 $spinnerJobForUrl.removeClass('hidden');
                 for (var i = 0; i < jenkinsList.length; i++) {
                     var keys = Object.keys(jenkinsList[i]);
-                    console.log("=========== " + JSON.stringify(jenkinsList[i][keys[0]]));
+                   
                     jenkinsServerId = jenkinsList[i][keys[0]];
                 }
                 //alert(JSON.stringify($option));
@@ -746,7 +744,6 @@ $(document).ready(function() {
         } else {
             return false;
         }
-
 
 
 
@@ -1215,7 +1212,7 @@ $(document).ready(function() {
             cookbooks: [],
             roles: []
         }
-        
+
         for (var i = 0; i < runlist.length; i++) {
 
             if (runlist[i].indexOf('template') === 0) {
@@ -1233,11 +1230,11 @@ $(document).ready(function() {
                 }
             }
             if (runlist[i].indexOf('recipe') === 0) {
-                if(reqBody.cookbooks.indexOf(name) === -1) {
+                if (reqBody.cookbooks.indexOf(name) === -1) {
                     reqBody.cookbooks.push(name);
                 }
             } else {
-                if(reqBody.roles.indexOf(name) === -1) {
+                if (reqBody.roles.indexOf(name) === -1) {
                     reqBody.roles.push(name);
                 }
             }
@@ -1532,6 +1529,7 @@ $(document).ready(function() {
         }).fail(function(jxhr) {
             alert("TaskLists load Failed");
         });
+
     }
     $('.chefRunlistModalClose').on('click', function() {
         $('#chefRunlistModal').modal("hide");
