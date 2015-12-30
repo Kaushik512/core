@@ -182,12 +182,12 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
 
     //$firstlabelinput.append($allFilterNew);
 
-    var $rolesFilter = $('<label class="radio hidden col-lg-3" style="font-size:13px;"><input name="radio" class="runlistTypeSelectorRadioBtn" type="radio" id="roles"  value="Roles"/><i></i>Roles</label>');
-    var $cookbooksFilter = $('<label class="radio hidden col-lg-3" style="font-size:13px;"><input name="radio" class="runlistTypeSelectorRadioBtn" type="radio" id="cookbooks"  value="Cookbooks"/><i></i>Cookbooks</label>');
-    var $allFilter = $('<label class="radio hidden col-lg-3" style="font-size:13px;"><input name="radio" class="runlistTypeSelectorRadioBtn" type="radio" id="all"  value="All"/><i></i>All</label>');
-    var $templatesFilter = $('<label class="radio hidden col-lg-3" style="font-size:13px;"><input name="radio" class="runlistTypeSelectorRadioBtn" type="radio" id="templatesSelector"  value="Templates"/><i></i>Templates</label>');
+    var $rolesFilter = $('<label class="radio hidden col-lg-2 col-md-2 col-sm-2" style="font-size:13px;"><input name="radio" class="runlistTypeSelectorRadioBtn" type="radio" id="roles"  value="Roles"/><i></i>Roles</label>');
+    var $cookbooksFilter = $('<label class="radio hidden col-lg-2 col-md-2 col-sm-2" style="font-size:13px;"><input name="radio" class="runlistTypeSelectorRadioBtn" type="radio" id="cookbooks"  value="Cookbooks"/><i></i>Cookbooks</label>');
+    var $allFilter = $('<label class="radio hidden col-lg-2 col-md-2 col-sm-2" style="font-size:13px;"><input name="radio" class="runlistTypeSelectorRadioBtn" type="radio" id="all"  value="All"/><i></i>All</label>');
+    var $templatesFilter = $('<label class="radio hidden col-lg-2 col-md-2 col-sm-2" style="font-size:13px;"><input name="radio" class="runlistTypeSelectorRadioBtn" type="radio" id="templatesSelector"  value="Templates"/><i></i>Templates</label>');
 
-    var $chefFactoryDetails = $('<label class="hidden" style="margin-left:25px;"><a id="chefFactory" href="javascript:void(0);" target="_black">Chef Factory</a></label>');
+    var $chefFactoryDetails = $('<label class="hidden" style="margin-left:25px;margin-top:7px;"><a id="chefFactory" href="javascript:void(0);" target="_black">Chef Factory</a></label>');
     $divFilterChefContainer.append($allFilter);
     $divFilterChefContainer.append($rolesFilter);
     $divFilterChefContainer.append($cookbooksFilter);

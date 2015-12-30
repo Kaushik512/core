@@ -8,7 +8,6 @@ function devCall() {
                 $('#defaultViewButton').find('i').removeClass('txt-color-deactive').addClass('txt-color-active');
                 $('#instanceview').find('i').removeClass('txt-color-active').addClass('txt-color-deactive');
             } else {
-                // $('#tableinstanceview_filter').css('display','none');
                 $("#divinstancestableview").addClass("visibleClass").show();
                 $("#divinstancescardview").removeClass("visibleClass").hide();
                 $('#instanceview').find('i').removeClass('txt-color-deactive').addClass('txt-color-active');
@@ -24,19 +23,15 @@ function devCall() {
                 $('#defaultViewButtonAppCard').hide();
                 $('#defaultViewButtonNewDeploy').show();
                 $("#divapplicationcardview").addClass("visibleClass").show();
-                //$('#defaultViewButtonAppCard').parents().eq(2).find('span:nth-child(2)').removeClass('margintop2right8').addClass('margintopright8');
                 $('#defaultViewButtonAppCard').find('i').removeClass('txt-color-deactive').addClass('txt-color-active');
                 $('#instanceviewAppCard').show();
-                //$('#instanceviewAppCard').find('i').removeClass('txt-color-active').addClass('txt-color-deactive');
             } else {
                 $("#divapplicationtableview").addClass("visibleClass").show();
                 $('#defaultViewButtonAppCard').show();
                 $('#defaultViewButtonNewDeploy').show();
-                //$('#defaultViewButtonAppCard').parents().eq(2).find('span:nth-child(2)').removeClass('margintopright8').addClass('margintop2right8');
                 $(".createAppConfigure").hide();
                 $("#divapplicationcardview").removeClass("visibleClass").hide();
                 $('#instanceviewAppCard').hide();
-                //$('#instanceviewAppCard').find('i').removeClass('txt-color-deactive').addClass('txt-color-active');
                 $('#defaultViewButtonAppCard').find('i').removeClass('txt-color-active').addClass('txt-color-deactive');
             }
         }
@@ -54,15 +49,15 @@ function devCall() {
 
     //for removing the selected blueprint in the blueprint tab
     window.removeSelectedBlueprint = function() {
-        var blueprintId = $('.productdiv1.role-Selected1').attr('data-blueprintid');
-        if (blueprintId) {
-            //found now delete
-            bootbox.confirm("Are you sure you would like to remove this blueprint?", function(result) {
-                //  alert(result);
+    var blueprintId = $('.productdiv1.role-Selected1').attr('data-blueprintid');
+    if (blueprintId) {
+        bootbox.confirm({
+            message: "Are you sure you would like to remove this blueprint?",
+            title: "Confirmation",
+            callback: function(result) {
                 if (!result) {
                     return;
                 } else {
-                    //alert(result);
                     $.ajax({
                         url: '/blueprints/' + blueprintId,
                         type: 'DELETE',
@@ -71,27 +66,31 @@ function devCall() {
                                 var $bcc = $('.productdiv1.role-Selected1').closest('.blueprintContainer');
                                 $('.productdiv1.role-Selected1').parent().detach();
                                 //Check if the closest bluprintcontainer is empty, if empty then hide it.
-                                // alert($bcc.find('.panel-body').children().length);
+
                                 if ($bcc.find('.panel-body').children().length <= 0) {
                                     $bcc.addClass('hidden');
                                 }
                             } else
-                                alert(data);
+                                bootbox.alert(data);
                         }
                     });
                 }
-            });
-        } else {
-            alert('Please select a blueprint to remove.');
-        }
+            }
+        });
+    } else {
+        bootbox.alert('Please select a blueprint to remove.');
     }
+}
     window.removeStack = function() {
-        var $selectedCard = $('.productdiv1.role-Selected1');
+    var $selectedCard = $('.productdiv1.role-Selected1');
 
-        var stackId = $selectedCard.attr('data-stackId');
-        if (stackId) {
-            //found now delete
-            bootbox.confirm("Are you sure you would like to remove this stack? This will remove all the instances related to this stack.", function(result) {
+    var stackId = $selectedCard.attr('data-stackId');
+    if (stackId) {
+        //found now delete
+        bootbox.confirm({
+            message: "Are you sure you would like to remove this stack? This will remove all the instances related to this stack.",
+            title: "Confirmation",
+            callback: function(result) {
                 if (!result) {
                     return;
                 }
@@ -103,8 +102,6 @@ function devCall() {
                         if (data.instanceIds) {
                             for (var i = 0; i < data.instanceIds.length; i++) {
                                 $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + data.instanceIds[i] + ']').parents('.domain-role-thumbnailDev').remove();
-                                // serachBoxInInstance.updateData(undefined,"remove",instanceId);
-
                                 var table = $('#tableinstanceview').DataTable();
                                 table.row('[data-instanceid=' + data.instanceIds[i] + ']').remove().draw(false);
 
@@ -112,15 +109,14 @@ function devCall() {
                         }
                     },
                     error: function() {
-
                     }
-                })
-
-            });
-        } else {
-            bootbox.alert('Please select a stack to remove.');
-        }
+                });
+            }
+        });
+    } else {
+        bootbox.alert('Please select a stack to remove.');
     }
+}
 
 
     $(document).ready(function() {
@@ -517,11 +513,6 @@ function devCall() {
                 }, 'Invalid IP address');
 
                 var validator = $('#addInstanceForm').validate({
-                    /*errorPlacement: function(error, element){
-// Append error within linked label
-$(element).closest("form").find("label[for='" + element.attr("id") + "']").append(error);
-
-},*/
                     rules: {
                         instanceUsername: {
                             required: true
