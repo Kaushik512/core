@@ -10,7 +10,7 @@
                         <h4 class="widget-margin" style="color:black;">Create Environment</h4>
                     </div>
                     <div class="widget-body">
-                        <div class="widget-main" style="min-height:300px">
+                        <div class="widget-main widgetHeight">
                             <div>
                                 <section id="widget-grid" class="">
                                     <!-- START ROW -->
@@ -23,7 +23,7 @@
                                                 <!-- widget content -->
                                                 <div class="widget-body no-padding">
                                                     <div class="col-lg-6 col-md-6">
-                                                        <label for="category">Organization:<span style="color:Red;" class="control-label">&nbsp;*</span>
+                                                        <label for="category">Organization:<span class="control-label redSpan">&nbsp;*</span>
                                                         </label>
                                                         <select id="orgname" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central" cdata="catalyst" cat-validation="required" cat-validation="required" linkedfields="['configname','projectname','puppetservername']" onchange="$('#configname').change();$('#puppetservername').change();">
                                                             <option value="">Select an Organization</option>
@@ -60,7 +60,7 @@
                                                         </select>
                                                     </div>
                                                     <!-- <div class="col-lg-6 col-md-6 smart-form" style="margin-top:25px;">
-                                                        <label for="category">Assign Teams:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                                        <label for="category">Assign Teams:<span class="control-label redSpan">&nbsp;*</span></label>
                                                         <div id="teamname" multiselect="multiselect" datatype="select" datapath="masterjson.rows.row" class="input-group from-control col-md-12 widthBox"  sourcepath="21" cdata="catalyst" cat-validation="onechecked" linkedto="orgname">
                                                         </div>
                                                     </div> -->

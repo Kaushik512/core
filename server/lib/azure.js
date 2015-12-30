@@ -5,7 +5,7 @@
  * Dec 2015
  */
 
-var sys = require('sys');
+//var sys = require('sys');
 var exec = require('child_process').exec;
 var SSHExec = require('./utils/sshexec');
 var logger = require('_pr/logger')(module);
@@ -862,6 +862,16 @@ var AzureCloud = function(options) {
 
             });
 
+            /*curl.executecurl(cmdString, function(err, stdout) {
+                logger.debug('stdout:', stdout, err);
+
+                if (stdout && stdout.indexOf('Connected successfully') >= 0) {
+                    callback('ok');
+                    return;
+                }
+
+            }); */
+
         } else {
             cmdString = opts.cmds.join(' && ');
             logger.debug("cmdString >>>", cmdString);
@@ -1007,6 +1017,59 @@ var AzureCloud = function(options) {
         };
         logger.debug('Timeout 3 set');
         self.timeouts.push(setTimeout(wfsr, 15000));
+    }
+
+    this.getVM = function(params, callback) {
+        fs.readFile(certFile, function(err, certData) {
+            if (err) {
+                logger.error("Error reading certFile..", err);
+                return;
+            }
+            logger.debug("certFile loaded");
+
+            fs.readFile(keyFile, function(err, keyData) {
+                if (err) {
+                    logger.error("Error reading keyFile..", err);
+                    return;
+                }
+                logger.debug("keyFile loaded");
+
+                console.log('params ==> ',params);                
+                var opts = {
+                    url: 'https://management.core.windows.net/'+options.subscriptionId+'/services/hostedservices/'+params.cloudServiceName+'/deployments/'+params.deploymentName+'/roles/'+params.name,
+                    agentOptions: {
+                        cert: certData,
+                        key: keyData,
+                    },
+                    headers: {
+                        "x-ms-version": "2015-04-01",
+                        "Content-Type": "application/json"
+                    }
+                }
+
+                request.get(opts, function(err, response, body) {
+
+                    if (err) {
+                        //console.log("Error...",err);
+                        callback(err, null);
+                        return;
+                    }
+
+                    console.log("response.statusCode: ", response.statusCode);
+
+                    if (response.statusCode == '200') {
+                        logger.debug("END:: getServerByName");
+                        callback(null, body);
+                        return;
+                    } else {
+                        callback(body, null);
+                        return;
+                    }
+
+                });
+            });
+        });
+
     }
 
     function pollInstanceState(instanceName, state, callback) {

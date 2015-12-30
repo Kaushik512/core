@@ -31,6 +31,7 @@ var Application = require('../model/classes/application/application');
 var Task = require('../model/classes/tasks/tasks.js');
 var masterUtil = require('../lib/utils/masterUtil.js');
 var CloudFormation = require('_pr/model/cloud-formation');
+var AzureArm = require('_pr/model/azure-arm');
 
 module.exports.setRoutes = function(app, sessionVerification) {
     app.all('/organizations/*', sessionVerification);
@@ -703,7 +704,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
         var templateType = req.body.blueprintData.templateType;
         var users = req.body.blueprintData.users;
         var blueprintType = req.body.blueprintData.blueprintType;
-
         usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
             if (!err) {
                 logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
@@ -734,6 +734,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 users: users,
                 blueprintType: blueprintType
             };
+
             logger.debug('req:', blueprintData);
             var dockerData, instanceData;
             logger.debug('req.body.blueprintData.blueprintType:', blueprintType);
@@ -853,6 +854,21 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     instances: req.body.blueprintData.cftInstances
                 }
                 blueprintData.cloudFormationData = cloudFormationData;
+            } else if (req.body.blueprintData.blueprintType === 'azure_arm') {
+                console.log('templateFile ==> ', req.body.blueprintData.cftTemplateFile);
+                armTemplateData = {
+                    cloudProviderId: req.body.blueprintData.cftProviderId,
+                    infraManagerType: 'chef',
+                    infraManagerId: req.body.blueprintData.chefServerId,
+                    runlist: req.body.blueprintData.runlist,
+                    stackParameters: req.body.blueprintData.cftStackParameters,
+                    //stackName: req.body.blueprintData.stackName,
+                    templateFile: req.body.blueprintData.cftTemplateFile,
+                    resourceGroup: req.body.blueprintData.resourceGroup,
+                    //instanceUsername: req.body.blueprintData.cftInstanceUserName
+                    instances: req.body.blueprintData.cftInstances
+                }
+                blueprintData.armTemplateData = armTemplateData;
             } else {
                 res.status(400).send({
                     message: "Invalid Blueprint Type"
@@ -994,12 +1010,23 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         return;
                                     }
 
-                                    res.send({
-                                        tasks: tasksData,
-                                        instances: instancesData,
-                                        blueprints: blueprintsData,
-                                        stacks: stacks
+                                    AzureArm.findByOrgBgProjectAndEnvId(req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, function(err, arms) {
+
+                                        if (err) {
+                                            res.send(500);
+                                            return;
+                                        }
+
+                                        res.send({
+                                            tasks: tasksData,
+                                            instances: instancesData,
+                                            blueprints: blueprintsData,
+                                            stacks: stacks,
+                                            arms: arms
+                                        });
+
                                     });
+
                                 });
 
                                 logger.debug("Exit get() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId);
@@ -1395,6 +1422,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                     } else {
                                         instance.puppet = {
                                             serverId: infraManagerDetails.rowid
+
                                         }
                                     }
                                     instancesDao.createInstance(instance, function(err, data) {

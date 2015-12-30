@@ -1,603 +1,131 @@
-
+<style>
+.accordionStyle{
+	height:444px!important;
+	overflow-y: auto!important;
+}
+.launchBtnMargin{
+	margin-left:200px!important;
+}
+</style>
 <!--blueprint tab-->
 <div class="tab-pane" id="l2">
-    <div class="panel-heading">
-        <h4 class="panel-title" style="font-size:12px !important">Blueprints</h4>
-    </div>
-                    <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-10" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
-
-                        <div>
-
-                            <div class="widget-body no-padding">
-
-                                <div class="panel-group smart-accordion-default" id="accordion-2" style="height:444px;overflow-y: auto;">
-                                    <div class="devopsRolePanel panel panel-default blueprintContainer">
-                                        <div class="panel-heading">
-                                            <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-2" href="#collapseOne-2"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Devop Roles</a></h4>
-                                        </div>
-                                        <div id="collapseOne-2" class="panel-collapse collapse">
-                                            <div class="panel-body">
-
-
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                    <!--App Factory Starts here-->
-                                    <div class="appFactoryPanel panel panel-default blueprintContainer">
-                                        <div class="panel-heading">
-                                            <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-2" href="#collapse2"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>App Factory</a></h4>
-                                        </div>
-                                        <div id="collapse2" class="panel-collapse collapse">
-                                            <div class="panel-body">
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--App Factory ends here-->
-
-                                    <div class="panel panel-default blueprintContainer">
-                                        <div class="panel-heading ">
-                                            <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-2" href="#collapse3" class="collapsed"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Cloud Formation</a></h4>
-                                        </div>
-                                        <div id="collapse3" class="panel-collapse collapse in">
-                                            <div class="panel-body">
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="desktopProvisioningPanel panel panel-default blueprintContainer">
-                                        <div class="panel-heading">
-                                            <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-2" href="#collapse4"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Desktop Provisioning</a></h4>
-                                        </div>
-                                        <div id="collapse4" class="panel-collapse collapse">
-                                            <div class="panel-body">
-
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-
-                        </div>
-
-
-                    </div>
-
-                    <footer class="footer">
-                        <div class="clearfix form-actions" style="text-align:center">
-                            <div class="btn-group">
-
-                                <a type="reset" class="btn pull-left btn-primary launchBtn" style="margin-left:200px;">
-                                    <i class="ace-icon fa  fa-location-arrow bigger-110"></i>
-                                    Launch
-                                </a>
-                            </div>
-                            <button class="btn pull-right btn-danger right-button" title="Delete Blueprint" onClick="removeSelectedBlueprint()" > <i class="fa fa-trash-o"></i></button>
-                        </div>
-
-                    </footer><!--Launch div ends here-->
-                </div> <!--tab-pane l2 gets over -->
-
-                <!--modal for launching the blueprint-->
-				<div class="modal fade" id="launchResultContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-
-				<div class="modal-dialog">
-				<div class="modal-content">
-				<div class="modal-header">
+	<div class="panel-heading">
+		<h4 class="panel-title font-size-12">Blueprints</h4>
+	</div>
+	<div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-10" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+		<div>
+			<div class="widget-body no-padding">
+				<div class="panel-group smart-accordion-default accordionStyle" id="accordion-2">
+					<div class="devopsRolePanel panel panel-default blueprintContainer">
+						<div class="panel-heading">
+							<h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-2" href="#collapseOne-2"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Devop Roles</a></h4>
+						</div>
+						<div id="collapseOne-2" class="panel-collapse collapse">
+							<div class="panel-body">
+							</div>
+						</div>
+					</div>
+					<!--App Factory Starts here-->
+					<div class="appFactoryPanel panel panel-default blueprintContainer">
+						<div class="panel-heading">
+							<h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-2" href="#collapse2"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>App Factory</a></h4>
+						</div>
+						<div id="collapse2" class="panel-collapse collapse">
+							<div class="panel-body">
+							</div>
+						</div>
+					</div>
+					<!--App Factory ends here-->
+					<div class="panel panel-default blueprintContainer">
+						<div class="panel-heading ">
+							<h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-2" href="#collapse3" class="collapsed"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Cloud Formation</a></h4>
+						</div>
+						<div id="collapse3" class="panel-collapse collapse in">
+							<div class="panel-body">
+							</div>
+						</div>
+					</div>
+					<div class="desktopProvisioningPanel panel panel-default blueprintContainer">
+						<div class="panel-heading">
+							<h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion-2" href="#collapse4"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Desktop Provisioning</a></h4>
+						</div>
+						<div id="collapse4" class="panel-collapse collapse">
+							<div class="panel-body">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<footer class="footer">
+		<div class="clearfix form-actions textCenter">
+			<div class="btn-group">
+				<a type="reset" class="btn pull-left btn-primary launchBtn launchBtnMargin">
+				<i class="ace-icon fa  fa-location-arrow bigger-110"></i>
+				Launch
+				</a>
+			</div>
+			<button class="btn pull-right btn-danger right-button" title="Delete Blueprint" onClick="removeSelectedBlueprint()" > <i class="fa fa-trash-o"></i></button>
+		</div>
+	</footer>
+	<!--Launch div ends here-->
+</div>
+<!--tab-pane l2 gets over -->
+<!--modal for launching the blueprint-->
+<div class="modal fade" id="launchResultContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 				<h4 class="modal-title" id="myModalLabel">Launching Blueprint</h4>
+			</div>
+			<div class="modal-body">
+				...
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!--modal for CFT launch-->
+<div class="modal fade" id="cftContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form role="form" class="cmxform" id="cftForm">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					<h4 class="modal-title" id="myModalLabel">Enter a Unique Stack Name?</h4>
 				</div>
 				<div class="modal-body">
-				...
+					<i>(Only numbers,letters allowed. No spaces and underscores)</i>
+					<input type="text" uniqueconditionedby="cftInput" class="form-control" autofocus name="cftInput" id="cftInput"/>
 				</div>
 				<div class="modal-footer">
-				<button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
+					<a type="button" class="btn btn-default" data-dismiss="modal">Close</a>
+					<input type="submit" class="btn btn-default btn-primary" value="Submit">
 				</div>
-				</div>
-				</div>
-				</div>
-
-                <!--modal for CFT launch-->
-                <div class="modal fade" id="cftContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-
-                <div class="modal-dialog">
-                <div class="modal-content">
-                    <form role="form" class="cmxform" id="cftForm">
-                <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="myModalLabel">Enter a Unique Stack Name?</h4>
-                </div>
-                <div class="modal-body">
-                <i>(Only numbers,letters allowed. No spaces and underscores)</i>
-                <input type="text" uniqueconditionedby="cftInput" class="form-control" autofocus name="cftInput" id="cftInput"/>
-
-                </div>
-                <div class="modal-footer">
-                <a type="button" class="btn btn-default" data-dismiss="modal">Close</a>
-                <input type="submit" class="btn btn-default btn-primary" value="Submit">
-                </div>
-            </form>
-                </div>
-                </div>
-                </div>
-                <!--modal for CFT Launch ends here-->
-
-
-
+			</form>
+		</div>
+	</div>
+</div>
+<!--modal for CFT Launch ends here-->
 <!--modal for blueprint edit-->
 <div class="modal fade bs-example-modal-lg" id="blueprintEditResultContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="myModalLabel">Blueprint Edit</h4>
-            </div>
-            <div class="modal-body" style="padding:0px !important">
-
-            </div>
-            <div class="modal-footer" style="margin-top:0px !important;">
-
-                <button type="button" class="btn btn-default btn-primary blueprintUpdateBtn" data-dismiss="modal">Save Version</button>
-                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<!--modal for blueprint read-->
-<div class="modal fade bs-example-modal-lg" id="modalForRead" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="myModalLabel"></h4>
-            </div>
-            <div class="modal-body" style="height:480px;overflow-y:auto;">
-              <!--os and the 1st tier-->
- <table class="table table-bordered">
-    <thead>
-        <th style="width:11%;text-align:center">Parameters</th>
-        <th style="width:27%;text-align:center">Values</th>
-    </thead>
-    <tbody>
-        <tr>
-            <td style="padding-left: 18px;padding-top:16px;">Blueprint Name:</td>
-<td>
-    
- <input  id="blueprintNameInputNew" disabled="disabled" class="form-control">
- 
-</td>
-</tr>
-
-<tr>
-  <td style="padding-left:18px;padding-top:16px">Template Type:</td>
-  <td>
-    <input id="blueprintTemplateType" disabled="disabled" class="form-control">
-  </td>
-</tr>
-
-<tr>
-  <td style="padding-left:18px;padding-top:16px">Organisation Name:</td>
-  <td>
-    <input id="blueprintORG" disabled="disabled" class="form-control">
-  </td>
-</tr>
-
-
-
-<tr>
-  <td style="padding-left:18px;padding-top:16px">Business Group:</td>
-  <td>
-    <input id="blueprintBU" disabled="disabled" class="form-control">
-  </td>
-</tr>
-
-<tr>
-  <td style="padding-left:18px;padding-top:16px">Project Name:</td>
-  <td>
-    <input id="blueprintProject" disabled="disabled" class="form-control">
-  </td>
-</tr>
-
-<tr>
-<td style="padding-left: 18px;padding-top:16px;">Operating System:</td>
-<td>
-
-    
- <input id="instanceOSNew" class="form-control" disabled="disabled">                                                      
- 
-</td>
-</tr>
-
-<tr>
-    <td style="padding-left: 18px;padding-top:16px;">Instance Size:</td>
-<td>
-  
- <input id="instancesizeNew" disabled="disabled" class="form-control">
- 
-</td>
-</tr>
-
-<tr>
-    <td style="padding-left: 18px;padding-top:16px;">Provider Type:</td>
-<td>
-
- <input id="instanceProviderType" disabled="disabled" class="form-control">
-
-</td>
-</tr>
-
-<tr>
-    <td style="padding-left: 18px;padding-top:16px;">Provider Name:</td>
-
-    <td>
- <input id="instanceProviderName" disabled="disabled" class="form-control">
-  
- </td>
-</tr>
-
-<tr>
-    <td style="padding-left: 18px;padding-top:16px;">Region:</td>
-<td>
- <input id="instanceRegion" disabled="disabled" class="form-control">
-
- </td>
-</tr>
-
-
-<tr>
-    <td style="padding-left: 18px;padding-top:16px;">Image:</td>
-<td>
-
- <input id="instanceImage" disabled="disabled" class="form-control">
-
- </td>
-</tr>
-
-<tr class="keyPair">
-    <td style="padding-left: 18px;padding-top:16px;">Keypair:</td>
-<td> 
-
- <input id="instancekeyPair" disabled="disabled" class="form-control">
-
- </td>
-</tr>
-
-<tr>
-    <td style="padding-left: 18px;padding-top:16px;">VPC ID:</td>
-
-<td>
- <input id="instanceVPC" class="form-control" disabled="disabled">                                               
-
-  </td>
-</tr>
-
-<tr>
-    <td style="padding-left: 18px;padding-top:16px;">Subnet:</td>
-
- <td>
-
-
- <input id="instanceSubnetId" class="form-control" disabled="disabled">                                          
-
- </td>
-</tr>
-
-<tr>
-    <td style="padding-left: 18px;padding-top:16px;">Security Group:</td>
-
-<td>
-
-  <input id="instanceSecurityGroupId" class="form-control" disabled="disabled">
-
-</td>
-</tr>
-
-<tr>
-    <td style="padding-left: 18px;padding-top:16px;">Version:</td>
-
-<td>
-
- <input id="instanceVersion" class="form-control" disabled="disabled">                                    
-
-</td>
-</tr>
-
-<tr>
-    <td style="padding-left: 18px;padding-top:16px;">Runlist:</td>
-
- <td>
-
-
- <input id="instanceRunlist" class="form-control" disabled="disabled">                                           
-
-</td>
-</tr>
-<tr class="hidden managementPemKey">
-    <td style="padding-left: 18px;padding-top:16px;">Pem File:</td>
-
- <td>
-
-
- <input id="managementPem" class="form-control" disabled="disabled">                                           
-
-</td>
-</tr>
-<tr class="hidden managementPemKey">
-    <td style="padding-left: 18px;padding-top:16px;">Key File:</td>
-
- <td>
-
-
- <input id="managementKey" class="form-control" disabled="disabled">                                           
-
-</td>
-</tr>
-
-            </tbody>
-           </table> 
-            
-             </div>
-             <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h4 class="modal-title" id="myModalLabel">Blueprint Edit</h4>
+			</div>
+			<div class="modal-body">
+			</div>
+			<div class="modal-footer">
+				<a type="button" class="btn btn-default btn-default" data-dismiss="modal">Close</a>
+				<button type="button" class="btn btn-default btn-primary blueprintUpdateBtn" data-dismiss="modal">Save Version</button>
+			</div>
+		</div>
+	</div>
 </div>
 <!--modal for blueprint edit read-->
-
-<!--modal for blueprint read-->
-<div class="modal fade bs-example-modal-lg" id="modalForReadCFT" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="myModalLabel"></h4>
-            </div>
-            <div class="modal-body" style="height:360px;overflow-y:auto;">
-              <!--os and the 1st tier-->
- <table class="table table-bordered">
-    <thead>
-        <th style="width:11%;text-align:center">Parameters</th>
-        <th style="width:27%;text-align:center">Values</th>
-    </thead>
-    <tbody>
-        <tr>
-            <td style="padding-left: 18px;padding-top:16px;">Blueprint Name:</td>
-<td>
-    
- <input  id="blueprintNameCFT" disabled="disabled" class="form-control">
- 
-</td>
-</tr>
-
-<tr>
-  <td style="padding-left:18px;padding-top:16px">Template Type:</td>
-  <td>
-    <input id="blueprintTemplateTypeCFT" disabled="disabled" class="form-control">
-  </td>
-</tr>
-
-<tr>
-  <td style="padding-left:18px;padding-top:16px">Organisation Name:</td>
-  <td>
-    <input id="blueprintORG" disabled="disabled" class="form-control">
-  </td>
-</tr>
-
-
-
-<tr>
-  <td style="padding-left:18px;padding-top:16px">Business Group:</td>
-  <td>
-    <input id="blueprintBU" disabled="disabled" class="form-control">
-  </td>
-</tr>
-
-<tr>
-  <td style="padding-left:18px;padding-top:16px">Project Name:</td>
-  <td>
-    <input id="blueprintProject" disabled="disabled" class="form-control">
-  </td>
-</tr>
-            </tbody>
-           </table> 
-            
-             </div>
-             <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!--modal for blueprint edit read-->
-
-
-<!--modal for help-->
-
-<div class="modal fade" id="modalForHelp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog " style="">
-        <div class="modal-content"> 
-            
-             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">
-                    &nbsp;CookBook Information
-                </h4>
-
-            </div> 
-            
-            
-             <div class="modal-body" style="height:400px;overflow-y:auto">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                        <th>CookBook Name</th>
-                        <th>Description</th>
-                        <tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                        <td>apache2-windows</td>
-                        <td>Installation &amp; Configuration of Apache Server</td>
-                        </tr>
-                            <tr>
-                                <td>apache2</td>
-                                <td>Installation &amp; Configuration of Apache Server</td>
-                            </tr>
-                        <!--2nd set-->
-                        <tr>
-                        <td>cassandra</td>
-                        <td>Installation and configuration of Cassandra Server</td>
-                        </tr>
-                            <tr>
-                                <td>eclipse_windows</td>
-                                <td>Installtion of Eclispe on Windows</td>
-                            </tr>   
-                            <!--3rd set-->
-
-                        <tr>
-                        <td>visualstudio_windows</td>
-                        <td>Installation of Visual Studio</td>
-                        </tr>
-                            <tr>
-                                <td>iis</td>
-                                <td>Installation and configuration of IIS Server</td>
-                            </tr>
-                            <!--4th set-->
-                        <tr>
-                        <td>jboss7</td>
-                        <td>Installation and Configuration of JBOSS7 Server</td>
-                        </tr>
-                            <tr>
-                                <td>tomcat</td>
-                                <td>Installs and configures Tomcat, Java servlet engine and webserver</td>
-                            </tr>
-                            <!--5th set-->
-                            <tr>
-                        <td>weblogic</td>
-                        <td>Installation and Configuration of weblogic</td>
-                        </tr>
-                            <tr>
-                                <td>java</td>
-                                <td>Installation of Java</td>
-                            </tr>
-                            <!--6th set-->
-                            <tr>
-                        <td>java_windows</td>
-                        <td>Installation of Java</td>
-                        </tr>
-                            <tr>
-                                <td>nodejs</td>
-                                <td>Installation of NodeJS and npm package</td>
-                            </tr>   
-                            <!--7th set-->
-
-                            <tr>
-                        <td>php</td>
-                        <td>Installation and Configuration of PHP</td>
-                        </tr>
-                            <tr>
-                                <td>lamp_role</td>
-                                <td>Installation and Configuration of LAMP stack</td>
-                            </tr>   
-
-                            <!--8th set-->
-                            <tr>
-                        <td>mysql-windows</td>
-                        <td>Installation and Configuration of Mysql</td>
-                        </tr>
-                            <tr>
-                                <td>mysql</td>
-                                <td>Installation and Configuration of Mysql</td>
-                            </tr>   
-                            <!--9th set-->
-
-                            <tr>
-                        <td>oracle_windows</td>
-                        <td>Installation and Configuration of Oracle</td>
-                        </tr>
-                            <tr>
-                                <td>postgresql</td>
-                                <td>Installation and Configurationof postgresql</td>
-                            </tr>   
-                            <!--10th set-->
-                            <tr>
-                        <td>service_apache</td>
-                        <td>Service cookbook for apache server</td>
-                        </tr>
-                            <tr>
-                                <td>service_iptables</td>
-                                <td>Service cookbook for firewall</td>
-                            </tr>   
-
-                            <!--11th set-->
-                            <tr>
-                        <td>service_jboss</td>
-                        <td>Service cookbook for Jboss server</td>
-                        </tr>
-                            <tr>
-                                <td>service_mysql</td>
-                                <td>Service cookbook for Mysql</td>
-                            </tr>   
-                            <!--12th set-->
-                            <tr>
-                        <td>service_nginx</td>
-                        <td>Service cookbook for nginx </td>
-                        </tr>
-                            <tr>
-                                <td>service_tomcat</td>
-                                <td>Service cookbook for tomcat</td>
-                            </tr>   
-                            <!--13th set-->
-                            <tr>
-                        <td>service_weblogic</td>
-                        <td>service cookbook for weblogic</td>
-                        </tr>
-                            <tr>
-                                <td>seven_zip</td>
-                                <td>Installation of 7Zip</td>
-                            </tr>
-                            <!--14th set-->
-                            <tr>
-                        <td>git</td>
-                        <td>Installs git and optionally sets up a git server as a daemon under runit</td>
-                        </tr>
-                            <tr>
-                                <td>wget_windows</td>
-                                <td>Installs wget on windows</td>
-                            </tr>
-                            <!--15th set-->
-                            <tr>
-                        <td>toad_windows</td>
-                        <td>Installation and Configuration of TOAD</td>
-                        </tr>
-                            <tr>
-                                <td>docker</td>
-                                <td>Installation and Configuration of docker engine</td>
-                            </tr>   
-                            <tr>
-                                <td>jenkins</td>
-                                <td>Installs and configures Jenkins CI master &amp; node slaves</td>
-                            </tr>   
-                    </tbody>
-                </table>
-
-            </div>
-            
-                <div class="modal-footer">
-        
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                </div>   
-  
-         </div>
-    </div>
-</div>
-
-

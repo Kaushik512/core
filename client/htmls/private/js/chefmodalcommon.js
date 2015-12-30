@@ -94,7 +94,6 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
 
 
 
-
     if (!selectedRunlist) {
         selectedRunlist = [];
     }
@@ -177,19 +176,18 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
 
 
 
-
     //checking for tasks class(deploy,all)
     var $cookbooksFilterDeploy = $('<label class="radio hidden col-lg-4" style="font-size:13px;"><input class="runlistTypeSelectorRadioBtn" name="radio" type="radio" id="deployCookbooks"  value="DeployCookbooks"/><i></i>Deploy Cookbooks</label>');
     //var $allFilterNew = $('<label class="radio" style="margin: 5px;font-size:13px;"><input name="radio" type="radio" id="allNew"  value="All"/><i></i>All</label>');
 
     //$firstlabelinput.append($allFilterNew);
 
-    var $rolesFilter = $('<label class="radio hidden col-lg-3" style="font-size:13px;"><input name="radio" class="runlistTypeSelectorRadioBtn" type="radio" id="roles"  value="Roles"/><i></i>Roles</label>');
-    var $cookbooksFilter = $('<label class="radio hidden col-lg-3" style="font-size:13px;"><input name="radio" class="runlistTypeSelectorRadioBtn" type="radio" id="cookbooks"  value="Cookbooks"/><i></i>Cookbooks</label>');
-    var $allFilter = $('<label class="radio hidden col-lg-3" style="font-size:13px;"><input name="radio" class="runlistTypeSelectorRadioBtn" type="radio" id="all"  value="All"/><i></i>All</label>');
-    var $templatesFilter = $('<label class="radio hidden col-lg-3" style="font-size:13px;"><input name="radio" class="runlistTypeSelectorRadioBtn" type="radio" id="templatesSelector"  value="Templates"/><i></i>Templates</label>');
+    var $rolesFilter = $('<label class="radio hidden col-lg-2 col-md-2 col-sm-2" style="font-size:13px;"><input name="radio" class="runlistTypeSelectorRadioBtn" type="radio" id="roles"  value="Roles"/><i></i>Roles</label>');
+    var $cookbooksFilter = $('<label class="radio hidden col-lg-2 col-md-2 col-sm-2" style="font-size:13px;"><input name="radio" class="runlistTypeSelectorRadioBtn" type="radio" id="cookbooks"  value="Cookbooks"/><i></i>Cookbooks</label>');
+    var $allFilter = $('<label class="radio hidden col-lg-2 col-md-2 col-sm-2" style="font-size:13px;"><input name="radio" class="runlistTypeSelectorRadioBtn" type="radio" id="all"  value="All"/><i></i>All</label>');
+    var $templatesFilter = $('<label class="radio hidden col-lg-2 col-md-2 col-sm-2" style="font-size:13px;"><input name="radio" class="runlistTypeSelectorRadioBtn" type="radio" id="templatesSelector"  value="Templates"/><i></i>Templates</label>');
 
-    var $chefFactoryDetails = $('<label class="hidden" style="margin-left:25px;"><a id="chefFactory" href="javascript:void(0);" target="_black">Chef Factory</a></label>');
+    var $chefFactoryDetails = $('<label class="hidden" style="margin-left:25px;margin-top:7px;"><a id="chefFactory" href="javascript:void(0);" target="_black">Chef Factory</a></label>');
     $divFilterChefContainer.append($allFilter);
     $divFilterChefContainer.append($rolesFilter);
     $divFilterChefContainer.append($cookbooksFilter);
@@ -220,7 +218,6 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
     $searchiconappend.hide();
     $('.btnUpdateInstanceRunlist').removeClass('pointereventsDisabled');
     $('.btnUpdateInstanceRunlist').addClass('pointereventsEnabled');
-
 
 
 
@@ -285,7 +282,6 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
     $anchorDown.append($anchorDowni);
     $btngroupUpDown.append($anchorDown);
     $inputgroupsecond.append($btngroupUpDown);
-
 
 
 
@@ -393,7 +389,6 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
             }
             rolesDataList.push(obj);
         }
-
 
 
 
@@ -512,7 +507,6 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
         $('.cookbookspinner').detach();
         $firstlabelinput.append($erroMsgArea);
     });
-
 
 
 
@@ -663,7 +657,6 @@ function $chefCookbookRoleSelector(catorgname, callback, selectedRunlist, readMo
 
 
 
-
     return $chefItemdiv;
 }
 
@@ -686,34 +679,34 @@ $chefCookbookRoleSelector.getRunlistNames = function(runlist) {
     }
     var runlistNames = [];
     runlist.forEach(function(item) {
-        if(item) {
-        var name = '';
-        if (item.indexOf('recipe') === 0) {
-            name = getNameFormChefRunlist(item);
-        } else if (item.indexOf('role') === 0) {
-            name = getNameFormChefRunlist(item);
-        } else {
-            name = getNameFromTemplateRunlist(item);
+        if (item) {
+            var name = '';
+            if (item.indexOf('recipe') === 0) {
+                name = getNameFormChefRunlist(item);
+            } else if (item.indexOf('role') === 0) {
+                name = getNameFormChefRunlist(item);
+            } else {
+                name = getNameFromTemplateRunlist(item);
+            }
+            runlistNames.push(name);
         }
-        runlistNames.push(name);
-       }
     });
-    
+
     return runlistNames;
 
 };
 $chefCookbookRoleSelector.getRunlistFromTemplate = function(template) {
     var indexOfTemplateMarker = template.indexOf(':-:');
-        if (indexOfTemplateMarker !== -1) {
-            
-                var runlistSubString = template.substring(indexOfTemplateMarker+3, template.length - 1);
-                var templateRunlist = runlistSubString.split('*!*');
-                return templateRunlist;
-            
-        } else {
-           return [];
-        }
-    
+    if (indexOfTemplateMarker !== -1) {
+
+        var runlistSubString = template.substring(indexOfTemplateMarker + 3, template.length - 1);
+        var templateRunlist = runlistSubString.split('*!*');
+        return templateRunlist;
+
+    } else {
+        return [];
+    }
+
 
 };
 
