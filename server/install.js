@@ -5,7 +5,7 @@
  * Dec 2015
  */
 
-var logger = require('_pr/logger')(module);
+//var logger = require('_pr/logger')(module);
 var spawn = require('child_process').spawn;
 var exec = require('child_process').exec;
 var readline = require('readline');
@@ -213,7 +213,7 @@ function parseArguments() {
     });
 
     if (options.help) {
-        logger.debug(usage);
+        console.log(usage);
         process.exit(0);
     }
     return options;
@@ -243,20 +243,20 @@ function getConfig(config, options) {
 }
 
 function installPackageJson() {
-    logger.debug("Installing node packages from pacakge.json");
+    console.log("Installing node packages from pacakge.json");
     var procInstall = spawn('npm', ['install', '--unsafe-perm']);
     procInstall.stdout.on('data', function(data) {
-        logger.debug("" + data);
+        console.log("" + data);
     });
     procInstall.stderr.on('data', function(data) {
         console.error("" + data);
     });
     procInstall.on('close', function(pacakgeInstallRetCode) {
         if (pacakgeInstallRetCode === 0) {
-            logger.debug("Installation Successfull.");
+            console.log("Installation Successfull.");
             process.exit(0);
         } else {
-            logger.debug("Error occured while installing packages from package.json");
+            console.log("Error occured while installing packages from package.json");
             process.exit(1);
         }
     });
@@ -268,16 +268,16 @@ function restoreSeedData(config, callback) {
         console.error("mongorestore error ==> ", mongoRestoreError);
     });
     procMongoRestore.stdout.on('data', function(data) {
-        logger.debug("" + data);
+        console.log("" + data);
     });
     procMongoRestore.stderr.on('data', function(data) {
-        logger.debug("" + data);
+        console.log("" + data);
     });
     procMongoRestore.on('close', function(mongoRestoreCode) {
         if (mongoRestoreCode === 0) {
-            logger.debug('mongo restore successfull');
+            console.log('mongo restore successfull');
             fse = require('fs-extra');
-            logger.debug('copying seed data');
+            console.log('copying seed data');
             fse.copySync('../seed/catalyst', config.catalystHome);
             callback();
         } else {
@@ -298,7 +298,7 @@ function setupLdapUser(config, callback) {
         if (!ldapUser) {
             throw 'Invalid ldap user input'
         }
-        logger.debug('Checking for ldap User : ' + ldapUser);
+        console.log('Checking for ldap User : ' + ldapUser);
         var ldapjs = require('ldapjs');
         var client = ldapjs.createClient({
             url: 'ldap://' + config.ldap.host + ':' + config.ldap.port
@@ -325,7 +325,7 @@ function setupLdapUser(config, callback) {
             });
 
             res.on('end', function(result) {
-                logger.debug('status: ' + result.status);
+                console.log('status: ' + result.status);
                 if (!userFound) {
                     console.error('Unable to find user ' + ldapUser);
                     process.exit(1);
@@ -338,12 +338,12 @@ function setupLdapUser(config, callback) {
 }
 
 function createConfigFile(config) {
-    logger.debug('creating configuration json file');
+    console.log('creating configuration json file');
     configJson = JSON.stringify(config);
     var fs = require('fs');
     fs.writeFileSync('config/catalyst-config.json', configJson);
 }
-logger.debug('Installing node packages required for installation');
+console.log('Installing node packages required for installation');
 proc = spawn('npm', ['install', "command-line-args@0.5.3", 'mkdirp@0.5.0', 'fs-extra@0.18.0', 'ldapjs@0.7.1']);
 proc.on('close', function(code) {
     if (code !== 0) {
@@ -352,7 +352,7 @@ proc.on('close', function(code) {
         var options = parseArguments();
         var defaultConfig = getDefaultsConfig();
         var config = getConfig(defaultConfig, options);
-        logger.debug('creating catalyst home directory');
+        console.log('creating catalyst home directory');
         var fsExtra = require('fs-extra');
         var mkdirp = require('mkdirp');
         mkdirp.sync(config.catalystHome);
@@ -381,7 +381,7 @@ proc.on('close', function(code) {
     }
 });
 proc.stdout.on('data', function(data) {
-    logger.debug("" + data);
+    console.log("" + data);
 });
 
 proc.stderr.on('data', function(data) {
