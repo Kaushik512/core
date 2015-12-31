@@ -1,3 +1,10 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
 var mongoose = require('mongoose');
 var ObjectId = require('mongoose').Types.ObjectId;
 var logger = require('_pr/logger')(module);
@@ -14,7 +21,6 @@ var Logs = mongoose.model('logs', LogSchema);
 var LogsDao = function() {
 
     this.insertLog = function(logData, callback) {
-        //logger.debug("Enter insertLog");
         var log = new Logs(logData);
         log.save(function(err, data) {
             if (err) {
@@ -24,8 +30,6 @@ var LogsDao = function() {
                 }
                 return;
             }
-
-            //logger.debug("Exit insertLog", logData);
             if (typeof callback === 'function') {
                 callback(null, data);
             }
@@ -62,7 +66,6 @@ var LogsDao = function() {
     }
 
     this.getLogsByReferenceIdAndTimestamp = function(referenceId, timestampStarted, timestampEnded, callback) {
-        //logger.debug(timestampStarted, timestampEnded);
         var queryObj = {
             referenceId: {
                 $in: [referenceId]
@@ -76,10 +79,6 @@ var LogsDao = function() {
                 queryObj.timestamp.$lte = timestampEnded
             }
         }
-
-        //logger.debug('queryObj ==>',queryObj);
-
-
         Logs.find(queryObj, function(err, data) {
             if (err) {
                 callback(err, null);

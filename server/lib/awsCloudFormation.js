@@ -1,6 +1,12 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
 var aws = require('aws-sdk');
 var logger = require('_pr/logger')(module);
-
 
 if (process.env.http_proxy) {
     aws.config.update({
@@ -10,7 +16,6 @@ if (process.env.http_proxy) {
     });
 }
 var AWSCloudFormation = function(awsSettings) {
-
     var cloudFormation = new aws.CloudFormation({
         "accessKeyId": awsSettings.access_key,
         "secretAccessKey": awsSettings.secret_key,
@@ -18,7 +23,6 @@ var AWSCloudFormation = function(awsSettings) {
     });
 
     var that = this;
-
     this.createStack = function(stackOptions, callback) {
         var options = {
             StackName: stackOptions.name,
@@ -51,8 +55,6 @@ var AWSCloudFormation = function(awsSettings) {
         });
     };
 
-
-
     function describeStacks(stackNameOrId, nextToken, callback) {
         cloudFormation.describeStacks({
             StackName: stackNameOrId,
@@ -63,7 +65,6 @@ var AWSCloudFormation = function(awsSettings) {
                 return;
             };
             callback(null, res.Stacks);
-
 
         });
 
@@ -96,13 +97,13 @@ var AWSCloudFormation = function(awsSettings) {
 
     this.waitForStackCompleteStatus = function(stackId, callback) {
         var self = this;
-        console.log('Checking status ==>');
+        logger.debug('Checking status ==>');
         this.getStack(stackId, function(err, stack) {
             if (err) {
                 callback(err, null);
                 return;
             }
-            console.log('status ==>', stack.StackStatus);
+            logger.debug('status ==>', stack.StackStatus);
             switch (stack.StackStatus) {
                 case 'CREATE_IN_PROGRESS':
                     setTimeout(function() {

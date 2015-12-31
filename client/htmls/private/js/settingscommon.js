@@ -118,13 +118,43 @@ var haspermission = function(category, permissionto) {
 };
 
 
-function validatedockeruser(usernameInput, passwordInput) {
+/*function validatedockeruser(usernameInput, passwordInput) {
     var retval = false;
     $.ajax({
         type: "get",
         dataType: "text",
         async: false,
         url: '/d4dmasters/dockervalidate/' + usernameInput.val() + '/' + passwordInput.val(),
+        success: function(data) {
+            if (data == '200')
+                retval = true;
+            else {
+                errormessageforInput(usernameInput.attr('id'), "Not a valid Docker UserID / Password");
+                retval = false;
+            }
+        },
+        failure: function(data) {
+            errormessageforInput(usernameInput.attr('id'), "Not a valid Docker UserID / Password");
+            retval = false;
+        }
+    });
+
+
+    return (retval);
+}*/
+
+function validatedockeruser(usernameInput, passwordInput) {
+    var dockerData = {
+        "userName": usernameInput.val(),
+        "password": passwordInput.val()
+    };
+    var retval = false;
+    $.ajax({
+        type: "post",
+        dataType: "text",
+        async: false,
+        data: dockerData,
+        url: '/d4dmasters/docker/validate',
         success: function(data) {
             if (data == '200')
                 retval = true;
@@ -529,17 +559,17 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                             inputC.html(v);
                         }
                     } else {
-                        if(inputC.attr('datafield') == 'templatescookbooks'){
-                            
+                        if (inputC.attr('datafield') == 'templatescookbooks') {
+
                             v = $chefCookbookRoleSelector.getRunlistNames(v.split(','));
-                            if(v.length) {
-                              v = v.join(' , ');
+                            if (v.length) {
+                                v = v.join(' , ');
                             }
-                            inputC.html(v); 
+                            inputC.html(v);
                         } else {
-                          inputC.html(v);    
-                        } 
-                        
+                            inputC.html(v);
+                        }
+
                     }
 
                 }
@@ -676,7 +706,7 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
             // var tdorgname = $('.rowtemplate').find('td[datafield="orgname"]');
             //&& tdorgname.length > 0
             if (importbutton && importbutton.length > 0) {
-                if (item.configType ==='puppet') {
+                if (item.configType === 'puppet') {
                     importbutton.attr("href", "#ajax/Settings/puppetSync.html?" + idFieldValue);
                 } else {
                     importbutton.attr("href", "#ajax/Settings/chefSync.html?" + idFieldValue);
@@ -2704,21 +2734,21 @@ function loadcookbooksinto(cookbookctrl, chefserverid) {
         $servicecookbookspinner.addClass('hidden');
 
 
-    }).fail(function(jxhr){
-          var msg = "Server Behaved Unexpectedly";
-            if (jxhr.responseJSON && jxhr.responseJSON.message) {
-                msg = jxhr.responseJSON.message;
-            } else if (jxhr.responseText) {
-                msg = jxhr.responseText;
-            }
-            bootbox.alert({
-                message: "There are no Chef Servers Associated to this Organisation",
-                title: "Error!"
-            });
-            var $servicecookbook = $('#' + cookbookctrl);
-            $servicecookbook.trigger('change').select2('val','');
-            $('.servicecookbookspinner').addClass('hidden');
+    }).fail(function(jxhr) {
+        var msg = "Server Behaved Unexpectedly";
+        if (jxhr.responseJSON && jxhr.responseJSON.message) {
+            msg = jxhr.responseJSON.message;
+        } else if (jxhr.responseText) {
+            msg = jxhr.responseText;
+        }
+        bootbox.alert({
+            message: "There are no Chef Servers Associated to this Organisation",
+            title: "Error!"
         });
+        var $servicecookbook = $('#' + cookbookctrl);
+        $servicecookbook.trigger('change').select2('val', '');
+        $('.servicecookbookspinner').addClass('hidden');
+    });
 
 
 }
@@ -2757,7 +2787,7 @@ function loadreceipesinto(receipectrls, cookbook, chefserverid, finalfunction) {
             $('.receipelistspinner').addClass('hidden');
             loadactioncheckboxes(receipectrls);
             //eval(finalfunction + '([' + receipectrls.toString() +'])');
-        }).fail(function(jxhr){
+        }).fail(function(jxhr) {
             var msg = "Server Behaved Unexpectedly";
             if (jxhr.responseJSON && jxhr.responseJSON.message) {
                 msg = jxhr.responseJSON.message;
@@ -3351,24 +3381,21 @@ function isFormValid(formid) {
                         errormessageforInput(currCtrl.attr('id'), "Atleast 8 characters required.");
                         currCtrl.focus();
                     }
-                    if(!/\d/.test(str)){
+                    if (!/\d/.test(str)) {
                         errormessageforInput(currCtrl.attr('id'), "Atleast a number required.");
                         currCtrl.focus();
                     }
-                    if(!/[a-z]/.test(str)){
+                    if (!/[a-z]/.test(str)) {
                         errormessageforInput(currCtrl.attr('id'), "Atleast a lower case char is required.");
                         currCtrl.focus();
                     }
-                    /*if(!/[A-Z]/.test(str)){
-                        errormessageforInput(currCtrl.attr('id'), "Atleast a upper case char is required.");
-                        currCtrl.focus();
-                    }*/
+
                     if(!/[!@#$%^&*]/.test(str)){
                         errormessageforInput(currCtrl.attr('id'), "Atleast a special char is required.");
                         currCtrl.focus();
                     }
-                    break;    
-                    
+                    break;
+
                 case "cnfPass":
                     if (password != cnfPassword) {
                         isValid = false;

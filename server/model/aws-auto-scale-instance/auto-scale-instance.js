@@ -1,3 +1,10 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
 var logger = require('_pr/logger')(module);
 var mongoose = require('mongoose');
 var extend = require('mongoose-schema-extend');
@@ -7,8 +14,6 @@ var uniqueValidator = require('mongoose-unique-validator');
 
 
 var Schema = mongoose.Schema;
-
-
 
 var AutoScaleInstanceSchema = new Schema({
     autoScaleResourceId: {
@@ -22,11 +27,6 @@ var AutoScaleInstanceSchema = new Schema({
         trim: true,
     }
 });
-
-
-
-
-
 
 // Static methods :- 
 
@@ -85,7 +85,6 @@ AutoScaleInstanceSchema.statics.removeById = function(id, callback) {
             callback(err, null);
             return;
         }
-        //console.log('data ==>', data);
         callback(null, deleteCount);
 
     });
@@ -107,15 +106,10 @@ AutoScaleInstanceSchema.statics.removeByAutoScaleResourceAndInstanceId = functio
             callback(err, null);
             return;
         }
-        //console.log('data ==>', data);
         callback(null, deleteCount);
 
     });
 };
-
-
-
-
 
 
 var AutoScaleInstance = mongoose.model('AutoScaleInstance', AutoScaleInstanceSchema);

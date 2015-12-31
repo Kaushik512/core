@@ -1,3 +1,10 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
 var mongoose = require('mongoose');
 var d4dModelNew = require('../model/d4dmasters/d4dmastersmodelnew.js');
 var d4dModelNew = require('../model/d4dmasters/d4dmastersmodelnew.js');
@@ -15,7 +22,6 @@ var UserSchema = new Schema({
 
 var Users = mongoose.model('users', UserSchema);
 
-
 module.exports.createUser = function(username, fname, lname, groupId, roleId, callback) {
   var user = new Users({
     username: username,
@@ -29,7 +35,7 @@ module.exports.createUser = function(username, fname, lname, groupId, roleId, ca
       callback(err, null);
       return;
     }
-    console.log("User Document Created");
+    logger.debug("User Document Created");
     callback(null, data);
   });
 
@@ -39,19 +45,13 @@ module.exports.createUser = function(username, fname, lname, groupId, roleId, ca
 
 var getpermissionforcategory = function(category,permissionto, permissionset) {
     var perms = [];
-   // logger.debug(JSON.stringify(permissionset));
- //   logger.debug('Category : ' + category);
     if (permissionset) {
-      // logger.debug('About to call getObjects u:' + username + ' c:' + category);
-       //permissionset = JSON.parse(permissionset);
         for(var i = 0; i< permissionset.length; i++){
           var obj = permissionset[i].permissions;
           for(var j = 0; j < obj.length;j++){
             if(obj[j].category == category){
-              //perms.push(obj[j].access);
               var acc = obj[j].access.toString().split(',');
               for(var ac in acc){
-               // logger.debug('Array : ' +acc[ac]);
                 if(perms.indexOf(acc[ac]) < 0)
                   perms.push(acc[ac]);
               }
@@ -121,7 +121,7 @@ module.exports.getUser = function(username, req, callback) {
     }, function(err, d4dMasterJson) {
         logger.debug('Completed query on masters users.');
         if (err) {
-            console.log("Hit and error:" + err);
+            logger.debug("Hit and error:" + err);
         }
         if (d4dMasterJson && d4dMasterJson.length) {
             //Fetching the permission set for the role defined for the user
@@ -146,17 +146,14 @@ module.exports.getUser = function(username, req, callback) {
                     callback(err, null);
                 }
             });
-            //res.end();
         } else {
-            console.log("none found");
+            logger.debug("none found");
             callback(err, null);
         }
 
 
     });
 };
-
-
 
 module.exports.getUser__ = function(username, callback) {
   Users.find({
@@ -172,7 +169,6 @@ module.exports.getUser__ = function(username, callback) {
 
 module.exports.getUsersInGroup = function(groupId, roleId, callback) {
   Users.find({
-    //roleId:roleId,
     groupId: groupId,
   }, function(err, data) {
     if (err) {

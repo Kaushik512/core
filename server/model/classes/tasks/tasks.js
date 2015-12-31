@@ -1,13 +1,18 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
 var logger = require('_pr/logger')(module);
 var mongoose = require('mongoose');
 var extend = require('mongoose-schema-extend');
 var ObjectId = require('mongoose').Types.ObjectId;
 var schemaValidator = require('../../dao/schema-validator');
 var uniqueValidator = require('mongoose-unique-validator');
-
 var ChefTask = require('./taskTypeChef');
 var JenkinsTask = require('./taskTypeJenkins');
-
 var TaskHistory = require('./taskHistory');
 var configmgmtDao = require('_pr/model/d4dmasters/configmgmt');
 var Jenkins = require('_pr/lib/jenkins');
@@ -28,7 +33,6 @@ var TASK_STATUS = {
     RUNNING: 'running',
     FAILED: 'failed'
 };
-
 
 var taskSchema = new Schema({
     orgId: {
@@ -85,7 +89,6 @@ taskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData,
     logger.debug('Executing');
     var task;
     var self = this;
-
     var taskHistoryData = {
         taskId: self.id,
         taskType: self.taskType,
@@ -103,8 +106,6 @@ taskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData,
         task = new JenkinsTask(this.taskConfig);
         taskHistoryData.jenkinsServerId = this.taskConfig.jenkinsServerId;
         taskHistoryData.jobName = this.taskConfig.jobName;
-
-
     } else if (this.taskType === TASK_TYPE.PUPPET_TASK) {
         task = new PuppetTask(this.taskConfig);
         taskHistoryData.nodeIds = this.taskConfig.nodeIds;
@@ -145,7 +146,6 @@ taskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData,
         logger.debug("Task last run timestamp updated", JSON.stringify(taskExecuteData));
         self.lastRunTimestamp = timestamp;
         self.lastTaskStatus = TASK_STATUS.RUNNING;
-        //logger.debug("========================= ",JSON.stringify(self));
         self.save(function(err, data) {
             if (err) {
                 logger.error("Unable to update task timestamp");
@@ -153,16 +153,12 @@ taskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData,
             }
 
             logger.debug("Task last run timestamp updated");
-
-
         });
         if (!taskExecuteData) {
             taskExecuteData = {};
         }
         taskExecuteData.timestamp = timestamp;
         taskExecuteData.taskType = task.taskType;
-
-
         //making task history entry
         if (taskExecuteData.instances) {
             taskHistoryData.nodeIdsWithActionLog = [];
@@ -183,24 +179,15 @@ taskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData,
         if (taskExecuteData.lastBuildNumber) {
             taskHistoryData.previousBuildNumber = taskExecuteData.lastBuildNumber;
         }
-        //var arrStr;
-        //var x;
-        logger.debug("+++++++++++++++++++++++ ", self.taskConfig.jobResultURL);
         var acUrl = [];
         if (self.jobResultURLPattern) {
             if (self.jobResultURLPattern.length > 0) {
-                /*arrStr = self.taskConfig.jobResultURL.split("-");
-            if(arrStr.length === 3){
-                x = taskExecuteData.buildNumber+"/"+arrStr[2].substr(arrStr[2].lastIndexOf("/")+1);
-                acUrl = arrStr[0]+"-"+arrStr[1]+"-"+x;
-            }*/
                 for (var i = 0; i < self.jobResultURLPattern.length; i++) {
                     acUrl.push(self.jobResultURLPattern[i].replace("$buildNumber", taskExecuteData.buildNumber));
                 }
             }
         }
         //self.taskConfig.jobResultURL = acUrl;
-        logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ", acUrl);
         taskHistoryData.jobResultURL = acUrl;
         if (taskHistoryData.taskType === TASK_TYPE.JENKINS_TASK) {
             var taskConfig = self.taskConfig;
@@ -222,7 +209,6 @@ taskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData,
 
             });
         }
-        logger.debug("before call -----------------------------");
         // hack for composite task
         if (taskHistoryEntry) {
             taskHistoryData.save();
@@ -230,16 +216,6 @@ taskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData,
         } else {
             taskHistory = new TaskHistory(taskHistoryData);
             taskHistory.save();
-            /*
-            TaskHistory.createNew(taskHistoryData, function(err, taskHistoryEntry) {
-                if (err) {
-                    logger.error("Unable to make task history entry", err);
-                    return;
-                }
-                logger.debug("after call -----------------------------");
-                taskHistory = taskHistoryEntry;
-                logger.debug("Task history created");
-            });*/
         }
 
         callback(null, taskExecuteData, taskHistory);
@@ -287,12 +263,6 @@ taskSchema.methods.getPuppetTaskNodes = function() {
     }
 };
 
-/*taskSchema.methods.getHistory = function(callback) {
-    TaskHistory.getHistoryByTaskId(this.id, function(err, tHistories) {
-        callback(err, tHistories);
-    });
-};*/
-
 taskSchema.methods.getHistory = function(callback) {
     TaskHistory.getHistoryByTaskId(this.id, function(err, tHistories) {
         var count = 0;
@@ -332,9 +302,6 @@ var comparer = function compareObject(a, b) {
         return 1;
     }
 }
-
-
-
 
 
 // Static methods :- 
@@ -428,7 +395,6 @@ taskSchema.statics.getTaskById = function(taskId, callback) {
             callback(err, null);
             return;
         }
-        //console.log('data ==>', data);
         if (data.length) {
             callback(null, data[0]);
         } else {
@@ -448,7 +414,7 @@ taskSchema.statics.getTaskByIds = function(taskIds, callback) {
     queryObj._id = {
         $in: taskIds
     }
-    console.log(taskIds);
+    logger.debug(taskIds);
     this.find(queryObj, function(err, tasks) {
         if (err) {
             logger.error(err);
@@ -469,7 +435,6 @@ taskSchema.statics.removeTaskById = function(taskId, callback) {
             callback(err, null);
             return;
         }
-        //console.log('data ==>', data);
         callback(null, deleteCount);
 
     });
@@ -535,7 +500,6 @@ taskSchema.statics.updateTaskById = function(taskId, taskData, callback) {
             callback(err, null);
             return;
         }
-        //console.log('data ==>', data);
         logger.debug('Updated task:' + JSON.stringify(Tasks));
         callback(null, updateCount);
 
@@ -547,7 +511,7 @@ taskSchema.statics.getTasksByNodeIds = function(nodeIds, callback) {
     if (!nodeIds) {
         nodeIds = [];
     }
-    console.log("nodeids ==> ", nodeIds, typeof nodeIds[0]);
+    logger.debug("nodeids ==> ", nodeIds, typeof nodeIds[0]);
     Tasks.find({
         "taskConfig.nodeIds": {
             "$in": nodeIds
@@ -557,7 +521,6 @@ taskSchema.statics.getTasksByNodeIds = function(nodeIds, callback) {
             callback(err, null);
             return;
         }
-        //console.log('data ==>', data);
         callback(null, tasks);
 
     });

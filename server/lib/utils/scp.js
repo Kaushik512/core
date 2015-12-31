@@ -1,6 +1,13 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
 var scpClient = require('scp2');
 var fileIo = require('./fileio');
-
+var logger = require('_pr/logger')(module);
 
 var HOST_UNREACHABLE = -5000;
 var INVALID_CREDENTIALS = -5001;
@@ -8,8 +15,6 @@ var JSCH_EXCEPTION = -5002;
 var UNKOWN_EXCEPTION = -5003;
 var PEM_FILE_READ_ERROR = -5004;
 var STREAM_ERROR = -5005;
-
-
 
 function getErrorObj(err, errCode) {
     return {
@@ -50,13 +55,9 @@ function getConnectionParams(options, callback) {
     }
 }
 
-
-
 module.exports = function(options) {
     var connectionParamsObj = null;
-
     function initializeParams(callback) {
-      
         if (!connectionParamsObj) {
             getConnectionParams(options, function(err, connectionParams) {
                 if (err) {
@@ -95,7 +96,6 @@ module.exports = function(options) {
             }
             connectionParamsObj.path = destPath;
             scpClient.scp(srcPath, connectionParamsObj, function(err) {
-            	console.log('here ===> ');
                 callback(err);
             });
 

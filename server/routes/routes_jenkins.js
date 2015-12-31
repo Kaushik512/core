@@ -5,6 +5,8 @@
  * Aug 2015
  */
 
+// This file act as a Controller which contains Jenkins related all end points.
+
 var Jenkins = require('../lib/jenkins');
 var configmgmtDao = require('../model/d4dmasters/configmgmt');
 var errorResponses = require('./error_responses');
@@ -37,7 +39,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
         configmgmtDao.getListNew('20', 'jenkinsname', function(err, jenkinsList) {
             if (err) {
                 logger.error('jenkins list fetch error', err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             logger.debug(jenkinsList);
@@ -50,7 +52,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
         configmgmtDao.getJenkinsDataFromId(jenkinsId, function(err, jenkinsData) {
             if (err) {
                 logger.error('jenkins list fetch error', err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             } else {
                 if (!(jenkinsData && jenkinsData.length)) {
@@ -75,7 +77,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
         jenkins.getJobs(function(err, jobsList) {
             if (err) {
                 logger.error('jenkins jobs fetch error', err);
-                res.send(500, errorResponses.jenkins.serverError);
+                res.status(500).send(errorResponses.jenkins.serverError);
                 return;
             }
             res.send(jobsList);
@@ -93,7 +95,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
         jenkins.getJobInfo(req.params.jobName, function(err, job) {
             if (err) {
                 logger.error('jenkins jobs fetch error', err);
-                res.send(500, errorResponses.jenkins.serverError);
+                res.status(500).send(errorResponses.jenkins.serverError);
                 return;
             }
             res.send(job);
@@ -181,7 +183,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
         jenkins.getBuildInfo(req.params.jobName, req.params.buildNumber, function(err, buildData) {
             if (err) {
                 logger.error('jenkins jobs fetch error', err);
-                res.send(500, errorResponses.jenkins.serverError);
+                res.status(500).send(errorResponses.jenkins.serverError);
                 return;
             }
             res.send(buildData);
@@ -199,7 +201,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
         jenkins.getJobOutput(req.params.jobName, req.params.buildNumber, function(err, jobOutput) {
             if (err) {
                 logger.error('jenkins jobs fetch error', err);
-                res.send(500, errorResponses.jenkins.serverError);
+                res.status(500).send(errorResponses.jenkins.serverError);
                 return;
             }
             res.send(jobOutput);
@@ -219,9 +221,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
         jenkins.getJobsBuildNumber(req.params.jobName, function(err, jobOutput) {
             if (err) {
                 logger.error('jenkins jobs fetch error', err);
-                res.send(500, errorResponses.jenkins.serverError);
-                // If job is newly created.
-                //res.send({});
+                res.status(500).send(errorResponses.jenkins.serverError);
                 return;
             }
             res.send(jobOutput);
@@ -242,14 +242,10 @@ module.exports.setRoutes = function(app, verificationFunc) {
         jenkins.updateJob(req.params.jobName, function(err, jobOutput) {
             if (err) {
                 logger.error('jenkins jobs fetch error', err);
-                res.send(500, errorResponses.jenkins.serverError);
+                res.status(500).send(errorResponses.jenkins.serverError);
                 return;
             }
             res.send(jobOutput);
         });
-
-
     });
-
-
 }

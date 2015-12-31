@@ -31,12 +31,9 @@ AppDeployPipelineSchema.statics.createNew = function(appDeployPipelineData, call
     this.find({
         projectId: appDeployPipelineData.projectId
     }, function(err, data) {
-        //logger.debug("I am in appdeploy_Pipeline");
-        //logger.debug(data);
         if (err) {
             logger.debug("Error fetching record.", err);
-        }
-        else {
+        } else {
             aDeploy.save(function(err, appDeploy) {
                 if (err) {
                     logger.debug("Got error while creating AppDeploy: ", err);

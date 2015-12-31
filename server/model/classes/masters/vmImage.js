@@ -16,8 +16,6 @@ var uniqueValidator = require('mongoose-unique-validator');
 
 var Schema = mongoose.Schema;
 
-
-
 var imageSchema = new Schema({
     id: {
         type: Number,
@@ -99,7 +97,7 @@ imageSchema.statics.createNew = function(imageData, callback) {
 imageSchema.statics.getImages = function(callback) {
     logger.debug("Enter getImages");
     this.find({
-        "id" : 22
+        "id": 22
     }, function(err, images) {
         if (err) {
             logger.error(err);
@@ -118,15 +116,17 @@ imageSchema.statics.getImages = function(callback) {
     });
 };
 
-imageSchema.statics.getImagesForOrg = function(orgList,callback) {
+imageSchema.statics.getImagesForOrg = function(orgList, callback) {
     logger.debug("Enter getImagesForOrg");
     var orgIds = [];
-        for(var x=0;x<orgList.length;x++){
-            orgIds.push(orgList[x]._id);
-        }
-        logger.debug("org id: ",orgIds);
+    for (var x = 0; x < orgList.length; x++) {
+        orgIds.push(orgList[x]._id);
+    }
+    logger.debug("org id: ", orgIds);
     this.find({
-        orgId : {$in:orgIds}
+        orgId: {
+            $in: orgIds
+        }
     }, function(err, images) {
         if (err) {
             logger.error(err);

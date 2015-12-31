@@ -1,3 +1,10 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
 var logger = require('_pr/logger')(module);
 var mongoose = require('mongoose');
 var extend = require('mongoose-schema-extend');
@@ -66,7 +73,7 @@ var vmwareInstanceBlueprintSchema = new Schema({
     },
     instanceUsername: {
         type: String
-        //required: true
+            //required: true
     },
     infraMangerType: String,
     infraManagerId: String,
@@ -147,9 +154,6 @@ vmwareInstanceBlueprintSchema.methods.getCloudProviderData = function() {
     };
 };
 
-
-
-
 // static methods
 vmwareInstanceBlueprintSchema.statics.createNew = function(awsData) {
     var self = this;
@@ -164,7 +168,7 @@ vmwareInstanceBlueprintSchema.statics.createNew = function(awsData) {
     awsData.infraManagerId = awsData.infraManagerId;
     awsData.dataStore = awsData.dataStore;
     awsData.imageId = awsData.imageId;
-    console.log(awsData);
+    logger.debug(awsData);
     awsData.cloudProviderData = {
         instanceCount: awsData.instanceCount,
         instanceOS: awsData.instanceOS,
@@ -172,8 +176,6 @@ vmwareInstanceBlueprintSchema.statics.createNew = function(awsData) {
         dataStore: awsData.dataStore,
         cloudProviderType: awsData.cloudProviderType
     };
-    logger.debug('--------------->>>>>' + JSON.stringify(awsData));
-
     var awsInstanceBlueprint = new self(awsData);
 
     return awsInstanceBlueprint;

@@ -1,18 +1,20 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
+// This file act as a request mapping i.e. it will decide which request will go to which routes.
+
+
+var logger = require('_pr/logger')(module);
 var express = require("express");
 var path = require("path");
-
 var auth = require('./routes_authentication');
-
 var chef = require('./routes_chef.js');
-
-
-
 var users = require('./routes_users');
-
-
-
 var d4dMasters = require('./routes_d4dMasters');
-
 var organizations = require('./routes_organizations');
 var projects = require('./routes_projects');
 var blueprints = require('./routes_blueprints');
@@ -20,57 +22,34 @@ var instances = require('./routes_instances');
 var tasks = require('./routes_tasks');
 var taskStatus = require('./routes_taskstatus');
 var ec2 = require('./routes_aws_ec2');
-
 var jenkins = require('./routes_jenkins');
 var openstack = require('./routes_openstack');
 var hppubliccloud = require('./routes_hppubliccloud');
 var azure = require('./routes_azure');
 var vmware = require('./routes_vmware.js');
-
 var application = require('./routes_application');
 var jira = require('./routes_jira');
-
 var provider = require('./routes_provider');
 var vmimage = require('./routes_vmImages');
-
 var chefClientExecution = require('./routes_chefClientExecutionResponse');
-
 var appConfig = require('_pr/config');
-
 var cloudformation = require('./routes_cloudformation');
-
 var notification = require('./routes_notification');
-
 var globalsettings = require('./routes_globalsettings');
-
 var tracks = require('./routes_track');
-
 var trackType = require('./routes_trackType');
-
 var puppet = require('./routes_puppet.js');
-
 var appdeploy = require('./routes_appdeploy');
-
 var nexus = require('./routes_nexus');
-
 var vmware = require('./routes_vmware.js');
-
 var servicenow = require('./routes_servicenow');
-
-
 var appdeployPipeline = require('./routes_appdeployPipeline');
-
 var chefFactory = require('./routes_cheffactory');
-
 var expressServeStatic = require('serve-static');
-
+var arm = require('./routes_arm');
 var dashboardProvider = require('./routes_dashboard');
 
-
-
 module.exports.setRoutes = function(app,socketIo) {
-
-
 
     app.all('*', function(req, res, next) {
         res.header("Access-Control-Allow-Origin", "*");
@@ -78,23 +57,21 @@ module.exports.setRoutes = function(app,socketIo) {
 
         next();
     });
-
-
     var verificationFunctions = auth.setRoutes(app);
     var sessionVerificationFunc = verificationFunctions.sessionVerificationFunc;
     var adminSessionVerificationFunc = verificationFunctions.adminSessionVerificationFunc;
 
-
     d4dMasters.setRoutes(app, sessionVerificationFunc);
 
     organizations.setRoutes(app, sessionVerificationFunc);
+
     projects.setRoutes(app, sessionVerificationFunc);
 
     blueprints.setRoutes(app, sessionVerificationFunc);
+
     instances.setRoutes(app, sessionVerificationFunc);
 
     chef.setRoutes(app, sessionVerificationFunc);
-
 
     users.setRoutes(app, sessionVerificationFunc);
 
@@ -105,9 +82,13 @@ module.exports.setRoutes = function(app,socketIo) {
     ec2.setRoutes(app, sessionVerificationFunc);
 
     jenkins.setRoutes(app, sessionVerificationFunc);
+
     openstack.setRoutes(app, sessionVerificationFunc);
+
     hppubliccloud.setRoutes(app, sessionVerificationFunc);
+
     azure.setRoutes(app, sessionVerificationFunc);
+
     vmware.setRoutes(app,sessionVerificationFunc);
 
     application.setRoutes(app, sessionVerificationFunc);
@@ -142,6 +123,8 @@ module.exports.setRoutes = function(app,socketIo) {
     
     dashboardProvider.setRoutes(app, sessionVerificationFunc);
 
+    arm.setRoutes(app,sessionVerificationFunc);
+
     app.get('/', function(req, res) {
         res.redirect('/private/index.html');
     });
@@ -153,7 +136,6 @@ module.exports.setRoutes = function(app,socketIo) {
         if (req.session && req.session.user) {
             res.redirect('/');
         } else {
-            //res.redirect('/login');
             next();
         }
     })
@@ -164,25 +146,20 @@ module.exports.setRoutes = function(app,socketIo) {
             if (req.session.user.authorizedfiles) {
                 var authfiles = req.session.user.authorizedfiles.split(','); //To be moved to login page an hold a static variable.
                 authfiles += ',index.html,settings.html,design.html,Tracker.html,noaccess.html'
-                    // console.log(authfiles.length, req.originalUrl.indexOf('.html'));
                 if (req.originalUrl.indexOf('.html') > 0) //its a html file.
                 {
                     var urlpart = req.originalUrl.split('/');
-                    //  console.log(urlpart[urlpart.length -1], authfiles.length, authfiles.indexOf(urlpart[urlpart.length -1]));
                     if (authfiles.indexOf(urlpart[urlpart.length - 1]) < 0 && req.session.user.cn != 'sd1') {
-                        console.log('not authorized');
-                        //              res.redirect('/private/ajax/noaccess.html'); //To be fixed when micro authentication is implemented.
-                        //            return;
+                        logger.debug('not authorized');
                     } else {
-                        console.log('Authorized');
+                        logger.debug('Authorized');
                     }
 
                 }
             }
-            console.log('req received ' + req.originalUrl);
+            logger.debug('req received ' + req.originalUrl);
             next();
         } else {
-            //res.redirect('/login');
             res.redirect('/public/login.html');
         }
     });
@@ -201,13 +178,8 @@ module.exports.setRoutes = function(app,socketIo) {
         });
 
         app.use('/uploads', expressServeStatic(appConfig.staticUploadDir));
-
     }
-
-    
-
     // for notification
-
     notification.setRoutes(app, socketIo);
 
 }

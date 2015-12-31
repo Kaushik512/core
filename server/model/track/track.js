@@ -60,7 +60,7 @@ TrackSchema.statics.createNew = function(trackData, callback) {
 TrackSchema.statics.updateTrack = function(trackId, trackData, callback) {
 
     logger.debug("Update Track" , JSON.stringify(trackData));
-    console.log(trackData.description);
+    logger.debug(trackData.description);
     if(!trackData.childItem) {
         trackData.childItem = [];
     }
@@ -142,7 +142,6 @@ TrackSchema.statics.getTrackByType = function(trackType, callback) {
             return;
         }
         if (tracks) {
-            //logger.debug("Got Track: ", JSON.stringify(tracks));
             callback(null, tracks);
         }
     });

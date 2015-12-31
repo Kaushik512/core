@@ -1,5 +1,13 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
 var Chef = require('_pr/lib/chef');
 var fileIo = require('_pr/lib/utils/fileio');
+var logger = require('_pr/logger')(module);
 
 
 function fixPath(path) {
@@ -109,7 +117,7 @@ var ChefFactory = function ChefFactory(chefSettings) {
             fileIo.readFile(chefSettings.userChefRepoLocation + '/cookbooks/' + cookbookName + '/' + fileName, function(err, fileData) {
                 fileCount++;
                 if (err) {
-                    console.log(err);
+                    logger.debug(err);
                     if (fileCount < 2) {
                         readNameFromFile('metadata.json', 'json', callback);
                     } else {
@@ -121,13 +129,11 @@ var ChefFactory = function ChefFactory(chefSettings) {
                 var fileDataString = fileData.toString();
                 if (fileType === 'rb') {
                     var regEx = /name\s*['"](.*?)['"]/g;
-                    //nodes = stdOutStr.match(regEx)
                     var matches;
                     var metaDatacookbookName;
 
                     while (matches = regEx.exec(fileDataString)) {
                         if (matches.length == 2) {
-                            //console.log('matches',matches);
                             metaDatacookbookName = matches[1];
                             break;
                         }
@@ -262,7 +268,7 @@ var ChefFactory = function ChefFactory(chefSettings) {
 
     this.saveRoleFile = function(filePath, fileContent, callback) {
         filePath = fixPath(filePath);
-        console.log(filePath);
+        logger.debug(filePath);
         if (filePath) {
             fileIo.writeFile(chefSettings.userChefRepoLocation + '/roles/' + filePath, fileContent, 'utf-8', function(err) {
                 if (err) {
@@ -391,8 +397,6 @@ var ChefFactory = function ChefFactory(chefSettings) {
             });
         }
     };
-
-
 
 };
 

@@ -1,3 +1,13 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
+// This file act as a Controller which contains project related all end points.
+
+
 var blueprintsDao = require('../model/dao/blueprints');
 
 var instancesDao = require('../model/classes/instance/instance');
@@ -20,7 +30,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var blueprintData = req.body.blueprintData;
         blueprintData.projectId = req.params.projectId;
         blueprintData.envId = req.params.envId;
-        console.log(JSON.stringify(blueprintData));
+        logger.debug(JSON.stringify(blueprintData));
         if (!blueprintData.runlist) {
             blueprintData.runlist = [];
         }

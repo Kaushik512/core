@@ -20,7 +20,6 @@ var uuid = require('node-uuid');
 var taskStatusModule = require('../model/taskstatus');
 var credentialCryptography = require('../lib/credentialcryptography');
 var Curl = require('../lib/utils/curl.js');
-
 var errorResponses = require('./error_responses');
 var waitForPort = require('wait-for-port');
 var logger = require('_pr/logger')(module);
@@ -33,8 +32,8 @@ module.exports.setRoutes = function(app, verificationFunc) {
     app.get('/chef/servers/:serverId/nodes', function(req, res) {
         configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
             if (err) {
-                console.log(err);
-                res.send(500, errorResponses.db.error);
+                logger.debug(err);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (!chefDetails) {
@@ -50,21 +49,18 @@ module.exports.setRoutes = function(app, verificationFunc) {
             });
             chef.getNodesList(function(err, nodeList) {
                 if (err) {
-                    res.send(500, errorResponses.chef.connectionError);
+                    res.status(500).send(errorResponses.chef.connectionError);
                     return;
                 } else {
                     instancesDao.getInstancesFilterByChefServerIdAndNodeNames(req.params.serverId, nodeList, function(err, instances) {
                         if (err) {
-                            res.send(500, errorResponses.chef.connectionError);
+                            res.status(500).send(errorResponses.chef.connectionError);
                             return;
                         }
                         if (instances && instances.length) {
                             for (var i = 0; i < instances.length; i++) {
-                                //nodeNames.push(instances[i].chef.chefNodeName);
                                 var index = nodeList.indexOf(instances[i].chef.chefNodeName);
-                                if (index !== -1) {
-                                    // nodeList.splice(index,1); //commented to prevent existing nodes not to be listed. Vinod 30-Apr-2015
-                                }
+                                if (index !== -1) {}
                             }
                             res.send(nodeList);
                         } else {
@@ -80,7 +76,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
 
     app.get('/chef/justtesting/:mastername/:fieldname/:comparedfieldname/:comparedfieldvalue', function(req, res) {
-        console.log('test', req.params.mastername, ' ' + req.params.fieldname, ' ' + req.params.comparedfieldname);
+        logger.debug('test', req.params.mastername, ' ' + req.params.fieldname, ' ' + req.params.comparedfieldname);
         configmgmtDao.getListFilteredNew(req.params.mastername, req.params.fieldname, req.params.comparedfieldname, req.params.comparedfieldvalue, function(err, outd) {
             if (!err)
                 res.send(outd);
@@ -91,8 +87,8 @@ module.exports.setRoutes = function(app, verificationFunc) {
     app.get('/chef/servers/:serverId/environments', function(req, res) {
         configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
             if (err) {
-                console.log(err);
-                res.send(500, errorResponses.db.error);
+                logger.debug(err);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (!chefDetails) {
@@ -108,7 +104,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             });
             chef.getEnvironmentsList(function(err, environmentsList) {
                 if (err) {
-                    res.send(500, errorResponses.chef.connectionError);
+                    res.status(500).send(errorResponses.chef.connectionError);
                     return;
                 } else {
                     res.send(environmentsList);
@@ -121,12 +117,12 @@ module.exports.setRoutes = function(app, verificationFunc) {
     app.get('/chef/servers/:serverId/nodes/:nodeName', function(req, res) {
         configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
             if (err) {
-                console.log(err);
+                logger.debug(err);
                 res.send(500);
                 return;
             }
             if (!chefDetails) {
-                console.log("Chef details not found");
+                logger.debug("Chef details not found");
                 res.send(404);
                 return;
             }
@@ -139,7 +135,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             });
             chef.getNode(req.params.nodeName, function(err, nodeData) {
                 if (err) {
-                    console.log(err)
+                    logger.debug(err)
                     res.send(500);
                     return;
                 } else {
@@ -237,7 +233,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     credentials.pemFileLocation = appConfig.tempDir + uuid.v4();
                     fileIo.writeFile(credentials.pemFileLocation, reqBody.credentials.pemFileData, null, function(err) {
                         if (err) {
-                            console.log('unable to create pem file ', err);
+                            logger.debug('unable to create pem file ', err);
                             callback(err, null);
                             return;
                         }
@@ -250,7 +246,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                         var tempPemFileLocation = appConfig.tempDir + uuid.v4();
                         fileIo.copyFile(appConfig.aws.pemFileLocation + appConfig.aws.pemFile, tempPemFileLocation, function() {
                             if (err) {
-                                console.log('unable to copy pem file ', err);
+                                logger.debug('unable to copy pem file ', err);
                                 callback(err, null);
                                 return;
                             }
@@ -268,17 +264,17 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
             getCredentialsFromReq(function(err, credentials) {
                 if (err) {
-                    console.log("unable to get credetials from request ", err);
+                    logger.debug("unable to get credetials from request ", err);
                     return;
                 }
                 credentialCryptography.encryptCredential(credentials, function(err, encryptedCredentials) {
                     if (err) {
-                        console.log("unable to encrypt credentials == >", err);
+                        logger.debug("unable to encrypt credentials == >", err);
                         return;
                     }
 
-                    console.log('nodeip ==> ', nodeIp);
-                    console.log('alive ==> ', node.isAlive);
+                    logger.debug('nodeip ==> ', nodeIp);
+                    logger.debug('alive ==> ', node.isAlive);
                     var instance = {
                         name: node.name,
                         orgId: orgId,
@@ -307,7 +303,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
                     instancesDao.createInstance(instance, function(err, data) {
                         if (err) {
-                            console.log(err, 'occured in inserting node in mongo');
+                            logger.debug(err, 'occured in inserting node in mongo');
                             return;
                         }
                         logsDao.insertLog({
@@ -331,13 +327,13 @@ module.exports.setRoutes = function(app, verificationFunc) {
             status.message = msg;
             status.err = err;
 
-            console.log('taskstatus updated');
+            logger.debug('taskstatus updated');
 
             if (count == reqBody.selectedNodes.length) {
-                console.log('setting complete');
+                logger.debug('setting complete');
                 taskstatus.endTaskStatus(true, status);
             } else {
-                console.log('setting task status');
+                logger.debug('setting task status');
                 taskstatus.updateTaskStatus(status);
             }
 
@@ -355,23 +351,23 @@ module.exports.setRoutes = function(app, verificationFunc) {
                     (function(nodeName) {
                         chef.getNode(nodeName, function(err, node) {
                             if (err) {
-                                console.log(err);
+                                logger.debug(err);
                                 updateTaskStatusNode(nodeName, "Unable to import node " + nodeName, true, count);
                                 return;
                             } else {
 
-                                console.log('creating env ==>', node.chef_environment);
-                                console.log('orgId ==>', orgId);
-                                console.log('bgid ==>', bgId);
-                                // console.log('node ===>', node);
+                                logger.debug('creating env ==>', node.chef_environment);
+                                logger.debug('orgId ==>', orgId);
+                                logger.debug('bgid ==>', bgId);
+                                // logger.debug('node ===>', node);
                                 environmentsDao.createEnv(node.chef_environment, orgId, bgId, projectId, function(err, data) {
 
                                     if (err) {
-                                        console.log(err, 'occured in creating environment in mongo');
+                                        logger.debug(err, 'occured in creating environment in mongo');
                                         updateTaskStatusNode(node.name, "Unable to import node : " + node.name, true, count);
                                         return;
                                     }
-                                    console.log('Env ID Received before instance create:' + data);
+                                    logger.debug('Env ID Received before instance create:' + data);
                                     node.envId = data;
                                     //fetching the ip of the imported node
                                     var nodeIp = 'unknown';
@@ -385,7 +381,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
                                     instancesDao.getInstanceByOrgAndNodeNameOrIP(orgId, node.name, nodeIp, function(err, instances) {
                                         if (err) {
-                                            console.log('Unable to fetch instance', err);
+                                            logger.debug('Unable to fetch instance', err);
                                             updateTaskStatusNode(node.name, "Unable to import node : " + node.name, true, count);
                                             return;
                                         }
@@ -407,7 +403,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                                         logger.debug('checking port for node with ip : ' + nodeIp);
                                         waitForPort(nodeIp, openport, function(err) {
                                             if (err) {
-                                                console.log(err);
+                                                logger.debug(err);
                                                 updateTaskStatusNode(node.name, "Unable to ssh/winrm into node " + node.name + ". Cannot import this node.", true, count);
                                                 return;
                                             }
@@ -479,7 +475,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             });
             chef.createEnvironment(req.body.envName, function(err, envName) {
                 if (err) {
-                    res.send(500, "Error to create Env on chef.");
+                    res.status(500).send("Error to create Env on chef.");
                     return;
                 } else if (envName === 409) {
                     logger.debug("Got 409");
@@ -514,7 +510,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             });
 
             chef.getCookbooksList(function(err, cookbooks) {
-                console.log(err);
+                logger.debug(err);
                 if (err) {
                     res.send(500);
                     return;
@@ -549,7 +545,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             });
 
             chef.getCookbook(req.params.cookbookName, function(err, cookbooks) {
-                console.log(err);
+                logger.debug(err);
                 if (err) {
                     res.send(500);
                     return;
@@ -585,7 +581,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             });
 
             chef.downloadCookbook(req.params.cookbookName, function(err, cookbooks) {
-                console.log(err);
+                logger.debug(err);
                 if (err) {
                     res.send(500);
                     return;
@@ -603,7 +599,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
     app.post('/chef/servers/:serverId/attributes', function(req, res) {
 
         if (!((req.body.cookbooks && req.body.cookbooks.length) || (req.body.roles && req.body.roles.length))) {
-            res.send(400, {
+            res.status(400).send({
                 message: "Invalid cookbooks or roles"
             });
             return;
@@ -667,7 +663,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
             });
 
             chef.getReceipesForCookbook(req.params.cookbookName, function(err, cookbooks) {
-                console.log(err);
+                logger.debug(err);
                 if (err) {
                     res.send(500);
                     return;
@@ -684,15 +680,14 @@ module.exports.setRoutes = function(app, verificationFunc) {
 
 
     app.get('/chef/servers/:serverId', function(req, res) {
-        console.log(req.params.serverId);
+        logger.debug(req.params.serverId);
         configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
             if (err) {
                 res.send(500);
                 return;
             }
-            console.log("chefLog -->", chefDetails);
+            logger.debug("chefLog -->", chefDetails);
             if (chefDetails) {
-                //var chefDetails = JSON.parse(chefJson);
                 res.send({
                     serverId: chefDetails.rowid,
                     orgname: chefDetails.orgname,
@@ -712,12 +707,12 @@ module.exports.setRoutes = function(app, verificationFunc) {
     app.post('/chef/servers/:serverId/nodes/:nodename/updateEnv', function(req, res) {
         configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
             if (err) {
-                console.log(err);
-                res.send(500, errorResponses.chef.corruptChefData);
+                logger.debug(err);
+                res.status(500).send(errorResponses.chef.corruptChefData);
                 return;
             }
             if (!chefDetails) {
-                res.send(500, errorResponses.chef.corruptChefData);
+                res.status(500).send(errorResponses.chef.corruptChefData);
                 return;
             }
             var chef = new Chef({
@@ -762,9 +757,8 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 chefValidationPemFile: chefDetails.validatorpemfile,
                 hostedChefUrl: chefDetails.url,
             });
-            console.log("Chef...>>>>>>>>>>>>>>>>>>> " + JSON.stringify(chef));
             chef.getCookbook(req.params.cookbookName, function(err, cookbooks) {
-                console.log(err);
+                logger.debug(err);
                 if (err) {
                     res.send(500);
                     return;
@@ -803,19 +797,18 @@ module.exports.setRoutes = function(app, verificationFunc) {
                         chefValidationPemFile: chefDetails.validatorpemfile,
                         hostedChefUrl: chefDetails.url,
                     });
-                    logger.debug("Chef...>>>>>>>>>>>>>>>>>>> ", JSON.stringify(chef));
                     chef.createDataBag(req.body.name, function(err, dataBag) {
                         if (err) {
                             logger.debug("Exit /chef/../databag/create");
-                            res.send(500, "Failed to create Data Bag on Chef.");
+                            res.status(500).send("Failed to create Data Bag on Chef.");
                             return;
                         } else if (dataBag === 409) {
                             logger.debug("Exit /chef/../databag/create");
-                            res.send(500, "Data Bag already exist on Chef.");
+                            res.status(500).send("Data Bag already exist on Chef.");
                             return;
                         } else if (dataBag === 400) {
                             logger.debug("Exit /chef/../databag/create");
-                            res.send(400, "Name can only contain lowercase letters, numbers, hyphens, and underscores.");
+                            res.status(400).send("Name can only contain lowercase letters, numbers, hyphens, and underscores.");
                             return;
                         }
                         logger.debug("Exit /chef/../databag/create");
@@ -851,11 +844,10 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 chefValidationPemFile: chefDetails.validatorpemfile,
                 hostedChefUrl: chefDetails.url,
             });
-            console.log("Chef...>>>>>>>>>>>>>>>>>>> " + JSON.stringify(chef));
             chef.getDataBags(function(err, dataBags) {
                 if (err) {
                     logger.debug("Exit /chef/../databag/list");
-                    res.send(500, "Failed to get Data Bag from Chef.");
+                    res.status(500).send("Failed to get Data Bag from Chef.");
                     return;
                 }
                 logger.debug("Exit /chef/../databag/list");
@@ -888,15 +880,14 @@ module.exports.setRoutes = function(app, verificationFunc) {
                         chefValidationPemFile: chefDetails.validatorpemfile,
                         hostedChefUrl: chefDetails.url,
                     });
-                    console.log("Chef...>>>>>>>>>>>>>>>>>>> " + JSON.stringify(chef));
                     chef.deleteDataBag(req.params.dataBagName, function(err, statusCode) {
                         if (err) {
                             logger.debug("Exit /chef/../databag/../delete");
-                            res.send(500, "Failed to delete Data Bag on Chef.");
+                            res.status(500).send("Failed to delete Data Bag on Chef.");
                             return;
                         } else if (statusCode === 404) {
                             logger.debug("Exit /chef/../databag/../delete");
-                            res.send(500, "No Data Bag found on Chef.");
+                            res.status(500).send("No Data Bag found on Chef.");
                             return;
                         }
                         logger.debug("Exit /chef/../databag/../delete");
@@ -923,7 +914,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 logger.debug("Got permission to create DataBagItem: ", isPermitted);
                 configmgmtDao.getChefServerDetails(req.params.serverId, function(err, chefDetails) {
                     if (err) {
-                        res.send(500, "Error to get chef detail.");
+                        res.status(500).send("Error to get chef detail.");
                         return;
                     }
                     if (!chefDetails) {
@@ -937,14 +928,12 @@ module.exports.setRoutes = function(app, verificationFunc) {
                         chefValidationPemFile: chefDetails.validatorpemfile,
                         hostedChefUrl: chefDetails.url,
                     });
-                    logger.debug("Chef...>>>>>>>>>>>>>>>>>>> ", JSON.stringify(chef));
                     logger.debug("Id check: ", JSON.stringify(req.body));
                     if (typeof req.body.id === 'undefined' || req.body.id.length === 0) {
-                        res.send(400, "Id can't be empty.");
+                        res.status(400).send("Id can't be empty.");
                         return;
                     }
                     var dataBagItem;
-                    logger.debug("dataBagItem>>>>>>>>> ", req.body.dataBagItem);
                     if (typeof req.body.dataBagItem === 'undefined') {
                         dataBagItem = {
                             "id": req.body.id
@@ -958,18 +947,18 @@ module.exports.setRoutes = function(app, verificationFunc) {
                         dataBagItem = JSON.parse(JSON.stringify(dataBagItem));
                     } catch (e) {
                         logger.debug("error: ", e);
-                        res.send(500, "Invalid Json for Data Bag item.");
+                        res.status(500).send("Invalid Json for Data Bag item.");
                         return;
                     }
                     chef.createDataBagItem(req, dataBagItem, function(err, dataBagItem) {
                         if (err) {
                             logger.debug("Exit /chef/../databag/../item/create");
-                            res.send(500, "Failed to create Data Bag Item on Chef.");
+                            res.status(500).send("Failed to create Data Bag Item on Chef.");
                             return;
                         }
                         if (dataBagItem === 409) {
                             logger.debug("Exit /chef/../databag/../item/create");
-                            res.send(500, "Data Bag Item already exist on Chef.");
+                            res.status(500).send("Data Bag Item already exist on Chef.");
                             return;
                         }
                         if (dataBagItem === 403) {
@@ -1011,11 +1000,10 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 chefValidationPemFile: chefDetails.validatorpemfile,
                 hostedChefUrl: chefDetails.url,
             });
-            console.log("Chef...>>>>>>>>>>>>>>>>>>> " + JSON.stringify(chef));
             chef.getDataBagItems(req.params.dataBagName, function(err, dataBagItems) {
                 if (err) {
                     logger.debug("Exit /chef/../databag/item/list");
-                    res.send(500, "Failed to get Data Bag from Chef.");
+                    res.status(500).send("Failed to get Data Bag from Chef.");
                     return;
                 }
                 logger.debug("Exit /chef/../databag/item/list");
@@ -1057,9 +1045,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
                         chefValidationPemFile: chefDetails.validatorpemfile,
                         hostedChefUrl: chefDetails.url,
                     });
-                    logger.debug("Chef...>>>>>>>>>>>>>>>>>>> ", JSON.stringify(chef));
                     var dataBagItem;
-                    logger.debug("dataBagItem>>>>>>>>> ", req.body.dataBagItem);
                     if (typeof req.body.dataBagItem === 'undefined') {
                         dataBagItem = {
                             "id": req.params.itemId
@@ -1073,13 +1059,13 @@ module.exports.setRoutes = function(app, verificationFunc) {
                         dataBagItem = JSON.parse(JSON.stringify(dataBagItem));
                     } catch (e) {
                         logger.debug("error: ", e);
-                        res.send(500, "Invalid Json for Data Bag item.");
+                        res.status(500).send("Invalid Json for Data Bag item.");
                         return;
                     }
                     chef.updateDataBagItem(req, dataBagItem, function(err, dataBagItem) {
                         if (err) {
                             logger.debug("Exit /chef/../databag/../item/update");
-                            res.send(500, "Failed to update Data Bag Item on Chef.");
+                            res.status(500).send("Failed to update Data Bag Item on Chef.");
                             return;
                         }
                         if (dataBagItem === 403) {
@@ -1124,11 +1110,10 @@ module.exports.setRoutes = function(app, verificationFunc) {
                         chefValidationPemFile: chefDetails.validatorpemfile,
                         hostedChefUrl: chefDetails.url,
                     });
-                    logger.debug("Chef...>>>>>>>>>>>>>>>>>>> ", JSON.stringify(chef));
                     chef.deleteDataBagItem(req.params.dataBagName, req.params.itemName, function(err, dataBagItem) {
                         if (err) {
                             logger.debug("Exit /chef/../databag/../item/delete");
-                            res.send(500, "Failed to delete Data Bag Item on Chef.");
+                            res.status(500).send("Failed to delete Data Bag Item on Chef.");
                             return;
                         }
                         logger.debug("Exit /chef/../databag/../item/delete");
@@ -1164,15 +1149,13 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 chefValidationPemFile: chefDetails.validatorpemfile,
                 hostedChefUrl: chefDetails.url,
             });
-            logger.debug("Chef...>>>>>>>>>>>>>>>>>>> ", JSON.stringify(chef));
             chef.getDataBagItemById(req.params.dataBagName, req.params.itemId, function(err, dataBagItem) {
                 if (err) {
                     logger.debug("Exit /chef/../databag/../item/find");
-                    res.send(500, "Failed to find Data Bag Item on Chef.");
+                    res.status(500).send("Failed to find Data Bag Item on Chef.");
                     return;
                 }
                 logger.debug("Exit /chef/../databag/../item/find");
-                logger.debug("dataBagItem:>>>>>>>>>>>> ", JSON.stringify(dataBagItem));
                 res.send(dataBagItem);
                 return;
             });
@@ -1198,11 +1181,10 @@ module.exports.setRoutes = function(app, verificationFunc) {
                 chefValidationPemFile: chefDetails.validatorpemfile,
                 hostedChefUrl: chefDetails.url,
             });
-            logger.debug("Chef...>>>>>>>>>>>>>>>>>>> ", JSON.stringify(chef));
             chef.deleteEnvironment(req.params.envName, function(err, env) {
                 if (err) {
                     logger.debug("Exit /chef/../environments ", err);
-                    res.send(500, "Failed to delete environments on Chef.");
+                    res.status(500).send("Failed to delete environments on Chef.");
                     return;
                 }
                 logger.debug("Exit /chef/../environments");
@@ -1211,7 +1193,4 @@ module.exports.setRoutes = function(app, verificationFunc) {
             });
         });
     });
-
-
-
 };

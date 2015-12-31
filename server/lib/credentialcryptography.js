@@ -1,3 +1,10 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
 /*
 This is a temproray class. these methods will me moved to model once mvc comes into pictured
 */
@@ -6,8 +13,10 @@ var appConfig = require('_pr/config');
 var uuid = require('node-uuid');
 var fileIo = require('./utils/fileio');
 var fs = require('fs');
+var logger = require('_pr/logger')(module);
+
 module.exports.encryptCredential = function(credentials, callback) {
-    console.log(credentials);
+    logger.debug(credentials);
     var cryptoConfig = appConfig.cryptoSettings;
     var encryptedCredentials = {};
 
@@ -22,9 +31,9 @@ module.exports.encryptCredential = function(credentials, callback) {
             cryptography.encryptFile(credentials.pemFileLocation, cryptoConfig.encryptionEncoding, encryptedPemFileLocation, cryptoConfig.decryptionEncoding, function(err) {
                 fileIo.removeFile(credentials.pemFileLocation, function(err) {
                     if (err) {
-                        console.log("Unable to delete temp pem file =>", err);
+                        logger.debug("Unable to delete temp pem file =>", err);
                     } else {
-                        console.log("temp pem file deleted =>");
+                        logger.debug("temp pem file deleted =>");
                     }
                 });
 
@@ -48,18 +57,16 @@ module.exports.decryptCredential = function(credentials, callback) {
     var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
 
     if (credentials.pemFileLocation) {
-
         var tempUncryptedPemFileLoc = appConfig.tempDir + uuid.v4();
-
         cryptography.decryptFile(credentials.pemFileLocation, cryptoConfig.decryptionEncoding, tempUncryptedPemFileLoc, cryptoConfig.encryptionEncoding, function(err) {
             if (err) {
-                console.log(err);
+                logger.debug(err);
                 callback(err, null);
                 return;
             }
             fs.chmod(tempUncryptedPemFileLoc, 0600, function(err) {
                 if (err) {
-                    console.log(err);
+                    logger.debug(err);
                     callback(err, null);
                     return;
                 }

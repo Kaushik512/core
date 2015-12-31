@@ -1,3 +1,11 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
+var logger = require('_pr/logger')(module);
 var util = require('util'),
     Strategy = require('passport-strategy'),
     LdapClient = require('./ldap-client.js');
@@ -27,17 +35,17 @@ util.inherits(LDAPPassportstrategy, Strategy);
 LDAPPassportstrategy.prototype.authenticate = function(req, options) {
     var self = this;
     var opts = this.getOptions();
-    console.log(opts);
+    logger.debug(opts);
     var ldapClient = new LdapClient({
         host: opts.host,
         port: opts.port,
         baseDn: opts.baseDn,
-        ou:opts.ou
+        ou: opts.ou
     });
-    console.log(req.body);
+    logger.debug(req.body);
     var username = req.body[opts.usernameField];
     var password = req.body[opts.passwordField];
-    
+
     if (!(username && password)) {
         return self.fail({
             message: 'Missing credentials'

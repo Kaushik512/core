@@ -1,12 +1,13 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
 var fs = require('fs');
 var fsExtra = require('fs-extra');
-
-
-module.exports.validateFilePath = function(rootPath, path) {
-
-
-
-}
+var logger = require('_pr/logger')(module);
 
 module.exports.readDir = function(root, path, callback) {
     var dirList = [];
@@ -14,7 +15,7 @@ module.exports.readDir = function(root, path, callback) {
     var totalItems = 0;
     var that = this;
     fs.readdir(root + path, function(err, files) {
-      
+
         if (err) {
             callback(err);
             return;
@@ -101,7 +102,7 @@ module.exports.writeFile = function(path, data, encoding, callback) {
 
 module.exports.exists = function(path, callback) {
     fs.exists(path, function(exists, err) {
-        console.log(exists, err);
+        logger.debug(exists, err);
         if (exists) {
             callback(exists);
         } else {
@@ -123,7 +124,7 @@ module.exports.mkdir = function(path, callback) {
 module.exports.copyFile = function(src, dst, callback) {
     fsExtra.copy(src, dst, function(err) {
         if (err) {
-            console.log(err);
+            logger.debug(err);
             return;
         }
         callback(null);
