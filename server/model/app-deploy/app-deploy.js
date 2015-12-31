@@ -10,6 +10,7 @@ var mongoose = require('mongoose');
 var ObjectId = require('mongoose').Types.ObjectId;
 var uniqueValidator = require('mongoose-unique-validator');
 var schemaValidator = require('_pr/model/utils/schema-validator');
+var mongoosePaginate = require('mongoose-paginate');
 
 // File which contains App Deploy DB schema and DAO methods. 
 
@@ -34,6 +35,7 @@ var AppDeploySchema = new Schema({
 
 });
 
+AppDeploySchema.plugin(mongoosePaginate);
 // Get all AppDeploy informations.
 AppDeploySchema.statics.getAppDeploy = function(callback) {
     this.find(function(err, appDeploy) {
@@ -263,9 +265,9 @@ AppDeploySchema.statics.getAppDeployByProjectId = function(projectId, appName, c
 
 // Get all AppDeploy informations by AppNameAndVersion.
 AppDeploySchema.statics.getAppDeployByAppNameAndVersion = function(appName, version, callback) {
-    logger.debug("appName: ",appName);
-    logger.debug("version: ",version);
-    var that =this;
+    logger.debug("appName: ", appName);
+    logger.debug("version: ", version);
+    var that = this;
     that.find({
         "applicationName": appName,
         "applicationVersion": version
@@ -278,6 +280,23 @@ AppDeploySchema.statics.getAppDeployByAppNameAndVersion = function(appName, vers
             logger.debug("Got AppDeploy: ", JSON.stringify(appDeploy));
             callback(null, appDeploy);
         }
+    });
+};
+
+// Get all AppDeploy informations. with pagination
+AppDeploySchema.statics.getAppDeployWithPage = function(offset, limit, callback) {
+    var query = {};
+    var options = {
+        sort: {
+            applicationLastDeploy: -1
+        },
+        lean: false,
+        offset: offset,
+        limit: limit
+    };
+    this.paginate(query, options).then(function(appDeploy) {
+        //slogger.debug(JSON.stringify(appDeploy));
+        callback(null, appDeploy);
     });
 };
 

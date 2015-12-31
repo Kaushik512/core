@@ -185,4 +185,17 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             }
         });
     });
+
+    // Get AppDeploy w.r.t. projectId
+    app.get('/app/deploy/offset/:offset/limit/:limit/paginate', function(req, res) {
+        logger.debug("Filtered by projectId called..");
+        AppDeploy.getAppDeployWithPage(req.params.offset, req.params.limit, function(err, appDeploy) {
+            if (err) {
+                res.status(500).send(errorResponses.db.error);
+                return;
+            }
+            res.status(200).send(appDeploy);
+            return;
+        });
+    });
 };
