@@ -4302,3 +4302,12 @@ form.cmxform .gray * {
 .modalHeightHelp{
     height:480px;overflow-y:auto
 }
+.leftSpaceStyle{
+    height:40px;background-color:#40baf1;color:white;border-right:1px solid silver;
+}
+.treeStyle{
+    margin-top:0px;font-size:11pt;font-weight:bold;padding-left:10px;padding-top:10px
+}
+.activeProviderOpen{
+    background-color:#40baf1;margin-right:1px;
+}
