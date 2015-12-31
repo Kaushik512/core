@@ -140,7 +140,7 @@ function getDefaultsConfig() {
         },
         logServerUrl: '',
         features: {
-            appcard: true
+            appcard: false
         },
         maxInstanceCount: 0,
 
