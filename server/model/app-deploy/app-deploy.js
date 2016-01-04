@@ -284,18 +284,25 @@ AppDeploySchema.statics.getAppDeployByAppNameAndVersion = function(appName, vers
 };
 
 // Get all AppDeploy informations. with pagination
-AppDeploySchema.statics.getAppDeployWithPage = function(offset, limit, callback) {
+AppDeploySchema.statics.getAppDeployWithPage = function(offset, limit, sortBy, searchBy, callback) {
     var query = {};
+    /*if(searchBy){
+        query[searchBy] = searchBy
+    };*/
     var options = {
         sort: {
-            applicationLastDeploy: -1
         },
         lean: false,
         offset: offset,
         limit: limit
     };
+    logger.debug(sortBy);
+    if (sortBy) {
+        options.sort[sortBy] = -1
+    }
+    logger.debug("options: ",JSON.stringify(options));
+    logger.debug("query: ",JSON.stringify(query));
     this.paginate(query, options).then(function(appDeploy) {
-        //slogger.debug(JSON.stringify(appDeploy));
         callback(null, appDeploy);
     });
 };
