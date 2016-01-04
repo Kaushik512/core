@@ -669,8 +669,6 @@ function foldTreeForSetting() {
 
 
 function setleftnavigation(toplink, breadcrumbHeader) {
-    //alert('setting left navigation');
-
     var TabID = $(toplink).attr('id');
     if (TabID === "workZoneNew") {
         loadTreeFuncNew();
@@ -1115,7 +1113,6 @@ function buildTree() {
         onNodeSelected: function(event, node) {
 
             window.selectedOrgName = $('li[data-nodeid="' + node.nodeId + '"]').first().find('a').first().attr('orgname');
-            //console.log("Org Selected:" + window.selectedOrgName );
             localStorage.setItem('selectedOrgName', $('li[data-nodeid="' + node.nodeId + '"]').first().find('a').first().attr('orgname'));
             localStorage.setItem('selectedOrgId', $('li[data-nodeid="' + node.nodeId + '"]').first().find('a').first().attr('orgid'));
             /*Description from the node*/
@@ -1125,7 +1122,7 @@ function buildTree() {
             localStorage.setItem("envname", node.text);
             localStorage.setItem('itProjectActive', 'no');
 
-            /*Draw the braedcrumb from ol*/
+            /*Draw the breadcrumb from ol*/
             var ol = $("#ribbon ol.breadcrumb");
             if (ol.children().length == 0) {
                 drawBreadCrumb();
@@ -1139,7 +1136,6 @@ function buildTree() {
 }
 
 var loadTreeFuncNew = function(lazy) {
-    // alert('load tree');
     console.log('Loaded a tree');
     if (lazy) {
         buildTree();
@@ -1154,10 +1150,8 @@ var loadTreeFuncNew = function(lazy) {
 
 
 function getUrlParameter(sParam) {
-    //var u = window.location.href.split('?');
     var u = $('#workZoneNew').attr('href').split('?');
     var sPageURL = u[1];
-    //alert(sPageURL);
     if (typeof sPageURL != 'undefined') {
         var sURLVariables = sPageURL.split('&');
         for (var i = 0; i < sURLVariables.length; i++) {
@@ -1170,7 +1164,6 @@ function getUrlParameter(sParam) {
         //check local storage for last env clicked.
         var lastwzurl = localStorage.getItem("lastworkzoneurl");
         if (lastwzurl) {
-            //alert('in lastwzurl' + lastwzurl);
             u = lastwzurl.split('?');
             sPageURL = u[1];
             if (typeof sPageURL != 'undefined') {
@@ -1190,8 +1183,6 @@ function getUrlParameter(sParam) {
     return ('');
 }
 
-//Special key to bring up the logs window
-
 $(document).keypress("l", function(e) {
     if (e.ctrlKey && e.altKey && (String.fromCharCode(e.which) === 'l' || String.fromCharCode(e.which) === 'L')) {  
         window.open('/private/catlog.html', 'Catalyst Log');
@@ -1202,7 +1193,6 @@ $(document).keypress("l", function(e) {
 
 window.getUrlParams = function(url) {
     var urlParams = {};
-    //var url = window.location.href;
     var indexOfQues = url.lastIndexOf("?");
     if (indexOfQues != -1) {
         var sub = url.substring(indexOfQues + 1);
@@ -1236,9 +1226,6 @@ function selectFirstEnvironment() {
 }
 
 function selectEnv() {
-
-
-
     var $workspaceTree = $('#Workspace1');
     var url = localStorage.getItem("lastworkzoneurl");
     if (!url) {
@@ -1276,7 +1263,6 @@ function selectEnv() {
             treeNodes.push($envLink);
             envFound = true;
         }
-        //alert(envFound);
         if (!envFound) {
             console.log('treenodes', treeNodes);
             for (var i = treeNodes.length - 1; i >= 0; i--) {
@@ -1287,8 +1273,8 @@ function selectEnv() {
         }
 
 
-    } else { //not found ... trying to find first element in any org
-        //alert('not found');
+    } else { 
+        //not found ... trying to find first element in any org
         envFound = selectFirstEnvironment();
     }
     if (!envFound) {
@@ -1315,7 +1301,7 @@ checkandnavigatetotab = function() {
 checkandnavigatetotab();
 loadSettingsTree();
 foldTreeForSetting();
-    </script>
+</script>
 
 <script src="js/chefmodalcommon.js"></script>
 <script src="js/jquerytemplatemin.js"></script>
@@ -1341,8 +1327,5 @@ foldTreeForSetting();
     </div>
     <!-- /.modal-dialog -->
 </div>
-
-
-
 </body>
 </html>

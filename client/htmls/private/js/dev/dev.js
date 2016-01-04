@@ -4256,10 +4256,6 @@ function devCall() {
                     $.get('../jenkins/' + jenkinsServerId + '/jobs/' + jobName, function(job) {
 
                         if (job.lastBuild.number > lastBuildNumber) {
-                            // $modal.find('.loadingContainer').hide();
-                            // $modal.find('.errorMsgContainer').hide();
-                            // $modal.find('.outputArea').show();
-
                             buildNumber = job.lastBuild.number;
 
                             pollJobOutput();
