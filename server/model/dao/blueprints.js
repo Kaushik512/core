@@ -1,3 +1,10 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
 var mongoose = require('mongoose');
 var ObjectId = require('mongoose').Types.ObjectId;
 var validate = require('mongoose-validator');
@@ -26,29 +33,20 @@ var BlueprintSchema = new Schema({
         trim: true,
         validate: schemaValidator.projIdValidator
     },
-    // envId: {
-    //     type: String,
-    //     required: true,
-    //     trim: true,
-    //     validate: schemaValidator.envIdValidator
-    // },
     imageId: {
         type: String,
         required: true,
         trim: true
-        //validate: schemaValidator.imageIdValidator
     },
     providerId: {
         type: String,
         required: true,
         trim: true
-        //validate: schemaValidator.imageIdValidator
     },
     keyPairId: {
         type: String,
         required: true,
         trim: true
-        //validate: schemaValidator.imageIdValidator
     },
     subnetId: {
         type: String,
@@ -89,12 +87,12 @@ var BlueprintSchema = new Schema({
         required: true,
         trim: true
     },
-    dockercompose:[{
-        dockercontainerpathstitle:String,
-        dockercontainerpaths:String,
+    dockercompose: [{
+        dockercontainerpathstitle: String,
+        dockercontainerpaths: String,
         dockerrepotags: String,
         dockerreponame: String,
-        dockerimagename: String,    
+        dockerimagename: String,
         dockerlaunchparameters: String
     }],
     dockercontainerpathstitle: {
@@ -127,15 +125,12 @@ var BlueprintSchema = new Schema({
     }],
     instanceType: {
         type: String,
-        //  required: true
     },
     instanceOS: {
         type: String,
-        // required: true
     },
     instanceAmiid: {
         type: String,
-        //  required: true
     },
     instanceUsername: {
         type: String,
@@ -305,10 +300,6 @@ var BlueprintsDao = function() {
         if (blueprintType) {
             queryObj.templateType = blueprintType;
         }
-        //Removed as a team check for the project happens at the route. - Vinod
-        // if (userName) {
-        //     queryObj.users = userName;
-        // }
 
         Blueprint.find(queryObj, function(err, data) {
             if (err) {
@@ -331,10 +322,6 @@ var BlueprintsDao = function() {
         if (blueprintType) {
             queryObj.templateType = blueprintType;
         }
-        //Removed as a team check for the project happens at the route. - Vinod
-        // if (userName) {
-        //     queryObj.users = userName;
-        // }
 
         Blueprint.find(queryObj, function(err, data) {
             if (err) {
@@ -352,7 +339,6 @@ var BlueprintsDao = function() {
             orgId: blueprintData.orgId,
             bgId: blueprintData.bgId,
             projectId: blueprintData.projectId,
-            //envId: blueprintData.envId,
             imageId: blueprintData.imageId,
             keyPairId: blueprintData.keyPairId,
             subnetId: blueprintData.subnetId,

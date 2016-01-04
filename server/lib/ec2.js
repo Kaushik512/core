@@ -1,3 +1,10 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
 var aws = require('aws-sdk');
 var logger = require('_pr/logger')(module);
 
@@ -49,13 +56,13 @@ var EC2 = function(awsSettings) {
     this.getInstanceState = function(instanceId, callback) {
         this.describeInstances([instanceId], function(err, data) {
             if (err) {
-                console.log("error occured while checking instance state. instance Id ==> " + instanceId);
+                logger.debug("error occured while checking instance state. instance Id ==> " + instanceId);
                 callback(err, null);
                 return;
             }
             if (data.Reservations.length && data.Reservations[0].Instances.length) {
                 var instanceState = data.Reservations[0].Instances[0].State.Name
-                console.log("instance state ==> " + instanceState);
+                logger.debug("instance state ==> " + instanceState);
                 callback(null, instanceState);
             } else {
                 callback(true, null);
@@ -77,20 +84,15 @@ var EC2 = function(awsSettings) {
           KeyName: keyPairName, /* required */
           SecurityGroupIds: securityGroupIds, /* required */
           SubnetId: subnetId /* required if use vpc*/
-      };
-      logger.debug("Param obj:>>>>  ",JSON.stringify(param));
-     
-        // var data = {"ReservationId":"r-d9fdb910","OwnerId":"549974527830","Groups":[],"Instances":[{"InstanceId":"i-8fd77354","ImageId":"ami-3d50120d","State":{"Code":0,"Name":"pending"},"PrivateDnsName":"ip-172-31-12-248.us-west-2.compute.internal","PublicDnsName":"","StateTransitionReason":"","KeyName":"cat_instances","AmiLaunchIndex":1,"ProductCodes":[],"InstanceType":"t2.micro","LaunchTime":"2015-08-12T05:33:45.000Z","Placement":{"AvailabilityZone":"us-west-2c","GroupName":"","Tenancy":"default"},"Monitoring":{"State":"disabled"},"SubnetId":"subnet-aed68ce8","VpcId":"vpc-b1f3ecd3","PrivateIpAddress":"172.31.12.248","StateReason":{"Code":"pending","Message":"pending"},"Architecture":"x86_64","RootDeviceType":"ebs","RootDeviceName":"/dev/sda1","BlockDeviceMappings":[],"VirtualizationType":"hvm","ClientToken":"","Tags":[],"SecurityGroups":[{"GroupName":"all_open","GroupId":"sg-c00ee1a5"}],"SourceDestCheck":true,"Hypervisor":"xen","NetworkInterfaces":[{"NetworkInterfaceId":"eni-3273ba69","SubnetId":"subnet-aed68ce8","VpcId":"vpc-b1f3ecd3","Description":"","OwnerId":"549974527830","Status":"in-use","MacAddress":"0a:c0:e3:ea:d4:b7","PrivateIpAddress":"172.31.12.248","PrivateDnsName":"ip-172-31-12-248.us-west-2.compute.internal","SourceDestCheck":true,"Groups":[{"GroupName":"all_open","GroupId":"sg-c00ee1a5"}],"Attachment":{"AttachmentId":"eni-attach-74c8e654","DeviceIndex":0,"Status":"attaching","AttachTime":"2015-08-12T05:33:45.000Z","DeleteOnTermination":true},"PrivateIpAddresses":[{"PrivateIpAddress":"172.31.12.248","PrivateDnsName":"ip-172-31-12-248.us-west-2.compute.internal","Primary":true}]}],"EbsOptimized":false},{"InstanceId":"i-8ed77355","ImageId":"ami-3d50120d","State":{"Code":0,"Name":"pending"},"PrivateDnsName":"ip-172-31-12-247.us-west-2.compute.internal","PublicDnsName":"","StateTransitionReason":"","KeyName":"cat_instances","AmiLaunchIndex":0,"ProductCodes":[],"InstanceType":"t2.micro","LaunchTime":"2015-08-12T05:33:45.000Z","Placement":{"AvailabilityZone":"us-west-2c","GroupName":"","Tenancy":"default"},"Monitoring":{"State":"disabled"},"SubnetId":"subnet-aed68ce8","VpcId":"vpc-b1f3ecd3","PrivateIpAddress":"172.31.12.247","StateReason":{"Code":"pending","Message":"pending"},"Architecture":"x86_64","RootDeviceType":"ebs","RootDeviceName":"/dev/sda1","BlockDeviceMappings":[],"VirtualizationType":"hvm","ClientToken":"","Tags":[],"SecurityGroups":[{"GroupName":"all_open","GroupId":"sg-c00ee1a5"}],"SourceDestCheck":true,"Hypervisor":"xen","NetworkInterfaces":[{"NetworkInterfaceId":"eni-3373ba68","SubnetId":"subnet-aed68ce8","VpcId":"vpc-b1f3ecd3","Description":"","OwnerId":"549974527830","Status":"in-use","MacAddress":"0a:99:31:96:73:9f","PrivateIpAddress":"172.31.12.247","PrivateDnsName":"ip-172-31-12-247.us-west-2.compute.internal","SourceDestCheck":true,"Groups":[{"GroupName":"all_open","GroupId":"sg-c00ee1a5"}],"Attachment":{"AttachmentId":"eni-attach-75c8e655","DeviceIndex":0,"Status":"attaching","AttachTime":"2015-08-12T05:33:45.000Z","DeleteOnTermination":true},"PrivateIpAddresses":[{"PrivateIpAddress":"172.31.12.247","PrivateDnsName":"ip-172-31-12-247.us-west-2.compute.internal","Primary":true}]}],"EbsOptimized":false}]};
-        // callback(null,data.Instances);
-        // return;
+      };     
         ec.runInstances(param, function(err, data) {
             if (err) {
-                console.log("error occured while launching instance");
-                console.log(err);
+                logger.debug("error occured while launching instance");
+                logger.debug(err);
                 callback(err, null);
                 return;
             }
-            logger.debug('>>>>>>>>>runInstances : data');
+            logger.debug('runInstances : data');
             logger.debug(JSON.stringify(data));
 
 
@@ -104,7 +106,7 @@ var EC2 = function(awsSettings) {
                     }]
                 };
                 ec.createTags(params, function(err) {
-                    console.log("Tagging instance", err ? "failure" : "success");
+                    logger.debug("Tagging instance", err ? "failure" : "success");
                 });
                 if(j >= data.Instances.length - 1)
                     callback(null, data.Instances);
@@ -116,20 +118,20 @@ var EC2 = function(awsSettings) {
     this.waitForInstanceRunnnigState = function(instanceId, callback) {
 
         function timeoutFunc(instanceId) {
-            console.log("checking state of instance ==> " + instanceId);
+            logger.debug("checking state of instance ==> " + instanceId);
             var t_timeout = setTimeout(function() {
                 ec.describeInstances({
                     InstanceIds: [instanceId]
                 }, function(err, data) {
                     if (err) {
-                        console.log("error occured while checking instance state. instance Id ==> " + instanceId);
+                        logger.debug("error occured while checking instance state. instance Id ==> " + instanceId);
                         callback(err, null);
                         return;
                     }
                     var instanceState = data.Reservations[0].Instances[0].State.Name
-                    console.log("instance state ==> " + instanceState);
+                    logger.debug("instance state ==> " + instanceState);
                     if (instanceState === instanceStateList.RUNNING) {
-                        console.log("instance has started running ");
+                        logger.debug("instance has started running ");
                         var instanceData = data.Reservations[0].Instances[0];
                          callback(null, instanceData);                        
 
@@ -151,7 +153,7 @@ var EC2 = function(awsSettings) {
             var timeout = setTimeout(function() {
                 that.getInstanceState(instanceId, function(err, instanceState) {
                     if (err) {
-                        console.log('Unable to get instance state', err);
+                        logger.debug('Unable to get instance state', err);
                         callback(err, null);
                         return;
                     }
@@ -171,12 +173,12 @@ var EC2 = function(awsSettings) {
             InstanceIds: instanceIds
         }, function(err, data) {
             if (err) {
-                console.log("unable to stop instance : " + instanceIds);
-                console.log(err);
+                logger.debug("unable to stop instance : " + instanceIds);
+                logger.debug(err);
                 callback(err, null)
                 return;
             }
-            console.log("number of instances stopped " + data.StoppingInstances.length);
+            logger.debug("number of instances stopped " + data.StoppingInstances.length);
             callback(null, data.StoppingInstances);
             pollInstanceState(instanceIds[0], instanceStateList.STOPPED, function(err, state) {
                 onStateChangedCompleteCallback(err, state);
@@ -190,12 +192,12 @@ var EC2 = function(awsSettings) {
             InstanceIds: instanceIds
         }, function(err, data) {
             if (err) {
-                console.log("unable to start instances : " + instanceIds);
-                console.log(err);
+                logger.debug("unable to start instances : " + instanceIds);
+                logger.debug(err);
                 callback(err, null)
                 return;
             }
-            console.log("number of instances stopped " + data.StartingInstances.length);
+            logger.debug("number of instances stopped " + data.StartingInstances.length);
             callback(null, data.StartingInstances);
             pollInstanceState(instanceIds[0], instanceStateList.RUNNING, function(err, state) {
                 onStateChangedCompleteCallback(err, state);
@@ -209,12 +211,12 @@ var EC2 = function(awsSettings) {
             InstanceIds: instanceIds
         }, function(err, data) {
             if (err) {
-                console.log("unable to reboot instance : " + instanceIds);
-                console.log(err);
+                logger.debug("unable to reboot instance : " + instanceIds);
+                logger.debug(err);
                 callback(err, null)
                 return;
             }
-            console.log("number of instances stopped " + data.length);
+            logger.debug("number of instances stopped " + data.length);
             callback(null, data);
             pollInstanceState(instanceIds[0], instanceStateList.RUNNING, function(err, state) {
                 onStateChangedCompleteCallback(err, state);
@@ -228,8 +230,8 @@ var EC2 = function(awsSettings) {
             InstanceIds: instanceIds
         }, function(err, data) {
             if (err) {
-                console.log("unable to terminate instance : " + instanceId);
-                console.log(err);
+                logger.debug("unable to terminate instance : " + instanceId);
+                logger.debug(err);
                 callback(err, null)
                 return;
             }
@@ -245,7 +247,7 @@ var EC2 = function(awsSettings) {
     this.getSecurityGroups = function(callback) {
         ec.describeSecurityGroups({}, function(err, data) {
             if (err) {
-                console.log(err);
+                logger.debug(err);
                 callback(err, null);
                 return;
             }
@@ -324,7 +326,7 @@ var EC2 = function(awsSettings) {
       };
         ec.describeSecurityGroups(params, function(err, data) {
             if (err) {
-                console.log(err);
+                logger.debug(err);
                 callback(err, null);
                 return;
             }
@@ -333,15 +335,15 @@ var EC2 = function(awsSettings) {
     };
 
     this.waitForEvent = function(instanceId, eventName, callback) {
-        console.log("waiting for ==> ",instanceId,eventName);
+        logger.debug("waiting for ==> ",instanceId,eventName);
         ec.waitFor(eventName, {
             InstanceIds: [instanceId]
         }, function(err, data) {
             if (err) {
-                console.log(err, err.stack); // an error occurred
+                logger.debug(err, err.stack); // an error occurred
                 callback(err, null);
             } else {
-                console.log(data);
+                logger.debug(data);
                 callback(null, data);
             } // successful response
         });
@@ -358,6 +360,30 @@ var EC2 = function(awsSettings) {
             }
         });
     };
+
+    this.listActiveInstances = function(callback){
+        var params = {
+            Filters: [{
+                Name: 'instance-state-name',
+                Values: ['running']
+            }
+            // ,{
+            //     Name: 'key-name',
+            //     Values: ['GoldenDemo']
+            // }
+            ]
+        };
+        ec.describeInstances(params,function(err,instances){
+            if(err){
+                logger.debug("Error occurred for listing aws instances: ",err);
+                callback(err,null);
+            }else{
+                logger.debug("Able to list all aws instances: ");
+                callback(null,instances);
+            }
+        });
+    };
+
 
 }
 

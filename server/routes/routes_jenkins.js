@@ -5,6 +5,8 @@
  * Aug 2015
  */
 
+// This file act as a Controller which contains Jenkins related all end points.
+
 var Jenkins = require('../lib/jenkins');
 var configmgmtDao = require('../model/d4dmasters/configmgmt');
 var errorResponses = require('./error_responses');
@@ -37,7 +39,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
         configmgmtDao.getListNew('20', 'jenkinsname', function(err, jenkinsList) {
             if (err) {
                 logger.error('jenkins list fetch error', err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             logger.debug(jenkinsList);
@@ -50,7 +52,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
         configmgmtDao.getJenkinsDataFromId(jenkinsId, function(err, jenkinsData) {
             if (err) {
                 logger.error('jenkins list fetch error', err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             } else {
                 if (!(jenkinsData && jenkinsData.length)) {
@@ -75,13 +77,11 @@ module.exports.setRoutes = function(app, verificationFunc) {
         jenkins.getJobs(function(err, jobsList) {
             if (err) {
                 logger.error('jenkins jobs fetch error', err);
-                res.send(500, errorResponses.jenkins.serverError);
+                res.status(500).send(errorResponses.jenkins.serverError);
                 return;
             }
             res.send(jobsList);
         });
-
-
     });
 
     app.get('/jenkins/:jenkinsId/jobs/:jobName', function(req, res) {
@@ -95,10 +95,80 @@ module.exports.setRoutes = function(app, verificationFunc) {
         jenkins.getJobInfo(req.params.jobName, function(err, job) {
             if (err) {
                 logger.error('jenkins jobs fetch error', err);
-                res.send(500, errorResponses.jenkins.serverError);
+                res.status(500).send(errorResponses.jenkins.serverError);
                 return;
             }
             res.send(job);
+        });
+    });
+
+    //API to get the count of dashboard build number per day.
+    app.get('/jenkins/:jenkinsId/dashboardjobs/:jobName', function(req, res) {
+        var jenkinsData = req.CATALYST.jenkins;
+
+        var jenkins = new Jenkins({
+            url: jenkinsData.jenkinsurl,
+            username: jenkinsData.jenkinsusername,
+            password: jenkinsData.jenkinspassword
+        });
+        /*jenkins.buildJob(req.params.jobName, function(err, job) {
+            console.log("Job=======>"+job);
+        });*/
+        jenkins.getJobInfo(req.params.jobName, function(err, job) {
+            if (err) {
+                logger.error('jenkins jobs fetch error', err);
+                res.send(500, errorResponses.jenkins.serverError);
+                return;
+            }
+            //logger.debug("firstBuild number====="+job.firstBuild.number);
+            jenkins.getLastBuildInfo(req.params.jobName, function(err, buildLatest) {
+                if (err) {
+                    logger.error('jenkins jobs fetch error', err);
+                    res.send(500, errorResponses.jenkins.serverError);
+                    return;
+                }
+                //logger.debug("LastBuild details====>"+buildLatest.timestamp);
+                var todaytimestamp = new Date().getTime();
+                //logger.debug("Today timestamp=====>"+todaytimestamp);
+                var yesterdaytimestamp = todaytimestamp - 86400000;
+                var buildCount = 0;
+                var successfulBuildCount = 0;
+                var buildDetails = function(number) {
+                    jenkins.getBuildInfo(req.params.jobName, number, function(err, buildData) {
+                        if (number && number > job.firstBuild.number) {
+                            if (err) {
+                                logger.error('jenkins jobs fetch error testing====>', err);
+                                //res.send(500, errorResponses.jenkins.serverError);
+                                buildDetails(number - 1);
+                                return;
+                            }
+                            if (buildData.timestamp > yesterdaytimestamp) {
+                                buildCount++;
+                                logger.debug("Successful build=====>"+buildData.result);
+                                if(buildData.result == 'SUCCESS'){
+                                    successfulBuildCount++;
+                                }
+                                //logger.debug("buildCOunt=====>" + buildCount);
+                                buildDetails(number - 1);
+                            } else {
+                                res.send(200, {
+                                    buildCount: buildCount,
+                                    sucessbuildCount: successfulBuildCount
+                                });
+                                return;
+                            }
+                        } else {
+                            res.send(200, {
+                                buildCount: buildCount,
+                                sucessbuildCount: successfulBuildCount
+                            });
+                            return;
+                        }
+
+                    });
+                };
+                buildDetails(buildLatest.number);
+            });
         });
     });
 
@@ -113,7 +183,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
         jenkins.getBuildInfo(req.params.jobName, req.params.buildNumber, function(err, buildData) {
             if (err) {
                 logger.error('jenkins jobs fetch error', err);
-                res.send(500, errorResponses.jenkins.serverError);
+                res.status(500).send(errorResponses.jenkins.serverError);
                 return;
             }
             res.send(buildData);
@@ -131,7 +201,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
         jenkins.getJobOutput(req.params.jobName, req.params.buildNumber, function(err, jobOutput) {
             if (err) {
                 logger.error('jenkins jobs fetch error', err);
-                res.send(500, errorResponses.jenkins.serverError);
+                res.status(500).send(errorResponses.jenkins.serverError);
                 return;
             }
             res.send(jobOutput);
@@ -151,9 +221,7 @@ module.exports.setRoutes = function(app, verificationFunc) {
         jenkins.getJobsBuildNumber(req.params.jobName, function(err, jobOutput) {
             if (err) {
                 logger.error('jenkins jobs fetch error', err);
-                res.send(500, errorResponses.jenkins.serverError);
-                // If job is newly created.
-                //res.send({});
+                res.status(500).send(errorResponses.jenkins.serverError);
                 return;
             }
             res.send(jobOutput);
@@ -174,14 +242,10 @@ module.exports.setRoutes = function(app, verificationFunc) {
         jenkins.updateJob(req.params.jobName, function(err, jobOutput) {
             if (err) {
                 logger.error('jenkins jobs fetch error', err);
-                res.send(500, errorResponses.jenkins.serverError);
+                res.status(500).send(errorResponses.jenkins.serverError);
                 return;
             }
             res.send(jobOutput);
         });
-
-
     });
-
-
 }

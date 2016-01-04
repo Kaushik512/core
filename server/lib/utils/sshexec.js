@@ -1,3 +1,10 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
 var fileIo = require('./fileio');
 var extend = require('extend');
 var sshConnection = require('ssh2').Client;
@@ -20,17 +27,17 @@ module.exports = function(opts) {
     function connect(connectionParamsObj, callback) {
         var con = new sshConnection();
         connectionParamsObj.readyTimeout = 40000; //timeout increased to support azure based vms
-        console.log("ConnectionParamsObj==>", connectionParamsObj);
+        logger.debug("ConnectionParamsObj==>", connectionParamsObj);
 
         try {
             con.connect(connectionParamsObj);
         } catch (connectErr) {
             con = null;
-            console.log(connectErr);
+            logger.debug(connectErr);
             // a hack to make a sycnronous call asynchronous 
             process.nextTick(function() {
                 if (connectErr.message === 'Cannot parse privateKey: Unsupported key format') {
-                    console.log('Error msg:' + connectErr.message);
+                    logger.debug('Error msg:' + connectErr.message);
                     callback(connectErr, INVALID_CREDENTIALS, null);
                 } else {
                     callback(connectErr, UNKOWN_EXCEPTION, null);
@@ -41,99 +48,92 @@ module.exports = function(opts) {
 
         con.on('ready', function() {
             isConnected = true;
-            callback(null,null,con);
+            callback(null, null, con);
         });
 
         con.on('error', function(err) {
             isConnected = false;
             con = null;
-            console.log("ERROR EVENT FIRED", err);
+            logger.debug("ERROR EVENT FIRED", err);
 
             if (err.level === 'client-authentication') {
-                console.log('Error msg:' + err);
-                callback(err, INVALID_CREDENTIALS,null);
+                logger.debug('Error msg:' + err);
+                callback(err, INVALID_CREDENTIALS, null);
             } else if (err.level === 'client-timeout') {
-                callback(err, HOST_UNREACHABLE,null);
+                callback(err, HOST_UNREACHABLE, null);
             } else {
-                callback(err, UNKOWN_EXCEPTION,null);
+                callback(err, UNKOWN_EXCEPTION, null);
             }
-            console.log('ssh error');
+            logger.debug('ssh error');
         });
 
         con.on('close', function(hadError) {
             isConnected = false;
             con = null;
-            console.log('ssh close ', hadError);
+            logger.debug('ssh close ', hadError);
         });
 
         con.on('end', function() {
             isConnected = false;
             con = null;
-            console.log('ssh end');
+            logger.debug('ssh end');
         });
 
         con.on('keyboard-interactive', function(name, instructions, instructionsLang, prompts, finish) {
-            console.log('Connection :: keyboard-interactive');
+            logger.debug('Connection :: keyboard-interactive');
             finish([options.password]);
         });
 
     }
 
     function initializeConnection(callback) {
-        console.log("In SSH Initilize");
-        //console.log('con ..>', con);
-        //if (!con) {
-            var connectionParamsObj = {
-                host: options.host,
-                port: options.port,
-                username: options.username
-            };
+        logger.debug("In SSH Initilize");
+        var connectionParamsObj = {
+            host: options.host,
+            port: options.port,
+            username: options.username
+        };
 
-            if (options.privateKey) {
-                if (options.passphrase) {
-                    connectionParamsObj.passphrase = options.passphrase;
-                }
-                fileIo.readFile(options.privateKey, function(err, key) {
-                    if (err) {
-                        callback(err, PEM_FILE_READ_ERROR);
-                        return;
-                    }
-                    connectionParamsObj.privateKey = key;
-                    connect(connectionParamsObj, callback);
-                });
-            } else {
-                console.log("SSh password...");
-
-                if (options.interactiveKeyboard) {
-                    connectionParamsObj.tryKeyboard = true;
-                    connect(connectionParamsObj, callback);
-                } else {
-                    connectionParamsObj.password = options.password;
-                    connect(connectionParamsObj, callback);
-                }
+        if (options.privateKey) {
+            if (options.passphrase) {
+                connectionParamsObj.passphrase = options.passphrase;
             }
-        /*} else {
-            process.nextTick(function() {
-                callback(null);
+            fileIo.readFile(options.privateKey, function(err, key) {
+                if (err) {
+                    callback(err, PEM_FILE_READ_ERROR);
+                    return;
+                }
+                connectionParamsObj.privateKey = key;
+                connect(connectionParamsObj, callback);
             });
-        }*/
+        } else {
+            logger.debug("SSh password...");
+
+            if (options.interactiveKeyboard) {
+                connectionParamsObj.tryKeyboard = true;
+                connect(connectionParamsObj, callback);
+            } else {
+                connectionParamsObj.password = options.password;
+                connect(connectionParamsObj, callback);
+            }
+        }
     }
 
 
     this.exec = function(cmd, onComplete, onStdOut, onStdErr) {
-        console.log("sshTry:", sshTry);
+        logger.debug("sshTry:", sshTry);
         sshTry++;
         var self = this;
         var execRetCode = null;
         var execSignal = null;
-        console.log('in exec: ' + cmd);
+        logger.debug('in exec: ' + cmd);
         initializeConnection(function(err, initErrorCode, con) {
             if (err) {
                 if (initErrorCode === -5001 && sshTry === 1) {
                     options.interactiveKeyboard = true;
                     con = null;
                     isConnected = false;
-                    console.log('firing again');
+                    logger.debug('firing again');
                     self.exec(cmd, onComplete, onStdOut, onStdErr);
                 } else {
                     onComplete(null, initErrorCode);
@@ -141,7 +141,7 @@ module.exports = function(opts) {
                 return;
             }
             if (con) {
-                console.log('executing cmd: ' + cmd);
+                logger.debug('executing cmd: ' + cmd);
                 con.exec('' + cmd, {
                     pty: true
                 }, function(err, stream) {
@@ -150,14 +150,14 @@ module.exports = function(opts) {
                         return;
                     }
                     stream.on('exit', function(code, signal) {
-                        console.log('SSH STREAM EXIT: ' + code + '  ==== ', signal);
+                        logger.debug('SSH STREAM EXIT: ' + code + '  ==== ', signal);
                         execRetCode = code;
                         execSignal = signal;
 
                     });
 
                     stream.on('close', function(code, signal) {
-                        console.log('SSH STREAM CLOSE');
+                        logger.debug('SSH STREAM CLOSE');
                         if (con) {
                             con.end();
                         }
@@ -175,27 +175,24 @@ module.exports = function(opts) {
                         }
                     });
 
-
                     if (typeof onStdOut === 'function') {
                         stream.on('data', function(data) {
-                            // console.log('SSH STDOUT: ' + data);
                             onStdOut(data);
                         })
                     }
 
                     if (typeof onStdErr === 'function') {
                         stream.stderr.on('data', function(data) {
-                            console.log('STDERR: ' + data);
+                            logger.debug('STDERR: ' + data);
                             onStdErr(data);
                         });
                     }
                 });
             } else {
-                console.log('con is null');
+                logger.debug('con is null');
                 onComplete(null, CONNECTION_NOT_INITIALIZED);
             }
 
         });
-
     }
 }

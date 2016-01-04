@@ -1,3 +1,10 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
 var mongoose = require('mongoose');
 var ObjectId = require('mongoose').Types.ObjectId;
 var validate = require('mongoose-validator');
@@ -24,14 +31,14 @@ buildHistorySchema.methods.getLogs = function() {
 
 buildHistorySchema.methods.updateBuildStatus = function(status, callback) {
     this.status.status = status,
-    this.save(function(err, history) {
-        if (err) {
-            logger.error(err);
-            callback(err, null);
-            return;
-        }
-        callback(null, history);
-    });
+        this.save(function(err, history) {
+            if (err) {
+                logger.error(err);
+                callback(err, null);
+                return;
+            }
+            callback(null, history);
+        });
 };
 
 buildHistorySchema.statics.BUILD_STATUS = {
@@ -85,9 +92,6 @@ buildHistorySchema.statics.getHistoryById = function(id, callback) {
     });
 
 };
-
-
-
 
 var BuildHistory = mongoose.model('appBuildHistory', buildHistorySchema);
 

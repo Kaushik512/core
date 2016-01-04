@@ -229,7 +229,7 @@
  </div>
 
  <div class="col-lg-6 col-md-6 foraws" style="margin-top:15px;">
- <label for="instancesize">Instance Size:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+ <label for="instancesize">Instance Size:<span class="control-label redSpan">&nbsp;*</span></label>
  <div class="input-groups">
  <select id="instancesize" name="instancesize" class="required chooseOrganization width-100 chooseSelect" style="vertical-align:central">
  <option value="">Choose Instanace Size</option>
@@ -238,7 +238,7 @@
  </div> 
 
  <div class="col-lg-6 col-md-6 foraws" style="margin-top:15px;">
- <label for="checkbox-toggle">Security Group:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+ <label for="checkbox-toggle">Security Group:<span class="control-label redSpan">&nbsp;*</span></label>
  <label id="spinnerSecurityGroup" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
  <div class="col-lg-6 smart-form multiselect inputGroups" style="  height: 140px;overflow-y: scroll;border:1px solid gray;padding: 0px;width:100%">
  <div id="securityGroupIds" name="securityGroupIds"  multiselect="multiselect" datatype="select" datapath="" class="input-group col-md-12 widthBox" style="width:99%;margin-top:-1px;border:0px">
@@ -247,7 +247,7 @@
  </div>
 
  <div class="col-lg-6 col-md-6 foraws" style="margin-top:15px;">
- <label for="instanceCount">Instances to Launch:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+ <label for="instanceCount">Instances to Launch:<span class="control-label redSpan">&nbsp;*</span></label>
  <div class="input-groups">
  <select id="instanceCount" name="instanceCount" class="required chooseOrganization width-100 chooseSelect" style="vertical-align:central">
  <option value="1">1</option>
@@ -287,7 +287,7 @@
 
  <div class="col-lg-6 col-md-6">
  <label for="blueprintNameInput">Enter Blueprint Name:
- <span style="color:Red;" class="control-label">&nbsp;*</span></label>
+ <span class="control-label redSpan">&nbsp;*</span></label>
  <div class="input-groups">
  <input  id="blueprintNameInput" name="blueprintNameInput" class="required form-control" type="text" autofocus="autofocus">
  </div>
@@ -493,190 +493,6 @@
          </div><!-- /.modal-dialog -->
          </div>
          <!--modal for runlist ends here-->
-
- <!--modal for help-->
-
-<div class="modal fade" id="modalForHelp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog " style="">
-        <div class="modal-content"> 
-            
-             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">
-                    &nbsp;CookBook Information
-                </h4>
-
-            </div> 
-            
-            
-             <div class="modal-body" style="height:400px;overflow-y:auto">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                        <th>CookBook Name</th>
-                        <th>Description</th>
-                        <tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                        <td>apache2-windows</td>
-                        <td>Installation &amp; Configuration of Apache Server</td>
-                        </tr>
-                            <tr>
-                                <td>apache2</td>
-                                <td>Installation &amp; Configuration of Apache Server</td>
-                            </tr>
-                        <!--2nd set-->
-                        <tr>
-                        <td>cassandra</td>
-                        <td>Installation and configuration of Cassandra Server</td>
-                        </tr>
-                            <tr>
-                                <td>eclipse_windows</td>
-                                <td>Installtion of Eclispe on Windows</td>
-                            </tr>   
-                            <!--3rd set-->
-
-                        <tr>
-                        <td>visualstudio_windows</td>
-                        <td>Installation of Visual Studio</td>
-                        </tr>
-                            <tr>
-                                <td>iis</td>
-                                <td>Installation and configuration of IIS Server</td>
-                            </tr>
-                            <!--4th set-->
-                        <tr>
-                        <td>jboss7</td>
-                        <td>Installation and Configuration of JBOSS7 Server</td>
-                        </tr>
-                            <tr>
-                                <td>tomcat</td>
-                                <td>Installs and configures Tomcat, Java servlet engine and webserver</td>
-                            </tr>
-                            <!--5th set-->
-                            <tr>
-                        <td>weblogic</td>
-                        <td>Installation and Configuration of weblogic</td>
-                        </tr>
-                            <tr>
-                                <td>java</td>
-                                <td>Installation of Java</td>
-                            </tr>
-                            <!--6th set-->
-                            <tr>
-                        <td>java_windows</td>
-                        <td>Installation of Java</td>
-                        </tr>
-                            <tr>
-                                <td>nodejs</td>
-                                <td>Installation of NodeJS and npm package</td>
-                            </tr>   
-                            <!--7th set-->
-
-                            <tr>
-                        <td>php</td>
-                        <td>Installation and Configuration of PHP</td>
-                        </tr>
-                            <tr>
-                                <td>lamp_role</td>
-                                <td>Installation and Configuration of LAMP stack</td>
-                            </tr>   
-
-                            <!--8th set-->
-                            <tr>
-                        <td>mysql-windows</td>
-                        <td>Installation and Configuration of Mysql</td>
-                        </tr>
-                            <tr>
-                                <td>mysql</td>
-                                <td>Installation and Configuration of Mysql</td>
-                            </tr>   
-                            <!--9th set-->
-
-                            <tr>
-                        <td>oracle_windows</td>
-                        <td>Installation and Configuration of Oracle</td>
-                        </tr>
-                            <tr>
-                                <td>postgresql</td>
-                                <td>Installation and Configurationof postgresql</td>
-                            </tr>   
-                            <!--10th set-->
-                            <tr>
-                        <td>service_apache</td>
-                        <td>Service cookbook for apache server</td>
-                        </tr>
-                            <tr>
-                                <td>service_iptables</td>
-                                <td>Service cookbook for firewall</td>
-                            </tr>   
-
-                            <!--11th set-->
-                            <tr>
-                        <td>service_jboss</td>
-                        <td>Service cookbook for Jboss server</td>
-                        </tr>
-                            <tr>
-                                <td>service_mysql</td>
-                                <td>Service cookbook for Mysql</td>
-                            </tr>   
-                            <!--12th set-->
-                            <tr>
-                        <td>service_nginx</td>
-                        <td>Service cookbook for nginx </td>
-                        </tr>
-                            <tr>
-                                <td>service_tomcat</td>
-                                <td>Service cookbook for tomcat</td>
-                            </tr>   
-                            <!--13th set-->
-                            <tr>
-                        <td>service_weblogic</td>
-                        <td>service cookbook for weblogic</td>
-                        </tr>
-                            <tr>
-                                <td>seven_zip</td>
-                                <td>Installation of 7Zip</td>
-                            </tr>
-                            <!--14th set-->
-                            <tr>
-                        <td>git</td>
-                        <td>Installs git and optionally sets up a git server as a daemon under runit</td>
-                        </tr>
-                            <tr>
-                                <td>wget_windows</td>
-                                <td>Installs wget on windows</td>
-                            </tr>
-                            <!--15th set-->
-                            <tr>
-                        <td>toad_windows</td>
-                        <td>Installation and Configuration of TOAD</td>
-                        </tr>
-                            <tr>
-                                <td>docker</td>
-                                <td>Installation and Configuration of docker engine</td>
-                            </tr>   
-                            <tr>
-                                <td>jenkins</td>
-                                <td>Installs and configures Jenkins CI master &amp; node slaves.</td>
-                            </tr>   
-                    </tbody>
-                </table>
-
-            </div>
-            
-                <div class="modal-footer">
-        
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                </div>   
-  
-         </div>
-    </div>
-</div>
-
-
-
 
  <!--adding new collapse-->
  <div class="panel panel-default appSeriesNameURL notForDocker notforCFT">
@@ -2427,7 +2243,7 @@ function getProviderListold() {
 
              for (var i = 0; i < rowLength; i += 1) {
                 //skipping cft if not aws provider
-                  if(providerselected && providerselected == 'openstack' && data[i]['templatetype'] && data[i]['templatetype'] == 'cft')
+                  if(providerselected && providerselected == 'openstack' && data[i]['templatetype'] && data[i]['templatetype'] == 'cft' || data[i]['templatetype'] == 'arm')
                     continue;
 
                  getDesignTypeImg = data[i]['designtemplateicon_filename'];
@@ -2830,7 +2646,7 @@ function getProviderListold() {
                                         // wizard.disableNextBtn();
                                         return;
                                     }
-                                    // var formHtmlDivHtml = '<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label for="">Instance Username: <span style="color:Red;" class="control-label">&nbsp;*</span></label><div class="input-groups"><input id="cftStackInstanceUsernameInput" class="form-control" type="text" autofocus="autofocus" aria-required="true"></div></div>';
+                                    // var formHtmlDivHtml = '<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label for="">Instance Username: <span class="control-label redSpan">&nbsp;*</span></label><div class="input-groups"><input id="cftStackInstanceUsernameInput" class="form-control" type="text" autofocus="autofocus" aria-required="true"></div></div>';
                                     var formHtmlDivHtml = '';
 
 

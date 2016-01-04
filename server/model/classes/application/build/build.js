@@ -1,14 +1,19 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
 var mongoose = require('mongoose');
 var ObjectId = require('mongoose').Types.ObjectId;
 var validate = require('mongoose-validator');
 var logger = require('_pr/logger')(module);
 var schemaValidator = require('../../../dao/schema-validator');
-
 var BuildHistory = require('./buildHistory');
 var Task = require('../../tasks/tasks.js');
 
 var Schema = mongoose.Schema;
-
 
 var buildSchema = new Schema({
     envId: String,
@@ -32,7 +37,7 @@ buildSchema.methods.execute = function(user, baseUrl, callback) {
     Task.getTaskById(self.taskId, function(err, task) {
         if (err) {
             logger.error(err);
-            res.send(500, errorResponses.db.error);
+            res.status(500).send(errorResponses.db.error);
             return;
         }
         var buildHistory;
@@ -112,7 +117,6 @@ buildSchema.statics.getBuildById = function(buildId, callback) {
             callback(err, null);
             return;
         }
-        //console.log('data ==>', data);
         if (data.length) {
             callback(null, data[0]);
         } else {
@@ -130,7 +134,6 @@ buildSchema.statics.getBuildsByTaskId = function(taskId, callback) {
             callback(err, null);
             return;
         }
-        //console.log('data ==>', data);
         if (data.length) {
             callback(null, data);
         } else {
@@ -138,8 +141,6 @@ buildSchema.statics.getBuildsByTaskId = function(taskId, callback) {
         }
     });
 };
-
-
 
 var BuildModel = mongoose.model('appBuilds', buildSchema);
 

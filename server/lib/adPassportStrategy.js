@@ -1,3 +1,10 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
 var util = require('util'),
     Strategy = require('passport-strategy'),
     ADClient = require('./ad-client.js');
@@ -27,17 +34,14 @@ util.inherits(ADPassportstrategy, Strategy);
 ADPassportstrategy.prototype.authenticate = function(req, options) {
     var self = this;
     var opts = this.getOptions();
-    console.log(opts);
     var adClient = new ADClient({
         host: opts.host,
         port: opts.port,
         baseDn: opts.baseDn,
         ou: opts.ou
     });
-    console.log(req.body);
     var username = req.body[opts.usernameField];
     var password = req.body[opts.passwordField];
-    console.log(username, ' == ', password);
     if (!(username && password)) {
         return self.fail({
             message: 'Missing credentials'

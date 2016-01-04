@@ -11,7 +11,7 @@
                   <h4 class="widget-margin" style="color:black;">New Jenkins Config  <span id="spnjenkins"></span></h4>
                </div>
                <div class="widget-body">
-                  <div class="widget-main" style="min-height:300px">
+                  <div class="widget-main widgetHeight">
                      <div>
                         <section id="widget-grid" class="">
                            <!-- START ROW -->
@@ -26,7 +26,7 @@
                                        <div class="widget-body no-padding">
                                           <div class="col-lg-6 col-md-6" style="margin-top:25px">
 
-                                                        <label for="category">Organization:<span style="color:Red;" class="control-label">&nbsp;*</span>
+                                                        <label for="category">Organization:<span class="control-label redSpan">&nbsp;*</span>
                                                         </label>
 
                                                         <select id="orgname" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central" cdata="catalyst" cat-validation="required" cat-validation="required" linkedfields="['configname']" onchange="$('#configname').change();">
@@ -36,23 +36,23 @@
                                                     </div>
                                           <div class="col-lg-6 col-md-6" style="margin-top:25px">
                                              <label for="">
-                                             Name<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                             Name<span class="control-label redSpan">&nbsp;*</span></label>
 
                                              <input name="ctl00$MainContent$orgname" value="" id="jenkinsname" class="form-control" type="text"  cdata="catalyst" unique="true"  uniqueconditionedby="jenkinsname"  cat-validation="required,max15">
                                           </div>
                                           <div class="col-lg-6 col-md-6" style="margin-top:25px">
                                              <label for="">
-                                             Jenkins URL<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                             Jenkins URL<span class="control-label redSpan">&nbsp;*</span></label>
                                              <input name="ctl00$MainContent$orgname" value="" id="jenkinsurl" class="form-control" type="text"  cdata="catalyst"  cat-validation="required,urlcheck">
                                           </div>
                                           <div class="col-lg-6 col-md-6" style="margin-top:25px">
                                              <label for="">
-                                             User ID <span style="color:Red;" class="control-label">&nbsp;*</span>
+                                             User ID <span class="control-label redSpan">&nbsp;*</span>
                                              </label>
                                              <input name="ctl00$MainContent$orgname" value="" id="jenkinsusername" class="form-control" type="text"  cdata="catalyst" cat-validation="required">
                                           </div>
                                           <div class="col-lg-6 col-md-6" style="margin-top:25px">
-                                             <label for="">Password <span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                             <label for="">Password <span class="control-label redSpan">&nbsp;*</span></label>
                                              <input name="ctl00$MainContent$orgname" value="" id="jenkinspassword" class="form-control" type="password"  cdata="catalyst" cat-validation="required" value="*********">
                                           </div>
                                           <div class="col-lg-6 col-md-6" style="margin-top:25px">

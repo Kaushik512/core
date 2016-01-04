@@ -17,7 +17,7 @@ var Cryptography = require('../../lib/utils/cryptography');
 // saveAwsPemFiles() capture all uploaded files from request and save.
 var ProviderUtil = function(){
 	this.saveAwsPemFiles = function(keyPair,inFiles,callback){
-		console.log("Path>>>>>>>>>> ",inFiles);
+		logger.debug("Path: ",inFiles);
 		var settings = appConfig;
         //encrypting default pem file
         var cryptoConfig = appConfig.cryptoSettings;
