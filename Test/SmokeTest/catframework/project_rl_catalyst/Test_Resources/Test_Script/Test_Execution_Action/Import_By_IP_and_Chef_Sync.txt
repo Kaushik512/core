@@ -525,9 +525,7 @@ Input the Ubuntu Usrname in Terminal
     Input Text    id=ssh-username    ${UbuntuUser}    
 
 Select Authenticationtype as PEM
-    Click Element    xpath=.//*[@id='s2id_ssh-pemFileCheckbox']/a/span[1]   
-    Sleep    1s
-    Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div
+    Click Element    xpath=.//*[@id='ssh-pemFileCheckbox']/option[@id='pemFileCheckbox']
 
 Upload the PemFile to ssh
     Choose File    xpath=.//*[@id='ssh-pemfileInput']    ${CAT_INSTANCES}
@@ -537,7 +535,7 @@ Upload the golden PemFile to ssh
     Choose File    xpath=.//*[@id='ssh-pemfileInput']    ${Goldendemo_pem}
 
 Clicking on the SubmitButton
-    Click Element    xpath=.//*[@id='ssh-login-form']/div[7]/button[1]
+    Click Element    xpath=.//*[@id='ssh-login-form']/div[6]/button[2]
 
 Verify the Node Importedd
     Element Should Contain    xpath=//div[@class='messageDiv']/div    Node Imported : ${IP Centos}
