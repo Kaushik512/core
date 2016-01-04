@@ -135,7 +135,7 @@ Choose the Cloud Provider
 	
 	
 Clicks on Configure Stack Parameters
-    Click Element    xpath=.//*[@id='accordion-Design']/div[7]/div[1]/h4/a/i[1]
+    Click Element    xpath=.//*[@id='accordion-Design']/div[6]/div[1]/h4/a/i[1]
 	
 	
 Enters the New Cloud Blueprint Name	
@@ -518,15 +518,16 @@ Clicks on Configure Organization Parameters
 
 
 Chooses Organization
-    Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:none')
-    Sleep    3s
-    Log    after scroll
-    Sleep    1s
-    Click Element    css=#s2id_orgnameSelect > .select2-choice
-    Log    after click
-    Input Text    css=#select2-drop .select2-input    ${ORGANIZATION NAME}
-    Sleep    1s
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    #Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:none')
+    #Sleep    3s
+    #Log    after scroll
+    #Sleep    1s
+    #Click Element    css=#s2id_orgnameSelect > .select2-choice
+    #Log    after click
+    #Input Text    css=#select2-drop .select2-input    ${ORGANIZATION NAME}
+    #Sleep    1s
+    #Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    Click Element    xpath=.//*[@id='orgnameSelect']/option[text()='${ORGANIZATION NAME}']
 
 Enters The Blueprint Name
     Input Text    id=blueprintNameInput    ${BLUEPRINT NAME}
@@ -560,7 +561,7 @@ Clicks on Update Runlist button
     Click Element    id=saveRunlist
 
 Clicks on Configure Application URL
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-Design']/div[6]/div[1]/h4/a/i[1]
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-Design']/div[5]/div[1]/h4/a/i[1]
 
 Clicks on AppNew Button
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    css=#newAppSeries
