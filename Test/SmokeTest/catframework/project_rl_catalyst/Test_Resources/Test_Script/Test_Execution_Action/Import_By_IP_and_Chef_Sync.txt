@@ -525,9 +525,7 @@ Input the Ubuntu Usrname in Terminal
     Input Text    id=ssh-username    ${UbuntuUser}    
 
 Select Authenticationtype as PEM
-    Click Element    xpath=.//*[@id='s2id_ssh-pemFileCheckbox']/a/span[1]   
-    Sleep    1s
-    Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div
+    Click Element    xpath=.//*[@id='ssh-pemFileCheckbox']/option[@id='pemFileCheckbox']
 
 Upload the PemFile to ssh
     Choose File    xpath=.//*[@id='ssh-pemfileInput']    ${CAT_INSTANCES}
