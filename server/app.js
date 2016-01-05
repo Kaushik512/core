@@ -29,6 +29,7 @@ var expressBodyParser = require('body-parser');
 var multipart = require('connect-multiparty');
 var expressMultipartMiddleware = multipart();
 var appConfig = require('_pr/config');
+var mongoose=require('mongoose');
 var MongoStore = require('connect-mongo')(expressSession);
 var mongoDbConnect = require('_pr/lib/mongodb');
 logger.debug('Starting Catalyst');
@@ -67,13 +68,12 @@ mongoDbConnect(dboptions, function(err) {
 });
 
 var mongoStore = new MongoStore({
-    db: appConfig.db.dbName,
-    host: appConfig.db.host,
-    port: appConfig.db.port
+    // db: appConfig.db.dbName,
+    // host: appConfig.db.host,
+    // port: appConfig.db.port
+    mongooseConnection:mongoose.connection
 }, function() {
-    server.listen(app.get('port'), function() {
-        logger.debug('Express server listening on port ' + app.get('port'));
-    });
+    
 });
 
 app.set('port', process.env.PORT || appConfig.app_run_port);
@@ -115,6 +115,8 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 }*/
 
 var server = http.createServer(app);
+
+
 // setting up socket.io
 io = io.listen(server, {
     log: false
@@ -143,4 +145,8 @@ io.sockets.on('connection', function(socket) {
     tail.on('line', function(line) {
         socket.emit('log', line);
     });
+});
+
+server.listen(app.get('port'), function() {
+    logger.debug('Express server listening on port ' + app.get('port'));
 });
