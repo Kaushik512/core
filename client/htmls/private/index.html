@@ -3,7 +3,6 @@
 
     <head>
         <meta charset="utf-8">
-        <!--<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">-->
         <title>Catalyst</title>
         <meta name="description" content="">
         <meta name="author" content="">
@@ -14,17 +13,9 @@
         <link rel="stylesheet" type="text/css" media="screen" href="css/jqueryUI.min.css">
         <link rel="stylesheet" type="text/css" media="screen" href="css/font-awesome.min.css">
         <link rel="stylesheet" href="js/jquery-filetree/jqueryFileTree.css" />
-        <style>
-        .leftSpaceStyle{
-            height:40px;background-color:#40baf1;color:white;border-right:1px solid silver;"
-        }
-        .treeStyle{
-            margin-top:0px;font-size:11pt;font-weight:bold;padding-left:10px;padding-top:10px
-        }
-        </style>
-</head>
+    </head>
 <body class="custom-theme">
-    <!-- possible classes: minified, fixed-ribbon, fixed-header, fixed-width-->
+    
     <!-- HEADER -->
     <!-- Header starts here -->
     <header>
@@ -46,27 +37,33 @@
                         <i class="fa fa-credit-card txt-color-blue"></i>&nbsp;WORKZONE 
                         </a>
                     </li>
+
                     <!--design starts here-->
                     <li class="left-projects-links hidden" id="designStyle" data-target="#blueprints"  navigation="blueprints">
                         <a href="#ajax/Aws-Production.html" id="designNew" onclick="setleftnavigation(this,'Design');" class="navigationTab">
                         <i class="fa fa-puzzle-piece"></i>&nbsp;DESIGN
                         </a>
                     </li>
+
                     <!--track-->
                     <li class="left-projects-links hidden" id="trackStyle" data-target="#Track" navigation="Track">
                         <a class="dropdown-toggle navigationTab" href="#ajax/trackSettings.html" id="trackNew"  onclick="setleftnavigation(this,'Track');"><i class="fa fa-anchor"></i>&nbsp;TRACK</a>
                     </li>
                     <!--track ends here-->
+
                     <!--right side navbar-->
                     <span class="navRight">
                         <li class="left-projects-links active" id="liuserinfo"></li>
+
                         <!--Settings tab-->
                         <li class="left-projects-links hidden" data-target="#Settings"   navigation="Settings">
                             <a class="dropdown-toggle navigationTab" href="#ajax/Settings/Dashboard.html" id="settingsNew"  onclick="setleftnavigation(this,'Settings');"><i class="fa fa-cog"></i>&nbsp;SETTINGS</a>
                         </li>
+
                         <!--help-->
                         <li class="left-projects-links"><a href="http://help.relevancelab.com/dokuwiki" target="_blank" id="dokuNew"><i class="fa fa-question"></i>&nbsp;Help</a>
                         </li>
+
                         <!--logout-->
                         <li id="logout" class="btn-header transparent pull-right logouttop">
                             <!-- ../auth/signout -->
@@ -74,14 +71,15 @@
                             <i class="fa fa-sign-out"></i>
                             </a></span>
                         </li>
+
                     </span>
                 </ul>
             </div>
         </nav>
     </header>
     <!--HEADER ends here -->
+
     <!-- Left panel : Navigation area -->
-    <!-- Note: This width of the aside area can be adjusted through LESS variables -->
     <aside id="left-panel">
         <div id="Workspace1">
             <div class="leftSpaceStyle">
@@ -111,9 +109,9 @@
             </ul>
             <ul class="menu-item-parentdemo hidden" id="blueprints" providerselected="aws">
                 <li class="active open">
-                    <a href="#" style="background-color:#40baf1;margin-right:1px;"><i class="fa fa-lg fa-fw fa-sitemap"></i><span class="menu-item-parent trackAlign" style="font-weight:bold">PROVIDERS</span>
+                    <a href="#" class="activeProviderOpen"><i class="fa fa-lg fa-fw fa-sitemap"></i><span class="menu-item-parent trackAlign"><strong>PROVIDERS</strong></span>
                     </a>
-                    <ul style="display:block">
+                    <ul class="visibleClass">
                         <li>
                             <a href="ajax/Aws-Production.html" onclick="$('#blueprints').attr('providerselected','aws');" class="devops_providers">
                                 <div class="aws" title="AWS"><span class="menu-item-parent provider-images trackAlign">&nbsp;&nbsp;AWS</span></div>
@@ -164,6 +162,7 @@
         <span class="minifyme"> <i class="fa fa-arrow-circle-left hit"></i> </span>
     </aside>
     <!-- END NAVIGATION -->
+
     <!-- MAIN PANEL -->
     <div id="main" role="main">
         <!-- RIBBON -->
@@ -670,16 +669,12 @@ function foldTreeForSetting() {
 
 
 function setleftnavigation(toplink, breadcrumbHeader) {
-    //alert('setting left navigation');
-
     var TabID = $(toplink).attr('id');
     if (TabID === "workZoneNew") {
         loadTreeFuncNew();
-
         $('#Settings_nav').hide();
         $('#Workspace1').show();
         $('#trackShow').hide();
-        // selectFirstEnv();
 
     } else if (TabID === "designNew") {
         $('#Workspace1').hide();
@@ -1013,7 +1008,6 @@ function getTrackTreeDetails() {
             trackTree = [];
 
             for (var i = 0; i < data.length; i++) {
-                //  console.table(trackTree);
                 trackTree.push({
                     "name": "data",
                     "text": data[i].type,
@@ -1075,11 +1069,7 @@ function getTrackTreeDetails() {
     })
 }
 
-
-
-
 function loadTrackTree() {
-    // alert('tree loading');
     $('#trackTree').treeview({
         data: trackTree,
         enableLinks: true,
@@ -1087,8 +1077,6 @@ function loadTrackTree() {
         expandIcon: 'fa fa-angle-right',
         levels: -1,
         onNodeSelected: function(event, node) {
-            //alert(JSON.stringify(node));
-            //alert('click');
             $("#content").empty();
             $("#content").attr('style', 'height: 100%!important').append('<iframe src=' + node['data-href'] + ' style="width: 101% ! important; height: 97%! important; border: medium none;"></iframe>');
             console.log($("#content")[0].innerHTML);
@@ -1100,9 +1088,6 @@ function loadTrackTree() {
     });
 }
 
-
-
-
 var treeData;
 
 function getTreeData() {
@@ -1113,13 +1098,6 @@ function getTreeData() {
         url: "../organizations/getTreeForbtv",
         success: function(data1) {
             treeData = data1;
-            console.log('ajax success');
-            //alert('New Json' + JSON.stringify(data1));
-            //lol=data1;
-
-            //alert('loading tree');
-            console.log(data1);
-
         }
     });
 
@@ -1135,7 +1113,6 @@ function buildTree() {
         onNodeSelected: function(event, node) {
 
             window.selectedOrgName = $('li[data-nodeid="' + node.nodeId + '"]').first().find('a').first().attr('orgname');
-            //console.log("Org Selected:" + window.selectedOrgName );
             localStorage.setItem('selectedOrgName', $('li[data-nodeid="' + node.nodeId + '"]').first().find('a').first().attr('orgname'));
             localStorage.setItem('selectedOrgId', $('li[data-nodeid="' + node.nodeId + '"]').first().find('a').first().attr('orgid'));
             /*Description from the node*/
@@ -1145,7 +1122,7 @@ function buildTree() {
             localStorage.setItem("envname", node.text);
             localStorage.setItem('itProjectActive', 'no');
 
-            /*Draw the braedcrumb from ol*/
+            /*Draw the breadcrumb from ol*/
             var ol = $("#ribbon ol.breadcrumb");
             if (ol.children().length == 0) {
                 drawBreadCrumb();
@@ -1159,7 +1136,6 @@ function buildTree() {
 }
 
 var loadTreeFuncNew = function(lazy) {
-    // alert('load tree');
     console.log('Loaded a tree');
     if (lazy) {
         buildTree();
@@ -1174,10 +1150,8 @@ var loadTreeFuncNew = function(lazy) {
 
 
 function getUrlParameter(sParam) {
-    //var u = window.location.href.split('?');
     var u = $('#workZoneNew').attr('href').split('?');
     var sPageURL = u[1];
-    //alert(sPageURL);
     if (typeof sPageURL != 'undefined') {
         var sURLVariables = sPageURL.split('&');
         for (var i = 0; i < sURLVariables.length; i++) {
@@ -1190,7 +1164,6 @@ function getUrlParameter(sParam) {
         //check local storage for last env clicked.
         var lastwzurl = localStorage.getItem("lastworkzoneurl");
         if (lastwzurl) {
-            //alert('in lastwzurl' + lastwzurl);
             u = lastwzurl.split('?');
             sPageURL = u[1];
             if (typeof sPageURL != 'undefined') {
@@ -1210,8 +1183,6 @@ function getUrlParameter(sParam) {
     return ('');
 }
 
-//Special key to bring up the logs window
-
 $(document).keypress("l", function(e) {
     if (e.ctrlKey && e.altKey && (String.fromCharCode(e.which) === 'l' || String.fromCharCode(e.which) === 'L')) {  
         window.open('/private/catlog.html', 'Catalyst Log');
@@ -1222,7 +1193,6 @@ $(document).keypress("l", function(e) {
 
 window.getUrlParams = function(url) {
     var urlParams = {};
-    //var url = window.location.href;
     var indexOfQues = url.lastIndexOf("?");
     if (indexOfQues != -1) {
         var sub = url.substring(indexOfQues + 1);
@@ -1256,9 +1226,6 @@ function selectFirstEnvironment() {
 }
 
 function selectEnv() {
-
-
-
     var $workspaceTree = $('#Workspace1');
     var url = localStorage.getItem("lastworkzoneurl");
     if (!url) {
@@ -1296,7 +1263,6 @@ function selectEnv() {
             treeNodes.push($envLink);
             envFound = true;
         }
-        //alert(envFound);
         if (!envFound) {
             console.log('treenodes', treeNodes);
             for (var i = treeNodes.length - 1; i >= 0; i--) {
@@ -1307,8 +1273,8 @@ function selectEnv() {
         }
 
 
-    } else { //not found ... trying to find first element in any org
-        //alert('not found');
+    } else { 
+        //not found ... trying to find first element in any org
         envFound = selectFirstEnvironment();
     }
     if (!envFound) {
@@ -1335,7 +1301,7 @@ checkandnavigatetotab = function() {
 checkandnavigatetotab();
 loadSettingsTree();
 foldTreeForSetting();
-    </script>
+</script>
 
 <script src="js/chefmodalcommon.js"></script>
 <script src="js/jquerytemplatemin.js"></script>
@@ -1361,8 +1327,5 @@ foldTreeForSetting();
     </div>
     <!-- /.modal-dialog -->
 </div>
-
-
-
 </body>
 </html>
