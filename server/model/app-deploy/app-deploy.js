@@ -286,12 +286,13 @@ AppDeploySchema.statics.getAppDeployByAppNameAndVersion = function(appName, vers
 // Get all AppDeploy informations. with pagination
 AppDeploySchema.statics.getAppDeployWithPage = function(offset, limit, sortBy, searchBy, callback) {
     var query = {};
-    /*if(searchBy){
-        query[searchBy] = searchBy
-    };*/
+    if (searchBy) {
+        query.applicationName= {
+            $regex: new RegExp(searchBy, "i")
+        }
+    };
     var options = {
-        sort: {
-        },
+        sort: {},
         lean: false,
         offset: offset,
         limit: limit
@@ -300,8 +301,8 @@ AppDeploySchema.statics.getAppDeployWithPage = function(offset, limit, sortBy, s
     if (sortBy) {
         options.sort[sortBy] = -1
     }
-    logger.debug("options: ",JSON.stringify(options));
-    logger.debug("query: ",JSON.stringify(query));
+    logger.debug("options: ", JSON.stringify(options));
+    logger.debug("query: ", JSON.stringify(query));
     this.paginate(query, options).then(function(appDeploy) {
         callback(null, appDeploy);
     });
