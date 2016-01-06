@@ -59,20 +59,32 @@ var PermissionsetsDao = function() {
     };
 
     // Save all permission informations.
-this.createNew = function(permissionData, callback) {
-    var that = this;
-    var permission = new Permissionsets(permissionData);
-    permission.save(function(err, permissionData) {
-        if (err) {
-            logger.debug("Got error while creating permission: ", err);
-            callback(err, null);
-        }
-        if (permissionData) {
-            logger.debug("Created permission: ");
+    this.createNew = function(permissionData, callback) {
+        var permission = new Permissionsets(permissionData);
+        permission.save(function(err, permissionData) {
+            if (err) {
+                logger.debug("Got error while creating permission: ", err);
+                callback(err, null);
+            }
+            if (permissionData) {
+                logger.debug("Created permission: ");
+                callback(null, permissionData);
+            }
+        });
+    };
+
+    // Get all permission informations.
+    this.listPermissionSets = function(callback) {
+        var that = this;
+        Permissionsets.find(function(err, permissionData) {
+            if (err) {
+                logger.debug("Got error while getting permission: ", err);
+                callback(err, null);
+            }
+            logger.debug("get permission: ");
             callback(null, permissionData);
-        }
-    });
-};
+        });
+    };
 
 };
 
