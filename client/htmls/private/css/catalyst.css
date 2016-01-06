@@ -3251,6 +3251,9 @@ nav ul {
         font-size: 14px!important;
         color: #fff!important;
     }
+    #settingsNewClick{
+        color:#3276b1!important;
+    }
     #designStyle {
         margin-left: 16px;
     }
