@@ -1466,6 +1466,6 @@ permissionsetsdao.listPermissionSets(function(err, data) {
         // End Create Team
 
     } else {
-        logger.info("Initial data setup already done.To setup again please remove DB and try again.");
+        logger.info("Initial data setup already done.To setup again please clean DB and try again.");
     }
 });
