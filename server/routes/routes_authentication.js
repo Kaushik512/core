@@ -22,26 +22,42 @@ var bcrypt = require('bcryptjs');
 var authUtil = require('../lib/utils/authUtil.js');
 var GlobalSettings = require('_pr/model/global-settings/global-settings');
 var AuthToken = require('_pr/model/auth-token');
+var LDAPUser = require('_pr/model/ldap-user/ldap-user.js');
 
 module.exports.setRoutes = function(app) {
     app.post('/auth/createldapUser', function(req, res) {
         if (req.body) {
-            var ldapClient = new LdapClient({
-                host: appConfig.ldap.host,
-                port: appConfig.ldap.port,
-                baseDn: appConfig.ldap.baseDn,
-                ou: appConfig.ldap.ou,
-                adminUser: appConfig.ldap.adminUser,
-                adminPass: appConfig.ldap.adminPass
-            });
-            logger.debug('Create User request received:', req.body.username, req.body.password.length, req.body.fname, req.body.lname);
-            ldapClient.createUser(req.body.username, req.body.password, req.body.fname, req.body.lname, function(err, user) {
-                if (err) {
-                    logger.debug('In Error', err);
-                    res.send(err);
-                } else {
 
-                    res.send(200);
+            LDAPUser.getLdapUser(function(err, ldapData) {
+                if (err) {
+                    logger.error("Failed to get ldap-user: ", err);
+                    return;
+                }
+                if (ldapData.length) {
+                    var ldapUser = ldapData[0];
+                    var ldapClient = new LdapClient({
+                        host: ldapUser.host,
+                        port: ldapUser.port,
+                        baseDn: ldapUser.baseDn,
+                        ou: ldapUser.ou,
+                        adminUser: ldapUser.adminUser,
+                        adminPass: ldapUser.adminPass
+                    });
+                    logger.debug('Create User request received:', req.body.username, req.body.password.length, req.body.fname, req.body.lname);
+                    ldapClient.createUser(req.body.username, req.body.password, req.body.fname, req.body.lname, function(err, user) {
+                        if (err) {
+                            logger.debug('In Error', err);
+                            res.send(err);
+                        } else {
+
+                            res.send(200);
+                            return;
+                        }
+                    });
+
+                } else {
+                    logger.debug("No Ldap User found.");
+                    res.status(404).send("No Ldap User found.");
                     return;
                 }
             });
@@ -237,16 +253,30 @@ module.exports.setRoutes = function(app) {
 
     app.get('/auth/userexists/:username', function(req, res) {
         logger.debug('Enter /auth/userexists/:username. for Username ::' + req.params.username);
-        var ldapClient = new LdapClient({
-            host: appConfig.ldap.host,
-            port: appConfig.ldap.port,
-            baseDn: appConfig.ldap.baseDn,
-            ou: appConfig.ldap.ou,
-            adminUser: appConfig.ldap.adminUser,
-            adminPass: appConfig.ldap.adminPass
-        });
-        ldapClient.compare(req.params.username, function(err, status) {
-            res.send(status)
+        LDAPUser.getLdapUser(function(err, ldapData) {
+            if (err) {
+                logger.error("Failed to get ldap-user: ", err);
+                return;
+            }
+            if (ldapData.length) {
+                var ldapUser = ldapData[0];
+                var ldapClient = new LdapClient({
+                    host: ldapUser.host,
+                    port: ldapUser.port,
+                    baseDn: ldapUser.baseDn,
+                    ou: ldapUser.ou,
+                    adminUser: ldapUser.adminUser,
+                    adminPass: ldapUser.adminPass
+                });
+
+                ldapClient.compare(req.params.username, function(err, status) {
+                    res.send(status)
+                });
+            } else {
+                logger.debug("No Ldap User found.");
+                res.status(404).send("No Ldap User found.");
+                return;
+            }
         });
     });
 

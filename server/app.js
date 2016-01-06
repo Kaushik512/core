@@ -29,21 +29,32 @@ var expressBodyParser = require('body-parser');
 var multipart = require('connect-multiparty');
 var expressMultipartMiddleware = multipart();
 var appConfig = require('_pr/config');
-var mongoose=require('mongoose');
+var mongoose = require('mongoose');
 var MongoStore = require('connect-mongo')(expressSession);
 var mongoDbConnect = require('_pr/lib/mongodb');
 logger.debug('Starting Catalyst');
 logger.debug('Logger Initialized');
-
-// setting up up passport authentication strategy
-passport.use(new passportLdapStrategy({
-    host: appConfig.ldap.host,
-    port: appConfig.ldap.port,
-    baseDn: appConfig.ldap.baseDn,
-    ou: appConfig.ldap.ou,
-    usernameField: 'username',
-    passwordField: 'pass'
-}));
+var LDAPUser = require('_pr/model/ldap-user/ldap-user.js');
+LDAPUser.getLdapUser(function(err, ldapData) {
+    if (err) {
+        logger.error("Failed to get ldap-user: ", err);
+        return;
+    }
+    if (ldapData.length) {
+        // setting up up passport authentication strategy
+        var ldapUser =ldapData[0];
+        passport.use(new passportLdapStrategy({
+            host: ldapUser.host,
+            port: ldapUser.port,
+            baseDn: ldapUser.baseDn,
+            ou: ldapUser.ou,
+            usernameField: 'username',
+            passwordField: 'pass'
+        }));
+    }else{
+        logger.debug("No Ldap User found.");
+    }
+});
 
 passport.serializeUser(function(user, done) {
     done(null, user);
@@ -71,9 +82,9 @@ var mongoStore = new MongoStore({
     // db: appConfig.db.dbName,
     // host: appConfig.db.host,
     // port: appConfig.db.port
-    mongooseConnection:mongoose.connection
+    mongooseConnection: mongoose.connection
 }, function() {
-    
+
 });
 
 app.set('port', process.env.PORT || appConfig.app_run_port);
@@ -96,7 +107,9 @@ app.use(expressBodyParser.urlencoded({
 }))
 
 // parse application/json
-app.use(expressBodyParser.json({limit: '50mb'}))
+app.use(expressBodyParser.json({
+    limit: '50mb'
+}))
 app.use(expressMultipartMiddleware);
 
 //setting up passport

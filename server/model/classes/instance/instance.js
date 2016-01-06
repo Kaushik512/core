@@ -1467,6 +1467,22 @@ var InstancesDao = function() {
             callback(null, instances);
         });
     };
+
+    this.getInstanceByIP = function(instanceIp, callback) {
+        Instances.find({
+            "instanceIP": instanceIp
+        }, {
+            'actionLogs': false
+        }, function(err, data) {
+            if (err) {
+                logger.error("Failed getInstanceById (%s)", instanceId, err);
+                callback(err, null);
+                return;
+            }
+            callback(null, data);
+
+        });
+    };
 };
 
 module.exports = new InstancesDao();

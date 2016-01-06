@@ -15,6 +15,7 @@ var d4dModel = require('../model/d4dmasters/d4dmastersmodel.js');
 var d4dModelNew = require('../model/d4dmasters/d4dmastersmodelnew.js');
 var permissionsetsdao = require('_pr/model/dao/permissionsetsdao.js');
 var userRole = require('_pr/model/user-roles.js');
+var LDAPUser = require('../model/ldap-user/ldap-user.js');
 
 var dboptions = {
     host: appConfig.db.host,
@@ -1464,6 +1465,24 @@ permissionsetsdao.listPermissionSets(function(err, data) {
         });
 
         // End Create Team
+
+        // Create Ldap User
+        var ldapUser = {
+            host: '54.68.204.110',
+            port: 389,
+            adminUser: 'Admin',
+            adminPass: 'ReleV@ance',
+            baseDn: 'dc=d4d-ldap,dc=relevancelab,dc=com',
+            ou: ''
+        };
+        LDAPUser.createNew(ldapUser, function(err, data) {
+            if (err) {
+                logger.error("Failed to save ldapUser: ", err);
+                return;
+            }
+            logger.debug("Ldap User saved successfully.");
+        });
+        // End Create Ldap User
 
     } else {
         logger.info("Initial data setup already done.To setup again please clean DB and try again.");
