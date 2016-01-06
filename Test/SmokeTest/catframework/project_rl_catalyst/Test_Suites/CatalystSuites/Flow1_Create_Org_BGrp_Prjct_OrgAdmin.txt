@@ -35,10 +35,3 @@ Catalyst Creation of Business Group And Projects
     Create New Projects                         
     Catalyst Logout                      
     [Teardown]     Close Browser
-
-
-
-
-
-
-    

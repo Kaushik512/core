@@ -11,7 +11,7 @@ Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
 
 *** Test Cases ***
 Catalyst new PROVIDERS setup
-    [Tags]       Sanity               Settings1
+    [Tags]       Sanity               Settings
 #    Catalyst Login
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
     Catalyst Creation of Providers Setup 
