@@ -2552,25 +2552,28 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                                     $('.cftResourceRunlistInput').empty().append($ccrs).data('$ccrs', $ccrs);
                                 });
 
-                                /*
+                                
 
-
+                                var vmCount = 0;
                                 for (var i = 0; i < resources.length; i++) {
                                     if (resources[i].type === "Microsoft.Compute/virtualMachines") {
+                                        vmCount++;
                                         var $clone = $panel.clone();
                                         var name = resources[i].name;
+                                        var displayName;
                                         if(name.indexOf('[variables(') === 0) {
                                             var indexOfBracketClose = name.indexOf(')');
                                             var variableName = name.substring(12,indexOfBracketClose-1);
                                             console.log('variables ==>',templateData.variables);
-                                            name = templateData.variables[variableName];
+                                            displayName = templateData.variables[variableName];
                                             
                                         } else  if(name.indexOf('[parameters(') === 0) {
 
                                         }
-                                        $clone.find('.heading-text').html('Configure Resource : ' + name);
-                                        $clone.find('.panel-collapse').attr('id', 'cftResource-' + name);
-                                        $clone.find('.panel-toggle').attr('href', '#cftResource-' + name);
+                                        displayName = displayName?displayName:vmCount;
+                                        $clone.find('.heading-text').html('Configure VM : ' + displayName);
+                                        $clone.find('.panel-collapse').attr('id', 'cftResource-' + displayName);
+                                        $clone.find('.panel-toggle').attr('href', '#cftResource-' + displayName);
 
                                         // for username
                                         // var $inputUsernameContainer = $inputContainerTemplate.clone();
@@ -2617,7 +2620,7 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                                         hasResource = true;
                                     }
 
-                                }*/
+                                }
                                 if (hasResource) {
                                     $panelBody.append($panelGroup);
 
