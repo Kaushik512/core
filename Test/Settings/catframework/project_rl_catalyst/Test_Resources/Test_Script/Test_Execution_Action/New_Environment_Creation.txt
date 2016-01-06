@@ -42,16 +42,28 @@ Catalyst Addition of New Environments
     Clicks on New button Create New Environment
     Sleep    2s
     Select organization for Env
+    Captures the screen shot of the page
     Clicks on Add Link
-    Enters randomly generated environment name    
+    Captures the screen shot of the page
+    Enters randomly generated environment name
+    Captures the screen shot of the page    
     Clicks on ADD button in Add a Chef Environment popup
+    Captures the screen shot of the page
     Select the Newly created Environment
     Sleep    2s
+    Captures the screen shot of the page
     Assign Projects for Orgnaization in Environment
+    Captures the screen shot of the page
     Clicks on Save Button to save the Environment
-    Verfiy the New Chef Env is created
+    Captures the screen shot of the page
+    #Sleep    2s
+    #Verfiy the New Chef Env is created
 
 
+
+
+Captures the screen shot of the page
+    Capture Page Screenshot
 
 Verfiy the New Chef Env is created
     Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${ENV STORE}']    ${ENV STORE}
