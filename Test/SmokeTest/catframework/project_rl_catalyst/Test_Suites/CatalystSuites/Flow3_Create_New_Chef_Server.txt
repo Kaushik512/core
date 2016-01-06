@@ -13,8 +13,7 @@ Catalyst new Config management setup
     [Tags]       Sanity          Settings
     Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
 #    Catalyst Login
-    Navigates to Config Management page
-    Create New Config Management
+    Create New Chef Server
     Catalyst Logout
     [Teardown]     Close Browser
     

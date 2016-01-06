@@ -15,18 +15,6 @@ Resource           ${CATALYST TEST DATA}/${TESTDATA}
 
 
 *** Keywords ***
-Catalyst User Creates New Template Type
-    Clicks on Settings
-    Clicks on Gallery Setup
-    Clicks on Template Type
-    Clicks on New Template Type Button
-    Enters the Design Template name
-    Chooses Template type Icon
-    Select Created organization
-    Select type of the template
-    Clicks Save Button in Template type page
-    
-
 Catalyst User New Template Creation
     Clicks on Settings
     Clicks on Gallery Setup
@@ -53,11 +41,11 @@ Catalyst Create New Cloud Formation Template
 
 	
 Choose Template Type for Cloud formation
-    Click Element    css=#s2id_templatetypename > a > span.select2-chosen	
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    css=#s2id_templatetypename > a > span.select2-chosen	
     Sleep    1s
     Input Text    css=#select2-drop > div > input    ${CLOUD TEMPTYPE}
     Sleep    1s
-    Click Element    css=ul > li:first-child > div
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    css=ul > li:first-child > div
 
 Enters Cloud Formation Tempalte Name
     Input Text    id=templatename    ${CLOUD TEMPNAME}
@@ -83,14 +71,6 @@ Clicks Save Button in Template type page
 
 Select Created organization
     Wait Until Keyword Succeeds    1 minute     1 seconds     Select From List     id=orgname      ${ORGANIZATION NAME}
-
-Select type of the template
-    Sleep    4s
-    Click Element    css=#s2id_templatetype > .select2-choice
-    Log    after click
-    Input Text    css=#select2-drop .select2-input    ${Template Type}
-    Sleep    4s
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span    
 
 
 Enters the New Template Name
@@ -120,25 +100,22 @@ Chooses Icon
 
 
 Chooses Template Type
-    Sleep    4s
-    Click Element    css=#s2id_templatetypename > .select2-choice
+    Sleep    2s
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    css=#s2id_templatetypename > .select2-choice
     Log    after click
     Input Text    css=#select2-drop .select2-input    ${TEMPLATE TYPENAME}
-    Sleep    4s
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span    
+    Sleep    2s
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span    
 
 Select Chef Server
     Select From List    id=configname    ${CONFIG MANAGEMENT NAME}                           
 
 
 Select CookBooks
-    Sleep   4s
+    Sleep   2s
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='${COOKBOOK NAME1}']
-    Sleep   4s
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=btnaddToRunlist
-    Sleep   2s
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='${COOKBOOK NAME2}']
-    Sleep   2s
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=btnaddToRunlist
 
 Select New CookBooks for Template
@@ -159,8 +136,6 @@ Clicks on >> Button
 
 Clicks on Save Button in Template Page
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    css=div.btn-group.pull-right > button
-
-
 
 
 Catalyst User Creates Service Command
@@ -195,7 +170,7 @@ Enters Service Name
 Choose Service Command Type
     Click Element    xpath=.//*[@id='s2id_commandtype']/a
     Click Element    xpath=.//*[@id='select2-drop']/ul/li[1]/div       #Chef CookBook/Recepie
-    #Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div       #Service Command
+    
 
 
 Select Service CookBooks
