@@ -1498,7 +1498,9 @@ permissionsetsdao.listPermissionSets(function(err, data) {
             });
             // End Create Ldap User
         } else if (modifyLdap) {
-            // Create Ldap User
+            
+            // Update Ldap User
+
             // provide ldap information here.
             var ldapUser = {
                 host: '54.68.204.110',
@@ -1526,7 +1528,7 @@ permissionsetsdao.listPermissionSets(function(err, data) {
                 }
             });
 
-            // End Create Ldap User
+            // End Update Ldap User
         } else {
             logger.info("LDAP User already exist.If you want to modify then please change the modifyLdap flag value to true and try.");
         }
