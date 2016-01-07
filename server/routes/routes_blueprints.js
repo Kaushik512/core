@@ -1799,24 +1799,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         var runlist = [];
                                                         var instances = blueprint.blueprintConfig.instances;
 
-                                                        // if (instances) {
-                                                        //     password = instances[vmName].password;
-                                                        //     if (password.indexOf('[parameters(') === 0) {
-                                                        //         var indexOfBracketClose = password.indexOf(')');
-                                                        //         var parameterName = password.substring(13, indexOfBracketClose - 1);
-                                                        //         password = blueprint.blueprintConfig.parameters[parameterName].value;
-                                                        //     }
-
-                                                        //     runlist = instances[vmName].runlist;
-                                                        // }
-
-                                                        var parameters = blueprint.blueprintConfig.parameters;
-                                                        if(parameters['adminPassword'] && parameters['adminPassword'].value) {
-                                                            password = blueprint.blueprintConfig.parameters['adminPassword'].value
-
+                                                        if (instances) {
+                                                            password = instances[vmName].password;
+                                                            runlist = instances[vmName].runlist;
                                                         }
 
-
+                                                    
 
                                                         addAndBootstrapInstance({
                                                             name: vmName,

@@ -12,12 +12,52 @@ var ARM = require('_pr/lib/azure-arm.js');
 var azureProvider = require('_pr/model/classes/masters/cloudprovider/azureCloudProvider.js');
 var appConfig = require('_pr/config');
 var uuid = require('node-uuid');
+var azureTemplateFunctionEvaluater = require('_pr/lib/azureTemplateFunctionEvaluater');
 
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     app.all('/azure-arm/*', sessionVerificationFunc);
 
+    app.post('/azure-arm/evaluateVMs', function(req, res) {
+       
+        var parameters = req.body.parameters;
+        var variables = req.body.variables;
+        var vms = req.body.vms;
+
+        var evaluatedVMS = [];
+
+        for (var i = 0; i < vms.length; i++) {
+            if (vms[i].copy) { // has copy
+                var count = azureTemplateFunctionEvaluater.evaluate(vms[i].count, parameters, variables);
+                for (var j = 1; j <= count; j++) {
+                    var vm = {};
+                    var vmName = azureTemplateFunctionEvaluater.evaluate(vms[i].name, parameters, variables, j);
+                    vm.name = vmName;
+                    var properties = vms[i].properties;
+                    if (properties && properties.osProfile) {
+                        vm.username = azureTemplateFunctionEvaluater.evaluate(properties.osProfile.adminUsername, parameters, variables, j);
+                        vm.password = azureTemplateFunctionEvaluater.evaluate(properties.osProfile.adminPassword, parameters, variables, j)
+                    }
+                    evaluatedVMS.push(vm);
+
+                }
+
+            } else {
+                var vm = {};
+                var vmName = azureTemplateFunctionEvaluater.evaluate(vms[i].name, parameters, variables);
+                vm.name = vmName;
+                var properties = vms[i].properties;
+                if (properties && properties.osProfile) {
+                    vm.username = azureTemplateFunctionEvaluater.evaluate(properties.osProfile.adminUsername, parameters, variables);
+                    vm.password = azureTemplateFunctionEvaluater.evaluate(properties.osProfile.adminPassword, parameters, variables)
+                }
+                evaluatedVMS.push(vm);
+            }
+        }
+
+        res.status(200).send(evaluatedVMS);
+    });
 
     app.get('/azure-arm/:providerId/resourceGroups', function(req, res) {
         azureProvider.getAzureCloudProviderById(req.params.providerId, function(err, providerdata) {
@@ -118,7 +158,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     };
 
                     var arm = new ARM(options);
-                    arm.createResourceGroup(req.body.name,function(err, body) {
+                    arm.createResourceGroup(req.body.name, function(err, body) {
                         if (err) {
                             res.status(500).send(err);
                             return;

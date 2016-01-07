@@ -3,10 +3,23 @@ var farmhash = require('farmhash');
 var url = require('url');
 
 
-function refactorExpression(expression) {
-	if (typeof expression === 'string ') {
+function isExpression(expression) {
+	if (typeof expression === 'string') {
 		var indexOfOpenBracket = expression.indexOf('[');
-		if (indexOfOpenBracket === = 0) {
+		if (indexOfOpenBracket === 0) {
+			return true;
+		} else {
+			return false;
+		}
+	} else {
+		return false;
+	}
+}
+
+function refactorExpression(expression) {
+	if (typeof expression === 'string') {
+		var indexOfOpenBracket = expression.indexOf('[');
+		if (indexOfOpenBracket === 0) {
 			var newExpression = expression.substring(indexOfOpenBracket + 1, expression.length - 1);
 			return newExpression;
 		} else {
@@ -140,11 +153,11 @@ function scope(expression, params, variab, index) {
 
 	function variables(key) {
 		var value = variab[key];
-		if (typeof value === 'string ') {
+		if (typeof value === 'string') {
 			var indexOfOpenBracket = value.indexOf('[');
-			if (indexOfOpenBracket === = 0) {
+			if (indexOfOpenBracket ===  0) {
 				var newExpression = value.substring(indexOfOpenBracket + 1, value.length - 1);
-				return scope(newExpression, params, variab);
+				return scope(newExpression, params, variab, index);
 			} else {
 				return value;
 			}
@@ -160,8 +173,14 @@ function scope(expression, params, variab, index) {
 
 }
 
-module.exports = function(expression, parameters, variables) {
-	expression = refactorExpression(expression);
-	return scope(expression, parameters, variables);
+module.exports.evaluate = function(expression, parameters, variables, index) {
+	console.log('params ===>',parameters);
+	if (isExpression(expression)) {
+		expression = refactorExpression(expression);
+		return scope(expression, parameters, variables, index);
+	} else {
+		console.log('not a expression');
+		return expression;
+	}
 
 };
