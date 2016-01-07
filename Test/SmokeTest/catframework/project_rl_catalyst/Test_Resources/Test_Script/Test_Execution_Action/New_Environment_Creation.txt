@@ -26,7 +26,6 @@ Catalyst creates environments by selcting from chef server
     Select the Environment1
     Assign Projects for Orgnaization in Environment
     Clicks on Save Button to save the Environment
-    Sleep    2s
     Clicks on New button Create New Environment
     Select organization for Env
     Select the Environment2
@@ -40,7 +39,7 @@ Catalyst Addition of New Environments
     Clicks on DevOps Setup menu
     Clicks on Environments menu link
     Clicks on New button Create New Environment
-    Sleep    2s
+    Sleep    1s
     Select organization for Env
     Clicks on Add Link
     Enters randomly generated environment name    
@@ -49,9 +48,6 @@ Catalyst Addition of New Environments
     Sleep    2s
     Assign Projects for Orgnaization in Environment
     Clicks on Save Button to save the Environment
-
-
-
 
 Enters randomly generated environment name 
     ${ENVV}=    Generate Random String    3    [NUMBERS]
@@ -66,21 +62,6 @@ Select the Newly created Environment
     Sleep     1s
     Input Text    css=#select2-drop > div > input    ${ENV STORE}
     Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='select2-drop']/ul/li[contains("${ENV STORE}",.)]
- 
-
-
-    #Sleep    4s
-    #Click Element    css=#s2id_environmentname > .select2-choice
-    #Log    after click
-    #Input Text    css=#select2-drop .select2-input    ${ENV STORE}
-    #Sleep    4s
-    #Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
-
-    #Click Element    xpath=.//*[@id='s2id_environmentname']/a/span[1]
-    #Sleep     1s
-    #Input Text    xpath=.//*[@id='select2-drop']/div/input    ${ENV STORE}
-    #Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='select2-drop']/ul/li[contains("${ENV STORE}",.)]
-
 
 
 Catalyst Environments2 setup
@@ -91,33 +72,6 @@ Catalyst Environments2 setup
     Assign Projects for Orgnaization in Environment
     Clicks on Save Button to save the Environments
 
-
-
-
-
-#Catalyst Activation of Environments in projects
-   # Clicks on Settings
-   # Clicks on Org Tree Setup
-   # Clicks on projects menu
-   # Clicks on Edit Update Button of the Project1 Created
-   # User Activates the Environment1
-   # User Activates the Environment2
-   # Clicks on Save Button of Your Project
-   # Clicks on Edit Update Button of the Project2 Created
-   # User Activates the Environment1     
-   # User Activates the Environment2     
-   # Clicks on Save Button of Your Project
-
-
-
-
-#Catalyst Edit the Project Setup
-    #Clicks on Settings
-    #Clicks on Organization setup
-    #Clicks on projects menu
-    #Clicks on Edit Button of the Project Created
-    #Assign the Environments to your Project
-    #Clicks on Save Button
 
 Clicks on Add Link
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    css=a.clearfix.pull-right
@@ -132,7 +86,7 @@ Add the Environment Named2
     Input Text    id=chefenvname    ${EnV2}
 
 Clicks on Edit Update Button of the Project1 Created
-     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()="TestProject1"]/../td[6]/div/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()="TestProject1"]/../td[6]/div/a
 
 User Activates the Environment1
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='environmentname']/label[text()='Dev']
@@ -151,16 +105,6 @@ Clicks on Org Tree Setup
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='setting_tree']/ul/li[1]/a
 
 
-#Edit Project Start
-Clicks on Organization setup
-    Click Element    xpath=.//*[@id='Settings']/li[1]/a/span
-
-#Clicks on Edit Button of the Project Created
- #   Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()="Catalyst"]/../td[6]/div/a        #Catalyst
-
-
-  Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()="Primary_Edu"]/../td[6]/div/a       Primary_Edu
-
 Select organization for Env
     Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_orgname']/a
     Input Text    xpath=.//*[@id='select2-drop']/div/input     ${ORGANIZATION NAME}
@@ -176,89 +120,36 @@ Clicks on Environments menu link
 
 
 Clicks on New button create new Environment
-    Sleep    2s
-    Click Element    css=#newENV
-    Sleep    2s
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    css=#newENV
+
 
 Select the Environment1    
-    Sleep    4s
-    Click Element    css=#s2id_environmentname > .select2-choice
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    css=#s2id_environmentname > .select2-choice
     Log    after click
     Input Text    css=#select2-drop .select2-input    ${EnV1}
-    Sleep    4s
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
-
-
-
-    #Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='s2id_environmentname']/a/span[1]
-    #Sleep    1s
-    #Input Text    xpath=.//*[@id='select2-drop']/div/input     ${EnV1}
-    #Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='select2-drop']/ul/li[contains("Dev",.)]
-
+    Sleep    2s
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
 
 Select the Environment2 
-    Sleep    4s
-    Click Element    css=#s2id_environmentname > .select2-choice
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    css=#s2id_environmentname > .select2-choice
     Log    after click
     Input Text    css=#select2-drop .select2-input    ${EnV2}
-    Sleep    4s
-    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
-
-
-
-    #Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='s2id_environmentname']/a/span[1]
-    #Sleep    1s
-    #Input Text    xpath=.//*[@id='select2-drop']/div/input     ${EnV2}
-    #Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='select2-drop']/ul/li[contains("QA",.)]
+    Sleep    2s
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
 
 
 Assign Projects for Orgnaization in Environment
     Click Element    xpath=.//*[@id='projectname']/label[text()='${PROJECT NAME1}']
-    #Click Element    xpath=.//*[@id='projectname']/label[text()='${PROJECT NAME2}']
-
-
+    
 
 Clicks on Save Button to save the Environment
-    Click Element    css=div.btn-group.pull-right > button
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    css=div.btn-group.pull-right > button
 
 
- 
  #Environment End
 
 
- #Import By IP
-
-
-Enters the IP Address for IP
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=instanceFQDN     ${IP ADDRESS}
-
-Choose the Operating System for IP
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_importinstanceOS']/a/span[1]
-    Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div      #linuxCentos
-    #Click Element    xpath=.//*[@id='select2-drop']/ul/li[3]/div   #Windows
-
-Enters the UserName for IP
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=instanceUsername    ${IP USERNAME}
-
-
-Choose the Authentication Type for IP
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_pemFileDropdown']/a/span
-    Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div
-
-
-Upload the Pem File for IP
-    Choose File     xpath=.//*[@id='importPemfileInput']     ${CATALYSTPEM}
-    #C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\catalyst.pem
-
-Enters the Application Name for IP
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    xpath=.//*[@id='appSeries12']/div[1]/input    ${IP APPNAME}
-
-Enters the Application URL for IP
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    xpath=.//*[@id='appSeries12']/div[2]/input     ${IP URL}
-
-Clicks on Import Button for IP
-    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='addInstanceBtn']
-
+ 
 
 
