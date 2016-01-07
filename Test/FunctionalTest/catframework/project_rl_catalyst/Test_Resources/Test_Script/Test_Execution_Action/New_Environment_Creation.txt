@@ -169,7 +169,7 @@ Verfiy Node Deleted
 Delete the Node
     #Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=//span[text()='10.0.1.200']
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='removeInstance']/i
-    Sleep   2s
+    Sleep   1s
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[text()='Delete']
 
 
