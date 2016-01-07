@@ -1,4 +1,6 @@
 var pad = require('node-string-pad');
+var farmhash = require('farmhash');
+var url = require('url');
 
 
 function refactorExpression(expression) {
@@ -16,7 +18,7 @@ function refactorExpression(expression) {
 
 }
 
-function scope(expression, params, variab) {
+function scope(expression, params, variab, index) {
 
 	// numneric expression
 
@@ -25,6 +27,11 @@ function scope(expression, params, variab) {
 	}
 
 	function copyIndex() {
+		if (index) {
+			return index;
+		} else {
+			return 0;
+		}
 
 	}
 
@@ -87,27 +94,40 @@ function scope(expression, params, variab) {
 	}
 
 	function substring(stringToParse, startIndex, length) {
-
+		if (!startIndex) {
+			startIndex = 0;
+		}
+		if (length) {
+			return stringToParse.substr(startIndex, length);
+		} else {
+			return stringToParse.substr(startIndex);
+		}
 	}
 
-	function toLower() {
-
+	function toLower(stringToChange) {
+		return stringToChange.toLowerCase();
 	}
 
-	function toUpper() {
-
+	function toUpper(stringToChange) {
+		return stringToChange.toUpperCase();
 	}
 
-	function trim() {
-
+	function trim(stringToTrim) {
+		return stringToTrim.trim();
 	}
 
 	function uniqueString() {
+		var str = '';
+		for (var i = 0; i < arguments.length; i++) {
+			str = str + arguments[i];
+		}
+		var hash = farmhash.hash64(str);
+		return hash;
 
 	}
 
-	function uri() {
-
+	function uri(baseUri, relativeUri) {
+		return url.resolve(baseUri, relativeUri);
 	}
 
 
