@@ -1466,25 +1466,69 @@ permissionsetsdao.listPermissionSets(function(err, data) {
 
         // End Create Team
 
-        // Create Ldap User
-        var ldapUser = {
-            host: '54.68.204.110',
-            port: 389,
-            adminUser: 'Admin',
-            adminPass: 'ReleV@ance',
-            baseDn: 'dc=d4d-ldap,dc=relevancelab,dc=com',
-            ou: ''
-        };
-        LDAPUser.createNew(ldapUser, function(err, data) {
-            if (err) {
-                logger.error("Failed to save ldapUser: ", err);
-                return;
-            }
-            logger.debug("Ldap User saved successfully.");
-        });
-        // End Create Ldap User
-
     } else {
         logger.info("Initial data setup already done.To setup again please clean DB and try again.");
     }
+
+    // to modify ldap values.
+    var modifyLdap = false;
+
+    LDAPUser.getLdapUser(function(err, data) {
+        if (err) {
+            logger.error("Failed to get ldapUser: ", err);
+            return;
+        }
+        if (!data.length) {
+            // Create Ldap User
+            // provide ldap information here.
+            var ldapUser = {
+                host: '54.68.204.110',
+                port: 389,
+                adminUser: 'Admin',
+                adminPass: 'ReleV@ance',
+                baseDn: 'dc=d4d-ldap,dc=relevancelab,dc=com',
+                ou: ''
+            };
+            LDAPUser.createNew(ldapUser, function(err, data) {
+                if (err) {
+                    logger.error("Failed to save ldapUser: ", err);
+                    return;
+                }
+                logger.debug("Ldap User saved successfully.");
+            });
+            // End Create Ldap User
+        } else if (modifyLdap) {
+            // Create Ldap User
+            // provide ldap information here.
+            var ldapUser = {
+                host: '54.68.204.110',
+                port: 8080,
+                adminUser: 'Admin',
+                adminPass: 'ReleV@ance',
+                baseDn: 'dc=d4d-ldap,dc=relevancelab,dc=com',
+                ou: ''
+            };
+            LDAPUser.getLdapUser(function(err, data) {
+                if (err) {
+                    logger.error("Failed to get ldapUser: ", err);
+                    return;
+                }
+                if (data.length) {
+                    LDAPUser.updateLdapUser(data[0]._id,ldapUser, function(err, data) {
+                        if (err) {
+                            logger.error("Failed to update ldapUser: ", err);
+                            return;
+                        }
+                        logger.debug("Ldap User updated successfully.");
+                    });
+                }else{
+                    logger.info("No ldap user found to update.");
+                }
+            });
+
+            // End Create Ldap User
+        } else {
+            logger.info("LDAP User already exist.If you want to modify then please change the modifyLdap flag value to true and try.");
+        }
+    });
 });

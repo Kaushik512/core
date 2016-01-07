@@ -31,7 +31,6 @@ LDAPUserSchema.statics.getLdapUser = function(callback) {
             logger.debug("Got error while fetching userData: ", err);
             callback(err, null);
         }
-        logger.debug("Got ldap user: ", JSON.stringify(users));
         callback(null, users);
     });
 };
@@ -46,6 +45,26 @@ LDAPUserSchema.statics.createNew = function(userData, callback) {
         }
         logger.debug("Creating user: ", JSON.stringify(user));
         callback(null, user);
+    });
+};
+
+// Update ldap user informations.
+LDAPUserSchema.statics.updateLdapUser = function(anId, userData, callback) {
+    this.update({
+        "_id": new ObjectId(anId),
+    }, {
+        $set: userData
+    }, {
+        upsert: false
+    }, function(err, data) {
+        if (err) {
+            logger.error("Failed to update user data", err);
+            callback(err, null);
+            return;
+        }
+
+        logger.debug("ldap user updated successfully.");
+        callback(null, data);
     });
 };
 
