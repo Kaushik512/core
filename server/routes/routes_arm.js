@@ -20,7 +20,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.all('/azure-arm/*', sessionVerificationFunc);
 
     app.post('/azure-arm/evaluateVMs', function(req, res) {
-       
+
         var parameters = req.body.parameters;
         var variables = req.body.variables;
         var vms = req.body.vms;
@@ -208,7 +208,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
 
-    app.delete('/azure-arm/:cfId', function(req, res) {
+    app.delete('/azure-arm/:armId', function(req, res) {
 
         function removeInstanceFromDb(instanceId) {
             instancesDao.removeInstancebyId(req.params.instanceId, function(err, data) {
@@ -222,114 +222,109 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             });
         }
 
-
-        CloudFormation.getById(req.params.cfId, function(err, cloudFormation) {
+        AzureArm.getById(req.params.armId, function(err, azureArm) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
-            if (cloudFormation) {
-                AWSProvider.getAWSProviderById(cloudFormation.cloudProviderId, function(err, aProvider) {
+            if (azureArm) {
+                azureProvider.getAzureCloudProviderById(azureArm.cloudProviderId, function(err, providerdata) {
                     if (err) {
-                        logger.error("Unable to fetch provide", err);
+                        logger.error("Unable to fetch provider", err);
                         res.send(500, errorResponses.db.error);
                     }
-                    var cryptoConfig = appConfig.cryptoSettings;
-                    var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
-                    var keys = [];
-                    keys.push(aProvider.accessKey);
-                    keys.push(aProvider.secretKey);
-                    cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
+
+                    providerdata = JSON.parse(providerdata);
+
+                    var settings = appConfig;
+
+                    var options = {
+                        subscriptionId: providerdata.subscriptionId,
+                    };
+
+                    var arm = new ARM(options);
+                    arm.deleteDeployedTemplate({
+                        name: azureArm.deploymentName,
+                        resourceGroup: azureArm.resourceGroup
+                    }, function(err, body) {
                         if (err) {
-                            res.send(500, {
-                                message: "Failed to decrypt accessKey or secretKey"
+                            res.status(500).send({
+                                message: "Unable to delete stack from aws"
                             });
                             return;
                         }
-
-                        var awsSettings = {
-                            "access_key": decryptedKeys[0],
-                            "secret_key": decryptedKeys[1],
-                            "region": cloudFormation.region,
-                        };
-                        var awsCF = new AWSCloudFormation(awsSettings);
-                        awsCF.deleteStack(cloudFormation.stackId, function(err, deletedStack) {
+                        configmgmtDao.getChefServerDetails(azureArm.infraManagerId, function(err, chefDetails) {
                             if (err) {
-                                logger.error("Unable to delete stack from aws", err);
-                                res.send(500, {
-                                    message: "Unable to delete stack from aws"
-                                });
+                                logger.debug("Failed to fetch ChefServerDetails ", err);
+                                res.send(500, errorResponses.chef.corruptChefData);
                                 return;
                             }
-                            configmgmtDao.getChefServerDetails(cloudFormation.infraManagerId, function(err, chefDetails) {
+                            var chef = new Chef({
+                                userChefRepoLocation: chefDetails.chefRepoLocation,
+                                chefUserName: chefDetails.loginname,
+                                chefUserPemFile: chefDetails.userpemfile,
+                                chefValidationPemFile: chefDetails.validatorpemfile,
+                                hostedChefUrl: chefDetails.url,
+                            });
+                            instancesDao.getInstancesByARMId(azureArm.id, function(err, instances) {
                                 if (err) {
-                                    logger.debug("Failed to fetch ChefServerDetails ", err);
-                                    res.send(500, errorResponses.chef.corruptChefData);
+                                    res.send(500, errorResponses.db.error);
                                     return;
                                 }
-                                var chef = new Chef({
-                                    userChefRepoLocation: chefDetails.chefRepoLocation,
-                                    chefUserName: chefDetails.loginname,
-                                    chefUserPemFile: chefDetails.userpemfile,
-                                    chefValidationPemFile: chefDetails.validatorpemfile,
-                                    hostedChefUrl: chefDetails.url,
-                                });
-                                instancesDao.getInstancesByCloudformationId(cloudFormation.id, function(err, instances) {
+                                var instanceIds = [];
+                                for (var i = 0; i < instances.length; i++) {
+                                    instanceIds.push(instances[i].id);
+                                    chef.deleteNode(instances[i].chef.chefNodeName, function(err, nodeData) {
+                                        if (err) {
+                                            logger.debug("Failed to delete node ", err);
+                                            if (err.chefStatusCode && err.chefStatusCode === 404) {
+
+                                            } else {
+
+                                            }
+                                            return;
+                                        }
+                                        logger.debug("Successfully removed instance from db.");
+                                    });
+                                }
+
+                                instancesDao.removeInstancebyArmId(azureArm.id, function(err, deletedData) {
                                     if (err) {
-                                        res.send(500, errorResponses.db.error);
+                                        logger.error("Unable to delete stack instances from db", err);
+                                        res.send(500, {
+                                            message: "Unable to delete stack from aws"
+                                        });
                                         return;
                                     }
-                                    var instanceIds = [];
-                                    for (var i = 0; i < instances.length; i++) {
-                                        instanceIds.push(instances[i].id);
-                                        chef.deleteNode(instances[i].chef.chefNodeName, function(err, nodeData) {
-                                            if (err) {
-                                                logger.debug("Failed to delete node ", err);
-                                                if (err.chefStatusCode && err.chefStatusCode === 404) {
-
-                                                } else {
-
-                                                }
-                                                return;
-                                            }
-                                            logger.debug("Successfully removed instance from db.");
-                                        });
-                                    }
-
-                                    instancesDao.removeInstancebyCloudFormationId(cloudFormation.id, function(err, deletedData) {
+                                    AzureArm.removeById(azureArm.id, function(err, deletedStack) {
                                         if (err) {
-                                            logger.error("Unable to delete stack instances from db", err);
+                                            logger.error("Unable to delete stack from db", err);
                                             res.send(500, {
-                                                message: "Unable to delete stack from aws"
+                                                message: "Unable to delete stack from db"
                                             });
                                             return;
                                         }
-                                        CloudFormation.removeById(cloudFormation.id, function(err, deletedStack) {
-                                            if (err) {
-                                                logger.error("Unable to delete stack from db", err);
-                                                res.send(500, {
-                                                    message: "Unable to delete stack from db"
-                                                });
-                                                return;
-                                            }
-                                            res.send(200, {
-                                                message: "deleted",
-                                                instanceIds: instanceIds
-                                            });
+                                        res.status(200).send({
+                                            message: "deleted",
+                                            instanceIds: instanceIds
                                         });
                                     });
-
                                 });
+
                             });
                         });
+
                     });
+
                 });
+
             } else {
-                res.send(404, {
+                res.status(404).send({
                     message: "Not Found"
-                })
+                });
             }
         });
+
     });
 
     app.get('/azure-arm/:cfId/instances', function(req, res) {
