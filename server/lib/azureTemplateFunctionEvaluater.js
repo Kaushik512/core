@@ -48,6 +48,10 @@ function scope(expression, params, variab, index) {
 
 	}
 
+	function copyindex() {
+		return copyIndex();
+	}
+
 	function div(operand1, operand2) {
 		return operand1 / operand2;
 	}
@@ -82,6 +86,7 @@ function scope(expression, params, variab, index) {
 	}
 
 	function concat() {
+		console.log("argulmet ==>", arguments)
 		var str = '';
 		for (var i = 0; i < arguments.length; i++) {
 			str = str + arguments[i];
@@ -90,6 +95,10 @@ function scope(expression, params, variab, index) {
 	}
 
 	function padLeft(stringToPad, totalLength, paddingCharacter) {
+		return pad(stringToPad, totalLength, 'LEFT', paddingCharacter);
+	}
+
+	function padleft(stringToPad, totalLength, paddingCharacter) {
 		return pad(stringToPad, totalLength, 'LEFT', paddingCharacter);
 	}
 
@@ -121,15 +130,34 @@ function scope(expression, params, variab, index) {
 		return stringToChange.toLowerCase();
 	}
 
+	function tolower(stringToChange) {
+		return stringToChange.toLowerCase();
+	}
+
 	function toUpper(stringToChange) {
 		return stringToChange.toUpperCase();
 	}
+
+	function toupper(stringToChange) {
+		return stringToChange.toUpperCase();
+	}
+
 
 	function trim(stringToTrim) {
 		return stringToTrim.trim();
 	}
 
 	function uniqueString() {
+		var str = '';
+		for (var i = 0; i < arguments.length; i++) {
+			str = str + arguments[i];
+		}
+		var hash = farmhash.hash64(str);
+		return hash;
+
+	}
+
+	function uniquestring() {
 		var str = '';
 		for (var i = 0; i < arguments.length; i++) {
 			str = str + arguments[i];
@@ -155,7 +183,7 @@ function scope(expression, params, variab, index) {
 		var value = variab[key];
 		if (typeof value === 'string') {
 			var indexOfOpenBracket = value.indexOf('[');
-			if (indexOfOpenBracket ===  0) {
+			if (indexOfOpenBracket === 0) {
 				var newExpression = value.substring(indexOfOpenBracket + 1, value.length - 1);
 				return scope(newExpression, params, variab, index);
 			} else {
@@ -174,7 +202,7 @@ function scope(expression, params, variab, index) {
 }
 
 module.exports.evaluate = function(expression, parameters, variables, index) {
-	console.log('params ===>',parameters);
+	console.log('expression ===>', expression);
 	if (isExpression(expression)) {
 		expression = refactorExpression(expression);
 		return scope(expression, parameters, variables, index);

@@ -29,7 +29,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
         for (var i = 0; i < vms.length; i++) {
             if (vms[i].copy) { // has copy
-                var count = azureTemplateFunctionEvaluater.evaluate(vms[i].count, parameters, variables);
+                var count = azureTemplateFunctionEvaluater.evaluate(vms[i].copy.count, parameters, variables);
                 for (var j = 1; j <= count; j++) {
                     var vm = {};
                     var vmName = azureTemplateFunctionEvaluater.evaluate(vms[i].name, parameters, variables, j);
