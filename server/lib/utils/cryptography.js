@@ -16,9 +16,6 @@ var fs = require('fs');
 var logger = require('_pr/logger')(module);
 
 function Cryptography(algorithm, password) {
-
-   
-
     var encrypt = function(text, encryptionEncoding, decryptionEncoding) {
         logger.debug(encryptionEncoding ," == ",decryptionEncoding);
         var encryptedText;
@@ -60,9 +57,7 @@ function Cryptography(algorithm, password) {
                 callback(err);
                 return;
             }
-            //logger.debug('pemfile == before ==>',fileData);
             var encryptedData = encrypt(fileData, encryptionEncoding, decryptionEncoding);
-            //logger.debug('pemfile == after ==>',encryptedData);
             fs.writeFile(outputFilepath, encryptedData, {
                 //encoding: outputEncoding
             }, function(err) {

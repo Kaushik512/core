@@ -465,7 +465,12 @@
     //Total Costs API
     $.get('../dashboard/providers/totalcosts', function(totalcosts) {
       $('#totalCosts').empty();
-      var totalcostcount = '$'+totalcosts[0].totalcostcount;
+      var totalcostcount;
+      if(!totalcosts.length){
+        totalcostcount = "Yet to fetch..."
+      }else{
+        totalcostcount = '$'+totalcosts[0].totalcostcount;
+      }
       $('#totalCosts').append(totalcostcount);
     }).fail(function() {});
 

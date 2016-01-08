@@ -1,4 +1,11 @@
-var sys = require('sys');
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
+//var sys = require('sys');
 var exec = require('child_process').exec;
 var SSHExec = require('./utils/sshexec');
 var logger = require('_pr/logger')(module);
@@ -15,27 +22,6 @@ var xml2json = require('xml2json');
 var waitForPort = require('wait-for-port');
 
 function execute(cmd, isJsonResponse, callback) {
-    // logger.debug("START of executing issued command");
-    // exec(cmd, function(error, stdout, stderr){ 
-    //  if(error){
-    //      logger.error("Error",error);
-    //      callback(error,null);
-    //      return
-    //  }
-    //  if(stderr){
-    //      logger.error("Std error",stderr);
-    //      callback(stderr,null);
-    //      return;
-    //  }
-
-    //    if(isJsonResponse){   
-    //       var json = JSON.parse(stdout);
-    //       //console.log("Json:", json)
-    //       callback(null,json); 
-    //       return;
-    //     }
-    //     callback(null,stdout); 
-    //    });
     var output = '';
     var options = {
         onError: function(err) {
@@ -45,7 +31,7 @@ function execute(cmd, isJsonResponse, callback) {
             if (code === 0) {
                 if (isJsonResponse) {
                     var json = JSON.parse(output);
-                    //console.log("Json:", json)
+                    //logger.debug("Json:", json)
                     callback(null, json);
                     return;
                 }
@@ -67,17 +53,12 @@ function execute(cmd, isJsonResponse, callback) {
 
     var proc = new Process(cmd, [], options);
     proc.start();
-
-
 }
 
 
 function constructXmlInputBody(params) {
-
     logger.debug("START:: constructXmlInputBody for VM creation:: ");
 
-    /*var createVMcmd = "azure vm create " +  + " " +  + " " +  + " " +  + " -z \"" +  + "\" -l \"" + params.location + "\" " + params.remoteCon + " " + params.port + " -w " +  + " -b " + params.subnet;
-    
     /*Defining configuration sets template*/
     var configurationSets = {};
     configurationSets.ConfigurationSets = [];
@@ -92,9 +73,7 @@ function constructXmlInputBody(params) {
     };
 
     networkConfigurationTemplate.ConfigurationSet[0].ConfigurationSetType = "NetworkConfiguration";
-
     if (params.os === "windows") {
-
         /*start of template for windows type machines configuration */
         var windowsProvisioningConfigurationTemplate = {
             ConfigurationSet: [{
@@ -118,9 +97,7 @@ function constructXmlInputBody(params) {
         windowsProvisioningConfigurationTemplate.ConfigurationSet[3].AdminPassword = params.password;
         windowsProvisioningConfigurationTemplate.ConfigurationSet[4].AdminUsername = params.username;
         /*end of template for windows type machines configuration */
-
         configurationSets.ConfigurationSets.push(windowsProvisioningConfigurationTemplate);
-
         /*start of template for windows 5985 port creation */
         var inputEndpointsTemplate = {
             InputEndpoint: [{
@@ -158,7 +135,6 @@ function constructXmlInputBody(params) {
         inputEndpointsTemplate1.InputEndpoint[2].Port = "3389";
         inputEndpointsTemplate1.InputEndpoint[3].Protocol = "tcp";
         /*end of template for windows rdp port creation */
-
         networkConfigurationTemplate.ConfigurationSet[1].InputEndpoints.push(inputEndpointsTemplate1);
 
     } else {
@@ -180,11 +156,8 @@ function constructXmlInputBody(params) {
                 DisableSshPasswordAuthentication: "false"
             }]
         };
-
         /*end of template for linux type machines configuration */
-
         configurationSets.ConfigurationSets.push(linuxProvisioningConfigurationTemplate);
-
         /*start of default endpoint template for ssh port*/
         var inputEndpointsTemplate = {
             InputEndpoint: [{
@@ -207,13 +180,9 @@ function constructXmlInputBody(params) {
     }
 
     var endpointsPorts = params.endpoints;
-
     logger.debug("endpointsPorts >>", endpointsPorts);
-
     var port = endpointsPorts.split(',')[0];
-
     logger.debug('Creating endpoint CatEndpoint template', port);
-
     if (port != "22" && port != "5985" && port != "3389") {
         var inputEndpointsTemplate = {
             InputEndpoint: [{
@@ -292,16 +261,8 @@ function constructXmlInputBody(params) {
 
 function constructCloudServiceReqBody(cloudService, location) {
     logger.debug("START:: constructCloudServiceReqBody");
-
-    //var base64_encode = require('base64').encode;
-    //var Buffer = require('buffer').Buffer;
-
     var base64_label = new Buffer(cloudService).toString('base64');
-
     logger.debug('Construct base64 without base64 module:', base64_label);
-
-    //var base64_label = base64_encode(buf);
-
     var cloudServiceTemplate = {
         CreateHostedService: [{
             _attr: {
@@ -369,7 +330,6 @@ function constructVMStartReqBody() {
     logger.debug("END:: constructVMStartReqBody");
 
     return xmlString;
-
 }
 
 var instanceStateList = {
@@ -380,15 +340,7 @@ var instanceStateList = {
     PENDING: 'pending'
 }
 
-
 var AzureCloud = function(options) {
-
-    /*var options = {
-        subscriptionId: "f2c53cd4-5d0f-4c6d-880b-6af801de9b21",
-        certLocation: "/Office/Work/Azure/certs/management.pem",
-        keyLocation: "/Office/Work/Azure/certs/management.key"
-    };*/
-
     var certFile = path.resolve(__dirname, options.certLocation);
     var keyFile = path.resolve(__dirname, options.keyLocation);
 
@@ -475,10 +427,9 @@ var AzureCloud = function(options) {
 
                 request.post(opts, function(err, response, body) {
 
-                    console.log("response.statusCode: ", response.statusCode);
+                    logger.debug("response.statusCode: ", response.statusCode);
 
                     if (err) {
-                        //console.log("Error...",err);
                         callback(err, null);
                         return;
                     }
@@ -536,10 +487,9 @@ var AzureCloud = function(options) {
 
                 request.post(opts, function(err, response, body) {
 
-                    console.log("response.statusCode: ", response.statusCode);
+                    logger.debug("response.statusCode: ", response.statusCode);
 
                     if (err) {
-                        //console.log("Error...",err);
                         callback(err, null);
                         return;
                     }
@@ -563,17 +513,6 @@ var AzureCloud = function(options) {
     }
 
     this.getLocations = function(callback) {
-        /*execute("azure vm location list --json", true, function(err, data) {
-            if (err) {
-                logger.error("Error in listing locations:", err);
-                callback(err, null);
-                return;
-            }
-
-            logger.debug("Number of locations:", data.length);
-            callback(null, data);
-            return;
-        });*/
         logger.debug("START:: getLocations");
         fs.readFile(certFile, function(err, certData) {
             if (err) {
@@ -626,17 +565,6 @@ var AzureCloud = function(options) {
     }
 
     this.getNetworks = function(callback) {
-        /*execute("azure network vnet list --json", true, function(err, data) {
-            if (err) {
-                logger.error("Error in listing networks:", err);
-                callback(err, null);
-                return;
-            }
-
-            logger.debug("Number of Virtual networks:", data.length);
-            callback(null, data);
-            return;
-        });*/
         logger.debug("START:: getNetworks");
         fs.readFile(certFile, function(err, certData) {
             if (err) {
@@ -718,11 +646,9 @@ var AzureCloud = function(options) {
                 }
 
                 request.post(opts, function(err, response, body) {
-
-                    console.log("response.statusCode: ", response.statusCode);
+                    logger.debug("response.statusCode: ", response.statusCode);
 
                     if (err) {
-                        //console.log("Error...",err);
                         callback(err, null);
                         return;
                     }
@@ -771,10 +697,10 @@ var AzureCloud = function(options) {
 
                 request.post(opts, function(err, response, body) {
 
-                    console.log("response.statusCode: ", response.statusCode);
+                    logger.debug("response.statusCode: ", response.statusCode);
 
                     if (err) {
-                        console.log("Error in Cloud Service creation", err);
+                        logger.debug("Error in Cloud Service creation", err);
                         callback(err, null);
                         return;
                     }
@@ -784,7 +710,7 @@ var AzureCloud = function(options) {
                         callback(null, "Created Cloud Service Successfully");
                         return;
                     } else {
-                        console.log("Error in Cloud Service creation:", body);
+                        logger.debug("Error in Cloud Service creation:", body);
                         callback(body, null);
                         return;
                     }
@@ -795,10 +721,6 @@ var AzureCloud = function(options) {
     }
 
     this.createServer = function(params, callback) {
-
-        //cloudServiceName,imageName,userName,password,vmName,size,sshPort
-        //var createVMcmd = "azure vm create "+ params.VMName +" "+ params.imageName +" "+ params.userName +" "+params.password+" -z \""+params.size+" -l \""+params.location+"\" -e "+ params.sshPort +"-w " + params.vnet + " -b " + params.subnet;
-
         if (params.os === 'windows') {
             params.remoteCon = '-r';
             params.port = '3389';
@@ -808,42 +730,6 @@ var AzureCloud = function(options) {
         }
 
         logger.debug("Azure server Launch params >>>", params);
-
-        /*var createVMcmd = "azure vm create " + params.VMName + " " + params.imageName + " " + params.username + " " + params.password + " -z \"" + params.size + "\" -l \"" + params.location + "\" " + params.remoteCon + " " + params.port + " -w " + params.vnet + " -b " + params.subnet;
-
-        logger.debug("Create VM command:", createVMcmd);
-        var self = this;
-
-        execute(createVMcmd, false, function(err, data) {
-            if (err) {
-                logger.error("Error in VM creation:", err);
-                callback(err, null);
-                return;
-            }
-            logger.debug("Create VM response:", data);
-
-            var endpointsPorts = params.endpoints;
-
-            logger.debug("endpointsPorts >>", endpointsPorts);
-
-            var port = endpointsPorts.split(',')[0];
-
-            logger.debug('Creating endpoint CatEndpoint with port:', port);
-
-            if (params.os === 'windows') {
-                self.createEndPoint(params.VMName, "default", '5985', function() {
-                    self.createEndPoint(params.VMName, "CatEndpoint", port, function() {
-
-                    });
-                });
-            } else {
-                self.createEndPoint(params.VMName, "CatEndpoint", port, function() {});
-            }
-
-            callback(null, data);
-
-        });*/
-
         var cloudServiceName = params.VMName;
 
         var cloudServiceReqBody = constructCloudServiceReqBody(cloudServiceName, params.location);
@@ -892,19 +778,6 @@ var AzureCloud = function(options) {
     }
 
     this.getServerByName = function(serverName, callback) {
-
-        /*var showVMcmd = "azure vm show --json " + serverName;
-
-        execute(showVMcmd, true, function(err, data) {
-            if (err) {
-                logger.error("Error in VM show:", err);
-                callback(err, null);
-                return;
-            }
-
-            logger.debug("Show VM response:", data);
-            callback(null, data);
-        });*/
         logger.debug("START:: getServerByName");
         fs.readFile(certFile, function(err, certData) {
             if (err) {
@@ -934,12 +807,11 @@ var AzureCloud = function(options) {
                 request.get(opts, function(err, response, body) {
 
                     if (err) {
-                        //console.log("Error...",err);
                         callback(err, null);
                         return;
                     }
 
-                    console.log("response.statusCode: ", response.statusCode);
+                    logger.debug("response.statusCode: ", response.statusCode);
 
                     if (response.statusCode == '200') {
                         logger.debug("END:: getServerByName");
@@ -962,7 +834,6 @@ var AzureCloud = function(options) {
     this.trysshoninstance = function(ostype, ip_address, username, pwd, callback) {
         logger.debug('In trysshoninstance1');
         var opts = {
-            //privateKey: instanceData.credentials.pemFilePath,
             password: pwd,
             username: username,
             host: ip_address,
@@ -970,30 +841,25 @@ var AzureCloud = function(options) {
             port: 22,
             cmds: ["ls -al"],
             cmdswin: ["knife wsman test"]
-            //interactiveKeyboard: true
         }
 
         var cmdString = '';
         if (ostype == "Windows") {
             curl = new Curl();
             cmdString = opts.cmdswin[0] + ' ' + opts.host + ' -m';
-            //logger.debug("cmdString >>>", cmdString);
-
             var openport = 5985;
-
             logger.debug('checking windows port 5985 for node with ip : ' + opts.host);
-
             waitForPort(opts.host, openport, function(err) {
                 if (err) {
                     logger.error(err);
                     callback('Error ', null);
                     return;
-                }else{
-                     logger.debug('port enabled');
-                     callback('ok');
-                     return;
+                } else {
+                    logger.debug('port enabled');
+                    callback('ok');
+                    return;
                 }
-                
+
             });
 
             /*curl.executecurl(cmdString, function(err, stdout) {
@@ -1003,17 +869,11 @@ var AzureCloud = function(options) {
                     callback('ok');
                     return;
                 }
-                if (err) {
-                    logger.debug('in error', err);
-                    callback('Error ', null);
-                    return;
-                }
 
-            });*/
+            }); */
 
         } else {
             cmdString = opts.cmds.join(' && ');
-            //console.log(JSON.stringify(opts));
             logger.debug("cmdString >>>", cmdString);
             var sshExec = new SSHExec(opts);
             sshExec.exec(cmdString, function(err, stdout) {
@@ -1032,7 +892,6 @@ var AzureCloud = function(options) {
 
     this.trysshoninstance1 = function(ostype, ip_address, username, pwd, callback) {
         var opts = {
-            //privateKey: instanceData.credentials.pemFilePath,
             password: pwd,
             username: username,
             host: ip_address,
@@ -1058,7 +917,6 @@ var AzureCloud = function(options) {
 
         } else {
             cmdString = opts.cmds.join(' && ');
-            //console.log(JSON.stringify(opts));
             var sshExec = new SSHExec(opts);
             sshExec.exec(cmdString, function(err, stdout) {
                 logger.debug(stdout);
@@ -1099,18 +957,9 @@ var AzureCloud = function(options) {
                     if (virtualIp) {
 
                         ip_address = virtualIp.Address;
-
-                        /*if (data.Network.Endpoints.length > 0)
-                        ip_address = data.Network.Endpoints[0].virtualIPAddress;
-                    else
-                        ip_address = data.VirtualIPAddresses.address;*/
-
-                        // var ip_address = data.Network.Endpoints[0].virtualIPAddress;
                         logger.debug('Azure VM ip address:', ip_address);
 
                         var status = data.Deployment.RoleInstanceList.RoleInstance.InstanceStatus;
-
-                        //var status = data.InstanceStatus;
 
                         if (status == 'ReadyRole') {
                             //set the floating ip to instance
@@ -1129,15 +978,9 @@ var AzureCloud = function(options) {
 
                     if (self.updatedfloatingip) {
 
-                        //var os = data.OSDisk.operatingSystem;
-
                         var os = data.Deployment.RoleList.Role.OSVirtualHardDisk.OS;
 
                         logger.debug("data.OSDisk.operatingSystem >>>>", os);
-
-                        /*if(!data.OSDisk.operatingSystem === "Windows"){ 
-                         
-                         logger.debug("try ssh oninstance..");*/
 
                         self.trysshoninstance(os, ip_address, username, pwd, function(cdata) {
                             logger.debug('End trysshoninstance:', cdata);
@@ -1162,11 +1005,6 @@ var AzureCloud = function(options) {
                             }
                         });
 
-                        /* } else{
-                        logger.debug("Windows instance..");
-                        callback(null, ip_address);
-                      }*/
-
                     } else {
                         logger.debug('Timeout 2 set');
                         if (!self.callbackdone) {
@@ -1181,12 +1019,65 @@ var AzureCloud = function(options) {
         self.timeouts.push(setTimeout(wfsr, 15000));
     }
 
+    this.getVM = function(params, callback) {
+        fs.readFile(certFile, function(err, certData) {
+            if (err) {
+                logger.error("Error reading certFile..", err);
+                return;
+            }
+            logger.debug("certFile loaded");
+
+            fs.readFile(keyFile, function(err, keyData) {
+                if (err) {
+                    logger.error("Error reading keyFile..", err);
+                    return;
+                }
+                logger.debug("keyFile loaded");
+
+                console.log('params ==> ',params);                
+                var opts = {
+                    url: 'https://management.core.windows.net/'+options.subscriptionId+'/services/hostedservices/'+params.cloudServiceName+'/deployments/'+params.deploymentName+'/roles/'+params.name,
+                    agentOptions: {
+                        cert: certData,
+                        key: keyData,
+                    },
+                    headers: {
+                        "x-ms-version": "2015-04-01",
+                        "Content-Type": "application/json"
+                    }
+                }
+
+                request.get(opts, function(err, response, body) {
+
+                    if (err) {
+                        //console.log("Error...",err);
+                        callback(err, null);
+                        return;
+                    }
+
+                    console.log("response.statusCode: ", response.statusCode);
+
+                    if (response.statusCode == '200') {
+                        logger.debug("END:: getServerByName");
+                        callback(null, body);
+                        return;
+                    } else {
+                        callback(body, null);
+                        return;
+                    }
+
+                });
+            });
+        });
+
+    }
+
     function pollInstanceState(instanceName, state, callback) {
         function checkInstanceStatus(statusToCheck, delay) {
             var timeout = setTimeout(function() {
                 that.getServerByName(instanceName, function(err, data) {
                     if (err) {
-                        console.log('Unable to get instance state', err);
+                        logger.debug('Unable to get instance state', err);
                         callback(err, null);
                         return;
                     }

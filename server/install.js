@@ -1,10 +1,16 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
+//var logger = require('_pr/logger')(module);
 var spawn = require('child_process').spawn;
 var exec = require('child_process').exec;
 var readline = require('readline');
 
-
 var currentDirectory = __dirname;
-
 function getDefaultsConfig() {
     var config = {
         express: {
@@ -14,7 +20,6 @@ function getDefaultsConfig() {
         },
         catalystAuthHeaderName: 'x-catalyst-auth',
         app_run_port: 3001,
-        //userHomeDir: currentDirectory + '/catdata',
         catalystDataDir: currentDirectory + '/catdata',
         catalysHomeDirName: 'catalyst',
         instancePemFilesDirName: 'instance-pemfiles',
@@ -32,7 +37,7 @@ function getDefaultsConfig() {
             cookbooksDirName: 'cookbooks',
             defaultChefCookbooks: [],
             defaultChefCookbooksLinux: [],
-            defaultChefCookbooksWindows:[],
+            defaultChefCookbooksWindows: [],
             ohaiHints: ['ec2'],
             attributeExtractorCookbookName: 'attrib',
             defaultChefClientRunCookbooks: [],
@@ -54,33 +59,9 @@ function getDefaultsConfig() {
             }
         },
         aws: {
-            access_key: "AKIAI6TVFFD23LMBJUPA",
-            secret_key: "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",
-            region: "us-west-2",
-            keyPairName: "catalyst",
-            securityGroupId: "sg-c00ee1a5",
             pemFileLocation: __dirname + '/config/',
             pemFile: "catalyst.pem",
             instanceUserName: "root",
-            os: [{
-                amiid: 'ami-b6bdde86',
-                username: 'root',
-                osType: 'linux',
-                name: 'Cent OS',
-                supportedInstanceType: ['t1.micro', 'm1.small', 'm1.medium', 'm1.large', 'm1.xlarge']
-            }, {
-                amiid: 'ami-21732111',
-                username: 'administrator',
-                osType: 'windows',
-                name: 'Windows 2008',
-                supportedInstanceType: ['t2.micro', 'm1.small']
-            }, {
-                amiid: 'ami-3d50120d',
-                username: 'ubuntu',
-                osType: 'linux',
-                name: 'ubuntu',
-                supportedInstanceType: ['t2.micro']
-            }],
             virtualizationType: [{
                 hvm: ['t2.micro', 't2.small', 't2.medium', 'm3.medium', 'm3.large', 'm3.xlarge', 'm3.2xlarge',
                     'c3.large', 'c3.xlarge', 'c3.2xlarge', 'c3.4xlarge', 'c3.8xlarge', 'c4.large', 'c4.xlarge',
@@ -154,17 +135,9 @@ function getDefaultsConfig() {
             port: 389,
             adminUser: 'Admin',
             adminPass: 'ReleV@ance',
-            //baseDn: 'cn=root',
             baseDn: 'dc=d4d-ldap,dc=relevancelab,dc=com',
             ou: ''
-            /* host: '192.168.105.11',
-            port: 389,
-            rootuser: 'Admin',
-            rootpass: 'ReleV@ance',
-            baseDn: 'dc=rlindia,dc=com',
-            ou: ''*/
         },
-        //logServerUrl: 'http://54.186.108.35/index.html#/dashboard/file/logstash.json',
         logServerUrl: '',
         features: {
             appcard: false
@@ -183,62 +156,53 @@ function getDefaultsConfig() {
             return this.catalystHome + this.tempDirName + "/";
         }
     };
-
     return config;
-
 }
 
 function parseArguments() {
     var cliArgs = require("command-line-args");
     var cli = cliArgs([{
-            name: "help",
-            alias: "h",
-            type: Boolean,
-            description: "Help"
-        }, {
-            name: "catalyst-port",
-            type: String,
-            description: "Catalyst port number"
-        },
-        /*{
-        name: "catalyst-home",
+        name: "help",
+        alias: "h",
+        type: Boolean,
+        description: "Help"
+    }, {
+        name: "catalyst-port",
         type: String,
-        description: "catalyst home directory name"
-    },*/
-        {
-            name: "db-host",
-            type: String,
-            description: "DB Host"
-        }, {
-            name: "db-port",
-            type: String,
-            description: "DB Port"
-        }, {
-            name: "db-name",
-            type: String,
-            description: "DB Port"
-        }, {
-            name: "ldap-host",
-            type: String,
-            description: "Ldap Host"
-        }, {
-            name: "ldap-port",
-            type: String,
-            description: "Ldap Host"
-        }, {
-            name: "seed-data",
-            type: Boolean,
-            description: "Restore Seed Data"
-        }, {
-            name: "ldap-user",
-            type: Boolean,
-            description: "Setup Ldap user"
-        }, {
-            name: "max-instance-count",
-            type: Number,
-            description: "Maximum number of instance allowed to be launch"
-        }
-    ]);
+        description: "Catalyst port number"
+    }, {
+        name: "db-host",
+        type: String,
+        description: "DB Host"
+    }, {
+        name: "db-port",
+        type: String,
+        description: "DB Port"
+    }, {
+        name: "db-name",
+        type: String,
+        description: "DB Port"
+    }, {
+        name: "ldap-host",
+        type: String,
+        description: "Ldap Host"
+    }, {
+        name: "ldap-port",
+        type: String,
+        description: "Ldap Host"
+    }, {
+        name: "seed-data",
+        type: Boolean,
+        description: "Restore Seed Data"
+    }, {
+        name: "ldap-user",
+        type: Boolean,
+        description: "Setup Ldap user"
+    }, {
+        name: "max-instance-count",
+        type: Number,
+        description: "Maximum number of instance allowed to be launch"
+    }]);
 
     var options = cli.parse();
 
@@ -252,15 +216,11 @@ function parseArguments() {
         console.log(usage);
         process.exit(0);
     }
-
-
     return options;
 }
 
-
 function getConfig(config, options) {
     //parsing arguments 
-
     if (options['catalyst-port']) {
         var catalystPort = parseInt(options['catalyst-port']);
         if (catalystPort) {
@@ -268,24 +228,19 @@ function getConfig(config, options) {
             config.express.port = catalystPort;
         }
     }
-    //config.catalysHomeDirName = options['catalyst-home'] ? options['catalyst-home'] : config.catalysHomeDirName;
     config.db.host = options['db-host'] ? options['db-host'] : config.db.host;
     config.db.port = options['db-port'] ? options['db-port'] : config.db.port;
     config.db.dbName = options['db-name'] ? options['db-name'] : config.db.dbName;
     config.ldap.host = options['ldap-host'] ? options['ldap-host'] : config.ldap.host;
     config.ldap.port = options['ldap-port'] ? options['ldap-port'] : config.ldap.port;
-
     if (options['max-instance-count']) {
         var maxInstanceCount = parseInt(options['max-instance-count']);
         if (maxInstanceCount) {
             config.maxInstanceCount = maxInstanceCount;
         }
     }
-
     return config;
-
 }
-
 
 function installPackageJson() {
     console.log("Installing node packages from pacakge.json");
@@ -293,7 +248,6 @@ function installPackageJson() {
     procInstall.stdout.on('data', function(data) {
         console.log("" + data);
     });
-
     procInstall.stderr.on('data', function(data) {
         console.error("" + data);
     });
@@ -330,9 +284,7 @@ function restoreSeedData(config, callback) {
             throw "Unable to restore mongodb"
         }
     });
-
 }
-
 
 function setupLdapUser(config, callback) {
     var rl = readline.createInterface({
@@ -352,7 +304,6 @@ function setupLdapUser(config, callback) {
             url: 'ldap://' + config.ldap.host + ':' + config.ldap.port
         });
         var searchOpts = {
-            // filter: '(cn=' + ldapUser+')',
             attrsOnly: true
         };
 
@@ -381,13 +332,9 @@ function setupLdapUser(config, callback) {
                 } else {
                     callback();
                 }
-
             });
         });
-
-
     });
-
 }
 
 function createConfigFile(config) {
@@ -396,33 +343,24 @@ function createConfigFile(config) {
     var fs = require('fs');
     fs.writeFileSync('config/catalyst-config.json', configJson);
 }
-
-
 console.log('Installing node packages required for installation');
 proc = spawn('npm', ['install', "command-line-args@0.5.3", 'mkdirp@0.5.0', 'fs-extra@0.18.0', 'ldapjs@0.7.1']);
 proc.on('close', function(code) {
     if (code !== 0) {
         throw "Unable to install packages"
     } else {
-
         var options = parseArguments();
         var defaultConfig = getDefaultsConfig();
         var config = getConfig(defaultConfig, options);
         console.log('creating catalyst home directory');
-
         var fsExtra = require('fs-extra');
-
-
         var mkdirp = require('mkdirp');
-
         mkdirp.sync(config.catalystHome);
         mkdirp.sync(config.instancePemFilesDir);
         mkdirp.sync(config.tempDir);
         mkdirp.sync(config.chef.chefReposLocation);
         mkdirp.sync(config.chef.cookbooksDir);
         mkdirp.sync(config.puppet.puppetReposLocation);
-
-
         if (options['seed-data']) {
             fsExtra.emptydirSync(config.catalystDataDir);
             restoreSeedData(config, function() {

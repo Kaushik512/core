@@ -1,4 +1,107 @@
 <link rel="stylesheet" type="text/css" media="screen" href="css/Dashboard.css">
+<div class="modal fade" id="modaldashboardConfigure" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+      <div class="modal-content">
+        <form role="form" id="appCardForm" autocomplete="off">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                  X
+              </button>
+              <h4 class="modal-title">
+                  <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Save data for Dashboard
+              </h4>
+          </div>
+          <div class="modal-body">
+            <form id="formdashboardapplication">
+              <div class="">
+                <div style="margin:5px 0px 0px;" class="row">
+                    <!-- <div style="padding-left:0px;" class="col-lg-6">
+                        <label for="name">Managed Instances:<span style="color:red">*</span>
+                        </label>
+                        <input type="text" autofocus="" style="height:36px;" class="form-control" id="managedinstancesInput">
+                    </div> -->
+                    <div style="padding-left:0px;" class="col-lg-6">
+                        <label for="name">Average Usages:
+                        </label>
+                        <input type="text" style="height:36px;" class="form-control" id="averageUsagesInput">
+                    </div>
+
+                    <div style="padding-left:0px;" class="col-lg-6">
+                        <label for="name">Total Builds:<span style="color:red">*</span>
+                        </label>
+                        <input type="text" style="height:36px;" class="form-control" id="totalbuildsInput">
+                    </div>
+                    <div style="padding-left:0px;margin-top:10px" class="col-lg-6">
+                        <label for="name">Total Builds Passed:
+                        </label>
+                        <input type="text" style="height:36px;" class="form-control" id="totalpassedbuildsInput">
+                    </div>
+
+                    <div style="padding-left:0px;margin-top:10px" class="col-lg-6">
+                        <label for="name">Total Builds Deployed:<span style="color:red">*</span>
+                        </label>
+                        <input type="text" style="height:36px;" class="form-control" id="totaldeployedbuildsInput">
+                    </div>
+                    <div style="padding-left:0px;margin-top:10px" class="col-lg-6">
+                        <label for="name">Total Uptime:
+                        </label>
+                        <input type="text" style="height:36px;" class="form-control" id="totaluptimeInput">
+                    </div>
+
+                    <div style="padding-left:0px;margin-top:10px" class="col-lg-6">
+                        <label for="name">Total Vmware Instances:<span style="color:red">*</span>
+                        </label>
+                        <input type="text" style="height:36px;" class="form-control" id="vmwareinstancesInput">
+                    </div>
+                    <div style="padding-left:0px;margin-top:10px" class="col-lg-6">
+                        <label for="name">Total AWS Instances:
+                        </label>
+                        <input type="text" style="height:36px;" class="form-control" id="awsinstancesInput">
+                    </div>
+
+                    <div style="padding-left:0px;margin-top:10px" class="col-lg-6">
+                        <label for="name">Total Azure Instances:<span style="color:red">*</span>
+                        </label>
+                        <input type="text" style="height:36px;" class="form-control" id="azureinstancesInput">
+                    </div>
+                    <div style="padding-left:0px;margin-top:10px" class="col-lg-6">
+                        <label for="name">Total Openstack Instances:
+                        </label>
+                        <input type="text" style="height:36px;" class="form-control" id="openstackinstancesInput">
+                    </div>
+
+                    <div style="padding-left:0px;margin-top:10px" class="col-lg-6">
+                        <label for="name">Total Instances Daily Trends:<span style="color:red">*</span>
+                        </label>
+                        <input type="text" style="height:36px;" class="form-control" id="dailytrendsInput">
+                    </div>
+                    <div style="padding-left:0px;margin-top:10px" class="col-lg-6">
+                        <label for="name">Total No of Alerts:
+                        </label>
+                        <input type="text" style="height:36px;" class="form-control" id="alertsInput">
+                    </div>
+
+
+                </div>
+            </div>
+            </form>
+          </div>
+           <div class="modal-footer">
+              <div class="btn-group" style="margin-left:200px;">  
+              <a class="btn btn-default" data-dismiss="modal">
+                  <i class="ace-icon fa fa-times bigger-110"></i>
+                  Cancel
+              </a>                               
+               <a class="btn btn-primary dashboardSaveBtn" style="margin-left:10px;">
+                  <i class="ace-icon fa fa-save bigger-110"></i>
+                  Save
+              </a>
+              </div>
+            </div>
+           </form>
+      </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
 <div class="modal fade" id="modaldashboardinfrastructurecardConfigure" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
   <div class="modal-dialog">
       <div class="modal-content">
@@ -29,6 +132,7 @@
                             <li>
                               <label for='checkbox-3'>
                                 <input value="Total Number of Providers" type='checkbox' class='' name='checkbox-0' id='checkbox-0' checked /><span></span>
+
                               </label>
                             </li>
                           </ul>
@@ -62,8 +166,7 @@
                           </ul>
                         </div>
                       </td>
-                    </tr>
-                    
+                    </tr>                    
                     <tr>
                       <td class="configInfrastructureUniqueName">Total Spend in Today</td>
                       <td>
@@ -416,3 +519,4 @@
   });
 
 </script>
+

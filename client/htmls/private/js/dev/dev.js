@@ -8,7 +8,6 @@ function devCall() {
                 $('#defaultViewButton').find('i').removeClass('txt-color-deactive').addClass('txt-color-active');
                 $('#instanceview').find('i').removeClass('txt-color-active').addClass('txt-color-deactive');
             } else {
-                // $('#tableinstanceview_filter').css('display','none');
                 $("#divinstancestableview").addClass("visibleClass").show();
                 $("#divinstancescardview").removeClass("visibleClass").hide();
                 $('#instanceview').find('i').removeClass('txt-color-deactive').addClass('txt-color-active');
@@ -21,22 +20,18 @@ function devCall() {
             if (objID == "divapplicationcardview" || objID == "defaultViewButtonAppCard") {
                 $("#divapplicationtableview").removeClass("visibleClass").hide();
                 $(".createAppConfigure").show();
-                $('#defaultViewButtonAppCard').hide();   
+                $('#defaultViewButtonAppCard').hide();
                 $('#defaultViewButtonNewDeploy').show();
                 $("#divapplicationcardview").addClass("visibleClass").show();
-                //$('#defaultViewButtonAppCard').parents().eq(2).find('span:nth-child(2)').removeClass('margintop2right8').addClass('margintopright8');
                 $('#defaultViewButtonAppCard').find('i').removeClass('txt-color-deactive').addClass('txt-color-active');
                 $('#instanceviewAppCard').show();
-                //$('#instanceviewAppCard').find('i').removeClass('txt-color-active').addClass('txt-color-deactive');
             } else {
                 $("#divapplicationtableview").addClass("visibleClass").show();
                 $('#defaultViewButtonAppCard').show();
                 $('#defaultViewButtonNewDeploy').show();
-                //$('#defaultViewButtonAppCard').parents().eq(2).find('span:nth-child(2)').removeClass('margintopright8').addClass('margintop2right8');
                 $(".createAppConfigure").hide();
                 $("#divapplicationcardview").removeClass("visibleClass").hide();
                 $('#instanceviewAppCard').hide();
-                //$('#instanceviewAppCard').find('i').removeClass('txt-color-deactive').addClass('txt-color-active');
                 $('#defaultViewButtonAppCard').find('i').removeClass('txt-color-active').addClass('txt-color-deactive');
             }
         }
@@ -54,15 +49,15 @@ function devCall() {
 
     //for removing the selected blueprint in the blueprint tab
     window.removeSelectedBlueprint = function() {
-        var blueprintId = $('.productdiv1.role-Selected1').attr('data-blueprintid');
-        if (blueprintId) {
-            //found now delete
-            bootbox.confirm("Are you sure you would like to remove this blueprint?", function(result) {
-                //  alert(result);
+    var blueprintId = $('.productdiv1.role-Selected1').attr('data-blueprintid');
+    if (blueprintId) {
+        bootbox.confirm({
+            message: "Are you sure you would like to remove this blueprint?",
+            title: "Confirmation",
+            callback: function(result) {
                 if (!result) {
                     return;
                 } else {
-                    //alert(result);
                     $.ajax({
                         url: '/blueprints/' + blueprintId,
                         type: 'DELETE',
@@ -71,27 +66,31 @@ function devCall() {
                                 var $bcc = $('.productdiv1.role-Selected1').closest('.blueprintContainer');
                                 $('.productdiv1.role-Selected1').parent().detach();
                                 //Check if the closest bluprintcontainer is empty, if empty then hide it.
-                                // alert($bcc.find('.panel-body').children().length);
+
                                 if ($bcc.find('.panel-body').children().length <= 0) {
                                     $bcc.addClass('hidden');
                                 }
                             } else
-                                alert(data);
+                                bootbox.alert(data);
                         }
                     });
                 }
-            });
-        } else {
-            alert('Please select a blueprint to remove.');
-        }
+            }
+        });
+    } else {
+        bootbox.alert('Please select a blueprint to remove.');
     }
+}
     window.removeStack = function() {
-        var $selectedCard = $('.productdiv1.role-Selected1');
+    var $selectedCard = $('.productdiv1.role-Selected1');
 
-        var stackId = $selectedCard.attr('data-stackId');
-        if (stackId) {
-            //found now delete
-            bootbox.confirm("Are you sure you would like to remove this stack? This will remove all the instances related to this stack.", function(result) {
+    var stackId = $selectedCard.attr('data-stackId');
+    if (stackId) {
+        //found now delete
+        bootbox.confirm({
+            message: "Are you sure you would like to remove this stack? This will remove all the instances related to this stack.",
+            title: "Confirmation",
+            callback: function(result) {
                 if (!result) {
                     return;
                 }
@@ -103,8 +102,6 @@ function devCall() {
                         if (data.instanceIds) {
                             for (var i = 0; i < data.instanceIds.length; i++) {
                                 $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + data.instanceIds[i] + ']').parents('.domain-role-thumbnailDev').remove();
-                                // serachBoxInInstance.updateData(undefined,"remove",instanceId);
-
                                 var table = $('#tableinstanceview').DataTable();
                                 table.row('[data-instanceid=' + data.instanceIds[i] + ']').remove().draw(false);
 
@@ -112,15 +109,52 @@ function devCall() {
                         }
                     },
                     error: function() {
-
                     }
-                })
-
-            });
-        } else {
-            bootbox.alert('Please select a stack to remove.');
-        }
+                });
+            }
+        });
+    } else {
+        bootbox.alert('Please select a stack to remove.');
     }
+}
+
+window.removeArmDeployment = function() {
+    var $selectedCard = $('.productdiv1.role-Selected1');
+
+    var armId = $selectedCard.attr('data-armId');
+    if (armId) {
+        //found now delete
+        bootbox.confirm({
+            message: "Are you sure you would like to remove this arm deployment? This will remove all the instances related to this deployment.",
+            title: "Confirmation",
+            callback: function(result) {
+                if (!result) {
+                    return;
+                }
+                $.ajax({
+                    url: '/azure-arm/' + armId,
+                    method: 'DELETE',
+                    success: function(data) {
+                        var $bcc = $selectedCard.parent().remove();
+                        if (data.instanceIds) {
+                            for (var i = 0; i < data.instanceIds.length; i++) {
+                                $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + data.instanceIds[i] + ']').parents('.domain-role-thumbnailDev').remove();
+                                var table = $('#tableinstanceview').DataTable();
+                                table.row('[data-instanceid=' + data.instanceIds[i] + ']').remove().draw(false);
+
+                            }
+                        }
+                    },
+                    error: function() {
+                    }
+                });
+            }
+        });
+    } else {
+        bootbox.alert('Please select a arm deployment to remove.');
+    }
+}
+
 
 
     $(document).ready(function() {
@@ -163,7 +197,6 @@ function devCall() {
             }
 
         });
-
 
 
 
@@ -237,7 +270,6 @@ function devCall() {
                 onkeyup: false,
                 errorClass: "error",
             });
-
 
 
 
@@ -519,11 +551,6 @@ function devCall() {
                 }, 'Invalid IP address');
 
                 var validator = $('#addInstanceForm').validate({
-                    /*errorPlacement: function(error, element){
-// Append error within linked label
-$(element).closest("form").find("label[for='" + element.attr("id") + "']").append(error);
-
-},*/
                     rules: {
                         instanceUsername: {
                             required: true
@@ -744,24 +771,24 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                 tableinstanceview = $('#tableinstanceview').DataTable({
                     "pagingType": "full_numbers",
                     "aoColumns": [{
-                            "bSortable": false
-                        },
-                        null, {
-                            "bSortable": false
-                        }, {
-                            "bSortable": false
-                        }, {
-                            "bSortable": false
-                        }, {
-                            "bSortable": false
-                        }, {
-                            "bSortable": false
-                        }, {
-                            "bSortable": false,
-                            "sWidth": "20%"
-                        }
-                    ]
-                    /*"fnRowCallback": function(nRow, aData, iDisplayIndex) {
+                                "bSortable": false
+                            },
+                            null, {
+                                "bSortable": false
+                            }, {
+                                "bSortable": false
+                            }, {
+                                "bSortable": false
+                            }, {
+                                "bSortable": false
+                            }, {
+                                "bSortable": false
+                            }, {
+                                "bSortable": false,
+                                "sWidth": "20%"
+                            }
+                        ]
+                        /*"fnRowCallback": function(nRow, aData, iDisplayIndex) {
 
                       $("td:first", nRow).html(iDisplayIndex + 1);
                       return nRow;
@@ -844,8 +871,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
             //     }
             // }
             if ($divinstancescardview.find('.domain-role-thumbnailDev').length > 0) {
-                //Arab
-                console.log("I am here there");
+
                 $divinstancescardview.find('.container').removeClass('role-Selectedcard');
                 var cardIndexInfo = localStorage.getItem("cardIndex");
                 console.log(cardIndexInfo);
@@ -1142,11 +1168,11 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                 }
                 var $ccrs = $chefCookbookRoleSelector(urlParams.org, function(data) {
 
-                }, runlist, readMode,{
-                     cookbooks: true,
-                     roles: true,
-                     templates: true,
-                     all: true
+                }, runlist, readMode, {
+                    cookbooks: true,
+                    roles: true,
+                    templates: true,
+                    all: true
                 });
                 $ccrs.find('#cookbooksrecipesselectedList').attr('data-instanceid', instanceId);
 
@@ -2378,7 +2404,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                 $imgprovider = $('<li><img src="img/azure-card.png" style="margin-left: -94px;margin-right: 7px;margin-top: 48px;" title="Windows Azure"></li>');
                             if (data[i].blueprintType == 'vmware_launch')
                                 $imgprovider = $('<li><img src="img/vmware-card.png" style="margin-left: -94px;margin-right: 7px;margin-top: 48px;" title="Vmware"></li>');
-                            
+
                             // alert(data[i].blueprintType);
                             var $liImage = $('<li></li>').append($img);
                             $ul.append($liImage);
@@ -2514,7 +2540,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                     });
                                 })(data[i]);
                                 //alert(JSON.stringify(data[i]));
-                            } else if (data[i].templateType == "cft") {
+                            } else if (data[i].templateType == "cft" || data[i].templateType == 'arm') {
                                 $selectVerEdit.hide();
                                 (function(blueprint) {
                                     // alert(JSON.stringify(blueprint));
@@ -2568,14 +2594,14 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                                 }
                                             });
 
-                                            if(blueprint.blueprintConfig.cloudProviderData.cloudProviderType == 'azure'){
+                                            if (blueprint.blueprintConfig.cloudProviderData.cloudProviderType == 'azure') {
 
                                                 $.ajax({
                                                     type: "GET",
                                                     url: "/azure/providers/" + blueprint.blueprintConfig.cloudProviderId,
                                                     success: function(data) {
                                                         data = JSON.parse(data);
-                                                        
+
                                                         $blueprintReadContainer.find('.modal-body #instanceProviderName').val(data.providerName).parents('tr').show();;
                                                         $blueprintReadContainer.find('.modal-body #instanceProviderType').val(data.providerType).parents('tr').show();;
 
@@ -2586,7 +2612,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                                         //$blueprintReadContainer.find('tr.keyPair').hide();
                                                         //$blueprintReadContainer.find('tr.managementPemKey').removeClass('hidden');
                                                         $blueprintReadContainer.find('.modal-body #managementPem').val(data.pemFileName).parents('tr').show();;
-                                                        
+
                                                         $blueprintReadContainer.find('.modal-body #managementKey').val(data.keyFileName).parents('tr').show();
 
                                                         //console.log(data);
@@ -2596,7 +2622,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                                     }
                                                 });
 
-                                            } else if(blueprint.blueprintConfig.cloudProviderData.cloudProviderType == 'vmware'){
+                                            } else if (blueprint.blueprintConfig.cloudProviderData.cloudProviderType == 'vmware') {
 
 
                                                 $.ajax({
@@ -2605,7 +2631,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                                     success: function(data) {
                                                         //data = JSON.parse(data);
 
-                                                        
+
                                                         $blueprintReadContainer.find('.modal-body #instanceProviderName').val(data.providerName).parents('tr').show();;
                                                         $blueprintReadContainer.find('.modal-body #instanceProviderType').val(data.providerType).parents('tr').show();;
 
@@ -2639,7 +2665,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                                         alert(data.toString());
                                                     }
                                                 });
-                                           }
+                                            }
 
                                             var $parent = $(this).parents('.cardimage');
 
@@ -2662,23 +2688,22 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                                 //for getting the VPC
                                                 $blueprintReadContainer.find('.modal-body #instanceVPC').val(blueprint.blueprintConfig.cloudProviderData.vpcId).parents('tr').show();
 
-                                            } 
-                                            
+                                            }
+
                                             // loop for getting runlist
                                             var versionsList = blueprint.blueprintConfig.infraManagerData.versionsList;
                                             if (versionsList && versionsList.length) {
-                                                
-                                                var runlistName = $chefCookbookRoleSelector.getRunlistNames(versionsList[versionsList.length-1].runlist);
+
+                                                var runlistName = $chefCookbookRoleSelector.getRunlistNames(versionsList[versionsList.length - 1].runlist);
                                                 $blueprintReadContainer.find('.modal-body #instanceRunlist').val(runlistName.join(' , ')).parents('tr').show();
 
                                                 //for getting the version
-                                                $blueprintReadContainer.find('.modal-body #instanceVersion').val(versionsList[versionsList.length-1].ver).parents('tr').show();
+                                                $blueprintReadContainer.find('.modal-body #instanceVersion').val(versionsList[versionsList.length - 1].ver).parents('tr').show();
 
                                             }
                                             $blueprintReadContainer.find('.modal-body #blueprintTemplateType').val(blueprint.templateType).parents('tr').show();
 
                                             getOrgProjDetails($blueprintReadContainer);
-
 
 
 
@@ -2924,7 +2949,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                 $('#myModalLabelDockerContainer').attr('saveto', lpinput).css('z-index', '9999').modal('show');
             };
 
-
+            var eventAdded = false;
             $('.launchBtn').click(function(e) {
                 var $selectedItems = $('.role-Selected1');
                 if (!$selectedItems.length) {
@@ -3075,6 +3100,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                 var version = $($selectedItems.get(0)).find('.blueprintVersionDropDown').val();
                                 var blueprintType = $($selectedItems.get(0)).attr('data-blueprintType');
                                 // alert('launching -> ' +'../blueprints/' + blueprintId + '/launch?version=' + version);
+
                                 function launchBP(stackName) {
                                     //   alert(JSON.stringify(stackName));
                                     var $launchResultContainer = $('#launchResultContainer');
@@ -3087,6 +3113,8 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                         var msgStr = 'Instance Id : ';
                                         if (blueprintType === 'aws_cf') {
                                             msgStr = 'Stack Id : ' + data.stackId + '. You can view your stack in cloudformation tab';
+                                        } else if (blueprintType === 'azure_arm') {
+                                            msgStr = 'Deployment Id : ' + data.armId + '. You can view your deployment in ARM tab';
                                         } else {
                                             msgStr = 'Instance Id : ';
 
@@ -3102,10 +3130,14 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                         $launchResultContainer.find('.modal-body').append($msg);
                                         if (blueprintType === 'aws_cf') {
                                             $.get('/cloudformation/' + data.stackId, function(stack) {
-
                                                 addStackToDom(stack);
-
                                             })
+                                            return;
+                                        } else if (blueprintType === 'azure_arm') {
+                                            $.get('/azure-arm/' + data.armId, function(armData) {
+                                                addARMToDom(armData);
+                                            })
+                                            
                                             return;
                                         }
 
@@ -3198,8 +3230,6 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
 
 
-
-
                                     }).error(function(jxhr) {
                                         var message = "Server Behaved Unexpectedly";
                                         if (jxhr.responseJSON && jxhr.responseJSON.message) {
@@ -3207,9 +3237,10 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                         }
                                         $launchResultContainer.find('.modal-body').empty().append('<span>' + message + '</span>');
                                     });
+
                                 }
 
-                                if (blueprintType === 'aws_cf') {
+                                if (blueprintType === 'aws_cf' || blueprintType === 'azure_arm') {
                                     jQuery.validator.addMethod("noSpace", function(value, element) {
                                         return value.indexOf(" ") < 0 && value != "";
                                     }, "No space allowed and the user can't leave it empty");
@@ -3227,22 +3258,25 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
                                         validator.resetForm();
                                     });
-                                    $("#cftForm").submit(function(e) {
-                                        var stackName = $('#cftInput').val();
-                                        var isValid = $('#cftForm').valid();
-                                        if (!isValid) {
-                                            e.preventDefault();
-                                            return false;
-                                        } else {
+                                    if (!eventAdded) {
+                                        $("#cftForm").submit(function(e) {
+                                            var stackName = $('#cftInput').val();
+                                            var isValid = $('#cftForm').valid();
+                                            if (!isValid) {
+                                                e.preventDefault();
+                                                return false;
+                                            } else {
 
-                                            launchBP(stackName);
-                                            $('#cftContainer').modal('hide');
-                                            e.preventDefault();
+                                                launchBP(stackName);
+                                                $('#cftContainer').modal('hide');
+                                                e.preventDefault();
 
-                                            return false;
-                                        }
+                                                return false;
+                                            }
+                                        });
+                                        eventAdded = true;
+                                    }
 
-                                    });
                                 } else if (blueprintType === 'openstack_launch' || blueprintType === 'hppubliccloud_launch') {
                                     //alert('attempt launch of openstack');
                                     launchBP();
@@ -3400,7 +3434,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                 for (var i = 0; i < runlist.length; i++) {
 
                     if (runlist[i].indexOf('template') === 0) {
-                         var templateRunlist = $chefCookbookRoleSelector.getRunlistFromTemplate(runlist[i]);
+                        var templateRunlist = $chefCookbookRoleSelector.getRunlistFromTemplate(runlist[i]);
                         runlist = runlist.concat(templateRunlist);
                         continue;
                     }
@@ -3414,11 +3448,11 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                         }
                     }
                     if (runlist[i].indexOf('recipe') === 0) {
-                        if(reqBody.cookbooks.indexOf(name) === -1) {
+                        if (reqBody.cookbooks.indexOf(name) === -1) {
                             reqBody.cookbooks.push(name);
                         }
                     } else {
-                        if(reqBody.roles.indexOf(name) === -1) {
+                        if (reqBody.roles.indexOf(name) === -1) {
                             reqBody.roles.push(name);
                         }
                     }
@@ -3600,7 +3634,6 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
             $('.Orchestration').click(function(e) {
                 $.get('../organizations/' + urlParams.org + '/businessgroups/' + urlParams['bg'] + '/projects/' + urlParams.projid + '/environments/' + urlParams.envid + '/', function(dataRelatedTask) {
-                    console.log("Arabinda Behera=======================>>>>>>>>>>>>");
                     console.log(dataRelatedTask.tasks);
                     initializeTaskArea(dataRelatedTask.tasks);
                 });
@@ -3633,11 +3666,103 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                             }
                         }
                     }
-                    //$('#ribbon').find('.breadcrumb').append('<li>"'+ DummyBreadCrumb'"</li>');
-                    //alert(DummyBreadCrumb);
                 }
 
             });
+        }
+
+        function pollARMStatus(stackId) {
+            $.get('/azure-arm/' + stackId + '/status', function(msg) {
+                switch (msg.status) {
+                    case 'Succeeded':
+                        $('[data-armId=' + stackId + ']').find('.stackStatus').html('Succeeded').css({
+                            'color': 'green'
+                        });
+                    setTimeout(function() {
+                        $.get('/azure-arm/' + stackId + '/instances', function(instances) {
+                            if (instances.length) {
+                                $('#tabInstanceStatus').hide();
+                            }
+                            for (var i = 0; i < instances.length; i++) {
+                                addInstanceToDOM(instances[i]);
+                            }
+                        });
+                    }, 20000);
+                        break;
+                    case 'Failed':
+                        $('[data-armId=' + stackId + ']').find('.stackStatus').html('Failed').css({
+                            'color': 'red'
+                        });
+                        break;
+                    case 'Canceled':
+                        $('[data-armId=' + stackId + ']').find('.stackStatus').html('Canceled').css({
+                            'color': 'red'
+                        });
+                        break;
+                    case 'Deleted':
+                        $('[data-armId=' + stackId + ']').find('.stackStatus').html('Deleted').css({
+                            'color': 'red'
+                        });
+                        break;
+                    default:
+                        setTimeout(function() {
+                            pollARMStatus(stackId);
+                        }, 3000);
+                        return;
+                }
+
+            });
+
+        }
+
+        function addARMToDom(arm) {
+            var $clonedDiv = $(' <div class="productdiv4"><div class="productdiv1 cardimage" ><ul class="list-unstyled system-prop" style="text-align: center;"><li><img src="img/cf-icon.png" alt="stack" class="stackLogo" /><span style="margin-left:40px;"></span></li><li title="" class="Cardtextoverflow"><u><b class="stackNameContainer"></b></u></li></ul><div class="stack-details-list"><span class="stack-details"><strong class="stackId"></strong></span><span class="stack-details">status : <span class="stackStatus"></span></span></div></div></div>');
+            var $cftStackContainer = $('#azureDeploymentContainer');
+
+            $clonedDiv.find('.productdiv1').attr({
+                'data-armId': arm._id,
+                'data-armName': arm.deploymentName
+            });
+            $clonedDiv.find('.stackNameContainer').append(arm.deploymentName);
+            //$clonedDiv.find('.stackId').append(stack.stackId);
+            switch (arm.status) {
+                case 'CREATE_IN_PROGRESS':
+                    $clonedDiv.find('.stackStatus').html(arm.status);
+                    break;
+                case 'CREATE_FAILED':
+                    $clonedDiv.find('.stackStatus').html('CREATE_FAILED').css({
+                        'color': 'red'
+                    });
+                    break;
+                case 'CREATE_COMPLETE':
+                    $clonedDiv.find('.stackStatus').html('CREATE_COMPLETE').css({
+                        'color': 'green'
+                    });
+                    break;
+
+                default:
+                    $clonedDiv.find('.stackStatus').html(arm.status).css({
+                        'color': 'yellow'
+                    });
+                    break;
+            }
+
+
+            $cftStackContainer.append($clonedDiv);
+             pollARMStatus(arm._id);
+            
+            $clonedDiv.find('.productdiv1').click(function() {
+                $('.role-Selected1').removeClass('role-Selected1');
+                $(this).addClass('role-Selected1');
+            });
+        }
+
+        function initializeARMArea(stacks) {
+
+            for (var i = 0; i < stacks.length; i++) {
+                addARMToDom(stacks[i]);
+            }
+
         }
 
         function pollStackStatus(stackId) {
@@ -4169,10 +4294,6 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                     $.get('../jenkins/' + jenkinsServerId + '/jobs/' + jobName, function(job) {
 
                         if (job.lastBuild.number > lastBuildNumber) {
-                            // $modal.find('.loadingContainer').hide();
-                            // $modal.find('.errorMsgContainer').hide();
-                            // $modal.find('.outputArea').show();
-
                             buildNumber = job.lastBuild.number;
 
                             pollJobOutput();
@@ -4244,9 +4365,9 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                         //if(headerCount === 1) {
 
                         setTimeout(function() {
-                            $liHeader.find('a').click();
-                        }, 2000)
-                        //}
+                                $liHeader.find('a').click();
+                            }, 2000)
+                            //}
                     });
 
                 }
@@ -4306,7 +4427,6 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
 
 
-
             for (var i = 0; i < data.length; i++) {
 
                 // alert(JSON.stringify(data));
@@ -4339,7 +4459,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
                         var $tdNodeList = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a class="assignedNodesList" rel="tooltip" data-placement="top" data-original-title="View Nodes" style="cursor:pointer;text-decoration:none;" data-toggle="modal"><i style="font-size:20px;color:#40baf1" class="ace-icon fa fa-sitemap"></i></a>');
                         if (data[i].taskType === 'chef') {
-                            $tdNodeList.append('<a class="assignedRunlistTable" style="margin-top:5px;text-decoration:none;margin-left:20px;" rel="tooltip" data-placement="top" data-original-title="Assigned Runlists" data-toggle="modal" href="#assignedRunlist"><i style="font-size:20px;color:#40baf1;margin-left:5px;" class="ace-icon fa fa-list-ul"></i></a>');
+                            $tdNodeList.append('<a class="assignedRunlistTable" rel="tooltip" data-placement="top" data-original-title="Assigned Runlists" data-toggle="modal" href="#assignedRunlist"><i style="font-size:20px;color:#40baf1;margin-left:5px;" class="ace-icon fa fa-list-ul"></i></a>');
                         }
                         $tdNodeList.find('a.assignedNodesList').data('nodeList', data[i].taskConfig.nodeIds).click(function(e) {
                             $.post('../instances/', {
@@ -4399,9 +4519,9 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                         });
                     } else if (data[i].taskType === 'composite') {
                         //if job type is composite..
-                        var $tdComposite = $('<td style="vertical-align:inherit;text-align:center;font-size">N/A</td>');
+                        var $tdComposite = $('<td style="vertical-align:inherit;text-align:center;font-size">-</td>');
                         $tr.append($tdComposite);
-                    } else {
+                    } else if (data[i].taskType === 'jenkins') {
                         //if job type is jenkins show job url..
                         var jobURLS = 'http://' + data[i].taskConfig.jobURL;
 
@@ -4415,7 +4535,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
                     //method for executing the chef and jenkins job...
                     var $tdExecute = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="Execute" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-play bigger-120"></i></a>');
-                    $tdExecute.find('a').data('taskId', data[i]._id).attr('data-executeTaskId', data[i]._id).click(function(e,nexusData) {
+                    $tdExecute.find('a').data('taskId', data[i]._id).attr('data-executeTaskId', data[i]._id).click(function(e, nexusData) {
                         var taskId = $(this).data('taskId');
 
                         if (data[i].taskType === 'jenkins' || data[i].taskType === 'chef' || data[i].taskType === 'puppet' || data[i].taskType === 'composite') {
@@ -4424,13 +4544,14 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
                                 var $modalForSelect = $('#modalForSelect');
                                 var $tableBody = $('#paramTableList').empty();
-                                $('#executeJob').unbind('submit').bind('submit',function(e) {
+                                $('#executeJob').unbind('submit').bind('submit', function(e) {
 
                                     $modalForSelect.modal('hide');
                                     console.log('firing');
                                     executeJob();
                                     return false;
                                 });
+
                                 function executeJob() {
                                     var $selects = $modalForSelect.find('.modal-body select');
                                     //alert($select);
@@ -4513,15 +4634,14 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
                                             } //for loop for default value ends here..
 
-                                            
+
                                         } //if ends here for default value..
 
-                                        
+
                                     } //if loop for choice ends here..
-                                    
 
 
-                        
+
                                 } //for ends here..
                                 //new else starts here..
                             } else {
@@ -4563,17 +4683,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                     }
                                 });
                             }
-                        } //if ends here..
-
-
-
-
-
-                        //alert(data[i].taskConfig.parameterized[a].parameterName);
-                        /*if(data[i].taskType==="chef"){
-             
-              }*/
-
+                        } //if ends here.
                     });
                     $tr.append($tdExecute);
 
@@ -4581,8 +4691,6 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                     if (data[i].taskType === 'chef' || data[i].taskType === 'puppet') {
                         var $tdHistory = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="History" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-header bigger-120"></i></a>');
                         $tdHistory.find('a').data('taskId', data[i]._id).attr('data-historyTaskId', data[i]._id).click(function(e) {
-                            //var $taskHistoryContent = $('#taskHistoryContent').show();
-                            //   alert(JSON.stringify(data[i]));
                             var taskId = $(this).data('taskId');
                             var $modal = $('#chefJobHistory');
                             $modal.find('.loadingContainer').show();
@@ -4592,7 +4700,6 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                             $('#orchestrationTable').hide();
                             $('.hideChefJob').click(function(e) {
                                 $modal.addClass('hidden');
-
                                 $('#orchestrationTable').show();
                             });
                             $taskHistoryDatatable.clear().draw();
@@ -4613,9 +4720,6 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                     }
                                     var $tdTimeEnded = $('<td></td>').append(dateEnded);
                                     $trHistoryRow.append($tdTimeEnded);
-
-
-
                                     if (taskHistories[i].status.toLowerCase() === "success") {
                                         var $tdBuildStatus = $('<td style="background-color:#1c9951;"></td>').append('<span style="color:#fff">SUCCESS</span>');
                                         $trHistoryRow.append($tdBuildStatus);
@@ -4632,8 +4736,6 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                         var $tdBuildStatusRunning = $('<td style="background-color:gray;"></td>').append('<span style="color:#fff;">PENDING</span>');
                                         $trHistoryRow.append($tdBuildStatusRunning);
                                     }
-
-
                                     var $tdMessage = $('<td style="width:42%"></td>');
                                     $trHistoryRow.append($tdMessage);
                                     if (taskHistories[i].taskType === 'chef') {
@@ -4659,23 +4761,15 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                             }
                                         })($tdMessage)
                                     }
-
-
                                     var $tdUser = $('<td></td>').append(taskHistories[i].user);
                                     $trHistoryRow.append($tdUser);
 
                                     var $tdLogs = $('<td></td>').append('<a data-original-title="MoreInfo" data-placement="top" rel="tooltip" class="moreinfoBuild margin-left40per" href="javascript:void(0)" data-toggle="modal"></a>');
                                     $tdLogs.find('a').data('history', taskHistories[i]).data('taskId', taskId).click(function() {
-
-                                        //$('#assignedTaskHistory').modal('hide');
                                         var history = $(this).data('history');
                                         showTaskLogs(history.taskId, history._id);
-
-
-
                                     });
                                     $trHistoryRow.append($tdLogs);
-
                                     $taskHistoryDatatable.row.add($trHistoryRow).draw();
                                 }
                                 $modal.find('.loadingContainer').hide();
@@ -4690,16 +4784,11 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                     $errorContainer.html("Server Behaved Unexpectedly");
                                 }
                             });
-
-                            //$modal.find('.outputArea').hide();
-
                         });
 
                     } else if (data[i].taskType === 'composite') {
                         var $tdHistory = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="History" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-header bigger-120"></i></a>');
                         $tdHistory.find('a').data('taskId', data[i]._id).attr('data-historyTaskId', data[i]._id).click(function(e) {
-                            //var $taskHistoryContent = $('#taskHistoryContent').show();
-                            //   alert(JSON.stringify(data[i]));
                             var taskId = $(this).data('taskId');
                             var $modal = $('#compositeJobHistory');
                             $modal.find('.loadingContainer').show();
@@ -4709,10 +4798,8 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                             $('#orchestrationTable').hide();
                             $('.hideCompositeJob').click(function(e) {
                                 $modal.addClass('hidden');
-
                                 $('#orchestrationTable').show();
                             });
-                            //$taskHistoryDatatable.clear().draw();
                             $compositeTaskHistoryDatatable.clear().draw();
 
                             $('.widget-header').find('h5.compositeTitle').html('Composite History For -&nbsp;' + data[i].name);
@@ -4758,13 +4845,8 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
                                     var $tdLogs = $('<td></td>').append('<a data-original-title="MoreInfo" data-placement="top" rel="tooltip" class="moreinfoBuild margin-left40per" href="javascript:void(0)" data-toggle="modal"></a>');
                                     $tdLogs.find('a').data('history', taskHistories[i]).data('taskId', taskId).click(function() {
-
-                                        //$('#assignedTaskHistory').modal('hide');
                                         var history = $(this).data('history');
                                         showTaskLogs(history.taskId, history._id);
-
-
-
                                     });
                                     $trHistoryRow.append($tdLogs);
 
@@ -4782,17 +4864,12 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                     $errorContainer.html("Server Behaved Unexpectedly");
                                 }
                             });
-
-                            //$modal.find('.outputArea').hide();
-
                         });
-                    } else {
+                    } else if (data[i].taskType === 'jenkins') {
                         //history for jenkins job type...description mentioned above..
                         var $tdHistory = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="History" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-header bigger-120"></i></a>');
                         $tdHistory.find('a').data('taskId', data[i]._id).data('autosyncFlag', data[i].taskConfig.autoSyncFlag).attr('data-historyTaskId', data[i]._id).click(function(e) {
-                            //var $taskHistoryContent = $('#taskHistoryContent').show();
                             var taskId = $(this).data('taskId');
-                            // alert(JSON.stringify(data[i]));
                             $taskHistoryDatatableJenkins.row().clear().draw(true);
                             var $modal = $('#jenkinsJobHistory');
                             $modal.find('.loadingContainer').show();
@@ -4809,9 +4886,6 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                             $('.widget-header').find('h5.jenkinsTitle').html('Jenkins Job History For -&nbsp;' + data[i].name);
 
                             var autoSyncFlag = $(this).data('autosyncFlag');
-
-                            //console.log('autoSyncFlag', autoSyncFlag);
-
                             var jenk_url = '';
                             $.get('../tasks/' + taskId, function(item) {
                                 jenk_url = 'http://' + item.taskConfig.jobURL;
@@ -4993,21 +5067,13 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                     $tr.append($tdOptions);
 
                     $taskDatatable.row.add($tr).draw();
-                    //$taskListArea.append($tr);
-
-                    //aaaa
                     if ($("#sorttableheader").length) {
-                        //alert(1);
                         $("#sorttableheader").tablesorter();
                     }
-                    //     $("#sorttableheader").tablesorter();
                     pageSetUp();
                 })(i);
 
             }
-
-
-
             //updating footer
             $('.taskListFooter').text('Showing ' + data.length + ' of ' + data.length + ' entries');
             pageSetUp();
@@ -5276,8 +5342,6 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
 
 
-
-
         $('.dockerinstancestart').click(function(e) {
             function generateCompositeJsonfromtable() {
                 var dockercompose = [];
@@ -5377,6 +5441,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                 x = data.instances;
                 initializeInstanceArea(data.instances);
                 initializeStackArea(data.stacks);
+                initializeARMArea(data.arms);
             });
             if (orgId) {
                 $.get('/d4dMasters/organization/' + orgId + '/configmanagement/list', function(configMgmntList) {
@@ -5401,14 +5466,13 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
 
 
-
             //socketAutoScale.on('connect', function() {
-                window.socketAutoScale.emit('joinCFRoom', {
-                    orgId: orgId,
-                    bgId: urlParams['bg'],
-                    projId: projectId,
-                    envId: envId
-                });
+            window.socketAutoScale.emit('joinCFRoom', {
+                orgId: orgId,
+                bgId: urlParams['bg'],
+                projId: projectId,
+                envId: envId
+            });
             //});
 
             window.socketAutoScale.on('cfAutoScaleInstanceRemoved', function(instanceData) {
@@ -5419,7 +5483,7 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
             });
             window.socketAutoScale.on('cfAutoScaleInstanceAdded', function(instanceData) {
                 console.log('add event fired ==> ', instanceData);
-                if(orgId === instanceData.orgId && urlParams['bg'] === instanceData.bgId &&projectId ===  instanceData.projectId && envId === instanceData.envId) {
+                if (orgId === instanceData.orgId && urlParams['bg'] === instanceData.bgId && projectId === instanceData.projectId && envId === instanceData.envId) {
                     addInstanceToDOM(instanceData);
                 }
             });
@@ -5428,24 +5492,24 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                 console.log('State changed event fired ==> ', instanceData);
                 var instanceId = instanceData._id;
                 var title = '';
-                if(orgId === instanceData.orgId && urlParams['bg'] === instanceData.bgId &&projectId ===  instanceData.projectId && envId === instanceData.envId) {
-                     var $card = $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + instanceData._id + ']');
-                      /*$card.find('.instance-state').removeClass().addClass('instance-state instance-state-text-stopped').html(instanceData.instanceState);
-                      disableInstanceActionBtns(instanceData._id);
-                      $card.find('.componentlistContainer').removeClass().addClass('componentlistContainer stopped');
-                      $('#tableinstanceview').find('tr[data-instanceid="'+instanceData._id+'"]').find('.instancestatusindicator').removeClass().addClass('instancestatusindicator stopped');
-                      */
-                      
+                if (orgId === instanceData.orgId && urlParams['bg'] === instanceData.bgId && projectId === instanceData.projectId && envId === instanceData.envId) {
+                    var $card = $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + instanceData._id + ']');
+                    /*$card.find('.instance-state').removeClass().addClass('instance-state instance-state-text-stopped').html(instanceData.instanceState);
+                    disableInstanceActionBtns(instanceData._id);
+                    $card.find('.componentlistContainer').removeClass().addClass('componentlistContainer stopped');
+                    $('#tableinstanceview').find('tr[data-instanceid="'+instanceData._id+'"]').find('.instancestatusindicator').removeClass().addClass('instancestatusindicator stopped');
+                    */
+
                     var $tableViewInstanceId = $("tr[data-instanceId='" + instanceId + "']");
-                      title = instanceData.instanceState == "running" ? "Stop" : instanceData.instanceState == "stopped" ? "Start" : "";
-                      $('[instanceID="' + instanceId + '"]').removeClass('stopped running pending stopping unknown').addClass(instanceData.instanceState).attr('data-original-title', title);
-                      
+                    title = instanceData.instanceState == "running" ? "Stop" : instanceData.instanceState == "stopped" ? "Start" : "";
+                    $('[instanceID="' + instanceId + '"]').removeClass('stopped running pending stopping unknown').addClass(instanceData.instanceState).attr('data-original-title', title);
+
                     if (instanceData.instanceState == 'stopped') {
                         enableInstanceActionStopBtn(instanceData._id);
                     }
                     if (instanceData.instanceState == 'running') {
                         enableInstanceActionStartBtn(instanceData._id, instanceData.hardware.os);
-                        
+
                     }
                     if (instanceData.instanceState == 'pending' || instanceData.instanceState == 'stopping' || instanceData.instanceState == 'terminated') {
                         disableInstanceActionBtns(instanceData._id);
@@ -5454,10 +5518,10 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                         disableInstanceStartStopActionBtns(instanceData._id, instanceData.hardware.os);
                     }
                     var cssClassed = getCssClassFromStatus(instanceData.instanceState);
-                            $card.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
-                            //disableInstanceActionBtns(instanceData._id);
-                            $card.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(instanceData.instanceState);
-                            $('.instancestatusindicator[data-instanceId="' + instanceId + '"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
+                    $card.find('.componentlistContainer').removeClass().addClass('componentlistContainer').addClass(cssClassed.ringClass);
+                    //disableInstanceActionBtns(instanceData._id);
+                    $card.find('.instance-state').removeClass().addClass('instance-state').addClass(cssClassed.textClass).html(instanceData.instanceState);
+                    $('.instancestatusindicator[data-instanceId="' + instanceId + '"]').removeClass().addClass('instancestatusindicator').addClass(cssClassed.tableViewStatusClass);
 
                     //addInstanceaddInstanceToDOMToDOMaddInstanceToDOM(instanceData);
                 }
@@ -5608,47 +5672,50 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
         //Loading the containers table in Docker.
         function loadContainersTable() {
 
-            //alert('called');
-            //debugger;
-            console.log('called');
-            //  $('#dockercontainertablerefreshspinner').addClass('fa-spin');
             $dockercontainertable = $('#dockercontainertable tbody');
-
             $('.docctrempty').detach();
-            var $docctrempty = $('#dockercontainertabletemplatetr').clone().empty().append('<td class="spinnerLoadForDocker" colspan="8" style="text-align:center">No containers found</td>').removeClass('hidden');
-            $docctrempty.addClass('docctrempty');
-            $dockercontainertable.append($docctrempty);
 
-            //Shwoing the loader spinner and clearing the rows.
-            $('tr[id*="trfordockercontainer_"]').remove();
-            //$('.loadingimagefordockertable').removeClass('hidden');
+            function showNoContainerRow() {
+                var $docctrempty = $('#dockercontainertabletemplatetr').clone().empty().append('<td class="spinnerLoadForDocker" colspan="8" style="text-align:center">No containers found</td>').removeClass('hidden');
+                $docctrempty.addClass('docctrempty');
+                $dockercontainertable.append($docctrempty);
+            }
             $dockercontainertable = $('#dockercontainertable tbody');
-
+            var $dockerContainer = $('.container').find('.dockerenabledinstacne');
+            if ($dockerContainer.length <= 0) {
+                $('.spinnerDocker').addClass('hidden');
+                $('.dockerContainerBody').removeClass('hidden');
+                showNoContainerRow();
+            }
             $('.container').each(function() {
                 var $docker = $(this).find('.dockerenabledinstacne');
                 if ($docker.html() != undefined) {
                     //Get the instance ID
-                    //$('li.Containers').removeClass('hidden');
+
                     var instanceid = $(this).find('[data-instanceid]').attr('data-instanceid');
                     $.get('/instances/dockercontainerdetails/' + instanceid, function(data) {
                         if (!data) {
+                            $('.spinnerDocker').addClass('hidden');
+                            $('.dockerContainerBody').removeClass('hidden');
+                            showNoContainerRow();
                             $('.loadingimagefordockertable').addClass('hidden');
                             $('#dockercontainertablerefreshspinner').removeClass('fa-spin');
                             return;
                         }
                         if (data) {
+                            //Shwoing the loader spinner and clearing the rows.
+                            $('tr[id*="trfordockercontainer_"]').remove();
+                            $('.spinnerDocker').addClass('hidden');
+                            $('.dockerContainerBody').removeClass('hidden');
                             $('.docctrempty').detach();
                             $('.loadingimagefordockertable').addClass('hidden');
                             $('#dockercontainertablerefreshspinner').removeClass('fa-spin');
                         }
                         var dockerContainerData = JSON.parse(data);
-                        //   alert(JSON.stringify(dockerContainerData));
-                        //Setting empty message
+
                         if (dockerContainerData.length <= 0) {
                             $('.docctrempty').detach();
-                            var $docctrempty = $('#dockercontainertabletemplatetr').clone().empty().append('<td colspan="8" style="text-align:center">No Containers Found</td>').removeClass('hidden');
-                            $docctrempty.addClass('docctrempty');
-                            $dockercontainertable.append($docctrempty);
+                            showNoContainerRow();
                         }
                         $.each(dockerContainerData, function(i, item) {
                             var $docctr = createdockercontainerrow(item, instanceid);
@@ -5768,12 +5835,14 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
                                 return;
                             }
                         });
-                    });
+                    })
                 } else { //no docker found
                     $('.loadingimagefordockertable').addClass('hidden');
                     //$('li.Containers').addClass('hidden');
                 }
             });
+
+
             //dockercontaineraction
 
 
@@ -5782,13 +5851,6 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
 
 
         function createdockercontainerrow(dockerContainerItem, instanceid) {
-            // <td class="dockercontainerstatus"></td>
-            // <td  class="dockercontainerstartedon"></td>
-            // <td  class="dockercontainername"></td>
-            // <td  class="dockercontainerhostip"></td>
-            // <td  class="dockercontainerid"></td>
-            // <td  class="dockercontainerimagename"></td>
-            //alert(instanceid); $modalDesktopProvisioning.modal('show');
             var $cadvisor = $('<a class="linkcadvisor hidden pull-right" target="_blank" title="Open cAdvisor"></a>');
 
 
@@ -5828,12 +5890,14 @@ $(element).closest("form").find("label[for='" + element.attr("id") + "']").appen
             $docctr.attr('containerid', dockerContainerItem.Id.substring(0, 12));
             $docctr.find('.dockercontainerhostip').html(instanceip);
             $docctr.find('.dockercontainerid').attr('containerid', dockerContainerItem.Id).html(dockerContainerItem.Id.substring(0, 12));
-            $docctr.find('.dockercontainerimagename').html(dockerContainerItem.Image);
+            $docctr.find('.dockercontainerimagename').addClass('dockerImgValue').attr('title', dockerContainerItem.Image).html(dockerContainerItem.Image);
             //Updating the more info popup event
             $docctr.find('.modelcontainermoreinfo').click(function() {
                 $.get('/instances/dockercontainerdetails/' + instanceid + '/' + dockerContainerItem.Id, function(data) {
                     var dockerContainerData = JSON.parse(data);
-                    //alert(JSON.stringify(dockerContainerData));
+                    console.log("dockerLogs" + JSON.stringify(dockerContainerData));
+                    $('.spinnerDockerInfo').addClass('hidden');
+                    $('.dockerLogsArea').removeClass('hidden');
                     $('#modalContainermoreInfo').find('td[containerdata]').each(function() {
                         console.log("dockerContainerData." + $(this).attr('containerdata'));
                         if ($(this).attr('containerdata') != '')

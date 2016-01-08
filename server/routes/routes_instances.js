@@ -8,7 +8,6 @@
 // This file act as a Controller which contains Instance related all end points.
 
 var blueprintsDao = require('../model/dao/blueprints');
-
 var instancesDao = require('../model/classes/instance/instance');
 var EC2 = require('../lib/ec2.js');
 var Chef = require('../lib/chef.js');
@@ -22,53 +21,41 @@ var usersDao = require('../model/users.js');
 var credentialCryptography = require('../lib/credentialcryptography')
 var fileIo = require('../lib/utils/fileio');
 var uuid = require('node-uuid');
-//var javaSSHWrapper = require('../model/javaSSHWrapper.js');
 var errorResponses = require('./error_responses');
 var logger = require('_pr/logger')(module);
 var waitForPort = require('wait-for-port');
-
 var AWSProvider = require('_pr/model/classes/masters/cloudprovider/awsCloudProvider.js');
 var AWSKeyPair = require('../model/classes/masters/cloudprovider/keyPair.js');
 var VMware = require('_pr/lib/vmware');
 var vmwareCloudProvider = require('_pr/model/classes/masters/cloudprovider/vmwareCloudProvider.js');
 var azureProvider = require('_pr/model/classes/masters/cloudprovider/azureCloudProvider.js');
 var AzureCloud = require('_pr/lib/azure');
-
 var ChefClientExecution = require('../model/classes/instance/chefClientExecution/chefClientExecution.js');
-
 var Cryptography = require('../lib/utils/cryptography');
-
-
 var Task = require('../model/classes/tasks/tasks.js');
 var utils = require('../model/classes/utils/utils.js');
 var SCPClient = require('../lib/utils/scp');
 var shellEscape = require('shell-escape');
-
 var Puppet = require('_pr/lib/puppet.js');
 var masterUtil = require('_pr/lib/utils/masterUtil');
-
 var fs = require('fs');
-
-//var WINRM = require('../lib/utils/winrmexec');
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     app.get('/instances/:instanceId', function(req, res) {
-        // logger.debug("Enter get() for /instances/%s", req.params.instanceId);
         instancesDao.getInstanceById(req.params.instanceId, function(err, data) {
             if (err) {
-                //         logger.error("Instance fetch Failed >> ", err);
                 res.send(500);
                 return;
             }
 
             if (data.length) {
                 res.send(data[0]);
+                return;
             } else {
-                //    logger.error("No such Instance for >> %s", req.params.instanceId);
                 res.send(404);
+                return;
             }
-            //  logger.debug("Exit get() for /instances/%s", req.params.instanceId);
         });
     });
 
@@ -83,9 +70,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
             if (data.length) {
                 res.send(data[0]);
+                return;
             } else {
                 logger.error("No such Instance for >> %s", req.params.platformId);
                 res.send(404);
+                return;
             }
             logger.debug("Exit get() for /instances/%s", req.params.platformId);
         });
@@ -117,7 +106,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         logger.debug("Enter get() for /instances");
         instancesDao.getInstances(null, function(err, data) {
             if (err) {
-                console.log(err);
+                logger.debug(err);
                 res.send(500);
                 return;
             }
@@ -128,15 +117,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });
 
     app.get('/instances/rdp/:vmname/:port', function(req, res) {
-
         res.setHeader('Content-disposition', 'attachment; filename=' + req.params.vmname + '.rdp');
         res.setHeader('Content-type', 'rdp');
-        //res.charset = 'UTF-8';
         var rdptext = "full address:s:" + req.params.vmname + ":" + req.params.port + "\n\r";
         rdptext += "prompt for credentials:i:1"
         res.write(rdptext);
         res.end();
-
     });
 
     app.post('/instances', function(req, res) {
@@ -157,7 +143,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         instancesDao.getInstanceById(req.params.instanceId, function(err, instances) {
             if (err) {
                 logger.debug("Failed to fetch Instance ", err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (instances.length) {
@@ -165,12 +151,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 Task.getTasksByNodeIds([req.params.instanceId], function(err, tasks) {
                     if (err) {
                         logger.debug("Failed to fetch tasks by node id ", err);
-                        res.send(500, errorResponses.db.error);
+                        res.status(500).send(errorResponses.db.error);
                         return;
                     }
-                    console.log('length ==>', tasks.length);
+                    logger.debug('length ==>', tasks.length);
                     if (tasks.length) {
-                        res.send(400, {
+                        res.status(400).send({
                             message: "Instance is associated with task"
                         });
                         return;
@@ -178,11 +164,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     }
 
                     if (req.query.chefRemove && req.query.chefRemove === 'true') {
-
-
                         var infraManagerData;
-
-
                         if (instance.chef && instance.chef.serverId) {
                             infraManagerData = instance.chef;
                         } else {
@@ -190,7 +172,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         }
                         var infraManagerId = infraManagerData.serverId;
                         if (!infraManagerId) {
-                            res.send(500, {
+                            res.status(500).send({
                                 message: "Instance data corrupted"
                             });
                             return;
@@ -199,13 +181,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         masterUtil.getCongifMgmtsById(infraManagerId, function(err, infraManagerDetails) {
                             if (err) {
                                 logger.debug("Failed to fetch Infra Manager Details ", err);
-                                res.send(500, errorResponses.db.error);
+                                res.status(500).send(errorResponses.db.error);
                                 return;
                             }
-                            console.log('infraManager ==>', infraManagerDetails);
+                            logger.debug('infraManager ==>', infraManagerDetails);
                             if (!infraManagerDetails) {
                                 logger.debug("Infra Manager details not found", err);
-                                res.send(500, {
+                                res.status(500).send({
                                     message: "Infra Manager Details Corrupted"
                                 });
                                 return;
@@ -277,7 +259,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             instancesDao.removeInstancebyId(req.params.instanceId, function(err, data) {
                 if (err) {
                     logger.error("Instance deletion Failed >> ", err);
-                    res.send(500, errorResponses.db.error);
+                    res.status(500).send(errorResponses.db.error);
                     return;
                 }
                 logger.debug("Exit delete() for /instances/%s", req.params.instanceid);
@@ -323,7 +305,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         instancesDao.removeAppUrl(req.params.instanceId, req.params.appUrlId, function(err, deleteCount) {
             if (err) {
                 logger.error("Failed to remove app url", err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             res.send({
@@ -335,11 +317,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     // add instance task
     app.post('/instances/:instanceId/addTask', function(req, res) {
         if (!(req.body.taskIds && req.body.taskIds.length)) {
-            // res.send(404, {
-            //     message: "Invalid Task Id"
-            // });
-            // return;
-
             req.body.taskIds = [];
         }
         instancesDao.addTaskIds(req.params.instanceId, req.body.taskIds, function(err, updateCount) {
@@ -363,7 +340,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         instancesDao.removeTaskId(req.params.instanceId, function(err, deleteCount) {
             if (err) {
                 logger.error("Failed to taskId", err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             res.send({
@@ -398,7 +375,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         logger.debug('cmd received: ', cmd);
         var stdOut = '';
         _docker.runDockerCommands(cmd, instanceid, function(err, retCode) {
-            //alert('Done');
             var _stdout = stdOut.split('\r\n');
             logger.debug('Docker containers : %s', _stdout.length);
             var start = false;
@@ -417,7 +393,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
         }, function(stdOutData) {
             stdOut += stdOutData;
-            // alert(stdOutData);
         }, function(stdOutErr) {
             logger.error("Error hits to fetch docker details", stdOutErr);
             res.send(500);
@@ -426,7 +401,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     });
     app.get('/instances/dockercontainerdetails/:instanceid/:containerid', function(req, res) {
-        //res.send(200);
         logger.debug("Enter get() for /instances/dockercontainerdetails/%s/%s", req.params.instanceid, req.params.containerid);
         var instanceid = req.params.instanceid;
         var _docker = new Docker();
@@ -436,7 +410,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         logger.debug('cmd received: ', cmd);
         var stdOut = '';
         _docker.runDockerCommands(cmd, instanceid, function(err, retCode) {
-            //alert('Done');
             var _stdout = stdOut.split('\r\n');
             logger.debug('Docker containers : ', _stdout.length);
             var start = false;
@@ -455,7 +428,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
         }, function(stdOutData) {
             stdOut += stdOutData;
-            // alert(stdOutData);
         }, function(stdOutErr) {
             logger.error("Hit some error: ", stdOutErr);
             res.send(500);
@@ -531,9 +503,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 break;
         }
 
-
-        //var cmd = 'echo -e \"GET /containers/' + req.params.containerid + '/json HTTP/1.0\r\n\" | sudo nc -U /var/run/docker.sock';
-
         var cmd = 'curl -XPOST http://localhost:4243/containers/' + req.params.containerid + '/' + action;
         if (action == 'delete') {
             cmd = 'sudo docker stop ' + req.params.containerid + ' &&  sudo docker rm ' + req.params.containerid;
@@ -554,7 +523,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     return;
                 } else {
                     _docker.runDockerCommands(cmd, instanceid, function(err, retCode) {
-                        //alert('Done');
                         if (!err) {
                             logsDao.insertLog({
                                 referenceId: instanceid,
@@ -584,7 +552,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             log: "Container  " + req.params.containerid + ":" + stdOutData,
                             timestamp: new Date().getTime()
                         });
-                        // alert(stdOutData);
                     }, function(stdOutErr) {
                         logger.error("Error hits while running Docker Command: ", err);
                         res.send(500);
@@ -607,13 +574,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     logger.error("Failed to Excute Docker command: ", err);
                     res.send(500);
                     return;
-                    //res.end('200');
-
                 }
-                console.log('this ret:' + retCode);
+                logger.debug('this ret:' + retCode);
                 if (retCode == '0') {
                     instancesDao.updateInstanceDockerStatus(req.params.instanceid, "success", '', function(data) {
-                        console.log('Instance Docker Status set to Success');
+                        logger.debug('Instance Docker Status set to Success');
                         logger.debug("Exit get() for /instances/checkfordocker/%s", req.params.instanceid);
                         res.send('OK');
                         return;
@@ -642,7 +607,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             limit: 10000
         }
         logger.debug(JSON.stringify(options));
-        // req.params.querytext = '(\"' + req.params.querytext + '\") AND (' + req.params.orgid + ' AND ' + req.params.bgid + ' AND ' + req.params.projid +  ' AND ' + req.params.envid + ')';
         instancesDao.searchInstances(req.params.querytext, options, function(err, data) {
             if (!err) {
                 logger.debug('Received from search');
@@ -675,19 +639,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 }
                 configmgmtDao.getMasterRow(18, 'dockerreponame', req.params.dockerreponame, function(err, data) {
                     if (!err) {
-
-                        //  var dockerRepo = JSON.parse(data);
                         logger.debug('Docker Repo ->', JSON.stringify(data));
                         var dock = JSON.parse(data);
-                        // var dockkeys = Object.keys(data);
                         logger.debug('username:', dock.dockeruserid);
-
                         var _docker = new Docker();
                         var stdmessages = '';
-
                         var cmd = "sudo docker login -e " + dock.dockeremailid + ' -u ' + dock.dockeruserid + ' -p ' + dock.dockerpassword;
-
-                        //cmd += ' && sudo docker pull ' + dock.dockeruserid  + '/' + decodeURIComponent(req.params.imagename);
                         //removing docker userID
                         cmd += ' && sudo docker pull ' + decodeURIComponent(req.params.imagename);
                         logger.debug('Intermediate cmd: ', cmd);
@@ -720,9 +677,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 }
 
                                 logger.debug("docker return ", retCode);
-                                if (retCode == 0)
-                                //if retCode == 0 //update docker status into instacne
-                                {
+                                if (retCode == 0) {
                                     instancesDao.updateInstanceDockerStatus(instanceid, "success", '', function(data) {
                                         logger.debug('Instance Docker Status set to Success');
                                         res.send(200);
@@ -761,7 +716,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     log: stdOutErr.toString('ascii'),
                                     timestamp: new Date().getTime()
                                 });
-                                console.log("docker return ", stdOutErr);
+                                logger.debug("docker return ", stdOutErr);
                                 res.send(stdOutErr);
 
                             });
@@ -808,16 +763,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 
             for (var i = 0; i < params.length; i++) {
-                //logger.debug('split runparams --->',params[i]);
                 if (params[i] != '') {
                     var itms = params[i].split(' ');
                     if (itms.length > 0) {
                         logger.debug('itms[0]:' + itms[0] + ';itms[1]:' + itms[1]);
-                        // if (itms[0] == 'c')
-                        //     startparams += ' ' + itms[1];
-                        // if (itms[0] == 'exec')
-                        //     execparam += ' ' + itms[1];
-                        // else
                         preparams += ' -' + params[i];
 
                         if (itms[0] == '-name') {
@@ -837,15 +786,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
             launchparams[0] = preparams;
             launchparams[1] = startparams;
-            // alert(execparam);
             launchparams[2] = execparam;
             launchparams[3] = containername;
-            //alert(launchparams);
-            //  logger.debug('launchparams:' + launchparams.join('&&'));
             return (launchparams);
         }
-
-        //:dockerreponame/:imagename/:tagname/:runparams/:startparams
         logger.debug("Enter get() for /instances/dockercompositeimagepull");
         var instanceid = req.params.instanceid;
         var dockercompose = decodeURIComponent(req.params.dockercomposejson);
@@ -871,21 +815,15 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 }
                 configmgmtDao.getMasterRow(18, 'dockerreponame', req.params.dockerreponame, function(err, data) {
                     if (!err) {
-
-                        //  var dockerRepo = JSON.parse(data);
                         logger.debug('Docker Repo ->', JSON.stringify(data));
                         var dock = JSON.parse(data);
-                        // var dockkeys = Object.keys(data);
                         logger.debug('username:', dock.dockeruserid);
-
                         var _docker = new Docker();
                         var stdmessages = '';
                         var imagecount = 0; //to count the no of images started.
                         var pullandrundocker = function(imagename, tagname, runparams, startparams, execcommand, containername, callback) {
                             imagecount++;
                             var cmd = "sudo docker login -e " + dock.dockeremailid + ' -u ' + dock.dockeruserid + ' -p ' + dock.dockerpassword;
-
-                            //cmd += ' && sudo docker pull ' + dock.dockeruserid  + '/' + decodeURIComponent(req.params.imagename);
                             //removing docker userID
                             cmd += ' && sudo docker pull ' + decodeURIComponent(imagename);
                             logger.debug('Intermediate cmd: ', cmd);
@@ -909,7 +847,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 logger.debug('Returning handle to browser');
                                 res.end('OK');
                             }
-                            //callback('done');
                             _docker.runDockerCommands(cmd, req.params.instanceid,
                                 function(err, retCode) {
                                     if (err) {
@@ -925,10 +862,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     }
 
                                     logger.debug("docker return ", retCode);
-                                    if (retCode == 0)
-                                    //if retCode == 0 //update docker status into instacne
-                                    {
-                                        logger.debug('Execcommand : --------------' + execcommand + ' ' + (execcommand != ''));
+                                    if (retCode == 0) {
+                                        logger.debug('Execcommand : ' + execcommand + ' ' + (execcommand != ''));
                                         if (execcommand != '' && execcommand != 'null') {
                                             logger.debug('In Execute command');
                                             logsDao.insertLog({
@@ -947,8 +882,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     logger.debug('runDockerCommand : in done');
                                                     instancesDao.updateInstanceDockerStatus(instanceid, "success", '', function(data) {
                                                         logger.debug('Instance Docker Status set to Success');
-                                                        // res.send(200);
-                                                        //callback('done');
                                                         logsDao.insertLog({
                                                             referenceId: instanceid,
                                                             err: false,
@@ -982,14 +915,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                 }
 
                                             });
-                                            // logger('runout :' + runout);
-
                                         } else //no exec commands found
                                         {
                                             instancesDao.updateInstanceDockerStatus(instanceid, "success", '', function(data) {
                                                 logger.debug('Instance Docker Status set to Success');
-                                                // res.send(200);
-                                                //callback('done');
                                                 logsDao.insertLog({
                                                     referenceId: instanceid,
                                                     err: false,
@@ -999,7 +928,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                 if (imagecount < dockercomposejson.length) {
 
                                                     var lp = generateDockerLaunchParams(dockercomposejson[imagecount]['dockerlaunchparameters']);
-                                                    logger.debug('lp returned from generate=======> ', lp.join(' &&'));
+                                                    logger.debug('lp returned from generate ', lp.join(' &&'));
                                                     var startparams = 'null';
                                                     var execcommand = 'null';
                                                     if (lp.length > 0) {
@@ -1046,9 +975,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         log: stdOutErr.toString('ascii'),
                                         timestamp: new Date().getTime()
                                     });
-                                    console.log("docker return ", stdOutErr);
-                                    //res.send(stdOutErr);
-
+                                    logger.debug("docker return ", stdOutErr);
                                 });
                         };
 
@@ -1070,11 +997,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         } else {
                             res.send('200 ' + 'No Images to pull');
                         }
-
-
-
-
-
                     } //!(err)
                 });
             } else {
@@ -1086,14 +1008,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     });
     app.post('/instances/:instanceId/updateRunlist', function(req, res) {
-        logger.debug("InstanceID>>>>>>>>>>> ", req.params.instanceId);
         if (req.session.user.rolename === 'Consumer') {
             res.send(401);
             return;
         }
         logger.debug("Enter post() for /instances/updateRunlist");
-
-        logger.debug(">>>>>>>>>>>>>>>>>>>>>>>> ", req.body.runlist);
         //verifying permission to update runlist
         logger.debug('Verifying User permission set for execute.');
         var user = req.session.user;
@@ -1130,7 +1049,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             }
 
                             if (!configManagmentId) {
-                                res.send(500, {
+                                res.status(500).send({
                                     message: "Instance Data Corrupted"
                                 });
                                 return;
@@ -1182,9 +1101,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         return;
                                     }
 
-
                                     //getting chef run execution Id 
-
                                     ChefClientExecution.createNew({
                                         instanceId: instance.id
 
@@ -1217,7 +1134,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     objectArray.push(req.body.jsonAttributes[i].jsonObj);
                                                 }
                                                 attributeObj = utils.mergeObjects(objectArray);
-                                                console.log('json ==> ', attributeObj);
+                                                logger.debug('json ==> ', attributeObj);
                                             } else {
                                                 req.body.jsonAttributes = [];
                                             }
@@ -1240,7 +1157,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                 runlist: req.body.runlist,
                                                 overrideRunlist: false,
                                                 jsonAttributes: JSON.stringify(jsonAttributeObj)
-                                                //parallel:true
                                             }
                                             logger.debug('decryptCredentials ==>', decryptedCredentials);
                                             if (decryptedCredentials.pemFileLocation) {
@@ -1259,7 +1175,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                             } else {
                                                 puppetSettings.password = infraManagerDetails.puppetpassword;
                                             }
-                                            console.log('puppet pemfile ==> ' + puppetSettings.pemFileLocation);
+                                            logger.debug('puppet pemfile ==> ' + puppetSettings.pemFileLocation);
                                             infraManager = new Puppet(puppetSettings);
                                             var runOptions = {
                                                 username: decryptedCredentials.username,
@@ -1274,8 +1190,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                             }
 
                                         }
-                                        console.log('here === >');
-
 
                                         logsDao.insertLog({
                                             referenceId: logReferenceIds,
@@ -1295,7 +1209,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                             }
 
                                             if (err) {
-                                                //console.log(err);
                                                 var timestampEnded = new Date().getTime();
                                                 logsDao.insertLog({
                                                     referenceId: logReferenceIds,
@@ -1333,8 +1246,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                     logger.error("Failed to check docker status: ", err);
                                                                     res.send(500);
                                                                     return;
-                                                                    //res.end('200');
-
                                                                 }
                                                                 logger.debug('Docker Check Returned:', retCode);
                                                                 if (retCode == '0' || retCode == null) {
@@ -1471,7 +1382,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             });
 
                             if (!data[0].providerId) {
-                                res.send(500, {
+                                res.status(500).send({
                                     message: "Insufficient provider details, to complete the operation"
                                 });
                                 logsDao.insertLog({
@@ -1486,10 +1397,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                             if (data[0].providerType && data[0].providerType == 'vmware') {
                                 vmwareCloudProvider.getvmwareProviderById(data[0].providerId, function(err, providerdata) {
-
                                     logger.debug('IN getvmwareProviderById: data: ');
-                                    logger.debug(JSON.stringify(data));
-                                    logger.debug('------------------------');
                                     var vmwareconfig = {
                                         host: '',
                                         username: '',
@@ -1509,8 +1417,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     } else {
                                         vmwareconfig = null;
                                     }
-                                    //  data.tenantName = "demo";
-                                    //callback(null, vmwareconfig);
                                     if (vmwareconfig) {
                                         var vmware = new VMware(vmwareconfig);
                                         vmware.startstopVM(vmwareconfig.serviceHost, data[0].platformId, 'poweroff', function(err, vmdata) {
@@ -1541,8 +1447,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     timestamp: timestampEnded
                                                 });
                                                 instancesDao.updateActionLog(req.params.instanceId, actionLog._id, true, timestampEnded);
-
-                                                // logger.debug('Recvd:',JSON.stringify(JSON.parse(vmdata)));
                                                 res.send(200, {
                                                     instanceCurrentState: 'stopped',
                                                     actionLogId: actionLog._id
@@ -1628,7 +1532,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                             timestamp: timestampEnded
                                                         });
                                                         instancesDao.updateActionLog(req.params.instanceId, actionLog._id, false, timestampEnded);
-                                                        res.send(500, {
+                                                        res.status(500).send({
                                                             actionLogId: actionLog._id
                                                         });
                                                         return;
@@ -1697,14 +1601,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 AWSProvider.getAWSProviderById(data[0].providerId, function(err, aProvider) {
                                     if (err) {
                                         logger.error(err);
-                                        res.send(500, "Unable to get Provider.");
+                                        res.status(500).send("Unable to get Provider.");
                                         return;
                                     }
-                                    logger.debug("Provider:>>>>>>>>>> ", JSON.stringify(aProvider));
                                     AWSKeyPair.getAWSKeyPairByProviderId(aProvider._id, function(err, keyPair) {
-                                        logger.debug("keyPairs length::::: ", keyPair[0].region);
+                                        logger.debug("keyPairs length: ", keyPair[0].region);
                                         if (err) {
-                                            res.send(500, "Error getting to fetch Keypair.")
+                                            res.status(500).send("Error getting to fetch Keypair.")
                                         }
                                         var cryptoConfig = appConfig.cryptoSettings;
                                         var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
@@ -1732,7 +1635,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         timestamp: timestampEnded
                                                     });
                                                     instancesDao.updateActionLog(req.params.instanceId, actionLog._id, false, timestampEnded);
-                                                    res.send(500, {
+                                                    res.status(500).send({
                                                         actionLogId: actionLog._id
                                                     });
                                                     return;
@@ -1764,8 +1667,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     logger.debug('instance state upadated');
                                                 });
                                                 var timestampEnded = new Date().getTime();
-
-
                                                 logsDao.insertLog({
                                                     referenceId: logReferenceIds,
                                                     err: false,
@@ -1822,7 +1723,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     }
                                     logger.debug('IN getvmwareProviderById: data: ');
                                     logger.debug(JSON.stringify(data));
-                                    logger.debug('------------------------');
                                     var vmwareconfig = {
                                         host: '',
                                         username: '',
@@ -1837,13 +1737,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         vmwareconfig.dc = providerdata.dc;
                                         vmwareconfig.serviceHost = appConfig.vmware.serviceHost;
                                         logger.debug('IN getvmwareProviderById: vmwareconfig: ');
-                                        // logger.debug(JSON.stringify(appConfig.vmware));
-                                        // logger.debug(JSON.stringify(vmwareconfig));
                                     } else {
                                         vmwareconfig = null;
                                     }
-                                    //  data.tenantName = "demo";
-                                    //callback(null, vmwareconfig);
                                     if (vmwareconfig) {
                                         var vmware = new VMware(vmwareconfig);
                                         vmware.startstopVM(vmwareconfig.serviceHost, data[0].platformId, 'poweron', function(err, vmdata) {
@@ -1874,8 +1770,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                     timestamp: timestampEnded
                                                 });
                                                 instancesDao.updateActionLog(req.params.instanceId, actionLog._id, true, timestampEnded);
-
-                                                //   logger.debug('Recvd:',JSON.stringify(JSON.parse(vmdata)));
                                                 res.send(200, {
                                                     instanceCurrentState: 'running',
                                                     actionLogId: actionLog._id
@@ -1922,7 +1816,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 });
 
                                 if (!data[0].providerId) {
-                                    res.send(500, {
+                                    res.status(500).send({
                                         message: "Insufficient provider details, to complete the operation"
                                     });
                                     logsDao.insertLog({
@@ -1989,7 +1883,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                             timestamp: timestampEnded
                                                         });
                                                         instancesDao.updateActionLog(req.params.instanceId, actionLog._id, false, timestampEnded);
-                                                        res.send(500, {
+                                                        res.status(500).send({
                                                             actionLogId: actionLog._id
                                                         });
                                                         return;
@@ -2049,7 +1943,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         });
                                                     });
                                                 });
-
                                         });
                                     });
                                 });
@@ -2058,13 +1951,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 AWSProvider.getAWSProviderById(data[0].providerId, function(err, aProvider) {
                                     if (err) {
                                         logger.error(err);
-                                        res.send(500, "Unable to find Provider.");
+                                        res.status(500).send("Unable to find Provider.");
                                         return;
                                     }
                                     AWSKeyPair.getAWSKeyPairByProviderId(aProvider._id, function(err, keyPair) {
                                         logger.debug("keyPairs length::::: ", keyPair[0].region);
                                         if (err) {
-                                            res.send(500, "Error getting to fetch Keypair.")
+                                            res.status(500).send("Error getting to fetch Keypair.")
                                         }
 
                                         var timestampStarted = new Date().getTime();
@@ -2110,7 +2003,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                         timestamp: timestampEnded
                                                     });
                                                     instancesDao.updateActionLog(req.params.instanceId, actionLog._id, false, timestampEnded);
-                                                    res.send(500, {
+                                                    res.status(500).send({
                                                         actionLogId: actionLog._id
                                                     });
                                                     return;
@@ -2178,7 +2071,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         }
                     });
 
-
                 } //else haspermission
             } //if !err
         }); //haspermission
@@ -2202,20 +2094,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 res.send(500);
                 return;
             }
-            // logger.debug("Exit get() for /instances/%s/logs", req.params.instanceId);
             res.send(data);
 
         });
-        /*logsDao.getLogsByReferenceId(req.params.instanceId, timestamp, function(err, data) {
-            if (err) {
-                logger.error("Found error to fetch Logs: ", err);
-                res.send(500);
-                return;
-            }
-            logger.debug("Exit get() for /instances/%s/logs", req.params.instanceId);
-            res.send(data);
-
-        });*/
     });
 
 
@@ -2269,7 +2150,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 res.send(500);
                 return;
             }
-            console.log(deleteCount);
             if (deleteCount) {
                 logger.debug("Exit delete() for /instances/%s/services/%s", req.params.instanceId, req.params.serviceId);
                 res.send({
@@ -2280,7 +2160,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             }
 
         });
-
 
     });
 
@@ -2406,7 +2285,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         });
                         instancesDao.updateActionLog(req.params.instanceId, actionLog._id, false, timestampEnded);
 
-                        res.send(500, {
+                        res.status(500).send({
                             actionLogId: actionLog._id
                         });
                         return;
@@ -2423,7 +2302,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 });
                                 instancesDao.updateActionLog(req.params.instanceId, actionLog._id, false, timestampEnded);
 
-                                res.send(500, {
+                                res.status(500).send({
                                     actionLogId: actionLog._id
                                 });
                                 return;
@@ -2438,7 +2317,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 });
                                 instancesDao.updateActionLog(req.params.instanceId, actionLog._id, false, timestampEnded);
 
-                                res.send(500, {
+                                res.status(500).send({
                                     actionLogId: actionLog._id
                                 });
                                 return;
@@ -2473,7 +2352,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 port: 22,
                                 runlist: runlist, // runing service runlist
                                 overrideRunlist: true
-                                //parallel:true
                             }
                             if (decryptedCredentials.pemFileLocation) {
                                 chefClientOptions.privateKey = decryptedCredentials.pemFileLocation;
@@ -2627,16 +2505,16 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         instancesDao.getInstanceById(req.params.instanceId, function(err, anInstance) {
             if (err) {
                 logger.error("Failed to fetch Instance: ", err);
-                res.send(500, "Failed to fetch Instance: ");
+                res.status(500).send("Failed to fetch Instance: ");
                 return;
             }
             if (anInstance) {
                 instancesDao.updateInstanceName(req.params.instanceId, req.body.name, function(err, updateCount) {
                     if (err) {
-                        res.send(500, "Failed to update instance name");
+                        res.status(500).send("Failed to update instance name");
                         return;
                     }
-                    console.log(updateCount);
+                    logger.debug(updateCount);
                     res.send(200, {
                         updateCount: updateCount
                     });
@@ -2655,14 +2533,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         instancesDao.getInstanceById(req.params.instanceId, function(err, anInstance) {
             if (err) {
                 logger.error("Failed to fetch Instance: ", err);
-                res.send(500, "Failed to fetch Instance: ");
+                res.status(500).send("Failed to fetch Instance: ");
                 return;
             }
-
-            logger.debug("Return instance>>>>>>>>>>> ", JSON.stringify(anInstance));
             if (anInstance.length) {
                 if (anInstance[0].bootStrapStatus !== 'success') {
-                    res.send(400, {
+                    res.status(400).send({
                         message: "Instance is not boostraped"
                     });
                     return;
@@ -2680,7 +2556,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     //decrypting pem file
                     credentialCryptography.decryptCredential(anInstance[0].credentials, function(err, decryptedCredentials) {
                         if (err) {
-                            res.send(500, "Unable to decrypt file.");
+                            res.status(500).send("Unable to decrypt file.");
                             return;
                         }
 
@@ -2710,7 +2586,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             var installedSoftwareString = '';
                             sshConnection.exec(cmd, function(err, retCode) {
                                 if (err) {
-                                    res.send(500, {
+                                    res.status(500).send({
                                         "message": "Unable to ssh"
                                     });
                                     return;
@@ -2720,22 +2596,22 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         installedSoftwareString: installedSoftwareString
                                     });
                                 } else if (retCode === -5000) {
-                                    res.send(500, {
+                                    res.status(500).send({
                                         "message": "Host Unreachable."
                                     });
                                     return;
                                 } else if (retCode === -5001) {
-                                    res.send(500, {
+                                    res.status(500).send({
                                         "message": "Invalid credentials."
                                     });
                                     return;
                                 } else if (retCode === -5002) {
-                                    res.send(500, {
+                                    res.status(500).send({
                                         "message": "Unknown Exeption Occured. Code : " + retCode
                                     });
                                     return;
                                 } else {
-                                    res.send(500, {
+                                    res.status(500).send({
                                         "message": "Unknown Exeption Occured. Code : " + retCode
                                     });
                                     return;
@@ -2774,7 +2650,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             chef.runKnifeWinrmCmd(cmd, chefClientOptions, function(err, retCode) {
 
                                 if (err) {
-                                    res.send(500, {
+                                    res.status(500).send({
                                         "message": "Unable to winrm"
                                     });
                                     return;
@@ -2794,22 +2670,22 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         installedSoftwareString: installedSoftwareString
                                     });
                                 } else if (retCode === -5000) {
-                                    res.send(500, {
+                                    res.status(500).send({
                                         "message": "Host Unreachable."
                                     });
                                     return;
                                 } else if (retCode === -5001) {
-                                    res.send(500, {
+                                    res.status(500).send({
                                         "message": "Invalid credentials."
                                     });
                                     return;
                                 } else if (retCode === -5002) {
-                                    res.send(500, {
+                                    res.status(500).send({
                                         "message": "Unknown Exeption Occured while trying knife winrm. Code : " + retCode
                                     });
                                     return;
                                 } else {
-                                    res.send(500, {
+                                    res.status(500).send({
                                         "message": "Unknown Exeption Occured while trying knife winrm. Code : " + retCode
                                     });
                                     return;
@@ -2839,7 +2715,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         instancesDao.getInstanceById(req.params.instanceId, function(err, instances) {
             if (err) {
                 logger.debug("Failed to fetch Instance ", err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (!instances.length) {
@@ -2853,12 +2729,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             configmgmtDao.getChefServerDetails(instance.chef.serverId, function(err, chefDetails) {
                 if (err) {
                     logger.debug("Failed to fetch ChefServerDetails ", err);
-                    res.send(500, errorResponses.chef.corruptChefData);
+                    res.status(500).send(errorResponses.chef.corruptChefData);
                     return;
                 }
                 credentialCryptography.decryptCredential(instance.credentials, function(err, decryptedCredentials) {
                     if (err) {
-                        res.send(500, {
+                        res.status(500).send({
                             "message": "Unable to decrypt file."
                         });
                         return;
@@ -2877,8 +2753,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     var scpClient = new SCPClient(params);
                     scpClient.upload(chefDetails.chefRepoLocation + '/.chef/', '/home/' + decryptedCredentials.username + '/.chef/', function(err) {
                         if (err) {
-                            console.log(err);
-                            res.send(500, err);
+                            logger.debug(err);
+                            res.status(500).send(err);
                             return;
                         }
                         res.send(200, {
@@ -2890,247 +2766,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             });
         });
     });
-    /*
-    app.get('/instances/:instanceId/setAsWorkStation', function(req, res) {
-
-        instancesDao.getInstanceById(req.params.instanceId, function(err, instances) {
-            if (err) {
-                logger.debug("Failed to fetch Instance ", err);
-                res.send(500, errorResponses.db.error);
-                return;
-            }
-            if (!instances.length) {
-                return res.send(404, {
-                    message: "Instance does not exist"
-                });
-
-            }
-
-            var instance = instances[0];
-            configmgmtDao.getChefServerDetails(instance.chef.serverId, function(err, chefDetails) {
-                if (err) {
-                    logger.debug("Failed to fetch ChefServerDetails ", err);
-                    res.send(500, errorResponses.chef.corruptChefData);
-                    return;
-                }
-                credentialCryptography.decryptCredential(instance.credentials, function(err, decryptedCredentials) {
-                    if (err) {
-                        res.send(500, {
-                            "message": "Unable to decrypt file."
-                        });
-                        return;
-                    }
-                    var params = {
-                        username: decryptedCredentials.username,
-                        host: instance.instanceIP,
-                        port: 22
-                    };
-
-                    if (decryptedCredentials.pemFileLocation) {
-                        params.privateKey = decryptedCredentials.pemFileLocation;
-                    } else {
-                        params.password = decryptedCredentials.password;
-                    }
-                    var remotePath;
-                    if (instance.hardware.os === 'linux') {
-                        remotePath = '$HOME/$HOSTNAME/.chef/';
-                    } else {
-                        remotePath = "C:\\Users\\" + params.username + '\\' + instance.chef.chefNodeName + '\\.chef\\';
-                    }
-
-                    function createCmdString(fileItem, cmdString, callback) {
-                        if (cmdString) {
-                            cmdString = cmdString + ' && '
-                        }
-                        fileIo.readFile(fileItem.fullPath, function(err, fileData) {
-                            if (err) {
-                                callback(err);
-                                return;
-                            }
-
-                            var args = ['echo', fileData.toString()];
-
-                            var escapedString = shellEscape(args);
-                            var sudoCmd = '';
-                            // if (instance.hardware.os === 'linux') {
-                            //     sudoCmd = "sudo sh -c \"";
-                            //     if (decryptedCredentials.password) {
-                            //         sudoCmd = 'echo \"' + decryptedCredentials.password + '\" | sudo -S ';
-                            //     }
-                            //     escapedString = sudoCmd + escapedString + ' > ' + remotePath + fileItem.name+"\"";
-                            // } else {
-                            //     escapedString = sudoCmd + escapedString + ' > ' + remotePath + fileItem.name;
-                            // }
-                            escapedString = sudoCmd + escapedString + ' > ' + remotePath + fileItem.name;
-
-
-                            cmdString = cmdString + escapedString;
-                            callback(null, cmdString);
-
-                        });
-                    }
-
-                    fileIo.readDir('', chefDetails.chefRepoLocation + '/.chef/', function(err, dirList, fileList) {
-                        if (err) {
-                            res.send(500, errorResponses.db.error);
-                            return;
-                        }
-                        var count = 0;
-
-                        function loopFiles(fileList, cmdString, callback) {
-
-                            if (count < fileList.length) {
-                                createCmdString(fileList[count], cmdString, function(err, cmdString) {
-                                    count++;
-                                    if (err) {
-                                        res.send(500, errorResponses.db.error);
-                                        return;
-                                    }
-                                    loopFiles(fileList, cmdString, callback);
-                                });
-                            } else {
-                                callback(cmdString);
-
-                            }
-                        }
-                        if (fileList.length) {
-                            loopFiles(fileList, '', function(cmdString) {
-
-                                if (instance.hardware.os === 'linux') {
-                                    var sudoCmd = '';
-                                    // var sudoCmd = "sudo";
-                                    // if (decryptedCredentials.password) {
-                                    //     sudoCmd = 'echo \"' + decryptedCredentials.password + '\" | sudo -S';
-                                    // }
-                                    var cmd = sudoCmd + " mkdir -p " + remotePath + ' && ' + cmdString;
-
-                                    var sshParamObj = {
-                                        username: decryptedCredentials.username,
-                                        host: instance.instanceIP,
-                                        port: 22
-                                    }
-                                    if (decryptedCredentials.pemFileLocation) {
-                                        sshParamObj.privateKey = decryptedCredentials.pemFileLocation;
-                                    } else {
-                                        sshParamObj.password = decryptedCredentials.password;
-                                    }
-                                    var sshConnection = new SSH(sshParamObj);
-                                    console.log(cmd);
-                                    sshConnection.exec(cmd, function(err, retCode) {
-                                        if (err) {
-                                            res.send(500, {
-                                                "message": "Unable to ssh"
-                                            });
-                                            return;
-                                        }
-                                        if (retCode == 0) {
-                                            res.send(200, {
-                                                "message": "true"
-                                            });
-                                        } else if (retCode === -5000) {
-                                            res.send(500, {
-                                                "message": "Host Unreachable."
-                                            });
-                                            return;
-                                        } else if (retCode === -5001) {
-                                            res.send(500, {
-                                                "message": "Invalid credentials."
-                                            });
-                                            return;
-                                        } else if (retCode === -5002) {
-                                            res.send(500, {
-                                                "message": "Unknown Exeption Occured. Code : " + retCode
-                                            });
-                                            return;
-                                        } else {
-                                            res.send(500, {
-                                                "message": "Unknown Exeption Occured. Code : " + retCode
-                                            });
-                                            return;
-                                        }
-
-                                    }, function(stdOut) {
-                                        console.log('err ==> ', stdOut.toString());
-
-                                    }, function(stdErr) {
-                                        console.log('err ==> ', stdErr.toString());
-                                    });
-
-                                } else { //windows
-
-                                    var chef = new Chef({
-                                        userChefRepoLocation: chefDetails.chefRepoLocation,
-                                        chefUserName: chefDetails.loginname,
-                                        chefUserPemFile: chefDetails.userpemfile,
-                                        chefValidationPemFile: chefDetails.validatorpemfile,
-                                        hostedChefUrl: chefDetails.url,
-                                    });
-                                    var chefClientOptions = {
-                                        username: decryptedCredentials.username,
-                                        host: instance.instanceIP,
-                                        port: 22,
-                                    }
-
-                                    if (decryptedCredentials.pemFileLocation) {
-                                        chefClientOptions.privateKey = decryptedCredentials.pemFileLocation;
-                                    } else {
-                                        chefClientOptions.password = decryptedCredentials.password;
-                                    }
-
-                                    chef.runKnifeWinrmCmd('mkdir ' + remotePath + ' && ' + cmdString, chefClientOptions, function(err, retCode) {
-
-                                        if (err) {
-                                            res.send(500, {
-                                                "message": "Unable to winrm"
-                                            });
-                                            return;
-                                        }
-                                        logger.debug("Winrm finished with retcode ==> " + retCode);
-                                        if (retCode == 0) {
-                                            res.send(200, {
-                                                "message": "true"
-                                            });
-                                        } else if (retCode === -5000) {
-                                            res.send(500, {
-                                                "message": "Host Unreachable."
-                                            });
-                                            return;
-                                        } else if (retCode === -5001) {
-                                            res.send(500, {
-                                                "message": "Invalid credentials."
-                                            });
-                                            return;
-                                        } else if (retCode === -5002) {
-                                            res.send(500, {
-                                                "message": "Unknown Exeption Occured while trying knife winrm. Code : " + retCode
-                                            });
-                                            return;
-                                        } else {
-                                            res.send(500, {
-                                                "message": "Unknown Exeption Occured while trying knife winrm. Code : " + retCode
-                                            });
-                                            return;
-                                        }
-                                    }, function(stdOut) {
-                                        installedSoftwareString = installedSoftwareString + stdOut.toString('UTF-8');
-
-                                    }, function(stdErr) {
-                                        logger.debug("err ==> " + stdErr.toString('ascii'));
-                                    });
-
-                                }
-
-                            });
-                        } else {
-                            res.send(500, errorResponses.db.error);
-                            return;
-                        }
-                    });
-                });
-
-            });
-        });
-    });*/
 
     app.get('/instances/:instanceId/status', function(req, res) {
         logger.debug("Enter get() for /instances/%s/actionLogs", req.params.instanceId);
@@ -3158,7 +2793,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         instancesDao.getInstanceById(req.params.instanceId, function(err, instances) {
             if (err) {
                 logger.error("Failed to fetch ActionLogs: ", err);
-                res.send(500, {
+                res.status(500).send({
                     message: "DB error"
                 });
                 return;
@@ -3172,7 +2807,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             var instance = instances[0];
             credentialCryptography.decryptCredential(instance.credentials, function(err, decryptedCredentials) {
                 if (err) {
-                    res.send(500, {
+                    res.status(500).send({
                         message: "error occured while decrypting credentials"
                     });
                     return;
@@ -3210,7 +2845,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         });
                     }
                     if (err) {
-                        res.send(500, {
+                        res.status(500).send({
                             message: "Unable to run service cmd on instance"
                         });
                         return;
@@ -3220,7 +2855,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             message: "cmd ran successfully"
                         });
                     } else {
-                        res.send(500, {
+                        res.status(500).send({
                             message: "cmd failed. code : " + ret
                         });
                     }
@@ -3267,7 +2902,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         "instanceIP": instances[i].instanceIP
                     };
                     _docker.runDockerCommands(cmd, instances[i]._id, function(err, retCode) {
-                        //alert('Done');
                         var _stdout = stdOut.split('\r\n');
                         logger.debug('Docker containers : %s', _stdout.length);
                         var start = false;
@@ -3281,17 +2915,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             if (_stdout[v].length == 1)
                                 start = true;
                             if (v >= _stdout.length - 1)
-                            //res.end(so);
                                 instanceObj.containers = so;
                             containerList.push(instanceObj);
                         });
 
                     }, function(stdOutData) {
                         stdOut += stdOutData;
-                        // alert(stdOutData);
                     }, function(stdOutErr) {
                         logger.error("Error hits to fetch docker details", stdOutErr);
-                        //res.send(500);
                     });
                 }
                 res.send(containerList);

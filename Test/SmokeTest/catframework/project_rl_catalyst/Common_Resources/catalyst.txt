@@ -17,11 +17,11 @@ Resource           ${CATALYST TEST DATA}/${TESTDATA}
 ${SERVER}                   ${ENVIRONMENT SERVER}
 ${BROWSER}                  ${BROWSER TYPE}
 ${TESTDATA}                ${ENV}.txt
-#${DELAY}             4
-${DELAY}               2             #15
-#${SHORT DELAY}       1
+
+${DELAY}               1             #15
+
 ${SHORT DELAY}       0
-${DELAY SECONDS}       5 seconds
+${DELAY SECONDS}       1 seconds
 
 ${ROOTPATH}              /home/ubuntu/development/catalyst/D4D/Test/SmokeTest/catframework/project_rl_catalyst
 ${CATALYST SUITES}           ${ROOTPATH}/Test_Suites

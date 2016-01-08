@@ -1,3 +1,13 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
+// This file act as a Controller which contains CFN related all end points.
+
+
 var CloudFormation = require('_pr/model/cloud-formation');
 var errorResponses = require('./error_responses');
 var AWSCloudFormation = require('_pr/lib/awsCloudFormation');
@@ -16,7 +26,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.get('/cloudformation/:cfId', function(req, res) {
         CloudFormation.getById(req.params.cfId, function(err, cloudFormation) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (cloudFormation) {
@@ -33,7 +43,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.get('/cloudformation/:cfId/status', function(req, res) {
         CloudFormation.getById(req.params.cfId, function(err, cloudFormation) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (cloudFormation) {
@@ -55,7 +65,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             instancesDao.removeInstancebyId(req.params.instanceId, function(err, data) {
                 if (err) {
                     logger.error("Instance deletion Failed >> ", err);
-                    res.send(500, errorResponses.db.error);
+                    res.status(500).send(errorResponses.db.error);
                     return;
                 }
                 logger.debug("Exit delete() for /instances/%s", req.params.instanceid);
@@ -66,14 +76,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
         CloudFormation.getById(req.params.cfId, function(err, cloudFormation) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (cloudFormation) {
                 AWSProvider.getAWSProviderById(cloudFormation.cloudProviderId, function(err, aProvider) {
                     if (err) {
                         logger.error("Unable to fetch provide", err);
-                        res.send(500, errorResponses.db.error);
+                        res.status(500).send(errorResponses.db.error);
                     }
                     var cryptoConfig = appConfig.cryptoSettings;
                     var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
@@ -82,7 +92,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     keys.push(aProvider.secretKey);
                     cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
                         if (err) {
-                            res.send(500, {
+                            res.status(500).send({
                                 message: "Failed to decrypt accessKey or secretKey"
                             });
                             return;
@@ -97,7 +107,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         awsCF.deleteStack(cloudFormation.stackId, function(err, deletedStack) {
                             if (err) {
                                 logger.error("Unable to delete stack from aws", err);
-                                res.send(500, {
+                                res.status(500).send({
                                     message: "Unable to delete stack from aws"
                                 });
                                 return;
@@ -105,7 +115,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             configmgmtDao.getChefServerDetails(cloudFormation.infraManagerId, function(err, chefDetails) {
                                 if (err) {
                                     logger.debug("Failed to fetch ChefServerDetails ", err);
-                                    res.send(500, errorResponses.chef.corruptChefData);
+                                    res.status(500).send(errorResponses.chef.corruptChefData);
                                     return;
                                 }
                                 var chef = new Chef({
@@ -117,7 +127,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 });
                                 instancesDao.getInstancesByCloudformationId(cloudFormation.id, function(err, instances) {
                                     if (err) {
-                                        res.send(500, errorResponses.db.error);
+                                        res.status(500).send(errorResponses.db.error);
                                         return;
                                     }
                                     var instanceIds = [];
@@ -140,7 +150,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     instancesDao.removeInstancebyCloudFormationId(cloudFormation.id, function(err, deletedData) {
                                         if (err) {
                                             logger.error("Unable to delete stack instances from db", err);
-                                            res.send(500, {
+                                            res.status(500).send({
                                                 message: "Unable to delete stack from aws"
                                             });
                                             return;
@@ -148,7 +158,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         CloudFormation.removeById(cloudFormation.id, function(err, deletedStack) {
                                             if (err) {
                                                 logger.error("Unable to delete stack from db", err);
-                                                res.send(500, {
+                                                res.status(500).send({
                                                     message: "Unable to delete stack from db"
                                                 });
                                                 return;
@@ -176,13 +186,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.get('/cloudformation/:cfId/instances', function(req, res) {
         CloudFormation.getById(req.params.cfId, function(err, cloudFormation) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (cloudFormation) {
                 instancesDao.getInstancesByCloudformationId(cloudFormation.id, function(err, instances) {
                     if (err) {
-                        res.send(500, errorResponses.db.error);
+                        res.status(500).send(errorResponses.db.error);
                         return;
                     }
                     res.send(200, instances);
@@ -199,14 +209,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.get('/cloudformation/:cfId/events', function(req, res) {
         CloudFormation.getById(req.params.cfId, function(err, cloudFormation) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (cloudFormation) {
                 AWSProvider.getAWSProviderById(cloudFormation.cloudProviderId, function(err, aProvider) {
                     if (err) {
                         logger.error("Unable to fetch provider", err);
-                        res.send(500, errorResponses.db.error);
+                        res.status(500).send(errorResponses.db.error);
                     }
                     var cryptoConfig = appConfig.cryptoSettings;
                     var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
@@ -216,12 +226,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                     cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
                         if (err) {
-                            res.send(500, {
+                            res.status(500).send({
                                 message: "Failed to decrypt accessKey or secretKey"
                             });
                             return;
                         }
-
 
                         var awsSettings = {
                             "access_key": decryptedKeys[0],
@@ -229,11 +238,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             "region": cloudFormation.region,
                         };
                         var awsCF = new AWSCloudFormation(awsSettings);
-                        //var nextToken = req.query.nextToken;
                         awsCF.getAllStackEvents(cloudFormation.stackId, function(err, data) {
-
                             if (err) {
-                                res.send(500, {
+                                res.status(500).send({
                                     message: "Failed to fetch stack events from aws"
                                 });
                                 return;
@@ -254,7 +261,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.get('/cloudformation/:cfId/resources', function(req, res) {
         CloudFormation.getById(req.params.cfId, function(err, cloudFormation) {
             if (err) {
-                res.send(500, errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (cloudFormation) {
@@ -262,7 +269,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 AWSProvider.getAWSProviderById(cloudFormation.cloudProviderId, function(err, aProvider) {
                     if (err) {
                         logger.error("Unable to fetch provide", err);
-                        res.send(500, errorResponses.db.error);
+                        res.status(500).send(errorResponses.db.error);
                     }
                     var cryptoConfig = appConfig.cryptoSettings;
                     var cryptography = new Cryptography(cryptoConfig.algorithm, cryptoConfig.password);
@@ -271,7 +278,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     keys.push(aProvider.secretKey);
                     cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
                         if (err) {
-                            res.send(500, {
+                            res.status(500).send({
                                 message: "Failed to decrypt accessKey or secretKey"
                             });
                             return;
@@ -286,9 +293,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         awsCF.listAllStackResources(cloudFormation.stackId, function(err, resources) {
                             if (err) {
                                 logger.error("Unable to fetch provide", err);
-                                res.send(500, errorResponses.db.error);
+                                res.status(500).send(errorResponses.db.error);
                             }
-                            res.send(200,resources);
+                            res.send(200, resources);
 
                         });
                     });
@@ -298,8 +305,4 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
 
     });
-
-
-
-
 };

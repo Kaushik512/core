@@ -1,3 +1,13 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
+// This file act as a Controller which contains notification related all end points.
+
+
 var https = require('https');
 var instancesDao = require('../model/classes/instance/instance');
 var EC2 = require('../lib/ec2.js');
@@ -15,42 +25,23 @@ var AWSProvider = require('../model/classes/masters/cloudprovider/awsCloudProvid
 var VMImage = require('../model/classes/masters/vmImage.js');
 var currentDirectory = __dirname;
 var AWSKeyPair = require('../model/classes/masters/cloudprovider/keyPair.js');
-
 var CloudFormation = require('_pr/model/cloud-formation');
 var AwsAutoScaleInstance = require('_pr/model/aws-auto-scale-instance');
 var AWSCloudFormation = require('_pr/lib/awsCloudFormation.js');
 var masterUtil = require('_pr/lib/utils/masterUtil.js');
 var credentialCryptography = require('_pr/lib/credentialcryptography');
-
-
 var crontab = require('node-crontab');
-
 var vmwareProvider = require('_pr/model/classes/masters/cloudprovider/vmwareCloudProvider.js');
 var VmwareCloud = require('_pr/lib/vmware.js');
 
-
-
-
-
-
-
 module.exports.setRoutes = function(app, socketIo) {
-
-
     // setting up socket.io
-
     var socketCloudFormationAutoScate = socketIo.of('/cloudFormationAutoScaleGroup');
 
     socketCloudFormationAutoScate.on('connection', function(socket) {
         socket.on('joinCFRoom', function(data) {
-            console.log('room joined', data);
+            logger.debug('room joined', data);
             socket.join(data.orgId + ':' + data.bgId + ':' + data.projId + ':' + data.envId);
-            // setTimeout(function(){
-            //  console.log('firing timeout');
-            //  socketCloudFormationAutoScate.to(data.orgId + ':' + data.bgId + ':' + data.projId + ':' + data.envId).emit('cfAutoScaleInstanceRemoved',{
-            //     instanceId:'560d17697c5a558126d5b1df'
-            //  });
-            // },15000)
         });
 
     });
@@ -74,9 +65,9 @@ module.exports.setRoutes = function(app, socketIo) {
 
                     if (confirmationURL) {
                         https.get(confirmationURL, function(res) {
-                            console.log("Got response: " + res.statusCode);
+                            logger.debug("Got response: " + res.statusCode);
                         }).on('error', function(e) {
-                            console.log("Got error: " + e.message);
+                            logger.debug("Got error: " + e.message);
                         });
                         res.send(200);
                     } else {
@@ -84,15 +75,15 @@ module.exports.setRoutes = function(app, socketIo) {
                     }
 
                 } else if (notificationType === 'Notification') { // message notification
-                    console.log('Got message');
-                    console.log(' Notification Subject ==> ', reqBody.Subject);
-                    console.log(' Notification Message  ==> ', reqBody.Message);
+                    logger.debug('Got message');
+                    logger.debug(' Notification Subject ==> ', reqBody.Subject);
+                    logger.debug(' Notification Message  ==> ', reqBody.Message);
                     var autoScaleMsg = JSON.parse(reqBody.Message);
-                    console.log("service ==> " + typeof autoScaleMsg);
+                    logger.debug("service ==> " + typeof autoScaleMsg);
                     if (autoScaleMsg.Service == "AWS Auto Scaling" && autoScaleMsg.StatusCode !== 'Failed') {
                         var autoScaleId = autoScaleMsg.AutoScalingGroupName;
                         if (autoScaleId) {
-                            console.log('finding by autoscale topic arn ==>' + topicArn);
+                            logger.debug('finding by autoscale topic arn ==>' + topicArn);
 
                             if (!topicArn) {
                                 return;
@@ -102,7 +93,7 @@ module.exports.setRoutes = function(app, socketIo) {
                                     logger.error(err);
                                     return;
                                 }
-                                console.log('found by autoscaleid ==>' + cloudFormations.length);
+                                logger.debug('found by autoscaleid ==>' + cloudFormations.length);
                                 if (cloudFormations && cloudFormations.length) {
 
                                     var cloudFormation = cloudFormations[0];
@@ -128,7 +119,7 @@ module.exports.setRoutes = function(app, socketIo) {
                                                             logger.error("Unable to delete instance by instance id", err);
                                                             return;
                                                         }
-                                                        console.log('emiting delete event');
+                                                        logger.debug('emiting delete event');
                                                         socketCloudFormationAutoScate.to(instance.orgId + ':' + instance.bgId + ':' + instance.projectId + ':' + instance.envId).emit('cfAutoScaleInstanceRemoved', {
                                                             instanceId: instance.id,
                                                             cloudformationId: cloudFormation.id
@@ -150,7 +141,6 @@ module.exports.setRoutes = function(app, socketIo) {
                                                 logger.error("Unable to fetch infra manager details ", err);
                                                 return;
                                             }
-                                            //logger.debug("infraManagerDetails", infraManagerDetails);
                                             if (!infraManagerDetails) {
                                                 logger.error("infra manager details is null");
                                                 return;
@@ -207,12 +197,11 @@ module.exports.setRoutes = function(app, socketIo) {
                                                         for (var k = 0; k < reservations.length; k++) {
 
                                                             if (reservations[k].Instances && reservations[k].Instances.length) {
-                                                                //instances = reservations[k].Instances;
                                                                 instances = instances.concat(reservations[k].Instances);
                                                             }
 
 
-                                                            console.log(awsRes);
+                                                            logger.debug(awsRes);
 
                                                         }
                                                         logger.debug('Instances length ==>', instances.length);
@@ -220,10 +209,6 @@ module.exports.setRoutes = function(app, socketIo) {
                                                         var jsonAttributesObj = {
                                                             instances: {}
                                                         };
-
-                                                        /*for (var i = 0; i < instances.length; i++) {
-                                                            jsonAttributesObj.instances[ec2Resources[instances[i].InstanceId]] = instances[i].PublicIpAddress;
-                                                        }*/
                                                         for (var i = 0; i < instances.length; i++) {
                                                             addAndBootstrapInstance(instances[i], jsonAttributesObj);
                                                         }
@@ -264,16 +249,6 @@ module.exports.setRoutes = function(app, socketIo) {
 
                                                                 var runlist = cloudFormation.autoScaleRunlist || [];
                                                                 var instanceUsername = cloudFormation.autoScaleUsername || 'ubuntu';
-                                                                /*
-                                                                for (var count = 0; count < blueprint.blueprintConfig.instances.length; count++) {
-                                                                if (logicalId === blueprint.blueprintConfig.instances[count].logicalId) {
-                                                                    instanceUsername = blueprint.blueprintConfig.instances[count].username;
-                                                                    runlist = blueprint.blueprintConfig.instances[count].runlist;
-                                                                    break;
-                                                                }
-                                                                }*/
-
-
 
                                                                 var instance = {
                                                                     name: instanceName,
@@ -305,14 +280,6 @@ module.exports.setRoutes = function(app, socketIo) {
                                                                         username: instanceUsername,
                                                                         pemFileLocation: encryptedPemFileLocation,
                                                                     },
-                                                                    /*blueprintData: {
-                                                                    blueprintId: blueprint._id,
-                                                                    blueprintName: blueprint.name,
-                                                                    templateId: blueprint.templateId,
-                                                                    templateType: blueprint.templateType,
-                                                                    templateComponents: blueprint.templateComponents,
-                                                                    iconPath: blueprint.iconpath
-                                                                },*/
                                                                     cloudFormationId: cloudFormation._id
                                                                 };
 
@@ -324,11 +291,8 @@ module.exports.setRoutes = function(app, socketIo) {
                                                                 } else {
                                                                     instance.puppet = {
                                                                         serverId: infraManagerDetails.rowid
-                                                                            /*chefNodeName: req.body.fqdn*/
                                                                     }
                                                                 }
-
-
 
                                                                 logger.debug('Creating instance in catalyst');
                                                                 instancesDao.createInstance(instance, function(err, data) {
@@ -405,11 +369,10 @@ module.exports.setRoutes = function(app, socketIo) {
                                                                                     return;
                                                                                 }
 
-
                                                                                 var infraManager;
                                                                                 var bootstrapOption;
                                                                                 if (infraManagerDetails.configType === 'chef') {
-                                                                                    console.log('In chef ');
+                                                                                    logger.debug('In chef ');
                                                                                     infraManager = new Chef({
                                                                                         userChefRepoLocation: infraManagerDetails.chefRepoLocation,
                                                                                         chefUserName: infraManagerDetails.loginname,
@@ -437,7 +400,7 @@ module.exports.setRoutes = function(app, socketIo) {
                                                                                     } else {
                                                                                         puppetSettings.password = infraManagerDetails.puppetpassword;
                                                                                     }
-                                                                                    console.log('puppet pemfile ==> ' + puppetSettings.pemFileLocation);
+                                                                                    logger.debug('puppet pemfile ==> ' + puppetSettings.pemFileLocation);
                                                                                     bootstrapOption = {
                                                                                         host: instance.instanceIP,
                                                                                         username: instance.credentials.username,
@@ -541,7 +504,7 @@ module.exports.setRoutes = function(app, socketIo) {
                                                                                                     setTimeout(function() {
                                                                                                         infraManager.getNode(nodeName, function(err, nodeData) {
                                                                                                             if (err) {
-                                                                                                                console.log(err);
+                                                                                                                logger.debug(err);
                                                                                                                 return;
                                                                                                             }
                                                                                                             // is puppet node
@@ -604,8 +567,6 @@ module.exports.setRoutes = function(app, socketIo) {
 
                                                                                             }
 
-
-
                                                                                         } else {
                                                                                             instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
                                                                                                 if (err) {
@@ -647,20 +608,15 @@ module.exports.setRoutes = function(app, socketIo) {
                                                                                 });
                                                                             });
 
-
-
                                                                         });
                                                                     });
                                                                 });
 
                                                             });
 
-
                                                         }
 
                                                     });
-
-
 
                                                 });
                                             });
@@ -725,7 +681,6 @@ module.exports.setRoutes = function(app, socketIo) {
             }
 
             if (instances.length > 0) {
-                //var instanceIds = [];
                 for (var ins = 0; ins < instances.length; ins++) {
                     (function(ins) {
                         //proceed only if the instance is part of the aws provider
@@ -750,7 +705,7 @@ module.exports.setRoutes = function(app, socketIo) {
                                                 keys.push(aProvider.secretKey);
                                                 cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
                                                     if (err) {
-                                                        res.send(500, "Failed to decrypt accessKey or secretKey");
+                                                        res.status(500).send("Failed to decrypt accessKey or secretKey");
                                                         return;
                                                     }
                                                     var ec2 = new EC2({
@@ -781,7 +736,6 @@ module.exports.setRoutes = function(app, socketIo) {
                                                             return;
                                                         }
 
-                                                        //logger.debug("Described Instances from AWS: ", JSON.stringify(awsInstances));
                                                         if (awsInstances) {
                                                             if (awsInstances.Reservations.length === 0) {
                                                                 if (instances[ins].instanceState != "terminated") {

@@ -11,7 +11,7 @@
                   <h4 class="widget-margin" style="color:black;">New Docker  <span id="spndocker"></span></h4>
                </div>
                <div class="widget-body">
-                  <div class="widget-main" style="min-height:300px">
+                  <div class="widget-main widgetHeight">
                      <div>
                         <section id="widget-grid" class="">
                            <!-- START ROW -->
@@ -24,7 +24,7 @@
                                       <div class="widget-body no-padding">
                                         <div class="col-lg-6 col-md-6" style="margin-top:25px">
 
-                                                        <label for="category">Organization:<span style="color:Red;" class="control-label">&nbsp;*</span>
+                                                        <label for="category">Organization:<span class="control-label redSpan">&nbsp;*</span>
                                                         </label>
 
                                                         <select id="orgname" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central" cdata="catalyst" cat-validation="required" cat-validation="required" linkedfields="['configname']" onchange="$('#configname').change();">
@@ -33,61 +33,30 @@
 
                                                     </div>
                                        <div class="col-lg-6 col-md-6" style="margin-top:25px">
-                                          <label for="">Name:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                          <label for="">Name:<span class="control-label redSpan">&nbsp;*</span></label>
                                           <label id="msgdockerrepositoryname" style="display:none;color:red;float:right;">Required</label>
                                           <!-- <i class="icon-append fa fa-building"></i> -->
                                           <input name="ctl00$MainContent$orgname" value="" id="dockerreponame" class="form-control" type="text"  cdata="catalyst" uniqueconditionedby="dockerreponame" unique="true"  cat-validation="required,nospecial,max15">
                                        </div>
                                        <div class="col-lg-6 col-md-6" style="margin-top:25px">
-                                          <label for="">Docker Hub Registry Name:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                          <label for="">Docker Hub Registry Name:<span class="control-label redSpan">&nbsp;*</span></label>
                                           <label id="msguserName" style="display:none;color:red;float:right;">Required</label>
                                           <!-- <i class="icon-append fa fa-building"></i> -->
                                           <input name="ctl00$MainContent$orgname" value="" id="dockerrepopath" class="form-control" type="text"  cdata="catalyst"  cat-validation="required">
                                        </div>
                                        <div class="col-lg-6 col-md-6" style="margin-top:25px">
-                                          <label for="">User ID: <span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                          <label for="">User ID: <span class="control-label redSpan">&nbsp;*</span></label>
                                           <!-- <i class="icon-append fa fa-building"></i> -->
                                           <input name="ctl00$MainContent$orgname" value="" id="dockeruserid" class="form-control" type="text"  cdata="catalyst">
                                        </div>
                                        <div class="col-lg-6 col-md-6" style="margin-top:25px">
-                                          <label for="">Email ID:<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                          <label for="">Email ID:<span class="control-label redSpan">&nbsp;*</span></label>
                                           <input name="ctl00$MainContent$orgname" value="" id="dockeremailid" class="form-control" type="text"  cdata="catalyst" cat-validation="required,email">
                                        </div>
                                        <div class="col-lg-6 col-md-6" style="margin-top:25px">
-                                          <label for="">Password: <span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                          <label for="">Password: <span class="control-label redSpan">&nbsp;*</span></label>
                                           <input name="ctl00$MainContent$orgname" value="" id="dockerpassword" class="form-control" type="password"  cdata="catalyst" cat-validation="required" value="*********">
                                        </div>
-                                       <div class="col-lg-6 col-md-6" style="margin-top:25px" id="frmconfigmanagement">
-                                          <div class="smart-forms">
-                                             <label>Certificate Key File:</label>
-                                             <label for="file" class="field file">
-                                                <div class="imgdiv" value="1"></div>
-                                                <span class="button btn-primary">Browse</span>
-                                                <input id="certkey" keyfield="dockerreponame" type="file" onchange="this.parentNode.nextSibling.value = this.value"  cdata="catalyst" class="gui-file"><input type="text" readonly="" class="gui-input">
-                                             </label>
-                                          </div>
-                                       </div>
-                                        <div class="col-lg-6 col-md-6" style="display:none">
-                                          <a style="cursor:pointer;" data-toggle="modal" data-backdrop="false" id="dockerrepoanchorDetails" href="#dockerrepodetailsModal"> <img title="Add Repo Details" data-placement="top" rel="tooltip" class="adddockerrepoDetails" style="float:right;margin-top:20px;" src="img/add.png"></a>
-                                          <label style="float:left;margin-top:20px;">Repositories :</label>
-                                          <div class="table-responsive table-div">
-                                            <table id="tabledockerrepositoryDetails" class="table table-striped table-bordered table-hover dataTable" style="border:1px solid #eeeeee !important; text-align:center;font-size:12px;margin-top:45px;" width="100%" cellpadding="5px">
-                                                <thead>
-                                                    <tr class="rowCustomStyle" style="font-weight:bold;">
-                                                      <!-- <td style="color:#fff;background-color: #2c3742;">Repository</td> -->
-                                                      <td style="color:#fff;background-color: #2c3742;">Name</td>
-                                                      <td style="color:#fff;background-color: #2c3742;">Action</td>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="dockerrepoDeployTbody">
-                                                </tbody>
-                                            </table>
-                                          </div>
-                                        </div>
-                                        <div class="col-lg-6 col-md-6" style="margin-top:25px; display:none">
-                                          <label for="name">Repository Details:</label>
-                                          <input autofocus name="ctl00$MainContent$orgname" value="" id="dockerrepositories" class="form-control" type="text"  cdata="catalyst">
-                                        </div>
                                     </div>
                                     <!-- end widget content -->
                                  </div>
@@ -120,40 +89,7 @@
    </div>
 </div>
 <!--row ends here-->
-<!--modal for Repo Deploy Details-->
-<div class="modal fade" id="dockerrepodetailsModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-   <div class="modal-dialog">
-      <div class="modal-content">
-         <form class="" id="dockerrepoDetailsCreate" autocomplete="off">
-            <div class="modal-header">
-               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-               &times;
-               </button>
-               <h4 class="modal-title">
-                  <img style="width:18px;margin-left:6px;" src="img/tasksmall.png">&nbsp;&nbsp;Add Docker Repository
-               </h4>
-            </div>
-            <div class="modal-body" style="height:100px;">
-               <div class="col-lg-6 col-md-6">
-                  <label>Name</label>
-                  <input type="text" class="form-control" id="dockerrepoNameCreate" placeholder="relevancelab/tomcat" />
-               </div>
-            </div>
-            <div class="modal-footer">
-              <a type="button" class="btn btn-default" data-dismiss="modal">
-                <i class="ace-icon fa fa-times bigger-110" style="margin-right: 5px;"></i>Cancel
-              </a>
-              <button class="btn btn-primary btn-mini" id="savedockerRepoDetails">
-                <i class="ace-icon fa fa-check bigger-110"></i>
-                Save
-              </button>
-            </div>
-         </form>
-      </div>
-   </div>
-</div>
 
-<!--modal for Repo Deploy Details ends here-->
 <!--Popup for selecting a cloud provider before proceeding-->
 <script>
   $('#dockerrepoanchorDetails').click(function(e) {
@@ -179,17 +115,7 @@
    }
    $("#tabledockerrepositoryDetails_length").hide();
    $("#tabledockerrepositoryDetails_filter").hide();
-   // For now repositories table view not required, so commenting the code.
-   /*$("#savecreateDockerbtn").click(function(e){
-      var dockerrepositories = [];
-        var $repoTableBody = $('#tabledockerrepositoryDetails tbody');
-        var $trs = $repoTableBody.find('tr');
-        $trs.each(function(e){
-          var $this = $(this);
-            dockerrepositories.push($this.attr('dockerrepoName'));
-        });
-        $('#dockerrepositories').val(JSON.stringify(dockerrepositories));
-   });*/
+   
    $("#savedockerRepoDetails").click(function(e) {
        e.preventDefault();
        var repoName = $("#dockerrepoNameCreate").val();
@@ -226,33 +152,29 @@
        $(".modal-backdrop.fade.in").detach();
        $('#btncancel').click();
    }
-   function setfolderpath(){ //Uncomment below line to set the folder path to uploaded files.
-       var folderpath = ''; //'/' + $('#dockerreponame').val() + "/dockerfiles/";
-    //   alert(folderpath);
+   function setfolderpath(){ 
+       var folderpath = ''; 
            $('#folderpath').val(folderpath);
    }
    function validateandsaveform(){
-    //alert('hshsh');
     var button = $("form[id*='myForm']").find("div.pull-right > button");
     if(button){
         button.attr('disabled','disabled');
         button.parent().prepend('<label id="masterssavespinner" class="" style="float:left;"><img  style="margin-left:5px;margin-right:25px;margin-top:8px;" src="img/select2-spinner.gif" /></label>')
     }
-    //return;
       setTimeout(function(){
-        /*if(validatedockeruser($('#dockeruserid'),$('#dockerpassword')))
-           {*/
-            //alert('here');
+        if(validatedockeruser($('#dockeruserid'),$('#dockerpassword')))
+           {
             $("#masterssavespinner").detach();
             button.removeAttr('disabled');   
                if(validateForm()) {
                    setfolderpath(); 
                    saveform('18');
                }
-           /*} else {
+        } else {
             $("#masterssavespinner").detach();
             button.removeAttr('disabled');
-           }*/
+           }
       },500)
        
    }
@@ -311,40 +233,6 @@
            return false; // for demo
        });
    });
-
-// For now repositories table view not required, so commenting the code.
-
-   /*$(document).ready(function() {
-    var url = window.location.href;
-      var queryString = url.substring(url.indexOf('?') + 1 );
-      if (queryString != 'new') {
-        $.get('/d4dMasters/docker/'+queryString, function(data) {
-          if(data){
-              var repoList = data.dockerrepositories;
-              if(repoList.length){
-                var $repoDeployTbody = $('#dockerrepoDeployTbody');;
-                for(var j=0; j < repoList.length; j++){
-                  (function(j){
-                    var $tr = $('<tr class="dockerrepoDetailsRow"></tr>');
-                    var $tdName = $('<td class="tddockerreponame" value=' + repoList[j] + ' style="word-break: break-word;"></td>');
-                    $tr.attr('dockerrepoName', repoList[j]);
-                    $tdName.append(repoList[j]);
-                    var $tdAction = $('<td/>');
-                    $tdAction.append('<div style="margin-right:17px;float:right;" class="btn-group"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
-                      $tdAction.find('.deleteRow').click(function() {
-                        $repoDetails.row($tr).remove().draw(true);
-                      });
-                      $tr.append($tdName).append($tdAction);
-                      $repoDeployTbody.append($tr);
-                      $repoDetails.row.add($tr).draw();
-                  })(j);
-                }
-              }
-            }
-        });
-        
-      }
-   });*/
 
    function isUserTypeSuperAdmin(){
     $.get('/d4dMasters/loggedInUser',function(data){

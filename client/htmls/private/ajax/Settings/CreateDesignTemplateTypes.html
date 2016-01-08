@@ -12,7 +12,7 @@
                     <h4 class="widget-margin" style="color:black;">Design Template Type</h4>
                 </div>
                 <div class="widget-body">
-                    <div class="widget-main" style="min-height:300px">
+                    <div class="widget-main widgetHeight">
                         <div>
 
                             <section id="widget-grid" class="">
@@ -33,7 +33,7 @@
                                                             <div class="col-lg-12 col-md-12">
                                                             
                                                                 <div class="col-lg-6 col-md-6">
-                                                                    <label for="">Template Type Name<span style="color:Red;" class="control-label">&nbsp;*</span></label>
+                                                                    <label for="">Template Type Name<span class="control-label redSpan">&nbsp;*</span></label>
                                                                         <label id="msgOrgName" style="display:none;color:red;float:right;">Required</label>
                                                                    
                                                                     <input name="ctl00$MainContent$orgname" value="" id="templatetypename" unique="true"  uniqueconditionedby="templatetypename" class="form-control" type="text"   cdata="catalyst" cat-validation="required,max15,nospace"><span data-val-controltovalidate="orgname" id="MainContent_Req_orgname"  unique="true" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
@@ -53,7 +53,7 @@
                                                             <div class="col-lg-12 col-md-12">
                                                                  <div class="col-lg-6 col-md-6">
 
-                                                        <label for="category">Organization:<span style="color:Red;" class="control-label">&nbsp;*</span>
+                                                        <label for="category">Organization:<span class="control-label redSpan">&nbsp;*</span>
                                                         </label>
 
                                                         <select id="orgname" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central" cdata="catalyst" cat-validation="required" cat-validation="required">
@@ -63,13 +63,14 @@
                                                             </div>
                                                             <div class="col-lg-6 col-md-6">
 
-                                                        <label for="category">Type:<span style="color:Red;" class="control-label">&nbsp;*</span>
+                                                        <label for="category">Type:<span class="control-label redSpan">&nbsp;*</span>
                                                         </label>
 
                                                         <select id="templatetype" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central" cdata="catalyst" cat-validation="required" cat-validation="required">
                                                             <option value="">Select Type</option>
                                                             <option value="chef">Chef</option>
                                                             <option value="cft">CFT</option>
+                                                            <option value="arm">ARMTemplate</option>
                                                             <option value="ami">OS Image</option>
                                                             <option value="docker">Docker</option>
                                                         </select>
@@ -101,14 +102,14 @@
 
                 <div class="widget-toolbox clearfix">
                        <div class="btn-group pull-right">
-                        <button class="btn btn-primary btn-mini" style="margin-right:11px;">
+                           <a class="btn btn-default btn-mini" onclick="window.history.back();" style="margin-right:11px;" id="btncancel">
+                               <i class="ace-icon fa fa-times bigger-110"></i>
+                               Cancel
+                           </a>
+                           <button class="btn btn-primary btn-mini">
                             <i class="ace-icon fa fa-check bigger-110"></i>
                              Save
                         </button>
-                           <a class="btn btn-primary btn-mini" onclick="window.history.back();" id="btncancel">
-                               <i class="ace-icon fa fa-undo bigger-110"></i>
-                               Cancel
-                           </a>
                         </div>
                 </div>
 

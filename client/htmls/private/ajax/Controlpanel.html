@@ -11,11 +11,11 @@
             <div class="widget-body" style="font-size:14px;">
                 <div class="">
 
-                    <ul class="thumbnails list-unstyled">
+                    <ul class="thumbnails list-unstyled col-lg-2 col-md-2 col-sm-12">
 
 
                         <!--Card for Planning starts here-->
-                        <li class="domain-role-thumbnail" style="padding-top:58px;margin-left:17px;">
+                        <li class="domain-role-thumbnail cpCardStyle">
                           <div class="flip-toggle container">
                             <div class="card">
                               <div class="front">
@@ -99,7 +99,7 @@
 
     <!--<div style="height:200px;border:1px solid blue;margin-left:200px;width:0px"></div>-->
 
-    <ul id="myTab3" class="nav nav-tabs pull-left" style="padding: 10px 0 0 40px;border-bottom: medium none; position: auto; width: 80%; background-color: #2c3742;border-radius:11px 11px 0px 0px;">
+    <ul id="myTab3" class="nav nav-tabs pull-left col-lg-9 col-md-9 col-sm-12 tabStyle">
 
         <li class="active" style="margin-right: 30px;">
               <a style="color: #eee;border-radius: 5px 5px 0 0 ; padding: 9px 10px 13px;" href="#l1" data-toggle="tab" style="font-size: 16px" ><i class="fa fa-fw fa-exclamation-circle" style="font-size: 16px"></i>Information</a>
@@ -114,7 +114,7 @@
               <a id="controlPanelLogTab" style="color: #eee;border-radius: 5px 5px 0 0 ; padding: 9px 10px 13px;" href="#l4" data-toggle="tab" style="font-size: 14px"> <i class="fa fa-fw fa-clock-o"></i>Logs</a>
           </li>
     </ul>
-    <div id="myTabContent3" class="nav pull-left tab-content" style="position: auto; left: 0px; width: 80%;margin-top:4px;margin-bottom:60px;">
+    <div id="myTabContent3" class="nav pull-left tab-content col-lg-9 col-md-9 col-sm-12 tabContent">
         <!-- info tab contents starts here -->
         <div class="tab-pane fade in active " id="l1" style="min-height:405px;overflow-y:auto;">
           <div class="panel-group smart-accordion-default">
@@ -718,189 +718,6 @@
     </div><!-- /.modal-dialog -->
 </div><!--/.modal-assignedExecute-->
 
-<!--modal for help-->
-
-<div class="modal fade" id="modalForHelp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog " style="">
-        <div class="modal-content"> 
-            
-             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">
-                    &nbsp;CookBook Information
-                </h4>
-
-            </div> 
-            
-            
-             <div class="modal-body" style="height:400px;overflow-y:auto">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                        <th>CookBook Name</th>
-                        <th>Description</th>
-                        <tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                        <td>apache2-windows</td>
-                        <td>Installation &amp; Configuration of Apache Server</td>
-                        </tr>
-                            <tr>
-                                <td>apache2</td>
-                                <td>Installation &amp; Configuration of Apache Server</td>
-                            </tr>
-                        <!--2nd set-->
-                        <tr>
-                        <td>cassandra</td>
-                        <td>Installation and configuration of Cassandra Server</td>
-                        </tr>
-                            <tr>
-                                <td>eclipse_windows</td>
-                                <td>Installtion of Eclispe on Windows</td>
-                            </tr>   
-                            <!--3rd set-->
-
-                        <tr>
-                        <td>visualstudio_windows</td>
-                        <td>Installation of Visual Studio</td>
-                        </tr>
-                            <tr>
-                                <td>iis</td>
-                                <td>Installation and configuration of IIS Server</td>
-                            </tr>
-                            <!--4th set-->
-                        <tr>
-                        <td>jboss7</td>
-                        <td>Installation and Configuration of JBOSS7 Server</td>
-                        </tr>
-                            <tr>
-                                <td>tomcat</td>
-                                <td>Installs and configures Tomcat, Java servlet engine and webserver</td>
-                            </tr>
-                            <!--5th set-->
-                            <tr>
-                        <td>weblogic</td>
-                        <td>Installation and Configuration of weblogic</td>
-                        </tr>
-                            <tr>
-                                <td>java</td>
-                                <td>Installation of Java</td>
-                            </tr>
-                            <!--6th set-->
-                            <tr>
-                        <td>java_windows</td>
-                        <td>Installation of Java</td>
-                        </tr>
-                            <tr>
-                                <td>nodejs</td>
-                                <td>Installation of NodeJS and npm package</td>
-                            </tr>   
-                            <!--7th set-->
-
-                            <tr>
-                        <td>php</td>
-                        <td>Installation and Configuration of PHP</td>
-                        </tr>
-                            <tr>
-                                <td>lamp_role</td>
-                                <td>Installation and Configuration of LAMP stack</td>
-                            </tr>   
-
-                            <!--8th set-->
-                            <tr>
-                        <td>mysql-windows</td>
-                        <td>Installation and Configuration of Mysql</td>
-                        </tr>
-                            <tr>
-                                <td>mysql</td>
-                                <td>Installation and Configuration of Mysql</td>
-                            </tr>   
-                            <!--9th set-->
-
-                            <tr>
-                        <td>oracle_windows</td>
-                        <td>Installation and Configuration of Oracle</td>
-                        </tr>
-                            <tr>
-                                <td>postgresql</td>
-                                <td>Installation and Configurationof postgresql</td>
-                            </tr>   
-                            <!--10th set-->
-                            <tr>
-                        <td>service_apache</td>
-                        <td>Service cookbook for apache server</td>
-                        </tr>
-                            <tr>
-                                <td>service_iptables</td>
-                                <td>Service cookbook for firewall</td>
-                            </tr>   
-
-                            <!--11th set-->
-                            <tr>
-                        <td>service_jboss</td>
-                        <td>Service cookbook for Jboss server</td>
-                        </tr>
-                            <tr>
-                                <td>service_mysql</td>
-                                <td>Service cookbook for Mysql</td>
-                            </tr>   
-                            <!--12th set-->
-                            <tr>
-                        <td>service_nginx</td>
-                        <td>Service cookbook for nginx </td>
-                        </tr>
-                            <tr>
-                                <td>service_tomcat</td>
-                                <td>Service cookbook for tomcat</td>
-                            </tr>   
-                            <!--13th set-->
-                            <tr>
-                        <td>service_weblogic</td>
-                        <td>service cookbook for weblogic</td>
-                        </tr>
-                            <tr>
-                                <td>seven_zip</td>
-                                <td>Installation of 7Zip</td>
-                            </tr>
-                            <!--14th set-->
-                            <tr>
-                        <td>git</td>
-                        <td>Installs git and optionally sets up a git server as a daemon under runit</td>
-                        </tr>
-                            <tr>
-                                <td>wget_windows</td>
-                                <td>Installs wget on windows</td>
-                            </tr>
-                            <!--15th set-->
-                            <tr>
-                        <td>toad_windows</td>
-                        <td>Installation and Configuration of TOAD</td>
-                        </tr>
-                            <tr>
-                                <td>docker</td>
-                                <td>Installation and Configuration of docker engine</td>
-                            </tr>   
-                            <tr>
-                                <td>jenkins</td>
-                                <td>Installs and configures Jenkins CI master &amp; node slaves</td>
-                            </tr>   
-                    </tbody>
-                </table>
-
-            </div>
-            
-                <div class="modal-footer">
-        
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                </div>   
-  
-         </div>
-    </div>
-</div>
-
-
-
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -1004,43 +821,6 @@
   </div>
 </div>
 
-<!--modal for instance edit-->
-
-<div class="modal fade" id="modalforInstanceEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog " style="">
-        <div class="modal-content"> 
-            <form role="form" id="instanceEditNew">
-             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">
-                    &nbsp;Edit Instance Name
-                </h4>
-
-            </div> 
-            
-            
-             <div class="modal-body" style="height:78px;">
-                <div class="col-lg-6 col-md-6">
-
-                            <label for="instanceEditName">Name<span style="color:Red;" class="control-label">&nbsp;*</span></label>
-
-                            <input type="text" name="instanceEditName" class="form-control" id="instanceEditName" autofocus/>
-                </div>
-                
-                    <input type="hidden" id="instanceIDHiddenInput">
-                
-
-            </div>
-            
-               <div class="modal-footer">
-        <a type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times fa-1x"></i>&nbsp;Cancel</a>
-        <button type="submit" id="editSaveBTN" class="btn btn-primary" value="Save"><i class="fa fa-check fa-1x"></i>&nbsp;Save</button>
-      </div>   
-  </form>
-         </div>
-    </div>
-</div>
-
 
 <div class="modal fade" id="instanceTaskModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg" style="">
@@ -1055,9 +835,9 @@
             </div> 
             
             
-             <div class="modal-body" style="min-height:300px;">
-              <div>
-                <div class="col-lg-6">
+             <div class="modal-body">
+              <fieldset>
+                <div class="col-lg-6 col-md-6 col-sm-6">
                   <div class="input-group width100">
                     <label class="input searchTaskLabel">
                       <strong class="fontsize13">Available Task</strong>
@@ -1085,7 +865,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-lg-6" id="selectedTaskForSave">
+                <div class="col-lg-6 col-md-6 col-sm-6" id="selectedTaskForSave">
                   <div class="input-group width100">
                     <label class="input searchTaskLabel">
                       <strong class="fontsize13">Selected Task</strong>
@@ -1097,7 +877,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </fieldset>
             </div>
             
                <div class="modal-footer">
@@ -1390,27 +1170,16 @@ function pollInstanceBootstrapState(instanceId, delay) {
 var logTimeout;
 var stateTimeout;
 $.get('../instances/' + urlParams.id, function(data) {
-    //populateJsonData(data._id);
-    //setting tree and drawing breadcrumb
-    //alert(data.projectId)
     var $selectedOrg = $('.orgsList').find('[data-org="' + urlParams.org + '"]');
-    // alert($selectedOrg);
-
     var orgid = $selectedOrg.click().attr('data-id');
-    //alert(orgid);
     if (orgid) {
         console.log('orgid ==>', orgid);
-        // var $li = $('.'+orgid).find('li[data-envName="'+data.envId+'"]').addClass('active');
-        // $li.parents('li').addClass('active open');
-        // $li.parents('ul').css({'display':'block'});
-        // drawBreadCrumb();
     }
 
     console.log(data);
 
 
     //fetching services list
-    //alert(data.chef.serverId);
     if (data.chef) {
         $.get('/d4dMasters/19/chefserverid/' + data.chef.serverId, function(services) {
             $.get('/d4dMasters/19/commandtype/Service%20Command', function(servicesCmd) {
@@ -1483,29 +1252,6 @@ $.get('../instances/' + urlParams.id, function(data) {
     }};
     var menuAppTaskLI = '';
     var menuTaskListLI = '';
-    /*var menuAppTaskVar = {
-      getmenuAppTask: function(data) {
-        //alert("I am in function");
-        //alert(data.appUrls.length);
-        if (data.appUrls && data.appUrls.length) {
-            for (var k = 0; k < data.appUrls.length; k++) {
-                // if (k == 2) {
-                //     break;
-                // }
-                var url = data.appUrls[k].url;
-                if (data.appUrls[k].url) {
-                    url = url.replace('$host', data.instanceIP);
-                }
-                var tempApp = "<li><a style='font-size:10px;' data-appUrlId='" + data.appUrls[k]._id + "' class='app-url' title='" + url + "' href='" + url + "'' target='_blank' >" + data.appUrls[k].name + "</a></li>";
-                menuAppTaskLI = menuAppTaskLI + tempApp;
-            }
-        } else {
-            menuAppTaskLI = "<li style='font-size:10px;color:#3276b1'>No AppLinks Available</li>";
-        }
-        
-        //alert(menuAppTaskLI);
-        return '<div class="menuAppTask" style="display: none;"><span class="menuAppLinkSpan">App Links</span><ul class="paddingleft32">' + menuAppTaskLI + '</ul></div>';
-    }};*/
     var getOS = function(data) {
             if (data.bootStrapStatus === 'waiting') {
                 console.log('polling bootStrapStatus');
@@ -1560,7 +1306,6 @@ $.get('../instances/' + urlParams.id, function(data) {
                     bootbox.alert('User has No Permission to Stop');
                     return;
                 }
-                //debugger;
                 $(this).parent().find('.actionbuttonShutdown').trigger('click');
 
             } else if ($(this).hasClass('stopped')) {
@@ -1573,7 +1318,6 @@ $.get('../instances/' + urlParams.id, function(data) {
                     bootbox.alert('User has No Permission to Start');
                     return;
                 }
-                //debugger;
                 $(this).parent().find('.actionbuttonStart').trigger('click');
             }
         }
@@ -1612,10 +1356,6 @@ $.get('../instances/' + urlParams.id, function(data) {
     $('.instanceActionBtnCtr').append([$(getStartStopToggler(data)), $spanheadingRightCP]);
     $('.instanceActionBtnCtr').append(showmenuAppTaskVar.getshowmenuAppTask());
     $('.instance-bootstrap-list').append($spanheadingRightCP);
-    //$divHeadingCP.append($spanheadingRightCP);
-    //$domainRolesCaption.append($divHeadingCP);
-
-    //$domainRolesCaption.append(menuAppTaskVar.getmenuAppTask(data));
     $domainRolesCaption.find('.showmenuAppTask').click(function() {
 
         $.get('../instances/' + instanceId, function(data1) {
@@ -1634,8 +1374,7 @@ $.get('../instances/' + urlParams.id, function(data) {
                             break;
                         }
                     }
-                    //var urls= data2.instances[0].appUrls;
-                    //console.log("data2 is:"+urls);
+                    
                     var stringmenuAppTask = '';
                     if (tasks && tasks.length) {
                         $.post('../tasks', {
@@ -1694,10 +1433,8 @@ $.get('../instances/' + urlParams.id, function(data) {
         });
     });
     $('.startstoptoggler').click(startAndStopToggler);
-    // .append('<img src="img/templateicons/'+data.blueprintData.templateId+'.png" style="height:20px;width:20px;margin-right:5px;">').append(data.blueprintData.blueprintName);
     $domainRolesCaption.find('.instance-details-ip strong').html(data.instanceIP);
     $domainRolesCaption.find('.instance-state').html(data.instanceState);
-    //data.instanceState = 'running';
 
     if(data.instanceState != 'running'){
       $('.inspectBtn').hide();
@@ -1802,8 +1539,6 @@ $.get('../instances/' + urlParams.id, function(data) {
                         var $rowDiv = $('<tr class="row rowSpacing"></tr>');
                         var timeString = new Date().setTime(data[i].timestamp);
                         var date = new Date(timeString).toLocaleString(); //converts to human readable strings
-                        /*$rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>' + date + '</div>'));*/
-
                         if (data[i].err) {
                             $rowDiv.append($('<td class="col-lg-12 col-sm-12" style="color:red;"></td>').append('<span class="textLogs">' + date + '</span>' + '&nbsp;&nbsp;&nbsp;' + '<span>' + data[i].log + '</span>'));
                         } else {
@@ -1835,10 +1570,6 @@ $.get('../instances/' + urlParams.id, function(data) {
             }, delay);
         }
         pollLogs(lastTimestamp, 0, true);
-        // $.get('../instances/' + data.id, function(data) {
-        //     //$('#tabInstanceStatus').hide();
-        //     addInstanceToDaddInstanceToDOMOMaddInstanceToDOM(data);
-        // });
     };
 
     var validator = $('#instanceEditNew').validate({
@@ -1934,9 +1665,6 @@ $.get('../instances/' + urlParams.id, function(data) {
             type: "GET",
             url: "/d4dMasters/getuser",
             success: function(usrdata) {
-
-                // alert(JSON.stringify(data));
-                //$("#liuserinfo").html("<i class=\"fa fa-user\"></i>&nbsp;<b>" + usrdata[0]['loginname'] + "</b>&nbsp;[" + usrdata[0]['userrolename'] + "]");
                 var username = '';
                 if (usrdata.user && usrdata.user.length) {
                     if (usrdata.user[0].username) {
@@ -2123,8 +1851,6 @@ $.get('../instances/' + urlParams.id, function(data) {
         if (!chefServerId) {
             var puppetServerId = $this.attr('data-puppetServerId');
             $controlPanelChefRunModalContainer.data('infraManagerType', 'puppet');
-            //$chefRunModalContainer.find('.chefRunlistContainer').empty();
-            //$chefRunModalContainer.find('.attributesViewTableBody').empty();
             $controlPanelChefRunModalContainer.find('.btnUpdateInstanceRunlist').click();
         } else {
             $controlPanelChefRunModalContainer.data('infraManagerType', 'chef');
@@ -2297,8 +2023,6 @@ $.get('../instances/' + urlParams.id, function(data) {
         $tbody.empty();
         var chefServerId = $ccrs.getChefServerId();
         $.post('../chef/servers/' + chefServerId + '/attributes', reqBody, function(attributesList) {
-            //var dataTable = $('#attributesEditListArea').DataTable();
-            //dataTable.clear();
              var $chefRunModalContainer = $('#controlPanelChefRunModalContainer');
              var $tbodyViewAttributes = $chefRunModalContainer.find('.attributesViewTableBody');
                                                           
@@ -2409,10 +2133,6 @@ $.get('../instances/' + urlParams.id, function(data) {
                 }
             }
         }
-
-        //$('#attrtextarea').text(JSON.stringify(attributeObj));
-
-        
         createAttribTableRowFromJson(attributes);
         $modal.modal('hide');
     });
@@ -2491,39 +2211,10 @@ $.get('../instances/' + urlParams.id, function(data) {
     $tr.append('<td scope="col" style="font-size:12px;">Free Memory</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + memoryCalculation(data.hardware.memory.free) + '</td>');
     $hrdwareTbody.append($tr);
 
-    // $tr = $('<tr style="line-height:2.3"></tr>');
-    // $tr.append('<td scope="col" style="font-size:12px;">Total Memory</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.hardware.memory.total + '</td>');
-    // $hrdwareTbody.append($tr);
-
-    // $tr = $('<tr style="line-height:2.3"></tr>');
-    // $tr.append('<td scope="col" style="font-size:12px;">Free Memory</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.hardware.memory.free + '</td>');
-    // $hrdwareTbody.append($tr);
-
-
-
-
-
-    //Blueprint Information Arab
     var $blueprintTbody = $('#collapseBlueprints').find('tbody');
     $blueprintTbody.empty();
-    // var $tr = $('<tr style="line-height:2.3"></tr>');
-    // $tr.append('<td scope="col" style="font-size:12px;">Blueprint Id</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.blueprintData.blueprintId + '</td>');
-    // $blueprintTbody.append($tr);
-
-    // $tr = $('<tr style="line-height:2.3"></tr>');
-    // $tr.append('<td scope="col" style="font-size:12px;">Blueprint Name</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.blueprintData.blueprintName + '</td>');
-    // $blueprintTbody.append($tr);
-
-    // $tr = $('<tr style="line-height:2.3"></tr>');
-    // $tr.append('<td scope="col" style="font-size:12px;">Template Id</td><td scope="col"> : </td><td scope="col" style="font-size:12px;">' + data.blueprintData.templateId + '</td>');
-    // $blueprintTbody.append($tr);
-
-    // $tr = $('<tr style="line-height:2.3"></tr>');
-    // $tr.append('<td scope="col" style="font-size:12px;">Template Type</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + data.blueprintData.templateType + '</td>');
-    // $blueprintTbody.append($tr);
-    //Arab
+    
     $.get('../instances/' + instanceId ,function(data1){
-      //console.log('success---1---2===');
         if(data1.orgId){
         $.get('../organizations/' + data1.orgId + '/businessgroups/' + data1.bgId + '/projects/' + data1.projectId + '/environments/' + data1.envId + '/', function(data2) {
             console.log('success---3---4===');
@@ -2590,23 +2281,11 @@ $.get('../instances/' + urlParams.id, function(data) {
                   $tr = $('<tr style="line-height:2.3"></tr>');
                   $tr.append('<td scope="col" style="font-size:12px;">Version</td><td scope="col"> : </td><td scope="col" style="font-size:12px;"> ' + versionLatest + '</td>');
                   $blueprintTbody.append($tr);
-                  
-                  // urls = data2.instances[i].appUrls;
-                  // instanceIp = data2.instances[i].instanceIP;
-                  // break;
                   //for getting the Provider name,Type,Region,KeyPair
                  $.ajax({
                      type: "GET",
                      url: "/aws/providers/" + data2.blueprints[j].blueprintConfig.cloudProviderId,
                      success: function(data3) {
-                         // $blueprintReadContainer.find('.modal-body #instanceProviderName').val(data.providerName);
-                         // $blueprintReadContainer.find('.modal-body #instanceProviderType').val(data.providerType);
-                         // // loop for getting region and Keypair
-                         // for (var k = 0; k < data.keyPairs.length; k++) {
-
-                         //     $blueprintReadContainer.find('.modal-body #instanceRegion').val(data.keyPairs[k].region);
-                         //     $blueprintReadContainer.find('.modal-body #instancekeyPair').val(data.keyPairs[k].keyPairName);
-                         // }
                          var providerTYPE = data3.providerType
                          var providerNAME = data3.providerName;
                          var regionNAME   = data3.keyPairs[0].region;
@@ -2655,10 +2334,6 @@ $.get('../instances/' + urlParams.id, function(data) {
                   });
                 }
               }
-              // else{
-              //   alert("I am in else part");
-              //     //$('#accordion-Blueprints').hide();
-              // }
             }
             
           });
@@ -2739,17 +2414,8 @@ $.get('../instances/' + urlParams.id, function(data) {
     if (data.appUrls && data.appUrls.length) {
         for (var kk = 0; kk < data.appUrls.length; kk++) {
             createAppUrlTableRow(data.appUrls[kk]);
-            //menuAppTaskVar.getmenuAppTask(data);
-            //createAppUrlCardLink(data.appUrls[kk], data.instanceIP);
         }
     }
-    /*else {
-      $('#appUrlTemplateFormCreate').removeClass('hidden');
-    }*/
-
-
-
-
     $('.loadingControlPanelIndicator').hide();
     $('#controlPanelContainer').show();
 
@@ -2781,24 +2447,6 @@ $.get('../instances/' + urlParams.id, function(data) {
             }
         });
     });
-
-    // var checkbox = $('#my_checkbox');
-    // var listbox = $('#taskList');
-
-    // $(checkbox).click(function() {
-    //     selectDeselect(listbox, checkbox);
-    // });
-
-    // function selectDeselect(listbox, checkbox) {
-    //     var select_all = $(checkbox).prop('checked') ? true : false;
-    //     var select = $(listbox);
-    //     if (select_all) {
-    //         var clone = select.clone();
-    //         $('option', clone).attr('selected', select_all);
-    //         var html = clone.html();
-    //         select.html(html);
-    //     } else $('option', select).removeAttr('selected');
-    // }
 
     $('#saveTaskBtn').click(function() {
         var $taskSelect = $('#selectedTaskList');
@@ -3058,7 +2706,14 @@ function addActionLogRow(actionLog) {
         var keys = Object.keys(actionData);
         for (var j = 0; j < keys.length; j++) {
             if (actionData[keys[j]] && actionData[keys[j]].length) {
-                $tdData.append($('<span></span>').append(keys[j] + ' : ').append(actionData[keys[j]]));
+                var data = actionData[keys[j]];
+                if(keys[j] == 'runlist') {
+                  data = $chefCookbookRoleSelector.getRunlistNames(data);
+                  if(data.length) {
+                    data = data.join(' , ');
+                  }
+                }
+                $tdData.append($('<span></span>').append(keys[j] + ' : ').append(data));
                 $tdData.append('<br/>');
             }
         }
@@ -3175,15 +2830,7 @@ $('.addServiceBtn').click(function() {
 });
 
 </script>
-<!--<script>
-  var containerHeight = $(".getContentWidth").height();
-  $("#wid-id-10").css("height", containerHeight );
-  //var contentWidth = containerWidth - staticIconWidth;
-  // $("#myTabContent3").css({'width': contentWidth});
-  var totalHeight = $("#content").height();
-  $(".thumbnails").css("height", totalHeight);
-  console.log(totalHeight);
-</script>-->
+
 
 <script type="text/javascript">
   
@@ -3445,58 +3092,12 @@ $(document).ready(function() {
  }
 
  function removeAppUrlCardLink(appUrlId) {
-  //alert(appUrlId);
      var $anchor = $('a[data-appUrlId="' + appUrlId + '"]').parent();
      if (!$anchor.length) {
          return;
      }
-     // console.log($anchor);
-     // console.log($anchor.index());
-     // //alert($anchor.index());
-     // var index = $anchor.index();
-     
-     // if (index < 3) {
-     //     var $nextLink;
-     //     if (index == 1) {console.log(data[0]);
-     //         $nextLink = $anchor.next().next();
-     //     } else {
-     //         $nextLink = $anchor.next();
-     //     }
-     //     console.log($nextLink.length);
-     //     $nextLink.show();
-     // }
-      // var $nextLink;
-      // if (index == 1) {console.log(data[0]);
-      //     $nextLink = $anchor.next().next();
-      // } else {
-      //    $nextLink = $anchor.next();
-      // }
-      // console.log($nextLink.length);
-      // $nextLink.show();
     $anchor.remove();
  }
-
- 
- // function createAppUrlCardLink(appUrlData, instanceIP) {
- //    //menuAppTaskVar.getmenuAppTask(appUrlData);
- //     var $cardAppUrlListContanier = $('.instance-bootstrap-list');
- //     var url = appUrlData.url;
- //     if (url) {
- //         url = url.replace('$host', instanceIP);
- //     }
- //     var anchor = "<span class='marginForURLCP'><a class='app-url' data-instanceIP='" + instanceIP + "' data-appUrlId='" + appUrlData._id + "' href='" + url + "'' target='_blank' title='" + appUrlData.name + "'>" + appUrlData.name + "</a></span>";
- //     var $anchor = $(anchor);
- //     // if ($cardAppUrlListContanier.find('.marginForURLCP').length > 1) {
- //     //     $anchor.hide();
- //     // }
- //     //$cardAppUrlListContanier.last().append($anchor);
- //     // $('.instanceActionBtnCtr').find('.showmenuAppTask').click();
- //     // $('.instanceActionBtnCtr').find('.menuAppTask').append($anchor);
- //     //alert($('.instanceActionBtnCtr').html());
-
- // }
-
-
 
  $('#appURLForm').submit(function(e) {
      var isValidator = $('#appURLForm').valid();

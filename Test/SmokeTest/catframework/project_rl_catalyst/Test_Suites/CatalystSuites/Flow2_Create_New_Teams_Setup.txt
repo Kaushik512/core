@@ -19,14 +19,3 @@ Catalyst New Teams Setup
     Catalyst Logout                      
     [Teardown]     Close Browser
 
-
-
-#Catalyst New Users Setup
-#    [Tags]       Sanity               Settings
-#    Catalyst Login
-#    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
-#    Catalyst Org Admin creates new org user
-#    Catalyst creates new org designer
-#    Catalyst creates new org consumer    
-#    Catalyst Logout                      
-#    [Teardown]     Close Browser

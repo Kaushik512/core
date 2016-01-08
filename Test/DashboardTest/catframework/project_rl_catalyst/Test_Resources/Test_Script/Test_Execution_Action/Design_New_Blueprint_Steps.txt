@@ -64,15 +64,27 @@ Catalyst Creation of New Blueprint
     Enable the Next Button
     Clicks on Next Button
     Clicks on Confirm OK Button
-    Sleep    1s
-    Clicks on Workzone
+    Sleep    2s
+    
+
+
+Catalyst deletion of New Blueprint
+    #Clicks on Workzone
+    Sleep    4s
     Clicks on RL_QA Environment
     Sleep    2s
     Clicks on Infrastructure Tab
+    Sleep    2s
     Clicks on Blueprints Section
-    Sleep    1s
+    Sleep    15s
     Verify the Blueprint is created
     Delete the Blueprint
+    Sleep    3s
+    verfiy blueprint is deleted
+
+
+verfiy blueprint is deleted
+    Page Should Not Contain    ${BLUEPRINT NAME}
 
 
 Clicks on Close of Runlist Tab
@@ -104,7 +116,7 @@ Verify the Blueprint is created
     Page Should Contain    ${BLUEPRINT NAME}
 
 Delete the Blueprint
-    Click Element    xpath=.//*[text()='${BLUEPRINT NAME}']
+    Click Element    xpath=.//b[text()='${BLUEPRINT NAME}']
     Sleep    1s
     Click Element    xpath=.//*[@id='l2']/footer/div/button
     Sleep    1s

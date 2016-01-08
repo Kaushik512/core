@@ -1,5 +1,12 @@
-var ActiveDirectory = require('activedirectory');
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
 
+var ActiveDirectory = require('activedirectory');
+var logger = require('_pr/logger')(module);
 
 var setDefaults = function(options) {
     options.host || (options.host = 'localhost');
@@ -15,7 +22,7 @@ function createDnObject(dnString) {
     var obj = {};
     for (var i = 0; i < parts.length; i++) {
         var keyValue = parts[i].split('=');
-        console.log(keyValue);
+        logger.debug(keyValue);
         if (obj[keyValue[0]]) {
             obj[keyValue[0]] = [].concat(obj[keyValue[0]]);
             obj[keyValue[0]].push(keyValue[1]);
@@ -33,11 +40,10 @@ function createDnString(username, baseDn, ou) {
     }
     str += baseDn;
     return str;
-    //'cn='+username+',ou=SCLT_Group3,dc=d4d-ldap,dc=relevancelab,dc=com';
 }
 
 var ADClient = function(options) {
-    console.log('options ==>', options);
+    logger.debug('options ==>', options);
     if (!options) {
         options = {};
     }
@@ -46,29 +52,22 @@ var ADClient = function(options) {
     var client = new ActiveDirectory({
         url: 'ldap://' + options.host + ':' + options.port,
         baseDN: options.baseDn,
-        //username: 'username@domain.com',
-        //password: 'password'
     });
 
 
     this.authenticate = function(username, password, callback) {
-
-        //console.log('hit authenticate =========>' + dnString);
-
         client.authenticate(username, password, function(err, auth) {
             if (err) {
-                console.log("err ==> ", err);
+                logger.error("err ==> ", err);
                 callback(err, null);
             } else {
-                console.log("User String:{" + dnString + '}');
+                logger.debug("User String:{" + dnString + '}');
                 var dnString = createDnString(username, options.baseDn, options.ou);
                 callback(null, createDnObject(dnString));
             }
         });
 
     };
-
-
 }
 
 module.exports = ADClient;

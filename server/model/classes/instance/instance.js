@@ -1,3 +1,10 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
 var mongoose = require('mongoose');
 var ObjectId = require('mongoose').Types.ObjectId;
 var schemaValidator = require('./../../dao/schema-validator');
@@ -8,7 +15,6 @@ var textSearch = require('mongoose-text-search');
 
 
 var Schema = mongoose.Schema;
-
 
 var ACTION_LOG_TYPES = {
 
@@ -48,9 +54,7 @@ var ACTION_LOG_TYPES = {
         type: 9,
         name: "puppet-agent-run"
     }
-
 }
-
 
 var ActionLogSchema = new Schema({
     type: {
@@ -137,7 +141,6 @@ var InstanceSchema = new Schema({
     runlist: [{
         type: String,
         trim: true
-        //validate: schemaValidator.recipeValidator
     }],
     attributes: [{
         name: String,
@@ -229,7 +232,8 @@ var InstanceSchema = new Schema({
     chefClientExecutionIds: [String],
     taskIds: [String],
     tempActionLogId: String,
-    cloudFormationId: String
+    cloudFormationId: String,
+    armId: String
 
 });
 
@@ -240,15 +244,12 @@ InstanceSchema.index({
 });
 
 var Instances = mongoose.model('instances', InstanceSchema);
-//mongoose.set('debug',true);
-
 
 var InstancesDao = function() {
     this.searchInstances = function(searchquery, options, callback) {
         logger.debug("Enter searchInstances query - (%s)", searchquery);
         Instances.textSearch(searchquery, options, function(err, data) {
             if (!err) {
-                // logger.debug(data.length);
                 var data1 = {
                     "tasks": [],
                     instances: [],
@@ -268,8 +269,6 @@ var InstancesDao = function() {
         });
     };
     this.getInstanceById = function(instanceId, callback) {
-        //logger.debug("Enter getInstanceById (%s)", instanceId);
-
         Instances.find({
             "_id": new ObjectId(instanceId)
         }, {
@@ -280,7 +279,6 @@ var InstancesDao = function() {
                 callback(err, null);
                 return;
             }
-            //logger.debug("Exit getInstanceById (%s)", instanceId);
             callback(null, data);
 
         });
@@ -337,7 +335,6 @@ var InstancesDao = function() {
                 callback(err, null);
                 return;
             }
-            //logger.debug(data);
             logger.debug("Exit getInstances :: ", instanceIds);
             callback(null, data);
         });
@@ -408,10 +405,6 @@ var InstancesDao = function() {
         if (instanceType) {
             queryObj['blueprintData.templateType'] = instanceType;
         }
-        //Removed as a team check for the project happens at the route. - Vinod
-        // if (userName) {
-        //     queryObj.users = userName;
-        // }
         Instances.find(queryObj, {
             'actionLogs': false
         }, function(err, data) {
@@ -502,7 +495,7 @@ var InstancesDao = function() {
                 callback(err, null);
                 return;
             }
-            console.log(JSON.stringify(data));
+            logger.debug(JSON.stringify(data));
             logger.debug("Exit getInstanceByProjectId (%s)", ProjectId);
             callback(null, data);
         });
@@ -520,6 +513,23 @@ var InstancesDao = function() {
                 return;
             }
             logger.debug("Exit getInstancesByCloudformationId (%s)", cfId);
+            callback(null, data);
+        });
+
+    };
+
+    this.getInstancesByARMId = function(armId, callback) {
+        logger.debug("Enter getInstancesByCloudformationId (%s)", armId);
+        var queryObj = {
+            armId: armId
+        }
+        Instances.find(queryObj, function(err, data) {
+            if (err) {
+                logger.debug("Failed to getInstancesByCloudformationId (%s)", armId, err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit getInstancesByCloudformationId (%s)", armId);
             callback(null, data);
         });
 
@@ -543,13 +553,7 @@ var InstancesDao = function() {
 
     this.createInstance = function(instanceData, callback) {
         logger.debug("Enter createInstance");
-
-
         var instance = new Instances(instanceData);
-
-
-
-
         instance.save(function(err, data) {
             if (err) {
                 logger.error("CreateInstance Failed", err, instanceData);
@@ -584,7 +588,7 @@ var InstancesDao = function() {
     };
 
     this.addAppUrls = function(instanceId, appUrls, callback) {
-        console.log(appUrls);
+        logger.debug(appUrls);
         for (var i = 0; i < appUrls.length; i++) {
             appUrls[i]._id = new ObjectId();
         }
@@ -744,8 +748,6 @@ var InstancesDao = function() {
         });
     };
 
-
-
     this.updateInstanceDockerStatus = function(instanceId, dockerstatus, dockerapiurl, callback) {
         logger.debug("Enter updateInstanceDockerStatus(%s, %s, %s)", instanceId, dockerstatus, dockerapiurl);
 
@@ -865,6 +867,21 @@ var InstancesDao = function() {
                 return;
             }
             logger.debug("Exit removeInstancebyCloudFormationId (%s)", cfId);
+            callback(null, data);
+        });
+    };
+
+    this.removeInstancebyArmId = function(armId, callback) {
+        logger.debug("Enter removeInstancebyArmId (%s)", armId);
+        Instances.remove({
+            armId: armId
+        }, function(err, data) {
+            if (err) {
+                logger.error("Failed to removeInstancebyArmId (%s)", armId, err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit removeInstancebyArmId (%s)", armId);
             callback(null, data);
         });
     };
@@ -1001,8 +1018,6 @@ var InstancesDao = function() {
         });
 
     };
-
-
 
     this.addService = function(instanceId, serviceIds, callback) {
         logger.debug("Enter addService ", instanceId, serviceIds);
@@ -1385,7 +1400,7 @@ var InstancesDao = function() {
         if (!nodeNames) {
             nodeNames = [];
         }
-        console.log('serverId -->', chefServerId);
+        logger.debug('serverId -->', chefServerId);
         Instances.find({
             "chef.serverId": chefServerId,
             "chef.chefNodeName": {

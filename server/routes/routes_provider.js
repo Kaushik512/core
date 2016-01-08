@@ -31,10 +31,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         AWSProvider.getAWSProviders(function(err, providers) {
             if (err) {
                 logger.error(err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
-            logger.debug("Provider list: ",JSON.stringify(providers));
+            logger.debug("Provider list: ", JSON.stringify(providers));
             if (providers) {
                 var providerList = [];
                 var count = 0;
@@ -42,13 +42,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     (function(i) {
 
                         AWSKeyPair.getAWSKeyPairByProviderId(providers[i]._id, function(err, keyPair) {
-                            logger.debug("keyPairs length::::: ", keyPair.length);
                             var keys = [];
                             keys.push(providers[i].accessKey);
                             keys.push(providers[i].secretKey);
                             cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
                                 if (err) {
-                                    res.sned(500, "Failed to decrypt accessKey or secretKey");
+                                    logger.error("Failed to decrypt accessKey or secretKey: ", err);
+                                    res.status(500).send("Failed to decrypt accessKey or secretKey");
                                     return;
                                 }
                                 count++;
@@ -65,7 +65,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         keyPairs: keyPair
                                     };
                                     providerList.push(dommyProvider);
-                                    logger.debug("count: ",count);
+                                    logger.debug("count: ", count);
                                     if (count === providers.length) {
                                         res.send(providerList);
                                         return;
@@ -86,21 +86,20 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         logger.debug("Enter get() for /providers/%s", req.params.providerId);
         var providerId = req.params.providerId.trim();
         if (typeof providerId === 'undefined' || providerId.length === 0) {
-            res.send(500, "Please Enter ProviderId.");
+            res.status(500).send("Please Enter ProviderId.");
             return;
         }
         AWSProvider.getAWSProviderById(providerId, function(err, aProvider) {
             if (err) {
                 logger.error(err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (aProvider) {
                 AWSKeyPair.getAWSKeyPairByProviderId(aProvider._id, function(err, keyPair) {
-                    logger.debug("keyPairs length::::: ", keyPair.length);
                     masterUtil.getOrgById(aProvider.orgId[0], function(err, orgs) {
                         if (err) {
-                            res.send(500, "Not able to fetch org.");
+                            res.status(500).send("Not able to fetch org.");
                             return;
                         }
                         var keys = [];
@@ -108,7 +107,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         keys.push(aProvider.secretKey);
                         cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
                             if (err) {
-                                res.sned(500, "Failed to decrypt accessKey or secretKey");
+                                logger.error("Failed to decrypt accessKey or secretKey: ", err);
+                                res.status(500).send("Failed to decrypt accessKey or secretKey");
                                 return;
                             }
                             if (orgs.length > 0) {
@@ -143,9 +143,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     //Create VMWare Provider
     app.post('/vmware/providers', function(req, res) {
-
-        console.log(req.body);
-
         logger.debug("Enter post() for /vmware.providers.", typeof req.body.fileName);
         var user = req.session.user;
         var category = configmgmtDao.getCategoryFromID("9");
@@ -159,50 +156,40 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var orgId = req.body.orgId;
 
         if (typeof vmwareusername === 'undefined' || vmwareusername.length === 0) {
-            res.send(400, "Please Enter Username.");
+            res.status(400).send("Please Enter Username.");
             return;
         }
         if (typeof vmwarepassword === 'undefined' || vmwarepassword.length === 0) {
-            res.send(400, "Please Enter Password.");
+            res.status(400).send("Please Enter Password.");
             return;
         }
         if (typeof vmwarehost === 'undefined' || vmwarehost.length === 0) {
-            res.send(400, "Please Enter a Host.");
+            res.status(400).send("Please Enter a Host.");
             return;
         }
         if (typeof vmwaredc === 'undefined' || vmwaredc.length === 0) {
-            res.send(400, "Please Enter a Tenant ID");
+            res.status(400).send("Please Enter a Tenant ID");
             return;
         }
         if (typeof providerName === 'undefined' || providerName.length === 0) {
-            res.send(400, "Please Enter Name.");
+            res.status(400).send("Please Enter Name.");
             return;
         }
         if (typeof providerType === 'undefined' || providerType.length === 0) {
-            res.send(400, "Please Enter ProviderType.");
+            res.status(400).send("Please Enter ProviderType.");
             return;
         }
         if (typeof orgId === 'undefined' || orgId.length === 0) {
-            res.status(400);
-            res.send("Please Select Any Organization.");
+            res.status(400).send("Please Select Any Organization.");
             return;
         }
-
-        var region;
-        // if (typeof req.body.region === 'string') {
-        //     logger.debug("inside single region: ", req.body.region);
-        //     region = req.body.region;
-        // } else {
-        //     region = req.body.region[0];
-        // }
-        // logger.debug("Final Region:  ", region)
 
         usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
             if (!err) {
                 logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
                 if (data == false) {
                     logger.debug('No permission to ' + permissionto + ' on ' + category);
-                    res.send(401, "You don't have permission to perform this operation.");
+                    res.status(400).send("You don't have permission to perform this operation.");
                     return;
                 }
             } else {
@@ -213,10 +200,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
             masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
                 if (err) {
-                    res.send(500, "Failed to fetch User.");
+                    res.status(500).send("Failed to fetch User.");
                     return;
                 }
-                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
+                logger.debug("LoggedIn User: ", JSON.stringify(anUser));
                 if (anUser) {
 
                     var providerData = {
@@ -231,31 +218,27 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     };
                     vmwareProvider.getvmwareProviderByName(providerData.providerName, providerData.orgId, function(err, prov) {
                         if (err) {
-                            logger.debug("err.....", err);
+                            logger.error("Error while fetching vmware: ", err);
+                            res.status(500).send("Error while fetching vmware");
+                            return;
                         }
                         if (prov) {
-                            logger.debug("getAWSProviderByName: ", JSON.stringify(prov));
-                            logger.debug("err.....", err);
-                            res.status(409);
-                            res.send("Provider name already exist.");
+                            logger.error("Provider name already exist: ");
+                            res.status(409).send("Provider name already exist.");
                             return;
                         }
                         vmwareProvider.createNew(providerData, function(err, provider) {
                             if (err) {
-                                logger.debug("err.....", err);
-                                res.status(500);
-                                res.send("Failed to create Provider.");
+                                logger.error("Failed to create Provider: ", err);
+                                res.status(500).send("Failed to create Provider.");
                                 return;
                             }
-                            logger.debug("Provider id:  %s", JSON.stringify(provider._id));
-
                             masterUtil.getOrgById(providerData.orgId, function(err, orgs) {
                                 if (err) {
-                                    res.send(500, "Not able to fetch org.");
+                                    res.status(500).send("Not able to fetch org.");
                                     return;
                                 }
                                 if (orgs.length > 0) {
-
                                     var dommyProvider = {
                                         _id: provider._id,
                                         id: 9,
@@ -267,9 +250,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         providerType: provider.providerType,
                                         orgId: orgs[0].rowid,
                                         orgName: orgs[0].orgname,
-
                                         __v: provider.__v,
-
                                     };
                                     res.send(dommyProvider);
                                     return;
@@ -289,35 +270,32 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     //get vmware providers
     app.get('/vmware/providers', function(req, res) {
-        logger.debug("Enter get() for /providers");
-
-
-
+        logger.debug("Enter get() for vmware/providers");
         var loggedInUser = req.session.user.cn;
         masterUtil.getLoggedInUser(loggedInUser, function(err, anUser) {
             if (err) {
-                res.send(500, "Failed to fetch User.");
+                res.status(500).send("Failed to fetch User.");
                 return;
             }
             if (!anUser) {
-                res.send(500, "Invalid User.");
+                res.status(500).send("Invalid User.");
                 return;
             }
             if (anUser.orgname_rowid[0] === "") {
                 masterUtil.getAllActiveOrg(function(err, orgList) {
                     if (err) {
-                        res.send(500, 'Not able to fetch Orgs.');
+                        res.status(500).send('Not able to fetch Orgs.');
                         return;
                     }
                     if (orgList) {
                         vmwareProvider.getvmwareProvidersForOrg(orgList, function(err, providers) {
                             if (err) {
                                 logger.error(err);
-                                res.send(500, errorResponses.db.error);
+                                res.status(500).send(errorResponses.db.error);
                                 return;
                             }
                             if (providers != null) {
-                                logger.debug("providers>>> ", JSON.stringify(providers));
+                                logger.debug("providers: ", JSON.stringify(providers));
                                 if (providers.length > 0) {
                                     res.send(providers);
                                     return;
@@ -335,18 +313,17 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             } else {
                 masterUtil.getOrgs(loggedInUser, function(err, orgList) {
                     if (err) {
-                        res.send(500, 'Not able to fetch Orgs.');
+                        res.status(500).send('Not able to fetch Orgs.');
                         return;
                     }
                     if (orgList) {
                         vmwareProvider.getvmwareProvidersForOrg(orgList, function(err, providers) {
                             if (err) {
                                 logger.error(err);
-                                res.send(500, errorResponses.db.error);
+                                res.status(500).send(errorResponses.db.error);
                                 return;
                             }
                             var providersList = [];
-                            logger.debug("Providers::::::::::::::::::: ", providers === null);
                             if (providers === null) {
                                 res.send(providersList);
                                 return;
@@ -373,45 +350,44 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         logger.debug("Enter get() for /azure/providers//%s", req.params.providerId);
         var providerId = req.params.providerId.trim();
         if (typeof providerId === 'undefined' || providerId.length === 0) {
-            res.send(500, "Please Enter ProviderId.");
+            res.status(500).send("Please Enter ProviderId.");
             return;
         }
         vmwareProvider.getvmwareProviderById(providerId, function(err, aProvider) {
             if (err) {
                 logger.error(err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (aProvider) {
-                console.log(aProvider);
-
                 masterUtil.getOrgById(aProvider.orgId[0], function(err, orgs) {
                     if (err) {
-                        res.send(500, "Not able to fetch org.");
+                        res.status(500).send("Not able to fetch org.");
                         return;
                     }
                     aProvider.orgname = orgs[0].orgname;
-
                     if (orgs.length > 0) {
                         res.send(aProvider);
+                        return;
                     }
                 });
 
             } else {
                 res.send(404);
+                return;
             }
         });
     }); //end: get azure provider by id
-    
-     //start: removes azure provider
+
+    //start: removes azure provider
     app.delete('/vmware/providers/:providerId', function(req, res) {
-        logger.debug("Enter delete__________() for vmware/providers/%s", req.params.providerId);
+        logger.debug("Enter delete for vmware/providers/%s", req.params.providerId);
         var user = req.session.user;
         var category = configmgmtDao.getCategoryFromID("9");
         var permissionto = 'delete';
         var providerId = req.params.providerId.trim();
         if (typeof providerId === 'undefined' || providerId.length === 0) {
-            res.send(500, "Please Enter ProviderId.");
+            res.status(500).send("Please Enter ProviderId.");
             return;
         }
 
@@ -431,32 +407,24 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
             masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
                 if (err) {
-                    res.send(500, "Failed to fetch User.");
+                    res.status(500).send("Failed to fetch User.");
                 }
-                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
                 if (anUser) {
-                    //data == true (create permission)
-                    /*if(data && anUser.orgname_rowid[0] !== ""){
-                    logger.debug("Inside check not authorized.");
-                    res.send(401,"You don't have permission to perform this operation.");
-                    return;
-                }*/
-
                     VMImage.getImageByProviderId(providerId, function(err, anImage) {
                         if (err) {
                             logger.error(err);
-                            res.send(500, errorResponses.db.error);
+                            res.status(500).send(errorResponses.db.error);
                             return;
                         }
                         if (anImage) {
                             res.send(403, "Provider already used by Some Images.To delete provider please delete respective Images first.");
                             return;
                         }
-                        logger.debug('Providerid +++++++',providerId);
+                        logger.debug('Providerid: ', providerId);
                         vmwareProvider.removevmwareProviderById(providerId, function(err, deleteCount) {
                             if (err) {
                                 logger.error(err);
-                                res.send(500, errorResponses.db.error);
+                                res.status(500).send(errorResponses.db.error);
                                 return;
                             }
                             if (deleteCount) {
@@ -473,12 +441,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             });
         }); //
     });
-    
+
 
     app.post('/vmware/providers/:providerId/update', function(req, res) {
         logger.debug("Enter post() for /providers/vmware/%s/update", req.params.providerId);
-         logger.debug("Enter post() for /vmware.providers.", typeof req.body.fileName);
-         console.log(req.body);
         var user = req.session.user;
         var category = configmgmtDao.getCategoryFromID("9");
         var permissionto = 'create';
@@ -491,27 +457,27 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var orgId = req.body.orgId;
 
         if (typeof vmwareusername === 'undefined' || vmwareusername.length === 0) {
-            res.send(400, "Please Enter Username.");
+            res.status(400).send("Please Enter Username.");
             return;
         }
         if (typeof vmwarepassword === 'undefined' || vmwarepassword.length === 0) {
-            res.send(400, "Please Enter Password.");
+            res.status(400).send("Please Enter Password.");
             return;
         }
         if (typeof vmwarehost === 'undefined' || vmwarehost.length === 0) {
-            res.send(400, "Please Enter a Host.");
+            res.status(400).send("Please Enter a Host.");
             return;
         }
         if (typeof vmwaredc === 'undefined' || vmwaredc.length === 0) {
-            res.send(400, "Please Enter a Tenant ID");
+            res.status(400).send("Please Enter a Tenant ID");
             return;
         }
         if (typeof providerName === 'undefined' || providerName.length === 0) {
-            res.send(400, "Please Enter Name.");
+            res.status(400).send("Please Enter Name.");
             return;
         }
         if (typeof providerType === 'undefined' || providerType.length === 0) {
-            res.send(400, "Please Enter ProviderType.");
+            res.status(400).send("Please Enter ProviderType.");
             return;
         }
         if (typeof orgId === 'undefined' || orgId.length === 0) {
@@ -519,7 +485,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             res.send("Please Select Any Organization.");
             return;
         }
-
 
         var providerData = {
             id: 9,
@@ -531,9 +496,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             tenantid: vmwaredc,
             orgId: orgId
         };
-    
-        logger.debug("provider>>>>>>>>>>>> %s", providerData.providerType);
-        logger.debug("provider data>>>>>>>>>>>> %s", JSON.stringify(providerData));
+        logger.debug("provider data %s", JSON.stringify(providerData));
 
         usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
             if (!err) {
@@ -551,21 +514,18 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
             masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
                 if (err) {
-                    res.send(500, "Failed to fetch User.");
+                    res.status(500).send("Failed to fetch User.");
                 }
-                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
                 if (anUser) {
-
-                    logger.debug("vmwareProvider data", JSON.stringify(data));
                     vmwareProvider.updatevmwareProviderById(req.params.providerId, providerData, function(err, updateCount) {
                         if (err) {
                             logger.error(err);
-                            res.send(500, errorResponses.db.error);
+                            res.status(500).send(errorResponses.db.error);
                             return;
                         }
                         masterUtil.getOrgById(providerData.orgId, function(err, orgs) {
                             if (err) {
-                                res.send(500, "Not able to fetch org.");
+                                res.status(500).send("Not able to fetch org.");
                                 return;
                             }
                             if (orgs.length > 0) {
@@ -590,14 +550,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 }
             });
         });
-
-
-
     });
 
 
     app.post('/hppubliccloud/providers', function(req, res) {
-
         logger.debug("Enter post() for /hppubliccloud.", typeof req.files.hppubliccloudinstancepem);
         var user = req.session.user;
         var category = configmgmtDao.getCategoryFromID("9");
@@ -612,8 +568,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var providerType = req.body.providerType.toLowerCase();
         var hppubliccloudkeyname = req.body.hppubliccloudkeyname;
         var hppubliccloudregion = req.body.hppubliccloudregion;
-
         var hpFileName = req.files.hpFileName.originalFilename;
+        var orgId = req.body.orgId;
 
         var serviceendpoints = {
             compute: req.body.openstackendpointcompute,
@@ -621,43 +577,38 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             image: req.body.openstackendpointimage,
             ec2: req.body.openstackendpointec2,
             identity: req.body.openstackendpointidentity,
-
         };
 
-
-
-        var orgId = req.body.orgId;
-
         if (typeof hppubliccloudusername === 'undefined' || hppubliccloudusername.length === 0) {
-            res.send(400, "Please Enter Username.");
+            res.status(400).send("Please Enter Username.");
             return;
         }
         if (typeof hppubliccloudpassword === 'undefined' || hppubliccloudpassword.length === 0) {
-            res.send(400, "Please Enter Password.");
+            res.status(400).send("Please Enter Password.");
             return;
         }
         if (typeof hppubliccloudhost === 'undefined' || hppubliccloudhost.length === 0) {
-            res.send(400, "Please Enter a Host.");
+            res.status(400).send("Please Enter a Host.");
             return;
         }
         if (typeof hppubliccloudtenantid === 'undefined' || hppubliccloudtenantid.length === 0) {
-            res.send(400, "Please Enter a Tenant ID");
+            res.status(400).send("Please Enter a Tenant ID");
             return;
         }
         if (typeof hppubliccloudregion === 'undefined' || hppubliccloudregion.length === 0) {
-            res.send(400, "Please Enter Region.");
+            res.status(400).send("Please Enter Region.");
             return;
         }
         if (typeof hppubliccloudkeyname === 'undefined' || hppubliccloudkeyname.length === 0) {
-            res.send(400, "Please Enter a Key name.");
+            res.status(400).send("Please Enter a Key name.");
             return;
         }
         if (typeof providerName === 'undefined' || providerName.length === 0) {
-            res.send(400, "Please Enter Name.");
+            res.status(400).send("Please Enter Name.");
             return;
         }
         if (typeof providerType === 'undefined' || providerType.length === 0) {
-            res.send(400, "Please Enter ProviderType.");
+            res.status(400).send("Please Enter ProviderType.");
             return;
         }
         if (typeof orgId === 'undefined' || orgId.length === 0) {
@@ -666,31 +617,21 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             return;
         }
         if (typeof hppubliccloudtenantname === 'undefined' || hppubliccloudtenantname.length === 0) {
-            res.send(400, "Please Enter Tenant Name.");
+            res.status(400).send("Please Enter Tenant Name.");
             return;
         }
         if (typeof hppubliccloudprojectname === 'undefined' || hppubliccloudprojectname.length === 0) {
-            res.send(400, "Please Enter Project Name.");
+            res.status(400).send("Please Enter Project Name.");
             return;
         }
         if (typeof serviceendpoints.compute === 'undefined' || serviceendpoints.compute.length === 0) {
-            res.send(400, "Please Enter Compute Endpoint Name.");
+            res.status(400).send("Please Enter Compute Endpoint Name.");
             return;
         }
         if (typeof serviceendpoints.identity === 'undefined' || serviceendpoints.identity.length === 0) {
-            res.send(400, "Please Enter Identity Endpoint Name.");
+            res.status(400).send("Please Enter Identity Endpoint Name.");
             return;
         }
-
-
-        var region;
-        // if (typeof req.body.region === 'string') {
-        //     logger.debug("inside single region: ", req.body.region);
-        //     region = req.body.region;
-        // } else {
-        //     region = req.body.region[0];
-        // }
-        // logger.debug("Final Region:  ", region)
 
         usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
             if (!err) {
@@ -708,12 +649,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
             masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
                 if (err) {
-                    res.send(500, "Failed to fetch User.");
+                    res.status(500).send("Failed to fetch User.");
                     return;
                 }
-                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
                 if (anUser) {
-
                     var providerData = {
                         id: 9,
                         username: hppubliccloudusername,
@@ -732,27 +671,24 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     };
                     hppubliccloudProvider.gethppubliccloudProviderByName(providerData.providerName, providerData.orgId, function(err, prov) {
                         if (err) {
-                            logger.debug("err.....", err);
+                            logger.error("err. ", err);
+                            res.status(500).send("Error to fetch Provider: ", err);
                         }
                         if (prov) {
-                            logger.debug("getAWSProviderByName: ", JSON.stringify(prov));
-                            logger.debug("err.....", err);
-                            res.status(409);
-                            res.send("Provider name already exist.");
+                            logger.debug("Provider name already exist");
+                            res.status(409).send("Provider name already exist.");
                             return;
                         }
                         hppubliccloudProvider.createNew(req, providerData, function(err, provider) {
                             if (err) {
-                                logger.debug("err.....", err);
-                                res.status(500);
-                                res.send("Failed to create Provider.");
+                                logger.error("Failed to create Provider: ", err);
+                                res.status(500).send("Failed to create Provider.");
                                 return;
                             }
-                            logger.debug("Provider id:  %s", JSON.stringify(provider._id));
 
                             masterUtil.getOrgById(providerData.orgId, function(err, orgs) {
                                 if (err) {
-                                    res.send(500, "Not able to fetch org.");
+                                    res.status(500).send("Not able to fetch org.");
                                     return;
                                 }
                                 if (orgs.length > 0) {
@@ -793,24 +729,24 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var loggedInUser = req.session.user.cn;
         masterUtil.getLoggedInUser(loggedInUser, function(err, anUser) {
             if (err) {
-                res.send(500, "Failed to fetch User.");
+                res.status(500).send("Failed to fetch User.");
                 return;
             }
             if (!anUser) {
-                res.send(500, "Invalid User.");
+                res.status(500).send("Invalid User.");
                 return;
             }
             if (anUser.orgname_rowid[0] === "") {
                 masterUtil.getAllActiveOrg(function(err, orgList) {
                     if (err) {
-                        res.send(500, 'Not able to fetch Orgs.');
+                        res.status(500).send('Not able to fetch Orgs.');
                         return;
                     }
                     if (orgList) {
                         hppubliccloudProvider.gethppubliccloudProvidersForOrg(orgList, function(err, providers) {
                             if (err) {
                                 logger.error(err);
-                                res.send(500, errorResponses.db.error);
+                                res.status(500).send(errorResponses.db.error);
                                 return;
                             }
                             if (providers != null) {
@@ -835,18 +771,18 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             } else {
                 masterUtil.getOrgs(loggedInUser, function(err, orgList) {
                     if (err) {
-                        res.send(500, 'Not able to fetch Orgs.');
+                        res.status(500).send('Not able to fetch Orgs.');
                         return;
                     }
                     if (orgList) {
                         hppubliccloudProvider.gethppubliccloudProvidersForOrg(orgList, function(err, providers) {
                             if (err) {
                                 logger.error(err);
-                                res.send(500, errorResponses.db.error);
+                                res.status(500).send(errorResponses.db.error);
                                 return;
                             }
                             var providersList = [];
-                            logger.debug("Providers::::::::::::::::::: ", providers === null);
+                            logger.debug("Providers: ", providers);
                             if (providers === null) {
                                 res.send(providersList);
                                 return;
@@ -872,31 +808,33 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         logger.debug("Enter get() for /hppubliccloud/providers//%s", req.params.providerId);
         var providerId = req.params.providerId.trim();
         if (typeof providerId === 'undefined' || providerId.length === 0) {
-            res.send(500, "Please Enter ProviderId.");
+            res.status(500).send("Please Enter ProviderId.");
             return;
         }
         hppubliccloudProvider.gethppubliccloudProviderById(providerId, function(err, aProvider) {
             if (err) {
                 logger.error(err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (aProvider) {
 
                 masterUtil.getOrgById(aProvider.orgId[0], function(err, orgs) {
                     if (err) {
-                        res.send(500, "Not able to fetch org.");
+                        res.status(500).send("Not able to fetch org.");
                         return;
                     }
                     aProvider.orgname = orgs[0].orgname;
 
                     if (orgs.length > 0) {
                         res.send(aProvider);
+                        return;
                     }
                 });
 
             } else {
-                res.send(404);
+                res.status(404).send("Provider not found.");
+                return;
             }
         });
     });
@@ -918,6 +856,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var hppubliccloudkeyname = req.body.hppubliccloudkeyname;
         var hpFileName = req.files.hpFileName.originalFilename;
         var hppubliccloudregion = req.body.hppubliccloudregion;
+        var providerId = req.params.providerId;
 
         var serviceendpoints = {
             compute: req.body.openstackendpointcompute,
@@ -930,43 +869,43 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
         var orgId = req.body.orgId;
         if (typeof hppubliccloudusername === 'undefined' || hppubliccloudusername.length === 0) {
-            res.send(400, "Please Enter Username.");
+            res.status(400).send("Please Enter Username.");
             return;
         }
         if (typeof hppubliccloudpassword === 'undefined' || hppubliccloudpassword.length === 0) {
-            res.send(400, "Please Enter Password.");
+            res.status(400).send("Please Enter Password.");
             return;
         }
         if (typeof hppubliccloudhost === 'undefined' || hppubliccloudhost.length === 0) {
-            res.send(400, "Please Enter a Host.");
+            res.status(400).send("Please Enter a Host.");
             return;
         }
         if (typeof hppubliccloudtenantid === 'undefined' || hppubliccloudtenantid.length === 0) {
-            res.send(400, "Please Enter a Tenant ID");
+            res.status(400).send("Please Enter a Tenant ID");
             return;
         }
         if (typeof hppubliccloudregion === 'undefined' || hppubliccloudregion.length === 0) {
-            res.send(400, "Please Enter Region.");
+            res.status(400).send("Please Enter Region.");
             return;
         }
         if (typeof hppubliccloudkeyname === 'undefined' || hppubliccloudkeyname.length === 0) {
-            res.send(400, "Please Enter a Key name.");
+            res.status(400).send("Please Enter a Key name.");
             return;
         }
         if (typeof providerName === 'undefined' || providerName.length === 0) {
-            res.send(400, "Please Enter Name.");
+            res.status(400).send("Please Enter Name.");
             return;
         }
         if (typeof providerType === 'undefined' || providerType.length === 0) {
-            res.send(400, "Please Enter ProviderType.");
+            res.status(400).send("Please Enter ProviderType.");
             return;
         }
         if (typeof hppubliccloudtenantname === 'undefined' || hppubliccloudtenantname.length === 0) {
-            res.send(400, "Please Enter Tenant Name.");
+            res.status(400).send("Please Enter Tenant Name.");
             return;
         }
         if (typeof hppubliccloudprojectname === 'undefined' || hppubliccloudprojectname.length === 0) {
-            res.send(400, "Please Enter Project Name.");
+            res.status(400).send("Please Enter Project Name.");
             return;
         }
         if (typeof orgId === 'undefined' || orgId.length === 0) {
@@ -975,11 +914,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             return;
         }
         if (typeof serviceendpoints.compute === 'undefined' || serviceendpoints.compute.length === 0) {
-            res.send(400, "Please Enter Compute Endpoint Name.");
+            res.status(400).send("Please Enter Compute Endpoint Name.");
             return;
         }
         if (typeof serviceendpoints.identity === 'undefined' || serviceendpoints.identity.length === 0) {
-            res.send(400, "Please Enter Identity Endpoint Name.");
+            res.status(400).send("Please Enter Identity Endpoint Name.");
             return;
         }
 
@@ -1000,8 +939,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             keyname: hppubliccloudkeyname,
             orgId: orgId
         };
-        logger.debug("provider>>>>>>>>>>>> %s", providerData.providerType);
-        logger.debug("provider data>>>>>>>>>>>> %s", JSON.stringify(providerData));
 
         usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
             if (!err) {
@@ -1019,26 +956,24 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
             masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
                 if (err) {
-                    res.send(500, "Failed to fetch User.");
+                    res.status(500).send("Failed to fetch User.");
                 }
-                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
+                logger.debug("LoggedIn User: ", JSON.stringify(anUser));
                 if (anUser) {
-
-                    logger.debug("Able to get AWS Keypairs. %s", JSON.stringify(data));
-                    hppubliccloudProvider.updatehppubliccloudProviderById(req.params.providerId, providerData, function(err, updateCount) {
+                    hppubliccloudProvider.updatehppubliccloudProviderById(providerId, providerData, function(err, updateCount) {
                         if (err) {
                             logger.error(err);
-                            res.send(500, errorResponses.db.error);
+                            res.status(500).send(errorResponses.db.error);
                             return;
                         }
                         masterUtil.getOrgById(providerData.orgId, function(err, orgs) {
                             if (err) {
-                                res.send(500, "Not able to fetch org.");
+                                res.status(500).send("Not able to fetch org.");
                                 return;
                             }
                             if (orgs.length > 0) {
                                 var dommyProvider = {
-                                    _id: req.params.providerId,
+                                    _id: providerId,
                                     id: 9,
                                     username: hppubliccloudusername,
                                     password: hppubliccloudpassword,
@@ -1057,11 +992,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 }
             });
         });
-
-
-
     });
-    
+
     //start: removes azure provider
     app.delete('/hppubliccloud/providers/:providerId', function(req, res) {
         logger.debug("Enter delete() for hppubliccloud/providers/%s", req.params.providerId);
@@ -1069,8 +1001,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var category = configmgmtDao.getCategoryFromID("9");
         var permissionto = 'delete';
         var providerId = req.params.providerId.trim();
+
         if (typeof providerId === 'undefined' || providerId.length === 0) {
-            res.send(500, "Please Enter ProviderId.");
+            res.status(500).send("Please Enter ProviderId.");
             return;
         }
 
@@ -1090,21 +1023,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
             masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
                 if (err) {
-                    res.send(500, "Failed to fetch User.");
-                }
-                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
-                if (anUser) {
-                    //data == true (create permission)
-                    /*if(data && anUser.orgname_rowid[0] !== ""){
-                    logger.debug("Inside check not authorized.");
-                    res.send(401,"You don't have permission to perform this operation.");
+                    res.status(500).send("Failed to fetch User.");
                     return;
-                }*/
-
+                }
+                if (anUser) {
                     VMImage.getImageByProviderId(providerId, function(err, anImage) {
                         if (err) {
                             logger.error(err);
-                            res.send(500, errorResponses.db.error);
+                            res.status(500).send(errorResponses.db.error);
                             return;
                         }
                         if (anImage) {
@@ -1115,7 +1041,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         hppubliccloudProvider.removehppubliccloudProviderById(providerId, function(err, deleteCount) {
                             if (err) {
                                 logger.error(err);
-                                res.send(500, errorResponses.db.error);
+                                res.status(500).send(errorResponses.db.error);
                                 return;
                             }
                             if (deleteCount) {
@@ -1130,9 +1056,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     });
                 }
             });
-        }); //
+        });
     });
-    
+
 
     //Creates Azure Provider
     app.post('/azure/providers', function(req, res) {
@@ -1142,38 +1068,23 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var category = configmgmtDao.getCategoryFromID("9");
         var permissionto = 'create';
         var azureSubscriptionId = req.body.azureSubscriptionId;
-        //var azureStorageAccount = req.body.azureStorageAccount;
-
-        logger.debug("Pem file name:", req.files);
-        logger.debug("Pem file name:", req.files.azurepem.originalFilename);
-        logger.debug("Key file name:", req.files.azurekey.originalFilename);
-        //logger.debug("file Object:", req.files.azurepem);
-
-        logger.debug("details>> ",req.files.azurepem);
-
         var providerName = req.body.providerName;
         var providerType = req.body.providerType.toLowerCase();
-
         var pemFileName = req.files.azurepem.originalFilename;
         var keyFileName = req.files.azurekey.originalFilename;
-
         var orgId = req.body.orgId;
 
         if (typeof azureSubscriptionId === 'undefined' || azureSubscriptionId.length === 0) {
-            res.send(400, "Please Enter SubscriptionId.");
+            res.status(400).send("Please Enter SubscriptionId.");
             return;
         }
-        /*if (typeof azureStorageAccount === 'undefined' || azureStorageAccount.length === 0) {
-            res.send(400, "Please Enter Storage Account.");
-            return;
-        }*/
 
         if (typeof providerName === 'undefined' || providerName.length === 0) {
-            res.send(400, "Please Enter Name.");
+            res.status(400).send("Please Enter Name.");
             return;
         }
         if (typeof providerType === 'undefined' || providerType.length === 0) {
-            res.send(400, "Please Enter ProviderType.");
+            res.status(400).send("Please Enter ProviderType.");
             return;
         }
         if (typeof pemFileName === 'undefined' || orgId.length === 0) {
@@ -1192,9 +1103,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             return;
         }
 
-
-        var region;
-
         usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
             if (!err) {
                 logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
@@ -1211,16 +1119,15 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
             masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
                 if (err) {
-                    res.send(500, "Failed to fetch User.");
+                    res.status(500).send("Failed to fetch User.");
                     return;
                 }
-                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
+                logger.debug("LoggedIn User: ", JSON.stringify(anUser));
                 if (anUser) {
 
                     var providerData = {
                         id: 9,
                         subscriptionId: azureSubscriptionId,
-                        //storageAccount: azureStorageAccount,
                         providerName: providerName,
                         providerType: providerType,
                         pemFileName: pemFileName,
@@ -1229,36 +1136,31 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     };
                     azurecloudProvider.getAzureCloudProviderByName(providerData.providerName, providerData.orgId, function(err, prov) {
                         if (err) {
-                            logger.debug("err.....", err);
+                            logger.debug("Failed to fetch Azure provider. ", err);
+                            res.status(500).send("Failed to fetch Azure provider.");
+                            return;
                         }
                         if (prov) {
-                            logger.debug("getAzureCloudProviderByName: ", JSON.stringify(prov));
-                            logger.debug("err.....", err);
-                            res.status(409);
-                            res.send("Provider name already exist.");
+                            res.status(409).send("Provider name already exist.");
                             return;
                         }
                         azurecloudProvider.createNew(req, providerData, function(err, provider) {
                             if (err) {
-                                logger.debug("err.....", err);
-                                res.status(500);
-                                res.send("Failed to create Provider.");
+                                logger.debug("Failed to create Provider.", err);
+                                res.status(500).send("Failed to create Provider.");
                                 return;
                             }
-                            logger.debug("Provider id:  %s", JSON.stringify(provider._id));
 
                             masterUtil.getOrgById(providerData.orgId, function(err, orgs) {
                                 if (err) {
-                                    res.send(500, "Not able to fetch org.");
+                                    res.status(500).send("Not able to fetch org.");
                                     return;
                                 }
                                 if (orgs.length > 0) {
-
                                     var dommyProvider = {
                                         _id: provider._id,
                                         id: 9,
                                         subscriptionId: azureSubscriptionId,
-                                        //storageAccount: azureStorageAccount,
                                         providerName: provider.providerName,
                                         providerType: provider.providerType,
                                         pemFileName: pemFileName,
@@ -1270,7 +1172,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     };
                                     res.send(dommyProvider);
                                     return;
-
                                 }
                             });
 
@@ -1290,60 +1191,60 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var loggedInUser = req.session.user.cn;
         masterUtil.getLoggedInUser(loggedInUser, function(err, anUser) {
             if (err) {
-                res.send(500, "Failed to fetch User.");
+                res.status(500).send("Failed to fetch User.");
                 return;
             }
             if (!anUser) {
-                res.send(500, "Invalid User.");
+                res.status(500).send("Invalid User.");
                 return;
             }
             if (anUser.orgname_rowid[0] === "") {
                 masterUtil.getAllActiveOrg(function(err, orgList) {
                     if (err) {
-                        res.send(500, 'Not able to fetch Orgs.');
+                        res.status(500).send('Not able to fetch Orgs.');
                         return;
                     }
                     if (orgList) {
                         azurecloudProvider.getAzureCloudProvidersForOrg(orgList, function(err, providers) {
                             if (err) {
                                 logger.error(err);
-                                res.send(500, errorResponses.db.error);
+                                res.status(500).send(errorResponses.db.error);
                                 return;
                             }
                             if (providers != null) {
                                 for (var i = 0; i < providers.length; i++) {
                                     providers[i]['providerType'] = providers[i]['providerType'].toUpperCase();
                                 }
-                                logger.debug("providers>>> ", JSON.stringify(providers));
+                                logger.debug("providers: ", JSON.stringify(providers));
                                 if (providers.length > 0) {
                                     res.send(providers);
                                     return;
                                 }
                             } else {
-                                res.send(200, []);
+                                res.status(200).send([]);
                                 return;
                             }
                         });
                     } else {
-                        res.send(200, []);
+                        res.status(200).send([]);
                         return;
                     }
                 });
             } else {
                 masterUtil.getOrgs(loggedInUser, function(err, orgList) {
                     if (err) {
-                        res.send(500, 'Not able to fetch Orgs.');
+                        res.status(500).send('Not able to fetch Orgs.');
                         return;
                     }
                     if (orgList) {
                         azurecloudProvider.getAzureCloudProvidersForOrg(orgList, function(err, providers) {
                             if (err) {
                                 logger.error(err);
-                                res.send(500, errorResponses.db.error);
+                                res.status(500).send(errorResponses.db.error);
                                 return;
                             }
                             var providersList = [];
-                            logger.debug("Providers::::::::::::::::::: ", providers === null);
+                            logger.debug("Providers: ", providers);
                             if (providers === null) {
                                 res.send(providersList);
                                 return;
@@ -1357,7 +1258,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             }
                         });
                     } else {
-                        res.send(200, []);
+                        res.status(200).send([]);
                         return;
                     }
                 });
@@ -1370,13 +1271,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         logger.debug("Enter get() for /azure/providers//%s", req.params.providerId);
         var providerId = req.params.providerId.trim();
         if (typeof providerId === 'undefined' || providerId.length === 0) {
-            res.send(500, "Please Enter ProviderId.");
+            res.status(500).send("Please Enter ProviderId.");
             return;
         }
         azurecloudProvider.getAzureCloudProviderById(providerId, function(err, aProvider) {
             if (err) {
                 logger.error(err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (aProvider) {
@@ -1385,18 +1286,19 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 logger.debug(provider.orgId);
                 masterUtil.getOrgById(provider.orgId[0], function(err, orgs) {
                     if (err) {
-                        res.send(500, "Not able to fetch org.");
+                        res.status(500).send("Not able to fetch org.");
                         return;
                     }
                     aProvider.orgname = orgs[0].orgname;
 
                     if (orgs.length > 0) {
                         res.send(aProvider);
+                        return;
                     }
                 });
 
             } else {
-                res.send(404);
+                res.status(500).send("Not Found Provider.");
             }
         });
     }); //end: get azure provider by id
@@ -1409,9 +1311,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var permissionto = 'create';
 
         var azureSubscriptionId = req.body.azureSubscriptionId;
-        //var azureStorageAccount = req.body.azureStorageAccount;
         var providerName = req.body.providerName;
         var providerType = req.body.providerType.toLowerCase();
+        var providerId = req.params.providerId;
 
         logger.debug("Pem file name:", req.files.azurepem.originalFilename);
         logger.debug("Key file name:", req.files.azurekey.originalFilename);
@@ -1422,13 +1324,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var orgId = req.body.orgId;
 
         if (typeof azureSubscriptionId === 'undefined' || azureSubscriptionId.length === 0) {
-            res.send(400, "Please Enter Subscription Id.");
+            res.status(400).send("Please Enter Subscription Id.");
             return;
         }
-        /*if (typeof azureStorageAccount === 'undefined' || azureStorageAccount.length === 0) {
-            res.send(400, "Please Enter Storage Account.");
-            return;
-        }*/
+
         if (typeof pemFileName === 'undefined' || orgId.length === 0) {
             res.status(400);
             res.send("Please upload azure subscription pem file");
@@ -1441,27 +1340,23 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         }
 
         if (typeof providerName === 'undefined' || providerName.length === 0) {
-            res.send(400, "Please Enter Name.");
+            res.status(400).send("Please Enter Name.");
             return;
         }
         if (typeof providerType === 'undefined' || providerType.length === 0) {
-            res.send(400, "Please Enter ProviderType.");
+            res.status(400).send("Please Enter ProviderType.");
             return;
         }
-
 
         var providerData = {
             id: 9,
             azureSubscriptionId: azureSubscriptionId,
-            //azureStorageAccount: azureStorageAccount,
             providerName: providerName,
             providerType: providerType,
             pemFileName: pemFileName,
             keyFileName: keyFileName,
             orgId: orgId
         };
-        logger.debug("provider>>>>>>>>>>>> %s", providerData.providerType);
-        logger.debug("provider data>>>>>>>>>>>> %s", JSON.stringify(providerData));
 
         usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
             if (!err) {
@@ -1479,29 +1374,27 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
             masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
                 if (err) {
-                    res.send(500, "Failed to fetch User.");
+                    res.status(500).send("Failed to fetch User.");
+                    return;
                 }
-                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
+                logger.debug("LoggedIn User: ", JSON.stringify(anUser));
                 if (anUser) {
-
-                    logger.debug("Able to get AWS Keypairs. %s", JSON.stringify(data));
-                    azurecloudProvider.updateAzureCloudProviderById(req.params.providerId, providerData, function(err, updateCount) {
+                    azurecloudProvider.updateAzureCloudProviderById(providerId, providerData, function(err, updateCount) {
                         if (err) {
                             logger.error(err);
-                            res.send(500, errorResponses.db.error);
+                            res.status(500).send(errorResponses.db.error);
                             return;
                         }
                         masterUtil.getOrgById(providerData.orgId, function(err, orgs) {
                             if (err) {
-                                res.send(500, "Not able to fetch org.");
+                                res.status(500).send("Not able to fetch org.");
                                 return;
                             }
                             if (orgs.length > 0) {
                                 var dommyProvider = {
-                                    _id: req.params.providerId,
+                                    _id: providerId,
                                     id: 9,
                                     subscriptionId: azureSubscriptionId,
-                                    //storageAccount: azureStorageAccount,
                                     providerName: providerData.providerName,
                                     providerType: providerData.providerType,
                                     pemFileName: pemFileName,
@@ -1528,7 +1421,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var permissionto = 'delete';
         var providerId = req.params.providerId.trim();
         if (typeof providerId === 'undefined' || providerId.length === 0) {
-            res.send(500, "Please Enter ProviderId.");
+            res.status(500).send("Please Enter ProviderId.");
             return;
         }
 
@@ -1537,7 +1430,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
                 if (data == false) {
                     logger.debug('No permission to ' + permissionto + ' on ' + category);
-                    res.send(401, "You don't have permission to perform this operation.");
+                    res.status(401).send("You don't have permission to perform this operation.");
                     return;
                 }
             } else {
@@ -1548,32 +1441,25 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
             masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
                 if (err) {
-                    res.send(500, "Failed to fetch User.");
+                    res.status(500).send("Failed to fetch User.");
                 }
-                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
+                logger.debug("LoggedIn User: ", JSON.stringify(anUser));
                 if (anUser) {
-                    //data == true (create permission)
-                    /*if(data && anUser.orgname_rowid[0] !== ""){
-                    logger.debug("Inside check not authorized.");
-                    res.send(401,"You don't have permission to perform this operation.");
-                    return;
-                }*/
-
                     VMImage.getImageByProviderId(providerId, function(err, anImage) {
                         if (err) {
-                            logger.error(err);
-                            res.send(500, errorResponses.db.error);
+                            logger.error(errorResponses.db.error);
+                            res.status(500).send("Failed to get Image.");
                             return;
                         }
                         if (anImage) {
-                            res.send(403, "Provider already used by Some Images.To delete provider please delete respective Images first.");
+                            res.status(403).send("Provider already used by Some Images.To delete provider please delete respective Images first.");
                             return;
                         }
 
                         azurecloudProvider.removeAzureCloudProviderById(providerId, function(err, deleteCount) {
                             if (err) {
                                 logger.error(err);
-                                res.send(500, errorResponses.db.error);
+                                res.status(500).send("Failed to get Provider.");
                                 return;
                             }
                             if (deleteCount) {
@@ -1591,10 +1477,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         }); //
     });
 
-
     //Create Openstack provider
     app.post('/openstack/providers', function(req, res) {
-
         logger.debug("Enter post() for /providers.", typeof req.body.fileName);
         var user = req.session.user;
         var category = configmgmtDao.getCategoryFromID("9");
@@ -1608,81 +1492,67 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var providerName = req.body.providerName;
         var providerType = req.body.providerType;
         var openstackkeyname = req.body.openstackkeyname;
+        var orgId = req.body.orgId;
+
         var serviceendpoints = {
             compute: req.body.openstackendpointcompute,
             network: req.body.openstackendpointnetwork,
             image: req.body.openstackendpointimage,
             ec2: req.body.openstackendpointec2,
             identity: req.body.openstackendpointidentity,
-
         };
 
-
-
-        var orgId = req.body.orgId;
-
         if (typeof openstackusername === 'undefined' || openstackusername.length === 0) {
-            res.send(400, "Please Enter Username.");
+            res.status(400).send("Please Enter Username.");
             return;
         }
         if (typeof openstackpassword === 'undefined' || openstackpassword.length === 0) {
-            res.send(400, "Please Enter Password.");
+            res.status(400).send("Please Enter Password.");
             return;
         }
         if (typeof openstackhost === 'undefined' || openstackhost.length === 0) {
-            res.send(400, "Please Enter a Host.");
+            res.status(400).send("Please Enter a Host.");
             return;
         }
         if (typeof openstacktenantid === 'undefined' || openstacktenantid.length === 0) {
-            res.send(400, "Please Enter a Tenant ID");
+            res.status(400).send("Please Enter a Tenant ID");
             return;
         }
         if (typeof providerName === 'undefined' || providerName.length === 0) {
-            res.send(400, "Please Enter Name.");
+            res.status(400).send("Please Enter Name.");
             return;
         }
         if (typeof providerType === 'undefined' || providerType.length === 0) {
-            res.send(400, "Please Enter ProviderType.");
+            res.status(400).send("Please Enter ProviderType.");
             return;
         }
         if (typeof orgId === 'undefined' || orgId.length === 0) {
-            res.status(400);
-            res.send("Please Select Any Organization.");
+            res.status(400).send("Please Select Any Organization.");
             return;
         }
         if (typeof openstacktenantname === 'undefined' || openstacktenantname.length === 0) {
-            res.send(400, "Please Enter Tenant Name.");
+            res.status(400).send("Please Enter Tenant Name.");
             return;
         }
         if (typeof openstackprojectname === 'undefined' || openstackprojectname.length === 0) {
-            res.send(400, "Please Enter Project Name.");
+            res.status(400).send("Please Enter Project Name.");
             return;
         }
         if (typeof serviceendpoints.compute === 'undefined' || serviceendpoints.compute.length === 0) {
-            res.send(400, "Please Enter Compute Endpoint Name.");
+            res.status(400).send("Please Enter Compute Endpoint Name.");
             return;
         }
         if (typeof serviceendpoints.identity === 'undefined' || serviceendpoints.identity.length === 0) {
-            res.send(400, "Please Enter Identity Endpoint Name.");
+            res.status(400).send("Please Enter Identity Endpoint Name.");
             return;
         }
-
-
-        var region;
-        // if (typeof req.body.region === 'string') {
-        //     logger.debug("inside single region: ", req.body.region);
-        //     region = req.body.region;
-        // } else {
-        //     region = req.body.region[0];
-        // }
-        // logger.debug("Final Region:  ", region)
 
         usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
             if (!err) {
                 logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
                 if (data == false) {
                     logger.debug('No permission to ' + permissionto + ' on ' + category);
-                    res.send(401, "You don't have permission to perform this operation.");
+                    res.status(400).send("You don't have permission to perform this operation.");
                     return;
                 }
             } else {
@@ -1693,10 +1563,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
             masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
                 if (err) {
-                    res.send(500, "Failed to fetch User.");
+                    res.status(500).send("Failed to fetch User.");
                     return;
                 }
-                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
+                logger.debug("LoggedIn User: ", JSON.stringify(anUser));
                 if (anUser) {
 
                     var providerData = {
@@ -1718,28 +1588,23 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             logger.debug("err.....", err);
                         }
                         if (prov) {
-                            logger.debug("getAWSProviderByName: ", JSON.stringify(prov));
                             logger.debug("err.....", err);
-                            res.status(409);
-                            res.send("Provider name already exist.");
+                            res.status(409).send("Provider name already exist.");
                             return;
                         }
-                        openstackProvider.createNew(req,providerData, function(err, provider) {
+                        openstackProvider.createNew(req, providerData, function(err, provider) {
                             if (err) {
                                 logger.debug("err.....", err);
-                                res.status(500);
-                                res.send("Failed to create Provider.");
+                                res.status(500).send("Failed to create Provider.");
                                 return;
                             }
-                            logger.debug("Provider id:  %s", JSON.stringify(provider._id));
 
                             masterUtil.getOrgById(providerData.orgId, function(err, orgs) {
                                 if (err) {
-                                    res.send(500, "Not able to fetch org.");
+                                    res.status(500).send("Not able to fetch org.");
                                     return;
                                 }
                                 if (orgs.length > 0) {
-
                                     var dommyProvider = {
                                         _id: provider._id,
                                         id: 9,
@@ -1756,7 +1621,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     };
                                     res.send(dommyProvider);
                                     return;
-
                                 }
                             });
 
@@ -1776,57 +1640,55 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var loggedInUser = req.session.user.cn;
         masterUtil.getLoggedInUser(loggedInUser, function(err, anUser) {
             if (err) {
-                res.send(500, "Failed to fetch User.");
+                res.status(500).send("Failed to fetch User.");
                 return;
             }
             if (!anUser) {
-                res.send(500, "Invalid User.");
+                res.status(500).send("Invalid User.");
                 return;
             }
             if (anUser.orgname_rowid[0] === "") {
                 masterUtil.getAllActiveOrg(function(err, orgList) {
                     if (err) {
-                        res.send(500, 'Not able to fetch Orgs.');
+                        res.status(500).send('Not able to fetch Orgs.');
                         return;
                     }
                     if (orgList) {
                         openstackProvider.getopenstackProvidersForOrg(orgList, function(err, providers) {
                             if (err) {
                                 logger.error(err);
-                                res.send(500, errorResponses.db.error);
+                                res.status(500).send(errorResponses.db.error);
                                 return;
                             }
                             if (providers != null) {
-                                logger.debug("providers>>> ", JSON.stringify(providers));
                                 if (providers.length > 0) {
                                     res.send(providers);
                                     return;
                                 }
                             } else {
-                                res.send(200, []);
+                                res.status(200).send([]);
                                 return;
                             }
                         });
                     } else {
-                        res.send(200, []);
+                        res.status(500).send([]);
                         return;
                     }
                 });
             } else {
                 masterUtil.getOrgs(loggedInUser, function(err, orgList) {
                     if (err) {
-                        res.send(500, 'Not able to fetch Orgs.');
+                        res.status(500).send('Not able to fetch Orgs.');
                         return;
                     }
                     if (orgList) {
                         openstackProvider.getopenstackProvidersForOrg(orgList, function(err, providers) {
                             if (err) {
                                 logger.error(err);
-                                res.send(500, errorResponses.db.error);
+                                res.status(500).send(errorResponses.db.error);
                                 return;
                             }
                             var providersList = [];
-                            logger.debug("Providers::::::::::::::::::: ", providers === null);
                             if (providers === null) {
                                 res.send(providersList);
                                 return;
@@ -1840,7 +1702,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             }
                         });
                     } else {
-                        res.send(200, []);
+                        res.status(200).send([]);
                         return;
                     }
                 });
@@ -1853,31 +1715,32 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         logger.debug("Enter get() for /providers/%s", req.params.providerId);
         var providerId = req.params.providerId.trim();
         if (typeof providerId === 'undefined' || providerId.length === 0) {
-            res.send(500, "Please Enter ProviderId.");
+            res.status(500).send("Please Enter ProviderId.");
             return;
         }
         openstackProvider.getopenstackProviderById(providerId, function(err, aProvider) {
             if (err) {
                 logger.error(err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
             if (aProvider) {
 
                 masterUtil.getOrgById(aProvider.orgId[0], function(err, orgs) {
                     if (err) {
-                        res.send(500, "Not able to fetch org.");
+                        res.status(500).send("Not able to fetch org.");
                         return;
                     }
                     aProvider.orgname = orgs[0].orgname;
 
                     if (orgs.length > 0) {
                         res.send(aProvider);
+                        return;
                     }
                 });
 
             } else {
-                res.send(404);
+                res.status(404).send("Provider not found.");
             }
         });
     });
@@ -1898,6 +1761,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var providerType = req.body.providerType.trim();
         var providerId = req.params.providerId.trim();
         var openstackkeyname = req.body.openstackkeyname;
+        var orgId = req.body.orgId;
+        var providerId = req.params.providerId;
+
         var serviceendpoints = {
             compute: req.body.openstackendpointcompute,
             network: req.body.openstackendpointnetwork,
@@ -1906,50 +1772,49 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             identity: req.body.openstackendpointidentity
 
         };
-        var orgId = req.body.orgId;
+
         if (typeof openstackusername === 'undefined' || openstackusername.length === 0) {
-            res.send(400, "Please Enter Username.");
+            res.status(400).send("Please Enter Username.");
             return;
         }
         if (typeof openstackpassword === 'undefined' || openstackpassword.length === 0) {
-            res.send(400, "Please Enter Password.");
+            res.status(400).send("Please Enter Password.");
             return;
         }
         if (typeof openstackhost === 'undefined' || openstackhost.length === 0) {
-            res.send(400, "Please Enter a Host");
+            res.status(400).send("Please Enter a Host");
             return;
         }
         if (typeof openstacktenantid === 'undefined' || openstacktenantid.length === 0) {
-            res.send(400, "Please Enter a Tenant ID");
+            res.status(400).send("Please Enter a Tenant ID");
             return;
         }
         if (typeof providerName === 'undefined' || providerName.length === 0) {
-            res.send(400, "Please Enter Name.");
+            res.status(400).send("Please Enter Name.");
             return;
         }
         if (typeof providerType === 'undefined' || providerType.length === 0) {
-            res.send(400, "Please Enter ProviderType.");
+            res.status(400).send("Please Enter ProviderType.");
             return;
         }
         if (typeof openstacktenantname === 'undefined' || openstacktenantname.length === 0) {
-            res.send(400, "Please Enter Tenant Name.");
+            res.status(400).send("Please Enter Tenant Name.");
             return;
         }
         if (typeof openstackprojectname === 'undefined' || openstackprojectname.length === 0) {
-            res.send(400, "Please Enter Project Name.");
+            res.status(400).send("Please Enter Project Name.");
             return;
         }
         if (typeof orgId === 'undefined' || orgId.length === 0) {
-            res.status(400);
-            res.send("Please Select Any Organization.");
+            res.status(400).send("Please Select Any Organization.");
             return;
         }
         if (typeof serviceendpoints.compute === 'undefined' || serviceendpoints.compute.length === 0) {
-            res.send(400, "Please Enter Compute Endpoint Name.");
+            res.status(400).send("Please Enter Compute Endpoint Name.");
             return;
         }
         if (typeof serviceendpoints.identity === 'undefined' || serviceendpoints.identity.length === 0) {
-            res.send(400, "Please Enter Identity Endpoint Name.");
+            res.status(400).send("Please Enter Identity Endpoint Name.");
             return;
         }
 
@@ -1966,18 +1831,15 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             providerType: providerType,
             serviceendpoints: serviceendpoints,
             keyname: openstackkeyname,
-
             orgId: orgId
         };
-        logger.debug("provider>>>>>>>>>>>> %s", providerData.providerType);
-        logger.debug("provider data>>>>>>>>>>>> %s", JSON.stringify(providerData));
 
         usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
             if (!err) {
                 logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
                 if (data == false) {
                     logger.debug('No permission to ' + permissionto + ' on ' + category);
-                    res.send(401, "You don't have permission to perform this operation.");
+                    res.status(401).send("You don't have permission to perform this operation.");
                     return;
                 }
             } else {
@@ -1988,26 +1850,25 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
             masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
                 if (err) {
-                    res.send(500, "Failed to fetch User.");
+                    res.status(500).send("Failed to fetch User.");
                 }
-                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
                 if (anUser) {
 
                     logger.debug("Able to get AWS Keypairs. %s", JSON.stringify(data));
-                    openstackProvider.updateopenstackProviderById(req.params.providerId, providerData, function(err, updateCount) {
+                    openstackProvider.updateopenstackProviderById(providerId, providerData, function(err, updateCount) {
                         if (err) {
                             logger.error(err);
-                            res.send(500, errorResponses.db.error);
+                            res.status(500).send(errorResponses.db.error);
                             return;
                         }
                         masterUtil.getOrgById(providerData.orgId, function(err, orgs) {
                             if (err) {
-                                res.send(500, "Not able to fetch org.");
+                                res.status(500).send("Not able to fetch org.");
                                 return;
                             }
                             if (orgs.length > 0) {
                                 var dommyProvider = {
-                                    _id: req.params.providerId,
+                                    _id: providerId,
                                     id: 9,
                                     username: openstackusername,
                                     password: openstackpassword,
@@ -2026,12 +1887,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 }
             });
         });
-
-
-
     });
-
-
 
     // Delete a particular AWS Provider.
     app.delete('/openstack/providers/:providerId', function(req, res) {
@@ -2040,8 +1896,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var category = configmgmtDao.getCategoryFromID("9");
         var permissionto = 'delete';
         var providerId = req.params.providerId.trim();
+
         if (typeof providerId === 'undefined' || providerId.length === 0) {
-            res.send(500, "Please Enter ProviderId.");
+            res.status(500).send("Please Enter ProviderId.");
             return;
         }
 
@@ -2061,21 +1918,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
             masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
                 if (err) {
-                    res.send(500, "Failed to fetch User.");
+                    res.status(500).send("Failed to fetch User.");
                 }
-                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
                 if (anUser) {
-                    //data == true (create permission)
-                    /*if(data && anUser.orgname_rowid[0] !== ""){
-                    logger.debug("Inside check not authorized.");
-                    res.send(401,"You don't have permission to perform this operation.");
-                    return;
-                }*/
-
                     VMImage.getImageByProviderId(providerId, function(err, anImage) {
                         if (err) {
                             logger.error(err);
-                            res.send(500, errorResponses.db.error);
+                            res.status(500).send(errorResponses.db.error);
                             return;
                         }
                         if (anImage) {
@@ -2086,28 +1935,29 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         openstackProvider.removeopenstackProviderById(providerId, function(err, deleteCount) {
                             if (err) {
                                 logger.error(err);
-                                res.send(500, errorResponses.db.error);
+                                res.status(500).send(errorResponses.db.error);
                                 return;
                             }
                             if (deleteCount) {
-                                logger.debug("Enter delete() for /providers/%s", req.params.providerId);
+                                logger.debug("Exit delete() for /providers/%s", req.params.providerId);
                                 res.send({
                                     deleteCount: deleteCount
                                 });
+                                return;
                             } else {
                                 res.send(400);
+                                return;
                             }
                         });
                     });
                 }
             });
-        }); //
+        });
     });
 
 
     // Create AWS Provider.
     app.post('/aws/providers', function(req, res) {
-
         logger.debug("Enter post() for /providers.", typeof req.body.fileName);
         var user = req.session.user;
         var category = configmgmtDao.getCategoryFromID("9");
@@ -2119,19 +1969,19 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var orgId = req.body.orgId;
 
         if (typeof accessKey === 'undefined' || accessKey.length === 0) {
-            res.send(400, "Please Enter AccessKey.");
+            res.status(400).send("Please Enter AccessKey.");
             return;
         }
         if (typeof secretKey === 'undefined' || secretKey.length === 0) {
-            res.send(400, "Please Enter SecretKey.");
+            res.status(400).send("Please Enter SecretKey.");
             return;
         }
         if (typeof providerName === 'undefined' || providerName.length === 0) {
-            res.send(400, "Please Enter Name.");
+            res.status(400).send("Please Enter Name.");
             return;
         }
         if (typeof providerType === 'undefined' || providerType.length === 0) {
-            res.send(400, "Please Enter ProviderType.");
+            res.status(400).send("Please Enter ProviderType.");
             return;
         }
         if (typeof orgId === 'undefined' || orgId.length === 0) {
@@ -2172,7 +2022,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             });
             usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
                 if (!err) {
-                    logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
                     if (data == false) {
                         logger.debug('No permission to ' + permissionto + ' on ' + category);
                         res.send(401, "You don't have permission to perform this operation.");
@@ -2186,41 +2035,36 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                 masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
                     if (err) {
-                        res.send(500, "Failed to fetch User.");
+                        res.status(500).send("Failed to fetch User.");
                         return;
                     }
-                    logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
                     if (anUser) {
                         ec2.describeKeyPairs(function(err, data) {
                             if (err) {
                                 logger.debug("Unable to get AWS Keypairs");
-                                res.send("Invalid AccessKey or SecretKey.", 500);
+                                res.status(500).send("Invalid AccessKey or SecretKey.");
                                 return;
                             }
                             logger.debug("Able to get AWS Keypairs. %s", JSON.stringify(data));
                             AWSProvider.getAWSProviderByName(providerData.providerName, providerData.orgId, function(err, prov) {
                                 if (err) {
-                                    logger.debug("err.....", err);
+                                    logger.error("err. ", err);
                                 }
                                 if (prov) {
                                     logger.debug("getAWSProviderByName: ", JSON.stringify(prov));
-                                    logger.debug("err.....", err);
-                                    res.status(409);
-                                    res.send("Provider name already exist.");
+                                    res.status(409).send("Provider name already exist.");
                                     return;
                                 }
                                 AWSProvider.createNew(providerData, function(err, provider) {
                                     if (err) {
-                                        logger.debug("err.....", err);
-                                        res.status(500);
-                                        res.send("Failed to create Provider.");
+                                        logger.error("err. ", err);
+                                        res.status(500).send("Failed to create Provider.");
                                         return;
                                     }
-                                    logger.debug("Provider id:  %s", JSON.stringify(provider._id));
                                     AWSKeyPair.createNew(req, provider._id, function(err, keyPair) {
                                         masterUtil.getOrgById(providerData.orgId, function(err, orgs) {
                                             if (err) {
-                                                res.send(500, "Not able to fetch org.");
+                                                res.status(500).send("Not able to fetch org.");
                                                 return;
                                             }
                                             if (orgs.length > 0) {
@@ -2259,29 +2103,27 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var loggedInUser = req.session.user.cn;
         masterUtil.getLoggedInUser(loggedInUser, function(err, anUser) {
             if (err) {
-                res.send(500, "Failed to fetch User.");
+                res.status(500).send("Failed to fetch User.");
                 return;
             }
             if (!anUser) {
-                res.send(500, "Invalid User.");
+                res.status(500).send("Invalid User.");
                 return;
             }
             if (anUser.orgname_rowid[0] === "") {
                 masterUtil.getAllActiveOrg(function(err, orgList) {
                     if (err) {
-                        res.send(500, 'Not able to fetch Orgs.');
+                        res.status(500).send('Not able to fetch Orgs.');
                         return;
                     }
                     if (orgList) {
                         AWSProvider.getAWSProvidersForOrg(orgList, function(err, providers) {
                             if (err) {
                                 logger.error(err);
-                                res.send(500, errorResponses.db.error);
+                                res.status(500).send(errorResponses.db.error);
                                 return;
                             }
-                            logger.debug("providers>>> ", JSON.stringify(providers));
                             var providersList = [];
-
                             if (providers.length > 0) {
                                 for (var i = 0; i < providers.length; i++) {
                                     var keys = [];
@@ -2289,13 +2131,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     keys.push(providers[i].secretKey);
                                     cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
                                         if (err) {
-                                            res.send(500, "Failed to decrypt accessKey or secretKey");
+                                            res.status(500).send("Failed to decrypt accessKey or secretKey");
                                             return;
                                         }
                                         providers[i].accessKey = decryptedKeys[0];
                                         providers[i].secretKey = decryptedKeys[1];
                                         providersList.push(providers[i]);
-                                        logger.debug("providers>>> ", JSON.stringify(providers));
+                                        logger.debug("providers: ", JSON.stringify(providers));
                                         if (providers.length === providersList.length) {
                                             res.send(providersList);
                                             return;
@@ -2315,18 +2157,17 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             } else {
                 masterUtil.getOrgs(loggedInUser, function(err, orgList) {
                     if (err) {
-                        res.send(500, 'Not able to fetch Orgs.');
+                        res.status(500).send('Not able to fetch Orgs.');
                         return;
                     }
                     if (orgList) {
                         AWSProvider.getAWSProvidersForOrg(orgList, function(err, providers) {
                             if (err) {
                                 logger.error(err);
-                                res.send(500, errorResponses.db.error);
+                                res.status(500).send(errorResponses.db.error);
                                 return;
                             }
                             var providersList = [];
-                            logger.debug("Providers::::::::::::::::::: ", providers === null);
                             if (providers === null) {
                                 res.send(providersList);
                                 return;
@@ -2344,7 +2185,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         providers[i].accessKey = decryptedKeys[0];
                                         providers[i].secretKey = decryptedKeys[1];
                                         providersList.push(providers[i]);
-                                        logger.debug("providers>>> ", JSON.stringify(providers));
+                                        logger.debug("providers: ", JSON.stringify(providers));
                                         if (providers.length === providersList.length) {
                                             res.send(providersList);
                                             return;
@@ -2378,29 +2219,29 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var providerId = req.params.providerId.trim();
         var orgId = req.body.orgId;
         if (typeof providerId === 'undefined' || providerId.length === 0) {
-            res.send(400, "{Please Enter ProviderId.}");
+            res.status(400).send("{Please Enter ProviderId.}");
             return;
         }
         if (typeof accessKey === 'undefined' || accessKey.length === 0) {
-            res.send(400, "{Please Enter AccessKey.}");
+            res.status(400).send("{Please Enter AccessKey.}");
             return;
         }
         if (typeof secretKey === 'undefined' || secretKey.length === 0) {
-            res.send(400, "{Please Enter SecretKey.}");
+            res.status(400).send("{Please Enter SecretKey.}");
             return;
         }
         if (typeof providerName === 'undefined' || providerName.length === 0) {
-            res.send(400, "{Please Enter Name.}");
+            res.status(400).send("{Please Enter Name.}");
             return;
         }
         if (typeof providerType === 'undefined' || providerType.length === 0) {
-            res.send(400, "{Please Enter ProviderType.}");
+            res.status(400).send("{Please Enter ProviderType.}");
             return;
         }
 
         AWSKeyPair.getAWSKeyPairByProviderId(providerId, function(err, keypairs) {
             if (err) {
-                res.send(500, "Failed to fetch Keypairs.")
+                res.status(500).send("Failed to fetch Keypairs.")
             }
             if (keypairs) {
                 var region = keypairs[0].region;
@@ -2421,7 +2262,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         providerType: providerType,
                         orgId: orgId
                     };
-                    logger.debug("provider>>>>>>>>>>>> %s", providerData.providerType);
                     var ec2 = new EC2({
                         "access_key": accessKey,
                         "secret_key": secretKey,
@@ -2443,24 +2283,22 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                         masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
                             if (err) {
-                                res.send(500, "Failed to fetch User.");
+                                res.status(500).send("Failed to fetch User.");
                             }
-                            logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
                             if (anUser) {
                                 ec2.describeKeyPairs(function(err, data) {
                                     if (err) {
                                         logger.debug("Unable to get AWS Keypairs");
-                                        res.send("Invalid AccessKey or SecretKey.", 500);
+                                        res.status(500).send("Invalid AccessKey or SecretKey.");
                                         return;
                                     }
                                     logger.debug("Able to get AWS Keypairs. %s", JSON.stringify(data));
-                                    AWSProvider.updateAWSProviderById(req.params.providerId, providerData, function(err, updateCount) {
+                                    AWSProvider.updateAWSProviderById(providerId, providerData, function(err, updateCount) {
                                         if (err) {
                                             logger.error(err);
-                                            res.send(500, errorResponses.db.error);
+                                            res.status(500).send(errorResponses.db.error);
                                             return;
                                         }
-                                        logger.debug("req.body.keyPairName: ", typeof req.body.keyPairName);
                                         if (typeof req.body.keyPairName === 'undefined') {
                                             res.send({
                                                 updateCount: updateCount
@@ -2496,7 +2334,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var permissionto = 'delete';
         var providerId = req.params.providerId.trim();
         if (typeof providerId === 'undefined' || providerId.length === 0) {
-            res.send(500, "Please Enter ProviderId.");
+            res.status(500).send("Please Enter ProviderId.");
             return;
         }
 
@@ -2516,21 +2354,13 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
             masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
                 if (err) {
-                    res.send(500, "Failed to fetch User.");
+                    res.status(500).send("Failed to fetch User.");
                 }
-                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
                 if (anUser) {
-                    //data == true (create permission)
-                    /*if(data && anUser.orgname_rowid[0] !== ""){
-                    logger.debug("Inside check not authorized.");
-                    res.send(401,"You don't have permission to perform this operation.");
-                    return;
-                }*/
-
                     VMImage.getImageByProviderId(providerId, function(err, anImage) {
                         if (err) {
                             logger.error(err);
-                            res.send(500, errorResponses.db.error);
+                            res.status(500).send(errorResponses.db.error);
                             return;
                         }
                         if (anImage) {
@@ -2541,7 +2371,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         AWSProvider.removeAWSProviderById(providerId, function(err, deleteCount) {
                             if (err) {
                                 logger.error(err);
-                                res.send(500, errorResponses.db.error);
+                                res.status(500).send(errorResponses.db.error);
                                 return;
                             }
                             if (deleteCount) {
@@ -2556,7 +2386,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     });
                 }
             });
-        }); //
+        });
     });
 
     // Delete a particular AWS Provider.
@@ -2567,7 +2397,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var permissionto = 'delete';
         var keyPairId = req.params.keyPairId.trim();
         if (typeof keyPairId === 'undefined' || keyPairId.length === 0) {
-            res.send(500, "Please Enter keyPairId.");
+            res.status(500).send("Please Enter keyPairId.");
             return;
         }
         usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
@@ -2586,11 +2416,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
             masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
                 if (err) {
-                    res.send(500, "Failed to fetch User.");
+                    res.status(500).send("Failed to fetch User.");
                 }
-                logger.debug("LoggedIn User:>>>> ", JSON.stringify(anUser));
                 if (anUser) {
-                    //data == true (create permission)
                     if (data && anUser.orgname_rowid[0] !== "") {
                         logger.debug("Inside check not authorized.");
                         res.send(401, "You don't have permission to perform this operation.");
@@ -2599,10 +2427,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     blueprints.getBlueprintByKeyPairId(keyPairId, function(err, aBluePrint) {
                         if (err) {
                             logger.error(err);
-                            res.send(500, errorResponses.db.error);
+                            res.status(500).send(errorResponses.db.error);
                             return;
                         }
-                        logger.debug("BluePrints:>>>>> ", JSON.stringify(aBluePrint));
                         if (aBluePrint.length) {
                             res.send(403, "KeyPair already used by Some BluePrints.To delete KeyPair please delete respective BluePrints First.");
                             return;
@@ -2610,11 +2437,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                             instances.getInstanceByKeyPairId(keyPairId, function(err, anInstance) {
                                 if (err) {
                                     logger.error(err);
-                                    res.send(500, errorResponses.db.error);
+                                    res.status(500).send(errorResponses.db.error);
                                     return;
                                 }
                                 if (anInstance.length) {
-                                    res.send(403, "KeyPair is already used by Instance.");
+                                    res.status(403).send("KeyPair is already used by Instance.");
                                 } else {
                                     AWSKeyPair.removeAWSKeyPairById(keyPairId, function(err, deleteCount) {
                                         if (deleteCount) {
@@ -2644,11 +2471,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
         ec2.getSecurityGroups(function(err, data) {
             if (err) {
-                logger.debug("Unable to get AWS Security Groups.");
-                res.send("Unable to get AWS Security Groups.", 500);
+                logger.error("Unable to get AWS Security Groups. ", err);
+                res.status(500).send("Unable to get AWS Security Groups.");
                 return;
             }
-            logger.debug("Able to get AWS Security Groups. %s", JSON.stringify(data));
             res.send(data);
         });
     });
@@ -2665,11 +2491,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
         ec2.describeKeyPairs(function(err, data) {
             if (err) {
-                logger.debug("Unable to get AWS Keypairs");
-                res.send("Invalid AccessKey or SecretKey.", 500);
+                logger.error("Unable to get AWS Keypairs: ", err);
+                res.status(500).send("Invalid AccessKey or SecretKey.");
                 return;
             }
-            logger.debug("Able to get AWS Keypairs. %s", JSON.stringify(data));
             res.send(data);
         });
     });
@@ -2686,11 +2511,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
         ec2.getSecurityGroupsForVPC(req.params.vpcId, function(err, data) {
             if (err) {
-                logger.debug("Unable to get AWS Security Groups for VPC.");
-                res.send("Unable to get AWS Security Groups for VPC.", 500);
+                logger.error("Unable to get AWS Security Groups for VPC.");
+                res.status(500).send("Unable to get AWS Security Groups for VPC.");
                 return;
             }
-            logger.debug("Able to get AWS Security Groups for VPC. %s", JSON.stringify(data));
             res.send(data);
         });
     });
@@ -2706,11 +2530,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
         ec2.describeVpcs(function(err, data) {
             if (err) {
-                logger.debug("Unable to describe Vpcs from AWS.", err);
-                res.send("Unable to Describe Vpcs from AWS.", 500);
+                logger.error("Unable to describe Vpcs from AWS.", err);
+                res.status(500).send("Unable to Describe Vpcs from AWS.");
                 return;
             }
-            logger.debug("Success to Describe Vpcs from AWS.", data);
             res.send(data);
         });
     });
@@ -2726,11 +2549,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
         ec2.describeSubnets(req.params.vpcId, function(err, data) {
             if (err) {
-                logger.debug("Unable to describeSubnets from AWS.", err);
-                res.send("Unable to describeSubnets from AWS.", 500);
+                logger.error("Unable to describeSubnets from AWS.", err);
+                res.status(500).send("Unable to describeSubnets from AWS.");
                 return;
             }
-            logger.debug("Success to describeSubnets from AWS.", data);
             res.send(data);
         });
     });
@@ -2738,7 +2560,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.get('/aws/providers/permission/set', function(req, res) {
         masterUtil.checkPermission(req.session.user.cn, function(err, permissionSet) {
             if (err) {
-                res.send(500, "Error for permissionSet.");
+                res.status(500).send("Error for permissionSet.");
             }
             if (permissionSet) {
                 res.send(permissionSet);
@@ -2753,20 +2575,21 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         logger.debug("Enter get() for /providers/org/%s", req.params.orgId);
         var orgId = req.params.orgId.trim();
         if (typeof orgId === 'undefined' || orgId.length === 0) {
-            res.send(500, "Please Enter orgId.");
+            res.status(500).send("Please Enter orgId.");
             return;
         }
         AWSProvider.getAWSProvidersByOrgId(orgId, function(err, providers) {
             if (err) {
                 logger.error(err);
-                res.send(500, errorResponses.db.error);
+                res.status(500).send(errorResponses.db.error);
                 return;
             }
-            logger.debug("providers>>> ", JSON.stringify(providers));
             if (providers) {
                 res.send(providers);
+                return;
             } else {
                 res.send([]);
+                return;
             }
         });
     });
@@ -2778,30 +2601,27 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var loggedInUser = req.session.user.cn;
         masterUtil.getLoggedInUser(loggedInUser, function(err, anUser) {
             if (err) {
-                res.send(500, "Failed to fetch User.");
+                res.status(500).send("Failed to fetch User.");
                 return;
             }
             if (!anUser) {
-                res.send(500, "Invalid User.");
+                res.status(500).send("Invalid User.");
                 return;
             }
             if (anUser.orgname_rowid[0] === "") {
                 masterUtil.getAllActiveOrg(function(err, orgList) {
                     if (err) {
-                        res.send(500, 'Not able to fetch Orgs.');
+                        res.status(500).send('Not able to fetch Orgs.');
                         return;
                     }
                     if (orgList) {
                         AWSProvider.getAWSProvidersForOrg(orgList, function(err, providers) {
                             if (err) {
                                 logger.error(err);
-                                res.send(500, errorResponses.db.error);
+                                res.status(500).send(errorResponses.db.error);
                                 return;
                             }
-                            logger.debug("providers>>> ", JSON.stringify(providers));
                             var providersList = {};
-
-
                             if (providers.length > 0) {
                                 var awsProviderList = [];
                                 for (var i = 0; i < providers.length; i++) {
@@ -2810,98 +2630,83 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     keys.push(providers[i].secretKey);
                                     cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
                                         if (err) {
-                                            res.send(500, "Failed to decrypt accessKey or secretKey");
+                                            res.status(500).send("Failed to decrypt accessKey or secretKey");
                                             return;
                                         }
                                         providers[i].accessKey = decryptedKeys[0];
                                         providers[i].secretKey = decryptedKeys[1];
                                         awsProviderList.push(providers[i]);
-                                        logger.debug("aws providers>>> ", JSON.stringify(providers));
                                     });
                                 }
                                 providersList.awsProviders = awsProviderList;
-                                //providersList.push(awsProviderList);
                             } else {
                                 providersList.awsProviders = [];
-                                //providersList.push([]);
                             }
 
                             openstackProvider.getopenstackProvidersForOrg(orgList, function(err, openstackProviders) {
                                 if (err) {
                                     logger.error(err);
-                                    res.send(500, errorResponses.db.error);
+                                    res.status(500).send(errorResponses.db.error);
                                     return;
                                 }
 
                                 if (openstackProviders != null) {
-                                    logger.debug("openstack Providers>>> ", JSON.stringify(openstackProviders));
                                     if (openstackProviders.length > 0) {
                                         providersList.openstackProviders = openstackProviders;
-                                        //providersList.push(openstackProviders);
                                     }
                                 } else {
                                     providersList.openstackProviders = [];
-                                    //providersList.push([]);
                                 }
 
                                 vmwareProvider.getvmwareProvidersForOrg(orgList, function(err, vmwareProviders) {
                                     if (err) {
                                         logger.error(err);
-                                        res.send(500, errorResponses.db.error);
+                                        res.status(500).send(errorResponses.db.error);
                                         return;
                                     }
                                     if (vmwareProviders != null) {
-                                        logger.debug("vmware Providers>>> ", JSON.stringify(vmwareProviders));
                                         if (vmwareProviders.length > 0) {
                                             providersList.vmwareProviders = vmwareProviders;
-                                            //providersList.push(vmwareProviders);
                                         }
                                     } else {
                                         providersList.vmwareProviders = [];
                                     }
 
-
                                     hppubliccloudProvider.gethppubliccloudProvidersForOrg(orgList, function(err, hpCloudProviders) {
                                         if (err) {
                                             logger.error(err);
-                                            res.send(500, errorResponses.db.error);
+                                            res.status(500).send(errorResponses.db.error);
                                             return;
                                         }
                                         if (hpCloudProviders != null) {
                                             for (var i = 0; i < hpCloudProviders.length; i++) {
                                                 hpCloudProviders[i]['providerType'] = hpCloudProviders[i]['providerType'].toUpperCase();
                                             }
-                                            logger.debug("providers>>> ", JSON.stringify(hpCloudProviders));
                                             if (hpCloudProviders.length > 0) {
                                                 providersList.hpPlublicCloudProviders = hpCloudProviders;
-                                                //providersList.push(hpCloudProviders);
                                             }
                                         } else {
                                             providersList.hpPlublicCloudProviders = [];
-                                            //providersList.push([]);
                                         }
 
                                         azurecloudProvider.getAzureCloudProvidersForOrg(orgList, function(err, azureProviders) {
 
                                             if (err) {
                                                 logger.error(err);
-                                                res.send(500, errorResponses.db.error);
+                                                res.status(500).send(errorResponses.db.error);
                                                 return;
                                             }
                                             if (azureProviders != null) {
                                                 for (var i = 0; i < azureProviders.length; i++) {
                                                     azureProviders[i]['providerType'] = azureProviders[i]['providerType'].toUpperCase();
                                                 }
-                                                logger.debug("providers>>> ", JSON.stringify(providers));
                                                 if (azureProviders.length > 0) {
                                                     providersList.azureProviders = azureProviders;
-                                                    //providersList.push(azureProviders);
                                                     res.send(providersList);
                                                     return;
                                                 }
                                             } else {
                                                 providersList.azureProviders = [];
-                                                //providersList.push([]);
                                                 res.send(200, providersList);
                                                 return;
                                             }
@@ -2915,27 +2720,24 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                         });
                     } else {
-                        res.send(200, []);
+                        res.status(200).send([]);
                         return;
                     }
                 });
             } else {
                 masterUtil.getOrgs(loggedInUser, function(err, orgList) {
                     if (err) {
-                        res.send(500, 'Not able to fetch Orgs.');
+                        res.status(500).send('Not able to fetch Orgs.');
                         return;
                     }
                     if (orgList) {
                         AWSProvider.getAWSProvidersForOrg(orgList, function(err, providers) {
                             if (err) {
                                 logger.error(err);
-                                res.send(500, errorResponses.db.error);
+                                res.status(500).send(errorResponses.db.error);
                                 return;
                             }
-                            logger.debug("providers>>> ", JSON.stringify(providers));
                             var providersList = {};
-
-
                             if (providers.length > 0) {
                                 var awsProviderList = [];
                                 for (var i = 0; i < providers.length; i++) {
@@ -2944,98 +2746,82 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     keys.push(providers[i].secretKey);
                                     cryptography.decryptMultipleText(keys, cryptoConfig.decryptionEncoding, cryptoConfig.encryptionEncoding, function(err, decryptedKeys) {
                                         if (err) {
-                                            res.send(500, "Failed to decrypt accessKey or secretKey");
+                                            res.status(500).send("Failed to decrypt accessKey or secretKey");
                                             return;
                                         }
                                         providers[i].accessKey = decryptedKeys[0];
                                         providers[i].secretKey = decryptedKeys[1];
                                         awsProviderList.push(providers[i]);
-                                        logger.debug("aws providers>>> ", JSON.stringify(providers));
                                     });
                                 }
                                 providersList.awsProviders = awsProviderList;
-                                //providersList.push(awsProviderList);
                             } else {
                                 providersList.awsProviders = [];
-                                //providersList.push([]);
                             }
 
                             openstackProvider.getopenstackProvidersForOrg(orgList, function(err, openstackProviders) {
                                 if (err) {
                                     logger.error(err);
-                                    res.send(500, errorResponses.db.error);
+                                    res.status(500).send(errorResponses.db.error);
                                     return;
                                 }
 
                                 if (openstackProviders != null) {
-                                    logger.debug("openstack Providers>>> ", JSON.stringify(openstackProviders));
                                     if (openstackProviders.length > 0) {
                                         providersList.openstackProviders = openstackProviders;
-                                        //providersList.push(openstackProviders);
                                     }
                                 } else {
                                     providersList.openstackProviders = [];
-                                    //providersList.push([]);
                                 }
 
                                 vmwareProvider.getvmwareProvidersForOrg(orgList, function(err, vmwareProviders) {
                                     if (err) {
                                         logger.error(err);
-                                        res.send(500, errorResponses.db.error);
+                                        res.status(500).send(errorResponses.db.error);
                                         return;
                                     }
                                     if (vmwareProviders != null) {
-                                        logger.debug("vmware Providers>>> ", JSON.stringify(vmwareProviders));
                                         if (vmwareProviders.length > 0) {
                                             providersList.vmwareProviders = vmwareProviders;
-                                            //providersList.push(vmwareProviders);
                                         }
                                     } else {
                                         providersList.vmwareProviders = [];
                                     }
 
-
                                     hppubliccloudProvider.gethppubliccloudProvidersForOrg(orgList, function(err, hpCloudProviders) {
                                         if (err) {
                                             logger.error(err);
-                                            res.send(500, errorResponses.db.error);
+                                            res.status(500).send(errorResponses.db.error);
                                             return;
                                         }
                                         if (hpCloudProviders != null) {
                                             for (var i = 0; i < hpCloudProviders.length; i++) {
                                                 hpCloudProviders[i]['providerType'] = hpCloudProviders[i]['providerType'].toUpperCase();
                                             }
-                                            logger.debug("providers>>> ", JSON.stringify(hpCloudProviders));
                                             if (hpCloudProviders.length > 0) {
                                                 providersList.hpPlublicCloudProviders = hpCloudProviders;
-                                                //providersList.push(hpCloudProviders);
                                             }
                                         } else {
                                             providersList.hpPlublicCloudProviders = [];
-                                            //providersList.push([]);
                                         }
 
                                         azurecloudProvider.getAzureCloudProvidersForOrg(orgList, function(err, azureProviders) {
-
                                             if (err) {
                                                 logger.error(err);
-                                                res.send(500, errorResponses.db.error);
+                                                res.status(500).send(errorResponses.db.error);
                                                 return;
                                             }
                                             if (azureProviders != null) {
                                                 for (var i = 0; i < azureProviders.length; i++) {
                                                     azureProviders[i]['providerType'] = azureProviders[i]['providerType'].toUpperCase();
                                                 }
-                                                logger.debug("providers>>> ", JSON.stringify(providers));
                                                 if (azureProviders.length > 0) {
                                                     providersList.azureProviders = azureProviders;
-                                                    //providersList.push(azureProviders);
                                                     res.send(providersList);
                                                     return;
                                                 }
                                             } else {
                                                 providersList.azureProviders = [];
-                                                //providersList.push([]);
                                                 res.send(200, providersList);
                                                 return;
                                             }
@@ -3069,6 +2855,37 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
         ec2.listInstances(function(err, nodes) {
             if (err) {
+                logger.error("Unable to list nodes from AWS.", err);
+                res.status(500).send("Unable to list nodes from AWS.");
+                return;
+            }
+            logger.debug("Success to list nodes from AWS.");
+            var nodeList = [];
+            for (var i = 0; i < nodes.Reservations.length; i++) {
+                var instance = {
+                    "instance": nodes.Reservations[i].Instances[0].InstanceId,
+                    "privateIp": nodes.Reservations[i].Instances[0].PrivateIpAddress,
+                    "publicIp": nodes.Reservations[i].Instances[0].PublicIpAddress,
+                    "privateDnsName": nodes.Reservations[i].Instances[0].PrivateDnsName
+                };
+                nodeList.push(instance);
+            }
+            var nodeListLength = nodeList.length;
+            logger.debug("I am in count of Total Instances", nodeListLength);
+            res.send(nodeList);
+        });
+    });
+    // List out all Active AWS nodes.
+    app.post('/aws/providers/activenode/list', function(req, res) {
+        logger.debug("Enter List Active AWS Nodes: ");
+
+        var ec2 = new EC2({
+            "access_key": req.body.accessKey,
+            "secret_key": req.body.secretKey,
+            "region": req.body.region
+        });
+        ec2.listActiveInstances(function(err, nodes) {
+            if (err) {
                 logger.debug("Unable to list nodes from AWS.", err);
                 res.send("Unable to list nodes from AWS.", 500);
                 return;
@@ -3084,8 +2901,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 };
                 nodeList.push(instance);
             }
+            var nodeListLength = nodeList.length;
+            logger.debug("I am in count of Active Instances", nodeListLength);
             res.send(nodeList);
         });
     });
 }
-

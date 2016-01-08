@@ -1,5 +1,13 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
 var mongoose = require('mongoose');
 var ObjectId = require('mongoose').Types.ObjectId;
+var logger = require('_pr/logger')(module);
 
 var Schema = mongoose.Schema;
 
@@ -20,31 +28,30 @@ var TaskStatus = mongoose.model('taskstatuses', TaskStatusSchema);
 var TaskStatusDao = function() {
 
     this.getTaskStatusById = function(taskId, callback) {
-        console.log(taskId);
-        TaskStatus.find({
-            "_id": new ObjectId(taskId)
-        }, function(err, data) {
-            if (err) {
-                callback(err, null);
-                return;
-            }
-            //console.log('data ==>', data);
-            callback(null, data);
+            logger.debug(taskId);
+            TaskStatus.find({
+                "_id": new ObjectId(taskId)
+            }, function(err, data) {
+                if (err) {
+                    callback(err, null);
+                    return;
+                }
+                callback(null, data);
 
-        });
-    },
+            });
+        },
 
-    this.createTaskStatus = function(taskStatusData, callback) {
-        var taskStatus = new TaskStatus(taskStatusData);
+        this.createTaskStatus = function(taskStatusData, callback) {
+            var taskStatus = new TaskStatus(taskStatusData);
 
-        taskStatus.save(function(err, data) {
-            if (err) {
-                callback(err, null);
-                return;
-            }
-            callback(null, data);
-        });
-    };
+            taskStatus.save(function(err, data) {
+                if (err) {
+                    callback(err, null);
+                    return;
+                }
+                callback(null, data);
+            });
+        };
 
     this.updateTaskStatus = function(taskId, updateData, callback) {
         var updateObj = {
@@ -77,7 +84,7 @@ var TaskStatusDao = function() {
                 callback(err, null);
                 return;
             }
-            console.log('updated ==>', data);
+            logger.debug('updated ==>', data);
             callback(null, data);
         });
     };
@@ -104,7 +111,7 @@ var TaskStatusDao = function() {
                 return;
             }
 
-            console.log('status', data);
+            logger.debug('status', data);
 
             callback(null, data);
         });

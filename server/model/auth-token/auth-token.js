@@ -1,3 +1,10 @@
+/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
+ */
+
 var logger = require('_pr/logger')(module);
 var mongoose = require('mongoose');
 var extend = require('mongoose-schema-extend');
@@ -34,7 +41,6 @@ var AuthTokenSchema = new Schema({
 
 // creates a new task
 AuthTokenSchema.statics.createNew = function(sessionData, callback) {
-    console.log('here === >>> anshul');
     var token = uuid.v4();
     var that = this;
     var authToken = new that({
@@ -43,7 +49,7 @@ AuthTokenSchema.statics.createNew = function(sessionData, callback) {
         sessionData: sessionData
     });
 
-    console.log('auth == > ',authToken);
+    logger.debug('auth == > ', authToken);
 
     authToken.save(function(err, data) {
         if (err) {
@@ -110,11 +116,6 @@ AuthTokenSchema.statics.removeByToken = function(token, callback) {
         callback(null, deleteCount);
     });
 };
-
-
-
-
-
 
 
 var AuthToken = mongoose.model('AuthToken', AuthTokenSchema);
