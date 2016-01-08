@@ -187,12 +187,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });
 
     // Get AppDeploy w.r.t. projectId
-    app.get('/app/deploy/offset/:offset/limit/:limit/paginate', function(req, res) {
+    app.post('/app/deploy/offset/:offset/limit/:limit/paginate', function(req, res) {
         logger.debug("Filtered by projectId called..");
         var offset=req.params.offset;
         var limit=req.params.limit;
-        var sortBy=req.query.sortBy;
-        var searchBy=req.query.searchBy;
+        var sortBy=req.body.sortBy;
+        var searchBy=req.body.searchBy;
         AppDeploy.getAppDeployWithPage(offset, limit, sortBy,searchBy, function(err, appDeploy) {
             if (err) {
                 res.status(500).send(errorResponses.db.error);

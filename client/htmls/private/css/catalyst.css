@@ -3251,6 +3251,9 @@ nav ul {
         font-size: 14px!important;
         color: #fff!important;
     }
+    #settingsNewClick{
+        color:#3276b1!important;
+    }
     #designStyle {
         margin-left: 16px;
     }
@@ -4301,4 +4304,18 @@ form.cmxform .gray * {
 }
 .modalHeightHelp{
     height:480px;overflow-y:auto
+}
+.leftSpaceStyle{
+    height:40px;background-color:#40baf1;color:white;border-right:1px solid silver;
+}
+.treeStyle{
+    margin-top:0px;font-size:11pt;font-weight:bold;padding-left:10px;padding-top:10px
+}
+.activeProviderOpen{
+    background-color:#40baf1;margin-right:1px;
+}
+.configureVM{
+    float:right;
+    margin-top:36px;
+    margin-right: 16px;
 }

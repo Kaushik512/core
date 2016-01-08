@@ -118,6 +118,44 @@ function devCall() {
     }
 }
 
+window.removeArmDeployment = function() {
+    var $selectedCard = $('.productdiv1.role-Selected1');
+
+    var armId = $selectedCard.attr('data-armId');
+    if (armId) {
+        //found now delete
+        bootbox.confirm({
+            message: "Are you sure you would like to remove this arm deployment? This will remove all the instances related to this deployment.",
+            title: "Confirmation",
+            callback: function(result) {
+                if (!result) {
+                    return;
+                }
+                $.ajax({
+                    url: '/azure-arm/' + armId,
+                    method: 'DELETE',
+                    success: function(data) {
+                        var $bcc = $selectedCard.parent().remove();
+                        if (data.instanceIds) {
+                            for (var i = 0; i < data.instanceIds.length; i++) {
+                                $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + data.instanceIds[i] + ']').parents('.domain-role-thumbnailDev').remove();
+                                var table = $('#tableinstanceview').DataTable();
+                                table.row('[data-instanceid=' + data.instanceIds[i] + ']').remove().draw(false);
+
+                            }
+                        }
+                    },
+                    error: function() {
+                    }
+                });
+            }
+        });
+    } else {
+        bootbox.alert('Please select a arm deployment to remove.');
+    }
+}
+
+
 
     $(document).ready(function() {
         /*********************************Instance.js********************/
@@ -3596,7 +3634,6 @@ function devCall() {
 
             $('.Orchestration').click(function(e) {
                 $.get('../organizations/' + urlParams.org + '/businessgroups/' + urlParams['bg'] + '/projects/' + urlParams.projid + '/environments/' + urlParams.envid + '/', function(dataRelatedTask) {
-                    console.log("Arabinda Behera=======================>>>>>>>>>>>>");
                     console.log(dataRelatedTask.tasks);
                     initializeTaskArea(dataRelatedTask.tasks);
                 });
@@ -3629,8 +3666,6 @@ function devCall() {
                             }
                         }
                     }
-                    //$('#ribbon').find('.breadcrumb').append('<li>"'+ DummyBreadCrumb'"</li>');
-                    //alert(DummyBreadCrumb);
                 }
 
             });
@@ -3681,7 +3716,7 @@ function devCall() {
         }
 
         function addARMToDom(arm) {
-            var $clonedDiv = $(' <div class="productdiv4"><div class="productdiv1 cardimage" ><ul class="list-unstyled system-prop" style="text-align: center;"><li><img src="img/cf-icon.png" alt="stack" class="stackLogo" /><span style="float:right;margin-top:4px;margin-left:8px;padding-right:9px;"><a rel="tooltip" class="stackInfo" href="javascript:void(0)" data-instanceid="55b74cff83fd0ca711303e61" data-placement="top" data-original-title="Stack Info"></a></span></li><li title="" class="Cardtextoverflow"><u><b class="stackNameContainer"></b></u></li></ul><div class="stack-details-list"><span class="stack-details"><strong class="stackId"></strong></span><span class="stack-details">status : <span class="stackStatus"></span></span></div></div></div>');
+            var $clonedDiv = $(' <div class="productdiv4"><div class="productdiv1 cardimage" ><ul class="list-unstyled system-prop" style="text-align: center;"><li><img src="img/cf-icon.png" alt="stack" class="stackLogo" /><span style="margin-left:40px;"></span></li><li title="" class="Cardtextoverflow"><u><b class="stackNameContainer"></b></u></li></ul><div class="stack-details-list"><span class="stack-details"><strong class="stackId"></strong></span><span class="stack-details">status : <span class="stackStatus"></span></span></div></div></div>');
             var $cftStackContainer = $('#azureDeploymentContainer');
 
             $clonedDiv.find('.productdiv1').attr({
@@ -3720,68 +3755,15 @@ function devCall() {
                 $('.role-Selected1').removeClass('role-Selected1');
                 $(this).addClass('role-Selected1');
             });
-
-            // $clonedDiv.find('.stackInfo').click(function(e) {
-            //     var $modal = $('#cftEventModalContainer');
-            //     var $logContainer = $modal.find('.logsArea').show();
-            //     var $modalBody = $modal.find('.modal-body');
-            //     $modal.find('.fromTemplate').remove();
-            //     var $table = $modal.find('.templateTable').clone();
-            //     $table.removeClass('templateTable').addClass('fromTemplate');
-            //     $modalBody.append($table);
-            //     var $tBody = $table.find('tbody');
-
-            //     function pollStackEvents(stackId) {
-
-
-            //         $.get('/cloudformation/' + stackId + '/events', function(events) {
-            //             if (!$.contains($modal[0], $table[0])) {
-            //                 return;
-            //             }
-            //             $tBody.empty();
-            //             $logContainer.hide();
-            //             $table.show();
-            //             for (var i = 0; i < events.length; i++) {
-            //                 var $rowTr = $('<tr/>');
-            //                 $rowTr.append('<td>' + events[i].Timestamp + '</td>');
-            //                 $rowTr.append('<td>' + events[i].LogicalResourceId + '</td>');
-            //                 $rowTr.append('<td>' + events[i].ResourceType + '</td>');
-            //                 $rowTr.append('<td>' + events[i].ResourceStatus + '</td>');
-            //                 $tBody.append($rowTr);
-            //             }
-            //             if ($modal.is(':visible')) {
-            //                 setTimeout(function() {
-            //                     pollStackEvents(stackId);
-            //                 }, 5000);
-            //             }
-            //         }).fail(function(jxhr) {
-            //             var msg = "Server Behaved Unexpectedly.";
-            //             if (jxhr.responseJSON && jxhr.responseJSON.message) {
-            //                 msg = jxhr.responseJSON.message;
-            //             }
-            //             $logContainer.empty().append(msg).show();
-            //             $table.hide();
-            //         });
-            //     }
-            //     $logContainer.empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
-            //     $modal.modal('show');
-            //     pollStackEvents(stack._id);
-
-            // });
-
         }
 
         function initializeARMArea(stacks) {
 
             for (var i = 0; i < stacks.length; i++) {
                 addARMToDom(stacks[i]);
-                //  alert(JSON.stringify(stacks[i]));
             }
 
         }
-
-
-
 
         function pollStackStatus(stackId) {
             $.get('/cloudformation/' + stackId + '/status', function(msg) {
@@ -4312,10 +4294,6 @@ function devCall() {
                     $.get('../jenkins/' + jenkinsServerId + '/jobs/' + jobName, function(job) {
 
                         if (job.lastBuild.number > lastBuildNumber) {
-                            // $modal.find('.loadingContainer').hide();
-                            // $modal.find('.errorMsgContainer').hide();
-                            // $modal.find('.outputArea').show();
-
                             buildNumber = job.lastBuild.number;
 
                             pollJobOutput();
@@ -4705,15 +4683,7 @@ function devCall() {
                                     }
                                 });
                             }
-                        } //if ends here..
-
-
-
-                        //alert(data[i].taskConfig.parameterized[a].parameterName);
-                        /*if(data[i].taskType==="chef"){
-             
-              }*/
-
+                        } //if ends here.
                     });
                     $tr.append($tdExecute);
 
@@ -4721,8 +4691,6 @@ function devCall() {
                     if (data[i].taskType === 'chef' || data[i].taskType === 'puppet') {
                         var $tdHistory = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="History" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-header bigger-120"></i></a>');
                         $tdHistory.find('a').data('taskId', data[i]._id).attr('data-historyTaskId', data[i]._id).click(function(e) {
-                            //var $taskHistoryContent = $('#taskHistoryContent').show();
-                            //   alert(JSON.stringify(data[i]));
                             var taskId = $(this).data('taskId');
                             var $modal = $('#chefJobHistory');
                             $modal.find('.loadingContainer').show();
@@ -4732,7 +4700,6 @@ function devCall() {
                             $('#orchestrationTable').hide();
                             $('.hideChefJob').click(function(e) {
                                 $modal.addClass('hidden');
-
                                 $('#orchestrationTable').show();
                             });
                             $taskHistoryDatatable.clear().draw();
@@ -4753,9 +4720,6 @@ function devCall() {
                                     }
                                     var $tdTimeEnded = $('<td></td>').append(dateEnded);
                                     $trHistoryRow.append($tdTimeEnded);
-
-
-
                                     if (taskHistories[i].status.toLowerCase() === "success") {
                                         var $tdBuildStatus = $('<td style="background-color:#1c9951;"></td>').append('<span style="color:#fff">SUCCESS</span>');
                                         $trHistoryRow.append($tdBuildStatus);
@@ -4772,8 +4736,6 @@ function devCall() {
                                         var $tdBuildStatusRunning = $('<td style="background-color:gray;"></td>').append('<span style="color:#fff;">PENDING</span>');
                                         $trHistoryRow.append($tdBuildStatusRunning);
                                     }
-
-
                                     var $tdMessage = $('<td style="width:42%"></td>');
                                     $trHistoryRow.append($tdMessage);
                                     if (taskHistories[i].taskType === 'chef') {
@@ -4799,23 +4761,15 @@ function devCall() {
                                             }
                                         })($tdMessage)
                                     }
-
-
                                     var $tdUser = $('<td></td>').append(taskHistories[i].user);
                                     $trHistoryRow.append($tdUser);
 
                                     var $tdLogs = $('<td></td>').append('<a data-original-title="MoreInfo" data-placement="top" rel="tooltip" class="moreinfoBuild margin-left40per" href="javascript:void(0)" data-toggle="modal"></a>');
                                     $tdLogs.find('a').data('history', taskHistories[i]).data('taskId', taskId).click(function() {
-
-                                        //$('#assignedTaskHistory').modal('hide');
                                         var history = $(this).data('history');
                                         showTaskLogs(history.taskId, history._id);
-
-
-
                                     });
                                     $trHistoryRow.append($tdLogs);
-
                                     $taskHistoryDatatable.row.add($trHistoryRow).draw();
                                 }
                                 $modal.find('.loadingContainer').hide();
@@ -4830,16 +4784,11 @@ function devCall() {
                                     $errorContainer.html("Server Behaved Unexpectedly");
                                 }
                             });
-
-                            //$modal.find('.outputArea').hide();
-
                         });
 
                     } else if (data[i].taskType === 'composite') {
                         var $tdHistory = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="History" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-header bigger-120"></i></a>');
                         $tdHistory.find('a').data('taskId', data[i]._id).attr('data-historyTaskId', data[i]._id).click(function(e) {
-                            //var $taskHistoryContent = $('#taskHistoryContent').show();
-                            //   alert(JSON.stringify(data[i]));
                             var taskId = $(this).data('taskId');
                             var $modal = $('#compositeJobHistory');
                             $modal.find('.loadingContainer').show();
@@ -4849,10 +4798,8 @@ function devCall() {
                             $('#orchestrationTable').hide();
                             $('.hideCompositeJob').click(function(e) {
                                 $modal.addClass('hidden');
-
                                 $('#orchestrationTable').show();
                             });
-                            //$taskHistoryDatatable.clear().draw();
                             $compositeTaskHistoryDatatable.clear().draw();
 
                             $('.widget-header').find('h5.compositeTitle').html('Composite History For -&nbsp;' + data[i].name);
@@ -4898,13 +4845,8 @@ function devCall() {
 
                                     var $tdLogs = $('<td></td>').append('<a data-original-title="MoreInfo" data-placement="top" rel="tooltip" class="moreinfoBuild margin-left40per" href="javascript:void(0)" data-toggle="modal"></a>');
                                     $tdLogs.find('a').data('history', taskHistories[i]).data('taskId', taskId).click(function() {
-
-                                        //$('#assignedTaskHistory').modal('hide');
                                         var history = $(this).data('history');
                                         showTaskLogs(history.taskId, history._id);
-
-
-
                                     });
                                     $trHistoryRow.append($tdLogs);
 
@@ -4922,17 +4864,12 @@ function devCall() {
                                     $errorContainer.html("Server Behaved Unexpectedly");
                                 }
                             });
-
-                            //$modal.find('.outputArea').hide();
-
                         });
                     } else if (data[i].taskType === 'jenkins') {
                         //history for jenkins job type...description mentioned above..
                         var $tdHistory = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="History" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-header bigger-120"></i></a>');
                         $tdHistory.find('a').data('taskId', data[i]._id).data('autosyncFlag', data[i].taskConfig.autoSyncFlag).attr('data-historyTaskId', data[i]._id).click(function(e) {
-                            //var $taskHistoryContent = $('#taskHistoryContent').show();
                             var taskId = $(this).data('taskId');
-                            // alert(JSON.stringify(data[i]));
                             $taskHistoryDatatableJenkins.row().clear().draw(true);
                             var $modal = $('#jenkinsJobHistory');
                             $modal.find('.loadingContainer').show();
@@ -4949,9 +4886,6 @@ function devCall() {
                             $('.widget-header').find('h5.jenkinsTitle').html('Jenkins Job History For -&nbsp;' + data[i].name);
 
                             var autoSyncFlag = $(this).data('autosyncFlag');
-
-                            //console.log('autoSyncFlag', autoSyncFlag);
-
                             var jenk_url = '';
                             $.get('../tasks/' + taskId, function(item) {
                                 jenk_url = 'http://' + item.taskConfig.jobURL;
@@ -5133,21 +5067,13 @@ function devCall() {
                     $tr.append($tdOptions);
 
                     $taskDatatable.row.add($tr).draw();
-                    //$taskListArea.append($tr);
-
-                    //aaaa
                     if ($("#sorttableheader").length) {
-                        //alert(1);
                         $("#sorttableheader").tablesorter();
                     }
-                    //     $("#sorttableheader").tablesorter();
                     pageSetUp();
                 })(i);
 
             }
-
-
-
             //updating footer
             $('.taskListFooter').text('Showing ' + data.length + ' of ' + data.length + ' entries');
             pageSetUp();

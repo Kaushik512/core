@@ -239,6 +239,43 @@ var ARM = function(options) {
         });
     };
 
+    this.deleteDeployedTemplate = function(deployParams, callback) {
+        getToken(function(err, token) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+
+            var opts = {
+                uri: 'https://management.azure.com/subscriptions/' + options.subscriptionId + '/resourcegroups/' + deployParams.resourceGroup + '/providers/microsoft.resources/deployments/' + deployParams.name + '?api-version=2015-01-01',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + token
+                },
+            };
+
+            request.del(opts, function(err, response, body) {
+
+                if (err) {
+                    //logger.debug("Error...",err);
+                    callback(err, null);
+                    return;
+                }
+
+                logger.debug("response.statusCode: ", response.statusCode);
+
+                if (response.statusCode == '200' || response.statusCode == '202') {
+                    callback(null, null);
+                    return;
+                } else {
+                    callback(err, null);
+                    return;
+                }
+
+            });
+        });
+    };
+
     this.waitForDeploymentCompleteStatus = function(deployParams, callback) {
         var self = this;
         logger.debug('Checking status ==>');
