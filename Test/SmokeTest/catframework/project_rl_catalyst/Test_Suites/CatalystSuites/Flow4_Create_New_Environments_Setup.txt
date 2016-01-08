@@ -30,3 +30,11 @@ Catalyst Adding New Envirornments to the Chef          #to chef server
 
 
 
+
+Catalyst Import a Node From ConfigManagement(Chef) in to the Environment
+    [Tags]       Sanity       Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Import a Node from Config Management
+    Catalyst Logout
+    [Teardown]     Close Browser

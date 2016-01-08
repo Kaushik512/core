@@ -167,6 +167,7 @@ ${Org_consumer_EMAIL_ID}    consumer@gmail.com
 ${Orgconsumer_PASSWD}       password1
 ${Orgconsumer_CONFPASSWD}   password1
 
+${NODE}              10.0.1.200
 
 ${EDIT_INSTANCE_NAME}       Instance_Centos
 ${ERRORMESSAGE}             Please enter instance name

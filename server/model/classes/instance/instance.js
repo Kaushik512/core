@@ -871,6 +871,21 @@ var InstancesDao = function() {
         });
     };
 
+    this.removeInstancebyArmId = function(armId, callback) {
+        logger.debug("Enter removeInstancebyArmId (%s)", armId);
+        Instances.remove({
+            armId: armId
+        }, function(err, data) {
+            if (err) {
+                logger.error("Failed to removeInstancebyArmId (%s)", armId, err);
+                callback(err, null);
+                return;
+            }
+            logger.debug("Exit removeInstancebyArmId (%s)", armId);
+            callback(null, data);
+        });
+    };
+
     this.removeInstancebyCloudFormationIdAndAwsId = function(cfId, awsInstanceId, callback) {
         logger.debug("Enter removeInstancebyCloudFormationId (%s)", cfId);
         Instances.remove({
