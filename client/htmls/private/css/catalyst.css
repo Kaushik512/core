@@ -4314,3 +4314,8 @@ form.cmxform .gray * {
 .activeProviderOpen{
     background-color:#40baf1;margin-right:1px;
 }
+.configureVM{
+    float:right;
+    margin-top:36px;
+    margin-right: 16px;
+}

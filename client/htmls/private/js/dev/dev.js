@@ -118,6 +118,44 @@ function devCall() {
     }
 }
 
+window.removeArmDeployment = function() {
+    var $selectedCard = $('.productdiv1.role-Selected1');
+
+    var armId = $selectedCard.attr('data-armId');
+    if (armId) {
+        //found now delete
+        bootbox.confirm({
+            message: "Are you sure you would like to remove this arm deployment? This will remove all the instances related to this deployment.",
+            title: "Confirmation",
+            callback: function(result) {
+                if (!result) {
+                    return;
+                }
+                $.ajax({
+                    url: '/azure-arm/' + armId,
+                    method: 'DELETE',
+                    success: function(data) {
+                        var $bcc = $selectedCard.parent().remove();
+                        if (data.instanceIds) {
+                            for (var i = 0; i < data.instanceIds.length; i++) {
+                                $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + data.instanceIds[i] + ']').parents('.domain-role-thumbnailDev').remove();
+                                var table = $('#tableinstanceview').DataTable();
+                                table.row('[data-instanceid=' + data.instanceIds[i] + ']').remove().draw(false);
+
+                            }
+                        }
+                    },
+                    error: function() {
+                    }
+                });
+            }
+        });
+    } else {
+        bootbox.alert('Please select a arm deployment to remove.');
+    }
+}
+
+
 
     $(document).ready(function() {
         /*********************************Instance.js********************/
@@ -3678,7 +3716,7 @@ function devCall() {
         }
 
         function addARMToDom(arm) {
-            var $clonedDiv = $(' <div class="productdiv4"><div class="productdiv1 cardimage" ><ul class="list-unstyled system-prop" style="text-align: center;"><li><img src="img/cf-icon.png" alt="stack" class="stackLogo" /><span style="float:right;margin-top:4px;margin-left:8px;padding-right:9px;"><a rel="tooltip" class="stackInfo" href="javascript:void(0)" data-instanceid="55b74cff83fd0ca711303e61" data-placement="top" data-original-title="Stack Info"></a></span></li><li title="" class="Cardtextoverflow"><u><b class="stackNameContainer"></b></u></li></ul><div class="stack-details-list"><span class="stack-details"><strong class="stackId"></strong></span><span class="stack-details">status : <span class="stackStatus"></span></span></div></div></div>');
+            var $clonedDiv = $(' <div class="productdiv4"><div class="productdiv1 cardimage" ><ul class="list-unstyled system-prop" style="text-align: center;"><li><img src="img/cf-icon.png" alt="stack" class="stackLogo" /><span style="margin-left:40px;"></span></li><li title="" class="Cardtextoverflow"><u><b class="stackNameContainer"></b></u></li></ul><div class="stack-details-list"><span class="stack-details"><strong class="stackId"></strong></span><span class="stack-details">status : <span class="stackStatus"></span></span></div></div></div>');
             var $cftStackContainer = $('#azureDeploymentContainer');
 
             $clonedDiv.find('.productdiv1').attr({
