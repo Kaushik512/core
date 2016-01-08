@@ -70,6 +70,7 @@
                                                             <option value="">Select Type</option>
                                                             <option value="chef">Chef</option>
                                                             <option value="cft">CFT</option>
+                                                            <option value="arm">ARMTemplate</option>
                                                             <option value="ami">OS Image</option>
                                                             <option value="docker">Docker</option>
                                                         </select>
@@ -101,14 +102,14 @@
 
                 <div class="widget-toolbox clearfix">
                        <div class="btn-group pull-right">
-                        <button class="btn btn-primary btn-mini" style="margin-right:11px;">
+                           <a class="btn btn-default btn-mini" onclick="window.history.back();" style="margin-right:11px;" id="btncancel">
+                               <i class="ace-icon fa fa-times bigger-110"></i>
+                               Cancel
+                           </a>
+                           <button class="btn btn-primary btn-mini">
                             <i class="ace-icon fa fa-check bigger-110"></i>
                              Save
                         </button>
-                           <a class="btn btn-primary btn-mini" onclick="window.history.back();" id="btncancel">
-                               <i class="ace-icon fa fa-undo bigger-110"></i>
-                               Cancel
-                           </a>
                         </div>
                 </div>
 
