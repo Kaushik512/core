@@ -1996,11 +1996,11 @@ window.removeArmDeployment = function() {
             //         $menu.show();
             //         var $anchorbody = $('body');
             //         $anchorbody.click(function() {
-            //           $menu.hide();                                                                                          
+            //           $menu.hide();
             //         });
             //         var $anchor = $('.app-url').parent();
             //         $anchor.click(function() {
-            //           $menu.hide();                                                                                          
+            //           $menu.hide();
             //         });
             //     }
             // });
@@ -2045,7 +2045,7 @@ window.removeArmDeployment = function() {
             //         $menu.show();
             //         var $anchor = $('.app-url').parent();
             //         $anchor.click(function() {
-            //           $menu.hide();                                                                                          
+            //           $menu.hide();
             //         });
             //     }
             // });
@@ -2546,7 +2546,12 @@ window.removeArmDeployment = function() {
                                     // alert(JSON.stringify(blueprint));
                                     $liRead.click(function(e) {
                                         var $blueprintReadContainerCFT = $('#modalForReadCFT');
-                                        $('.modal-title').html('Blueprint Information-CFT');
+
+                                        if(blueprint.templateType == 'arm') {
+                                          $blueprintReadContainerCFT.find('.modal-title').html('Blueprint Information-ARM');
+                                        } else {
+                                          $blueprintReadContainerCFT.find('.modal-title').html('Blueprint Information-CFT');
+                                        }
 
                                         //  alert(JSON.stringify(data));
                                         //condition for getting the OS,instanceType,version...
@@ -2605,7 +2610,7 @@ window.removeArmDeployment = function() {
                                                         $blueprintReadContainer.find('.modal-body #instanceProviderName').val(data.providerName).parents('tr').show();;
                                                         $blueprintReadContainer.find('.modal-body #instanceProviderType').val(data.providerType).parents('tr').show();;
 
-                                                        // loop for getting region 
+                                                        // loop for getting region
 
                                                         $blueprintReadContainer.find('.modal-body #instanceRegion').val(blueprint.blueprintConfig.cloudProviderData.region).parents('tr').show();;
 
@@ -2635,7 +2640,7 @@ window.removeArmDeployment = function() {
                                                         $blueprintReadContainer.find('.modal-body #instanceProviderName').val(data.providerName).parents('tr').show();;
                                                         $blueprintReadContainer.find('.modal-body #instanceProviderType').val(data.providerType).parents('tr').show();;
 
-                                                        // loop for getting region 
+                                                        // loop for getting region
 
                                                         //console.log(data);
                                                     },
@@ -2876,7 +2881,7 @@ window.removeArmDeployment = function() {
                 //     $row.insertBefore($row.prev());
                 // } else if (what === "dockerimageselectordown") {
                 //     $row.insertAfter($row.next());
-                // } 
+                // }
                 var row = $lnk.closest('.dockerimagesrow');
                 if (what === "dockerimageselectorup") {
                     var prev = row.prev();
@@ -3137,7 +3142,7 @@ window.removeArmDeployment = function() {
                                             $.get('/azure-arm/' + data.armId, function(armData) {
                                                 addARMToDom(armData);
                                             })
-                                            
+
                                             return;
                                         }
 
@@ -3241,6 +3246,11 @@ window.removeArmDeployment = function() {
                                 }
 
                                 if (blueprintType === 'aws_cf' || blueprintType === 'azure_arm') {
+                                    if(blueprintType === 'azure_arm') {
+                                      $('#cftForm').find('.modal-title').html('Enter Deployment Name');
+                                    } else {
+                                      $('#cftForm').find('.modal-title').html('Enter Unique Stack Name');
+                                    }
                                     jQuery.validator.addMethod("noSpace", function(value, element) {
                                         return value.indexOf(" ") < 0 && value != "";
                                     }, "No space allowed and the user can't leave it empty");
@@ -3750,7 +3760,7 @@ window.removeArmDeployment = function() {
 
             $cftStackContainer.append($clonedDiv);
              pollARMStatus(arm._id);
-            
+
             $clonedDiv.find('.productdiv1').click(function() {
                 $('.role-Selected1').removeClass('role-Selected1');
                 $(this).addClass('role-Selected1');
@@ -4432,7 +4442,7 @@ window.removeArmDeployment = function() {
                 // alert(JSON.stringify(data));
                 (function(i) {
                     var $tr = $('<tr></tr>').attr('data-taskId', data[i]._id);
-                    //method for getting the type of job.. 
+                    //method for getting the type of job..
                     if (data[i].taskType === 'chef') {
                         var $tdType = $('<td style="vertical-align:inherit;text-align:center;"></td>').append("<img style='width:31px;' src='img/chef.png' alt='chef'>&nbsp;&nbsp;<span style='font-size:14px;'></span>");
                     } else if (data[i].taskType === 'composite') {
@@ -4618,7 +4628,7 @@ window.removeArmDeployment = function() {
                                         $tr.append($tdName).append($tdValue);
                                         $tableBody.append($tr);
                                         //$modalForSelect.find('.modal-body').append(label).append('<br/>');
-                                        //  $modalForSelect.find('.modal-body').append($tableBody);  
+                                        //  $modalForSelect.find('.modal-body').append($tableBody);
 
 
                                         if (data[i].taskConfig.parameterized[a].defaultValue) {
@@ -5567,7 +5577,7 @@ window.removeArmDeployment = function() {
 
       getInstances();
 
-      
+
 
   } else {
       var $workzoneTab = $('#workZoneNew');
