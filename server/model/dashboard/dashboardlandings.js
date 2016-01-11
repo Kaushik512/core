@@ -58,15 +58,9 @@ dashboardlandingsSchema.statics.getLandingDataInfo = function(callback) {
             callback(err, null);
             return;
         }
-        if (landingData.length) {
             logger.debug("Exit getallLandingDataInfo");
             callback(null, landingData);
             return;
-        } else {
-            logger.debug("Exit getallLandingDataInfo with no data present");
-            callback(null, null);
-            return;
-        }
     });
 };
 

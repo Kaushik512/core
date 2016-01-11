@@ -125,6 +125,8 @@ module.exports.setRoutes = function(app,socketIo) {
 
     arm.setRoutes(app,sessionVerificationFunc);
 
+    dashboardProvider.setRoutes(app, sessionVerificationFunc);
+
     app.get('/', function(req, res) {
         res.redirect('/private/index.html');
     });

@@ -27,6 +27,11 @@ var appConfig = require('_pr/config');
 var dashboardData = require('../lib/utils/dashboardUtil.js');
 
 var providersdashboard = require('../model/dashboard/dashboardinstances.js');
+//var dashboardmanagedInstances = require('../model/dashboard/dashboardmanagedinstances.js');
+var dashboardcosts = require('../model/dashboard/dashboardcosts.js');
+
+
+/*var dashboardusages = require('../model/dashboard/dashboardusages.js');
 var dashboardmanagedInstances = require('../model/dashboard/dashboardmanagedinstances.js');
 var dashboardcosts = require('../model/dashboard/dashboardcosts.js');
 var dashboardusages = require('../model/dashboard/dashboardusages.js');
@@ -43,7 +48,7 @@ var dashboardazureinstances = require('../model/dashboard/dashboardazureinstance
 var dashboardopenstackinstances = require('../model/dashboard/dashboardopenstackinstances.js');
 
 var dashboarddailytrends = require('../model/dashboard/dashboarddailytrends.js');
-var dashboardalerts = require('../model/dashboard/dashboardalerts.js');
+var dashboardalerts = require('../model/dashboard/dashboardalerts.js');*/
 
 var dashboardlandings = require('../model/dashboard/dashboardlandings.js');
 
@@ -56,14 +61,14 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.all("/dashboard/providers/*", sessionVerificationFunc);
 
     app.post('/dashboard/providers/dashboardlanding', function(req, res) {
-
         dashboardlandings.getLandingDataInfo(function(err, landingData) {
             if (err) {
                 res.send(500, errorResponses.db.error);
                 return;
             }
 
-            if (landingData.length) {
+            if (landingData && landingData.length) {
+
                 landingData[0].jenkinsReferenceValue = req.body.jenkinsReferenceValue;
                 landingData[0].jobsListValue = req.body.jobsListValue;
                 
@@ -84,7 +89,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         return;
                     }
                     if (landingDashboarddata) {
-                        console.log("dashboarddashboarddata+++++++++++++"+landingDashboarddata);
+                        logger.debug("dashboarddashboarddata: ",landingDashboarddata);
                         res.send(200, landingDashboarddata);
                         return;
                     }
@@ -94,7 +99,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });
 
     app.get('/dashboard/providers/dashboardlanding', function(req, res) {
-        //logger.debug(req.params.projectId);
         dashboardlandings.getLandingDataInfo(function(err, dashboardLandingData) {
             if (err) {
                 res.send(500, errorResponses.db.error);
@@ -108,15 +112,15 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     });
 
     app.post('/dashboard/providers/dashboardmongopush', function(req, res) {
-        //console.log(req.body.managedinstancesCount);
-        console.log(req.body.averageUsagesCount);
+        //logger.debug(req.body.managedinstancesCount);
+        logger.debug(req.body.averageUsagesCount);
         /*dashboardmanagedInstances.createNew(req.body.managedinstancesCount, function(err, dashboardmanagedinstancesdata) {
             if (err) {
                 res.send(403, "dashboard managedinstances Data Already Exist.");
                 return;
             }
             if (dashboardmanagedinstancesdata) {
-                console.log("dashboardmanagedinstances+++++++++++++"+dashboardmanagedinstancesdata);
+                logger.debug("dashboardmanagedinstances:"+dashboardmanagedinstancesdata);
                 res.send(200, dashboardmanagedinstancesdata);
                 return;
             }
@@ -127,7 +131,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (dashboardusagesdata) {
-                console.log("dashboardusagesdata+++++++++++++"+dashboardusagesdata);
+                logger.debug("dashboardusagesdata:",dashboardusagesdata);
                 res.send(200, dashboardusagesdata);
                 return;
             }
@@ -138,7 +142,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (dashboardbuild) {
-                console.log("dashboardbuild+++++++++++++"+dashboardbuild);
+                logger.debug("dashboardbuild: ",dashboardbuild);
                 res.send(200, dashboardbuild);
                 return;
             }
@@ -149,7 +153,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (dashboardbuildpassed) {
-                console.log("dashboardbuildpassed+++++++++++++"+dashboardbuildpassed);
+                logger.debug("dashboardbuildpassed: ",dashboardbuildpassed);
                 res.send(200, dashboardbuildpassed);
                 return;
             }
@@ -160,7 +164,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (dashboardbuilddeployed) {
-                console.log("dashboardbuilddeployed+++++++++++++"+dashboardbuilddeployed);
+                logger.debug("dashboardbuilddeployed: ",dashboardbuilddeployed);
                 res.send(200, dashboardbuilddeployed);
                 return;
             }
@@ -171,7 +175,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (dashboarduptimedata) {
-                console.log("dashboarduptime+++++++++++++"+dashboarduptimedata);
+                logger.debug("dashboarduptime: ",dashboarduptimedata);
                 res.send(200, dashboarduptimedata);
                 return;
             }
@@ -185,7 +189,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (dashboardvmwareinstancesdata) {
-                console.log("dashboardvmware+++++++++++++"+dashboardvmwareinstancesdata);
+                logger.debug("dashboardvmware:",dashboardvmwareinstancesdata);
                 res.send(200, dashboardvmwareinstancesdata);
                 return;
             }
@@ -196,7 +200,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (dashboardawsinstancesdata) {
-                console.log("dashboardaws+++++++++++++"+dashboardawsinstancesdata);
+                logger.debug("dashboardaws:",dashboardawsinstancesdata);
                 res.send(200, dashboardawsinstancesdata);
                 return;
             }
@@ -207,7 +211,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (dashboardazureinstancesdata) {
-                console.log("dashboardazure+++++++++++++"+dashboardazureinstancesdata);
+                logger.debug("dashboardazure:",dashboardazureinstancesdata);
                 res.send(200, dashboardazureinstancesdata);
                 return;
             }
@@ -218,7 +222,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (dashboardopenstackinstancesdata) {
-                console.log("dashboard openstack+++++++++++++"+dashboardopenstackinstancesdata);
+                logger.debug("dashboard openstack:",dashboardopenstackinstancesdata);
                 res.send(200, dashboardopenstackinstancesdata);
                 return;
             }
@@ -233,7 +237,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (dashboarddailytrendsdata) {
-                console.log("dashboarddailytrends+++++++++++++"+dashboarddailytrendsdata);
+                logger.debug("dashboarddailytrends: ",dashboarddailytrendsdata);
                 res.send(200, dashboarddailytrendsdata);
                 return;
             }
@@ -244,7 +248,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (dashboardalertsdata) {
-                console.log("dashboardalerts+++++++++++++"+dashboardalertsdata);
+                logger.debug("dashboardalerts: ",dashboardalertsdata);
                 res.send(200, dashboardalertsdata);
                 return;
             }
@@ -258,7 +262,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (providerDataLatest) {
-                console.log("I am in latest count of totalinstances : " + providerDataLatest);
+                logger.debug("I am in latest count of totalinstances : " , providerDataLatest);
                 res.send(200, providerDataLatest);
                 return;
             }
@@ -271,7 +275,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 logger.debug("Error while getElementBytting instance!");
             }
             if(instances){
-                console.log("I am in count of total managed instances ##############"+instances.length);
+                logger.debug("I am in count of total managed instances: ",instances.length);
                 res.send(200, instances.length);
             }
         });
@@ -280,7 +284,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (managedInstancesDataLatest) {
-                console.log("I am in latest count of totalinstances : " + managedInstancesDataLatest);
+                logger.debug("I am in latest count of totalinstances : " + managedInstancesDataLatest);
                 res.send(200, managedInstancesDataLatest);
                 return;
             }
@@ -293,7 +297,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (costsDataLatest) {
-                console.log("I am in latest count of costdata : " + costsDataLatest);
+                logger.debug("I am in latest count of costdata : " , costsDataLatest);
                 res.send(200, costsDataLatest);
                 return;
             }
@@ -306,7 +310,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (usagesDataLatest) {
-                console.log("I am in latest count of usagesData : " + usagesDataLatest);
+                logger.debug("I am in latest count of usagesData : " , usagesDataLatest);
                 res.send(200, usagesDataLatest);
                 return;
             }
@@ -319,7 +323,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (totalbuildsDataLatest) {
-                console.log("I am in latest count of totalbuildsData : " + totalbuildsDataLatest);
+                logger.debug("I am in latest count of totalbuildsData : " , totalbuildsDataLatest);
                 res.send(200, totalbuildsDataLatest);
                 return;
             }
@@ -332,7 +336,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (totalbuildspassedDataLatest) {
-                console.log("I am in latest count of totalbuildspassedData : " + totalbuildspassedDataLatest);
+                logger.debug("I am in latest count of totalbuildspassedData : " , totalbuildspassedDataLatest);
                 res.send(200, totalbuildspassedDataLatest);
                 return;
             }
@@ -345,7 +349,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (totalbuildsdeployedDataLatest) {
-                console.log("I am in latest count of totalbuildsdeployedData : " + totalbuildsdeployedDataLatest);
+                logger.debug("I am in latest count of totalbuildsdeployedData : " , totalbuildsdeployedDataLatest);
                 res.send(200, totalbuildsdeployedDataLatest);
                 return;
             }
@@ -358,7 +362,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (totaluptimeDataLatest) {
-                console.log("I am in latest count of totaluptimeData : " + totaluptimeDataLatest);
+                logger.debug("I am in latest count of totaluptimeData : " , totaluptimeDataLatest);
                 res.send(200, totaluptimeDataLatest);
                 return;
             }
@@ -371,7 +375,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (totalvmwareinstancesDataLatest) {
-                console.log("I am in latest count of totalvmwareinstancesData : " + totalvmwareinstancesDataLatest);
+                logger.debug("I am in latest count of totalvmwareinstancesData : " , totalvmwareinstancesDataLatest);
                 res.send(200, totalvmwareinstancesDataLatest);
                 return;
             }
@@ -384,7 +388,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (totalawsinstancesDataLatest) {
-                console.log("I am in latest count of totalawsinstancesData : " + totalawsinstancesDataLatest);
+                logger.debug("I am in latest count of totalawsinstancesData : " , totalawsinstancesDataLatest);
                 res.send(200, totalawsinstancesDataLatest);
                 return;
             }
@@ -397,7 +401,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (totalazureinstancesDataLatest) {
-                console.log("I am in latest count of totalazureinstancesData : " + totalazureinstancesDataLatest);
+                logger.debug("I am in latest count of totalazureinstancesData : " , totalazureinstancesDataLatest);
                 res.send(200, totalazureinstancesDataLatest);
                 return;
             }
@@ -410,7 +414,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (totalopenstackinstancesDataLatest) {
-                console.log("I am in latest count of totalopenstackinstancesData : " + totalopenstackinstancesDataLatest);
+                logger.debug("I am in latest count of totalopenstackinstancesData : " , totalopenstackinstancesDataLatest);
                 res.send(200, totalopenstackinstancesDataLatest);
                 return;
             }
@@ -423,7 +427,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (totaldailytrendsDataLatest) {
-                console.log("I am in latest count of totaldailytrendsData : " + totaldailytrendsDataLatest);
+                logger.debug("I am in latest count of totaldailytrendsData : " , totaldailytrendsDataLatest);
                 res.send(200, totaldailytrendsDataLatest);
                 return;
             }
@@ -436,7 +440,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 return;
             }
             if (totalalertsDataLatest) {
-                console.log("I am in latest count of totalalertsData : " + totalalertsDataLatest);
+                logger.debug("I am in latest count of totalalertsData : " , totalalertsDataLatest);
                 res.send(200, totalalertsDataLatest);
                 return;
             }
