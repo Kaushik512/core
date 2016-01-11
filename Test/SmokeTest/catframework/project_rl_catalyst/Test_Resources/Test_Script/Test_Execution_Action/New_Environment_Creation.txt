@@ -73,6 +73,122 @@ Catalyst Environments2 setup
     Clicks on Save Button to save the Environments
 
 
+Catalyst Import a Node from Config Management
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Config Managementt
+    Clicks on Import Nodes Button of Server for Sync
+    Find the Instance and Impoert to the Environment
+    #Input the Environment Name in the Search
+    Select the CheckBox to Import
+    Clicking on the Import Nodes Button in Config Mgmt Page 
+    Verfiy the Organization is Disabled
+    Select the Business Grp in Inport Nodes
+    Select the Project in Inport Nodes
+    Enters the UserName in Inport Nodes
+    Choose the Authentication as Pem in Inportnodes
+    Upload the PEM file in Inport Nodes
+    Clicks on Import Button in Import Nodes
+    Sleep    5s
+    Verify the Node Importedd
+    Clicks on Close of ConfigMgmt Button
+    Clicks on Workzone Buttonn
+    Clicks on the Button to the Environment imported
+    Node is Inported in the Environment
+    Delete the Node
+    Sleep    2s
+    Verfiy Node Deleted
+    
+
+Clicks on Workzone Buttonn
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    css=#workZoneNew
+
+Clicks on the Button to the Environment imported
+    Wait Until Keyword Succeeds    2 minute     1 seconds      Click Element    xpath=//*[normalize-space(text())="${ENVNAME}"]
+    
+
+Node is Inported in the Environment
+    Sleep    4s
+    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${NODE}")]/div/div/div/div[3]/div/span[1]/strong    ${NODE}
+
+Delete the Node
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='removeInstance']/i
+    Sleep   2s
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[text()='Delete']
+
+
+Verfiy Node Deleted
+    Page Should Not Contain    ${NODE}
+
+
+Clicks on Close of ConfigMgmt Button
+     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='chefImportNodesResultModal']/div/div/div[3]/button
+
+Find the Instance and Impoert to the Environment
+    Sleep    4s
+    Click Element    xpath=.//*[@id='organiz']/table/tbody/tr/td[text()='${NODE}']/../td[6]/div/a/span[2]
+    Sleep    1s
+    Input Text    css=#select2-drop > div > input    ${ENVNAME}
+    Sleep    1s
+    Click Element    css=ul > li:first-child > div
+    ${Env status}=    Run Keyword and Return Status    Element Should Be Visible    xpath=.//*[text()='OK']
+    Run Keyword If    '${Env status}' == 'False'
+    ...    Log    OK Button is not displayed to change the Environment    
+    ...    ELSE IF    '${Env status}' == 'True'
+    ...    Clicks on ok button to change the environment
+
+Select the CheckBox to Import
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='organiz']/table/tbody/tr/td[text()='${NODE}']/../td[7]/label/i
+   
+
+Clicking on the Import Nodes Button in Config Mgmt Page
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    id=buttonForIP
+    
+
+Verfiy the Organization is Disabled
+    Element Should Contain    xpath=.//*[@id='s2id_chefImportOrgSelect']/a    ${ORGANIZATION NAME}
+
+Select the Business Grp in Inport Nodes
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='s2id_chefImportBgSelect']/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=//div[text()='${BUSINESS GROUP NAME1}'] 
+
+
+Select the Project in Inport Nodes
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='s2id_chefImportProjectSelect']/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=//div[text()='${PROJECT NAME1}']
+
+
+Enters the UserName in Inport Nodes
+    Input Text    id=importUsernameInput    ${IP USERNAME}
+
+
+Choose the Authentication as Pem in Inportnodes
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='s2id_pemFileDropdown2']/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=//div[text()='Pem File']
+
+
+
+Upload the PEM file in Inport Nodes
+    Choose File    id=importPemfileInput    ${Goldendemo_pem}
+
+
+Clicks on Import Button in Import Nodes
+    Click Element    xpath=//*[text()='Import']
+
+
+Verify the Node Importedd
+    Sleep    5s
+    Element Should Contain    css=.messageDiv>div    Node Imported : ${NODE}
+    Sleep    4s
+
+
+Clicks on Config Managementt
+    Click Element    xpath=//*[text()='Chef Server']
+
+Clicks on Import Nodes Button of Server for Sync
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${CONFIG MANAGEMENT NAME}']/../td[5]/div/a[2]
+
+
 Clicks on Add Link
     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    css=a.clearfix.pull-right
 

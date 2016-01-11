@@ -118,6 +118,44 @@ function devCall() {
     }
 }
 
+window.removeArmDeployment = function() {
+    var $selectedCard = $('.productdiv1.role-Selected1');
+
+    var armId = $selectedCard.attr('data-armId');
+    if (armId) {
+        //found now delete
+        bootbox.confirm({
+            message: "Are you sure you would like to remove this arm deployment? This will remove all the instances related to this deployment.",
+            title: "Confirmation",
+            callback: function(result) {
+                if (!result) {
+                    return;
+                }
+                $.ajax({
+                    url: '/azure-arm/' + armId,
+                    method: 'DELETE',
+                    success: function(data) {
+                        var $bcc = $selectedCard.parent().remove();
+                        if (data.instanceIds) {
+                            for (var i = 0; i < data.instanceIds.length; i++) {
+                                $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + data.instanceIds[i] + ']').parents('.domain-role-thumbnailDev').remove();
+                                var table = $('#tableinstanceview').DataTable();
+                                table.row('[data-instanceid=' + data.instanceIds[i] + ']').remove().draw(false);
+
+                            }
+                        }
+                    },
+                    error: function() {
+                    }
+                });
+            }
+        });
+    } else {
+        bootbox.alert('Please select a arm deployment to remove.');
+    }
+}
+
+
 
     $(document).ready(function() {
         /*********************************Instance.js********************/
@@ -1958,11 +1996,11 @@ function devCall() {
             //         $menu.show();
             //         var $anchorbody = $('body');
             //         $anchorbody.click(function() {
-            //           $menu.hide();                                                                                          
+            //           $menu.hide();
             //         });
             //         var $anchor = $('.app-url').parent();
             //         $anchor.click(function() {
-            //           $menu.hide();                                                                                          
+            //           $menu.hide();
             //         });
             //     }
             // });
@@ -2007,7 +2045,7 @@ function devCall() {
             //         $menu.show();
             //         var $anchor = $('.app-url').parent();
             //         $anchor.click(function() {
-            //           $menu.hide();                                                                                          
+            //           $menu.hide();
             //         });
             //     }
             // });
@@ -2508,7 +2546,12 @@ function devCall() {
                                     // alert(JSON.stringify(blueprint));
                                     $liRead.click(function(e) {
                                         var $blueprintReadContainerCFT = $('#modalForReadCFT');
-                                        $('.modal-title').html('Blueprint Information-CFT');
+
+                                        if(blueprint.templateType == 'arm') {
+                                          $blueprintReadContainerCFT.find('.modal-title').html('Blueprint Information-ARM');
+                                        } else {
+                                          $blueprintReadContainerCFT.find('.modal-title').html('Blueprint Information-CFT');
+                                        }
 
                                         //  alert(JSON.stringify(data));
                                         //condition for getting the OS,instanceType,version...
@@ -2567,7 +2610,7 @@ function devCall() {
                                                         $blueprintReadContainer.find('.modal-body #instanceProviderName').val(data.providerName).parents('tr').show();;
                                                         $blueprintReadContainer.find('.modal-body #instanceProviderType').val(data.providerType).parents('tr').show();;
 
-                                                        // loop for getting region 
+                                                        // loop for getting region
 
                                                         $blueprintReadContainer.find('.modal-body #instanceRegion').val(blueprint.blueprintConfig.cloudProviderData.region).parents('tr').show();;
 
@@ -2597,7 +2640,7 @@ function devCall() {
                                                         $blueprintReadContainer.find('.modal-body #instanceProviderName').val(data.providerName).parents('tr').show();;
                                                         $blueprintReadContainer.find('.modal-body #instanceProviderType').val(data.providerType).parents('tr').show();;
 
-                                                        // loop for getting region 
+                                                        // loop for getting region
 
                                                         //console.log(data);
                                                     },
@@ -2838,7 +2881,7 @@ function devCall() {
                 //     $row.insertBefore($row.prev());
                 // } else if (what === "dockerimageselectordown") {
                 //     $row.insertAfter($row.next());
-                // } 
+                // }
                 var row = $lnk.closest('.dockerimagesrow');
                 if (what === "dockerimageselectorup") {
                     var prev = row.prev();
@@ -3099,7 +3142,7 @@ function devCall() {
                                             $.get('/azure-arm/' + data.armId, function(armData) {
                                                 addARMToDom(armData);
                                             })
-                                            
+
                                             return;
                                         }
 
@@ -3203,6 +3246,11 @@ function devCall() {
                                 }
 
                                 if (blueprintType === 'aws_cf' || blueprintType === 'azure_arm') {
+                                    if(blueprintType === 'azure_arm') {
+                                      $('#cftForm').find('.modal-title').html('Enter Deployment Name');
+                                    } else {
+                                      $('#cftForm').find('.modal-title').html('Enter Unique Stack Name');
+                                    }
                                     jQuery.validator.addMethod("noSpace", function(value, element) {
                                         return value.indexOf(" ") < 0 && value != "";
                                     }, "No space allowed and the user can't leave it empty");
@@ -3678,7 +3726,7 @@ function devCall() {
         }
 
         function addARMToDom(arm) {
-            var $clonedDiv = $(' <div class="productdiv4"><div class="productdiv1 cardimage" ><ul class="list-unstyled system-prop" style="text-align: center;"><li><img src="img/cf-icon.png" alt="stack" class="stackLogo" /><span style="float:right;margin-top:4px;margin-left:8px;padding-right:9px;"><a rel="tooltip" class="stackInfo" href="javascript:void(0)" data-instanceid="55b74cff83fd0ca711303e61" data-placement="top" data-original-title="Stack Info"></a></span></li><li title="" class="Cardtextoverflow"><u><b class="stackNameContainer"></b></u></li></ul><div class="stack-details-list"><span class="stack-details"><strong class="stackId"></strong></span><span class="stack-details">status : <span class="stackStatus"></span></span></div></div></div>');
+            var $clonedDiv = $(' <div class="productdiv4"><div class="productdiv1 cardimage" ><ul class="list-unstyled system-prop" style="text-align: center;"><li><img src="img/cf-icon.png" alt="stack" class="stackLogo" /><span style="margin-left:40px;"></span></li><li title="" class="Cardtextoverflow"><u><b class="stackNameContainer"></b></u></li></ul><div class="stack-details-list"><span class="stack-details"><strong class="stackId"></strong></span><span class="stack-details">status : <span class="stackStatus"></span></span></div></div></div>');
             var $cftStackContainer = $('#azureDeploymentContainer');
 
             $clonedDiv.find('.productdiv1').attr({
@@ -3712,7 +3760,7 @@ function devCall() {
 
             $cftStackContainer.append($clonedDiv);
              pollARMStatus(arm._id);
-            
+
             $clonedDiv.find('.productdiv1').click(function() {
                 $('.role-Selected1').removeClass('role-Selected1');
                 $(this).addClass('role-Selected1');
@@ -4394,7 +4442,7 @@ function devCall() {
                 // alert(JSON.stringify(data));
                 (function(i) {
                     var $tr = $('<tr></tr>').attr('data-taskId', data[i]._id);
-                    //method for getting the type of job.. 
+                    //method for getting the type of job..
                     if (data[i].taskType === 'chef') {
                         var $tdType = $('<td style="vertical-align:inherit;text-align:center;"></td>').append("<img style='width:31px;' src='img/chef.png' alt='chef'>&nbsp;&nbsp;<span style='font-size:14px;'></span>");
                     } else if (data[i].taskType === 'composite') {
@@ -4580,7 +4628,7 @@ function devCall() {
                                         $tr.append($tdName).append($tdValue);
                                         $tableBody.append($tr);
                                         //$modalForSelect.find('.modal-body').append(label).append('<br/>');
-                                        //  $modalForSelect.find('.modal-body').append($tableBody);  
+                                        //  $modalForSelect.find('.modal-body').append($tableBody);
 
 
                                         if (data[i].taskConfig.parameterized[a].defaultValue) {
@@ -5529,7 +5577,7 @@ function devCall() {
 
       getInstances();
 
-      
+
 
   } else {
       var $workzoneTab = $('#workZoneNew');

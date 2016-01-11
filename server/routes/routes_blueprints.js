@@ -1801,14 +1801,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
                                                         if (instances) {
                                                             password = instances[vmName].password;
-                                                            if (password.indexOf('[parameters(') === 0) {
-                                                                var indexOfBracketClose = password.indexOf(')');
-                                                                var parameterName = password.substring(13, indexOfBracketClose - 1);
-                                                                password = blueprint.blueprintConfig.parameters[parameterName].value;
-                                                            }
-
                                                             runlist = instances[vmName].runlist;
                                                         }
+
+                                                    
 
                                                         addAndBootstrapInstance({
                                                             name: vmName,

@@ -1,7 +1,4 @@
 <link rel="stylesheet" type="text/css" media="screen" href="css/Dashboard.css">
-<!-- <a href="#modaldashboardConfigure" data-toggle="modal" class="createAppConfigure">
-    <i class="fa fa-th fa-cogs" style="margin-right: 5px; color: rgb(64, 186, 241); font-size: 18px;"></i>
-</a> -->
 <div class="modal fade" id="modaldashboardConfigure" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
   <div class="modal-dialog">
       <div class="modal-content">
@@ -127,6 +124,21 @@
                       </tr>
                   </thead>
                   <tbody>
+                  <tr>
+                      <td class="configInfrastructureUniqueName">Total Number of Providers</td>
+                      <td>
+                        <div class='iphone-toggle-buttons'>
+                          <ul style='padding: 0px; margin: 0px;list-style-type: none;'>
+                            <li>
+                              <label for='checkbox-3'>
+                                <input value="Total Number of Providers" type='checkbox' class='' name='checkbox-0' id='checkbox-0' checked /><span></span>
+
+                              </label>
+                            </li>
+                          </ul>
+                        </div>
+                      </td>
+                    </tr>
                     <tr>
                       <td class="configInfrastructureUniqueName">Total Instances</td>
                       <td>
@@ -134,7 +146,7 @@
                           <ul style='padding: 0px; margin: 0px;list-style-type: none;'>
                             <li>
                               <label for='checkbox-1'>
-                                <input type='checkbox' class='' name='checkbox-1' id='checkbox-1' checked /><span></span>
+                                <input value="Total Instances" type='checkbox' class='' name='checkbox-1' id='checkbox-1' checked /><span></span>
                               </label>
                             </li>
                           </ul>
@@ -148,63 +160,21 @@
                           <ul style='padding: 0px; margin: 0px;list-style-type: none;'>
                             <li>
                               <label for='checkbox-2'>
-                                <input type='checkbox' class='' name='checkbox-2' id='checkbox-2' checked /><span></span>
+                                <input value="Total Managed Instances" type='checkbox' class='' name='checkbox-2' id='checkbox-2' checked /><span></span>
                               </label>
                             </li>
                           </ul>
                         </div>
                       </td>
-                    </tr>
+                    </tr>                    
                     <tr>
-                      <td class="configInfrastructureUniqueName">Total VMWare Instances</td>
+                      <td class="configInfrastructureUniqueName">Total Spend in Today</td>
                       <td>
                         <div class='iphone-toggle-buttons'>
                           <ul style='padding: 0px; margin: 0px;list-style-type: none;'>
                             <li>
                               <label for='checkbox-3'>
-                                <input type='checkbox' class='' name='checkbox-3' id='checkbox-3' checked /><span></span>
-                              </label>
-                            </li>
-                          </ul>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="configInfrastructureUniqueName">Total AWS Instances</td>
-                      <td>
-                        <div class='iphone-toggle-buttons'>
-                          <ul style='padding: 0px; margin: 0px;list-style-type: none;'>
-                            <li>
-                              <label for='checkbox-4'>
-                                <input type='checkbox' class='' name='checkbox-4' id='checkbox-4' checked/><span></span>
-                              </label>
-                            </li>
-                          </ul>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="configInfrastructureUniqueName">Total Azure Instances</td>
-                      <td>
-                        <div class='iphone-toggle-buttons'>
-                          <ul style='padding: 0px; margin: 0px;list-style-type: none;'>
-                            <li>
-                              <label for='checkbox-5'>
-                                <input type='checkbox' class='' name='checkbox-5' id='checkbox-5' checked /><span></span>
-                              </label>
-                            </li>
-                          </ul>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="configInfrastructureUniqueName">Total Openstack Instances</td>
-                      <td>
-                        <div class='iphone-toggle-buttons'>
-                          <ul style='padding: 0px; margin: 0px;list-style-type: none;'>
-                            <li>
-                              <label for='checkbox-6'>
-                                <input type='checkbox' class='' name='checkbox-6' id='checkbox-6' checked /><span></span>
+                                <input value="Total Spend in Today" type='checkbox' class='' name='checkbox-3' id='checkbox-3' checked/><span></span>
                               </label>
                             </li>
                           </ul>
@@ -228,11 +198,11 @@
               </div>
             </div>
            </form>
-      </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
+      </div>
+  </div>
 </div>
 <div class="modal fade" id="modaldashboardbuildcardConfigure" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog">
       <div class="modal-content">
         <form role="form" id="" autocomplete="off">
           <div class="modal-header">
@@ -295,20 +265,6 @@
                         </div>
                       </td>
                     </tr>
-                    <tr>
-                      <td class="configBuildUniqueName">Total Uptime</td>
-                      <td>
-                        <div class='iphone-toggle-buttons'>
-                          <ul style='padding: 0px; margin: 0px;list-style-type: none;'>
-                            <li>
-                              <label for='checkbox-Arab4'>
-                                <input value="Total Uptime" type='checkbox' class='' name='checkbox-Arab4' id='checkbox-Arab4' checked /><span></span>
-                              </label>
-                            </li>
-                          </ul>
-                        </div>
-                      </td>
-                    </tr>
                   </tbody>
               </table>
             </form>
@@ -326,122 +282,9 @@
               </div>
             </div>
            </form>
-      </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div>
-<div class="modal fade" id="modaldashboardnotificationcardConfigure" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-  <div class="modal-dialog">
-      <div class="modal-content">
-        <form role="form" id="" autocomplete="off">
-          <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                  X
-              </button>
-              <h4 class="modal-title">
-                  <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Configure Dashboard Cards
-              </h4>
-          </div>
-          <div class="modal-body">
-            <form id="">
-              <table class="table table-bordered" cellpadding="5px" width="100%" id="">
-                  <thead>
-                      <tr style="background-color: #2c3742;color: #fff;">
-                          <th>Notoification Cards</th>
-                          <th>Active</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td class="configAppDeployUniqueName">Instances Daily Trends</td>
-                      <td>
-                        <div class='iphone-toggle-buttons'>
-                          <ul style='padding: 0px; margin: 0px;list-style-type: none;'>
-                            <li>
-                              <label for='checkbox-0'>
-                                <input type='checkbox' class='' name='checkbox-0' id='checkbox-0' checked /><span></span>
-                              </label>
-                            </li>
-                          </ul>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="configAppDeployUniqueName">Total Alerts</td>
-                      <td>
-                        <div class='iphone-toggle-buttons'>
-                          <ul style='padding: 0px; margin: 0px;list-style-type: none;'>
-                            <li>
-                              <label for='checkbox-1'>
-                                <input type='checkbox' class='' name='checkbox-1' id='checkbox-1' checked /><span></span>
-                              </label>
-                            </li>
-                          </ul>
-                        </div>
-                      </td>
-                    </tr>
-                    <!-- <tr>
-                      <td class="configAppDeployUniqueName">Total Passed Builds</td>
-                      <td>
-                        <div class='iphone-toggle-buttons'>
-                          <ul style='padding: 0px; margin: 0px;list-style-type: none;'>
-                            <li>
-                              <label for='checkbox-2'>
-                                <input type='checkbox' class='' name='checkbox-2' id='checkbox-2' checked /><span></span>
-                              </label>
-                            </li>
-                          </ul>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="configAppDeployUniqueName">Total Deployed Builds</td>
-                      <td>
-                        <div class='iphone-toggle-buttons'>
-                          <ul style='padding: 0px; margin: 0px;list-style-type: none;'>
-                            <li>
-                              <label for='checkbox-3'>
-                                <input type='checkbox' class='' name='checkbox-3' id='checkbox-3' checked /><span></span>
-                              </label>
-                            </li>
-                          </ul>
-                        </div>
-                      </td>
-                    </tr> -->
-                  </tbody>
-              </table>
-            </form>
-          </div>
-           <div class="modal-footer">
-              <div class="btn-group" style="margin-left:200px;">  
-              <a class="btn btn-default" data-dismiss="modal">
-                  <i class="ace-icon fa fa-times bigger-110"></i>
-                  Cancel
-              </a>                               
-               <a class="btn btn-primary" style="margin-left:10px;">
-                  <i class="ace-icon fa fa-save bigger-110"></i>
-                  Save
-              </a>
-              </div>
-            </div>
-           </form>
-      </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div>
-<!-- <div class="row">
-  <div class="col-lg-6 col-md-6">
-    <label for="">Choose AWS Providers:<span style="color:red">*</span>
-        <span>
-            <img class="awsproviderspinner" src="img/select2-spinner.gif" style="display:none"></img>
-        </span>
-    </label>
-    <div class="input-groups">
-        <select id="chooseAwsProviderID" name="" class="required width-100 form-control">
-           
-        </select>
-    </div>
+      </div>
   </div>
-</div> -->
-
+</div>
 <div class="panel-group smart-accordion-default">
   <div class="panel panel-default" id="accordion-Infrastructure">
       <div class="panel-heading">
@@ -458,149 +301,67 @@
       </div>
       <div id="collapseInfrastructure" class="panel-collapse collapse in">
         <div class="panel-body" style="padding:15px 2px !important">
-          <div id="infrastructurecardview" class="carousel slide">
-            <div class="carousel-inner" style="min-height:150px !important; overflow: hidden!important;padding:0px 42px; background-image:linear-gradient(to bottom, #fff 0%, #fff 100%), linear-gradient(to bottom, #ddd 0%, gray 100%);
-            background-clip: content-box, padding-box ">
-              <div class="item active">
-                <div class="row">
-                  <div class="col-lg-3 col-xs-6">
-                    <div class="small-box bg-aqua">
-                      <div class="inner">
-                        <h3 id="totalProviders">&nbsp;</h3>
-                        <p>Total <br>Number of Providers</p>
-                      </div>
-                      <div class="icon">
-                        <i class="fa fa-th"></i>
-                      </div>
-                      <a class="small-box-footer" href="#">
-                        More info <i class="fa fa-arrow-circle-right"></i>
-                      </a>
-                    </div>
+          <div id="infrastructurecardview">
+            <div class="row">
+              <div class="col-lg-3 col-xs-6 infrastructureClass" data-text="Total Number of Providers">
+                <div class="small-box bg-aqua">
+                  <div class="inner">
+                    <h3 id="totalProviders">&nbsp;</h3>
+                    <p>Total <br>Number of Providers</p>
                   </div>
-                  <div class="col-lg-3 col-xs-6">
-                    <div class="small-box bg-aqua">
-                      <div class="inner">
-                        <h3 id="totalInstances">&nbsp;</h3>
-                        <p>Total <br>No. of Instances</p>
-                      </div>
-                      <div class="icon">
-                        <i class="fa fa-laptop"></i>
-                      </div>
-                      <a class="small-box-footer" href="index.html">
-                        More info <i class="fa fa-arrow-circle-right"></i>
-                      </a>
-                    </div>
+                  <div class="icon">
+                    <i class="fa fa-th"></i>
                   </div>
-                  <div class="col-lg-3 col-xs-6">
-                    <div class="small-box bg-aqua">
-                      <div class="inner">
-                        <h3 id="managedInstances">&nbsp;</h3>
-                        <p>Total <br>No. of Managed Instances</p>
-                      </div>
-                      <div class="icon">
-                        <i class="fa fa-cube"></i>
-                      </div>
-                      <a class="small-box-footer" href="#">
-                        More Info <i class="fa fa-arrow-circle-right"></i>
-                      </a>
-                    </div>
-                  </div>
-                  
-                  <div class="col-lg-3 col-xs-6">
-                    <div class="small-box bg-aqua">
-                      <div class="inner">
-                        <h3 id="totalCosts">&nbsp;</h3>
-                        <p>Total <br>Spend in Today</p>
-                      </div>
-                      <div class="icon">
-                        <i class="fa fa-dollar"></i>
-                      </div>
-                      <a class="small-box-footer" href="#">
-                       More info <i class="fa fa-arrow-circle-right"></i>
-                      </a>
-                    </div>
-                  </div>
-
-                </div> 
-                  <!-- <div class="col-lg-3 col-xs-6">
-                    <div class="small-box bg-aqua">
-                      <div class="inner">
-                        <h3 id="totalUsages">&nbsp;</h3>
-                        <p>Total <br>Average Usages/Utilizations</p>
-                      </div>
-                      <div class="icon">
-                        <i class="fa fa-pie-chart"></i>
-                      </div>
-                      <a class="small-box-footer" href="#">
-                        Usages More info <i class="fa fa-arrow-circle-right"></i>
-                      </a>
-                    </div>
-                  </div>
-                </div>  --> 
-              </div>
-              <div class="item">
-                <div class="row">
-                  <div class="col-lg-3 col-xs-6">
-                    <div class="small-box bg-aqua">
-                      <div class="inner">
-                        <h3 id="totalvmwareInstances">&nbsp;</h3>
-                        <p>Total <br>No. of VMWare Instances</p>
-                      </div>
-                      <div class="icon">
-                        <i class="fa fa-desktop"></i>
-                      </div>
-                      <a class="small-box-footer" href="index.html">
-                        VMWare More info <i class="fa fa-arrow-circle-right"></i>
-                      </a>
-                    </div>
-                  </div>
-                  <div class="col-lg-3 col-xs-6">
-                    <div class="small-box bg-aqua">
-                      <div class="inner">
-                        <h3 id="totalawsInstances">&nbsp;</h3>
-                        <p>Total <br>No. of AWS Instances</p>
-                      </div>
-                      <div class="icon">
-                        <i class="fa fa-cubes"></i>
-                      </div>
-                      <a class="small-box-footer" href="#">
-                        AWS More Info<i class="fa fa-arrow-circle-right"></i>
-                      </a>
-                    </div>
-                  </div>
-                  <div class="col-lg-3 col-xs-6">
-                    <div class="small-box bg-aqua">
-                      <div class="inner">
-                        <h3 id="totalazureInstances">&nbsp;</h3>
-                        <p>Total <br>No. of Azure Instances </p>
-                      </div>
-                      <div class="icon">
-                        <i class="fa fa-tablet"></i>
-                      </div>
-                      <a class="small-box-footer" href="index.html">
-                        Azure More info <i class="fa fa-arrow-circle-right"></i>
-                      </a>
-                    </div>
-                  </div>
-                  <div class="col-lg-3 col-xs-6">
-                    <div class="small-box bg-aqua">
-                      <div class="inner">
-                        <h3 id="totalopenstackInstances">&nbsp;</h3>
-                        <p>Total <br>No. of Openstack Instances </p>
-                      </div>
-                      <div class="icon">
-                        <i class="fa fa-futbol-o"></i>
-                      </div>
-                      <a class="small-box-footer" href="index.html">
-                        Openstack More info <i class="fa fa-arrow-circle-right"></i>
-                      </a>
-                    </div>
-                  </div>
+                  <a class="small-box-footer" href="#">
+                    More info <i class="fa fa-arrow-circle-right"></i>
+                  </a>
                 </div>
               </div>
+              <div class="col-lg-3 col-xs-6 infrastructureClass" data-text="Total Instances">
+                <div class="small-box bg-aqua">
+                  <div class="inner">
+                    <h3 id="totalInstances">&nbsp;</h3>
+                    <p>Total <br>No. of Instances</p>
+                  </div>
+                  <div class="icon">
+                    <i class="fa fa-laptop"></i>
+                  </div>
+                  <a class="small-box-footer" href="#">
+                    More info <i class="fa fa-arrow-circle-right"></i>
+                  </a>
+                </div>
+              </div>
+              <div class="col-lg-3 col-xs-6 infrastructureClass" data-text="Total Managed Instances">
+                <div class="small-box bg-aqua">
+                  <div class="inner">
+                    <h3 id="managedInstances">&nbsp;</h3>
+                    <p>Total <br>No. of Managed Instances</p>
+                  </div>
+                  <div class="icon">
+                    <i class="fa fa-cube"></i>
+                  </div>
+                  <a class="small-box-footer" href="#">
+                    More Info <i class="fa fa-arrow-circle-right"></i>
+                  </a>
+                </div>
+              </div>
+              
+              <div class="col-lg-3 col-xs-6 infrastructureClass" data-text="Total Spend in Today">
+                <div class="small-box bg-aqua">
+                  <div class="inner">
+                    <h3 id="totalCosts">&nbsp;</h3>
+                    <p>Total <br>Spend in Today</p>
+                  </div>
+                  <div class="icon">
+                    <i class="fa fa-dollar"></i>
+                  </div>
+                  <a class="small-box-footer" href="#">
+                   More info <i class="fa fa-arrow-circle-right"></i>
+                  </a>
+                </div>
+              </div>
+
             </div>
-            <a class="left carousel-control" href="#infrastructurecardview" data-slide="prev"> <img src="img/demo/left-icon.png" style="height:40px;margin-top:50px;"/> </a>
-            <a class="right carousel-control" href="#infrastructurecardview" data-slide="next"><img src="img/demo/right-icon.png" style="margin-top: 50px; margin-left: -48px; height: 54px;"/> </a>
           </div>
         </div>
       </div>
@@ -664,110 +425,26 @@
                 </a>
               </div>
             </div>
-            <div class="col-lg-3 col-xs-6 buildCiCdClass" data-text="Total Uptime">
-              <div class="small-box bg-green">
-                <div class="inner">
-                  <h3 id="totalUptime">&nbsp;</h3>
-                  <p>Total<br>Uptime</p>
-                </div>
-                <div class="icon">
-                  <i class="fa fa-line-chart"></i>
-                </div>
-                <a class="small-box-footer" href="#">
-                  Uptime More Info <i class="fa fa-arrow-circle-right"></i>
-                </a>
-              </div>
-            </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <div class="panel panel-default" id="accordion-Notification">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion-Notification" href="#collapseNotification"> 
-          <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> 
-          <i class="fa fa-fw fa-minus-circle txt-color-blue"></i>
-          <!-- <i class="fa fa-fw fa-bar-chart-o" style="font-size:14px;"></i>  -->
-          <b style="color:#3a87ad;font-size:12px;">Notification</b>
-        </a>
-      </h4>
-      <a href="#modaldashboardnotificationcardConfigure" data-toggle="modal" class="createAppConfigure" style="float:right;margin-top:10px">
-          <i class="fa fa-th fa-cogs" style="margin-right: 5px; color: rgb(64, 186, 241); font-size: 18px;"></i>
-      </a>
-    </div>
-    <div id="collapseNotification" class="panel-collapse collapse in">
-      <div class="panel-body">
-        <div class="row">
-          <div class="col-lg-3 col-xs-6">
-            <div class="small-box bg-red">
-              <div class="inner">
-                <h3 id="totaldailyTrends"></h3>
-                <p>New vs Terminated<br>Instances Daily Trends</p>
-              </div>
-              <div class="icon">
-                <i class="fa fa-shield"></i>
-              </div>
-              <a class="small-box-footer" href="#">
-                More info <i class="fa fa-arrow-circle-right"></i>
-              </a>
-            </div>
-          </div>
-          <div class="col-lg-3 col-xs-6">
-            <div class="small-box bg-red">
-              <div class="inner">
-                <h3 id="totalAlerts"></h3>
-                <p>Total<br>No. of Alerts</p>
-              </div>
-              <div class="icon">
-                <i class="fa fa-tags"></i>
-              </div>
-              <a class="small-box-footer" href="#">
-                Alerts More info <i class="fa fa-arrow-circle-right"></i>
-              </a>
-            </div>
-          </div>
-          
         </div>
       </div>
     </div>
   </div>
 </div>
-<div class="row">
-  
-</div>
-<script type="text/javascript">
-  /*$(document).ready(function() {
-    $.get('../allproviders/list', function(dataforallproviders) {
-
-
-    }).fail(function() {});  
-  
-  });*/
-</script>
 <script type="text/javascript">
   $(document).ready(function() {
-    $('.carousel.slide').carousel({
-      interval: false,
-      cycle: false
-    });
     $('.infrastructureConfigureSaveBtn').click(function() {
       var $tableinfrastructureDashboard = $('#tableinfrastructureDashboard');
-      var configureInfrastructureArray = [];
+      var $collapseInfrastructure = $('#collapseInfrastructure');
+      $collapseInfrastructure.find('.infrastructureClass').hide();
 
-
-      $tableinfrastructureDashboard.find('tbody tr').filter(':has(:checkbox:checked)').each(function() {
-        var $tr = $(this);
-        var infrastructureUniqueText = $tr.find('.configInfrastructureUniqueName').text();
-        configureInfrastructureArray.push(infrastructureUniqueText);
+      $tableinfrastructureDashboard.find('tbody tr input').filter(':checked').each(function() {
+        createInfrastructureDashboard($(this).val());
       });
 
-      if (configureInfrastructureArray.length > 0) {
-        configureInfrastructureArray.forEach(function(infrastructureUniqueText) {
-          alert(infrastructureUniqueText);
-        });
+      function createInfrastructureDashboard(uniqueText){
+        $collapseInfrastructure.find('.infrastructureClass').filter('[data-text="' + uniqueText + '"]').show();
       }
+      $('#modaldashboardinfrastructurecardConfigure').modal('hide');
     });
     $('.buildConfigureSaveBtn').click(function() {
       var $tablebuildDashboard = $('#tablebuildDashboard');
@@ -807,7 +484,6 @@
     });
 
     $.get('../allproviders/list', function(totalProviders) {
-      //alert(totalProviders);
       var totalCountProviders;
       var awsProvidersCount = totalProviders.awsProviders.length;
       var openstackProvidersCount = totalProviders.openstackProviders.length;
@@ -819,8 +495,6 @@
       $('#totalProviders').empty();
       $('#totalProviders').append(totalCountProviders);
     }).fail(function() {});
-
-
 
     //Total Instances API
     $.get('../dashboard/providers/totalinstances', function(totalinstances) {
@@ -840,146 +514,9 @@
     //Total managedinstances API
     $.get('../dashboard/providers/totalmanagedinstances', function(totalmanagedinstances) {
       $('#managedInstances').empty();
-      //var totalmanagedinstancesCount = totalmanagedinstances[0].totalmanagedinstancescount;
       $('#managedInstances').append(totalmanagedinstances);
     }).fail(function() {});
-
-
-    //Total Usages API
-    /*$.get('../dashboard/providers/totalusages', function(totalusages) {
-      $('#totalUsages').empty();
-      var totalusagesCount = totalusages[0].totalusagecount+'%';
-      $('#totalUsages').append(totalusagesCount);
-    }).fail(function() {});*/
-
-    //Total Builds API
-    /*$.get('../dashboard/providers/totalbuilds', function(totalbuilds) {
-      $('#totalBuilds').empty();
-      var totalbuildsCount = totalbuilds[0].totaltotalbuildcount;
-      $('#totalBuilds').append(totalbuildsCount);
-    }).fail(function() {});*/
-
-    
-    //Total totalbuildspassed API
-    /*$.get('../dashboard/providers/totalbuildspassed', function(totalbuildspassed) {
-      $('#totalbuildsPassed').empty();
-      var totalbuildspassedCount = totalbuildspassed[0].totalpassedbuildcount;
-      $('#totalbuildsPassed').append(totalbuildspassedCount);
-    }).fail(function() {});*/
-
-    //Total totalbuildsdeployed API
-    /*$.get('../dashboard/providers/totalbuildsdeployed', function(totalbuildsdeployed) {
-      $('#totalbuildsDeployed').empty();
-      var totalbuildsdeployedCount = totalbuildsdeployed[0].totaldeployedbuildcount;
-      $('#totalbuildsDeployed').append(totalbuildsdeployedCount);
-    }).fail(function() {});*/
-
-    //Total uptime API
-    $.get('../dashboard/providers/totaluptime', function(totaluptime) {
-      $('#totalUptime').empty();
-      var totaluptimeCount = totaluptime[0].totaluptimecount+'%';
-      $('#totalUptime').append(totaluptimeCount);
-    }).fail(function() {});
-
-    //Total vmwareinstances API
-    $.get('../dashboard/providers/totalvmwareinstances', function(totalvmwareinstances) {
-      $('#totalvmwareInstances').empty();
-      var totalvmwareinstancesCount = totalvmwareinstances[0].totalvmwareinstancescount;
-      $('#totalvmwareInstances').append(totalvmwareinstancesCount);
-    }).fail(function() {});
-
-    //Total awsinstances API
-    $.get('../dashboard/providers/totalawsinstances', function(totalawsinstances) {
-      $('#totalawsInstances').empty();
-      var totalawsinstancesCount = totalawsinstances[0].totalawsinstancescount;
-      $('#totalawsInstances').append(totalawsinstancesCount);
-    }).fail(function() {});
-
-    //Total azureinstances API
-    $.get('../dashboard/providers/totalazureinstances', function(totalazureinstances) {
-      $('#totalazureInstances').empty();
-      var totalazureinstancesCount = totalazureinstances[0].totalazureinstancescount;
-      $('#totalazureInstances').append(totalazureinstancesCount);
-    }).fail(function() {});
-
-
-    //Total awsinstances API
-    $.get('../dashboard/providers/totalopenstackinstances', function(totalopenstackinstances) {
-      $('#totalopenstackInstances').empty();
-      var totalopenstackinstancesCount = totalopenstackinstances[0].totalopenstackinstancescount;
-      $('#totalopenstackInstances').append(totalopenstackinstancesCount);
-    }).fail(function() {});
-
-    //Total totaldailyTrends API
-    $.get('../dashboard/providers/totaldailytrends', function(totaldailyTrends) {
-      $('#totaldailyTrends').empty();
-      var totaldailyTrendsCount = totaldailyTrends[0].totaldailytrendcount+'%';
-      $('#totaldailyTrends').append(totaldailyTrendsCount);
-    }).fail(function() {});
-
-    //Total totalAlerts API
-    $.get('../dashboard/providers/totalalerts', function(totalAlerts) {
-      $('#totalAlerts').empty();
-      var totalAlertsCount = totalAlerts[0].totalalertcount;
-      $('#totalAlerts').append(totalAlertsCount);
-    }).fail(function() {});
-
-
-    function dashboardEntry(){
-      var dataDashboard = {};
-      //var managedinstancesInput = $('#managedinstancesInput').val();
-      var averageUsagesInput = $('#averageUsagesInput').val();
-
-      var totalbuildsInput = $('#totalbuildsInput').val();
-      var totalpassedbuildsInput = $('#totalpassedbuildsInput').val();
-
-      var totaldeployedbuildsInput = $('#totaldeployedbuildsInput').val();
-      var totaluptimeInput = $('#totaluptimeInput').val();
-
-      var vmwareinstancesInput = $('#vmwareinstancesInput').val();
-      var awsinstancesInput = $('#awsinstancesInput').val();
-
-      var azureinstancesInput = $('#azureinstancesInput').val();
-      var openstackinstancesInput = $('#openstackinstancesInput').val();
-
-      var dailytrendsInput = $('#dailytrendsInput').val();
-      var alertsInput = $('#alertsInput').val();
-
-
-      //dataDashboard.managedinstancesCount = managedinstancesInput;
-      dataDashboard.averageUsagesCount = averageUsagesInput;
-
-      dataDashboard.totalbuildsCount = totalbuildsInput;
-      dataDashboard.totalpassedbuildsCount = totalpassedbuildsInput;
-
-      dataDashboard.totaldeployedbuildsCount = totaldeployedbuildsInput;
-      dataDashboard.totaluptimeCount = totaluptimeInput;
-
-      dataDashboard.vmwareinstancesCount = vmwareinstancesInput;
-      dataDashboard.awsinstancesCount = awsinstancesInput;
-
-      dataDashboard.azureinstancesCount = azureinstancesInput;
-      dataDashboard.openstackinstancesCount = openstackinstancesInput;
-
-      dataDashboard.dailytrendsCount = dailytrendsInput;
-      dataDashboard.alertsCount = alertsInput;
-
-      alert(JSON.stringify(dataDashboard));
-      $.ajax({
-        url: '/dashboard/providers/dashboardmongopush',
-        data: JSON.stringify(dataDashboard),
-        type: 'POST',
-        contentType: "application/json",
-        success: function(dashboardmongo) {
-          console.log("dashboardmongo ########"+dashboardmongo);
-        },
-        error: function(jqxhr) {
-          console.log("Error occured in dashboardmongopush");
-        }
-      });
-    }
-    $('.dashboardSaveBtn').on("click", function() {
-      dashboardEntry();
-    });
   });
+
 </script>
+
