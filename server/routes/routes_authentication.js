@@ -34,26 +34,31 @@ module.exports.setRoutes = function(app) {
                     return;
                 }
                 if (ldapData.length) {
-                    var ldapUser = ldapData[0];
-                    var ldapClient = new LdapClient({
-                        host: ldapUser.host,
-                        port: ldapUser.port,
-                        baseDn: ldapUser.baseDn,
-                        ou: ldapUser.ou,
-                        adminUser: ldapUser.adminUser,
-                        adminPass: ldapUser.adminPass
-                    });
-                    logger.debug('Create User request received:', req.body.username, req.body.password.length, req.body.fname, req.body.lname);
-                    ldapClient.createUser(req.body.username, req.body.password, req.body.fname, req.body.lname, function(err, user) {
-                        if (err) {
-                            logger.debug('In Error', err);
-                            res.send(err);
-                        } else {
+                    if (ldapData[0].host != "") {
+                        var ldapUser = ldapData[0];
+                        var ldapClient = new LdapClient({
+                            host: ldapUser.host,
+                            port: ldapUser.port,
+                            baseDn: ldapUser.baseDn,
+                            ou: ldapUser.ou,
+                            adminUser: ldapUser.adminUser,
+                            adminPass: ldapUser.adminPass
+                        });
+                        logger.debug('Create User request received:', req.body.username, req.body.password.length, req.body.fname, req.body.lname);
+                        ldapClient.createUser(req.body.username, req.body.password, req.body.fname, req.body.lname, function(err, user) {
+                            if (err) {
+                                logger.debug('In Error', err);
+                                res.send(err);
+                            } else {
 
-                            res.send(200);
-                            return;
-                        }
-                    });
+                                res.send(200);
+                                return;
+                            }
+                        });
+                    } else {
+                        res.send(200);
+                        return;
+                    }
 
                 } else {
                     logger.debug("No Ldap User found.");
@@ -259,19 +264,24 @@ module.exports.setRoutes = function(app) {
                 return;
             }
             if (ldapData.length) {
-                var ldapUser = ldapData[0];
-                var ldapClient = new LdapClient({
-                    host: ldapUser.host,
-                    port: ldapUser.port,
-                    baseDn: ldapUser.baseDn,
-                    ou: ldapUser.ou,
-                    adminUser: ldapUser.adminUser,
-                    adminPass: ldapUser.adminPass
-                });
+                if (ldapData[0].host != "") {
+                    var ldapUser = ldapData[0];
+                    var ldapClient = new LdapClient({
+                        host: ldapUser.host,
+                        port: ldapUser.port,
+                        baseDn: ldapUser.baseDn,
+                        ou: ldapUser.ou,
+                        adminUser: ldapUser.adminUser,
+                        adminPass: ldapUser.adminPass
+                    });
 
-                ldapClient.compare(req.params.username, function(err, status) {
-                    res.send(status)
-                });
+                    ldapClient.compare(req.params.username, function(err, status) {
+                        res.send(status)
+                    });
+                } else {
+                    res.send(200);
+                }
+
             } else {
                 logger.debug("No Ldap User found.");
                 res.status(404).send("No Ldap User found.");
