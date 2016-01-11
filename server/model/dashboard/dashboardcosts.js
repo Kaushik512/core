@@ -59,15 +59,9 @@ dashboardcostsSchema.statics.getLatestCostInfo = function(callback) {
             callback(err, null);
             return;
         }
-        if (costData.length) {
             logger.debug("Exit getLatestcostDataInfo with providers present");
             callback(null, costData);
             return;
-        } else {
-            logger.debug("Exit getLatestcostDataInfo with no providers present");
-            callback(null, null);
-            return;
-        }
     }).sort({_id:-1}).limit(1);
 };
 

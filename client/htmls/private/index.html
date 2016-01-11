@@ -949,6 +949,13 @@ var SettingTreeJson = [{
             "href": "#ajax/Settings/DashboardSettings.html",
             "selectable": true,
             "icon": "fa fa-lg fa-fw fa-files-o"
+        },{
+            "name": "templates",
+            "text": "Dashboard landing",
+            "borderColor": "#000",
+            "href": "#ajax/Settings/DashboardLandings.html",
+            "selectable": true,
+            "icon": "fa fa-lg fa-fw fa-bolt"
 
         }],
         "borderColor": "#000",
@@ -1019,7 +1026,6 @@ function getTrackTreeDetails() {
                     "href": "javascript:void(0);"
                 });
                 for (var j = 0; j < data[i].itemUrls.length; j++) {
-
                     if (data[i].itemUrls[j].childItem.length > 0) {
                         trackTree[i].nodes.push({
                             "name": "parentData",
