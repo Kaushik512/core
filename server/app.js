@@ -66,7 +66,7 @@ mongoDbConnect(dboptions, function(err) {
     }
 });
 
-var mongoStore = new MongoStore({
+/*var mongoStore = new MongoStore({
     db: appConfig.db.dbName,
     host: appConfig.db.host,
     port: appConfig.db.port
@@ -74,6 +74,12 @@ var mongoStore = new MongoStore({
     server.listen(app.get('port'), function() {
         logger.debug('Express server listening on port ' + app.get('port'));
     });
+});*/
+
+var mongoStore = new MongoStore({
+    mongooseConnection: mongoose.connection
+}, function() {
+
 });
 
 app.set('port', process.env.PORT || appConfig.app_run_port);
@@ -96,7 +102,9 @@ app.use(expressBodyParser.urlencoded({
 }))
 
 // parse application/json
-app.use(expressBodyParser.json({limit: '50mb'}))
+app.use(expressBodyParser.json({
+    limit: '50mb'
+}))
 app.use(expressMultipartMiddleware);
 
 //setting up passport
@@ -143,4 +151,8 @@ io.sockets.on('connection', function(socket) {
     tail.on('line', function(line) {
         socket.emit('log', line);
     });
+});
+
+server.listen(app.get('port'), function() {
+    logger.debug('Express server listening on port ' + app.get('port'));
 });
