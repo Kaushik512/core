@@ -98,7 +98,9 @@ var ARM = function(options) {
           callback(null, body);
           return;
         } else {
-          callback(err, null);
+          callback({
+            messgae:"Invalid res code"
+          }, null);
           return;
         }
 
@@ -148,7 +150,9 @@ var ARM = function(options) {
           callback(null, body);
           return;
         } else {
-          callback(err, null);
+          callback({
+            message:"Invalid Response Code : "+ response.statusCode
+          }, null);
           return;
         }
 
@@ -197,7 +201,9 @@ var ARM = function(options) {
           callback(null, body);
           return;
         } else {
-          callback(err, null);
+           callback({
+            message:"Invalid Response Code : "+ response.statusCode
+          }, null);
           return;
         }
 
@@ -244,7 +250,9 @@ var ARM = function(options) {
           callback(null, body);
           return;
         } else {
-          callback(err, null);
+          callback({
+            message:"Invalid Response Code : "+ response.statusCode
+          }, null);
           return;
         }
 
@@ -285,7 +293,9 @@ var ARM = function(options) {
           callback(null, null);
           return;
         } else {
-          callback(err, null);
+           callback({
+            message:"Invalid Response Code : "+ response.statusCode
+          }, null);
           return;
         }
 
@@ -376,7 +386,9 @@ var ARM = function(options) {
           callback(null, body);
           return;
         } else {
-          callback(err, null);
+          callback({
+            message:"Invalid Response Code : "+ response.statusCode
+          }, null);
           return;
         }
 
@@ -430,7 +442,9 @@ var ARM = function(options) {
           callback(null, body);
           return;
         } else {
-          callback(err, null);
+          callback({
+            message:"Invalid Response Code : "+ response.statusCode
+          }, null);
           return;
         }
 
@@ -488,7 +502,9 @@ var ARM = function(options) {
           callback(null, body);
           return;
         } else {
-          callback(err, null);
+           callback({
+            message:"Invalid Response Code : "+ response.statusCode
+          }, null);
           return;
         }
 
@@ -544,7 +560,9 @@ var ARM = function(options) {
           callback(null, body);
           return;
         } else {
-          callback(err, null);
+           callback({
+            message:"Invalid Response Code : "+ response.statusCode
+          }, null);
           return;
         }
 
@@ -620,7 +638,7 @@ var ARM = function(options) {
           return;
         } else {
           callback({
-            messgae: "Invalid Response Code"
+            message:"Invalid Response Code : "+ response.statusCode
           }, null);
           return;
         }
