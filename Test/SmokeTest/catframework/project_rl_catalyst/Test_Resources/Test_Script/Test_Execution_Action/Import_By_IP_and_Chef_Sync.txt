@@ -49,6 +49,7 @@ Catalyst checks the Jenkins task history
     Clicks on the History button
     Sleep    10s
     Clicks on Jenkins Log button in Job output column
+    Sleep    5s
     Closes the Execute Logs window
     Clicks on Close button to go back to List of task page
 
@@ -63,12 +64,12 @@ Clicks on Jenkins Log button in Job output column
 
 
 Closes the Execute Logs window
-    Sleep    3s
-    Click Element    xpath=.//*[@id='assignedExecute']/div/div/div[3]/a
+    Sleep    2s
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='assignedExecute']/div/div/div[3]/a
 
 Clicks on Close button to go back to List of task page
     Sleep    2s
-    Click Element    css=.btn.btn-minier.btn-primary.hideJenkinsJob
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    css=.btn.btn-minier.btn-primary.hideJenkinsJob
 
 
 
