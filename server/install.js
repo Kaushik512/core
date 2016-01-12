@@ -127,8 +127,8 @@ function getDefaultsConfig() {
             port: '27017'
         },
         authStrategy: {
-            local: true,
-            externals: false
+            local: false,
+            externals: true
         },
         logServerUrl: '',
         features: {

@@ -36,7 +36,6 @@ var mongoose = require('mongoose');
 
 logger.debug('Starting Catalyst');
 logger.debug('Logger Initialized');
-<<<<<<< HEAD
 var LDAPUser = require('_pr/model/ldap-user/ldap-user.js');
 LDAPUser.getLdapUser(function(err, ldapData) {
     if (err) {

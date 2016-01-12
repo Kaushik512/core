@@ -1482,11 +1482,11 @@ permissionsetsdao.listPermissionSets(function(err, data) {
             // Create Ldap User
             // provide ldap information here.
             var ldapUser = {
-                host: '',
-                port: 0,
-                adminUser: '',
-                adminPass: '',
-                baseDn: '',
+                host: '54.68.204.110',
+                port: 389,
+                adminUser: 'Admin',
+                adminPass: 'ReleV@ance',
+                baseDn: 'dc=d4d-ldap,dc=relevancelab,dc=com',
                 ou: ''
             };
             LDAPUser.createNew(ldapUser, function(err, data) {
