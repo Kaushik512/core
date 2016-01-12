@@ -158,9 +158,7 @@
                   bootbox.alert(msg);
                 });
               }
-            });
-
-            
+            });  
           });
         } else {
           $.get('/jenkins/', function(jenkinsList) {
@@ -171,7 +169,6 @@
             $jenkinsServerListDropdown.append('<option value="">Choose Jenkins Server</option>');
             for (var i = 0; i < jenkinsList.length; i++) {
               var keys = Object.keys(jenkinsList[i]);
-              alert(keys);
               var $option = $('<option></option>').val(jenkinsList[i][keys[0]]).html(keys[0]);
               $jenkinsServerListDropdown.append($option);
             }
@@ -214,35 +211,6 @@
                 });
               }
             });
-            $jobsList.change(function(e) {
-              var jobName = $('#jobListJenkins').val();
-              var jenkinsServerId;
-              for (var i = 0; i < jenkinsList.length; i++) {
-                var keys = Object.keys(jenkinsList[i]);
-                console.log("=========== " + JSON.stringify(jenkinsList[i][keys[0]]));
-                jenkinsServerId = jenkinsList[i][keys[0]];
-              }
-              if (jobName) {
-                $('.jenkinsJobURL').empty();
-                $.get('/jenkins/' + jenkinsServerId + '/dashboardjobs/' + jobName, function(jobsList) {
-                  //console.log("Joblist are====>",jobsList);
-                  $('#totalBuilds').empty();
-                  $('#totalbuildsPassed').empty();
-                  $('#totalbuildsDeployed').empty();
-                  $('#totalBuilds').append(jobsList.buildCount);
-                  $('#totalbuildsPassed').append(jobsList.sucessbuildCount);
-                  $('#totalbuildsDeployed').append(jobsList.sucessbuildCount);
-                }).fail(function(jxhr) {
-                  var msg = "Jenkins Server Behaved Unexpectedly.";
-                  if (jxhr.responseJSON && jxhr.responseJSON.message) {
-                    msg = jxhr.responseJSON.message;
-                  } else if (jxhr.responseText) {
-                    msg = jxhr.responseText;
-                  }
-                  bootbox.alert(msg);
-                });
-              }
-            });
           });
         }
       });
@@ -250,7 +218,6 @@
         event.preventDefault();
         var jenkinsReferenceValue = $("#chooseJenkinsReference option:selected").val();
         var jobsListValue = $("#jobListJenkins option:selected").val();
-
         if (jenkinsReferenceValue && jobsListValue) {
           dashboardLandingEntry();
         }
@@ -259,7 +226,6 @@
           var dataDashboard = {};
           dataDashboard.jenkinsReferenceValue = jenkinsReferenceValue;
           dataDashboard.jobsListValue = jobsListValue;
-          alert(JSON.stringify(dataDashboard));
           $.ajax({
               url: '/dashboard/providers/dashboardlanding',
               data: JSON.stringify(dataDashboard),
@@ -269,7 +235,6 @@
                   console.log("dataDashboard saved to mongo ########" + JSON.stringify(dashboardLandingData));
                   $('#msgdashboardSave').html(" ");
                   $('#msgdashboardSave').html("Saved Successfully");
-
               },
               error: function(jqxhr) {
                   console.log("Error occured in dashboardlandingmongopush");
