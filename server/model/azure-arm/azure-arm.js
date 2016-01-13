@@ -173,7 +173,7 @@ ARMSchema.statics.getById = function(cfId, callback) {
             callback(err, null);
             return;
         }
-        //console.log('data ==>', data);
+       
         if (data.length) {
             callback(null, data[0]);
         } else {
@@ -213,7 +213,7 @@ ARMSchema.statics.removeById = function(cfId, callback) {
             callback(err, null);
             return;
         }
-        //console.log('data ==>', data);
+        
         callback(null, deleteCount);
 
     });
@@ -235,7 +235,7 @@ ARMSchema.statics.findByAutoScaleTopicArn = function(topicArn, callback) {
             callback(err, null);
             return;
         }
-        //console.log('data ==>', data);
+        
         callback(null, cloudFormations);
 
     });
@@ -257,7 +257,7 @@ ARMSchema.statics.findByAutoScaleResourceId = function(resourceId, callback) {
             callback(err, null);
             return;
         }
-        //console.log('data ==>', data);
+      
         callback(null, cloudFormations);
 
     });
