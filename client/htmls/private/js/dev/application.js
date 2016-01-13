@@ -110,8 +110,6 @@ function getAllPipelineViewData() {
             }).fail(function() {});
         }
     }).fail(function() {});
-
-    
 }
 function creationPipelineTableView(projectId,arrEnv,arrSequence){
     var $tableClone = $('.tableClone').clone();
@@ -157,11 +155,9 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
             }
 
             function createStatusPresentCard(appDeployDataObj,applicationName,callback){
-                //alert("called..");
                 var tempStr = '';
                        
                 var $childCardTemplate = $('.childCardTemplate');
-                //alert($childCardTemplate.length);
                 var $childPresentCard = $childCardTemplate.clone(true);
                 $childPresentCard.css({
                     display: 'inline-flex'
@@ -213,9 +209,19 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
                 }
                 else if($.inArray(arrSequence[j],applicationEnvList)!==-1){
                     //application status present card
-                    createStatusPresentCard(appDeployDataObj,applicationName,function(err,data){
-                        finalArray.push(data);
-                    });
+                    //alert($(arrSequence).get(-1));
+                    if($(arrSequence).get(-1) == arrSequence[j]){
+                        //alert("Matched");
+                        createStatusPresentCard(appDeployDataObj,applicationName,function(err,data){
+                            alert(data);
+                            finalArray.push(data);
+                        });
+                    }
+                    else{
+                        createStatusPresentCard(appDeployDataObj,applicationName,function(err,data){
+                            finalArray.push(data);
+                        });
+                    }
                 }else{
                     //application status absent card
                     var tempStr = '';
@@ -229,17 +235,23 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
                     $childPresentCard.find('.imgHeight').attr("src","img/rsz_inactive.png");
                     $childPresentCard.find('.lastapplicationDeploy').html('');
                     //$childPresentCard.find('.footer-innerdiv').html('');
-                    $childPresentCard.find('.applicationChildDetails').hide();
+                        $childPresentCard.children().css({
+                            'opacity': '0.5',
+                            'pointer-events': 'none'
+                        });
+                    //$childPresentCard.find('.applicationChildDetails').attr('disabled');
+                    //$childPresentCard.find('.applicationChildmoreInfo').attr('disabled');
                     
                     var $childCardtemplateStr = $childPresentCard.prop('outerHTML');
                     tempStr = tempStr + $childCardtemplateStr;
                     finalArray.push(tempStr);
-                }  
+                } 
             }
             $tableapplicationTest.dataTable().fnAddData(finalArray);
-        });
+            //alert($('#tableContainer table tbody td').outerWidth()); 
+        });        
     });
-
+    
     $tableapplicationTbody.on('click','.applicationChildDetails',moreinfoDetailsPipelineViewClickHandler);
 }
 

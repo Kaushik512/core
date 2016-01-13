@@ -38,11 +38,11 @@
 				                            <div class="panel-heading panel-heading-support">
 				                                
 				                                <span class="spanHeading">
-				                                  <a  class="applicationMainIP colorblack" href="javascript:void(0)">Catalyst</a>
+				                                  <span class="applicationMainIP colorblack">Catalyst</span>
 				                                </span>
 							            	</div>
 								            <div class="appCardBody">
-								                <div class="panel-body panel-primary appCardInfo padding7">
+								                <div class="panel-body panel-primary appCardInfo padding2">
 								                    <div>
 								                        <div class="col-lg-12 col-sm-12 col-xs-12 text-center margin-top-15">
 								                            <img class="mainImageHeight" src="img/rsz_logo.png">
@@ -67,33 +67,37 @@
 							        	</div>
 							    	</div>
 							    </span>
-							    <span><img src="img/arrow_right.png" class="spanMainImage"></span>
+							    <!-- <span><img src="img/arrow_right.png" class="spanMainImage"></span> -->
 							</div>
 			    			<div class="childCardTemplate" style="display:none">
-			        			<span>
+			        			<span class="firstChildSpanTemplate">
 				                    <div class="col-sm-12 col-md-12 col-lg-12 col-xs-6 no-padding padding-right5-mobile maxminwidth130">
 				                        <div class="panel panel-primary appcard-role-inner borderrad12colorGray">
 				                            <div class="panel-heading panel-heading-support">
-				                                <span class="spanHeading">IP: 
-				                                  <a class="applicationChildIP colorblack" href="javascript:void(0)">
+				                                <span class="spanHeading"> 
+				                                  <span class="applicationChildIP colorblack">
 				                                  	54.17.34.45
+				                                  </span>
+				                                  <a class="btn btn-primary btn-sm width27borderradius50 applicationChildmoreInfo" style="float:right">
+				                                  	<i class="fa fa-info font-size-11">
+				                                  	</i>
 				                                  </a>
 				                                </span>
 			    							</div>
 										    <div class="appCardBody">
-										        <div class="panel-body panel-primary appCardInfo padding7">
+										        <div class="panel-body panel-primary appCardInfo padding2">
 										            <div class="">
 										                <div class="col-lg-12 col-sm-12 col-xs-12 text-center">
 										                    <img src="img/aws_logo_started.png" class="imgHeight">
-										                    <a class="btn btn-primary btn-sm width27borderradius50 applicationChildDetails" style="margin-left:-40px">
-										                        <i style="font-size: 14px;color:#fff" class="fa fa-th"> </i>
+										                    <a class="btn btn-primary btn-sm width27borderradius50 applicationChildDetails" style="margin-left:-27px">
+										                        <i class="fa fa-th" style="font-size: 10px;color:#fff"></i>
 										                    </a>
 										                </div>
 										                <div class="col-lg-12 col-sm-12 col-xs-12 padding0 text-center">
 										                    <div class="font-size10">
 										                        <div>
-										                            <span class="lastDeploySpan">Last Deploy:</span>
-										                            <span class="lastapplicationDeploy">17-12-03 12:43:19 PM</span>
+										                            <!-- <span class="lastDeploySpan">Last Deploy:</span> -->
+										                            <span class="lastapplicationDeploy" title="Last Deploy" data-original-title="Eval_Setup" data-placement="top" rel="tooltip">17-12-03 12:43:19 PM</span>
 										                        </div>
 										                    </div>
 										                </div>
@@ -121,10 +125,15 @@
 										</div>
 									</div>
 								</span>
-								<span><img src="img/arrow_right.png" class="spanChildImage"></span>
+								<span class="secondChildSpanTemplate">
+									<a href="javascript:void" class="spanChildPromote">
+				                        <i class="fa fa-arrow-right txt-color-blue" style="font-size: 18px;margin-top:27px"></i>
+				                    </a>
+									<!-- <img src="img/arrow_right.png" class="spanChildImage"> -->
+								</span>
 							</div>
 							<div class="col-md-12" id="divapplicationcardview" style="padding-left:0px; padding-right:0px;padding-top:10px">
-                				<table class="tableClone dataTable table-custom table-condensed" cellpadding="5px" width="100%" style="border-bottom:1px solid #ddd">
+                				<table class="tableClone dataTable table-custom table-condensed" cellpadding="5px" width="100%" style="border-bottom:1px solid #ddd" style="display:none">
 
 				                </table>
 				                <div class="table-responsive table-div" id="tableContainer">
@@ -363,10 +372,10 @@
                                     <td>Application Name :</td>
                                     <td class="appNameModal"></td>
                                 </tr>
-                                <tr>
+                                <!-- <tr>
                                     <td>App-Instance Name :</td>
                                     <td class="appInstanceNameModal"></td>
-                                </tr>
+                                </tr> -->
                                 <tr>
                                     <td>Host :</td>
                                     <td class="hostNameModal"></td>
