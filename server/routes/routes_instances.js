@@ -99,6 +99,88 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 		});
 	});
 
+    app.post('/instances/:instanceId/remediation', function(req, res) {
+        logger.debug("Enter get() for /instances/%s/redemption", req.params.instanceId);
+        instancesDao.getInstanceById(req.params.instanceId, function(err, instances) {
+            if (err) {
+                logger.error("Failed to fetch ActionLogs: ", err);
+                res.status(500).send({
+                    message: "DB error"
+                });
+                return;
+            }
+            if (!instances.length) {
+                res.send(404, {
+                    message: "Instance not found"
+                });
+                return;
+            }
+            var instance = instances[0];
+            credentialCryptography.decryptCredential(instance.credentials, function(err, decryptedCredentials) {
+                if (err) {
+                    res.status(500).send({
+                        message: "error occured while decrypting credentials"
+                    });
+                    return;
+                }
+                var sshParamObj = {
+                    host: instance.instanceIP,
+                    port: 22,
+                    username: instance.credentials.username,
+                };
+                var sudoCmd;
+                if (decryptedCredentials.pemFileLocation) {
+                    sshParamObj.privateKey = decryptedCredentials.pemFileLocation;
+                } else {
+                    sshParamObj.password = decryptedCredentials.password;
+                }
+
+                var serviceCmd = "service " + req.body.service + " " + req.body.action;
+                var sudoCmd = "sudo";
+                if (sshParamObj.password) {
+                    sudoCmd = 'echo \"' + sshParamObj.password + '\" | sudo -S';
+                }
+                serviceCmd = sudoCmd + " " + serviceCmd;
+
+
+                var sshConnection = new SSH(sshParamObj);
+
+                sshConnection.exec(serviceCmd, function(err, ret) {
+                    if (decryptedCredentials.pemFileLocation) {
+                        fileIo.removeFile(decryptedCredentials.pemFileLocation, function(err) {
+                            if (err) {
+                                logger.error("Unable to delete temp pem file =>", err);
+                            } else {
+                                logger.error("temp pem file deleted =>", err);
+                            }
+                        });
+                    }
+                    if (err) {
+                        res.status(500).send({
+                            message: "Unable to run service cmd on instance"
+                        });
+                        return;
+                    }
+                    if (ret === 0) {
+                        res.send(200, {
+                            message: "cmd ran successfully"
+                        });
+                    } else {
+                        res.status(500).send({
+                            message: "cmd failed. code : " + ret
+                        });
+                    }
+
+                }, function(stdout) {
+                    logger.debug(stdout.toString());
+                }, function(stderr) {
+                    logger.debug(stderr.toString());
+                });
+
+            });
+        });
+    });
+
 	app.all('/instances/*', sessionVerificationFunc);
 
 
@@ -2798,7 +2880,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 	});
 
-	app.post('/instances/:instanceId/remediation', function(req, res) {
+    // Now for some reason moving this end point to out of authentication: Gobinda
+
+	/*app.post('/instances/:instanceId/remediation', function(req, res) {
 		logger.debug("Enter get() for /instances/%s/redemption", req.params.instanceId);
 		instancesDao.getInstanceById(req.params.instanceId, function(err, instances) {
 			if (err) {
@@ -2878,7 +2962,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 			});
 		});
-	});
+	});*/
 
 	app.get('/instances/org/:orgId/bu/:buId/project/:projectId/env/:envId/docker/containers', function(req, res) {
 		logger.debug("Enter get() for /instances/dockercontainerdetails/%s", req.params.instanceid);
