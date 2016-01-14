@@ -11,6 +11,8 @@ var url = require('url');
 var fs = require('fs');
 var Client = require('node-rest-client').Client;
 
+var slackMsg = require('../routes/routes_slack');
+
 
 
 var Jenkins = function(options) {
@@ -79,6 +81,11 @@ var Jenkins = function(options) {
                 return;
             }
             callback(null, data);
+            str = data.fullDisplayName;
+            var res = str.split(" ");
+            var res1 = str.split("#");
+            msg = res[0]+" - Build" +res[1] +"- Successful: Check console output at jenkins.rlcatalyst.com/job/"+res[0]+"/"+res1[1]+" to view the results";
+            slackMsg.slackMessage('https://hooks.slack.com/services/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','#catalyst_alert','@vimal.mishra',msg);
         });
     };
 

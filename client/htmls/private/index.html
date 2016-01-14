@@ -15,7 +15,7 @@
         <link rel="stylesheet" href="js/jquery-filetree/jqueryFileTree.css" />
     </head>
 <body class="custom-theme">
-    
+
     <!-- HEADER -->
     <!-- Header starts here -->
     <header>
@@ -34,7 +34,7 @@
                 <ul class="nav navbar-nav">
                     <li class="left-projects-links hidden" data-target="#Workspace" navigation="Workspace,Workspace1">
                         <a class="active navigationTab" id="workZoneNew" href="#" onclick="setleftnavigation(this,'org');">
-                        <i class="fa fa-credit-card txt-color-blue"></i>&nbsp;WORKZONE 
+                        <i class="fa fa-credit-card txt-color-blue"></i>&nbsp;WORKZONE
                         </a>
                     </li>
 
@@ -296,7 +296,7 @@
                             <tr>
                                 <td class="tdStyleInfo">Operating System:</td>
                                 <td>
-                                    <input id="instanceOSNew" class="form-control" disabled="disabled">                                                      
+                                    <input id="instanceOSNew" class="form-control" disabled="disabled">
                                 </td>
                             </tr>
                             <tr>
@@ -331,20 +331,20 @@
                             </tr>
                             <tr>
                                 <td class="tdStyleInfo">Keypair:</td>
-                                <td> 
+                                <td>
                                     <input id="instancekeyPair" disabled="disabled" class="form-control">
                                 </td>
                             </tr>
                             <tr>
                                 <td class="tdStyleInfo">VPC ID:</td>
                                 <td>
-                                    <input id="instanceVPC" class="form-control" disabled="disabled">                                               
+                                    <input id="instanceVPC" class="form-control" disabled="disabled">
                                 </td>
                             </tr>
                             <tr>
                                 <td class="tdStyleInfo">Subnet:</td>
                                 <td>
-                                    <input id="instanceSubnetId" class="form-control" disabled="disabled">                                          
+                                    <input id="instanceSubnetId" class="form-control" disabled="disabled">
                                 </td>
                             </tr>
                             <tr>
@@ -356,13 +356,13 @@
                             <tr>
                                 <td class="tdStyleInfo">Version:</td>
                                 <td>
-                                    <input id="instanceVersion" class="form-control" disabled="disabled">                                    
+                                    <input id="instanceVersion" class="form-control" disabled="disabled">
                                 </td>
                             </tr>
                             <tr>
                                 <td class="tdStyleInfo">Runlist:</td>
                                 <td>
-                                    <input id="instanceRunlist" class="form-control" disabled="disabled">                                           
+                                    <input id="instanceRunlist" class="form-control" disabled="disabled">
                                 </td>
                             </tr>
                         </tbody>
@@ -600,13 +600,13 @@
         </div>
     </div>
     <!--modal for help ends here-->
-    
+
     <script src="js/libs/jquery-2.0.2.min.js"></script>
     <script src="js/libs/jquery-ui-1.10.3.min.js"></script>
     <script src="js/libs/modernizr-2.5.3.min.js"></script>
     <script src="js/select2.min.js"></script>
     <script src="js/bootstrap-treeview.js"></script>
-    
+
     <script src="js/bootstrap/bootstrap.min.js"></script>
     <!-- CUSTOM NOTIFICATION -->
     <script src="js/notification/SmartNotification.min.js"></script>
@@ -614,7 +614,7 @@
     <script src="js/smartwidgets/jarvis.widget.min.js"></script>
     <script src="js/plugin/bootstrap-wizard/jquery.bootstrap.wizard.js"></script>
     <script src="js/plugin/bootbox/bootbox.min.js"></script>
-    
+
     <script src="/private/js/jquery.dataTables.min.js"></script>
     <script src="js/jquery.tablesorter.min.js"></script>
     <script src="js/jquery.validate.min.js"></script>
@@ -623,10 +623,10 @@
     <script src="js/app.js"></script>
 
     <script src="js/dev/dev.js"></script>
-    
 
-    
-    
+
+
+
 <!-- MAIN APP JS FILE -->
 <script type="text/javascript">
 var a, b, x;
@@ -1190,7 +1190,7 @@ function getUrlParameter(sParam) {
 }
 
 $(document).keypress("l", function(e) {
-    if (e.ctrlKey && e.altKey && (String.fromCharCode(e.which) === 'l' || String.fromCharCode(e.which) === 'L')) {  
+    if (e.ctrlKey && e.altKey && (String.fromCharCode(e.which) === 'l' || String.fromCharCode(e.which) === 'L')) {
         window.open('/private/catlog.html', 'Catalyst Log');
     }
 });
@@ -1279,7 +1279,7 @@ function selectEnv() {
         }
 
 
-    } else { 
+    } else {
         //not found ... trying to find first element in any org
         envFound = selectFirstEnvironment();
     }

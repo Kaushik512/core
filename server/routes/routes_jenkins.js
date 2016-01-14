@@ -1,7 +1,7 @@
 /* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
- * Written by Gobinda Das <gobinda.das@relevancelab.com> and Arabinda Behera<arabinda.behera@relevancelab.com>, 
+ * Written by Gobinda Das <gobinda.das@relevancelab.com> and Arabinda Behera<arabinda.behera@relevancelab.com>,
  * Aug 2015
  */
 
@@ -14,7 +14,7 @@ var logger = require('_pr/logger')(module);
 var url = require('url');
 var fs = require('fs');
 var currentDirectory = __dirname;
-
+var slackMsg = require('./routes_slack');
 module.exports.setRoutes = function(app, verificationFunc) {
     app.get('/jenkins/version', function(req, res) {
         var jenkinVversion;
