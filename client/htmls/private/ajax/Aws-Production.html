@@ -53,6 +53,14 @@
 											 <div class="tab-pane active" id="tab1" style="padding-bottom:20px;overflow-y: auto;">
 												<div id="templateContent" class="row " style="margin:0px;min-height:200px;">
 												</div>
+												    <!-- <label>
+												        <input class="repoTypeSelectorRadioBtn" type="radio" name="repoType" value="Docker" checked='checked'>1
+												    </label>
+												    <label>
+												        <input class="repoTypeSelectorRadioBtn" type="radio" name="repoType" value="Nexus">2
+												    </label>
+													<div id="Docker" class="dummyClass">Docker</div>
+													<div id="Nexus" class="dummyClass" style="display:none">Nexus</div> -->
 											 </div>
 											 <div class="tab-pane" id="tab2" style="padding-bottom:20px;overflow-y: auto;">
 												<div class="row " style="margin:0px">
@@ -288,6 +296,74 @@
 															   </div>
 															</div>
 															<!--configure runlist collapse ends here-->
+															<!--adding repository parameters starts here-->
+<div class="panel panel-default">
+   <div class="panel-heading">
+	  <h4 class="panel-title">
+		 <a data-toggle="collapse" data-parent="#accordion-Design" href="#CollapseConfigureRepo" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Configure Repository</a>
+	  </h4>
+   </div>
+   <div id="CollapseConfigureRepo" class="panel-collapse collapse">
+	  <div class="panel-body" style="padding-left: 8px;">
+	  	<div class="col-lg-12">
+			<label>
+		        <input class="repoTypeSelectorRadioBtn" type="radio" name="repoType" data-repotype="Docker" checked='checked'>Docker
+		    </label>
+		    <label>
+		        <input class="repoTypeSelectorRadioBtn" type="radio" name="repoType" data-repotype="Nexus">Nexus
+		    </label>
+	    </div>
+		<div id="Docker" class="repoTypeClass">
+			<div class="col-lg-6 col-md-6">
+				<label for="repoNameDocker">Enter Repository Name:
+				<span class="control-label redSpan">&nbsp;*</span></label>
+				<div class="input-groups">
+				   <input  id="repoNameDocker" name="repoNameDocker" class="form-control" type="text" autofocus="autofocus">
+				</div>
+			</div>
+			<div class="col-lg-6 col-md-6">
+				<label for="containerIdDocker">Enter Container ID:
+				<span class="control-label redSpan">&nbsp;*</span></label>
+				<div class="input-groups">
+				   <input  id="containerIdDocker" name="containerIdDocker" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="col-lg-6 col-md-6">
+				<label for="containerPortDocker">Enter Container Port:
+				<span class="control-label redSpan">&nbsp;*</span></label>
+				<div class="input-groups">
+				   <input  id="containerPortDocker" name="containerPortDocker" class="form-control" type="text">
+				</div>
+			</div>
+		</div>
+		<div id="Nexus" class="repoTypeClass" style="display:none">
+			<div class="col-lg-6 col-md-6">
+				<label for="repoNameNexus">Enter Repository Name:
+				<span class="control-label redSpan">&nbsp;*</span></label>
+				<div class="input-groups">
+				   <input  id="repoNameNexus" name="repoNameNexus" class="form-control" type="text" autofocus="autofocus">
+				</div>
+			</div>
+			<div class="col-lg-6 col-md-6">
+				<label for="artifactNexus">Enter Artifact:
+				<span class="control-label redSpan">&nbsp;*</span></label>
+				<div class="input-groups">
+				   <input id="artifactNexus" name="artifactNexus" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="col-lg-6 col-md-6">
+				<label for="versionNexus">Enter Version:
+				<span class="control-label redSpan">&nbsp;*</span></label>
+				<div class="input-groups">
+				   <input id="versionNexus" name="versionNexus" class="form-control" type="text">
+				</div>
+			</div>
+		</div>
+
+
+	  </div>
+   </div>
+</div>
 															<!--assign runlist modal-->
 															<div class="modal fade" id="chefRunlistModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
 															   <div class="modal-dialog">
