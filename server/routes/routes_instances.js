@@ -99,9 +99,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 		});
 	});
 
-    app.post('/instances/:instanceId/remediation', function(req, res) {
-        logger.debug("Enter get() for /instances/%s/redemption", req.params.instanceId);
-        instancesDao.getInstanceById(req.params.instanceId, function(err, instances) {
+    app.post('/instances/:platformId/remediation', function(req, res) {
+        logger.debug("Enter get() for /instances/%s/redemption", req.params.platformId);
+        instancesDao.getInstanceByPlatformId(req.params.platformId, function(err, instances) {
             if (err) {
                 logger.error("Failed to fetch ActionLogs: ", err);
                 res.status(500).send({
@@ -134,7 +134,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                 } else {
                     sshParamObj.password = decryptedCredentials.password;
                 }
-
+                // service: any service running on machine (apache2,mysql)
+                // action: start/stop
+                
                 var serviceCmd = "service " + req.body.service + " " + req.body.action;
                 var sudoCmd = "sudo";
                 if (sshParamObj.password) {
