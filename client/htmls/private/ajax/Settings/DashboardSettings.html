@@ -34,7 +34,6 @@ width:100%;
                                     <tr class="rowCustomStyle">
                                         <td>Type</td>
                                         <td>Parent Name</td>
-                                        <td>Child Name</td>
                                         <td>Description</td>
                                         <td>Action</td>
                                     </tr>
@@ -53,21 +52,6 @@ width:100%;
         </div>  <!-- col-lg-12 ends here-->
 </div>   <!--row ends here-->     
 
-<div class="childContainer hidden" id="childItemSeries">
-      <div class="col-lg-6 col-md-6 margintop15">
-        <label for="">Child Name:</label>
-        <div class="input-groups" id="childNameLabel">
-        <input type="text" name="childName" class="childNameItem form-control" id="childName"/>
-        </div>
-     </div>
-     <div class="col-lg-6 col-md-6 margintop15">
-        <label for="">Child URL:</label>
-        <div class="input-groups" id="childUrlLabel">
-        <input type="url" name="childUrl" class="childUrlItem form-control" id="childUrl"/> 
-        </div>
-     </div>
-</div>      
-
 <!--modal for ItemList-->
 <div class="modal fade" id="modalForTrackEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
    <div class="modal-dialog " style="">
@@ -84,11 +68,6 @@ width:100%;
                   <label for="">Type:</label>
                   <div class="input-groups">
                   <select id="trackType" name="trackType" class="required form-control width-100" style="vertical-align:central">
-                     <option value="">Choose Type</option>
-                     <option value="Provider">Provider</option>
-                     <option value="Monitoring">Monitoring</option>
-                     <option value="Logs">Logs</option>
-                     <option value="Notifications">Notifications</option>
                   </select>
                   </div>
                </div>
@@ -111,9 +90,6 @@ width:100%;
                         </div>
                      </div>
               </div>
-              <div class="childAppendContainer">
-              </div>
-           <a href="javascript:void(0)" class="clearfix pull-right addChildItem" data-backdrop="false" data-toggle="modal">Add Child Item</a>
                 <input type="hidden" id="trackEditHiddenInputId">
                 <input type="hidden" id="trackEditHiddenInput">
                 <input type="hidden" id="trackItemHiddenInputNameUrl">
@@ -132,13 +108,8 @@ width:100%;
 
 
 <script>
-
-
-
-
 //initialising the datatable...
 if (!$.fn.dataTable.isDataTable('#trackTable')) {
-    //var $taskListArea = $('.taskListArea').empty();
     var $trackDatatable = $('#trackTable').DataTable({
         "pagingType": "full_numbers",
         "bInfo": false,
@@ -151,9 +122,7 @@ if (!$.fn.dataTable.isDataTable('#trackTable')) {
             "bSortable": false
         },{
             "bSortable": false
-        }, {
-            "bSortable": false
-        }, {
+        },{
             "bSortable": false
         }]
 
@@ -162,14 +131,33 @@ if (!$.fn.dataTable.isDataTable('#trackTable')) {
 
 //calling the global track functionality when track params are available..
 $(document).ready(function(e) {
+    getTrackType();
     getGlobalTrack();
 });
 
-//when the user closes the modal the childContainer will be hidden..
-$('#modalForTrackEdit').on('hidden.bs.modal', function() {
-    $('.childContainer').addClass('hidden');
-    return false;
-});
+function getTrackType(){
+    var trackType = '../trackType';
+    $.get(trackType, function(data) {
+
+        console.log(data);
+        if (data && data.length) {
+            for (var kk = 0; kk < data.length; kk++) {
+                var str = '<option>' + data[kk].type + '</option>';
+                $('#trackType').append(str);
+            }
+        }
+    }).fail(function(jxhr) {
+        var msg = "Server Behaved Unexpectedly";
+        if (jxhr.responseJSON && jxhr.responseJSON.message) {
+            msg = jxhr.responseJSON.message;
+        } else if (jxhr.responseText) {
+            msg = jxhr.responseText;
+        }
+        bootbox.alert(msg);
+    });
+
+}
+
 
 //when the user clicks on the new button the setting the value to 'new' for the hidden field to know that user is creating the new item..
 $('.addDashboardItem').click(function(e) {
@@ -177,10 +165,6 @@ $('.addDashboardItem').click(function(e) {
     $('.modal-header').find('.modal-title').html('Create New Dashboard Item');
     $('#trackEditHiddenInput').val('new');   
 });
-
- $('.addChildItem').click(function() {
-     $('#childItemSeries').clone().appendTo('.childAppendContainer').removeClass('hidden').removeAttr('id');
- });
 
 //to show the focus on first input ....
 $(document).on('shown.bs.modal', function(e) {
@@ -278,8 +262,6 @@ function getGlobalTrack() {
                 createTableForTrack(data[kk]);
             }
         }
-
-
     }).fail(function(jxhr) {
         var msg = "Server Behaved Unexpectedly";
         if (jxhr.responseJSON && jxhr.responseJSON.message) {
@@ -308,34 +290,15 @@ function createTableForTrack(trackData) {
 
                 var $tdParent = $('<td class="trackParent"/>').append('<a title="' + trackData.itemUrls[j].url + '" target="_blank" href="' + trackData.itemUrls[j].url + '">' + trackData.itemUrls[j].name + '</a>');
 
-                var $child = $('<td class="trackChild"/>');
-
-                if (trackData.itemUrls[j].childItem && trackData.itemUrls[j].childItem.length) {
-
-                    for (var k = 0; k < trackData.itemUrls[j].childItem.length; k++) {
-                        (function(k) {
-                            $child.append('<a title="' + trackData.itemUrls[j].childItem[k].url + '" target="_blank" href="' + trackData.itemUrls[j].childItem[k].url + '">' + trackData.itemUrls[j].childItem[k].name + '</a>').append('&nbsp;&nbsp;');
-                        })(k);
-                    }
-                } else {
-                    $child = $('<td class="trackChild">-</td>');
-                }
-
                 var $tdAction = $('<td/>');
 
                 $tdAction.append('<div class="btn-group"><button class="btn btn-info pull-left btn-sg tableactionbutton editRowTrackUrl" data-placement="top" value="Update" title="Edit"><i class="ace-icon fa fa-pencil bigger-120"></i></button></div>').append('<div style="margin-left:14px;" class="btn-group"><button class="btn btn-danger pull-left btn-sg tableactionbutton globalTrackUrlRemove" data-placement="top" value="Remove" title="Delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
 
                 //for editing track items from the table...
                 $tdAction.find('button.editRowTrackUrl').click(function() {
-
-
-                    //  debugger;
-                    
                     var $this = $(this);
                     var $tr = $this.parents('tr.trackItemRow');
                     var trackData = $tr.data('trackData');
-                   // alert('btn'+JSON.stringify(trackData));
-                    //var datatrackId = $tr.data('data-trackId');
                     var trackId = trackData._id;
                     var itemUrlIdEdit = trackData.itemUrls[j]._id;
                     var $editModal = $('#modalForTrackEdit');
@@ -347,24 +310,10 @@ function createTableForTrack(trackData) {
                     $editModal.find('#trackDescription').val(trackData.itemUrls[j].description);
 
                     $editModal.find('#trackType').val(trackData.type);
-                    if (trackData.itemUrls[j].childItem && trackData.itemUrls[j].childItem.length) {
-                            $('.childAppendContainer').empty();
-                        for (var p = 0; p < trackData.itemUrls[j].childItem.length; p++) {
-                                            
-                            var $cloneChild = $('#childItemSeries').clone().removeClass('hidden').removeAttr('id');
-                            $cloneChild.find("input.childNameItem").val(trackData.itemUrls[j].childItem[p].name);
-                            $cloneChild.find("input.childUrlItem").val(trackData.itemUrls[j].childItem[p].url);
-                            $('.childAppendContainer').append($cloneChild);
-                        }
-                    }
 
                     var id = $(this).parents('tr').attr('data-itemUrlId');
-                    //alert(id);
-
                     $editModal.find('#trackEditHiddenInputId').val(trackData._id);
                     $editModal.find('#trackItemHiddenInputNameUrl').val(id);
-                  //  alert(trackData.itemUrls[j]._id);
-
                     return false;
                 });
 
@@ -374,8 +323,6 @@ function createTableForTrack(trackData) {
                     var $this = $(this);
                     var $tr = $this.parents('tr.trackItemRow');
                     var trackId = trackData._id;
-
-                    //var itemUrlId = trackData.itemUrls[j]._id;
                     var itemUrlId = $(this).parents('tr').attr('data-itemUrlId');
                     bootbox.confirm({
                         message: 'Are you sure you want to Delete Dashboard Item -&nbsp;' + trackData.itemUrls[j].name + '&nbsp;&nbsp;of Type-&nbsp;' + trackData.type,
@@ -387,7 +334,6 @@ function createTableForTrack(trackData) {
                                     method: 'DELETE',
                                     success: function() {
                                         $trackDatatable.row($tr).remove().draw(false);
-
                                     },
                                     error: function(jxhr) {
                                         bootbox.alert(result);
@@ -408,7 +354,7 @@ function createTableForTrack(trackData) {
                     return false;
                 });
 
-                $tr.append($tdType).append($tdParent).append($child).append($tdDescription).append($tdAction);
+                $tr.append($tdType).append($tdParent).append($tdDescription).append($tdAction);
                 $trackNameList.append($tr);
                 $trackDatatable.row.add($tr).draw();
             })(j);
@@ -434,29 +380,14 @@ $('#trackItemUrl').submit(function(e) {
 
         var itemName = $this.find('.trackNameItem').val().trim();
         var itemURL = $this.find('.trackUrlItem').val().trim();
-        var $childURLContainers = $('.childContainer');
         var itemDescription = $this.find('#trackDescription').val().trim();
-        var childItem = [];
-      //  alert("childItem" + JSON.stringify(childItem));
         if (itemName && itemURL) {
             itemUrls.push({
                 name: itemName,
                 url: itemURL,
-                description: itemDescription,
-                childItem: childItem
+                description: itemDescription
             });
         }
-        $childURLContainers.each(function() {
-            $this = $(this);
-            var childItemName = $this.find('.childNameItem').val().trim();
-            var childItemURL = $this.find('.childUrlItem').val().trim();
-            if (childItemName && childItemURL) {
-                itemUrls[0].childItem.push({
-                    name: childItemName,
-                    url: childItemURL
-                });
-            }
-        });
 
         trackData.itemUrls = itemUrls;
         trackData.type = $form.find('#trackType').val();
@@ -472,11 +403,8 @@ $('#trackItemUrl').submit(function(e) {
         if (dashboardEditNew === 'edit') {
             console.log(dashboardEditNew);
             console.log(trackData);
-           // alert(trackData.itemUrls[0].childItem);
             var itemId = $('#trackItemHiddenInputNameUrl').val();
             trackData.itemUrls[0].itemId = itemId;
-          //  alert("childedit" + JSON.stringify(childItem));
-           // alert(JSON.stringify(trackData.itemUrls[0]));
             url = '../track/' + trackId + '/update';
             reqBody = {
                 "itemUrls": trackData.itemUrls[0],
@@ -489,8 +417,6 @@ $('#trackItemUrl').submit(function(e) {
                 "type": trackData.type
             };
         }
-        console.log('====',reqBody);
-
         $.ajax({
             method: "POST",
             url: url,
@@ -510,7 +436,6 @@ $('#trackItemUrl').submit(function(e) {
                     var itemUrls = [];
                     for (var j = 0; j < data.itemUrls.length; j++) {
                         if (!$('tr[data-itemUrlId="' + data.itemUrls[j]._id + '"]').length) {
-                            // alert(data.itemUrls[j]._id);
                             itemUrls.push(data.itemUrls[j]);
                         }
                     }
@@ -519,21 +444,12 @@ $('#trackItemUrl').submit(function(e) {
 
                     $('#saveBtnTrack').removeAttr('disabled');
                 } else {
-                    console.log(dashboardEditNew);
                     var $tr = $('tr[data-itemUrlId="' + itemId + '"]');
                     $tr.find('.trackType').html(reqBody.type);
                     console.log("reqBody" + JSON.stringify(reqBody.itemUrls));
                     $tr.find('.trackParent').html('<a style="word-break:break-word;" href="' + reqBody.itemUrls.url + '" target="_blank">' + reqBody.itemUrls.name + '</a> ');
 
                     $tr.find('.trackDescription').html(reqBody.itemUrls.description);
-                    var $trChild = $tr.find('.trackChild').empty();
-                    if (reqBody.itemUrls.childItem && reqBody.itemUrls.childItem.length) {
-                        for (var q = 0; q < reqBody.itemUrls.childItem.length; q++) {
-                            console.log("childItem" + JSON.stringify(reqBody.itemUrls.childItem));
-                            $trChild.append('<a style="word-break:break-word;" href="' + reqBody.itemUrls.childItem[q].url + '" target="_blank">' + reqBody.itemUrls.childItem[q].name + '</a>').append('&nbsp;&nbsp;');
-                        }
-                    }
-                  //  alert("edit"+JSON.stringify(trackData.itemUrls));
                     $tr.data('trackData', {
                         _id: trackId,
                         itemUrls: trackData.itemUrls,

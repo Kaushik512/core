@@ -26,8 +26,6 @@ width:100%;
             <div class="widget-body">
                 <div class="widget-main widgetHeight">
                     <div class="col-md-12 table-responsive tablePadding">
-                         
-                          
                          <table id="trackTypeTable" class="tableData table table-striped table-bordered table-hover dataTable no-footer textCenter" cellpadding="5px">
                              
                                 <thead>
@@ -66,13 +64,21 @@ width:100%;
                 <div class="col-lg-6 col-md-6">
                   <label for="">Create Type:</label>
                   <div class="input-groups">
-                  <input autofocus type="text" name="trackTypeCreate" class="trackType form-control" id="trackType"/>
+                  <input autofocus type="text" name="trackTypeCreate" class="required trackType form-control" id="trackType"/>
                   </div>
                </div>
                <div class="col-lg-6 col-md-6">
                   <label for="">Description:</label>
                   <input type="text" name="trackTypeDescription" class="trackTypeDescription form-control" id="trackTypeDescription">
                </div>
+               <div class="itemURLContainer" id="itemSeries"> 
+                     <div class="col-lg-6 col-md-6 margintop15">
+                        <label for="">Parent Name:</label>
+                        <div class="input-groups">
+                        <input type="text" name="trackTypeName" class="trackTypeName form-control" id="trackTypeName"/>
+                        </div>
+                     </div>
+              </div>
                 <input type="hidden" id="trackTypeHiddenInputId"/>
                 <input type="hidden" id="trackTypeEditHiddenInput"/>
             </fieldset>
@@ -161,6 +167,7 @@ function getTrackType() {
 
     var trackTypeDetails = '../trackType';
     $.get(trackTypeDetails, function(data) {
+        alert(JSON.stringify(data));
         console.log(data);
         if (data && data.length) {
             for (var kk = 0; kk < data.length; kk++) {
@@ -192,24 +199,7 @@ function createTableForTrackType(trackTypeData) {
 
     var $tdAction = $('<td/>');
 
-    $tdAction.append('<div class="btn-group"><button class="btn btn-info pull-left btn-sg tableactionbutton editRowTrackType" data-placement="top" value="Update" title="Edit"><i class="ace-icon fa fa-pencil bigger-120"></i></button></div>').append('<div style="margin-left:14px;" class="btn-group"><button class="btn btn-danger pull-left btn-sg tableactionbutton globalTrackTypeRemove" data-placement="top" value="Remove" title="Delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
-
-    //for editing track type items from the table...
-    $tdAction.find('button.editRowTrackType').click(function() {
-        var $this = $(this);
-        var $tr = $this.parents('tr.trackTypeRow');
-        var trackTypeData = $tr.data('trackTypeData');
-        var $editModal = $('#modalForTrackTypeEdit');
-        $editModal.modal('show');
-        $editModal.find('#trackTypeEditHiddenInput').val('edit');
-        $editModal.find('h4.modal-title').html('Edit Dashboard Type &nbsp;-&nbsp;&nbsp;' + trackTypeData.type);
-        $editModal.find('#trackTypeDescription').val(trackTypeData.description);
-
-        $editModal.find('#trackType').val(trackTypeData.type);
-
-        $editModal.find('#trackTypeHiddenInputId').val(trackTypeData._id);
-        return false;
-    });
+    $tdAction.append('<div style="margin-left:14px;" class="btn-group"><button class="btn btn-danger pull-left btn-sg tableactionbutton globalTrackTypeRemove" data-placement="top" value="Remove" title="Delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
 
     //for deletion of track type items from the table..
     $tdAction.find('button.globalTrackTypeRemove').click(function() {
@@ -263,9 +253,19 @@ $('#trackTypeForm').submit(function(e) {
         $('#saveItemSpinner').removeClass('hidden');
         var $form = $('#trackTypeForm');
         var trackTypeData = {};
+        var subType = [];
         $this = $(this);
+        var subTypeName = $this.find('#trackTypeName').val().trim();
         trackTypeData.description = $this.find('#trackTypeDescription').val().trim();
         trackTypeData.type = $form.find('#trackType').val();
+
+        if (subTypeName) {
+            subType.push({
+                name: subTypeName
+            });
+        }
+
+        trackTypeData.subType = subType;
         var dashboardEditNew = $(this).find('#trackTypeEditHiddenInput').val();
         var trackTypeId = $form.find('#trackTypeHiddenInputId').val();
         var url;
@@ -283,6 +283,7 @@ $('#trackTypeForm').submit(function(e) {
         } else {
             url = '../trackType';
             reqBody = {
+                "subType":trackTypeData.subType,
                 "type": trackTypeData.type,
                 "description": trackTypeData.description
             };
