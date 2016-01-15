@@ -1227,6 +1227,25 @@
 								//constructing the docker composite json.
 								var dockercompose = [];
 								var dockerimages = {};
+								
+								var appVersion = $('#chooseVersions').val();
+								var nexusUrl = $('#repositoryUrl').val();
+								var nexus = {
+					                "url": nexusUrl,
+					                "version": appVersion 
+					                };
+					            //reqBody.nexus = nexus;
+					            var dockerImage = $('#chooseRepository').val();
+					            var containerId = $('#containerIdDiv').val();
+					            var containerPort = $('#containerPort').val();
+				                var docker = {
+				                "image": dockerImage,
+				                "containerId": containerId,
+				                "containerPort": containerPort
+				                };
+				                //reqBody.docker = docker;
+
+
 								console.log($('#compositedockertable').find('.dockerimagesrow').length);
 								$('.dockerimagesrow').each(function() {
 									dockerimages = {};
@@ -1284,7 +1303,6 @@
 								reqBody.iconpath = $('.productdiv2.role-Selected').find('img[src*="__templatesicon__"]').first().attr('src');
 								reqBody.orgId = $('#orgnameSelect').val();
 								reqBody.bgId = $('#bgListInput').val();
-								alert($('#projectListInput').val());
 								reqBody.projectId = $('#projectListInput').val();
 								
 								var imageIdentifier = $('#imageId').val();
@@ -1373,7 +1391,7 @@
 									if (($('.role-Selected').data('templatetype')).toLowerCase() === 'cloudformation') {
 										reqBody.blueprintType = 'aws_cf';
 									}
-									alert(reqBody);
+									//alert(reqBody);
 									console.log(reqBody);
 									$.post('/organizations/' + reqBody.orgId + '/businessgroups/' + reqBody.bgId + '/projects/' + reqBody.projectId + '/blueprints', {
 										blueprintData: reqBody
