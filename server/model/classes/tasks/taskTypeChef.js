@@ -90,14 +90,6 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusD
                 }
             });
         }
-
-        if (nexusData.projectId) {
-            objectArray.push({
-                "rlcatalyst": {
-                    "projectId": nexusData.projectId
-                }
-            });
-        }
     }
     logger.debug("AppDeploy attributes: ",JSON.stringify(objectArray));
     var attributeObj = utils.mergeObjects(objectArray);
