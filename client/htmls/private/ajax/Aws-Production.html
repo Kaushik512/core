@@ -53,14 +53,12 @@
 											 <div class="tab-pane active" id="tab1" style="padding-bottom:20px;overflow-y: auto;">
 												<div id="templateContent" class="row " style="margin:0px;min-height:200px;">
 												</div>
-												    <!-- <label>
-												        <input class="repoTypeSelectorRadioBtn" type="radio" name="repoType" value="Docker" checked='checked'>1
-												    </label>
-												    <label>
-												        <input class="repoTypeSelectorRadioBtn" type="radio" name="repoType" value="Nexus">2
-												    </label>
-													<div id="Docker" class="dummyClass">Docker</div>
-													<div id="Nexus" class="dummyClass" style="display:none">Nexus</div> -->
+												<!-- <div class="smart-form">
+											      <div class="col-lg-12 col-md-12 col-sm-12">
+											        <label style="font-size:13px;" class="radio col-lg-2 col-md-2 col-sm-2"><input type="radio" value="All" id="all" class="runlistTypeSelectorRadioBtn" name="radio"><i></i>All</label>
+											        <label style="font-size:13px;" class="radio col-lg-2 col-md-2 col-sm-2"><input type="radio" value="Roles" id="roles" class="runlistTypeSelectorRadioBtn" name="radio"><i></i>Roles</label>
+											      </div>
+												</div> -->
 											 </div>
 											 <div class="tab-pane" id="tab2" style="padding-bottom:20px;overflow-y: auto;">
 												<div class="row " style="margin:0px">
@@ -305,14 +303,16 @@
    </div>
    <div id="CollapseConfigureRepo" class="panel-collapse collapse">
 	  <div class="panel-body" style="padding-left: 8px;">
-	  	<div class="col-lg-12">
-			<label>
-		        <input class="repoTypeSelectorRadioBtn" type="radio" name="repoType" data-repotype="Docker" checked='checked'>Docker
-		    </label>
-		    <label>
-		        <input class="repoTypeSelectorRadioBtn" type="radio" name="repoType" data-repotype="Nexus">Nexus
-		    </label>
-	    </div>
+	  	<div class="col-lg-12 col-md-12 col-sm-12">
+	  	  <div class="smart-form">
+	        <label style="font-size:13px;" class="radio col-lg-2 col-md-2 col-sm-2">
+	        	<input type="radio" id="dockerRepoInputId" class="repoTypeSelectorRadioBtn" name="repoType" data-repotype="Docker"><i></i>Docker
+	        </label>
+	        <label style="font-size:13px;" class="radio col-lg-2 col-md-2 col-sm-2">
+	        	<input id="nexusRepoInputId" class="repoTypeSelectorRadioBtn" type="radio" name="repoType" data-repotype="Nexus"><i></i>Nexus
+	        </label>
+	      </div>
+		</div>
 		<div id="Docker" class="repoTypeClass">
 			<div class="col-lg-6 col-md-6">
 				<label for="repoNameDocker">Enter Repository Name:

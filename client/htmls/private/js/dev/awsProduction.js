@@ -2085,17 +2085,9 @@
 			alert('Please select a blueprint to remove.');
 		}
 	}
+$('#dockerRepoInputId').trigger('click');
 $(".repoTypeSelectorRadioBtn").click(function() {
     var val = $(this).attr('data-repotype');
     $('.repoTypeClass').hide();
     $('#'+val).show();
 });
-/*$(".repoTypeSelectorRadioBtn").change(function() {
-	//alert("Hello");
-    var val = $(".repoTypeSelectorRadioBtn:checked").val();
-    //alert(val);
-    //$('.dummyClass').hide();
-    alert(val);
-    $('.dummyClass').removeClass('hidden');
-    $('#'+val).show();
-});*/
