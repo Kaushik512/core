@@ -233,6 +233,7 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
                     $childPresentCard.find('.applicationChildIP').html('');
                     $childPresentCard.find('.lastDeploySpan').html('');
                     $childPresentCard.find('.imgHeight').attr("src","img/rsz_inactive.png");
+                    $childPresentCard.find('.applicationChildDetails').removeClass('btn-primary').addClass('btn-grey');
                     $childPresentCard.find('.lastapplicationDeploy').html('');
                     //$childPresentCard.find('.footer-innerdiv').html('');
                         $childPresentCard.children().css({
