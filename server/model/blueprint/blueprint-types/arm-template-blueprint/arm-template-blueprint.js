@@ -99,7 +99,7 @@ ARMTemplateBlueprintSchema.statics.createNew = function(data) {
 		return null;
 	}
 	var parameters = {};
-	console.log('parameters ===>  ', data.stackParameters);
+	
 	if (data.stackParameters) {
 		for (var i = 0; i < data.stackParameters.length; i++) {
 
