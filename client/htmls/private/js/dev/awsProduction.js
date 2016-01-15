@@ -1189,6 +1189,7 @@
 				var validatorForm = $("#wizard-1").validate();
 				validatorForm.resetForm();
 			} else if (index == 3) {
+
 				if ($wizard.data('secondClick')) {
 					return true;
 				}
@@ -1214,6 +1215,7 @@
 									alert('please choose an Organization');
 									return false;
 								}
+
 								reqBody = {};
 								reqBody.templateId = $selectedItem.attr('data-templateId');
 								reqBody.templateType = $selectedItem.attr('data-templateType');
@@ -1282,6 +1284,7 @@
 								reqBody.iconpath = $('.productdiv2.role-Selected').find('img[src*="__templatesicon__"]').first().attr('src');
 								reqBody.orgId = $('#orgnameSelect').val();
 								reqBody.bgId = $('#bgListInput').val();
+								alert($('#projectListInput').val());
 								reqBody.projectId = $('#projectListInput').val();
 								
 								var imageIdentifier = $('#imageId').val();
@@ -1293,7 +1296,7 @@
 								var vpcId = $('#vpcId').val();
 								var subnetId = $('#subnetId').val();
 								var region = $('#region').val();
-								
+
 								reqBody.keyPairId = keyPairId;
 								reqBody.securityGroupIds = securityGroupIds;
 								reqBody.instanceType = instanceType;
@@ -1370,6 +1373,8 @@
 									if (($('.role-Selected').data('templatetype')).toLowerCase() === 'cloudformation') {
 										reqBody.blueprintType = 'aws_cf';
 									}
+									alert(reqBody);
+									console.log(reqBody);
 									$.post('/organizations/' + reqBody.orgId + '/businessgroups/' + reqBody.bgId + '/projects/' + reqBody.projectId + '/blueprints', {
 										blueprintData: reqBody
 									}, function(data) {
@@ -1646,6 +1651,290 @@
 				var getProjs = $selectedOrgOption.data('projList');
 				for (var i = 0; i < getProjs.length; i++) {
 					$projectList.append($('<option></option>').val(getProjs[i].rowid).html(getProjs[i].name));
+				}
+			});
+			//Arab Code for Application Setup. 
+			/*var projectListValue = $projectList.val();
+			var $nexusServer = $('#chooseNexusServer');
+			$nexusServer.click(function(e) {
+				alert(projectListValue);
+				if(!projectListValue){
+					alert("Please Choose Project Before Proceeding....");
+				}
+			});*/
+			$projectList.change(function(e){
+				var projectId = $(this).val();
+				getNexusServer();
+				getDockerServer();
+				function resetAllFields() {
+					var $chooseRepository = $('#chooseRepository');
+					$chooseRepository.empty();
+					$('#chooseRepository').append('<option value="">Choose Repositories</option>');
+					var $chooseArtifacts = $('#chooseArtifacts');
+					$chooseArtifacts.empty();
+					$('#chooseArtifacts').append('<option value="">Choose Artifacts</option>');
+					var $chooseVersions = $('#chooseVersions');
+					$chooseVersions.empty();
+					$('#chooseVersions').append('<option value="">Choose Versions</option>');
+					var $repositoryUrl = $('#repositoryUrl');
+					$repositoryUrl.val("");
+					var $containerId = $('#containerIdDiv');
+					$containerId.val("");
+					var $containerPort = $('#containerPort');
+					$containerPort.val("");
+				}
+
+				function resetSpinners() {
+					$('.reposerverspinner').css('display', 'none');
+					$('.repospinner').css('display', 'none');
+					$('.repourlspinner').css('display', 'none');
+					$('.artifactsspinner').css('display', 'none');
+					$('.versionspinner').css('display', 'none');
+					$('.jobdetailsspinner').css('display', 'none');
+				}
+
+				function getNexusServer() {
+					resetAllFields();
+					var $nexusServer = $('#chooseNexusServer');
+					$nexusServer.empty();
+					$('#chooseNexusServer').append('<option value="">Choose Server</option>');
+					var $chooseJobType = $('#chooseJobType');
+					$chooseJobType.empty();
+					$('#chooseJobType').append('<option value="">Choose Job</option>');
+					$('.reposerverspinner').css('display', 'inline-block');
+					$.get('/d4dMasters/readmasterjsonnew/26', function(nexus) {
+						$('.reposerverspinner').css('display', 'none');
+						if (nexus.length) {
+							for (var i = 0; i < nexus.length; i++) {
+								$('#chooseNexusServer').append('<option data-nexusUrl = "' + nexus[i].hostname + '" value=' + nexus[i].rowid + ' data-serverType = "' + nexus[i].configType + '">' + nexus[i].nexusservername + '</option>');
+							}
+						}
+					});
+				}
+
+				function getDockerServer() {
+					$.get('/d4dMasters/readmasterjsonnew/18', function(dockerData) {
+						if (dockerData.length) {
+							for (var i = 0; i < dockerData.length; i++) {
+								$('#chooseNexusServer').append('<option value=' + dockerData[i].rowid + ' data-serverType = "' + dockerData[i].configType + '">' + dockerData[i].dockerreponame + '</option>');
+							}
+						}
+					});
+				}
+
+				var $nexusServer = $('#chooseNexusServer');
+				$nexusServer.change(function(e) {
+					var nexusServerType = $('#chooseNexusServer :selected').attr('data-serverType');
+					if ($('#chooseNexusServer :selected').text() == 'Choose Server') {
+						$('.containerIdClass').hide();
+						$('.containerPortClass').hide();
+						$('.repoUrlClass').hide();
+						$('.artifactClass').hide();
+						$('.versionClass').hide();
+						$('.createTaskLinkUpgrade').attr('disabled', 'disabled');
+
+						// Reset all values
+						resetAllFields();
+
+					} else if (nexusServerType == 'nexus') {
+						//$('.containerUpgradeDeploy').hide();
+						//$('.createTaskLinkUpgrade').removeAttr('disabled');
+						$('.repoUrlClass').show();
+						$('.artifactClass').show();
+						$('.versionClass').show();
+						$('.containerIdClass').hide();
+						$('.containerPortClass').hide();
+						resetAllFields();
+						getNexusServerRepo($(this).val());
+					} else { // It's Docker
+						resetAllFields();
+						//$('.containerUpgradeDeploy').show();
+						//$('.createTaskLinkUpgrade').removeAttr('disabled');
+
+						$('.repoUrlClass').hide();
+						$('.artifactClass').hide();
+						$('.versionClass').hide();
+						$('.containerIdClass').show();
+						$('.containerPortClass').show();
+						var containerId = $('#containerIdInput').val();
+						//var upgrade = $('#upgradeValue').val();
+						// if (containerId != "NA" && upgrade == "true") {
+						// 	$('#containerIdDiv').val(containerId);
+						// 	$('#containerIdDiv').attr('disabled', 'disabled');
+						// }
+						getDockerRepoes();
+					}
+
+				});
+
+				function getDockerRepoes() {
+					$('.repospinner').css('display', 'inline-block');
+					var $chooseRepository = $('#chooseRepository');
+					//var projectId = urlParams.projid;
+					if (projectId) {
+						$.get('/d4dMasters/project/' + projectId, function(anProject) {
+							$('.repospinner').css('display', 'none');
+							if (anProject.length) {
+								anProject = anProject[0];
+								if (anProject.repositories) {
+									var repositories = anProject.repositories.docker;
+									if (repositories.length) {
+										for (var x = 0; x < repositories.length; x++) {
+											$('#chooseRepository').append('<option value="' + repositories[x] + '">' + repositories[x] + '</option>');
+										}
+									}
+								}
+							}
+						});
+					} else {
+						$('.repospinner').css('display', 'none');
+					}
+				}
+
+				function getNexusServerRepo(nexusId) {
+					$('.repospinner').css('display', 'inline-block');
+					var $chooseRepository = $('#chooseRepository');
+					//var projectId = urlParams.projid;
+					if (nexusId) {
+						$.get('/nexus/' + nexusId + '/repositories', function(nexusRepos) {
+							$('.repospinner').css('display', 'none');
+							if (nexusRepos.length) {
+
+								$.get('/d4dMasters/project/' + projectId, function(anProject) {
+									if (anProject.length) {
+										project = anProject[0];
+										if (project.repositories) {
+											var repositories = project.repositories.nexus;
+											if (repositories.length) {
+												for (var x = 0; x < repositories.length; x++) {
+													(function(x) {
+														for (var i = 0; i < nexusRepos.length; i++) {
+															if (repositories[x] === nexusRepos[i].name) {
+																$('#chooseRepository').append('<option data-repoName="' + nexusRepos[i].name + '" data-repoUrl="' + nexusRepos[i].resourceURI + '" value="' + nexusRepos[i].id + '">' + nexusRepos[i].name + '</option>');
+															}
+														}
+													})(x);
+												}
+											}
+										}
+									}
+								});
+							}
+						});
+					} else {
+						$('.repospinner').css('display', 'none');
+					}
+				}
+
+				var $chooseRepository = $('#chooseRepository');
+				$chooseRepository.change(function(e) {
+					var nexusServerType = $('#chooseNexusServer :selected').attr('data-serverType');
+					if (nexusServerType === 'nexus') {
+						$('.containerIdClass').hide();
+						$('.containerPortClass').hide();
+						$('.repoUrlClass').show();
+						$('.artifactClass').show();
+						$('.versionClass').show();
+
+						var $repositoryUrl = $('#repositoryUrl');
+						$repositoryUrl.val("");
+						var $chooseArtifacts = $('#chooseArtifacts');
+						$chooseArtifacts.empty();
+						$('#chooseArtifacts').append('<option value="">Choose Artifacts</option>');
+						var $chooseVersions = $('#chooseVersions');
+						$chooseVersions.empty();
+						$('#chooseVersions').append('<option value="">Choose Versions</option>');
+						$('#repositoryUrl').val($(this).find('option:selected').attr('data-repoUrl'));
+
+						var repoName = $(this).find('option:selected').attr('data-repoName');
+						var nexusId = $('#chooseNexusServer').val();
+						getNexusServerRepoArtifact(nexusId, repoName);
+					} else {
+						$('.containerIdClass').show();
+						$('.containerPortClass').show();
+						$('.repoUrlClass').hide();
+						$('.artifactClass').hide();
+						$('.versionClass').hide();
+					}
+
+				});
+
+				function getNexusServerRepoArtifact(nexusId, repoName) {
+					$('.artifactsspinner').css('display', 'inline-block');
+					var $chooseArtifacts = $('#chooseArtifacts');
+					$chooseArtifacts.empty();
+					$('#chooseArtifacts').append('<option value="">Choose Artifacts</option>');
+					if (nexusId && repoName) {
+						$.get('/nexus/' + nexusId + '/repositories/' + repoName + '/artifact', function(artifacts) {
+							$('.artifactsspinner').css('display', 'none');
+							if (artifacts.length) {
+								var uniqueArtifacts = [];
+								var checker;
+								for (var i = 0; i < artifacts.length; i++) {
+									if (!checker || comparer(checker, artifacts[i]) != 0) {
+										checker = artifacts[i];
+										uniqueArtifacts.push(checker);
+									}
+								}
+								for (var j = 0; j < uniqueArtifacts.length; j++) {
+									$('#chooseArtifacts').append('<option data-groupId="' + uniqueArtifacts[j].groupId + '" value=' + uniqueArtifacts[j].artifactId + '>' + uniqueArtifacts[j].artifactId + '</option>');
+								}
+							}
+						});
+					} else {
+						$('.artifactsspinner').css('display', 'none');
+					}
+				}
+				var $chooseArtifacts = $('#chooseArtifacts');
+				$chooseArtifacts.change(function(e) {
+					var $chooseVersions = $('#chooseVersions');
+					$chooseVersions.empty();
+					$('#chooseVersions').append('<option value="">Choose Versions</option>');
+					var repoName = $('#chooseRepository').find('option:selected').attr('data-repoName');
+					var nexusId = $('#chooseNexusServer').val();
+					var groupId = $(this).find('option:selected').attr('data-groupId');
+					var reqBody = {
+						"groupId": groupId,
+						"artifactId": $(this).val()
+					};
+					getNexusServerRepoArtifactVersions(nexusId, repoName, reqBody);
+				});
+
+				var comparer = function compareObject(a, b) {
+					if (a.artifactId === b.artifactId) {
+						return 0;
+					} else {
+						return 1;
+					}
+				}
+				function getNexusServerRepoArtifactVersions(nexusId, repoName, reqBody) {
+					$('.versionspinner').css('display', 'inline-block');
+					var $chooseVersions = $('#chooseVersions');
+					$chooseVersions.empty();
+					$('#chooseVersions').append('<option value="">Choose Versions</option>');
+					if (nexusId && repoName && reqBody.groupId && reqBody.artifactId) {
+						$.ajax({
+							url: '/nexus/' + nexusId + '/repositories/' + repoName + '/artifact/versions',
+							data: JSON.stringify(reqBody),
+							type: 'POST',
+							contentType: "application/json",
+							success: function(data) {
+								$('.versionspinner').css('display', 'none');
+								if (data) {
+									var versions = data.metadata.versioning[0].versions[0].version;
+									for (var i = 0; i < versions.length; i++) {
+										$('#chooseVersions').append('<option value=' + versions[i] + '>' + versions[i] + '</option>');
+									}
+								}
+							},
+							error: function(jqxhr) {
+								$('.versionspinner').css('display', 'none');
+								alert(jqxhr.responseText);
+							}
+						});
+					} else {
+						$('.versionspinner').css('display', 'none');
+					}
 				}
 			});
 		}
