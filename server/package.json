@@ -56,7 +56,8 @@
         "request": "2.65.0",
         "adal-node": "0.1.17",
         "node-string-pad": "0.0.4",
-        "farmhash": "1.1.0"
+        "farmhash": "1.1.0",
+        "slack-node":"*"
     },
     "devDependencies": {
         "grunt": "0.4.5",
