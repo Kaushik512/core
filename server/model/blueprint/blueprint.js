@@ -89,6 +89,18 @@ var BlueprintSchema = new Schema({
         required: true,
         trim: true
     },
+    repoType:{
+        type: String
+    },
+    nexus:{
+        url: String,
+        version: String
+    },
+    docker:{
+        image: String,
+        containerId: String,
+        containerPort: String
+    },
     blueprintConfig: Schema.Types.Mixed
 });
 
