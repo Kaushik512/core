@@ -1680,6 +1680,12 @@
 					alert("Please Choose Project Before Proceeding....");
 				}
 			});*/
+			$('#chooseNexusServer').click(function(e){
+				var projectSelName = $('#projectListInput option:selected').val();
+				if(!projectSelName || projectSelName == 'choose'){
+					alert("Please Choose Project Before Proceeding....");
+				}
+			});
 			$projectList.change(function(e){
 				var projectId = $(this).val();
 				getNexusServer();
