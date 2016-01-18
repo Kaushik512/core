@@ -89,6 +89,18 @@ var BlueprintSchema = new Schema({
         required: true,
         trim: true
     },
+    repoType:{
+        type: String
+    },
+    nexus:{
+        url: String,
+        version: String
+    },
+    docker:{
+        image: String,
+        containerId: String,
+        containerPort: String
+    },
     blueprintConfig: Schema.Types.Mixed
 });
 
@@ -235,7 +247,9 @@ BlueprintSchema.statics.createNew = function(blueprintData, callback) {
         templateType: blueprintData.templateType,
         users: blueprintData.users,
         blueprintConfig: blueprintConfig,
-        blueprintType: blueprintType
+        blueprintType: blueprintType,
+        nexus: blueprintData.nexus,
+        docker: blueprintData.docker
     };
     var blueprint = new Blueprints(blueprintObj);
     logger.debug('saving');

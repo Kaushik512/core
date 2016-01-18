@@ -688,7 +688,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     app.post('/organizations/:orgId/businessgroups/:bgId/projects/:projectId/blueprints', function(req, res) {
         logger.debug("Enter post() for /organizations/%s/businessgroups/%s/projects/%s/environments/%s/blueprints", req.params.orgId, req.params.bgId, req.params.projectId, req.params.envId, req.params.providerId, req.params.imageId);
-
+        logger.debug("================= ",JSON.stringify(req.body.blueprintData));
         //validating if user has permission to save a blueprint
         logger.debug('Verifying User permission set');
         var user = req.session.user;
@@ -704,6 +704,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
         var templateType = req.body.blueprintData.templateType;
         var users = req.body.blueprintData.users;
         var blueprintType = req.body.blueprintData.blueprintType;
+        var nexus = req.body.blueprintData.nexus;
+        var docker = req.body.blueprintData.docker;
         usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
             if (!err) {
                 logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
@@ -732,7 +734,9 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 templateId: templateId,
                 templateType: templateType,
                 users: users,
-                blueprintType: blueprintType
+                blueprintType: blueprintType,
+                nexus: nexus,
+                docker: docker
             };
 
             logger.debug('req:', blueprintData);
