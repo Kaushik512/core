@@ -264,6 +264,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 			});
 			return;
 		}
+		var blueprintId = req.params.blueprintId;
 		var user = req.session.user;
 		var category = 'blueprints';
 		var permissionto = 'execute';

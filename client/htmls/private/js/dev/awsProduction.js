@@ -1230,22 +1230,25 @@
 								
 								var appVersion = $('#chooseVersions').val();
 								var nexusUrl = $('#repositoryUrl').val();
-								var nexus = {
+								var nexusServerType = $('#chooseNexusServer :selected').attr('data-serverType');
+								if(nexusServerType === "nexus"){
+									var nexus = {
 					                "url": nexusUrl,
 					                "version": appVersion 
 					                };
-					            //reqBody.nexus = nexus;
-					            var dockerImage = $('#chooseRepository').val();
-					            var containerId = $('#containerIdDiv').val();
-					            var containerPort = $('#containerPort').val();
-				                var docker = {
-				                "image": dockerImage,
-				                "containerId": containerId,
-				                "containerPort": containerPort
-				                };
-				                //reqBody.docker = docker;
-
-
+					            	reqBody.nexus = nexus;
+								}else{
+									var dockerImage = $('#chooseRepository').val();
+						            var containerId = $('#containerIdDiv').val();
+						            var containerPort = $('#containerPort').val();
+					                var docker = {
+					                "image": dockerImage,
+					                "containerId": containerId,
+					                "containerPort": containerPort
+					                };
+					                reqBody.docker = docker;
+								}
+								
 								console.log($('#compositedockertable').find('.dockerimagesrow').length);
 								$('.dockerimagesrow').each(function() {
 									dockerimages = {};
