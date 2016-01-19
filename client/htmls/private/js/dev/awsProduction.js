@@ -1231,9 +1231,32 @@
 								var appVersion = $('#chooseVersions').val();
 								var nexusUrl = $('#repositoryUrl').val();
 								var nexusServerType = $('#chooseNexusServer :selected').attr('data-serverType');
-								if(nexusServerType === "nexus"){
+								var nexusRepoUrl = "";
+								var repoId = $('#chooseRepository').find('option:selected').val();
+							    if(!repoId){
+							        alert("Please select repository.");
+							        return false;
+							    }
+							    
+									if(nexusServerType === "nexus"){
+										var artifactId = $('#chooseArtifacts').find('option:selected').val();
+								    if(!artifactId){
+								        alert("Please select artifact.");
+								        return false;
+								    }
+								    var versionId = $('#chooseVersions').find('option:selected').val();
+								    if(!versionId){
+								        alert("Please select version.");
+								        return false;
+								    }
+								    if(repoId === "petclinic"){
+							        nexusRepoUrl = nexusUrl+"/service/local/repositories/"+repoId+"/content/"+groupId+"/"+artifactId+"/"+versionId+"/"+artifactId+"-"+versionId+".war";
+								    }else{
+								        nexusRepoUrl = nexusUrl+"/service/local/repositories/"+repoId+"/content/"+groupId+"/"+artifactId+"/"+versionId+"/"+artifactId+"-"+versionId+".zip";
+								    }
+
 									var nexus = {
-					                "url": nexusUrl,
+					                "url": nexusRepoUrl,
 					                "version": appVersion 
 					                };
 					            	reqBody.nexus = nexus;
@@ -1241,6 +1264,10 @@
 									var dockerImage = $('#chooseRepository').val();
 						            var containerId = $('#containerIdDiv').val();
 						            var containerPort = $('#containerPort').val();
+						            if(!dockerImage){
+								        alert("Please select repository.");
+								        return false;
+								    }
 					                var docker = {
 					                "image": dockerImage,
 					                "containerId": containerId,

@@ -569,6 +569,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 																				//decrypting pem file
 																				var cryptoConfig = appConfig.cryptoSettings;
 																				var tempUncryptedPemFileLoc = appConfig.tempDir + uuid.v4();
+					
 																				cryptography.decryptFile(instance.credentials.pemFileLocation, cryptoConfig.decryptionEncoding, tempUncryptedPemFileLoc, cryptoConfig.encryptionEncoding, function(err) {
 																					if (err) {
 																						instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
@@ -593,7 +594,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 																					chef.bootstrapInstance({
 																						instanceIp: instance.instanceIP,
 																						pemFilePath: tempUncryptedPemFileLoc,
-																						runlist: instance.runlist,
+																						runlist: null,
 																						instanceUsername: instance.credentials.username,
 																						nodeName: instance.chef.chefNodeName,
 																						environment: envName,
@@ -642,6 +643,32 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 																									timestamp: timestampEnded
 																								});
 																								instancesDao.updateActionLog(instance.id, actionLog._id, true, timestampEnded);
+
+																								// Run cookbook after bootstrap success
+																								var tempUncryptedPemFileLoc = appConfig.tempDir + uuid.v4();
+																								var jsonAttributesObj = blueprint.getCookBookAttributes();
+																								logger.debug("jsonAttributes: ",JSON.stringify(jsonAttributesObj));
+																								if(instance.runlist || jsonAttributesObj){
+																										chef.bootstrapInstance({
+																										instanceIp: instance.instanceIP,
+																										pemFilePath: tempUncryptedPemFileLoc,
+																										runlist: instance.runlist,
+																										instanceUsername: instance.credentials.username,
+																										nodeName: instance.chef.chefNodeName,
+																										environment: envName,
+																										instanceOS: instance.hardware.os,
+																										jsonAttributes: jsonAttributesObj
+																									}, function(err, code) {
+
+																										fileIo.removeFile(tempUncryptedPemFileLoc, function(err) {
+																											if (err) {
+																												logger.error("Unable to delete temp pem file =>", err);
+																											} else {
+																												logger.debug("temp pem file deleted =>", err);
+																											}
+																										});
+																									});
+																								}
 
 
 																								chef.getNode(instance.chefNodeName, function(err, nodeData) {
@@ -2146,6 +2173,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 																	log: "Instance Ready..about to bootstrap",
 																	timestamp: timestampStarted
 																});
+
 																chef.bootstrapInstance({
 																	instanceIp: publicip,
 																	runlist: version.runlist,

@@ -186,9 +186,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
 
-    // Get AppDeploy w.r.t. projectId
+    // Appdeploy api supported by pagination,search and sort
     app.post('/app/deploy/list', function(req, res) {
-        logger.debug("Filtered by projectId called..");
+        logger.debug("req query: ",JSON.stringify(req.query));
         var offset=req.query.offset;
         var limit=req.query.limit;
         var sortBy=req.body.sortBy;
