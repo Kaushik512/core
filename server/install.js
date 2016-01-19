@@ -127,8 +127,8 @@ function getDefaultsConfig() {
             port: '27017'
         },
         authStrategy: {
-            local: false,
-            externals: true
+            local: true,
+            externals: false
         },
         ldap: {
             host: '54.68.204.110',
