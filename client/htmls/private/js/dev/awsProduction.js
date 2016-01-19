@@ -1764,6 +1764,7 @@
 								$('#chooseNexusServer').append('<option data-nexusUrl = "' + nexus[i].hostname + '" value=' + nexus[i].rowid + ' data-serverType = "' + nexus[i].configType + '">' + nexus[i].nexusservername + '</option>');
 							}
 						}
+						$('#chooseNexusServer > option:eq(1)').attr('selected', true).change();
 					});
 				}
 
@@ -1778,6 +1779,7 @@
 				}
 
 				var $nexusServer = $('#chooseNexusServer');
+
 				$nexusServer.change(function(e) {
 					var nexusServerType = $('#chooseNexusServer :selected').attr('data-serverType');
 					if ($('#chooseNexusServer :selected').text() == 'Choose Server') {
@@ -1870,6 +1872,7 @@
 														}
 													})(x);
 												}
+												$('#chooseRepository > option:eq(1)').attr('selected', true).change();
 											}
 										}
 									}
@@ -1935,7 +1938,9 @@
 									$('#chooseArtifacts').append('<option data-groupId="' + uniqueArtifacts[j].groupId + '" value=' + uniqueArtifacts[j].artifactId + '>' + uniqueArtifacts[j].artifactId + '</option>');
 								}
 							}
+							$('#chooseArtifacts > option:eq(1)').attr('selected', true).change();
 						});
+
 					} else {
 						$('.artifactsspinner').css('display', 'none');
 					}
@@ -1980,6 +1985,7 @@
 									for (var i = 0; i < versions.length; i++) {
 										$('#chooseVersions').append('<option value=' + versions[i] + '>' + versions[i] + '</option>');
 									}
+									$('#chooseVersions > option:last-child').attr('selected', true).change();
 								}
 							},
 							error: function(jqxhr) {
