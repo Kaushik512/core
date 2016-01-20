@@ -1229,7 +1229,7 @@
 								var dockerimages = {};
 								
 								var appVersion = $('#chooseVersions').val();
-								var nexusUrl = $('#repositoryUrl').val();
+								var nexusUrl = $('#chooseNexusServer').find('option:selected').attr('data-nexusUrl');
 								var nexusServerType = $('#chooseNexusServer :selected').attr('data-serverType');
 								var nexusRepoUrl = "";
 								var repoId = $('#chooseRepository').find('option:selected').val();
@@ -1249,12 +1249,12 @@
 								        alert("Please select version.");
 								        return false;
 								    }
+								    var groupId = $('#chooseArtifacts').find('option:selected').attr('data-groupId').replace(/\./g, '/');
 								    if(repoId === "petclinic"){
 							        nexusRepoUrl = nexusUrl+"/service/local/repositories/"+repoId+"/content/"+groupId+"/"+artifactId+"/"+versionId+"/"+artifactId+"-"+versionId+".war";
 								    }else{
 								        nexusRepoUrl = nexusUrl+"/service/local/repositories/"+repoId+"/content/"+groupId+"/"+artifactId+"/"+versionId+"/"+artifactId+"-"+versionId+".zip";
 								    }
-
 									var nexus = {
 					                "url": nexusRepoUrl,
 					                "version": appVersion 
