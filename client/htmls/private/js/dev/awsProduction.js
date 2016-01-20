@@ -1229,7 +1229,7 @@
 								var dockerimages = {};
 								
 								var appVersion = $('#chooseVersions').val();
-								var nexusUrl = $('#repositoryUrl').val();
+								var nexusUrl = $('#chooseNexusServer').find('option:selected').attr('data-nexusUrl');
 								var nexusServerType = $('#chooseNexusServer :selected').attr('data-serverType');
 								var nexusRepoUrl = "";
 								var repoId = $('#chooseRepository').find('option:selected').val();
@@ -1255,7 +1255,6 @@
 								    }else{
 								        nexusRepoUrl = nexusUrl+"/service/local/repositories/"+repoId+"/content/"+groupId+"/"+artifactId+"/"+versionId+"/"+artifactId+"-"+versionId+".zip";
 								    }
-
 									var nexus = {
 					                "url": nexusRepoUrl,
 					                "version": appVersion 
