@@ -138,7 +138,7 @@
                                                                   <span style="color:red">*</span>
                                                                </label>
                                                             <label style="font-size:13px;" class="radio">
-                                                              <input id="nexusRepoInputId" class="jobTypeSelectorRadioBtn" type="radio" name="jobDetType" data-jobdetails="Blueprint"><i></i>
+                                                              <input id="selectBlueprintInputId" class="jobTypeSelectorRadioBtn" type="radio" name="jobDetType" data-jobdetails="Blueprint"><i></i>
                                                               <img style="margin-top:-5px;" src="img/templateicons/Create-run-list---deployment.png">
                                                               Select Blueprint
                                                               <span style="color:red">*</span>
@@ -151,7 +151,6 @@
                                                             </div>
                                                             <div id="Blueprint" class="jobDetailsClass col-lg-12" style="display:none">
                                                                <ul id="selectedBlueprintChefTask" class="deploymentBlueprintList selectedNodesTaskCSS">
-                                                               <li>Arab Blueprint</li>
                                                                </ul>
                                                             </div>
                                                             <!-- <ul id="selectedNodesChefTask" class="deploymentNodeList selectedNodesTaskCSS">
@@ -827,5 +826,35 @@ $(".jobTypeSelectorRadioBtn").click(function() {
     var val = $(this).attr('data-jobdetails');
     $('.jobDetailsClass').hide();
     $('#'+val).show();
+});
+
+var urlParams = {};
+(window.onpopstate = function() {
+   var url = window.location.href;
+   var indexOfQues = url.lastIndexOf("?");
+   if (indexOfQues != -1) {
+       var sub = url.substring(indexOfQues + 1);
+       console.log(sub);
+       var params = sub.split('&')
+       for (var i = 0; i < params.length; i++) {
+           var paramParts = params[i].split('=');
+           urlParams[paramParts[0]] = paramParts[1];
+       }
+   }
+
+})();
+var projectId = urlParams['projid'];
+var envId = urlParams['envid'];
+var orgId = urlParams['org'];
+var bgId = urlParams['bg'];
+$.get('../organizations/' + orgId + '/businessgroups/' + bgId + '/projects/' + projectId + '/environments/' + envId + '/', function(data) {
+   
+   for (var i = 0; i < data.blueprints.length; i++) {
+      var blueprintName = data.blueprints[i].name;
+      var $li = $('<li><label class="checkbox" style="margin: 5px;font-size:13px;"><input type="checkbox" name="deploymentBlueprintsCheckBox" value="' + data.blueprints[i]._id + '"><i></i>' + blueprintName + '</label></li>'); 
+      if (blueprintName) {
+         $('#selectedBlueprintChefTask').append($li);
+      }
+   }
 });
 </script>
