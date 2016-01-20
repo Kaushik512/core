@@ -1235,6 +1235,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                                                 if (instance.hardware.os != 'windows')
                                                                                                                     return;
                                                                                                             }
+                                                                                                            jsonAttributesObj = blueprint.getCookBookAttributes();
                                                                                                             chef.bootstrapInstance({
                                                                                                                 instanceIp: instance.instanceIP,
                                                                                                                 pemFilePath: tempUncryptedPemFileLoc,
@@ -1613,6 +1614,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                 if (instance.hardware.os != 'windows')
                                                                     return;
                                                             }
+                                                            var jsonAttributesObj = blueprint.getCookBookAttributes();
                                                             chef.bootstrapInstance({
                                                                 instanceIp: instance.instanceIP,
                                                                 instancePassword: decryptedCredential.password,
@@ -1620,8 +1622,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                 instanceUsername: instance.credentials.username,
                                                                 nodeName: instance.chef.chefNodeName,
                                                                 environment: envName,
-                                                                instanceOS: instance.hardware.os
-                                                                    //jsonAttributes: jsonAttributesObj
+                                                                instanceOS: instance.hardware.os,
+                                                                jsonAttributes: jsonAttributesObj
                                                             }, function(err, code) {
 
                                                                 logger.error('process stopped ==> ', err, code);
@@ -2200,7 +2202,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                     log: "Instance Ready..about to bootstrap",
                                                                     timestamp: timestampStarted
                                                                 });
-
+                                                                var jsonAttributesObj = blueprint.getCookBookAttributes();
                                                                 chef.bootstrapInstance({
                                                                     instanceIp: publicip,
                                                                     runlist: version.runlist,
@@ -2209,7 +2211,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                     nodeName: instance.chef.chefNodeName,
                                                                     environment: envName,
                                                                     instanceOS: instance.hardware.os,
-                                                                    jsonAttributes: null
+                                                                    //jsonAttributes: null
+                                                                    jsonAttributes: jsonAttributesObj
                                                                 }, function(err, code) {
                                                                     fs.unlink(tempUncryptedPemFileLoc, function(err) {
                                                                         logger.debug("Deleting decryptedPemFile..");
@@ -2525,6 +2528,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                     log: "Instance Ready..about to bootstrap",
                                                                     timestamp: timestampStarted
                                                                 });
+                                                                var jsonAttributesObj = blueprint.getCookBookAttributes();
                                                                 chef.bootstrapInstance({
                                                                     instanceIp: publicip,
                                                                     runlist: version.runlist,
@@ -2533,7 +2537,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                     nodeName: launchparams.server.name,
                                                                     environment: envName,
                                                                     instanceOS: instance.hardware.os,
-                                                                    jsonAttributes: null
+                                                                    //jsonAttributes: null
+                                                                    jsonAttributes: jsonAttributesObj
                                                                 }, function(err, code) {
                                                                     if (code == 0) {
                                                                         instancesDao.updateInstanceBootstrapStatus(instance.id, 'success', function(err, updateData) {
@@ -2839,7 +2844,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                 } else {
                                                                                     port = '22';
                                                                                 }
-
+                                                                                var jsonAttributesObj = blueprint.getCookBookAttributes();
                                                                                 chef.bootstrapInstance({
                                                                                     instanceIp: publicip,
                                                                                     runlist: version.runlist,
@@ -2848,7 +2853,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                     nodeName: launchparams.VMName,
                                                                                     environment: envName,
                                                                                     instanceOS: instance.hardware.os,
-                                                                                    jsonAttributes: null,
+                                                                                    //jsonAttributes: null,
+                                                                                    jsonAttributes: jsonAttributesObj,
                                                                                     port: port
                                                                                 }, function(err, code) {
                                                                                     fs.unlink(decryptedPemFile, function(err) {
@@ -3217,7 +3223,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                     log: "Instance Ready..about to bootstrap",
                                                                                     timestamp: timestampStarted
                                                                                 });
-
+                                                                                var jsonAttributesObj = blueprint.getCookBookAttributes();
                                                                                 chef.bootstrapInstance({
                                                                                     instanceIp: publicip,
                                                                                     runlist: version.runlist,
@@ -3226,7 +3232,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                     nodeName: createserverdata["vm_name"],
                                                                                     environment: envName,
                                                                                     instanceOS: instance.hardware.os,
-                                                                                    jsonAttributes: null
+                                                                                    //jsonAttributes: null
+                                                                                    jsonAttributes: jsonAttributesObj
                                                                                 }, function(err, code) {
                                                                                     var timestampEnded = new Date().getTime();
                                                                                     if (err) {
