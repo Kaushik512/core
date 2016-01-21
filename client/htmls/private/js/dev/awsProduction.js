@@ -1191,7 +1191,8 @@
 	                                        alert("Please select version.");
 	                                        return false;
 	                                    }
-	                                    var groupId = $chooseArtifacts.find('option:selected').attr('data-groupId').replace(/\./g, '/');
+	                                    var groupId = $chooseGroupId.find('option:selected').val();
+	                                    // var groupId = $chooseArtifacts.find('option:selected').attr('data-groupId').replace(/\./g, '/');
 	                                    if (repoId === "petclinic") {
 	                                        nexusRepoUrl = nexusUrl + "/service/local/repositories/" + repoId + "/content/" + groupId + "/" + artifactId + "/" + versionId + "/" + artifactId + "-" + versionId + ".war";
 	                                    } else {
@@ -1636,6 +1637,7 @@
 	        $projectList.change(function(e) {
 	            var $nexusServer = $('#chooseNexusServer');
 	            var $chooseRepository = $('#chooseRepository');
+	            var $chooseGroupId = $('#chooseGroupId');
 	            var $chooseArtifacts = $('#chooseArtifacts');
 	            var $chooseVersions = $('#chooseVersions');
 	            var projectId = $(this).val();
@@ -1664,6 +1666,9 @@
 	                //var $chooseRepository = $('#chooseRepository');
 	                $chooseRepository.empty();
 	                $chooseRepository.append('<option value="">Choose Repositories</option>');
+	                // var $chooseGroupId = $('#chooseGroupId');
+					$chooseGroupId.empty();
+					$('#chooseGroupId').append('<option value="">Choose Group ID</option>');
 	                //var $chooseArtifacts = $('#chooseArtifacts');
 	                $chooseArtifacts.empty();
 	                $chooseArtifacts.append('<option value="">Choose Artifacts</option>');
@@ -1700,7 +1705,8 @@
 	                    $('.reposerverspinner').css('display', 'none');
 	                    if (nexus.length) {
 	                        for (var i = 0; i < nexus.length; i++) {
-	                            $nexusServer.append('<option data-nexusUrl = "' + nexus[i].hostname + '" value=' + nexus[i].rowid + ' data-serverType = "' + nexus[i].configType + '">' + nexus[i].nexusservername + '</option>');
+	                            $('#chooseNexusServer').append('<option data-groupId = "' + nexus[i].groupid + '" data-nexusUrl = "' + nexus[i].hostname + '" value=' + nexus[i].rowid + ' data-serverType = "' + nexus[i].configType + '">' + nexus[i].nexusservername + '</option>');
+	                            //$nexusServer.append('<option data-nexusUrl = "' + nexus[i].hostname + '" value=' + nexus[i].rowid + ' data-serverType = "' + nexus[i].configType + '">' + nexus[i].nexusservername + '</option>');
 	                        }
 	                    }
 	                    $('#chooseNexusServer > option:eq(1)').attr('selected', true).change();
@@ -1722,6 +1728,7 @@
 	                // var nexusServerType = $('#chooseNexusServer :selected').attr('data-serverType');
 	                var nexusServerType = $nexusServer.find('option:selected').attr('data-serverType');
 	                if ($nexusServer.find('option:selected').text() == 'Choose Server') {
+	                    $('.groupClass').hide();
 	                    $('.containerIdClass').hide();
 	                    $('.containerPortClass').hide();
 	                    $('.repoUrlClass').hide();
@@ -1733,17 +1740,24 @@
 	                } else if (nexusServerType == 'nexus') {
 	                    //$('.containerUpgradeDeploy').hide();
 	                    //$('.createTaskLinkUpgrade').removeAttr('disabled');
+	                    $('.groupClass').show();
 	                    $('.repoUrlClass').show();
 	                    $('.artifactClass').show();
 	                    $('.versionClass').show();
 	                    $('.containerIdClass').hide();
 	                    $('.containerPortClass').hide();
 	                    resetAllFields();
+	                    /*var groupId = $('#chooseNexusServer :selected').attr('data-groupId').split(",");
+						for(var g=0; g< groupId.length; g++){
+							$('#chooseGroupId').append('<option value="' + groupId[g] + '">' + groupId[g] + '</option>');
+						}*/
+						getNexusServerGroupId();
 	                    getNexusServerRepo($(this).val());
 	                } else { // It's Docker
 	                    resetAllFields();
 	                    //$('.containerUpgradeDeploy').show();
 	                    //$('.createTaskLinkUpgrade').removeAttr('disabled');
+	                    $('.groupClass').hide();
 	                    $('.repoUrlClass').hide();
 	                    $('.artifactClass').hide();
 	                    $('.versionClass').hide();
@@ -1830,6 +1844,7 @@
 	                    $('.versionClass').show();
 	                    var $repositoryUrl = $('#repositoryUrl');
 	                    $repositoryUrl.val("");
+	                    
 	                    //var $chooseArtifacts = $('#chooseArtifacts');
 	                    $chooseArtifacts.empty();
 	                    $chooseArtifacts.append('<option value="">Choose Artifacts</option>');
@@ -1839,8 +1854,18 @@
 	                    $('#repositoryUrl').val($(this).find('option:selected').attr('data-repoUrl'));
 	                    var repoName = $(this).find('option:selected').attr('data-repoName');
 	                    var nexusId = $nexusServer.val();
-	                    getNexusServerRepoArtifact(nexusId, repoName);
+	                    var groupId = $('#chooseGroupId').val();
+	                    alert(repoName);
+	                    getNexusServerRepoArtifact(nexusId, repoName,groupId);
+	                    /*if(!repoName){
+	                    	$chooseGroupId.empty();
+							$('#chooseGroupId').append('<option value="">Choose Group ID</option>');
+	                    } else{
+	                    	getNexusServerRepoArtifact(nexusId, repoName,groupId);
+	                    }*/
+	                    
 	                } else {
+	                	$('.groupClass').hide();
 	                    $('.containerIdClass').show();
 	                    $('.containerPortClass').show();
 	                    $('.repoUrlClass').hide();
@@ -1849,13 +1874,45 @@
 	                }
 	            });
 
-	            function getNexusServerRepoArtifact(nexusId, repoName) {
+				function getNexusServerGroupId(){
+					var groupId = $('#chooseNexusServer :selected').attr('data-groupId').split(",");
+					for(var g=0; g< groupId.length; g++){
+						$('#chooseGroupId').append('<option value="' + groupId[g] + '">' + groupId[g] + '</option>');
+					}
+					$('#chooseGroupId > option:eq(1)').attr('selected', true).change();
+				}
+				//var $chooseGroupId = $('#chooseGroupId');
+				$chooseGroupId.change(function(e) {
+					var repoName = $('#chooseRepository').find('option:selected').attr('data-repoName');
+					var nexusId = $('#chooseNexusServer').val();
+					var groupId = $('#chooseGroupId').val();
+					getNexusServerRepoArtifact(nexusId, repoName,groupId);
+				});
+
+	            function getNexusServerRepoArtifact(nexusId, repoName, groupId) {
 	                $('.artifactsspinner').css('display', 'inline-block');
 	                //var $chooseArtifacts = $('#chooseArtifacts');
 	                $chooseArtifacts.empty();
 	                $chooseArtifacts.append('<option value="">Choose Artifacts</option>');
 	                if (nexusId && repoName) {
-	                    $.get('/nexus/' + nexusId + '/repositories/' + repoName + '/artifact', function(artifacts) {
+	                   $.get('/nexus/' + nexusId + '/repositories/' + repoName + '/group/'+groupId+'/artifact', function(artifacts) {
+							$('.artifactsspinner').css('display', 'none');
+							if (artifacts.length) {
+								var uniqueArtifacts = [];
+								var checker;
+								for (var i = 0; i < artifacts.length; i++) {
+									if (!checker || comparer(checker, artifacts[i]) != 0) {
+										checker = artifacts[i];
+										uniqueArtifacts.push(checker);
+									}
+								}
+								for (var j = 0; j < uniqueArtifacts.length; j++) {
+									$('#chooseArtifacts').append('<option data-groupId="' + uniqueArtifacts[j].groupId + '" value=' + uniqueArtifacts[j].artifactId + '>' + uniqueArtifacts[j].artifactId + '</option>');
+								}
+								$('#chooseArtifacts > option:eq(1)').attr('selected', true).change();
+							}
+						});
+	                   /* $.get('/nexus/' + nexusId + '/repositories/' + repoName + '/artifact', function(artifacts) {
 	                        $('.artifactsspinner').css('display', 'none');
 	                        if (artifacts.length) {
 	                            var uniqueArtifacts = [];
@@ -1872,7 +1929,7 @@
 	                        }
 	                        //$chooseArtifacts.find('option:eq(1)').attr('selected', true).change();
 	                        $('#chooseArtifacts > option:eq(1)').attr('selected', true).change();
-	                    });
+	                    });*/
 	                } else {
 	                    $('.artifactsspinner').css('display', 'none');
 	                }
@@ -1885,11 +1942,12 @@
 	                var repoName = $chooseRepository.find('option:selected').attr('data-repoName');
 	                var nexusId = $nexusServer.val();
 	                var groupId = $(this).find('option:selected').attr('data-groupId');
-	                var reqBody = {
+	                var artifactId = $(this).val();
+	                /*var reqBody = {
 	                    "groupId": groupId,
 	                    "artifactId": $(this).val()
-	                };
-	                getNexusServerRepoArtifactVersions(nexusId, repoName, reqBody);
+	                };*/
+	                getNexusServerRepoArtifactVersions(nexusId, repoName, groupId, artifactId);
 	            });
 	            var comparer = function compareObject(a, b) {
 	                if (a.artifactId === b.artifactId) {
@@ -1898,8 +1956,30 @@
 	                    return 1;
 	                }
 	            }
+	            function getNexusServerRepoArtifactVersions(nexusId, repoName, groupId, artifactId) {
+					$('.versionspinner').css('display', 'inline-block');
+					var $chooseVersions = $('#chooseVersions');
+					$chooseVersions.empty();
+					$('#chooseVersions').append('<option value="">Choose Versions</option>');
+					if (nexusId && repoName && groupId && artifactId) {
+						$.get('/nexus/'+nexusId+'/repositories/'+repoName+'/group/'+groupId+'/artifact/'+artifactId+'/versions',function(data){
+							$('.versionspinner').css('display', 'none');
+							if(data){
+								var versions = data.metadata.versioning[0].versions[0].version;
+									for (var i = 0; i < versions.length; i++) {
+										$('#chooseVersions').append('<option value=' + versions[i] + '>' + versions[i] + '</option>');
+									}
+								$chooseVersions.find('option:last-child').attr('selected', true).change();
+							}else{
+								$('.versionspinner').css('display', 'none');
+							}
 
-	            function getNexusServerRepoArtifactVersions(nexusId, repoName, reqBody) {
+						});
+					} else {
+						$('.versionspinner').css('display', 'none');
+					}
+				}
+	            /*function getNexusServerRepoArtifactVersions(nexusId, repoName, reqBody) {
 	                $('.versionspinner').css('display', 'inline-block');
 	                //var $chooseVersions = $('#chooseVersions');
 	                $chooseVersions.empty();
@@ -1929,7 +2009,7 @@
 	                } else {
 	                    $('.versionspinner').css('display', 'none');
 	                }
-	            }
+	            }*/
 	        });
 	    }
 	});
