@@ -123,7 +123,7 @@
             <div class="modal-body" style="height:150px;">
               <div class="col-lg-6 col-md-6">
                 <label for="name">Nexus Group ID:<span class="control-label redSpan">&nbsp;*</span></label>
-                <input type="text" cat-validation="required" cdata="catalyst" class="form-control" id="nexusGroupId" value="" name="ctl00$MainContent$orgname">
+                <input type="text" cdata="catalyst" class="form-control" id="nexusGroupId" value="" name="ctl00$MainContent$orgname">
               </div>
             </div>
             <div class="modal-footer">
@@ -142,11 +142,48 @@
 <!--Popup for selecting a cloud provider before proceeding-->
 <script>
    //Form Name
-   $(document).ready(function() {
-       $(".chooseOrganization").select2();
-       //isUserTypeSuperAdmin();
-       $('#frmconfigmanagement').hide();
-       });
+  $(document).ready(function() {
+   $(".chooseOrganization").select2();
+   //isUserTypeSuperAdmin();
+   $('#frmconfigmanagement').hide();
+  });
+  $(document).ready(function() {
+      var url = window.location.href;
+      var queryString = url.substring(url.indexOf('?') + 1 );
+      if (queryString == 'new') {
+      } else {
+        $.get('/d4dMasters/readmasterjsonnew/26', function(data) {
+            for (var i = 0; i < data.length; i++) {
+              (function(i){
+                if (queryString == data[i].rowid){
+                  for(var j=0;j<data[i].groupid.length;j++){
+                    (function(j){
+                      var nexusGroupName = data[i].groupid[j];
+                      var $nexusGroupTbody = $('#nexusGroupTbody');
+                      var $tr = $('<tr class="nexusGroupDetailsRow"></tr>');
+                      var $tdnexusGroupName = $('<td class="tdnexusGroupName" value=' + nexusGroupName + ' style="word-break: break-word;"></td>');
+                      $tr.data('nexusGroupName', nexusGroupName);
+
+                      $tdnexusGroupName.append(nexusGroupName);
+                      var $tdAction = $('<td/>');
+                      $tdAction.append('<div class="btn-group"><button class="deleteRow" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
+
+                      $tdAction.find('.deleteRow').click(function() {
+                        $nexusGroupDetails.row($tr).remove().draw(true);
+                      });
+
+                      $tr.append($tdnexusGroupName).append($tdAction);
+                      $nexusGroupTbody.append($tr);
+                      $nexusGroupDetails.row.add($tr).draw();
+                    })(j);
+                  }
+                }
+             })(i);
+            }
+        });
+      }
+   });
+
    $('#nexusGroupAnchorDetails').click(function(e) {
       $("#nexusGroupDetailsModal").modal('show');
       $('#nexusGroupDetailsCreate').trigger("reset");
