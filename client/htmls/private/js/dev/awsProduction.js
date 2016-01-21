@@ -1165,6 +1165,10 @@
 	                            //constructing the docker composite json.
 	                            var dockercompose = [];
 	                            var dockerimages = {};
+	                            var $nexusServer = $('#chooseNexusServer');
+					            var $chooseRepository = $('#chooseRepository');
+					            var $chooseArtifacts = $('#chooseArtifacts');
+	                            var $chooseVersions = $('#chooseVersions');
 	                            var appVersion = $chooseVersions.val();
 	                            var nexusUrl = $nexusServer.find('option:selected').attr('data-nexusUrl');
 	                            //var nexusServerType = $('#chooseNexusServer :selected').attr('data-serverType');
