@@ -1855,15 +1855,15 @@
 	                    var repoName = $(this).find('option:selected').attr('data-repoName');
 	                    var nexusId = $nexusServer.val();
 	                    var groupId = $('#chooseGroupId').val();
-	                    alert(repoName);
+	                    var $chooseGroupId = $('#chooseGroupId');
+						$chooseGroupId.empty();
+						$('#chooseGroupId').append('<option value="">Choose Group ID</option>');
+
+						var groupId = $('#chooseNexusServer :selected').attr('data-groupId').split(",");
+						for(var g=0; g< groupId.length; g++){
+							$('#chooseGroupId').append('<option value="' + groupId[g] + '">' + groupId[g] + '</option>');
+						}
 	                    getNexusServerRepoArtifact(nexusId, repoName,groupId);
-	                    /*if(!repoName){
-	                    	$chooseGroupId.empty();
-							$('#chooseGroupId').append('<option value="">Choose Group ID</option>');
-	                    } else{
-	                    	getNexusServerRepoArtifact(nexusId, repoName,groupId);
-	                    }*/
-	                    
 	                } else {
 	                	$('.groupClass').hide();
 	                    $('.containerIdClass').show();
