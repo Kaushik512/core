@@ -67,7 +67,7 @@ var Nexus = function() {
         });
     }
 
-    this.getNexusArtifact = function(anId, repoName, callback) {
+    this.getNexusArtifact = function(anId, repoName,groupId, callback) {
         d4dModelNew.d4dModelMastersNexusServer.find({
             rowid: anId,
             id: "26"
@@ -82,7 +82,7 @@ var Nexus = function() {
                     password: nexus[0].nexuspassword
                 };
                 client = new Client(options_auth);
-                var nexusUrl = nexus[0].hostname + '/service/local/data_index?q=' + nexus[0].groupid;
+                var nexusUrl = nexus[0].hostname + '/service/local/data_index?q=' + groupId;
                 client.registerMethod("jsonMethod", nexusUrl, "GET");
                 client.methods.jsonMethod(function(data, response) {
                     var json = parser.toJson(data);
@@ -106,7 +106,7 @@ var Nexus = function() {
         });
     }
 
-    this.getNexusArtifactVersions = function(anId, repoName, reqBody, callback) {
+    this.getNexusArtifactVersions = function(anId, repoName, groupId,artifactId, callback) {
         d4dModelNew.d4dModelMastersNexusServer.find({
             rowid: anId,
             id: "26"
@@ -121,8 +121,8 @@ var Nexus = function() {
                     password: nexus[0].nexuspassword
                 };
                 client = new Client(options_auth);
-                var groupId = reqBody.groupId.replace(/\./g, '/');
-                var nexusUrl = nexus[0].hostname + '/service/local/repositories/' + repoName + '/content/' + groupId + '/' + reqBody.artifactId + '/maven-metadata.xml';
+                var gId = groupId.replace(/\./g, '/');
+                var nexusUrl = nexus[0].hostname + '/service/local/repositories/' + repoName + '/content/' + gId + '/' + artifactId + '/maven-metadata.xml';
                 client.registerMethod("jsonMethod", nexusUrl, "GET");
                 var reqSubmit = client.methods.jsonMethod(function(data, response) {
                     logger.debug("nexusUrl: ", nexusUrl);
