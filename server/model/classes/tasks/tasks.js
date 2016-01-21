@@ -328,7 +328,8 @@ taskSchema.statics.createNew = function(taskData, callback) {
             taskType: TASK_TYPE.CHEF_TASK,
             nodeIds: taskData.nodeIds,
             runlist: taskData.runlist,
-            attributes: taskData.attributes
+            attributes: taskData.attributes,
+            blueprintIds: taskData.blueprintIds
         });
     } else if (taskData.taskType === TASK_TYPE.PUPPET_TASK) {
 

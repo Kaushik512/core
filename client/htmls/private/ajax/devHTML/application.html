@@ -1389,7 +1389,14 @@ $chooseRepository.change(function(e) {
 		$('.repoUrlClass').show();
 		$('.artifactClass').show();
 		$('.versionClass').show();
+		var $chooseGroupId = $('#chooseGroupId');
+		$chooseGroupId.empty();
+		$('#chooseGroupId').append('<option value="">Choose Group ID</option>');
 
+		var groupId = $('#chooseNexusServer :selected').attr('data-groupId').split(",");
+		for(var g=0; g< groupId.length; g++){
+			$('#chooseGroupId').append('<option value="' + groupId[g] + '">' + groupId[g] + '</option>');
+		}
 		var $repositoryUrl = $('#repositoryUrl');
 		$repositoryUrl.val("");
 		var $chooseArtifacts = $('#chooseArtifacts');

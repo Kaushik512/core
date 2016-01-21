@@ -30,7 +30,8 @@ var chefTaskSchema = taskTypeSchema.extend({
     attributes: [{
         name: String,
         jsonObj: {}
-    }]
+    }],
+    blueprintIds: [String]
 });
 
 //Instance Methods :- getNodes

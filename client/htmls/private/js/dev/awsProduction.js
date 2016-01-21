@@ -1175,10 +1175,10 @@
 	                            var nexusServerType = $nexusServer.find('option:selected').attr('data-serverType');
 	                            var nexusRepoUrl = "";
 	                            var repoId = $chooseRepository.find('option:selected').val();
-	                            if (!repoId) {
+	                            /*if (!repoId) {
 	                                alert("Please select repository.");
 	                                return false;
-	                            }
+	                            }*/
 	                            if ($(this).prop("checked")) {
 	                                if (nexusServerType === "nexus") {
 	                                    var artifactId = $chooseArtifacts.find('option:selected').val();
