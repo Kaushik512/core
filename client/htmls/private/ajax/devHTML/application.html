@@ -125,7 +125,7 @@
 										</div>
 									</div>
 								</span>
-								<span class="secondChildSpanTemplate">
+								<span class="secondChildSpanTemplate" style="padding-left:20px;">
 									<a href="javascript:void" class="spanChildPromote">
 				                        <i class="fa fa-arrow-right txt-color-blue" style="font-size: 18px;margin-top:27px"></i>
 				                    </a>
@@ -2354,11 +2354,15 @@ function constructUI(data) {
 		var selectedAppName = $chooseApplication.val();
 		if (typeof selectedAppName != 'undefined') {
 			$('#appDeployName').append().text("  for '" + selectedAppName + "'");
-			$("#widgetAppDeploy").css({
-				"border-left": "1px solid rgb(221, 221, 221)",
-				"border-right": "1px solid rgb(221, 221, 221)",
-				"border-bottom": "1px solid rgb(221, 221, 221)"
-			});
+			// $("#widgetAppDeploy").css({
+			// 	"border-left": "1px solid rgb(221, 221, 221)",
+			// 	"border-right": "1px solid rgb(221, 221, 221)",
+			// 	"border-bottom": "1px solid rgb(221, 221, 221)"
+			// });
+			// $("#accordion-AppDeploy").css({
+			// 	"border-left": "1px solid rgb(221, 221, 221)",
+			// 	"border-right": "1px solid rgb(221, 221, 221)"
+			// });
 			$('#widgetAppDeploy').show();
 		} else {
 			$('#appDeployName').append().text("");
