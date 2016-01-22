@@ -1,583 +1,360 @@
 <link rel="stylesheet" type="text/css" href="css/application.css">
-<style type="text/css">
-	@media (min-width: 320px) and (max-width: 767px) {
-	  .padding-left5-mobile{
-		padding-left: 5px !important;
-	  }
-	  .padding-right5-mobile{
-		padding-right: 5px !important;
-	  }
-	  .margin-left10Per-mobile{
-		margin-left: 10%;
-	  }
-	}
-	@media (min-width: 320px) and (max-width: 480px) {
-	  .margin-left10Per-mobile{
-		margin-left: 25% !important;
-	  }
-	}
-	.tableStyleColor{
-		color:#fff!important;
-		background-color: #2c3742!important;
-	}
-</style>
 <div class="tab-pane" id="l6">
-	<div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-application" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
-		<div>
-			<div class="widget-body no-padding">
-				<div class="col-lg-6 col-md-6 availableApp hidden" style="padding-left: 0px; margin-bottom: 15px;margin-top:5px;">
-					<label for="chooseApplication">Choose Available Application:<span class="redSpan">*</span></label>
-					<div class="input-groups">
-						<select id="chooseApplication" name="chooseApplication" class="required chooseApplication width-100">
-						</select>
-					</div>
-				</div>
-				<div class="col-lg-6 col-md-6 hidden">
-					<div class="panel-heading">
-						<span class="pull-right swap-view">
+    <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-application" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+        <div>
+            <div class="widget-body no-padding">
+                <div class="col-lg-6 col-md-6 availableApp hidden" style="padding-left: 0px; margin-bottom: 15px;margin-top:5px;">
+                    <label for="chooseApplication">Choose Available Application:<span class="redSpan">*</span></label>
+                    <div class="input-groups">
+                        <select id="chooseApplication" name="chooseApplication" class="required chooseApplication width-100">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 hidden">
+                    <div class="panel-heading">
+                        <span class="pull-right swap-view">
 						<a class="btn btn-primary envAppDeployList" href="#modalAppCardTableDetails" data-toggle="modal" style="margin-top: 15px;">
 						<span style="font-weight: bold;">List of Application</span>
-						<i title="Add Application Details" class="fa fa-list fa-2x" style="color:#ffffff;cursor:pointer;font-size:13px;"></i>
-						</a>
-						<a class="btn btn-primary envAppDeployModal" href="#modalAppCardDetails" data-toggle="modal" style="margin-top: 15px;">
-						<span style="font-weight: bold;">Add Application</span>
-						<i title="Add Application Details" class="fa fa-plus fa-2x" style="color:#ffffff;cursor:pointer;font-size:13px;"></i>
-						</a>
-						</span>
-					</div>
-				</div>
-				<div class="row">
-					<article class="col-sm-12 col-md-12 col-lg-12">
-						<div class="widget-body font-size12" id="widgetAppDeploy" style="">
-							<div class="panel-group smart-accordion-default" id="accordion-AppDeploy">
+                        <i title="Add Application Details" class="fa fa-list fa-2x" style="color:#ffffff;cursor:pointer;font-size:13px;"></i>
+                        </a>
+                        <a class="btn btn-primary envAppDeployModal" href="#modalAppCardDetails" data-toggle="modal" style="margin-top: 15px;">
+                            <span style="font-weight: bold;">Add Application</span>
+                            <i title="Add Application Details" class="fa fa-plus fa-2x" style="color:#ffffff;cursor:pointer;font-size:13px;"></i>
+                        </a>
+                        </span>
+                    </div>
+                </div>
+                <div class="row">
+                    <article class="col-sm-12 col-md-12 col-lg-12">
+                        <div class="widget-body font-size12" id="widgetAppDeploy" style="">
+                            <div class="panel-group smart-accordion-default" id="accordion-AppDeploy">
+                            </div>
+                            <div id="nodataAppDeploy" style="display:none">
+                            </div>
+                            <div class="mainCardTemplate" style="display:none">
+			                    <span>
+				                    <div class="col-sm-12 col-md-12 col-lg-12 col-xs-6 no-padding padding-right5-mobile maxminwidth130">
+				                        <div class="panel panel-primary appcard-role-inner bordercolorGrayMain mainCardHeight">
+				                            <div class="panel-heading-support-main">
+				                                
+				                                <span class="spanHeading">
+				                                  <span class="applicationMainIP colorblack">Catalyst</span>
+				                                </span>
+							            	</div>
+								            <div class="appCardBody">
+								                <div class="panel-body panel-primary appCardInfo padding2">
+								                    <div>
+								                        <div class="col-lg-12 col-sm-12 col-xs-12 text-center margin-top-15">
+								                            <img class="mainImageHeight" src="img/rsz_logo.png">
+								                        </div>
+								                        <div class="col-lg-12 col-sm-12 col-xs-12 paddingtopbottom4 text-center margin-top-25">
+								                            <div class="font-size10">
+								                                <span>Version :</span><span class="versionMain">2.10.477</span>
+								                            </div>
+								                        </div>
+								                    </div>
+								                </div>
+								                <!-- <div style="padding:3px;border-radius:0 0 12px 12px;background:white!important;border-top:1px solid #ddd !important" class="panel-footer clearfix">
+								                    <div style="padding-left:4px;padding-right:4px;margin-top:2px" class="col-lg-12 col-sm-12 col-xs-12">
+								                        <div style="padding-left:0px;margin-top: -2px;" class="col-lg-4 col-sm-4 col-xs-4 col-lg-offset-4">
+								                            <a class="btn btn-primary btn-sm width27borderradius50" data-toggle="modal" href="#modalDetailsAppDeploy" data-actiontype="start" rel="tooltip" data-placement="top" data-original-title="Details">
+								                                <i style="font-size: 14px;" class="fa fa-th"> </i>
+								                            </a>
+								                        </div>
+								                    </div>
+								                </div> -->
+								            </div>
+							        	</div>
+							    	</div>
+							    </span>
+							    <!-- <span><img src="img/arrow_right.png" class="spanMainImage"></span> -->
 							</div>
-							<div id="nodataAppDeploy" style="display:none">
-							</div>
-						</div>
-					</article>
-				</div>
-				<div class="col-sm-4 col-md-3 col-lg-2 col-xs-12 envSpecificAppTemplate" style="display:none">
-					<div class="envSpecificAppname"><u></u></div>
-				</div>
-				<div class="col-sm-12 col-md-12 col-lg-12 col-xs-12 no-padding envSpecificAppInstanceUniqueCard padding-right5-mobile margin-left10Per-mobile" style="display:none">
-					<div class="panel panel-primary appCard-inner-panel role-Selectedcard-app">
-						<div class="panel-heading appCard-inner-panel-heading">
-							<div contenteditable="false" class="domain-roles-icon">
-								<img class="domain-roles-icon-image" src="img/app-store-icons/Docker.png">
-							</div>
-							<div class="appInstanceNameCard">
-								<span class="appInstanceNameCardSpan"></span>
-							</div>
-						</div>
-						<div class="appCardBody">
-							<div class="panel-body panel-primary appCardInfo">
-								<div class="">
-									<div class="col-lg-12 col-sm-12 col-xs-12 text-align-center">
-										<img src="img/rsz_logo.png">
-									</div>
-									<div class="col-lg-12 col-sm-12 col-xs-12 paddingtopbottom4 text-align-center">
-										<div class="font-size-10">
-											<span>Version :</span><span class="versionAppDeploy"></span>
+			    			<div class="childCardTemplate" style="display:none">
+			        			<span class="firstChildSpanTemplate">
+				                    <div class="col-sm-12 col-md-12 col-lg-12 col-xs-6 no-padding padding-right5-mobile maxminwidth130">
+				                        <div class="panel panel-primary appcard-role-inner borderrad12colorGray">
+				                            <div class="panel-heading panel-heading-support">
+				                                <span class="spanHeading"> 
+				                                  <span class="applicationChildIP colorblack">
+				                                  	54.17.34.45
+				                                  </span>
+				                                  <a class="btn btn-primary btn-sm width27borderradius50 applicationChildmoreInfo" style="float:right">
+				                                  	<i class="fa fa-info font-size-11">
+				                                  	</i>
+				                                  </a>
+				                                </span>
+			    							</div>
+										    <div class="appCardBody">
+										        <div class="panel-body panel-primary appCardInfo padding2">
+										            <div class="">
+										                <div class="col-lg-12 col-sm-12 col-xs-12 text-center">
+										                    <img src="img/aws_logo_started.png" class="imgHeight">
+										                    <a class="btn btn-primary btn-sm width27borderradius50 applicationChildDetails" style="margin-left:-27px">
+										                        <i class="fa fa-th" style="font-size: 10px;color:#fff"></i>
+										                    </a>
+										                </div>
+										                <div class="col-lg-12 col-sm-12 col-xs-12 padding0 text-center">
+										                    <div class="font-size10">
+										                        <div>
+										                            <!-- <span class="lastDeploySpan">Last Deploy:</span> -->
+										                            <span class="lastapplicationDeploy" title="Last Deploy" data-original-title="Eval_Setup" data-placement="top" rel="tooltip">17-12-03 12:43:19 PM</span>
+										                        </div>
+										                    </div>
+										                </div>
+										            </div>
+										            <div class="col-lg-12 col-sm-12 col-xs-12" style="display:none">
+														<span class="applicationNamePipelineView"></span>
+														<span class="applicationInstanceNamePipelineView"></span>
+														<span class="hostNamePipelineView"></span>  
+														<span class="applicationNodeIPPipelineView"></span>  
+														<span class="containerIdPipelineView"></span>  
+														<span class="applicationStatusPipelineView"></span>
+													</div>
+										        </div>
+										        <!-- <div class="panel-footer clearfix panel-footer-support">
+										            <div class="col-lg-12 col-sm-12 col-xs-12 panel-footer-innerdiv">
+										                <div class="col-lg-4 col-sm-4 col-xs-4 col-lg-offset-4 footer-innerdiv">
+										                    <a class="btn btn-primary btn-sm width27borderradius50 applicationChildDetails">
+										                        <i style="font-size: 14px;" class="fa fa-th"> </i>
+										                    </a>
+										                </div>
+										            </div>
+										            
+										        </div> -->
+										    </div>
 										</div>
 									</div>
-									<div class="col-lg-12 col-sm-12 col-xs-12 paddingtopbottom4 text-align-center paddingleftright0">
-										<div class="font-size-10">
-											<span>Last Deploy :</span><span class="lastdeployAppDeploy"></span>
-										</div>
-									</div>
-									<div class="col-lg-12 col-sm-12 col-xs-12" style="display:none">
-										<span class="applicationNamePipeline"></span>
-										<span class="hostNamePipeline"></span>  
-										<span class="applicationNodeIPPipeline"></span>  
-										<span class="containerIdPipeline"></span>  
-										<span class="applicationTypePipeline"></span>
-										<span class="applicationStatusPipeline"></span>
-									</div>
-								</div>
+								</span>
+								<span class="secondChildSpanTemplate">
+									<a href="javascript:void" class="spanChildPromote">
+				                        <i class="fa fa-arrow-right txt-color-blue" style="font-size: 18px;margin-top:27px"></i>
+				                    </a>
+				                    <!-- <div class="arrow_box">
+									    <h4>Promote</h4>
+									</div> -->
+									<!-- <img src="img/arrow_right.png" class="spanChildImage"> -->
+								</span>
 							</div>
-							<div class="panel-footer clearfix appCard-inner-panel-footer">
-								<div class="col-lg-12 col-sm-12 col-xs-12 appCard-panel-foot-actiondiv">
-									<div class="col-lg-4 col-sm-4 col-xs-4 appCard-panel-foot-actionchildfirstDiv">
-									</div>
-									<div class="col-lg-4 col-sm-4 col-xs-4 appCard-panel-foot-actionchildsecondDiv">
-									</div>
-									<div class="col-lg-4 col-sm-4 col-xs-4 appCard-panel-foot-actionchildthirdDiv">
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
+							<div class="col-md-12" id="divapplicationcardview" style="padding-left:0px; padding-right:0px;padding-top:10px">
+                				<table class="tableClone dataTable table-custom table-condensed" cellpadding="5px" width="100%" style="border-bottom:1px solid #ddd" style="display:none">
+
+				                </table>
+				                <div class="table-responsive table-div" id="tableContainer">
+				                    
+				                </div>
+            				</div>
+							
+                        </div>
+                    </article>
+                </div>
+                
 				<div class="row loadingAppDeploySpinner">
-					<article class="col-sm-12 col-md-12 col-lg-12">
-						<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif"/>
-					</article>
+				    <article class="col-sm-12 col-md-12 col-lg-12">
+				        <img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />
+				    </article>
 				</div>
 				<div class="accordianTemplateContainer" style="display:none">
-					<div class="panel panel-default accordianTemplate">
-						<div class="panel-heading"  style="border-bottom:1px solid rgb(221, 221, 221);height:40px;background-color:#fcfcfc;">
-							<h4 class="panel-title">
+				    <div class="panel panel-default accordianTemplate">
+				        <div class="panel-heading" style="border-bottom:1px solid rgb(221, 221, 221);height:40px;background-color:#fcfcfc;">
+				            <h4 class="panel-title">
 								<span style="float:left;padding:0px !important;color:#666 !important;font-size:13px !important" class="envAppDeployName"></span>
 							</h4>
-							<span class="pull-right margintop2right8">   
-							<a  id="defaultViewButtonNewDeploy" class="btn btn-primary createNewDeploy" style="margin-right:5px;" data-toggle="modal" href="#modalUpgradeAppDeploy"> 
-							<i class="ace-icon fa fa-plus bigger-110" style="color:#fff;margin-right:4px;"></i>Deploy New App
-							</a>                                 
-							<a onclick="showHideControlApplication(this.id)" class="btn1" id="instanceviewAppCard" rel="tooltip" data-placement="top" data-original-title="History" title="History"> 
-							<i style="font-size:16px" class="fa fa-header fa-2x txt-color-deactive"></i>
-							</a>&nbsp;
-							<a onclick="showHideControlApplication(this.id)" id="defaultViewButtonAppCard" class="btn btn-primary" style="display:none"> 
-							<i class="ace-icon ace-icon fa fa-chevron-left bigger-110" style="color:#fff;margin-right:4px;"></i>Pipeline View
-							</a>
-							<a href="#modalappcardConfigure" data-toggle="modal" class="createAppConfigure" style="margin-top:-5px" title="Configure" rel="tooltip" data-placement="top" data-original-title="Configure">
-							<i class="fa fa-th fa-cogs" style="margin-right: 5px; color: rgb(64, 186, 241); font-size: 18px;"></i>
-							</a>
+				            <span class="pull-right margintop2right8">   
+								<a  id="defaultViewButtonNewDeploy" class="btn btn-primary createNewDeploy" style="margin-right:5px;" data-toggle="modal" href="#modalUpgradeAppDeploy"> 
+								<i class="ace-icon fa fa-plus bigger-110" style="color:#fff;margin-right:4px;"></i>Deploy New App
+								</a>                                 
+								<a onclick="showHideControlApplication(this.id)" class="btn1" id="instanceviewAppCard" rel="tooltip" data-placement="top" data-original-title="History" title="History"> 
+								<i style="font-size:16px" class="fa fa-header fa-2x txt-color-deactive"></i>
+								</a>&nbsp;
+								<a onclick="showHideControlApplication(this.id)" id="defaultViewButtonAppCard" class="btn btn-primary" style="display:none"> 
+								<i class="ace-icon ace-icon fa fa-chevron-left bigger-110" style="color:#fff;margin-right:4px;"></i>Pipeline View
+								</a>
+								<a href="#modalappcardConfigure" data-toggle="modal" class="createAppConfigure" style="margin-top:-5px" title="Configure" rel="tooltip" data-placement="top" data-original-title="Configure">
+								<i class="fa fa-th fa-cogs" style="margin-right: 5px; color: rgb(64, 186, 241); font-size: 18px;"></i>
+								</a>
 							</span>
-						</div>
-						<div id="divapplicationtableview">
-							<div id="collapseAppEnv1" class="panel-collapse collapse in envAppDeployAccordian">
-								<div class="table-responsive table-div" style="padding: 5px;overflow-x: auto;min-height:300px">
-									<table id="tableappDeploydetails" class="table table-striped table-bordered table-hover dataTable envAppDeployTable" style="border:1px solid #eeeeee !important; text-align:center;font-size:12px;margin-top:45px;" width="100%" cellpadding="5px">
-										<thead>
-											<tr class="rowCustomStyle" style="font-weight:bold;">
-												<td class="tableStyleColor">App</td>
-												<td class="tableStyleColor">App-Instance</td>
-												<td class="tableStyleColor">Version</td>
-												<td class="tableStyleColor">Host</td>
-												<td class="tableStyleColor">Node IP</td>
-												<td class="tableStyleColor">Last Deploy</td>
-												<td class="tableStyleColor">Container Name/ID</td>
-												<td class="tableStyleColor">Application Type</td>
-												<td class="tableStyleColor">Status</td>
-												<td class="tableStyleColor">Logs</td>
-												<td class="tableStyleColor">Upgrade</td>
-											</tr>
-										</thead>
-										<tbody>
-										</tbody>
-									</table>
-								</div>
-								<div class="table-responsive table-div fornNoDataDiv" style="display:none">
-									<table id="tableappDeploydetailsforNoData" class="table table-striped table-bordered table-hover dataTable" style="border:1px solid #eeeeee !important; text-align:center;font-size:12px;margin-top:45px;" width="100%" cellpadding="5px">
-										<thead>
-											<tr class="rowCustomStyle">
-												<td class="tableStyleColor">App</td>
-												<td class="tableStyleColor">App-Instance</td>
-												<td class="tableStyleColor">Version</td>
-												<td class="tableStyleColor">Host</td>
-												<td class="tableStyleColor">Node IP</td>
-												<td class="tableStyleColor">Last Deploy</td>
-												<td class="tableStyleColor">Container Name/ID</td>
-												<td class="tableStyleColor">Application Type</td>
-												<td class="tableStyleColor">Status</td>
-												<td class="tableStyleColor">Logs</td>
-												<td class="tableStyleColor">Upgrade</td>
-											</tr>
-										</thead>
-										<tbody>
-										</tbody>
-									</table>
-								</div>
-							</div>
-						</div>
-						<div id="divapplicationcardview">
-							<div class="col-sm-12 col-md-12 col-lg-12 stageContainer">
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="modal fade" id="modalappcardConfigure" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<form role="form" id="appCardForm" autocomplete="off">
-								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-									X
-									</button>
-									<h4 class="modal-title">
-										<i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Configure Application Pipeline View
-									</h4>
-								</div>
-								<div class="modal-body">
-							<form id="formconfigureapplication">
-							<table class="table table-bordered" cellpadding="5px" width="100%" id="tableconfigureapplication">
-							<thead>
-							<tr class="tableStyleColor">
-							<th>Stages/Environments</th>
-							<th>Active</th>
-							<th>UP/DOWN</th>
-							</tr>
-							</thead>
-							<tbody>
-							</tbody>
-							</table>
-							</form>
-							</div>
-							<div class="modal-footer">
-								<div class="btn-group" style="margin-left:200px;">  
-									<a class="btn btn-default" data-dismiss="modal">
-									<i class="ace-icon fa fa-times bigger-110"></i>
-									Cancel
-									</a>                               
-									<a class="btn btn-primary appdeployConfigureSaveBtn" style="margin-left:10px;">
-									<i class="ace-icon fa fa-save bigger-110"></i>
-									Save
-									</a>
-								</div>
-							</div>
-							</form>
-						</div>
-						<!-- /.modal-content -->
-					</div>
-					<!-- /.modal-dialog -->
-				</div>
-				<div class="modal fade" id="modalAppCardDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<form role="form" id="formAppDeploy" autocomplete="off">
-								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-									X
-									</button>
-									<h4 class="modal-title">
-										<i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Associate App Deploy<span class="redSpan font-size-12" id="errorParam"></span>
-									</h4>
-								</div>
-								<div class="modal-body">
-									<div class="addApptoAppend">
-										<div style="margin:5px 0px 0px;" class="row application4Params">
-											<div style="padding-left:0px;" class="col-lg-6 col-md-6 col-sm-6">
-												<label for="name">Application Name:<span class="redSpan">*</span>
-												</label>
-												<input type="text" autofocus="" style="height:36px;" class="form-control" id="appNameInput">
-											</div>
-											<div style="padding-left:0px;" class="col-lg-6 col-md-6 col-sm-6">
-												<label for="name">Description:
-												</label>
-												<input type="text" style="height:36px;" class="form-control" id="applicationDescriptionInput">
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="modal-footer">
-									<div class="btn-group" style="margin-left:200px;">
-										<a style="margin-left:10px;" class="btn btn-default cancelAppDeploy" data-dismiss="modal">
-										<i class="ace-icon fa fa-times bigger-110"></i> Cancel
-										</a>
-										<a class="btn btn-primary" id="parameterAppDeploySaveBtn">
-										<i class="ace-icon fa fa-save bigger-110"></i> Save
-										</a>
-									</div>
-								</div>
-							</form>
-						</div>
-					</div>
-				</div>
-				<div class="modal fade" id="modalAppCardTableDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<form role="form" id="formAppDeployTableHistory" autocomplete="off">
-								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-									X
-									</button>
-									<h4 class="modal-title">
-										<i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;List of Application
-									</h4>
-								</div>
-								<div class="modal-body">
-									<div class="table-responsive table-div">
-										<table id="tableappParamDeploy" class="table table-striped table-bordered table-hover dataTable" style="border:1px solid #eeeeee !important; text-align:center;font-size:12px;" width="100%" cellpadding="5px">
-											<thead>
-												<tr class="rowCustomStyle" style="font-weight:bold;">
-													<td class="tableStyleColor">S.No.</td>
-													<td class="tableStyleColor">Application Name</td>
-													<td class="tableStyleColor">Application Description</td>
-												</tr>
-											</thead>
-											<tbody>
-											</tbody>
-										</table>
-									</div>
-								</div>
-								<div class="modal-footer">
-									<div class="btn-group" style="margin-left:200px;">
-										<a style="margin-left:10px;" class="btn btn-default" data-dismiss="modal">
-										<i class="ace-icon fa fa-times bigger-110"></i> Cancel
-										</a>
-									</div>
-								</div>
-							</form>
-						</div>
-					</div>
-				</div>
-				<div class="modal fade" id="modalDetailsAppDeploy" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<form role="form" id="" autocomplete="off">
-								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-									X
-									</button>
-									<h4 class="modal-title">
-										<i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Details
-									</h4>
-								</div>
-								<div class="modal-body">
-									<div class="">
-										<table class="table table-bordered" cellpadding="5px" width="100%" id="">
-											<thead>
-												<tr class="tableStyleColor">
-													<th>Application Details</th>
-													<th>Application Values</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr>
-													<td>Application Name :</td>
-													<td class="appNameModal"></td>
-												</tr>
-												<tr>
-													<td>App-Instance Name :</td>
-													<td class="appInstanceNameModal"></td>
-												</tr>
-												<tr>
-													<td>Version :</td>
-													<td class="versionModal"></td>
-												</tr>
-												<tr>
-													<td>Host :</td>
-													<td class="hostNameModal"></td>
-												</tr>
-												<tr>
-													<td>Node IP :</td>
-													<td class="nodeIpModal"></td>
-												</tr>
-												<tr>
-													<td>Last Deploy :</td>
-													<td class="lastDeployModal"></td>
-												</tr>
-												<tr>
-													<td>Container Name/ID :</td>
-													<td class="containerIdModal"></td>
-												</tr>
-												<tr>
-													<td>Application Type :</td>
-													<td class="applicationTypeModal"></td>
-												</tr>
-												<tr>
-													<td>Status :</td>
-													<td class="statusModal"></td>
-												</tr>
-											</tbody>
-										</table>
-									</div>
-								</div>
-								<div class="modal-footer">
-									<div class="btn-group" style="margin-left:200px;">                                
-										<a style="margin-left:10px;" class="btn btn-default" data-dismiss="modal">
-										<i class="ace-icon fa fa-times bigger-110"></i>
-										Cancel
-										</a>
-									</div>
-								</div>
-							</form>
-						</div>
-						<!-- /.modal-content -->
-					</div>
-					<!-- /.modal-dialog -->
-				</div>
-				<div class="modal fade" id="modalAppCardLogDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<form role="form" id="formAppDeployLogs" autocomplete="off">
-								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-									X
-									</button>
-									<h4 class="modal-title">
-										<i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Logs
-									</h4>
-								</div>
-								<div class="modal-body">
-									<div class="logsForAppDeploy">
-									</div>
-								</div>
-								<div class="modal-footer">
-									<div class="btn-group" style="margin-left:200px;">
-										<a style="margin-left:10px;" class="btn btn-default cancelAppDeploy" data-dismiss="modal">
-										<i class="ace-icon fa fa-times bigger-110"></i> Cancel
-										</a>
-									</div>
-								</div>
-							</form>
-						</div>
-					</div>
-				</div>
-				<div class="modal fade" id="modalUpgradeAppDeploy" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<form role="form" id="formUpgradeAppDeploy" autocomplete="off">
-								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-									X
-									</button>
-									<h4 class="modal-title modaltitleforNewDeploy" style="display:none">
-										<i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;New App Deployment
-									</h4>
-									<h4 class="modal-title modaltitleforupgradeDeploy">
-										<i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Upgrade : <span id="upgradeAppName"></span> (<span id="upgradeNodeIp"></span>)
-									</h4>
-								</div>
-								<div class="modal-body">
-									<div class="upgradeForAppDeploy">
-										<input type="hidden" id="containerIdInput">
-										<fieldset class="fieldsetCustom">
-											<legend  class="legendCustom">Repository Details:</legend>
-											<div class="col-lg-6 col-md-6">
-												<label for="">Repository Server:<span class="redSpan">*</span>
-												<span>
-												<img class="reposerverspinner" src="img/select2-spinner.gif" style="display:none">
-												</img>
-												</span>
-												</label>
-												<div class="input-groups">
-													<select id="chooseNexusServer" name="" class="required width-100 form-control">
-														<option value="">Choose Server</option>
-													</select>
-												</div>
-											</div>
-											<div class="col-lg-6 col-md-6">
-												<label for="">Repository:<span class="redSpan">*</span>
-												<span>
-												<img class="repospinner" src="img/select2-spinner.gif" style="display:none"></img>
-												</span>
-												</label>
-												<div class="input-groups">
-													<select id="chooseRepository" name="" class="required width-100 form-control">
-														<option value="">Choose Repositories</option>
-													</select>
-												</div>
-											</div>
-											<div class="col-lg-6 col-md-6 margintop15 groupClass">
-												<label for="">Group ID:<span class="redSpan">*</span>
-												<span>
-												<img class="repospinner" src="img/select2-spinner.gif" style="display:none"></img>
-												</span>
-												</label>
-												<div class="input-groups">
-													<select id="chooseGroupId" name="" class="required width-100 form-control">
-														<option value="">Choose Group ID</option>
-													</select>
-												</div>
-											</div>
-											<div class="col-lg-6 col-md-6 margintop15 artifactClass">
-												<label for="">Artifacts:<span class="redSpan">*</span>
-												<span>
-												<img class="artifactsspinner" src="img/select2-spinner.gif" style="display:none">
-												</img>
-												</span>
-												</label>
-												<div class="input-groups">
-													<select id="chooseArtifacts" name="" class="required width-100 form-control">
-														<option value="">Choose Artifacts</option>
-													</select>
-												</div>
-											</div>
-											<div class="col-lg-6 col-md-6 margintop15 versionClass">
-												<label for="">Versions:<span class="redSpan">*</span>
-												<span>
-												<img class="versionspinner" src="img/select2-spinner.gif" style="display:none">
-												</img>
-												</span>
-												</label>
-												<div class="input-groups">
-													<select id="chooseVersions" name="" class="required width-100 form-control">
-														<option value="">Choose Versions</option>
-													</select>
-												</div>
-											</div>
-											<div class="col-lg-12 col-md-12 margintop15 repoUrlClass">
-												<label>Repository URL:<span class="redSpan">*</span>
-												<span>
-												<img class="repourlspinner" src="img/select2-spinner.gif" style="display:none">
-												</img>
-												</span>
-												</label>
-												<input id="repositoryUrl" type="text" class="form-control" name="" disabled>
-											</div>
-											<div class="col-lg-12 col-md-12 margintop15 containerClass containerIdClass containerUpgradeDeploy">
-												<label>Container Name/ID:
-												<span>
-												<img class="containerIdspinner" src="img/select2-spinner.gif" style="display:none">
-												</img>
-												</span>
-												</label>
-												<input id="containerIdDiv" type="text" class="form-control" />
-											</div>
-											<div class="col-lg-12 col-md-12 margintop15 containerClass  containerPortClass containerUpgradeDeploy">
-												<label>Container Port:<span class="redSpan">*</span>
-												<span>
-												<img class="containerIdspinner" src="img/select2-spinner.gif" style="display:none">
-												</img>
-												</span>
-												</label>
-												<input id="containerPort" type="text" class="form-control" name="">
-											</div>
-											<input id="upgradeValue" type="hidden" />
-											
-										</fieldset>
-										<fieldset class="fieldsetCustom"  style="margin-top: 20px ! important;">
-											<legend  class="legendCustom">Job Details:</legend>
-											<div class="col-lg-6 col-md-6 col-sm-6">
-												<label>Jobs:<span class="redSpan">*</span>
-												<span>
-												<img class="jobdetailsspinner" src="img/select2-spinner.gif" style="display:none">
-												</img>
-												</span>
-												</label>
-												<div class="input-groups">
-													<select id="chooseJobType" name="" class="required width-100 form-control">
-														<option value="">Choose Job</option>
-													</select>
-												</div>
-											</div>
-											<div class="col-lg-6 col-md-6" style="margin-top: 6px;">
-												<label>
-												<span></span>
-												</label>
-												<div class="input-groups">
-													<a class="btn btn-primary createTaskLinkUpgrade">
-													<i class="ace-icon fa fa-indent bigger-110"></i> Create New Job
-													</a>
-												</div>
-											</div>
-										</fieldset>
-									</div>
-								</div>
-								<div class="modal-footer">
-									<div class="btn-group" style="margin-left:200px;">
-										<a style="margin-left:10px;" class="btn btn-default cancelUpgradeAppDeploy" data-dismiss="modal">
-										<i class="ace-icon fa fa-times bigger-110"></i> Cancel
-										</a>
-										<a style="margin-left:10px;" class="btn btn-primary saveNewAppDeploy" style="display:none">
-										<i class="ace-icon fa fa-location-arrow bigger-110"></i> Deploy
-										</a>
-										<a style="margin-left:10px;" class="btn btn-primary saveUpgradeAppDeploy">
-										<i class="ace-icon fa fa-save bigger-110"></i> Upgrade
-										</a>
-									</div>
-								</div>
-							</form>
-						</div>
-					</div>
+				        </div>
+				        <div id="divapplicationtableview">
+				            <div id="collapseAppEnv1" class="panel-collapse collapse in envAppDeployAccordian">
+				                <div class="table-responsive table-div" style="padding: 5px;overflow-x: auto;min-height:300px">
+				                    <table id="tableappDeploydetails" class="table table-striped table-bordered table-hover dataTable envAppDeployTable" style="border:1px solid #eeeeee !important; text-align:center;font-size:12px;margin-top:45px;" width="100%" cellpadding="5px">
+				                        <thead>
+				                            <tr class="rowCustomStyle" style="font-weight:bold;">
+				                                <td class="tableStyleColor">App</td>
+				                                <td class="tableStyleColor">App-Instance</td>
+				                                <td class="tableStyleColor">Version</td>
+				                                <td class="tableStyleColor">Host</td>
+				                                <td class="tableStyleColor">Node IP</td>
+				                                <td class="tableStyleColor">Last Deploy</td>
+				                                <td class="tableStyleColor">Container Name/ID</td>
+				                                <td class="tableStyleColor">Application Type</td>
+				                                <td class="tableStyleColor">Status</td>
+				                                <td class="tableStyleColor">Logs</td>
+				                                <td class="tableStyleColor">Upgrade</td>
+				                            </tr>
+				                        </thead>
+				                        <tbody>
+				                        </tbody>
+				                    </table>
+				                </div>
+				                <div class="table-responsive table-div fornNoDataDiv" style="display:none">
+				                    <table id="tableappDeploydetailsforNoData" class="table table-striped table-bordered table-hover dataTable" style="border:1px solid #eeeeee !important; text-align:center;font-size:12px;margin-top:45px;" width="100%" cellpadding="5px">
+				                        <thead>
+				                            <tr class="rowCustomStyle">
+				                                <td class="tableStyleColor">App</td>
+				                                <td class="tableStyleColor">App-Instance</td>
+				                                <td class="tableStyleColor">Version</td>
+				                                <td class="tableStyleColor">Host</td>
+				                                <td class="tableStyleColor">Node IP</td>
+				                                <td class="tableStyleColor">Last Deploy</td>
+				                                <td class="tableStyleColor">Container Name/ID</td>
+				                                <td class="tableStyleColor">Application Type</td>
+				                                <td class="tableStyleColor">Status</td>
+				                                <td class="tableStyleColor">Logs</td>
+				                                <td class="tableStyleColor">Upgrade</td>
+				                            </tr>
+				                        </thead>
+				                        <tbody>
+				                        </tbody>
+				                    </table>
+				                </div>
+				            </div>
+				        </div>
+				        <div id="">
+				        </div>
+				    </div>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-<div class="modal fade" id="modalassignTaskUpgrade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-	<div class="modal-dialog modal-lg">
+<div class="modal fade" id="modalappcardConfigure" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form role="form" id="appCardForm" autocomplete="off">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					X
+					</button>
+					<h4 class="modal-title">
+						<i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Configure Application Pipeline View
+					</h4>
+				</div>
+				<div class="modal-body">
+			<form id="formconfigureapplication">
+			<table class="table table-bordered" cellpadding="5px" width="100%" id="tableconfigureapplication">
+			<thead>
+			<tr class="tableStyleColor">
+			<th>Stages/Environments</th>
+			<th>Active</th>
+			<th>UP/DOWN</th>
+			</tr>
+			</thead>
+			<tbody>
+			</tbody>
+			</table>
+			</form>
+			</div>
+			<div class="modal-footer">
+				<div class="btn-group" style="margin-left:200px;">  
+					<a class="btn btn-default" data-dismiss="modal">
+					<i class="ace-icon fa fa-times bigger-110"></i>
+					Cancel
+					</a>                               
+					<a class="btn btn-primary appdeployConfigureSaveBtn" style="margin-left:10px;">
+					<i class="ace-icon fa fa-save bigger-110"></i>
+					Save
+					</a>
+				</div>
+			</div>
+			</form>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+<div class="modal fade" id="modalAppCardDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form role="form" id="formAppDeploy" autocomplete="off">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					X
+					</button>
+					<h4 class="modal-title">
+						<i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Associate App Deploy<span class="redSpan font-size-12" id="errorParam"></span>
+					</h4>
+				</div>
+				<div class="modal-body">
+					<div class="addApptoAppend">
+						<div style="margin:5px 0px 0px;" class="row application4Params">
+							<div style="padding-left:0px;" class="col-lg-6 col-md-6 col-sm-6">
+								<label for="name">Application Name:<span class="redSpan">*</span>
+								</label>
+								<input type="text" autofocus="" style="height:36px;" class="form-control" id="appNameInput">
+							</div>
+							<div style="padding-left:0px;" class="col-lg-6 col-md-6 col-sm-6">
+								<label for="name">Description:
+								</label>
+								<input type="text" style="height:36px;" class="form-control" id="applicationDescriptionInput">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="btn-group" style="margin-left:200px;">
+						<a style="margin-left:10px;" class="btn btn-default cancelAppDeploy" data-dismiss="modal">
+						<i class="ace-icon fa fa-times bigger-110"></i> Cancel
+						</a>
+						<a class="btn btn-primary" id="parameterAppDeploySaveBtn">
+						<i class="ace-icon fa fa-save bigger-110"></i> Save
+						</a>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="modalAppCardTableDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form role="form" id="formAppDeployTableHistory" autocomplete="off">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					X
+					</button>
+					<h4 class="modal-title">
+						<i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;List of Application
+					</h4>
+				</div>
+				<div class="modal-body">
+					<div class="table-responsive table-div">
+						<table id="tableappParamDeploy" class="table table-striped table-bordered table-hover dataTable" style="border:1px solid #eeeeee !important; text-align:center;font-size:12px;" width="100%" cellpadding="5px">
+							<thead>
+								<tr class="rowCustomStyle" style="font-weight:bold;">
+									<td class="tableStyleColor">S.No.</td>
+									<td class="tableStyleColor">Application Name</td>
+									<td class="tableStyleColor">Application Description</td>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="btn-group" style="margin-left:200px;">
+						<a style="margin-left:10px;" class="btn btn-default" data-dismiss="modal">
+						<i class="ace-icon fa fa-times bigger-110"></i> Cancel
+						</a>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<!-- <div class="modal fade" id="modalDetailsAppDeploy" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+	<div class="modal-dialog">
 		<div class="modal-content">
 			<form role="form" id="" autocomplete="off">
 				<div class="modal-header">
@@ -585,20 +362,341 @@
 					X
 					</button>
 					<h4 class="modal-title">
-						<i class="fa fa-indent txt-color-blue"></i>&nbsp;&nbsp;Create New Job
+						<i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Details
 					</h4>
 				</div>
 				<div class="modal-body">
+					<div class="">
+						<table class="table table-bordered" cellpadding="5px" width="100%" id="">
+							<thead>
+								<tr class="tableStyleColor">
+									<th>Application Details</th>
+									<th>Application Values</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Application Name :</td>
+									<td class="appNameModal"></td>
+								</tr>
+								<tr>
+									<td>App-Instance Name :</td>
+									<td class="appInstanceNameModal"></td>
+								</tr>
+								<tr>
+									<td>Version :</td>
+									<td class="versionModal"></td>
+								</tr>
+								<tr>
+									<td>Host :</td>
+									<td class="hostNameModal"></td>
+								</tr>
+								<tr>
+									<td>Node IP :</td>
+									<td class="nodeIpModal"></td>
+								</tr>
+								<tr>
+									<td>Last Deploy :</td>
+									<td class="lastDeployModal"></td>
+								</tr>
+								<tr>
+									<td>Container Name/ID :</td>
+									<td class="containerIdModal"></td>
+								</tr>
+								<tr>
+									<td>Application Type :</td>
+									<td class="applicationTypeModal"></td>
+								</tr>
+								<tr>
+									<td>Status :</td>
+									<td class="statusModal"></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="btn-group" style="margin-left:200px;">                                
+						<a style="margin-left:10px;" class="btn btn-default" data-dismiss="modal">
+						<i class="ace-icon fa fa-times bigger-110"></i>
+						Cancel
+						</a>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div> -->
+<div class="modal fade" id="modalDetailsAppDeploy" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form role="form" id="" autocomplete="off">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        X
+                    </button>
+                    <h4 class="modal-title">
+						<i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Details
+					</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="">
+                        <table class="table table-bordered" cellpadding="5px" width="100%" id="">
+                            <thead>
+                                <tr class="tableStyleColor">
+                                    <th>Application Details</th>
+                                    <th>Application Values</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Application Name :</td>
+                                    <td class="appNameModal"></td>
+                                </tr>
+                                <!-- <tr>
+                                    <td>App-Instance Name :</td>
+                                    <td class="appInstanceNameModal"></td>
+                                </tr> -->
+                                <tr>
+                                    <td>Host :</td>
+                                    <td class="hostNameModal"></td>
+                                </tr>
+                                <tr>
+                                    <td>Node IP :</td>
+                                    <td class="nodeIpModal"></td>
+                                </tr>
+                                <tr>
+                                    <td>Container Name/ID :</td>
+                                    <td class="containerIdModal"></td>
+                                </tr>
+                                <tr>
+                                    <td>Status :</td>
+                                    <td class="statusModal"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="btn-group" style="margin-left:200px;">
+                        <a style="margin-left:10px;" class="btn btn-default" data-dismiss="modal">
+                            <i class="ace-icon fa fa-times bigger-110"></i> Cancel
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalAppCardLogDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form role="form" id="formAppDeployLogs" autocomplete="off">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					X
+					</button>
+					<h4 class="modal-title">
+						<i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Logs
+					</h4>
+				</div>
+				<div class="modal-body">
+					<div class="logsForAppDeploy">
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="btn-group" style="margin-left:200px;">
+						<a style="margin-left:10px;" class="btn btn-default cancelAppDeploy" data-dismiss="modal">
+						<i class="ace-icon fa fa-times bigger-110"></i> Cancel
+						</a>
+					</div>
 				</div>
 			</form>
 		</div>
 	</div>
 </div>
+<div class="modal fade" id="modalUpgradeAppDeploy" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form role="form" id="formUpgradeAppDeploy" autocomplete="off">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					X
+					</button>
+					<h4 class="modal-title modaltitleforNewDeploy" style="display:none">
+						<i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;New App Deployment
+					</h4>
+					<h4 class="modal-title modaltitleforupgradeDeploy">
+						<i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Upgrade : <span id="upgradeAppName"></span> (<span id="upgradeNodeIp"></span>)
+					</h4>
+				</div>
+				<div class="modal-body">
+					<div class="upgradeForAppDeploy">
+						<input type="hidden" id="containerIdInput">
+						<fieldset class="fieldsetCustom">
+							<legend  class="legendCustom">Repository Details:</legend>
+							<div class="col-lg-6 col-md-6">
+								<label for="">Repository Server:<span class="redSpan">*</span>
+								<span>
+								<img class="reposerverspinner" src="img/select2-spinner.gif" style="display:none">
+								</img>
+								</span>
+								</label>
+								<div class="input-groups">
+									<select id="chooseNexusServer" name="" class="required width-100 form-control">
+										<option value="">Choose Server</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-6">
+								<label for="">Repository:<span class="redSpan">*</span>
+								<span>
+								<img class="repospinner" src="img/select2-spinner.gif" style="display:none"></img>
+								</span>
+								</label>
+								<div class="input-groups">
+									<select id="chooseRepository" name="" class="required width-100 form-control">
+										<option value="">Choose Repositories</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-6 margintop15 groupClass">
+								<label for="">Group ID:<span class="redSpan">*</span>
+								<span>
+								<img class="repospinner" src="img/select2-spinner.gif" style="display:none"></img>
+								</span>
+								</label>
+								<div class="input-groups">
+									<select id="chooseGroupId" name="" class="required width-100 form-control">
+										<option value="">Choose Group ID</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-6 margintop15 artifactClass">
+								<label for="">Artifacts:<span class="redSpan">*</span>
+								<span>
+								<img class="artifactsspinner" src="img/select2-spinner.gif" style="display:none">
+								</img>
+								</span>
+								</label>
+								<div class="input-groups">
+									<select id="chooseArtifacts" name="" class="required width-100 form-control">
+										<option value="">Choose Artifacts</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-6 margintop15 versionClass">
+								<label for="">Versions:<span class="redSpan">*</span>
+								<span>
+								<img class="versionspinner" src="img/select2-spinner.gif" style="display:none">
+								</img>
+								</span>
+								</label>
+								<div class="input-groups">
+									<select id="chooseVersions" name="" class="required width-100 form-control">
+										<option value="">Choose Versions</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-12 col-md-12 margintop15 repoUrlClass">
+								<label>Repository URL:<span class="redSpan">*</span>
+								<span>
+								<img class="repourlspinner" src="img/select2-spinner.gif" style="display:none">
+								</img>
+								</span>
+								</label>
+								<input id="repositoryUrl" type="text" class="form-control" name="" disabled>
+							</div>
+							<div class="col-lg-12 col-md-12 margintop15 containerClass containerIdClass containerUpgradeDeploy">
+								<label>Container Name/ID:
+								<span>
+								<img class="containerIdspinner" src="img/select2-spinner.gif" style="display:none">
+								</img>
+								</span>
+								</label>
+								<input id="containerIdDiv" type="text" class="form-control" />
+							</div>
+							<div class="col-lg-12 col-md-12 margintop15 containerClass  containerPortClass containerUpgradeDeploy">
+								<label>Container Port:<span class="redSpan">*</span>
+								<span>
+								<img class="containerIdspinner" src="img/select2-spinner.gif" style="display:none">
+								</img>
+								</span>
+								</label>
+								<input id="containerPort" type="text" class="form-control" name="">
+							</div>
+							<input id="upgradeValue" type="hidden" />
+							
+						</fieldset>
+						<fieldset class="fieldsetCustom"  style="margin-top: 20px ! important;">
+							<legend  class="legendCustom">Job Details:</legend>
+							<div class="col-lg-6 col-md-6 col-sm-6">
+								<label>Jobs:<span class="redSpan">*</span>
+								<span>
+								<img class="jobdetailsspinner" src="img/select2-spinner.gif" style="display:none">
+								</img>
+								</span>
+								</label>
+								<div class="input-groups">
+									<select id="chooseJobType" name="" class="required width-100 form-control">
+										<option value="">Choose Job</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-6" style="margin-top: 6px;">
+								<label>
+								<span></span>
+								</label>
+								<div class="input-groups">
+									<a class="btn btn-primary createTaskLinkUpgrade">
+									<i class="ace-icon fa fa-indent bigger-110"></i> Create New Job
+									</a>
+								</div>
+							</div>
+						</fieldset>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="btn-group" style="margin-left:200px;">
+						<a style="margin-left:10px;" class="btn btn-default cancelUpgradeAppDeploy" data-dismiss="modal">
+						<i class="ace-icon fa fa-times bigger-110"></i> Cancel
+						</a>
+						<a style="margin-left:10px;" class="btn btn-primary saveNewAppDeploy" style="display:none">
+						<i class="ace-icon fa fa-location-arrow bigger-110"></i> Deploy
+						</a>
+						<a style="margin-left:10px;" class="btn btn-primary saveUpgradeAppDeploy">
+						<i class="ace-icon fa fa-save bigger-110"></i> Upgrade
+						</a>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="modalassignTaskUpgrade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form role="form" id="" autocomplete="off">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        X
+                    </button>
+                    <h4 class="modal-title">
+						<i class="fa fa-indent txt-color-blue"></i>&nbsp;&nbsp;Create New Job
+					</h4>
+                </div>
+                <div class="modal-body">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- <script src="js/dev/application.js"></script> -->
 <script type="text/javascript">
 // assignTaskUpgradeApp.html
 $(document).ready(function() {
 	getAllApplicationData();
-	getAllPipelineApplicationData();
+	//getAllPipelineApplicationData();
 	$("#divapplicationtableview").hide();
 	if ($('#chooseNexusServer :selected').text() == 'Choose Server') {
 		$('.createTaskLinkUpgrade').attr('disabled', 'disabled');
@@ -636,7 +734,7 @@ $(document).ready(function() {
 	$('#defaultViewButtonNewDeploy').on('click', newAppDeployClickHandler);
 });
 
-function getAllPipelineApplicationData() {
+/*function getAllPipelineApplicationData() {
 	var projectId = urlParams.projid;
 	var envNameSelected = "";
 	$.get('/app/deploy/pipeline/project/' + projectId, function(dataPipeline) {
@@ -665,6 +763,248 @@ function getAllPipelineApplicationData() {
 			});
 		}
 	}).fail(function() {});
+}*/
+getAllPipelineViewData();
+
+function getAllPipelineViewData() {
+	//alert("I am in getAllPipelineViewData function");
+    var urlParams = {};
+    (window.onpopstate = function() {
+        var url = window.location.href;
+        var indexOfQues = url.lastIndexOf("?");
+        if (indexOfQues != -1) {
+            var sub = url.substring(indexOfQues + 1);
+            var params = sub.split('&')
+            for (var i = 0; i < params.length; i++) {
+                var paramParts = params[i].split('=');
+                urlParams[paramParts[0]] = paramParts[1];
+            }
+        }
+    })();
+
+    var projectId = urlParams.projid;
+
+    $.get('/app/deploy/pipeline/project/' + projectId, function(dataPipeline) {
+        if (dataPipeline.length) {
+            var arrEnv = [];
+            var arrSequence = [];
+            arrEnv.push({
+                "title": ''
+            });
+            arrSequence.push('');
+            for (var i = 0; i < dataPipeline[0].envId.length; i++) {
+                var envUniqueText = dataPipeline[0].envId[i];
+                var obj = {
+                    "title": envUniqueText
+                };
+                arrEnv.push(obj);
+            }
+            for (var j = 0; j < dataPipeline[0].envSequence.length; j++) {
+                var envUniqueText = dataPipeline[0].envSequence[j];
+                arrSequence.push(envUniqueText);
+            }
+            if(arrSequence[dataPipeline[0].envSequence.length] && arrEnv[dataPipeline[0].envId.length]){
+                creationPipelineTableView(projectId,arrEnv,arrSequence);
+            }
+            
+        } else {
+            $.get('/d4dMasters/project/' + projectId, function(dataforenvName) {
+                var individualenvName = dataforenvName[0].environmentname;
+                individualenvName = individualenvName.split(",");
+                var arrEnv = [];
+                var arrSequence = [];
+                arrEnv.push({
+                    "title": ''
+                });
+                arrSequence.push('');
+
+                for (var i = 0; i < individualenvName.length; i++) {
+                    var envUniqueText = individualenvName[i];
+
+                    var obj = {
+                        "title": envUniqueText
+                    };
+                    arrEnv.push(obj);
+                    arrSequence.push(envUniqueText);
+                }
+
+                console.log('array sequence');
+                console.log(arrSequence);
+                if(arrSequence[individualenvName.length]){
+                    creationPipelineTableView(projectId,arrEnv,arrSequence);
+                }
+
+            }).fail(function() {});
+        }
+    }).fail(function() {});
+}
+function creationPipelineTableView(projectId,arrEnv,arrSequence){
+    //alert("I am in pipeline Tableview");
+    var $tableClone = $('.tableClone').clone();
+    $tableClone.removeClass('tableClone');
+    $('#tableContainer').empty().append($tableClone);
+    
+    $tableClone.DataTable({
+        columns: arrEnv,
+        "bSort": false,
+        "bAutoWidth": false,
+        "bProcessing": true,
+        "bDeferRender": true,
+        "bFilter": false,
+        "bLengthChange": false
+    });
+    $tableClone.find('thead th').addClass('padding-left5per');
+    var $tableapplicationTest = $tableClone;
+    var $tableapplicationTbody = $tableClone.find('tbody');
+    $.get('/app/deploy/project/' + projectId + '/list', function(deployData) {
+        deployData.forEach(function(appDeployDataObj) {
+            function createMainCard(applicationName,versionNumber){
+                var tempStr = '';
+                       
+                var $mainCardTemplate = $('.mainCardTemplate');
+
+                var $mainCard = $mainCardTemplate.clone(true);
+                $mainCard.css({
+                    display: 'inline-flex'
+                });
+                
+                $mainCard.find('.applicationMainIP').html(applicationName);
+                $mainCard.find('.versionMain').html(versionNumber);
+
+                if(applicationName === "catalyst"){
+                    $mainCard.find('.mainImageHeight').attr("src","img/rsz_logo.png");    
+                }else{
+                    $mainCard.find('.mainImageHeight').attr("src","img/petclinic.png");
+                }
+                
+                var $mainCardtemplateStr = $mainCard.prop('outerHTML');
+                tempStr = tempStr + $mainCardtemplateStr;
+                return tempStr;
+            }
+
+            function createStatusPresentCard(appDeployDataObj,applicationName,callback){
+                var tempStr = '';
+                       
+                var $childCardTemplate = $('.childCardTemplate');
+                var $childPresentCard = $childCardTemplate.clone(true);
+                $childPresentCard.css({
+                    display: 'inline-flex'
+                });
+                var count =0;
+                for(var i=0;i<appDeployDataObj.envId.length;i++){
+                    
+                    (function(i){
+                        count++;
+                        $childPresentCard.find('.applicationChildIP').html(appDeployDataObj.applicationNodeIP[i]);
+                        $childPresentCard.find('.lastapplicationDeploy').html(appDeployDataObj.applicationLastDeploy[i]);
+
+                        if(appDeployDataObj.applicationStatus[i] === "Successful"){
+                            $childPresentCard.find('.imgHeight').attr("src","img/aws_logo_started.png");
+                            $childPresentCard.find('.applicationChildDetails').removeClass('btn-primary').addClass('btn-success');
+
+                        }else{
+                            $childPresentCard.find('.imgHeight').attr("src","img/aws_logo_stopped.png");
+                            $childPresentCard.find('.applicationChildDetails').removeClass('btn-primary').addClass('btn-danger');
+                        }
+                        
+                        $childPresentCard.find('.applicationNamePipelineView').html(applicationName);
+                        $childPresentCard.find('.applicationInstanceNamePipelineView').html(appDeployDataObj.applicationInstanceName[i]);
+                        $childPresentCard.find('.hostNamePipelineView').html(appDeployDataObj.hostName[i]);
+                        $childPresentCard.find('.applicationNodeIPPipelineView').html(appDeployDataObj.applicationNodeIP[i]);
+                        $childPresentCard.find('.containerIdPipelineView').html(appDeployDataObj.containerId[i]);
+                        $childPresentCard.find('.applicationStatusPipelineView').html(appDeployDataObj.applicationStatus[i]);
+                        if(count === appDeployDataObj.envId.length){
+                            var $childCardtemplateStr = $childPresentCard.prop('outerHTML');
+                            tempStr = tempStr + $childCardtemplateStr;
+                            callback(null,tempStr);
+                        }
+                    })(i);
+                }
+            };
+
+            var countColumn = 0;
+            var dummyArray = [];
+            var finalArray = [];
+            var applicationName = appDeployDataObj.applicationName;
+            var versionNumber = appDeployDataObj.applicationVersion;
+            var applicationEnvList=appDeployDataObj.envId;
+               for (var j = 0; j < arrSequence.length; j++) {
+                countColumn++;
+                //application main card
+                if(j==0 && arrSequence[j]===""){
+                    var obj = createMainCard(applicationName,versionNumber);
+                    finalArray.push(createMainCard(applicationName,versionNumber));
+                }
+                else if($.inArray(arrSequence[j],applicationEnvList)!==-1){
+                    //application status present card
+                    //alert($(arrSequence).get(-1));
+                    if($(arrSequence).get(-1) == arrSequence[j]){
+                        //alert("Matched");
+                        createStatusPresentCard(appDeployDataObj,applicationName,function(err,data){
+                            //alert(data);
+                            finalArray.push(data);
+                        });
+                    }
+                    else{
+                        createStatusPresentCard(appDeployDataObj,applicationName,function(err,data){
+                            finalArray.push(data);
+                        });
+                    }
+                }else{
+                    //application status absent card
+                    var tempStr = '';
+                    var $childCardTemplate = $('.childCardTemplate');
+                    var $childPresentCard = $childCardTemplate.clone(true);
+                    $childPresentCard.css({
+                        display: 'inline-flex'
+                    });
+                    $childPresentCard.find('.applicationChildIP').html('');
+                    $childPresentCard.find('.lastDeploySpan').html('');
+                    $childPresentCard.find('.imgHeight').attr("src","img/rsz_inactive.png");
+                    $childPresentCard.find('.applicationChildDetails').removeClass('btn-primary').addClass('btn-grey');
+                    $childPresentCard.find('.lastapplicationDeploy').html('');
+                    //$childPresentCard.find('.footer-innerdiv').html('');
+                        $childPresentCard.children().css({
+                            'opacity': '0.5',
+                            'pointer-events': 'none'
+                        });
+                    //$childPresentCard.find('.applicationChildDetails').attr('disabled');
+                    //$childPresentCard.find('.applicationChildmoreInfo').attr('disabled');
+                    
+                    var $childCardtemplateStr = $childPresentCard.prop('outerHTML');
+                    tempStr = tempStr + $childCardtemplateStr;
+                    finalArray.push(tempStr);
+                } 
+            }
+            $tableapplicationTest.dataTable().fnAddData(finalArray);
+            //alert($('#tableContainer table tbody td').outerWidth()); 
+        });        
+    });
+    
+    $tableapplicationTbody.on('click','.applicationChildDetails',moreinfoDetailsPipelineViewClickHandler);
+}
+
+function moreinfoDetailsPipelineViewClickHandler(e) {
+    var $modal = $('#modalDetailsAppDeploy');
+    var applicationNamePipelineText = $(this).parents().eq(5).find('.applicationNamePipelineView').html();
+    $modal.find('.appNameModal').html(applicationNamePipelineText);
+
+    var appInstanceNameCardSpanText = $(this).parents().eq(5).find('.applicationInstanceNamePipelineView').html();
+    $modal.find('.appInstanceNameModal').html(appInstanceNameCardSpanText);
+
+    var hostNamePipelineText = $(this).parents().eq(5).find('.hostNamePipelineView').html();
+    $modal.find('.hostNameModal').html(hostNamePipelineText);
+
+    var applicationNodeIPPipelineText = $(this).parents().eq(5).find('.applicationNodeIPPipelineView').html();
+    $modal.find('.nodeIpModal').html(applicationNodeIPPipelineText);
+
+    var containerIdPipelineText = $(this).parents().eq(5).find('.containerIdPipelineView').html();
+    $modal.find('.containerIdModal').html(containerIdPipelineText);
+
+    var applicationStatusPipelineText = $(this).parents().eq(5).find('.applicationStatusPipelineView').html();
+    $modal.find('.statusModal').html(applicationStatusPipelineText);
+
+    $modal.modal('show');
 }
 
 function createAttribTableRowFromJson(attributes) {
@@ -712,7 +1052,7 @@ function createAttribTableRowFromJson(attributes) {
 		getVal(attributeObj, '');
 	}
 }
-$('.createAppConfigure').click(function() {
+/*$('.createAppConfigure').click(function() {
 	var selectedEnvironments = [];
 	var allEnvironments = [];
 	var $tableconfigureapplication = $('#tableconfigureapplication');
@@ -787,6 +1127,121 @@ $('.createAppConfigure').click(function() {
 		},
 		error: function() {}
 	});
+});*/
+$('.createAppConfigure').click(function() {
+    var selectedEnvironments = [];
+    var allEnvironments = [];
+    var $tableconfigureapplication = $('#tableconfigureapplication');
+    var $tbody = $tableconfigureapplication.find('tbody').empty();
+    var projectId = urlParams.projid;
+    $.ajax({
+        url: '/app/deploy/pipeline/project/' + projectId,
+        type: "GET",
+        async: true,
+        success: function(dataPipeline) {
+            if (dataPipeline.length) {
+                for (var i = 0; i < dataPipeline[0].envId.length; i++) {
+                    selectedEnvironments.push(dataPipeline[0].envId[i]);
+                }
+                for (var i = 0; i < dataPipeline[0].envSequence.length; i++) {
+                    allEnvironments.push(dataPipeline[0].envSequence[i]);
+                }
+                if (selectedEnvironments.length == 0) {
+                    $.get('/d4dMasters/project/' + projectId, function(dataforenvName) {
+                        var individualenvName = dataforenvName[0].environmentname;
+                        individualenvName = individualenvName.split(",");
+                        for (var i = 0; i < individualenvName.length; i++) {
+                            var checked = "";
+                            if ($.inArray(individualenvName[i], individualenvName) > -1) {
+                                checked = "checked";
+                            }
+                            var $tr = $('<tr/>').attr({
+                                'data-configureApplication': individualenvName[i]
+                            });
+                            var $tdenvName = $('<td class="configAppDeployUniqueName"/>').html(individualenvName[i]);
+                            var $tdActive = $('<td/>').html("<div class='iphone-toggle-buttons'><ul style='padding: 0px; margin: 0px;list-style-type: none;'><li><label for='checkbox-" + i + "'><input type='checkbox' class='appDeployCheckboxOrder' name='checkbox-" + i + "' id='checkbox-" + i + "' " + checked + " /><span></span></label></li></ul></div>");
+                            var $tdupdown = $('<td/>').html("<a class='btn btn-default btn-primary up' style='border-radius:50%;height:27px;width:27px;padding-top:0px' type='button'><i style='font-size:12px;margin-left:-5px;margin-top:5px;' class='fa  fa-chevron-up'></i></a><a class='btn btn-default btn-primary down' style='border-radius:50%;height:27px;width:27px;padding-top:0px;margin-left:10px' type='button'><i style='font-size:12px;margin-left:-5px;margin-top:5px;' class='fa  fa-chevron-down'></i></a>");
+                            $tr.append($tdenvName).append($tdActive).append($tdupdown);
+                            $tbody.append($tr);
+                        }
+                        $tableconfigureapplication.append($tbody);
+                        $tableconfigureapplication.find(".up,.down").click(function() {
+                            var row = $(this).parents("tr:first");
+                            if ($(this).is(".up")) {
+                                row.insertBefore(row.prev());
+                            } else {
+                                row.insertAfter(row.next());
+                            }
+                        });
+                    });
+                } else {
+                    for (var i = 0; i < allEnvironments.length; i++) {
+                        var checked = "";
+                        if ($.inArray(allEnvironments[i], selectedEnvironments) > -1) {
+                            checked = "checked";
+                        }
+                        var $tr = $('<tr/>').attr({
+                            'data-configureApplication': allEnvironments[i]
+                        });
+                        var $tdenvName = $('<td class="configAppDeployUniqueName"/>').html(allEnvironments[i]);
+                        var $tdActive = $('<td/>').html("<div class='iphone-toggle-buttons'><ul style='padding: 0px; margin: 0px;list-style-type: none;'><li><label for='checkbox-" + i + "'><input type='checkbox' class='appDeployCheckboxOrder' name='checkbox-" + i + "' id='checkbox-" + i + "' " + checked + " /><span></span></label></li></ul></div>");
+                        var $tdupdown = $('<td/>').html("<a class='btn btn-default btn-primary up' style='border-radius:50%;height:27px;width:27px;padding-top:0px' type='button'><i style='font-size:12px;margin-left:-5px;margin-top:5px;' class='fa  fa-chevron-up'></i></a><a class='btn btn-default btn-primary down' style='border-radius:50%;height:27px;width:27px;padding-top:0px;margin-left:10px' type='button'><i style='font-size:12px;margin-left:-5px;margin-top:5px;' class='fa  fa-chevron-down'></i></a>");
+                        $tr.append($tdenvName).append($tdActive).append($tdupdown);
+                        $tbody.append($tr);
+                    }
+                    $tableconfigureapplication.append($tbody);
+                    $tableconfigureapplication.find(".up,.down").click(function() {
+                        var row = $(this).parents("tr:first");
+                        if ($(this).is(".up")) {
+                            row.insertBefore(row.prev());
+                        } else {
+                            row.insertAfter(row.next());
+                        }
+                    });
+                }
+            }else{
+                $.get('/d4dMasters/project/' + projectId, function(dataforenvName) {
+                    var individualenvName = dataforenvName[0].environmentname;
+                    individualenvName = individualenvName.split(",");
+                    for (var i = 0; i < individualenvName.length; i++) {
+                        selectedEnvironments.push(individualenvName[i]);
+                        allEnvironments.push(individualenvName[i]);
+                    }
+                    if(selectedEnvironments[individualenvName.length] == allEnvironments[individualenvName.length]){
+                        $.get('/d4dMasters/project/' + projectId, function(dataforenvName) {
+                            var individualenvName = dataforenvName[0].environmentname;
+                            individualenvName = individualenvName.split(",");
+                            for (var i = 0; i < individualenvName.length; i++) {
+                                var checked = "";
+                                if ($.inArray(individualenvName[i], individualenvName) > -1) {
+                                    checked = "checked";
+                                }
+                                var $tr = $('<tr/>').attr({
+                                    'data-configureApplication': individualenvName[i]
+                                });
+                                var $tdenvName = $('<td class="configAppDeployUniqueName"/>').html(individualenvName[i]);
+                                var $tdActive = $('<td/>').html("<div class='iphone-toggle-buttons'><ul style='padding: 0px; margin: 0px;list-style-type: none;'><li><label for='checkbox-" + i + "'><input type='checkbox' class='appDeployCheckboxOrder' name='checkbox-" + i + "' id='checkbox-" + i + "' " + checked + " /><span></span></label></li></ul></div>");
+                                var $tdupdown = $('<td/>').html("<a class='btn btn-default btn-primary up' style='border-radius:50%;height:27px;width:27px;padding-top:0px' type='button'><i style='font-size:12px;margin-left:-5px;margin-top:5px;' class='fa  fa-chevron-up'></i></a><a class='btn btn-default btn-primary down' style='border-radius:50%;height:27px;width:27px;padding-top:0px;margin-left:10px' type='button'><i style='font-size:12px;margin-left:-5px;margin-top:5px;' class='fa  fa-chevron-down'></i></a>");
+                                $tr.append($tdenvName).append($tdActive).append($tdupdown);
+                                $tbody.append($tr);
+                            }
+                            $tableconfigureapplication.append($tbody);
+                            $tableconfigureapplication.find(".up,.down").click(function() {
+                                var row = $(this).parents("tr:first");
+                                if ($(this).is(".up")) {
+                                    row.insertBefore(row.prev());
+                                } else {
+                                    row.insertAfter(row.next());
+                                }
+                            });
+                        });
+                    }
+                });
+
+            }
+        },
+        error: function() {}
+    });
 });
 
 function ConvertTimeformat(format, str, formatStr) {
@@ -821,7 +1276,7 @@ function convertToDateObj(strInputDate) {
 	return dateConverted;
 }
 
-function createPipelineArea(envName, selectedEnv, projectId) {
+/*function createPipelineArea(envName, selectedEnv, projectId) {
 	var $stageContainer = $('.stageContainer');
 	var $envSpecificAppTemplate = $('.envSpecificAppTemplate');
 
@@ -1029,14 +1484,14 @@ function constructPipelineUI(data, $clonePipeline) {
 		}
 		$('#' + $clonePipeline).append($cloneAppInstanceUniqueCard);
 	}
-}
+}*/
 
 
-var $stageContainer = $('.stageContainer');
+/*var $stageContainer = $('.stageContainer');
 $stageContainer.on('click', '.moreinfoDetailsPipeline', moreinfoDetailsPipelineClickHandler);
 $stageContainer.on('click', '.moreinfoAppDeployPipeline', moreInfoAppDeployPipelineClickHandler);
-$stageContainer.on('click', '.moreinfoUpgradePipelineAppDeploy', moreInfoUpgradeAppDeployPipelineClickHandler);
-$('.appdeployConfigureSaveBtn').click(function() {
+$stageContainer.on('click', '.moreinfoUpgradePipelineAppDeploy', moreInfoUpgradeAppDeployPipelineClickHandler);*/
+/*$('.appdeployConfigureSaveBtn').click(function() {
 	var $tableconfigureapplication = $('#tableconfigureapplication');
 	var projectId = urlParams.projid;
 	var envNameSelected = "";
@@ -1092,6 +1547,69 @@ $('.appdeployConfigureSaveBtn').click(function() {
 			$('#modalappcardConfigure').modal('hide');
 		}
 	});
+});*/
+$('.appdeployConfigureSaveBtn').click(function() {
+    var $tableconfigureapplication = $('#tableconfigureapplication');
+    var projectId = urlParams.projid;
+    var configureEnvArray = [];
+    var configureEnvArraySequence = [];
+    var arrEnv = [];
+    var arrSequence = [];
+    arrEnv.push({
+        "title": ''
+    });
+    arrSequence.push('');
+    $tableconfigureapplication.find('tbody tr').each(function() {
+        $tr = $(this);
+        var envUniqueTextAllEnv = $tr.find('.configAppDeployUniqueName').text();
+        configureEnvArraySequence.push(envUniqueTextAllEnv);
+        arrSequence.push(envUniqueTextAllEnv);
+    });
+    $tableconfigureapplication.find('tbody tr').filter(':has(:checkbox:checked)').each(function() {
+        var $tr = $(this);
+        var envUniqueText = $tr.find('.configAppDeployUniqueName').text();
+        var obj = {
+            "title": envUniqueText
+        };
+        arrEnv.push(obj);
+        configureEnvArray.push(envUniqueText);
+    });
+    
+   	creationPipelineTableView(projectId,arrEnv,arrSequence);
+   
+    /*getenvName(function(envName) {
+        envNameSelected = envName;
+        if (configureEnvArray.length > 0) {
+            configureEnvArray.forEach(function(envUniqueText) {
+                createPipelineArea(envUniqueText, envNameSelected, projectId);
+            });
+        } else {
+            configureEnvArraySequence.forEach(function(envUniqueText) {
+                createPipelineArea(envUniqueText, envNameSelected, projectId);
+            });
+        }
+    });*/
+    var dataDeployPipeline = {
+        "appDeployPipelineData": {
+            "loggedInUser": "",
+        }
+    };
+    var projectId = urlParams.projid;
+    dataDeployPipeline.appDeployPipelineData.projectId = projectId;
+    dataDeployPipeline.appDeployPipelineData.envId = configureEnvArray;
+    dataDeployPipeline.appDeployPipelineData.envSequence = configureEnvArraySequence;
+    $.ajax({
+        url: '/app/deploy/data/pipeline/configure',
+        data: JSON.stringify(dataDeployPipeline),
+        type: 'POST',
+        contentType: "application/json",
+        success: function(data) {
+            $('#modalappcardConfigure').modal('hide');
+        },
+        error: function(jqxhr) {
+            $('#modalappcardConfigure').modal('hide');
+        }
+    });
 });
 $('#instanceviewAppCard').click(function() {
 	getenvName(function(envName) {
@@ -1106,7 +1624,7 @@ $('#defaultViewButtonAppCard').click(function() {
 	});
 });
 
-function moreinfoDetailsPipelineClickHandler(e) {
+/*function moreinfoDetailsPipelineClickHandler(e) {
 	var $modal = $('#modalDetailsAppDeploy');
 	var applicationNamePipelineText = $(this).parents().eq(5).find('.applicationNamePipeline').html();
 	$modal.find('.appNameModal').html(applicationNamePipelineText);
@@ -1195,16 +1713,16 @@ function moreInfoUpgradeAppDeployPipelineClickHandler(e) {
 	var $modal = $('#modalUpgradeAppDeploy');
 	$('#containerIdInput').val(containerId);
 	$modal.modal('show');
-}
+}*/
 
 function getEnvNameforConfigure() {
 	var projectId = urlParams.projid;
 	$.get('/d4dMasters/project/' + projectId, function(dataforenvName) {
 		var individualenvName = dataforenvName[0].environmentname;
 		individualenvName = individualenvName.split(",");
-		alert(individualenvName.length);
+		//alert(individualenvName.length);
 		for (var i = 0; i < individualenvName.length; i++) {
-			alert(individualenvName[i]);
+			//alert(individualenvName[i]);
 		}
 	});
 }
