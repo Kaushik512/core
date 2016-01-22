@@ -353,7 +353,7 @@
 		</div>
 	</div>
 </div>
-<div class="modal fade" id="modalDetailsAppDeploy" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+<!-- <div class="modal fade" id="modalDetailsAppDeploy" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<form role="form" id="" autocomplete="off">
@@ -425,9 +425,68 @@
 				</div>
 			</form>
 		</div>
-		<!-- /.modal-content -->
 	</div>
-	<!-- /.modal-dialog -->
+</div> -->
+<div class="modal fade" id="modalDetailsAppDeploy" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form role="form" id="" autocomplete="off">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        X
+                    </button>
+                    <h4 class="modal-title">
+						<i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Details
+					</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="">
+                        <table class="table table-bordered" cellpadding="5px" width="100%" id="">
+                            <thead>
+                                <tr class="tableStyleColor">
+                                    <th>Application Details</th>
+                                    <th>Application Values</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Application Name :</td>
+                                    <td class="appNameModal"></td>
+                                </tr>
+                                <!-- <tr>
+                                    <td>App-Instance Name :</td>
+                                    <td class="appInstanceNameModal"></td>
+                                </tr> -->
+                                <tr>
+                                    <td>Host :</td>
+                                    <td class="hostNameModal"></td>
+                                </tr>
+                                <tr>
+                                    <td>Node IP :</td>
+                                    <td class="nodeIpModal"></td>
+                                </tr>
+                                <tr>
+                                    <td>Container Name/ID :</td>
+                                    <td class="containerIdModal"></td>
+                                </tr>
+                                <tr>
+                                    <td>Status :</td>
+                                    <td class="statusModal"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="btn-group" style="margin-left:200px;">
+                        <a style="margin-left:10px;" class="btn btn-default" data-dismiss="modal">
+                            <i class="ace-icon fa fa-times bigger-110"></i> Cancel
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 <div class="modal fade" id="modalAppCardLogDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
 	<div class="modal-dialog">
@@ -708,6 +767,7 @@ $(document).ready(function() {
 getAllPipelineViewData();
 
 function getAllPipelineViewData() {
+	//alert("I am in getAllPipelineViewData function");
     var urlParams = {};
     (window.onpopstate = function() {
         var url = window.location.href;
@@ -725,7 +785,7 @@ function getAllPipelineViewData() {
     var projectId = urlParams.projid;
 
     $.get('/app/deploy/pipeline/project/' + projectId, function(dataPipeline) {
-        if (dataPipeline[0].envId.length > 0) {
+        if (dataPipeline.length) {
             var arrEnv = [];
             var arrSequence = [];
             arrEnv.push({
@@ -779,6 +839,7 @@ function getAllPipelineViewData() {
     }).fail(function() {});
 }
 function creationPipelineTableView(projectId,arrEnv,arrSequence){
+    //alert("I am in pipeline Tableview");
     var $tableClone = $('.tableClone').clone();
     $tableClone.removeClass('tableClone');
     $('#tableContainer').empty().append($tableClone);
@@ -880,7 +941,7 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
                     if($(arrSequence).get(-1) == arrSequence[j]){
                         //alert("Matched");
                         createStatusPresentCard(appDeployDataObj,applicationName,function(err,data){
-                            alert(data);
+                            //alert(data);
                             finalArray.push(data);
                         });
                     }
@@ -1659,9 +1720,9 @@ function getEnvNameforConfigure() {
 	$.get('/d4dMasters/project/' + projectId, function(dataforenvName) {
 		var individualenvName = dataforenvName[0].environmentname;
 		individualenvName = individualenvName.split(",");
-		alert(individualenvName.length);
+		//alert(individualenvName.length);
 		for (var i = 0; i < individualenvName.length; i++) {
-			alert(individualenvName[i]);
+			//alert(individualenvName[i]);
 		}
 	});
 }
