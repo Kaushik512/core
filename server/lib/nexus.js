@@ -67,7 +67,7 @@ var Nexus = function() {
         });
     }
 
-    this.getNexusArtifact = function(anId, repoName,groupId, callback) {
+    this.getNexusArtifact = function(anId, repoName, groupId, callback) {
         d4dModelNew.d4dModelMastersNexusServer.find({
             rowid: anId,
             id: "26"
@@ -92,9 +92,11 @@ var Nexus = function() {
                     var artifactList = [];
                     if (json) {
                         var artifacts = json['search-results'].data.artifact;
-                        for (var i = 0; i < artifacts.length; i++) {
-                            if (repoName === artifacts[i].repoId) {
-                                artifactList.push(artifacts[i]);
+                        if (artifacts.length) {
+                            for (var i = 0; i < artifacts.length; i++) {
+                                if (repoName === artifacts[i].repoId) {
+                                    artifactList.push(artifacts[i]);
+                                }
                             }
                         }
                     }
@@ -106,7 +108,7 @@ var Nexus = function() {
         });
     }
 
-    this.getNexusArtifactVersions = function(anId, repoName, groupId,artifactId, callback) {
+    this.getNexusArtifactVersions = function(anId, repoName, groupId, artifactId, callback) {
         d4dModelNew.d4dModelMastersNexusServer.find({
             rowid: anId,
             id: "26"
