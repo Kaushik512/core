@@ -1179,7 +1179,8 @@
 	                                alert("Please select repository.");
 	                                return false;
 	                            }*/
-	                            if ($(this).prop("checked")) {
+	                            /*alert($(this).prop("checked"));
+	                            if ($(this).prop("checked")) {*/
 	                                if (nexusServerType === "nexus") {
 	                                    var artifactId = $chooseArtifacts.find('option:selected').val();
 	                                    if (!artifactId) {
@@ -1203,6 +1204,7 @@
 	                                        "version": appVersion
 	                                    };
 	                                    reqBody.nexus = nexus;
+	                                    //alert(JSON);
 	                                } else {
 	                                    var dockerImage = $chooseRepository.val();
 	                                    var containerId = $('#containerIdDiv').val();
@@ -1218,7 +1220,7 @@
 	                                    };
 	                                    reqBody.docker = docker;
 	                                }
-	                            }
+	                            //}
 	                            console.log($('#compositedockertable').find('.dockerimagesrow').length);
 	                            $('.dockerimagesrow').each(function() {
 	                                dockerimages = {};
