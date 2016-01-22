@@ -35,13 +35,29 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     // Create AppDeploy
     app.post('/app/deploy', function(req, res) {
         logger.debug("Got appDeploy data: ", JSON.stringify(req.body.appDeployData));
-        AppDeploy.createNew(req.body.appDeployData, function(err, appDeploy) {
+        var appDeployData = req.body.appDeployData;
+        var instanceIp = appDeployData.applicationNodeIP.split(" ")[0];
+        instancesDao.getInstanceByIP(instanceIp, function(err, instance) {
             if (err) {
-                res.status(500).send(errorResponses.db.error);
+                logger.error("Failed to fetch instance: ", err);
+                res.status(500).send("Failed to fetch instance.");
                 return;
             }
-            if (appDeploy) {
-                res.status(200).send(appDeploy);
+            if (instance.length) {
+                var anInstance = instance[0];
+                appDeployData['projectId'] = anInstance.projectId;
+                AppDeploy.createNew(appDeployData, function(err, appDeploy) {
+                    if (err) {
+                        res.status(500).send(errorResponses.db.error);
+                        return;
+                    }
+                    if (appDeploy) {
+                        res.status(200).send(appDeploy);
+                        return;
+                    }
+                });
+            }else{
+                res.status(404).send("Project not found for instance: ",instanceIp);
                 return;
             }
         });
