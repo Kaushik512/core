@@ -68,12 +68,18 @@ mongoDbConnect(dboptions, function(err) {
   }
 });
 
-var mongoStore = new MongoStore({
-  // db: appConfig.db.dbName,
-  // host: appConfig.db.host,
-  // port: appConfig.db.port
-  mongooseConnection: mongoose.connection
+/*var mongoStore = new MongoStore({
+    db: appConfig.db.dbName,
+    host: appConfig.db.host,
+    port: appConfig.db.port
+}, function() {
+    server.listen(app.get('port'), function() {
+        logger.debug('Express server listening on port ' + app.get('port'));
+    });
+});*/
 
+var mongoStore = new MongoStore({
+    mongooseConnection: mongoose.connection
 }, function() {
 
 });

@@ -546,9 +546,18 @@ $(document).ready(function() {
                     nodesList.push(this.value);
                 }
             });
-            if (!nodesList.length) {
+
+            var $selectedBlueprints = $('#selectedBlueprintChefTask input[type=checkbox]');
+            var blueprintList = [];
+            $selectedBlueprints.each(function() {
+                if (this.checked) {
+                    blueprintList.push(this.value);
+                }
+            });
+
+            if (!nodesList.length && !blueprintList.length) {
                 bootbox.alert({
-                    message: 'Please choose nodes',
+                    message: 'Please choose either nodes or blueprints',
                     title: "Error"
                 });
                 return false;
@@ -562,8 +571,10 @@ $(document).ready(function() {
                 alert('Please choose runlist');
                 return false;
             }*/
+            taskData.blueprintIds = blueprintList;
             taskData.nodeIds = nodesList;
             taskData.runlist = runlist;
+            alert(JSON.stringify(taskData));
             //taskData.attributesjson = $('#attrtextarea').val().trim();
             $trAttribute = $('#attributesViewListTable').find('tbody tr');
             var attributes = [];

@@ -2409,6 +2409,18 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                             res.send(200);
                                             return;
                                         });
+                                    }else if (req.params.id === '26') {
+                                        bodyJson['groupid'] = JSON.parse(bodyJson['groupid']);
+                                        var nexusModel = new d4dModelNew.d4dModelMastersNexusServer(bodyJson);
+                                        nexusModel.save(function(err, data) {
+                                            if (err) {
+                                                logger.error('Hit Save error', err);
+                                                res.send(500);
+                                                return;
+                                            }
+                                            res.send(200);
+                                            return;
+                                        });
                                     } else {
                                         eval('var mastersrdb =  new d4dModelNew.' + dbtype + '({' + JSON.parse(FLD) + '})');
                                         mastersrdb.save(function(err, data) {
@@ -2463,6 +2475,29 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                         eval('d4dModelNew.' + dbtype).update({
                                             rowid: bodyJson["rowid"],
                                             "id": "4"
+                                        }, {
+                                            $set: rowtoedit
+                                        }, {
+                                            upsert: false
+                                        }, function(err, saveddata) {
+                                            if (err) {
+                                                logger.error('Hit Save error', err);
+                                                res.send(500);
+                                                return;
+                                            }
+                                            res.send(200);
+                                            return;
+                                        });
+                                    }
+
+                                    if (req.params.id === '26') {
+                                        bodyJson['groupid'] = JSON.parse(bodyJson['groupid']);
+                                        delete rowtoedit._id; //fixing the issue of 
+                                        rowtoedit["groupid"] = bodyJson['groupid'];
+                                        logger.debug('Rowtoedit: %s', JSON.stringify(rowtoedit));
+                                        eval('d4dModelNew.' + dbtype).update({
+                                            rowid: bodyJson["rowid"],
+                                            "id": "26"
                                         }, {
                                             $set: rowtoedit
                                         }, {

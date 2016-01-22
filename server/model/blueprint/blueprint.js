@@ -21,6 +21,7 @@ var VmwareBlueprint = require('./blueprint-types/instance-blueprint/vmware-bluep
 
 var CloudFormationBlueprint = require('./blueprint-types/cloud-formation-blueprint/cloud-formation-blueprint');
 var ARMTemplateBlueprint = require('./blueprint-types/arm-template-blueprint/arm-template-blueprint');
+var utils = require('../classes/utils/utils.js');
 
 var BLUEPRINT_TYPE = {
     DOCKER: 'docker',
@@ -88,6 +89,18 @@ var BlueprintSchema = new Schema({
         type: String,
         required: true,
         trim: true
+    },
+    repoType: {
+        type: String
+    },
+    nexus: {
+        url: String,
+        version: String
+    },
+    docker: {
+        image: String,
+        containerId: String,
+        containerPort: String
     },
     blueprintConfig: Schema.Types.Mixed
 });
@@ -235,7 +248,9 @@ BlueprintSchema.statics.createNew = function(blueprintData, callback) {
         templateType: blueprintData.templateType,
         users: blueprintData.users,
         blueprintConfig: blueprintConfig,
-        blueprintType: blueprintType
+        blueprintType: blueprintType,
+        nexus: blueprintData.nexus,
+        docker: blueprintData.docker
     };
     var blueprint = new Blueprints(blueprintObj);
     logger.debug('saving');
@@ -295,6 +310,51 @@ BlueprintSchema.statics.getBlueprintsByOrgBgProject = function(orgId, bgId, proj
         callback(null, blueprints);
     });
 };
+
+BlueprintSchema.methods.getCookBookAttributes = function() {
+    var blueprint = this;
+    //merging attributes Objects
+    var attributeObj = {};
+    var objectArray = [];
+    // While passing extra attribute to chef cookbook "rlcatalyst" is used as attribute.
+    if (blueprint.nexus) {
+        objectArray.push({
+            "rlcatalyst": {
+                "nexusUrl": blueprint.nexus.url
+            }
+        });
+        objectArray.push({
+            "rlcatalyst": {
+                "version": blueprint.nexus.version
+            }
+        });
+    }
+    if (blueprint.docker) {
+        objectArray.push({
+            "rlcatalyst": {
+                "containerId": blueprint.docker.containerId
+            }
+        });
+        objectArray.push({
+            "rlcatalyst": {
+                "containerPort": blueprint.docker.containerPort
+            }
+        });
+        objectArray.push({
+            "rlcatalyst": {
+                "dockerRepo": blueprint.docker.image
+            }
+        });
+    }
+    /*objectArray.push({
+        "rlcatalyst": {
+            "upgrade": false
+        }
+    });*/
+    logger.debug("AppDeploy attributes: ", JSON.stringify(objectArray));
+    var attributeObj = utils.mergeObjects(objectArray);
+    return attributeObj;
+}
 
 var Blueprints = mongoose.model('blueprints', BlueprintSchema);
 

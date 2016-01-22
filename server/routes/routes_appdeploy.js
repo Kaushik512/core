@@ -185,4 +185,21 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             }
         });
     });
+
+    // Appdeploy api supported by pagination,search and sort
+    app.post('/app/deploy/list', function(req, res) {
+        logger.debug("req query: ",JSON.stringify(req.query));
+        var offset=req.query.offset;
+        var limit=req.query.limit;
+        var sortBy=req.body.sortBy;
+        var searchBy=req.body.searchBy;
+        AppDeploy.getAppDeployWithPage(offset, limit, sortBy,searchBy, function(err, appDeploy) {
+            if (err) {
+                res.status(500).send(errorResponses.db.error);
+                return;
+            }
+            res.status(200).send(appDeploy);
+            return;
+        });
+    });
 };

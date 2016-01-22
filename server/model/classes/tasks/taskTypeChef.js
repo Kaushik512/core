@@ -30,7 +30,8 @@ var chefTaskSchema = taskTypeSchema.extend({
     attributes: [{
         name: String,
         jsonObj: {}
-    }]
+    }],
+    blueprintIds: [String]
 });
 
 //Instance Methods :- getNodes
@@ -87,14 +88,6 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusD
             objectArray.push({
                 "rlcatalyst": {
                     "upgrade": nexusData.upgrade
-                }
-            });
-        }
-
-        if (nexusData.projectId) {
-            objectArray.push({
-                "rlcatalyst": {
-                    "projectId": nexusData.projectId
                 }
             });
         }
