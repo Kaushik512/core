@@ -1858,13 +1858,18 @@
 	                    var nexusId = $nexusServer.val();
 	                    var groupId = $('#chooseGroupId').val();
 	                    var $chooseGroupId = $('#chooseGroupId');
-						$chooseGroupId.empty();
-						$('#chooseGroupId').append('<option value="">Choose Group ID</option>');
+						
+	                    if(!repoName){
+	                    	$chooseGroupId.empty();
+							$('#chooseGroupId').append('<option value="">Choose Group ID</option>');
 
-						var groupId = $('#chooseNexusServer :selected').attr('data-groupId').split(",");
-						for(var g=0; g< groupId.length; g++){
-							$('#chooseGroupId').append('<option value="' + groupId[g] + '">' + groupId[g] + '</option>');
-						}
+							var groupId = $('#chooseNexusServer :selected').attr('data-groupId').split(",");
+							for(var g=0; g< groupId.length; g++){
+								$('#chooseGroupId').append('<option value="' + groupId[g] + '">' + groupId[g] + '</option>');
+							}
+	                    }else{
+	                    	$('#chooseGroupId > option:eq(1)').attr('selected', true).change();
+	                    }
 	                    getNexusServerRepoArtifact(nexusId, repoName,groupId);
 	                } else {
 	                	$('.groupClass').hide();
