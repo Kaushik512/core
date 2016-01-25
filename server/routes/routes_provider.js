@@ -2622,7 +2622,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                 return;
                             }
                             var providersList = {};
-                            if (providers.length > 0) {
+                            if (providers && providers.length > 0) {
                                 var awsProviderList = [];
                                 for (var i = 0; i < providers.length; i++) {
                                     var keys = [];
