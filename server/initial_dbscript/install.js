@@ -64,9 +64,9 @@ mongoDbConnect(dboptions, function(err) {
 
             // provide ldap information here.
             var ldapUser = {
-                host: 'hghhh',
+                host: '',
                 port: 0,
-                adminUser: 'ffsdfdffd',
+                adminUser: '',
                 adminPass: '',
                 baseDn: '',
                 ou: ''
