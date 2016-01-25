@@ -38,6 +38,18 @@ module.exports.createRole = function(roleName, permissionsObj, callback) {
 
 };
 
+module.exports.createNew = function(roleData, callback) {
+	var roles = new Role(roleData);
+	roles.save(function(err, data) {
+		if (err) {
+			callback(err, null);
+		} else {
+			callback(null, data);
+		}
+	});
+
+};
+
 module.exports.getRoleById = function(roleId, callback) {
 	logger.debug('RoleID' + roleId);
 	Role.find({
