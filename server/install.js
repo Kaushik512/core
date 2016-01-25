@@ -127,16 +127,8 @@ function getDefaultsConfig() {
             port: '27017'
         },
         authStrategy: {
-            local: false,
-            externals: true
-        },
-        ldap: {
-            host: '54.68.204.110',
-            port: 389,
-            adminUser: 'Admin',
-            adminPass: 'ReleV@ance',
-            baseDn: 'dc=d4d-ldap,dc=relevancelab,dc=com',
-            ou: ''
+            local: true,
+            externals: false
         },
         logServerUrl: '',
         features: {
@@ -231,8 +223,8 @@ function getConfig(config, options) {
     config.db.host = options['db-host'] ? options['db-host'] : config.db.host;
     config.db.port = options['db-port'] ? options['db-port'] : config.db.port;
     config.db.dbName = options['db-name'] ? options['db-name'] : config.db.dbName;
-    config.ldap.host = options['ldap-host'] ? options['ldap-host'] : config.ldap.host;
-    config.ldap.port = options['ldap-port'] ? options['ldap-port'] : config.ldap.port;
+    //config.ldap.host = options['ldap-host'] ? options['ldap-host'] : config.ldap.host;
+    //config.ldap.port = options['ldap-port'] ? options['ldap-port'] : config.ldap.port;
     if (options['max-instance-count']) {
         var maxInstanceCount = parseInt(options['max-instance-count']);
         if (maxInstanceCount) {
@@ -364,15 +356,15 @@ proc.on('close', function(code) {
         if (options['seed-data']) {
             fsExtra.emptydirSync(config.catalystDataDir);
             restoreSeedData(config, function() {
-                if (options['ldap-user']) {
+                /*if (options['ldap-user']) {
                     setupLdapUser(config, function() {
                         createConfigFile(config);
                         installPackageJson();
                     });
-                } else {
+                } else {*/
                     createConfigFile(config);
                     installPackageJson();
-                }
+                //}
             });
         } else {
             createConfigFile(config);

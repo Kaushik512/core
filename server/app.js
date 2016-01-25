@@ -29,22 +29,34 @@ var expressBodyParser = require('body-parser');
 var multipart = require('connect-multiparty');
 var expressMultipartMiddleware = multipart();
 var appConfig = require('_pr/config');
+var mongoose = require('mongoose');
 var MongoStore = require('connect-mongo')(expressSession);
 var mongoDbConnect = require('_pr/lib/mongodb');
 var mongoose = require('mongoose');
 
 logger.debug('Starting Catalyst');
 logger.debug('Logger Initialized');
-
-// setting up up passport authentication strategy
-passport.use(new passportLdapStrategy({
-  host: appConfig.ldap.host,
-  port: appConfig.ldap.port,
-  baseDn: appConfig.ldap.baseDn,
-  ou: appConfig.ldap.ou,
-  usernameField: 'username',
-  passwordField: 'pass'
-}));
+var LDAPUser = require('_pr/model/ldap-user/ldap-user.js');
+LDAPUser.getLdapUser(function(err, ldapData) {
+    if (err) {
+        logger.error("Failed to get ldap-user: ", err);
+        return;
+    }
+    if (ldapData.length) {
+        // setting up up passport authentication strategy
+        var ldapUser =ldapData[0];
+        passport.use(new passportLdapStrategy({
+            host: ldapUser.host,
+            port: ldapUser.port,
+            baseDn: ldapUser.baseDn,
+            ou: ldapUser.ou,
+            usernameField: 'username',
+            passwordField: 'pass'
+        }));
+    }else{
+        logger.debug("No Ldap User found.");
+    }
+});
 
 passport.serializeUser(function(user, done) {
   done(null, user);
@@ -119,6 +131,8 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 }*/
 
 var server = http.createServer(app);
+
+
 // setting up socket.io
 io = io.listen(server, {
   log: false
@@ -152,3 +166,4 @@ io.sockets.on('connection', function(socket) {
 server.listen(app.get('port'), function() {
   logger.debug('Express server listening on port ' + app.get('port'));
 });
+
