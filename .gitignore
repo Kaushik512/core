@@ -8,3 +8,16 @@ tempfiles/
 seed/copychefidtoinstance.js
 server/catdata/
 server/vspheretest.js
+*.pem
+*.key
+*.cert
+*.zip
+*.gz
+*.psd
+*.out
+*.error
+*.debug
+*.log
+*.npmrc
+*.lock
+*.svn
