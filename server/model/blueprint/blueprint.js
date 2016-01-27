@@ -22,6 +22,7 @@ var VmwareBlueprint = require('./blueprint-types/instance-blueprint/vmware-bluep
 var CloudFormationBlueprint = require('./blueprint-types/cloud-formation-blueprint/cloud-formation-blueprint');
 var ARMTemplateBlueprint = require('./blueprint-types/arm-template-blueprint/arm-template-blueprint');
 var utils = require('../classes/utils/utils.js');
+var nexus = require('_pr/lib/nexus.js');
 
 var BLUEPRINT_TYPE = {
     DOCKER: 'docker',
@@ -91,11 +92,16 @@ var BlueprintSchema = new Schema({
         trim: true
     },
     repoType: {
-        type: String
+        type: String,
+        trim: true
     },
     nexus: {
+        repoId: String,
         url: String,
-        version: String
+        version: String,
+        repoName: String,
+        groupId: String,
+        artifactId: String
     },
     docker: {
         image: String,
@@ -250,7 +256,8 @@ BlueprintSchema.statics.createNew = function(blueprintData, callback) {
         blueprintConfig: blueprintConfig,
         blueprintType: blueprintType,
         nexus: blueprintData.nexus,
-        docker: blueprintData.docker
+        docker: blueprintData.docker,
+        repoId: blueprintData.repoId
     };
     var blueprint = new Blueprints(blueprintObj);
     logger.debug('saving');
@@ -311,22 +318,72 @@ BlueprintSchema.statics.getBlueprintsByOrgBgProject = function(orgId, bgId, proj
     });
 };
 
-BlueprintSchema.methods.getCookBookAttributes = function() {
+BlueprintSchema.methods.getCookBookAttributes = function(callback) {
     var blueprint = this;
     //merging attributes Objects
     var attributeObj = {};
     var objectArray = [];
     // While passing extra attribute to chef cookbook "rlcatalyst" is used as attribute.
     if (blueprint.nexus) {
+        var nexusRepoUrl = "";
+        var url = blueprint.nexus.url;
+        var repoName = blueprint.nexus.repoName;
+        var groupId = blueprint.nexus.groupId;
+        var artifactId = blueprint.nexus.artifactId;
+        var version = blueprint.nexus.version;
         objectArray.push({
             "rlcatalyst": {
-                "nexusUrl": blueprint.nexus.url
+                "upgrade": false
             }
         });
-        objectArray.push({
-            "rlcatalyst": {
-                "version": blueprint.nexus.version
+
+        nexus.getNexusArtifactVersions(blueprint.nexus.repoId, repoName, groupId, artifactId, function(err, data) {
+            if (err) {
+                logger.debug("Failed to fetch Repository from Mongo: ", err);
+                // repoName is hardcoded, need to find better way to make dynamic.
+                if (repoName === "petclinic") {
+                    nexusRepoUrl = url + "/service/local/repositories/" + repoName + "/content/" + groupId + "/" + artifactId + "/" + version + "/" + artifactId + "-" + version + ".war";
+                } else {
+                    nexusRepoUrl = url + "/service/local/repositories/" + repoName + "/content/" + groupId + "/" + artifactId + "/" + version + "/" + artifactId + "-" + version + ".zip";
+                }
+                objectArray.push({
+                    "rlcatalyst": {
+                        "nexusUrl": nexusRepoUrl
+                    }
+                });
+                objectArray.push({
+                    "rlcatalyst": {
+                        "version": version
+                    }
+                });
             }
+
+            if (data) {
+                var versions = data.metadata.versioning[0].versions[0].version;
+                var latestVersionIndex = versions.length;
+                var latestVersion = versions[latestVersionIndex - 1];
+                logger.debug("Got latest catalyst version from nexus: ", latestVersion);
+                // repoName is hardcoded, need to find better way to make dynamic
+                if (repoName === "petclinic") {
+                    nexusRepoUrl = url + "/service/local/repositories/" + repoName + "/content/" + groupId + "/" + artifactId + "/" + latestVersion + "/" + artifactId + "-" + latestVersion + ".war";
+                } else {
+                    nexusRepoUrl = url + "/service/local/repositories/" + repoName + "/content/" + groupId + "/" + artifactId + "/" + latestVersion + "/" + artifactId + "-" + latestVersion + ".zip";
+                }
+                objectArray.push({
+                    "rlcatalyst": {
+                        "nexusUrl": nexusRepoUrl
+                    }
+                });
+                objectArray.push({
+                    "rlcatalyst": {
+                        "version": latestVersion
+                    }
+                });
+            } else {
+                logger.debug("No artifact version found.");
+            }
+            var attributeObj = utils.mergeObjects(objectArray);
+            callback(null, attributeObj);
         });
     }
     if (blueprint.docker) {
@@ -345,15 +402,14 @@ BlueprintSchema.methods.getCookBookAttributes = function() {
                 "dockerRepo": blueprint.docker.image
             }
         });
+        objectArray.push({
+            "rlcatalyst": {
+                "upgrade": false
+            }
+        });
+        var attrs = utils.mergeObjects(objectArray);
+        callback(null, attrs);
     }
-    /*objectArray.push({
-        "rlcatalyst": {
-            "upgrade": false
-        }
-    });*/
-    logger.debug("AppDeploy attributes: ", JSON.stringify(objectArray));
-    var attributeObj = utils.mergeObjects(objectArray);
-    return attributeObj;
 }
 
 var Blueprints = mongoose.model('blueprints', BlueprintSchema);
