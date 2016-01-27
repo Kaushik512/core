@@ -1920,6 +1920,7 @@ var MasterUtil = function() {
                                             var containerId = [];
                                             var hostName = [];
                                             var envId = [];
+                                            var appLog = [];
                                             for(var l=0;l<filteredData.length;l++){
                                                 applicationInstanceName.push(filteredData[l].applicationInstanceName);
                                                 applicationNodeIP.push(filteredData[l].applicationNodeIP);
@@ -1928,6 +1929,7 @@ var MasterUtil = function() {
                                                 containerId.push(filteredData[l].containerId);
                                                 hostName.push(filteredData[l].hostName);
                                                 envId.push(filteredData[l].envId);
+                                                appLog.push(filteredData[l].appLogs);
                                             }
                                             var tempJson = {
                                                 "applicationName":applicationName,
@@ -1940,6 +1942,7 @@ var MasterUtil = function() {
                                                 "containerId":containerId,
                                                 "hostName":hostName,
                                                 "envId":envId,
+                                                "appLogs" : appLog
                                             };
                                             finalJson.push(tempJson);
                                             if(filterArray.length === count){

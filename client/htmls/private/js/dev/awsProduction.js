@@ -1192,7 +1192,8 @@
 	                                        alert("Please select version.");
 	                                        return false;
 	                                    }
-	                                    var groupId = $chooseGroupId.find('option:selected').val();
+	                                    var $chooseGroupId = $('#chooseGroupId');
+	                                    var groupId = $chooseGroupId.find('option:selected').val().replace(/\./g, '/');
 	                                    // var groupId = $chooseArtifacts.find('option:selected').attr('data-groupId').replace(/\./g, '/');
 	                                    if (repoId === "petclinic") {
 	                                        nexusRepoUrl = nexusUrl + "/service/local/repositories/" + repoId + "/content/" + groupId + "/" + artifactId + "/" + versionId + "/" + artifactId + "-" + versionId + ".war";

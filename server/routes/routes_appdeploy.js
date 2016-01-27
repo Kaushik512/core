@@ -13,7 +13,7 @@ var AppDeploy = require('_pr/model/app-deploy/app-deploy');
 var errorResponses = require('./error_responses');
 var AppData = require('_pr/model/app-deploy/app-data');
 var masterUtil = require('_pr/lib/utils/masterUtil.js');
-
+var instancesDao = require('../model/classes/instance/instance');
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.all('/app/deploy/*', sessionVerificationFunc);
@@ -35,13 +35,30 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     // Create AppDeploy
     app.post('/app/deploy', function(req, res) {
         logger.debug("Got appDeploy data: ", JSON.stringify(req.body.appDeployData));
-        AppDeploy.createNew(req.body.appDeployData, function(err, appDeploy) {
+        var appDeployData = req.body.appDeployData;
+        var instanceIp = appDeployData.applicationNodeIP.trim().split(" ")[0];
+        instancesDao.getInstanceByIP(instanceIp, function(err, instance) {
             if (err) {
-                res.status(500).send(errorResponses.db.error);
+                logger.error("Failed to fetch instance: ", err);
+                res.status(500).send("Failed to fetch instance.");
                 return;
             }
-            if (appDeploy) {
-                res.status(200).send(appDeploy);
+            if (instance.length) {
+                var anInstance = instance[0];
+                appDeployData['projectId'] = anInstance.projectId;
+                logger.debug("Before save appDeploy: ", JSON.stringify(appDeployData));
+                AppDeploy.createNew(appDeployData, function(err, appDeploy) {
+                    if (err) {
+                        res.status(500).send(errorResponses.db.error);
+                        return;
+                    }
+                    if (appDeploy) {
+                        res.status(200).send(appDeploy);
+                        return;
+                    }
+                });
+            } else {
+                res.status(404).send("Project not found for instance: ", instanceIp);
                 return;
             }
         });
@@ -65,38 +82,23 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
 
-    // Get all AppData
-    app.get('/app/deploy/data/list', function(req, res) {
-        logger.debug("Data list api called...");
-        AppData.getAppData(function(err, appDeployes) {
-            if (err) {
-                res.status(500).send(errorResponses.db.error);
-                return;
-            }
-            if (appDeployes) {
-                res.status(200).send(appDeployes);
-                return;
-            }
-        });
-    });
-
-    // Create AppData
+    // Create or update AppData
     app.post('/app/deploy/data/create', function(req, res) {
-        AppData.createNew(req.body.appDeployData, function(err, appDeployes) {
+        AppData.createNewOrUpdate(req.body.appData, function(err, appData) {
             if (err) {
-                res.status(403).send("Application Already Exist.");
+                res.status(500).send("Failed to get appData.");
                 return;
             }
-            if (appDeployes) {
-                res.status(200).send(appDeployes);
+            if (appData) {
+                res.status(200).send(appData);
                 return;
             }
         });
     });
 
     // Get all AppData by name
-    app.get('/app/deploy/data/env/:envName/:appName/project/:projectId/list', function(req, res) {
-        masterUtil.getAppDataByName(req.params.envName, req.params.appName, req.params.projectId, function(err, appDatas) {
+    app.get('/app/deploy/data/node/:nodeIp/project/:projectId/env/:envName', function(req, res) {
+        AppData.getAppDataByIpAndProjectAndEnv(req.params.nodeIp, req.params.projectId, req.params.envName, function(err, appDatas) {
             if (err) {
                 res.status(500).send("Please add app name.");
                 return;
@@ -108,19 +110,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
 
-    // Get all AppData
-    app.get('/app/deploy/list', function(req, res) {
-        AppData.getAppDataWithDeploy(function(err, appDeployes) {
-            if (err) {
-                res.status(500).send(errorResponses.db.error);
-                return;
-            }
-            if (appDeployes) {
-                res.status(200).send(appDeployes);
-                return;
-            }
-        });
-    });
 
     // Get respective Logs
     app.get('/app/deploy/:appId/logs', function(req, res) {
@@ -188,12 +177,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     // Appdeploy api supported by pagination,search and sort
     app.post('/app/deploy/list', function(req, res) {
-        logger.debug("req query: ",JSON.stringify(req.query));
-        var offset=req.query.offset;
-        var limit=req.query.limit;
-        var sortBy=req.body.sortBy;
-        var searchBy=req.body.searchBy;
-        AppDeploy.getAppDeployWithPage(offset, limit, sortBy,searchBy, function(err, appDeploy) {
+        logger.debug("req query: ", JSON.stringify(req.query));
+        var offset = req.query.offset;
+        var limit = req.query.limit;
+        var sortBy = req.body.sortBy;
+        var searchBy = req.body.searchBy;
+        AppDeploy.getAppDeployWithPage(offset, limit, sortBy, searchBy, function(err, appDeploy) {
             if (err) {
                 res.status(500).send(errorResponses.db.error);
                 return;
