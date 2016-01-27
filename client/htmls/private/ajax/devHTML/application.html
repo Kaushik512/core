@@ -125,7 +125,7 @@
 										</div>
 									</div>
 								</span>
-								<span class="secondChildSpanTemplate" style="padding-left:20px;">
+								<span class="secondChildSpanTemplate">
 									<a href="javascript:void" class="spanChildPromote">
 				                        <i class="fa fa-arrow-right txt-color-blue" style="font-size: 18px;margin-top:27px"></i>
 				                    </a>
@@ -787,24 +787,28 @@ function getAllPipelineViewData() {
     $.get('/app/deploy/pipeline/project/' + projectId, function(dataPipeline) {
         if (dataPipeline.length) {
             var arrEnv = [];
+            var arrPresentEnvSeq = [];
             var arrSequence = [];
             arrEnv.push({
                 "title": ''
             });
             arrSequence.push('');
+            arrPresentEnvSeq.push('');
             for (var i = 0; i < dataPipeline[0].envId.length; i++) {
                 var envUniqueText = dataPipeline[0].envId[i];
                 var obj = {
                     "title": envUniqueText
                 };
                 arrEnv.push(obj);
+                arrPresentEnvSeq.push(envUniqueText);
             }
             for (var j = 0; j < dataPipeline[0].envSequence.length; j++) {
                 var envUniqueText = dataPipeline[0].envSequence[j];
                 arrSequence.push(envUniqueText);
             }
             if(arrSequence[dataPipeline[0].envSequence.length] && arrEnv[dataPipeline[0].envId.length]){
-                creationPipelineTableView(projectId,arrEnv,arrSequence);
+            	//alert("Hi");
+                creationPipelineTableView(projectId,arrEnv,arrPresentEnvSeq);
             }
             
         } else {
@@ -813,10 +817,12 @@ function getAllPipelineViewData() {
                 individualenvName = individualenvName.split(",");
                 var arrEnv = [];
                 var arrSequence = [];
+                var arrPresentEnvSeq = [];
                 arrEnv.push({
                     "title": ''
                 });
                 arrSequence.push('');
+                arrPresentEnvSeq.push('');
 
                 for (var i = 0; i < individualenvName.length; i++) {
                     var envUniqueText = individualenvName[i];
@@ -831,19 +837,20 @@ function getAllPipelineViewData() {
                 console.log('array sequence');
                 console.log(arrSequence);
                 if(arrSequence[individualenvName.length]){
-                    creationPipelineTableView(projectId,arrEnv,arrSequence);
+                    creationPipelineTableView(projectId,arrEnv,arrPresentEnvSeq);
                 }
 
             }).fail(function() {});
         }
     }).fail(function() {});
 }
+
 function creationPipelineTableView(projectId,arrEnv,arrSequence){
     //alert("I am in pipeline Tableview");
     var $tableClone = $('.tableClone').clone();
     $tableClone.removeClass('tableClone');
     $('#tableContainer').empty().append($tableClone);
-    
+    //alert("Hello");
     $tableClone.DataTable({
         columns: arrEnv,
         "bSort": false,
@@ -853,6 +860,7 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
         "bFilter": false,
         "bLengthChange": false
     });
+    //alert(arrSequence.length);
     $tableClone.find('thead th').addClass('padding-left5per');
     var $tableapplicationTest = $tableClone;
     var $tableapplicationTbody = $tableClone.find('tbody');
@@ -928,21 +936,31 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
             var applicationName = appDeployDataObj.applicationName;
             var versionNumber = appDeployDataObj.applicationVersion;
             var applicationEnvList=appDeployDataObj.envId;
-               for (var j = 0; j < arrSequence.length; j++) {
+            //alert($(arrSequence).get(-1));
+            //alert(arrSequence.length);
+
+
+            /*for (var j = 0; j < arrSequence.length; j++) {
                 countColumn++;
+                //alert(arrSequence[j]);
                 //application main card
+                
                 if(j==0 && arrSequence[j]===""){
                     var obj = createMainCard(applicationName,versionNumber);
                     finalArray.push(createMainCard(applicationName,versionNumber));
                 }
                 else if($.inArray(arrSequence[j],applicationEnvList)!==-1){
                     //application status present card
-                    //alert($(arrSequence).get(-1));
+                    // alert($(arrSequence).get(-1));
+                    // alert(arrSequence[j]);
+                    //returns the last item in the list
                     if($(arrSequence).get(-1) == arrSequence[j]){
                         //alert("Matched");
                         createStatusPresentCard(appDeployDataObj,applicationName,function(err,data){
                             //alert(data);
-                            finalArray.push(data);
+                            var $childPresentCard = data;
+                            
+                            finalArray.push($childPresentCard);
                         });
                     }
                     else{
@@ -964,23 +982,95 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
                     $childPresentCard.find('.applicationChildDetails').removeClass('btn-primary').addClass('btn-grey');
                     $childPresentCard.find('.lastapplicationDeploy').html('');
                     //$childPresentCard.find('.footer-innerdiv').html('');
-                        $childPresentCard.children().css({
-                            'opacity': '0.5',
-                            'pointer-events': 'none'
+                    $childPresentCard.children().css({
+                        'opacity': '0.5',
+                        'pointer-events': 'none'
+                    });
+                    
+                    var $childCardtemplateStr = $childPresentCard.prop('outerHTML');
+                    tempStr = tempStr + $childCardtemplateStr;
+                    finalArray.push(tempStr);
+                } 
+            }*/
+
+            for (var j = 0; j < arrSequence.length; j++) {
+                countColumn++;
+                //alert(arrSequence[j]);
+                //application main card
+                
+                if(j==0 && arrSequence[j]===""){
+                    var obj = createMainCard(applicationName,versionNumber);
+                    finalArray.push(createMainCard(applicationName,versionNumber));
+                }
+                else if($.inArray(arrSequence[j],applicationEnvList)!==-1){
+                    //application status present card
+                    // alert($(arrSequence).get(-1));
+                    // alert(arrSequence[j]);
+                    //returns the last item in the list
+                    if($(arrSequence).get(-1) == arrSequence[j]){
+                        //alert("Matched");
+                        createStatusPresentCard(appDeployDataObj,applicationName,function(err,data){
+                            //alert(data);
+                            var $childPresentCard = data;
+                            
+                            finalArray.push($childPresentCard);
                         });
-                    //$childPresentCard.find('.applicationChildDetails').attr('disabled');
-                    //$childPresentCard.find('.applicationChildmoreInfo').attr('disabled');
+                    }
+                    else{
+                        createStatusPresentCard(appDeployDataObj,applicationName,function(err,data){
+                            finalArray.push(data);
+                        });
+                    }
+                }else{
+                    //application status absent card
+                    var tempStr = '';
+                    var $childCardTemplate = $('.childCardTemplate');
+                    var $childPresentCard = $childCardTemplate.clone(true);
+                    $childPresentCard.css({
+                        display: 'inline-flex'
+                    });
+                    $childPresentCard.find('.applicationChildIP').html('');
+                    $childPresentCard.find('.lastDeploySpan').html('');
+                    $childPresentCard.find('.imgHeight').attr("src","img/rsz_inactive.png");
+                    $childPresentCard.find('.applicationChildDetails').removeClass('btn-primary').addClass('btn-grey');
+                    $childPresentCard.find('.lastapplicationDeploy').html('');
+                    //$childPresentCard.find('.footer-innerdiv').html('');
+                    $childPresentCard.children().css({
+                        'opacity': '0.5',
+                        'pointer-events': 'none'
+                    });
                     
                     var $childCardtemplateStr = $childPresentCard.prop('outerHTML');
                     tempStr = tempStr + $childCardtemplateStr;
                     finalArray.push(tempStr);
                 } 
             }
-            $tableapplicationTest.dataTable().fnAddData(finalArray);
-            //alert($('#tableContainer table tbody td').outerWidth()); 
-        });        
+          	//debugger;
+           //alert(finalArray.length);
+
+           for (var j = 0; j < arrEnv.length; j++) {
+	           var finalString = $(finalArray).get(-1);
+	           finalArray.pop();
+	           var firstSubStr = finalString.lastIndexOf('<span');
+	           var lastSubStr = finalString.lastIndexOf('</span>');
+
+	           var finalstr = finalString.substring(0,firstSubStr);
+	           var superFinalString = finalstr +"</div>";
+	           finalArray.push(superFinalString);
+	       	}
+
+
+           $tableapplicationTest.dataTable().fnAddData(finalArray);
+
+        }); 
     });
-    
+	setTimeout(function(){
+		var childCardTemplWidth = $('#tableContainer .childCardTemplate').outerWidth();
+		var firstChildSpanTemplWidth = $('#tableContainer .firstChildSpanTemplate').outerWidth();
+		var diff = childCardTemplWidth - firstChildSpanTemplWidth;
+		var actualSetDiff = diff/2;
+		$('#tableContainer .childCardTemplate .secondChildSpanTemplate').css('padding-left',actualSetDiff);
+	},10000);
     $tableapplicationTbody.on('click','.applicationChildDetails',moreinfoDetailsPipelineViewClickHandler);
 }
 
@@ -1243,7 +1333,6 @@ $('.createAppConfigure').click(function() {
         error: function() {}
     });
 });
-
 function ConvertTimeformat(format, str, formatStr) {
 	var time = str;
 	var hours = Number(time.match(/^(\d+)/)[1]);
@@ -1555,10 +1644,12 @@ $('.appdeployConfigureSaveBtn').click(function() {
     var configureEnvArraySequence = [];
     var arrEnv = [];
     var arrSequence = [];
+    var arrPresentEnvSeq = [];
     arrEnv.push({
         "title": ''
     });
     arrSequence.push('');
+    arrPresentEnvSeq.push('');
     $tableconfigureapplication.find('tbody tr').each(function() {
         $tr = $(this);
         var envUniqueTextAllEnv = $tr.find('.configAppDeployUniqueName').text();
@@ -1572,10 +1663,11 @@ $('.appdeployConfigureSaveBtn').click(function() {
             "title": envUniqueText
         };
         arrEnv.push(obj);
+        arrPresentEnvSeq.push(envUniqueText);
         configureEnvArray.push(envUniqueText);
     });
     
-   	creationPipelineTableView(projectId,arrEnv,arrSequence);
+   	creationPipelineTableView(projectId,arrEnv,arrPresentEnvSeq);
    
     /*getenvName(function(envName) {
         envNameSelected = envName;

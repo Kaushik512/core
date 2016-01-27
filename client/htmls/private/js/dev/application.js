@@ -1455,6 +1455,7 @@ $("#tableappParamDeploy_filter").hide();
 var urlParams = {};
 (window.onpopstate = function() {
     var url = window.location.href;
+    alert(typeof url);
     var indexOfQues = url.lastIndexOf("?");
     if (indexOfQues != -1) {
         var sub = url.substring(indexOfQues + 1);
