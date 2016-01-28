@@ -11,6 +11,22 @@ var extend = require('mongoose-schema-extend');
 var ObjectId = require('mongoose').Types.ObjectId;
 var CHEFInfraBlueprint = require('../chef-infra-manager/chef-infra-manager');
 
+
+
+var instancesDao = require('_pr/model/classes/instance/instance');
+var Docker = require('_pr/model/docker.js');
+var logsDao = require('_pr/model/dao/logsdao.js');
+var appConfig = require('_pr/config');
+var Cryptography = require('_pr/lib/utils/cryptography');
+var fileIo = require('_pr/lib/utils/fileio');
+var uuid = require('node-uuid');
+var VMImage = require('_pr/model/classes/masters/vmImage.js');
+var credentialcryptography = require('_pr/lib/credentialcryptography');
+var VmwareCloud = require('_pr/lib/vmware.js');
+var vmwareProvider = require('_pr/model/classes/masters/cloudprovider/vmwareCloudProvider.js');
+var fs = require('fs');
+
+
 var Schema = mongoose.Schema;
 
 var CLOUD_PROVIDER_TYPE = {
@@ -294,11 +310,11 @@ vmwareInstanceBlueprintSchema.methods.launch = function(launchParams, callback) 
 
 										launchParams.infraManager.bootstrapInstance({
 											instanceIp: publicip,
-											runlist: version.runlist,
+											runlist: instance.runlist,
 											instanceUsername: anImage.userName,
 											instancePassword: anImage.instancePassword, //should be the encryped file 
 											nodeName: createserverdata["vm_name"],
-											environment: envName,
+											environment: launchParams.envName,
 											instanceOS: instance.hardware.os,
 											jsonAttributes: null
 										}, function(err, code) {

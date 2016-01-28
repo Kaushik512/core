@@ -20,9 +20,12 @@ var fileIo = require('_pr/lib/utils/fileio');
 var uuid = require('node-uuid');
 var credentialcryptography = require('_pr/lib/credentialcryptography');
 var Openstack = require('_pr/lib/openstack');
+var openstackProvider = require('_pr/model/classes/masters/cloudprovider/openstackCloudProvider.js');
 
 var Hppubliccloud = require('_pr/lib/hppubliccloud.js');
 var hppubliccloudProvider = require('_pr/model/classes/masters/cloudprovider/hppublicCloudProvider.js');
+
+var fs = require('fs');
 
 
 
@@ -127,16 +130,19 @@ openstackInstanceBlueprintSchema.methods.launch = function(launchParams, callbac
 	launchParams.version = versionData;
 	var self = this;
 	var getProviderData = null;
-
+	var context = null;
 
 	if (self.cloudProviderType === 'openstack') {
 		getProviderData = openstackProvider.getopenstackProviderById;
+		context = openstackProvider;
 
 	} else {
 		getProviderData = hppubliccloudProvider.gethppubliccloudProviderById;
+		context = hppubliccloudProvider;
+
 	}
 
-	getProviderData(self.cloudProviderId, function(err, providerdata) {
+	getProviderData.call(context, self.cloudProviderId, function(err, providerdata) {
 		if (err) {
 			logger.error('getopenstackProviderById ' + err);
 			callback({
@@ -327,7 +333,7 @@ openstackInstanceBlueprintSchema.methods.launch = function(launchParams, callbac
 								instanceUsername: 'ubuntu',
 								pemFilePath: tempUncryptedPemFileLoc,
 								nodeName: instance.chef.chefNodeName,
-								environment: launchParams.senvName,
+								environment: launchParams.envName,
 								instanceOS: instance.hardware.os,
 								jsonAttributes: null
 							}, function(err, code) {

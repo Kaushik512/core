@@ -112,7 +112,7 @@ function getBlueprintConfigType(blueprint) {
 	} else if ((blueprint.blueprintType === BLUEPRINT_TYPE.OPENSTACK_LAUNCH || blueprint.blueprintType === BLUEPRINT_TYPE.HPPUBLICCLOUD_LAUNCH) && blueprint.blueprintConfig) {
 		BlueprintConfigType = OpenstackBlueprint;
 	} else if ((blueprint.blueprintType === BLUEPRINT_TYPE.AZURE_LAUNCH) && blueprint.blueprintConfig) {
-		BlueprintConfigType = InstanceBlueprint;
+		BlueprintConfigType = AzureBlueprint;
 	} else if ((blueprint.blueprintType === BLUEPRINT_TYPE.VMWARE_LAUNCH) && blueprint.blueprintConfig) {
 		logger.debug('this is test');
 		BlueprintConfigType = VmwareBlueprint;
