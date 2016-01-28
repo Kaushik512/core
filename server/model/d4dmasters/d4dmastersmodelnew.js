@@ -594,20 +594,17 @@ var d4dMastersUserroles = new mongoose.Schema({
     userrolename: {
         type: String,
         required: true,
-        trim: true,
-        validate: nameValidator
+        trim: true
     },
     description: {
         type: String,
         required: true,
-        trim: true,
-        validate: descValidator
+        trim: true
     },
     globalaccessname: {
         type: String,
         required: true,
-        trim: true,
-        validate: nameValidator
+        trim: true
     },
     orgname: {
         type: [String],

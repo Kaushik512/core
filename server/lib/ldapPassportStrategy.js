@@ -10,6 +10,8 @@ var util = require('util'),
     Strategy = require('passport-strategy'),
     LdapClient = require('./ldap-client.js');
 
+var LDAPUser = require('../model/ldap-user/ldap-user.js');
+
 var setDefaults = function(options) {
     options.usernameField || (options.usernameField = 'username');
     options.passwordField || (options.passwordField = 'password');
