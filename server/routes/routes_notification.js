@@ -34,7 +34,9 @@ var crontab = require('node-crontab');
 var vmwareProvider = require('_pr/model/classes/masters/cloudprovider/vmwareCloudProvider.js');
 var VmwareCloud = require('_pr/lib/vmware.js');
 
-module.exports.setRoutes = function(app, socketIo) {
+var socketIo = require('_pr/socket.io').getInstance();
+
+module.exports.setRoutes = function(app) {
     // setting up socket.io
     var socketCloudFormationAutoScate = socketIo.of('/cloudFormationAutoScaleGroup');
 

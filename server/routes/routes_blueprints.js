@@ -254,7 +254,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         })
     });
 
-    app.get('/blueprints/:blueprintId/launch', function(req, res) {
+    app.get('/blueprints/:blueprintId/launch_old', function(req, res) {
         logger.debug("Enter /blueprints/%s/launch -- ", req.params.blueprintId);
         //verifying if the user has permission
         logger.debug('Verifying User permission set for execute.');
@@ -264,7 +264,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             });
             return;
         }
-        var blueprintId = req.params.blueprintId;
         var user = req.session.user;
         var category = 'blueprints';
         var permissionto = 'execute';
@@ -569,7 +568,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                 //decrypting pem file
                                                                                 var cryptoConfig = appConfig.cryptoSettings;
                                                                                 var tempUncryptedPemFileLoc = appConfig.tempDir + uuid.v4();
-
                                                                                 cryptography.decryptFile(instance.credentials.pemFileLocation, cryptoConfig.decryptionEncoding, tempUncryptedPemFileLoc, cryptoConfig.encryptionEncoding, function(err) {
                                                                                     if (err) {
                                                                                         instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
@@ -591,203 +589,147 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                         if (instance.hardware.os != 'windows')
                                                                                             return;
                                                                                     }
-                                                                                    //var jsonAttributesObj = blueprint.getCookBookAttributes();
-                                                                                    blueprint.getCookBookAttributes(function(err,jsonAttributesObj){
-                                                                                        logger.debug("jsonAttributesObj:: ",JSON.stringify(jsonAttributesObj));
-                                                                                        chef.bootstrapInstance({
-                                                                                            instanceIp: instance.instanceIP,
-                                                                                            pemFilePath: tempUncryptedPemFileLoc,
-                                                                                            runlist: instance.runlist,
-                                                                                            instanceUsername: instance.credentials.username,
-                                                                                            nodeName: instance.chef.chefNodeName,
-                                                                                            environment: envName,
-                                                                                            instanceOS: instance.hardware.os,
-                                                                                            jsonAttributes: jsonAttributesObj
-                                                                                        }, function(err, code) {
+                                                                                    chef.bootstrapInstance({
+                                                                                        instanceIp: instance.instanceIP,
+                                                                                        pemFilePath: tempUncryptedPemFileLoc,
+                                                                                        runlist: instance.runlist,
+                                                                                        instanceUsername: instance.credentials.username,
+                                                                                        nodeName: instance.chef.chefNodeName,
+                                                                                        environment: envName,
+                                                                                        instanceOS: instance.hardware.os
+                                                                                    }, function(err, code) {
 
-                                                                                            fileIo.removeFile(tempUncryptedPemFileLoc, function(err) {
-                                                                                                if (err) {
-                                                                                                    logger.error("Unable to delete temp pem file =>", err);
-                                                                                                } else {
-                                                                                                    logger.debug("temp pem file deleted =>", err);
-                                                                                                }
-                                                                                            });
-
-
-                                                                                            logger.error('process stopped ==> ', err, code);
+                                                                                        fileIo.removeFile(tempUncryptedPemFileLoc, function(err) {
                                                                                             if (err) {
-                                                                                                logger.error("knife launch err ==>", err);
-                                                                                                instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
+                                                                                                logger.error("Unable to delete temp pem file =>", err);
+                                                                                            } else {
+                                                                                                logger.debug("temp pem file deleted =>", err);
+                                                                                            }
+                                                                                        });
 
+
+                                                                                        logger.error('process stopped ==> ', err, code);
+                                                                                        if (err) {
+                                                                                            logger.error("knife launch err ==>", err);
+                                                                                            instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
+
+                                                                                            });
+                                                                                            var timestampEnded = new Date().getTime();
+                                                                                            logsDao.insertLog({
+                                                                                                referenceId: logsReferenceIds,
+                                                                                                err: true,
+                                                                                                log: "Bootstrap failed",
+                                                                                                timestamp: timestampEnded
+                                                                                            });
+                                                                                            instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
+
+
+                                                                                        } else {
+                                                                                            if (code == 0) {
+                                                                                                instancesDao.updateInstanceBootstrapStatus(instance.id, 'success', function(err, updateData) {
+                                                                                                    if (err) {
+                                                                                                        logger.error("Unable to set instance bootstarp status. code 0", err);
+                                                                                                    } else {
+                                                                                                        logger.debug("Instance bootstrap status set to success");
+                                                                                                    }
                                                                                                 });
                                                                                                 var timestampEnded = new Date().getTime();
                                                                                                 logsDao.insertLog({
                                                                                                     referenceId: logsReferenceIds,
-                                                                                                    err: true,
-                                                                                                    log: "Bootstrap failed",
+                                                                                                    err: false,
+                                                                                                    log: "Instance Bootstraped successfully",
+                                                                                                    timestamp: timestampEnded
+                                                                                                });
+                                                                                                instancesDao.updateActionLog(instance.id, actionLog._id, true, timestampEnded);
+
+
+                                                                                                chef.getNode(instance.chefNodeName, function(err, nodeData) {
+                                                                                                    if (err) {
+                                                                                                        logger.error("Failed chef.getNode", err);
+                                                                                                        return;
+                                                                                                    }
+                                                                                                    var hardwareData = {};
+                                                                                                    hardwareData.architecture = nodeData.automatic.kernel.machine;
+                                                                                                    hardwareData.platform = nodeData.automatic.platform;
+                                                                                                    hardwareData.platformVersion = nodeData.automatic.platform_version;
+                                                                                                    hardwareData.memory = {
+                                                                                                        total: 'unknown',
+                                                                                                        free: 'unknown'
+                                                                                                    };
+                                                                                                    if (nodeData.automatic.memory) {
+                                                                                                        hardwareData.memory.total = nodeData.automatic.memory.total;
+                                                                                                        hardwareData.memory.free = nodeData.automatic.memory.free;
+                                                                                                    }
+                                                                                                    hardwareData.os = instance.hardware.os;
+                                                                                                    instancesDao.setHardwareDetails(instance.id, hardwareData, function(err, updateData) {
+                                                                                                        if (err) {
+                                                                                                            logger.error("Unable to set instance hardware details  code (setHardwareDetails)", err);
+                                                                                                        } else {
+                                                                                                            logger.debug("Instance hardware details set successessfully");
+                                                                                                        }
+                                                                                                    });
+                                                                                                    //Checking docker status and updating
+                                                                                                    var _docker = new Docker();
+                                                                                                    _docker.checkDockerStatus(instance.id,
+                                                                                                        function(err, retCode) {
+                                                                                                            if (err) {
+                                                                                                                logger.error("Failed _docker.checkDockerStatus", err);
+                                                                                                                res.send(500);
+                                                                                                                return;
+                                                                                                                //res.end('200');
+
+                                                                                                            }
+                                                                                                            logger.debug('Docker Check Returned:' + retCode);
+                                                                                                            if (retCode == '0') {
+                                                                                                                instancesDao.updateInstanceDockerStatus(instance.id, "success", '', function(data) {
+                                                                                                                    logger.debug('Instance Docker Status set to Success');
+                                                                                                                });
+
+                                                                                                            }
+                                                                                                        });
+
+                                                                                                });
+
+                                                                                            } else {
+                                                                                                instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
+                                                                                                    if (err) {
+                                                                                                        logger.error("Unable to set instance bootstarp status code != 0", err);
+                                                                                                    } else {
+                                                                                                        logger.debug("Instance bootstrap status set to failed");
+                                                                                                    }
+                                                                                                });
+                                                                                                var timestampEnded = new Date().getTime();
+                                                                                                logsDao.insertLog({
+                                                                                                    referenceId: logsReferenceIds,
+                                                                                                    err: false,
+                                                                                                    log: "Bootstrap Failed",
                                                                                                     timestamp: timestampEnded
                                                                                                 });
                                                                                                 instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
 
-
-                                                                                            } else {
-                                                                                                if (code == 0) {
-                                                                                                    instancesDao.updateInstanceBootstrapStatus(instance.id, 'success', function(err, updateData) {
-                                                                                                        if (err) {
-                                                                                                            logger.error("Unable to set instance bootstarp status. code 0", err);
-                                                                                                        } else {
-                                                                                                            logger.debug("Instance bootstrap status set to success");
-                                                                                                        }
-                                                                                                    });
-                                                                                                    var timestampEnded = new Date().getTime();
-                                                                                                    logsDao.insertLog({
-                                                                                                        referenceId: logsReferenceIds,
-                                                                                                        err: false,
-                                                                                                        log: "Instance Bootstraped successfully",
-                                                                                                        timestamp: timestampEnded
-                                                                                                    });
-                                                                                                    instancesDao.updateActionLog(instance.id, actionLog._id, true, timestampEnded);
-                                                                                                    /*
-                                                                                                    // Run cookbook after bootstrap success
-                                                                                                    var tempUncryptedPemFileLoc = appConfig.tempDir + uuid.v4();
-                                                                                                    var jsonAttributesObj = blueprint.getCookBookAttributes();
-                                                                                                    logger.debug("jsonAttributes: ", JSON.stringify(jsonAttributesObj));
-                                                                                                    if (instance.runlist || jsonAttributesObj) {
-                                                                                                        var executionIdJsonAttributeObj = {
-                                                                                                            catalyst_attribute_handler: {
-                                                                                                                catalystCallbackUrl: baseUrl + '/chefClientExecution/' + chefClientExecution.id
-                                                                                                            }
-                                                                                                        };
-
-                                                                                                        var jsonAttributeObj = utils.mergeObjects([executionIdJsonAttributeObj, attributeObj]);
-                                                                                                        var jsonAttributesString = JSON.stringify(jsonAttributeObj);
-                                                                                                        var chefClientOptions = {
-                                                                                                            privateKey: decryptedCredentials.pemFileLocation,
-                                                                                                            username: decryptedCredentials.username,
-                                                                                                            host: instance.instanceIP,
-                                                                                                            instanceOS: instance.hardware.os,
-                                                                                                            port: 22,
-                                                                                                            runlist: instance.runlist, // runing service runlist
-                                                                                                            jsonAttributes: jsonAttributesString,
-                                                                                                            overrideRunlist: true,
-                                                                                                            parallel: true
-                                                                                                        }
-                                                                                                        if (decryptedCredentials.pemFileLocation) {
-                                                                                                            chefClientOptions.privateKey = decryptedCredentials.pemFileLocation;
-                                                                                                        } else {
-                                                                                                            chefClientOptions.password = decryptedCredentials.password;
-                                                                                                        }
-                                                                                                        logger.debug("")
-                                                                                                        chef.bootstrapInstance({
-                                                                                                            instanceIp: instance.instanceIP,
-                                                                                                            pemFilePath: tempUncryptedPemFileLoc,
-                                                                                                            runlist: instance.runlist,
-                                                                                                            instanceUsername: instance.credentials.username,
-                                                                                                            nodeName: instance.chef.chefNodeName,
-                                                                                                            environment: envName,
-                                                                                                            instanceOS: instance.hardware.os,
-                                                                                                            jsonAttributes: jsonAttributesObj
-                                                                                                        }, function(err, code) {
-
-                                                                                                            fileIo.removeFile(tempUncryptedPemFileLoc, function(err) {
-                                                                                                                if (err) {
-                                                                                                                    logger.error("Unable to delete temp pem file =>", err);
-                                                                                                                } else {
-                                                                                                                    logger.debug("temp pem file deleted =>", err);
-                                                                                                                }
-                                                                                                            });
-                                                                                                        });
-                                                                                                    }
-
-    																								*/
-                                                                                                    chef.getNode(instance.chefNodeName, function(err, nodeData) {
-                                                                                                        if (err) {
-                                                                                                            logger.error("Failed chef.getNode", err);
-                                                                                                            return;
-                                                                                                        }
-                                                                                                        var hardwareData = {};
-                                                                                                        hardwareData.architecture = nodeData.automatic.kernel.machine;
-                                                                                                        hardwareData.platform = nodeData.automatic.platform;
-                                                                                                        hardwareData.platformVersion = nodeData.automatic.platform_version;
-                                                                                                        hardwareData.memory = {
-                                                                                                            total: 'unknown',
-                                                                                                            free: 'unknown'
-                                                                                                        };
-                                                                                                        if (nodeData.automatic.memory) {
-                                                                                                            hardwareData.memory.total = nodeData.automatic.memory.total;
-                                                                                                            hardwareData.memory.free = nodeData.automatic.memory.free;
-                                                                                                        }
-                                                                                                        hardwareData.os = instance.hardware.os;
-                                                                                                        instancesDao.setHardwareDetails(instance.id, hardwareData, function(err, updateData) {
-                                                                                                            if (err) {
-                                                                                                                logger.error("Unable to set instance hardware details  code (setHardwareDetails)", err);
-                                                                                                            } else {
-                                                                                                                logger.debug("Instance hardware details set successessfully");
-                                                                                                            }
-                                                                                                        });
-                                                                                                        //Checking docker status and updating
-                                                                                                        var _docker = new Docker();
-                                                                                                        _docker.checkDockerStatus(instance.id,
-                                                                                                            function(err, retCode) {
-                                                                                                                if (err) {
-                                                                                                                    logger.error("Failed _docker.checkDockerStatus", err);
-                                                                                                                    res.send(500);
-                                                                                                                    return;
-                                                                                                                    //res.end('200');
-
-                                                                                                                }
-                                                                                                                logger.debug('Docker Check Returned:' + retCode);
-                                                                                                                if (retCode == '0') {
-                                                                                                                    instancesDao.updateInstanceDockerStatus(instance.id, "success", '', function(data) {
-                                                                                                                        logger.debug('Instance Docker Status set to Success');
-                                                                                                                    });
-
-                                                                                                                }
-                                                                                                            });
-
-                                                                                                    });
-
-                                                                                                } else {
-                                                                                                    instancesDao.updateInstanceBootstrapStatus(instance.id, 'failed', function(err, updateData) {
-                                                                                                        if (err) {
-                                                                                                            logger.error("Unable to set instance bootstarp status code != 0", err);
-                                                                                                        } else {
-                                                                                                            logger.debug("Instance bootstrap status set to failed");
-                                                                                                        }
-                                                                                                    });
-                                                                                                    var timestampEnded = new Date().getTime();
-                                                                                                    logsDao.insertLog({
-                                                                                                        referenceId: logsReferenceIds,
-                                                                                                        err: false,
-                                                                                                        log: "Bootstrap Failed",
-                                                                                                        timestamp: timestampEnded
-                                                                                                    });
-                                                                                                    instancesDao.updateActionLog(instance.id, actionLog._id, false, timestampEnded);
-
-                                                                                                }
                                                                                             }
+                                                                                        }
 
-                                                                                        }, function(stdOutData) {
+                                                                                    }, function(stdOutData) {
 
-                                                                                            logsDao.insertLog({
-                                                                                                referenceId: logsReferenceIds,
-                                                                                                err: false,
-                                                                                                log: stdOutData.toString('ascii'),
-                                                                                                timestamp: new Date().getTime()
-                                                                                            });
-
-                                                                                        }, function(stdErrData) {
-
-                                                                                            //retrying 4 times before giving up.
-                                                                                            logsDao.insertLog({
-                                                                                                referenceId: logsReferenceIds,
-                                                                                                err: true,
-                                                                                                log: stdErrData.toString('ascii'),
-                                                                                                timestamp: new Date().getTime()
-                                                                                            });
-
-
+                                                                                        logsDao.insertLog({
+                                                                                            referenceId: logsReferenceIds,
+                                                                                            err: false,
+                                                                                            log: stdOutData.toString('ascii'),
+                                                                                            timestamp: new Date().getTime()
                                                                                         });
+
+                                                                                    }, function(stdErrData) {
+
+                                                                                        //retrying 4 times before giving up.
+                                                                                        logsDao.insertLog({
+                                                                                            referenceId: logsReferenceIds,
+                                                                                            err: true,
+                                                                                            log: stdErrData.toString('ascii'),
+                                                                                            timestamp: new Date().getTime()
+                                                                                        });
+
+
                                                                                     });
 
                                                                                 });
@@ -1238,7 +1180,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                                                 if (instance.hardware.os != 'windows')
                                                                                                                     return;
                                                                                                             }
-                                                                                                            jsonAttributesObj = blueprint.getCookBookAttributes();
                                                                                                             chef.bootstrapInstance({
                                                                                                                 instanceIp: instance.instanceIP,
                                                                                                                 pemFilePath: tempUncryptedPemFileLoc,
@@ -1617,7 +1558,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                 if (instance.hardware.os != 'windows')
                                                                     return;
                                                             }
-                                                            var jsonAttributesObj = blueprint.getCookBookAttributes();
                                                             chef.bootstrapInstance({
                                                                 instanceIp: instance.instanceIP,
                                                                 instancePassword: decryptedCredential.password,
@@ -1625,8 +1565,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                 instanceUsername: instance.credentials.username,
                                                                 nodeName: instance.chef.chefNodeName,
                                                                 environment: envName,
-                                                                instanceOS: instance.hardware.os,
-                                                                jsonAttributes: jsonAttributesObj
+                                                                instanceOS: instance.hardware.os
+                                                                    //jsonAttributes: jsonAttributesObj
                                                             }, function(err, code) {
 
                                                                 logger.error('process stopped ==> ', err, code);
@@ -2205,7 +2145,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                     log: "Instance Ready..about to bootstrap",
                                                                     timestamp: timestampStarted
                                                                 });
-                                                                var jsonAttributesObj = blueprint.getCookBookAttributes();
                                                                 chef.bootstrapInstance({
                                                                     instanceIp: publicip,
                                                                     runlist: version.runlist,
@@ -2214,8 +2153,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                     nodeName: instance.chef.chefNodeName,
                                                                     environment: envName,
                                                                     instanceOS: instance.hardware.os,
-                                                                    //jsonAttributes: null
-                                                                    jsonAttributes: jsonAttributesObj
+                                                                    jsonAttributes: null
                                                                 }, function(err, code) {
                                                                     fs.unlink(tempUncryptedPemFileLoc, function(err) {
                                                                         logger.debug("Deleting decryptedPemFile..");
@@ -2531,7 +2469,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                     log: "Instance Ready..about to bootstrap",
                                                                     timestamp: timestampStarted
                                                                 });
-                                                                var jsonAttributesObj = blueprint.getCookBookAttributes();
                                                                 chef.bootstrapInstance({
                                                                     instanceIp: publicip,
                                                                     runlist: version.runlist,
@@ -2540,8 +2477,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                     nodeName: launchparams.server.name,
                                                                     environment: envName,
                                                                     instanceOS: instance.hardware.os,
-                                                                    //jsonAttributes: null
-                                                                    jsonAttributes: jsonAttributesObj
+                                                                    jsonAttributes: null
                                                                 }, function(err, code) {
                                                                     if (code == 0) {
                                                                         instancesDao.updateInstanceBootstrapStatus(instance.id, 'success', function(err, updateData) {
@@ -2847,7 +2783,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                 } else {
                                                                                     port = '22';
                                                                                 }
-                                                                                var jsonAttributesObj = blueprint.getCookBookAttributes();
+
                                                                                 chef.bootstrapInstance({
                                                                                     instanceIp: publicip,
                                                                                     runlist: version.runlist,
@@ -2856,8 +2792,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                     nodeName: launchparams.VMName,
                                                                                     environment: envName,
                                                                                     instanceOS: instance.hardware.os,
-                                                                                    //jsonAttributes: null,
-                                                                                    jsonAttributes: jsonAttributesObj,
+                                                                                    jsonAttributes: null,
                                                                                     port: port
                                                                                 }, function(err, code) {
                                                                                     fs.unlink(decryptedPemFile, function(err) {
@@ -3226,7 +3161,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                     log: "Instance Ready..about to bootstrap",
                                                                                     timestamp: timestampStarted
                                                                                 });
-                                                                                var jsonAttributesObj = blueprint.getCookBookAttributes();
+
                                                                                 chef.bootstrapInstance({
                                                                                     instanceIp: publicip,
                                                                                     runlist: version.runlist,
@@ -3235,8 +3170,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                                                                     nodeName: createserverdata["vm_name"],
                                                                                     environment: envName,
                                                                                     instanceOS: instance.hardware.os,
-                                                                                    //jsonAttributes: null
-                                                                                    jsonAttributes: jsonAttributesObj
+                                                                                    jsonAttributes: null
                                                                                 }, function(err, code) {
                                                                                     var timestampEnded = new Date().getTime();
                                                                                     if (err) {
@@ -3406,6 +3340,80 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 
 
+                    });
+                }
+            } else {
+                logger.error("Hit and error in haspermission:", err);
+                res.send(500);
+                return;
+            }
+            return;
+
+        }); // end haspermission
+    });
+
+    app.get('/blueprints/:blueprintId/launch', function(req, res) {
+        logger.debug("Enter /blueprints/%s/launch -- ", req.params.blueprintId);
+        //verifying if the user has permission
+        logger.debug('Verifying User permission set for execute.');
+        if (!req.query.envId) {
+            res.send(400, {
+                "message": "Invalid Environment Id"
+            });
+            return;
+        }
+        var user = req.session.user;
+        var category = 'blueprints';
+        var permissionto = 'execute';
+        usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+            if (!err) {
+                logger.debug('Returned from haspermission :  launch ' + data + ' , Condition State : ' + (data == false));
+                if (data == false) {
+                    logger.debug('No permission to ' + permissionto + ' on ' + category);
+                    res.send(401);
+                    return;
+                } else {
+
+                    Blueprints.getById(req.params.blueprintId, function(err, blueprint) {
+                        if (err) {
+                            logger.error('Failed to getBlueprint. Error = ', err);
+                            res.send(500, errorResponses.db.error);
+                            return;
+                        }
+                        if (!blueprint) {
+                            res.send(404, {
+                                message: "Blueprint Does Not Exist"
+                            });
+                            return;
+                        }
+
+                        var stackName = null;
+
+                        if (blueprint.blueprintType === 'aws_cf' || blueprint.blueprintType === 'azure_arm') {
+                            stackName = req.query.stackName;
+                            if (!stackName) {
+                                res.send(400, {
+                                    message: "Invalid stack name"
+                                });
+                                return;
+                            }
+                        }
+
+                        blueprint.launch({
+                            envId: req.query.envId,
+                            ver: req.query.version,
+                            stackName: stackName,
+                            sessionUser: req.session.user.cn,
+                        }, function(err, launchData) {
+                            if (err) {
+                                res.status(500).send({
+                                    message: "Server Behaved Unexpectedly"
+                                });
+                                return;
+                            }
+                            res.status(200).send(launchData)
+
+                        });
                     });
                 }
             } else {

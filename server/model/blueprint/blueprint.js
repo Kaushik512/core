@@ -9,6 +9,11 @@ var logger = require('_pr/logger')(module);
 var mongoose = require('mongoose');
 var extend = require('mongoose-schema-extend');
 var ObjectId = require('mongoose').Types.ObjectId;
+
+var Chef = require('_pr/lib/chef.js');
+var configmgmtDao = require('_pr/model/d4dmasters/configmgmt');
+var appConfig = require('_pr/config');
+
 var schemaValidator = require('_pr/model/utils/schema-validator');
 
 var uniqueValidator = require('mongoose-unique-validator');
@@ -23,6 +28,8 @@ var CloudFormationBlueprint = require('./blueprint-types/cloud-formation-bluepri
 var ARMTemplateBlueprint = require('./blueprint-types/arm-template-blueprint/arm-template-blueprint');
 var utils = require('../classes/utils/utils.js');
 var nexus = require('_pr/lib/nexus.js');
+
+
 
 var BLUEPRINT_TYPE = {
     DOCKER: 'docker',
@@ -89,10 +96,6 @@ var BlueprintSchema = new Schema({
     templateType: {
         type: String,
         required: true,
-        trim: true
-    },
-    repoType: {
-        type: String,
         trim: true
     },
     nexus: {
@@ -192,11 +195,116 @@ BlueprintSchema.methods.getCloudProviderData = function() {
     return blueprintConfigType.getCloudProviderData();
 }
 
-BlueprintSchema.methods.launch = function(envId, ver, callback) {
-    var blueprintConfigType = getBlueprintConfigType(this);
-    blueprintConfigType.launch(ver, function(err, launchData) {
-        callback(err, launchData);
+BlueprintSchema.methods.launch = function(opts, callback) {
+    var infraManager = this.getInfraManagerData();
+    var self = this;
+    configmgmtDao.getEnvNameFromEnvId(opts.envId, function(err, envName) {
+        if (err) {
+            callback({
+                message: "Failed to get env name from env id"
+            }, null);
+            return;
+        }
+        if (!envName) {
+            callback({
+                "message": "Unable to find environment name from environment id"
+            });
+            return;
+        }
+
+        configmgmtDao.getChefServerDetails(infraManager.infraManagerId, function(err, chefDetails) {
+            if (err) {
+                logger.error("Failed to getChefServerDetails", err);
+                callback({
+                    message: "Failed to getChefServerDetails"
+                }, null);
+                return;
+            }
+            if (!chefDetails) {
+                logger.error("No CHef Server Detailed available.", err);
+                callback({
+                    message: "No Chef Server Detailed available"
+                }, null);
+                return;
+            }
+            var chef = new Chef({
+                userChefRepoLocation: chefDetails.chefRepoLocation,
+                chefUserName: chefDetails.loginname,
+                chefUserPemFile: chefDetails.userpemfile,
+                chefValidationPemFile: chefDetails.validatorpemfile,
+                hostedChefUrl: chefDetails.url
+            });
+            logger.debug('Chef Repo Location = ', chefDetails.chefRepoLocation);
+
+            var blueprintConfigType = getBlueprintConfigType(self);
+
+            if (!self.appUrls) {
+                self.appUrls = [];
+            }
+            var appUrls = self.appUrls;
+            if (appConfig.appUrls && appConfig.appUrls.length) {
+                appUrls = appUrls.concat(appConfig.appUrls);
+            }
+
+            chef.getEnvironment(envName, function(err, env) {
+                if (err) {
+                    logger.error("Failed chef.getEnvironment", err);
+                    res.send(500);
+                    return;
+                }
+
+                if (!env) {
+                    logger.debug("Blueprint env ID = ", req.query.envId);
+                    chef.createEnvironment(envName, function(err) {
+                        if (err) {
+                            logger.error("Failed chef.createEnvironment", err);
+                            res.send(500);
+                            return;
+                        }
+                        blueprintConfigType.launch({
+                            infraManager: chef,
+                            ver: opts.ver,
+                            envName: envName,
+                            envId: opts.envId,
+                            stackName: opts.stackName,
+                            blueprintName: self.name,
+                            orgId: self.orgId,
+                            bgId: self.bgId,
+                            projectId: self.projectId,
+                            appUrls: appUrls,
+                            sessionUser: opts.user,
+                            users: self.users,
+                            blueprintData: self,
+                        }, function(err, launchData) {
+                            callback(err, launchData);
+                        });
+
+                    });
+                } else {
+                    blueprintConfigType.launch({
+                        infraManager: chef,
+                        ver: opts.ver,
+                        envName: envName,
+                        envId: opts.envId,
+                        stackName: opts.stackName,
+                        blueprintName: self.name,
+                        orgId: self.orgId,
+                        bgId: self.bgId,
+                        projectId: self.projectId,
+                        appUrls: appUrls,
+                        sessionUser: opts.user,
+                        users: self.users,
+                        blueprintData: self,
+                    }, function(err, launchData) {
+                        callback(err, launchData);
+                    });
+                }
+
+            });
+
+        });
     });
+
 };
 
 // static methods
@@ -256,8 +364,7 @@ BlueprintSchema.statics.createNew = function(blueprintData, callback) {
         blueprintConfig: blueprintConfig,
         blueprintType: blueprintType,
         nexus: blueprintData.nexus,
-        docker: blueprintData.docker,
-        repoId: blueprintData.repoId
+        docker: blueprintData.docker
     };
     var blueprint = new Blueprints(blueprintObj);
     logger.debug('saving');
@@ -318,7 +425,7 @@ BlueprintSchema.statics.getBlueprintsByOrgBgProject = function(orgId, bgId, proj
     });
 };
 
-BlueprintSchema.methods.getCookBookAttributes = function(callback) {
+BlueprintSchema.methods.getCookBookAttributes = function(instanceIP, callback) {
     var blueprint = this;
     //merging attributes Objects
     var attributeObj = {};
@@ -334,6 +441,11 @@ BlueprintSchema.methods.getCookBookAttributes = function(callback) {
         objectArray.push({
             "rlcatalyst": {
                 "upgrade": false
+            }
+        });
+        objectArray.push({
+            "rlcatalyst": {
+                "applicationNodeIP": instanceIP
             }
         });
 
@@ -407,10 +519,15 @@ BlueprintSchema.methods.getCookBookAttributes = function(callback) {
                 "upgrade": false
             }
         });
+        objectArray.push({
+            "rlcatalyst": {
+                "applicationNodeIP": instanceIP
+            }
+        });
         var attrs = utils.mergeObjects(objectArray);
         callback(null, attrs);
     }
-}
+};
 
 var Blueprints = mongoose.model('blueprints', BlueprintSchema);
 

@@ -87,9 +87,10 @@ var Nexus = function() {
                 };
                 client = new Client(options_auth);
                 var nexusUrl = nexus[0].hostname + '/service/local/data_index?q=' + groupId;
+                logger.debug("======== ",nexusUrl);
                 client.registerMethod("jsonMethod", nexusUrl, "GET");
                 client.methods.jsonMethod(function(data, response) {
-                    try {
+                    //try {
                         var json = parser.toJson(data);
                         logger.debug("data: ", typeof json);
                         json = JSON.parse(json);
@@ -107,9 +108,9 @@ var Nexus = function() {
                         }
                         callback(null, artifactList);
 
-                    } catch (err) {
+                    /*} catch (err) {
                         callback(err,null);
-                    }
+                    }*/
                 });
             } else {
                 callback(null, null);
