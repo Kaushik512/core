@@ -23,6 +23,7 @@ var taskTypeSchema = require('./taskTypeSchema');
 
 var ChefClientExecution = require('../instance/chefClientExecution/chefClientExecution.js');
 var utils = require('../utils/utils.js');
+var Blueprints = require('_pr/model/blueprint');
 
 var chefTaskSchema = taskTypeSchema.extend({
     nodeIds: [String],
@@ -40,9 +41,56 @@ chefTaskSchema.methods.getNodes = function() {
 };
 
 // Instance Method :- run task
-chefTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData, onExecute, onComplete) {
+chefTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData, blueprintIds,envId, onExecute, onComplete) {
     var self = this;
     logger.debug("self: ", JSON.stringify(self));
+    var count = 0;
+    if (blueprintIds.length) {
+        for (var i = 0; i < blueprintIds.length; i++) {
+            Blueprints.getById(blueprintIds[i], function(err, blueprint) {
+                count++;
+                if (err) {
+                    logger.error("Failed to get blueprint versions ", err);
+                    onExecute({
+                        message: "Failed to get blueprint versions"
+                    });
+                }
+                if (blueprint) {
+                    blueprint.extraRunlist = self.runlist;
+                    logger.debug("envId=== ",envId);
+                    blueprint.launch({
+                        envId: envId,
+                        ver: null,
+                        stackName: null,
+                        sessionUser: userName
+                    }, function(err, launchData) {
+                        if (err) {
+                            logger.debug("==== ",err);
+                            if (blueprintIds.length == count) {
+                                logger.debug("========");
+                                onExecute({
+                                    message: "Server Behaved Unexpectedly"
+                                });
+                                onComplete(null, null, {
+                                    runlist: self.runlist
+                                });
+                            }
+                        }
+                        if (blueprintIds.length == count) {
+                            onExecute({
+                                message: "Server Behaved Unexpectedly"
+                            });
+                            onComplete(null, null, {
+                                runlist: self.runlist
+                            });
+                        }
+                    });
+                }
+            });
+        }
+        return;
+
+    }
     //merging attributes Objects
     var attributeObj = {};
     var objectArray = [];

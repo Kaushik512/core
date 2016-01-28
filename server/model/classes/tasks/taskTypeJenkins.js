@@ -14,6 +14,7 @@ var Jenkins = require('../../../lib/jenkins');
 var configmgmtDao = require('../../d4dmasters/configmgmt.js');
 
 var taskTypeSchema = require('./taskTypeSchema');
+var Blueprints = require('_pr/model/blueprint');
 
 
 var jenkinsTaskSchema = taskTypeSchema.extend({
@@ -25,9 +26,9 @@ var jenkinsTaskSchema = taskTypeSchema.extend({
     isParameterized: Boolean,
     parameterized: [{
         parameterName: String,
-        name:{
-            type:String,
-            unique:true
+        name: {
+            type: String,
+            unique: true
         },
         defaultValue: [String],
         description: String
@@ -35,9 +36,36 @@ var jenkinsTaskSchema = taskTypeSchema.extend({
 });
 
 // Instance Method :- run task
-jenkinsTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData, onExecute, onComplete) {
-    logger.debug("Choice Param in::: ",choiceParam);
+jenkinsTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData, blueprintIds, onExecute, onComplete) {
+    logger.debug("Choice Param in::: ", choiceParam);
     var self = this;
+    if (blueprintIds.length) {
+        for (var i = 0; i < blueprintIds.length; i++) {
+            Blueprints.getById(req.params.blueprintId, function(err, blueprint) {
+                if (err) {
+                    logger.error("Failed to get blueprint versions ", err);
+                    onExecute({
+                        message: "Failed to get blueprint versions"
+                    });
+                }
+                if (blueprint) {
+                    blueprint.launch({
+                        envId: self.envId,
+                        ver: null,
+                        stackName: null,
+                        sessionUser: userName,
+                    }, function(err, launchData) {
+                        if (err) {
+                            onExecute({
+                                message: "Server Behaved Unexpectedly"
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    }
+
     configmgmtDao.getJenkinsDataFromId(this.jenkinsServerId, function(err, jenkinsData) {
         if (err) {
             logger.error('jenkins list fetch error', err);

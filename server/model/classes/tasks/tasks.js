@@ -86,7 +86,7 @@ var taskSchema = new Schema({
 // instance method :-  
 
 // Executes a task
-taskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData, callback, onComplete) {
+taskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData,blueprintIds,envId, callback, onComplete) {
     logger.debug('Executing');
     var task;
     var self = this;
@@ -130,7 +130,7 @@ taskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData,
     }
     var timestamp = new Date().getTime();
     var taskHistory = null;
-    task.execute(userName, baseUrl, choiceParam, nexusData, function(err, taskExecuteData, taskHistoryEntry) {
+    task.execute(userName, baseUrl, choiceParam, nexusData,blueprintIds, function(err, taskExecuteData, taskHistoryEntry) {
         if (err) {
             callback(err, null);
             return;
