@@ -704,17 +704,20 @@ module.exports.setRoutes = function(app, sessionVerification) {
 		var templateType = req.body.blueprintData.templateType;
 		var users = req.body.blueprintData.users;
 		var blueprintType = req.body.blueprintData.blueprintType;
-		
-        // a temp fix for invalid appurl data. will be removed in next iteration
-        var tempAppUrls = [];
+
+		// a temp fix for invalid appurl data. will be removed in next iteration
+		var tempAppUrls = [];
+		if (!appUrls) {
+			appUrls = []
+		}
 		for (var i = 0; i < appUrls.length; i++) {
 			if (appUrls[i]) {
 				tempAppUrls.push(appUrls[i]);
 			}
 		}
 		appUrls = tempAppUrls;
-		
-        usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
+
+		usersDao.haspermission(user.cn, category, permissionto, null, req.session.user.permissionset, function(err, data) {
 			if (!err) {
 				logger.debug('Returned from haspermission : ' + data + ' : ' + (data == false));
 				if (data == false) {
