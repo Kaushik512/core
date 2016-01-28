@@ -126,12 +126,16 @@
 									</div>
 								</span>
 								<span class="secondChildSpanTemplate">
-									<a href="javascript:void" class="spanChildPromote">
+									<!-- <a href="javascript:void" class="spanChildPromote">
 				                        <i class="fa fa-arrow-right txt-color-blue" style="font-size: 18px;margin-top:27px"></i>
-				                    </a>
+				                    </a> -->
 				                    <!-- <div class="arrow_box">
 									    <h4>Promote</h4>
 									</div> -->
+									
+									<div id="triangles" style="margin-top:25px">
+									    <div style="font-size:10px;margin-top:-7px;margin-left:1px;color:#fff">Promote</div>
+									</div>
 									<!-- <img src="img/arrow_right.png" class="spanChildImage"> -->
 								</span>
 							</div>
@@ -790,7 +794,7 @@ function getAllPipelineViewData() {
             var arrPresentEnvSeq = [];
             var arrSequence = [];
             arrEnv.push({
-                "title": ''
+                "title": 'App Details'
             });
             arrSequence.push('');
             arrPresentEnvSeq.push('');
@@ -819,7 +823,7 @@ function getAllPipelineViewData() {
                 var arrSequence = [];
                 var arrPresentEnvSeq = [];
                 arrEnv.push({
-                    "title": ''
+                    "title": 'App Details'
                 });
                 arrSequence.push('');
                 arrPresentEnvSeq.push('');
@@ -898,21 +902,25 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
                 $childPresentCard.css({
                     display: 'inline-flex'
                 });
+                //alert(typeof matchedEnv);
+                //alert("Hello");
+                //alert("Matched Env:=>"+matchedEnv);
                 var count =0;
                 for(var i=0;i<appDeployDataObj.envId.length;i++){
-                    
+                    //alert(typeof appDeployDataObj.envId[i]);
                     (function(i){
                         count++;
+                        //alert(appDeployDataObj.applicationNodeIP[i]);
                         $childPresentCard.find('.applicationChildIP').html(appDeployDataObj.applicationNodeIP[i]);
                         $childPresentCard.find('.lastapplicationDeploy').html(appDeployDataObj.applicationLastDeploy[i]);
 
                         if(appDeployDataObj.applicationStatus[i] === "Successful"){
                             $childPresentCard.find('.imgHeight').attr("src","img/aws_logo_started.png");
-                            $childPresentCard.find('.applicationChildDetails').removeClass('btn-primary').addClass('btn-success');
+                            $childPresentCard.find('.applicationChildDetails').removeClass('btn-primary btn-danger').addClass('btn-success');
 
                         }else{
                             $childPresentCard.find('.imgHeight').attr("src","img/aws_logo_stopped.png");
-                            $childPresentCard.find('.applicationChildDetails').removeClass('btn-primary').addClass('btn-danger');
+                            $childPresentCard.find('.applicationChildDetails').removeClass('btn-primary btn-success').addClass('btn-danger');
                         }
                         
                         $childPresentCard.find('.applicationNamePipelineView').html(applicationName);
@@ -929,101 +937,91 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
                     })(i);
                 }
             };
-
-            var countColumn = 0;
-            var dummyArray = [];
+            function sortAscending(data_A, data_B)
+			{
+				data_A = convertToDateObj(data_A);
+			    data_B = convertToDateObj(data_B);
+			    return (data_B - data_A);
+			}
             var finalArray = [];
             var applicationName = appDeployDataObj.applicationName;
             var versionNumber = appDeployDataObj.applicationVersion;
-            var applicationEnvList=appDeployDataObj.envId;
-            //alert($(arrSequence).get(-1));
-            //alert(arrSequence.length);
+            var applicationEnvList = appDeployDataObj.envId;
+            
+            
+            var sortedappdataList = [];
+            var unsortedappdataList = [];
+            var indexedList = [];
+            //var sortedappdataList = [];
+
+            for(var j=0;j<applicationEnvList.length;j++){
+            	sortedappdataList.push(appDeployDataObj.applicationLastDeploy[j]);
+	            unsortedappdataList.push(appDeployDataObj.applicationLastDeploy[j]);
+            }
+            
+            sortedappdataList.sort(sortAscending);
+            
+            for(var m=0; m<unsortedappdataList.length;m++){
+            	indexedList.push(jQuery.inArray(unsortedappdataList[m], sortedappdataList));
+            }
 
 
-            /*for (var j = 0; j < arrSequence.length; j++) {
-                countColumn++;
-                //alert(arrSequence[j]);
-                //application main card
-                
-                if(j==0 && arrSequence[j]===""){
-                    var obj = createMainCard(applicationName,versionNumber);
-                    finalArray.push(createMainCard(applicationName,versionNumber));
-                }
-                else if($.inArray(arrSequence[j],applicationEnvList)!==-1){
-                    //application status present card
-                    // alert($(arrSequence).get(-1));
-                    // alert(arrSequence[j]);
-                    //returns the last item in the list
-                    if($(arrSequence).get(-1) == arrSequence[j]){
-                        //alert("Matched");
-                        createStatusPresentCard(appDeployDataObj,applicationName,function(err,data){
-                            //alert(data);
-                            var $childPresentCard = data;
-                            
-                            finalArray.push($childPresentCard);
-                        });
-                    }
-                    else{
-                        createStatusPresentCard(appDeployDataObj,applicationName,function(err,data){
-                            finalArray.push(data);
-                        });
-                    }
-                }else{
-                    //application status absent card
-                    var tempStr = '';
-                    var $childCardTemplate = $('.childCardTemplate');
-                    var $childPresentCard = $childCardTemplate.clone(true);
-                    $childPresentCard.css({
-                        display: 'inline-flex'
-                    });
-                    $childPresentCard.find('.applicationChildIP').html('');
-                    $childPresentCard.find('.lastDeploySpan').html('');
-                    $childPresentCard.find('.imgHeight').attr("src","img/rsz_inactive.png");
-                    $childPresentCard.find('.applicationChildDetails').removeClass('btn-primary').addClass('btn-grey');
-                    $childPresentCard.find('.lastapplicationDeploy').html('');
-                    //$childPresentCard.find('.footer-innerdiv').html('');
-                    $childPresentCard.children().css({
-                        'opacity': '0.5',
-                        'pointer-events': 'none'
-                    });
-                    
-                    var $childCardtemplateStr = $childPresentCard.prop('outerHTML');
-                    tempStr = tempStr + $childCardtemplateStr;
-                    finalArray.push(tempStr);
-                } 
-            }*/
+            var applicationInstanceName = [];
+            var applicationNodeIP = [];
+            var applicationLastDeploy = [];
+            var applicationStatus = [];
+            var containerId = [];
+            var hostName = [];
+            var envId = [];
+            var appLogs = [];
+            for(var n=0;n<indexedList.length;n++){
+            	applicationInstanceName.push(appDeployDataObj.applicationInstanceName[indexedList[n]]);
+            	applicationNodeIP.push(appDeployDataObj.applicationNodeIP[indexedList[n]]);
+            	applicationLastDeploy.push(appDeployDataObj.applicationLastDeploy[indexedList[n]]);
+            	applicationStatus.push(appDeployDataObj.applicationStatus[indexedList[n]]);
+            	containerId.push(appDeployDataObj.containerId[indexedList[n]]);
+            	hostName.push(appDeployDataObj.hostName[indexedList[n]]);
+            	envId.push(appDeployDataObj.envId[indexedList[n]]);
+            	appLogs.push(appDeployDataObj.appLogs[indexedList[n]]);
+            }
+
+            var sortedappDeployDataObj = {
+            	"applicationName": applicationName,
+            	"applicationVersion": versionNumber,
+            	"projectId": projectId,
+            	"applicationInstanceName": applicationInstanceName,
+            	"applicationNodeIP": applicationNodeIP,
+            	"applicationLastDeploy": applicationLastDeploy,
+            	"applicationStatus": applicationStatus,
+            	"containerId": containerId,
+            	"hostName": hostName,
+            	"envId": envId,
+            	"appLogs": appLogs
+            };
+
+            //alert(JSON.stringify(sortedappDeployDataObj));
 
             for (var j = 0; j < arrSequence.length; j++) {
-                countColumn++;
+                //countColumn++;
                 //alert(arrSequence[j]);
                 //application main card
                 
-                if(j==0 && arrSequence[j]===""){
-                    var obj = createMainCard(applicationName,versionNumber);
-                    finalArray.push(createMainCard(applicationName,versionNumber));
+                if(j==0 && arrSequence[0]==""){
+                	finalArray.push("TestMain");
+                    /*var obj = createMainCard(applicationName,versionNumber);
+                    finalArray.push(createMainCard(applicationName,versionNumber));*/
                 }
-                else if($.inArray(arrSequence[j],applicationEnvList)!==-1){
-                    //application status present card
-                    // alert($(arrSequence).get(-1));
-                    // alert(arrSequence[j]);
-                    //returns the last item in the list
-                    if($(arrSequence).get(-1) == arrSequence[j]){
-                        //alert("Matched");
-                        createStatusPresentCard(appDeployDataObj,applicationName,function(err,data){
-                            //alert(data);
-                            var $childPresentCard = data;
-                            
-                            finalArray.push($childPresentCard);
-                        });
-                    }
-                    else{
-                        createStatusPresentCard(appDeployDataObj,applicationName,function(err,data){
-                            finalArray.push(data);
-                        });
-                    }
+                else if($.inArray(arrSequence[j],applicationEnvList)!=-1){
+                	/*createStatusPresentCard(sortedappDeployDataObj,applicationName,function(err,data){
+                        //alert(data);
+                        finalArray.push(data);
+                    });*/
+                	finalArray.push("Present");
+                	
                 }else{
                     //application status absent card
-                    var tempStr = '';
+                    finalArray.push('Absent');
+                    /*var tempStr = '';
                     var $childCardTemplate = $('.childCardTemplate');
                     var $childPresentCard = $childCardTemplate.clone(true);
                     $childPresentCard.css({
@@ -1042,13 +1040,11 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
                     
                     var $childCardtemplateStr = $childPresentCard.prop('outerHTML');
                     tempStr = tempStr + $childCardtemplateStr;
-                    finalArray.push(tempStr);
+                    finalArray.push(tempStr);*/
                 } 
             }
-          	//debugger;
-           //alert(finalArray.length);
 
-           for (var j = 0; j < arrEnv.length; j++) {
+            /*for (var j = 0; j < arrEnv.length; j++) {
 	           var finalString = $(finalArray).get(-1);
 	           finalArray.pop();
 	           var firstSubStr = finalString.lastIndexOf('<span');
@@ -1057,20 +1053,23 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
 	           var finalstr = finalString.substring(0,firstSubStr);
 	           var superFinalString = finalstr +"</div>";
 	           finalArray.push(superFinalString);
-	       	}
+	       	}*/
 
 
+
+            
            $tableapplicationTest.dataTable().fnAddData(finalArray);
 
         }); 
+		
     });
-	setTimeout(function(){
+	/*setTimeout(function(){
 		var childCardTemplWidth = $('#tableContainer .childCardTemplate').outerWidth();
 		var firstChildSpanTemplWidth = $('#tableContainer .firstChildSpanTemplate').outerWidth();
 		var diff = childCardTemplWidth - firstChildSpanTemplWidth;
 		var actualSetDiff = diff/2;
 		$('#tableContainer .childCardTemplate .secondChildSpanTemplate').css('padding-left',actualSetDiff);
-	},10000);
+	},10000);*/
     $tableapplicationTbody.on('click','.applicationChildDetails',moreinfoDetailsPipelineViewClickHandler);
 }
 
@@ -1351,13 +1350,26 @@ function ConvertTimeformat(format, str, formatStr) {
 }
 
 function convertToDateObj(strInputDate) {
+	var dateStr = strInputDate.split(' ')[0];
 	var timeStr = strInputDate.split(' ')[1];
 	var formatStr = strInputDate.split(' ')[2];
 	var str = ConvertTimeformat("24", timeStr, formatStr);
-	var year = strInputDate.substring(0, 2);
-	var month = strInputDate.substring(3, 5);
-	month = parseInt(month);
-	var day = strInputDate.substring(6, 8);
+	if(dateStr.length == 8){
+	  	var year = strInputDate.substring(0, 2);
+	    year = 20+year;
+	    var month = strInputDate.substring(3, 5);
+	    month = parseInt(month);
+	    var day = strInputDate.substring(6, 8);
+	  }else{
+	  	var year = strInputDate.substring(0, 4);
+			var month = strInputDate.substring(5, 7);
+			month = parseInt(month);
+			var day = strInputDate.substring(8, 10);
+	  }
+	// var year = strInputDate.substring(0, 2);
+	// var month = strInputDate.substring(3, 5);
+	// month = parseInt(month);
+	// var day = strInputDate.substring(6, 8);
 	var hour = str.substring(0, 2);
 	var minute = str.substring(3, 5);
 	var second = str.substring(6, 8);

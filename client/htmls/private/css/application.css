@@ -478,8 +478,11 @@
 };*/
 .arrow_box {
     position: relative;
-    background: #88b7d5;
-    border: 4px solid #c2e1f5;
+    background: #fff;
+    height:30px;
+    margin-top: 20px;
+    border: 2px solid #000;
+    /*border: 4px solid #c2e1f5;*/
 }
 .arrow_box:after, .arrow_box:before {
     left: 100%;
@@ -494,15 +497,42 @@
 
 .arrow_box:after {
     border-color: rgba(136, 183, 213, 0);
-    border-left-color: #88b7d5;
-    border-width: 30px;
-    margin-top: -30px;
+    border-left-color: #000;
+    border-width: 16px;
+    margin-top: -16px;
 }
-.arrow_box:before {
+/*.arrow_box:before {
     border-color: rgba(194, 225, 245, 0);
     border-left-color: #c2e1f5;
     border-width: 36px;
     margin-top: -36px;
+}*/
+#triangles{
+    /* margin:3em; */
+    width:60px; /*set dimensions of DIV to 0 so its borders collapse and touch one 
+    another*/
+    height:0;
+    border-color: #2c3742 #2c3742 #2c3742 white; /*top, right, bottom, and left border*/
+    border-style: solid;
+    border-width: 15px; /*width of each border*/
+    position:relative
+}
+#triangles:after, #triangles:before {
+    left: 100%;
+    top: 50%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+
+#triangles:after {
+    border-color: rgba(136, 183, 213, 0) rgba(136, 183, 213, 0) rgba(136, 183, 213, 0) #2c3742;
+    border-width: 15px;
+    margin-left: 15px;
+    margin-top: -15px;
 }
 .panel{
     margin-bottom: 0px !important;
