@@ -1,7 +1,7 @@
 /* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
- * Written by Gobinda Das <gobinda.das@relevancelab.com>, 
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
  * Oct 2015
  */
 
@@ -57,9 +57,13 @@ var Nexus = function() {
                 var nexusUrl = nexus[0].hostname + '/service/local/repositories';
                 client.registerMethod("jsonMethod", nexusUrl, "GET");
                 var reqSubmit = client.methods.jsonMethod(function(data, response) {
-                    var json = parser.toJson(data);
-                    logger.debug("data: ", JSON.stringify(json));
-                    callback(null, json);
+                    try {
+                        var json = parser.toJson(data);
+                        logger.debug("data: ", JSON.stringify(json));
+                        callback(null, json);
+                    } catch (err) {
+                        callback(err, null);
+                    }
                 });
             } else {
                 callback(null, null);
@@ -83,24 +87,30 @@ var Nexus = function() {
                 };
                 client = new Client(options_auth);
                 var nexusUrl = nexus[0].hostname + '/service/local/data_index?q=' + groupId;
+                logger.debug("======== ",nexusUrl);
                 client.registerMethod("jsonMethod", nexusUrl, "GET");
                 client.methods.jsonMethod(function(data, response) {
-                    var json = parser.toJson(data);
-                    logger.debug("data: ", typeof json);
-                    json = JSON.parse(json);
-                    logger.debug("Parsed json: ", JSON.stringify(json));
-                    var artifactList = [];
-                    if (json) {
-                        var artifacts = json['search-results'].data.artifact;
-                        if (artifacts.length) {
-                            for (var i = 0; i < artifacts.length; i++) {
-                                if (repoName === artifacts[i].repoId) {
-                                    artifactList.push(artifacts[i]);
+                    //try {
+                        var json = parser.toJson(data);
+                        logger.debug("data: ", typeof json);
+                        json = JSON.parse(json);
+                        logger.debug("Parsed json: ", JSON.stringify(json));
+                        var artifactList = [];
+                        if (json) {
+                            var artifacts = json['search-results'].data.artifact;
+                            if (artifacts.length) {
+                                for (var i = 0; i < artifacts.length; i++) {
+                                    if (repoName === artifacts[i].repoId) {
+                                        artifactList.push(artifacts[i]);
+                                    }
                                 }
                             }
                         }
-                    }
-                    callback(null, artifactList);
+                        callback(null, artifactList);
+
+                    /*} catch (err) {
+                        callback(err,null);
+                    }*/
                 });
             } else {
                 callback(null, null);

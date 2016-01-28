@@ -574,7 +574,7 @@ $(document).ready(function() {
             taskData.blueprintIds = blueprintList;
             taskData.nodeIds = nodesList;
             taskData.runlist = runlist;
-            alert(JSON.stringify(taskData));
+            //alert(JSON.stringify(taskData));
             //taskData.attributesjson = $('#attrtextarea').val().trim();
             $trAttribute = $('#attributesViewListTable').find('tbody tr');
             var attributes = [];

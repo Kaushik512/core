@@ -506,6 +506,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     if (err) {
                         res.status(500).send('Not able to fetch Orgs.');
                         return;
+                    }
+                    if (orgList.length === 0 && req.params.id === '21') {
+                        d4dModelNew.d4dModelMastersTeams.find({
+                            id: "21"
+                        }, function(err, data) {
+                            if (err) {
+                                logger.error("Failed to fetch Team.");
+                            }
+                            res.send(data);
+                        });
                     } else if (req.params.id === '1') {
                         res.send(orgList);
                         return;
@@ -636,6 +646,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             res.send(pList);
                             return;
                         });
+
                     } else if (req.params.id === '26') {
                         // For Puppet Server
                         masterUtil.getNexusServers(orgList, function(err, pList) {
@@ -1225,7 +1236,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 //Re-construct the json with the item found
                                 var configmgmt = '';
                                 for (var k = 0; k < itm.field.length; k++) {
-
                                     if (configmgmt == '')
                                         configmgmt += "\"" + itm.field[k]["name"] + "\":\"" + itm.field[k]["values"].value + "\"";
                                     else
@@ -1433,10 +1443,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
             }
         });
     });
-
-
-
-
 
     app.get('/d4dMasters/configmgmt/:rowid', function(req, res) {
         logger.debug("Enter get() for  /d4dMasters/configmgmt/%s", req.params.rowid);
@@ -1883,7 +1889,6 @@ module.exports.setRoutes = function(app, sessionVerification) {
                     var root = '';
                     bodyJson["serviceids"].forEach(function(serviceid, servicecount) {
                         logger.debug("%s :: %s", serviceid, servicecount);
-
                         d4dMasterJson.masterjson.rows.row.forEach(function(itm, i) {
                             logger.debug("found %s", itm.field.length);
                             var configmgmt = '';
@@ -2250,7 +2255,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                 res.status(500).send("Failed to save Org.");
                                                 return;
                                             }
-                                            for (var x1 = 0; x1 < 4; x1++) {
+                                            for (var x1 = 0; x1 < 5; x1++) {
                                                 (function(x1) {
                                                     var templatetypename;
                                                     var designtemplateicon_filename;
@@ -2267,6 +2272,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                                         templatetypename = "CloudFormation";
                                                         designtemplateicon_filename = "CloudFormation.png";
                                                         templatetype = "cft";
+
+                                                    } else if (x1 === 3) {
+                                                        templatetypename = "ARMTemplate";
+                                                        designtemplateicon_filename = "CloudFormation.png";
+                                                        templatetype = "arm";
                                                     } else {
                                                         templatetypename = "Docker";
                                                         designtemplateicon_filename = "Docker.png";

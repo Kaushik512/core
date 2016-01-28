@@ -46,7 +46,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             if (instance.length) {
                 var anInstance = instance[0];
                 appDeployData['projectId'] = anInstance.projectId;
-                logger.debug("Before save appDeploy: ", JSON.stringify(appDeployData));
                 AppDeploy.createNew(appDeployData, function(err, appDeploy) {
                     if (err) {
                         res.status(500).send(errorResponses.db.error);

@@ -79,13 +79,14 @@ var taskSchema = new Schema({
     taskConfig: Schema.Types.Mixed,
     lastTaskStatus: String,
     lastRunTimestamp: Number,
-    timestampEnded: Number
+    timestampEnded: Number,
+    blueprintIds: [String]
 });
 
 // instance method :-  
 
 // Executes a task
-taskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData, callback, onComplete) {
+taskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData,blueprintIds,envId, callback, onComplete) {
     logger.debug('Executing');
     var task;
     var self = this;
@@ -129,7 +130,7 @@ taskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData,
     }
     var timestamp = new Date().getTime();
     var taskHistory = null;
-    task.execute(userName, baseUrl, choiceParam, nexusData, function(err, taskExecuteData, taskHistoryEntry) {
+    task.execute(userName, baseUrl, choiceParam, nexusData,blueprintIds, function(err, taskExecuteData, taskHistoryEntry) {
         if (err) {
             callback(err, null);
             return;
@@ -328,8 +329,7 @@ taskSchema.statics.createNew = function(taskData, callback) {
             taskType: TASK_TYPE.CHEF_TASK,
             nodeIds: taskData.nodeIds,
             runlist: taskData.runlist,
-            attributes: taskData.attributes,
-            blueprintIds: taskData.blueprintIds
+            attributes: taskData.attributes
         });
     } else if (taskData.taskType === TASK_TYPE.PUPPET_TASK) {
 

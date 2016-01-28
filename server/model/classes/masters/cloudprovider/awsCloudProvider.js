@@ -77,15 +77,10 @@ awsProviderSchema.statics.getAWSProviders = function(callback) {
             callback(err, null);
             return;
         }
-        if (providers.length) {
-            logger.debug("Exit getAWSProviders with providers present");
-            callback(null, providers);
-            return;
-        } else {
-            logger.debug("Exit getAWSProviders with no providers present");
-            callback(null, null);
-            return;
-        }
+
+        logger.debug("Exit getAWSProviders with providers present");
+        callback(null, providers);
+        return;
 
     });
 };

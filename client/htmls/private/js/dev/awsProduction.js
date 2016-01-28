@@ -1175,6 +1175,7 @@
 	                            var nexusServerType = $nexusServer.find('option:selected').attr('data-serverType');
 	                            var nexusRepoUrl = "";
 	                            var repoId = $chooseRepository.find('option:selected').val();
+	                            var nexusRepoId = $nexusServer.find('option:selected').val();
 	                            /*if (!repoId) {
 	                                alert("Please select repository.");
 	                                return false;
@@ -1195,14 +1196,18 @@
 	                                    var $chooseGroupId = $('#chooseGroupId');
 	                                    var groupId = $chooseGroupId.find('option:selected').val().replace(/\./g, '/');
 	                                    // var groupId = $chooseArtifacts.find('option:selected').attr('data-groupId').replace(/\./g, '/');
-	                                    if (repoId === "petclinic") {
+	                                    /*if (repoId === "petclinic") {
 	                                        nexusRepoUrl = nexusUrl + "/service/local/repositories/" + repoId + "/content/" + groupId + "/" + artifactId + "/" + versionId + "/" + artifactId + "-" + versionId + ".war";
 	                                    } else {
 	                                        nexusRepoUrl = nexusUrl + "/service/local/repositories/" + repoId + "/content/" + groupId + "/" + artifactId + "/" + versionId + "/" + artifactId + "-" + versionId + ".zip";
-	                                    }
+	                                    }*/
 	                                    var nexus = {
-	                                        "url": nexusRepoUrl,
-	                                        "version": appVersion
+	                                    	"repoId": nexusRepoId,
+	                                        "url": nexusUrl,
+	                                        "version": appVersion,
+	                                        "repoName": repoId,
+	                                        "artifactId": artifactId,
+	                                        "groupId": groupId
 	                                    };
 	                                    reqBody.nexus = nexus;
 	                                    //alert(JSON);

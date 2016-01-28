@@ -9,6 +9,11 @@ var logger = require('_pr/logger')(module);
 var mongoose = require('mongoose');
 var extend = require('mongoose-schema-extend');
 var ObjectId = require('mongoose').Types.ObjectId;
+
+var Chef = require('_pr/lib/chef.js');
+var configmgmtDao = require('_pr/model/d4dmasters/configmgmt');
+var appConfig = require('_pr/config');
+
 var schemaValidator = require('_pr/model/utils/schema-validator');
 
 var uniqueValidator = require('mongoose-unique-validator');
@@ -22,6 +27,9 @@ var VmwareBlueprint = require('./blueprint-types/instance-blueprint/vmware-bluep
 var CloudFormationBlueprint = require('./blueprint-types/cloud-formation-blueprint/cloud-formation-blueprint');
 var ARMTemplateBlueprint = require('./blueprint-types/arm-template-blueprint/arm-template-blueprint');
 var utils = require('../classes/utils/utils.js');
+var nexus = require('_pr/lib/nexus.js');
+
+
 
 var BLUEPRINT_TYPE = {
     DOCKER: 'docker',
@@ -90,12 +98,13 @@ var BlueprintSchema = new Schema({
         required: true,
         trim: true
     },
-    repoType: {
-        type: String
-    },
     nexus: {
+        repoId: String,
         url: String,
-        version: String
+        version: String,
+        repoName: String,
+        groupId: String,
+        artifactId: String
     },
     docker: {
         image: String,
@@ -118,7 +127,7 @@ function getBlueprintConfigType(blueprint) {
     } else if ((blueprint.blueprintType === BLUEPRINT_TYPE.OPENSTACK_LAUNCH || blueprint.blueprintType === BLUEPRINT_TYPE.HPPUBLICCLOUD_LAUNCH) && blueprint.blueprintConfig) {
         BlueprintConfigType = OpenstackBlueprint;
     } else if ((blueprint.blueprintType === BLUEPRINT_TYPE.AZURE_LAUNCH) && blueprint.blueprintConfig) {
-        BlueprintConfigType = InstanceBlueprint;
+        BlueprintConfigType = AzureBlueprint;
     } else if ((blueprint.blueprintType === BLUEPRINT_TYPE.VMWARE_LAUNCH) && blueprint.blueprintConfig) {
         logger.debug('this is test');
         BlueprintConfigType = VmwareBlueprint;
@@ -186,11 +195,116 @@ BlueprintSchema.methods.getCloudProviderData = function() {
     return blueprintConfigType.getCloudProviderData();
 }
 
-BlueprintSchema.methods.launch = function(envId, ver, callback) {
-    var blueprintConfigType = getBlueprintConfigType(this);
-    blueprintConfigType.launch(ver, function(err, launchData) {
-        callback(err, launchData);
+BlueprintSchema.methods.launch = function(opts, callback) {
+    var infraManager = this.getInfraManagerData();
+    var self = this;
+    configmgmtDao.getEnvNameFromEnvId(opts.envId, function(err, envName) {
+        if (err) {
+            callback({
+                message: "Failed to get env name from env id"
+            }, null);
+            return;
+        }
+        if (!envName) {
+            callback({
+                "message": "Unable to find environment name from environment id"
+            });
+            return;
+        }
+
+        configmgmtDao.getChefServerDetails(infraManager.infraManagerId, function(err, chefDetails) {
+            if (err) {
+                logger.error("Failed to getChefServerDetails", err);
+                callback({
+                    message: "Failed to getChefServerDetails"
+                }, null);
+                return;
+            }
+            if (!chefDetails) {
+                logger.error("No CHef Server Detailed available.", err);
+                callback({
+                    message: "No Chef Server Detailed available"
+                }, null);
+                return;
+            }
+            var chef = new Chef({
+                userChefRepoLocation: chefDetails.chefRepoLocation,
+                chefUserName: chefDetails.loginname,
+                chefUserPemFile: chefDetails.userpemfile,
+                chefValidationPemFile: chefDetails.validatorpemfile,
+                hostedChefUrl: chefDetails.url
+            });
+            logger.debug('Chef Repo Location = ', chefDetails.chefRepoLocation);
+
+            var blueprintConfigType = getBlueprintConfigType(self);
+
+            if (!self.appUrls) {
+                self.appUrls = [];
+            }
+            var appUrls = self.appUrls;
+            if (appConfig.appUrls && appConfig.appUrls.length) {
+                appUrls = appUrls.concat(appConfig.appUrls);
+            }
+
+            chef.getEnvironment(envName, function(err, env) {
+                if (err) {
+                    logger.error("Failed chef.getEnvironment", err);
+                    res.send(500);
+                    return;
+                }
+
+                if (!env) {
+                    logger.debug("Blueprint env ID = ", req.query.envId);
+                    chef.createEnvironment(envName, function(err) {
+                        if (err) {
+                            logger.error("Failed chef.createEnvironment", err);
+                            res.send(500);
+                            return;
+                        }
+                        blueprintConfigType.launch({
+                            infraManager: chef,
+                            ver: opts.ver,
+                            envName: envName,
+                            envId: opts.envId,
+                            stackName: opts.stackName,
+                            blueprintName: self.name,
+                            orgId: self.orgId,
+                            bgId: self.bgId,
+                            projectId: self.projectId,
+                            appUrls: appUrls,
+                            sessionUser: opts.user,
+                            users: self.users,
+                            blueprintData: self,
+                        }, function(err, launchData) {
+                            callback(err, launchData);
+                        });
+
+                    });
+                } else {
+                    blueprintConfigType.launch({
+                        infraManager: chef,
+                        ver: opts.ver,
+                        envName: envName,
+                        envId: opts.envId,
+                        stackName: opts.stackName,
+                        blueprintName: self.name,
+                        orgId: self.orgId,
+                        bgId: self.bgId,
+                        projectId: self.projectId,
+                        appUrls: appUrls,
+                        sessionUser: opts.user,
+                        users: self.users,
+                        blueprintData: self,
+                    }, function(err, launchData) {
+                        callback(err, launchData);
+                    });
+                }
+
+            });
+
+        });
     });
+
 };
 
 // static methods
@@ -311,22 +425,77 @@ BlueprintSchema.statics.getBlueprintsByOrgBgProject = function(orgId, bgId, proj
     });
 };
 
-BlueprintSchema.methods.getCookBookAttributes = function() {
+BlueprintSchema.methods.getCookBookAttributes = function(instanceIP, callback) {
     var blueprint = this;
     //merging attributes Objects
     var attributeObj = {};
     var objectArray = [];
     // While passing extra attribute to chef cookbook "rlcatalyst" is used as attribute.
     if (blueprint.nexus) {
+        var nexusRepoUrl = "";
+        var url = blueprint.nexus.url;
+        var repoName = blueprint.nexus.repoName;
+        var groupId = blueprint.nexus.groupId;
+        var artifactId = blueprint.nexus.artifactId;
+        var version = blueprint.nexus.version;
         objectArray.push({
             "rlcatalyst": {
-                "nexusUrl": blueprint.nexus.url
+                "upgrade": false
             }
         });
         objectArray.push({
             "rlcatalyst": {
-                "version": blueprint.nexus.version
+                "applicationNodeIP": instanceIP
             }
+        });
+
+        nexus.getNexusArtifactVersions(blueprint.nexus.repoId, repoName, groupId, artifactId, function(err, data) {
+            if (err) {
+                logger.debug("Failed to fetch Repository from Mongo: ", err);
+                // repoName is hardcoded, need to find better way to make dynamic.
+                if (repoName === "petclinic") {
+                    nexusRepoUrl = url + "/service/local/repositories/" + repoName + "/content/" + groupId + "/" + artifactId + "/" + version + "/" + artifactId + "-" + version + ".war";
+                } else {
+                    nexusRepoUrl = url + "/service/local/repositories/" + repoName + "/content/" + groupId + "/" + artifactId + "/" + version + "/" + artifactId + "-" + version + ".zip";
+                }
+                objectArray.push({
+                    "rlcatalyst": {
+                        "nexusUrl": nexusRepoUrl
+                    }
+                });
+                objectArray.push({
+                    "rlcatalyst": {
+                        "version": version
+                    }
+                });
+            }
+
+            if (data) {
+                var versions = data.metadata.versioning[0].versions[0].version;
+                var latestVersionIndex = versions.length;
+                var latestVersion = versions[latestVersionIndex - 1];
+                logger.debug("Got latest catalyst version from nexus: ", latestVersion);
+                // repoName is hardcoded, need to find better way to make dynamic
+                if (repoName === "petclinic") {
+                    nexusRepoUrl = url + "/service/local/repositories/" + repoName + "/content/" + groupId + "/" + artifactId + "/" + latestVersion + "/" + artifactId + "-" + latestVersion + ".war";
+                } else {
+                    nexusRepoUrl = url + "/service/local/repositories/" + repoName + "/content/" + groupId + "/" + artifactId + "/" + latestVersion + "/" + artifactId + "-" + latestVersion + ".zip";
+                }
+                objectArray.push({
+                    "rlcatalyst": {
+                        "nexusUrl": nexusRepoUrl
+                    }
+                });
+                objectArray.push({
+                    "rlcatalyst": {
+                        "version": latestVersion
+                    }
+                });
+            } else {
+                logger.debug("No artifact version found.");
+            }
+            var attributeObj = utils.mergeObjects(objectArray);
+            callback(null, attributeObj);
         });
     }
     if (blueprint.docker) {
@@ -345,16 +514,23 @@ BlueprintSchema.methods.getCookBookAttributes = function() {
                 "dockerRepo": blueprint.docker.image
             }
         });
+        objectArray.push({
+            "rlcatalyst": {
+                "upgrade": false
+            }
+        });
+        objectArray.push({
+            "rlcatalyst": {
+                "applicationNodeIP": instanceIP
+            }
+        });
+        var attrs = utils.mergeObjects(objectArray);
+        process.nextTick(function() {
+            callback(null, attrs);
+        });
+
     }
-    /*objectArray.push({
-        "rlcatalyst": {
-            "upgrade": false
-        }
-    });*/
-    logger.debug("AppDeploy attributes: ", JSON.stringify(objectArray));
-    var attributeObj = utils.mergeObjects(objectArray);
-    return attributeObj;
-}
+};
 
 var Blueprints = mongoose.model('blueprints', BlueprintSchema);
 

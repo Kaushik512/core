@@ -85,8 +85,11 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 res.status(500).send(errorResponses.db.error);
                 return;
             }
-
-            task.execute(req.session.user.cn, req.protocol + '://' + req.get('host'), choiceParam, nexusData, function(err, taskRes, historyData) {
+            var blueprintIds = [];
+            if(task.blueprintIds){
+                blueprintIds = task.blueprintIds
+            }
+            task.execute(req.session.user.cn, req.protocol + '://' + req.get('host'), choiceParam, nexusData,blueprintIds,task.envId, function(err, taskRes, historyData) {
                 if (err) {
                     logger.error(err);
                     res.status(500).send(err);

@@ -23,6 +23,7 @@ var taskTypeSchema = require('./taskTypeSchema');
 
 var ChefClientExecution = require('../instance/chefClientExecution/chefClientExecution.js');
 var utils = require('../utils/utils.js');
+var Blueprints = require('_pr/model/blueprint');
 
 var chefTaskSchema = taskTypeSchema.extend({
     nodeIds: [String],
@@ -30,8 +31,7 @@ var chefTaskSchema = taskTypeSchema.extend({
     attributes: [{
         name: String,
         jsonObj: {}
-    }],
-    blueprintIds: [String]
+    }]
 });
 
 //Instance Methods :- getNodes
@@ -41,59 +41,63 @@ chefTaskSchema.methods.getNodes = function() {
 };
 
 // Instance Method :- run task
-chefTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData, onExecute, onComplete) {
+chefTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData, blueprintIds,envId, onExecute, onComplete) {
     var self = this;
     logger.debug("self: ", JSON.stringify(self));
+    var count = 0;
+    if (blueprintIds.length) {
+        for (var i = 0; i < blueprintIds.length; i++) {
+            Blueprints.getById(blueprintIds[i], function(err, blueprint) {
+                count++;
+                if (err) {
+                    logger.error("Failed to get blueprint versions ", err);
+                    onExecute({
+                        message: "Failed to get blueprint versions"
+                    });
+                }
+                if (blueprint) {
+                    blueprint.extraRunlist = self.runlist;
+                    logger.debug("envId=== ",envId);
+                    blueprint.launch({
+                        envId: envId,
+                        ver: null,
+                        stackName: null,
+                        sessionUser: userName
+                    }, function(err, launchData) {
+                        if (err) {
+                            logger.debug("==== ",err);
+                            if (blueprintIds.length == count) {
+                                logger.debug("========");
+                                onExecute({
+                                    message: "Server Behaved Unexpectedly"
+                                });
+                                onComplete(null, null, {
+                                    runlist: self.runlist
+                                });
+                            }
+                        }
+                        if (blueprintIds.length == count) {
+                            onExecute({
+                                message: "Server Behaved Unexpectedly"
+                            });
+                            onComplete(null, null, {
+                                runlist: self.runlist
+                            });
+                        }
+                    });
+                }
+            });
+        }
+        return;
+
+    }
     //merging attributes Objects
     var attributeObj = {};
     var objectArray = [];
     for (var i = 0; i < self.attributes.length; i++) {
         objectArray.push(self.attributes[i].jsonObj);
     }
-    // While passing extra attribute to chef cookbook "rlcatalyst" is used as attribute.
-    if (nexusData) {
-        objectArray.push({
-            "rlcatalyst": {
-                "nexusUrl": nexusData.nexusUrl
-            }
-        });
-        objectArray.push({
-            "rlcatalyst": {
-                "version": nexusData.version
-            }
-        });
-        if (nexusData.containerId) {
-            objectArray.push({
-                "rlcatalyst": {
-                    "containerId": nexusData.containerId
-                }
-            });
-        }
-        if (nexusData.containerPort) {
-            objectArray.push({
-                "rlcatalyst": {
-                    "containerPort": nexusData.containerPort
-                }
-            });
-        }
-        if (nexusData.containerPort) {
-            objectArray.push({
-                "rlcatalyst": {
-                    "dockerRepo": nexusData.dockerRepo
-                }
-            });
-        }
 
-        if (nexusData.upgrade) {
-            objectArray.push({
-                "rlcatalyst": {
-                    "upgrade": nexusData.upgrade
-                }
-            });
-        }
-    }
-    logger.debug("AppDeploy attributes: ",JSON.stringify(objectArray));
-    var attributeObj = utils.mergeObjects(objectArray);
     var instanceIds = this.nodeIds;
     if (!(instanceIds && instanceIds.length)) {
         if (typeof onExecute === 'function') {
@@ -103,7 +107,7 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusD
         }
         return;
     }
-    
+
     instancesDao.getInstances(instanceIds, function(err, instances) {
         if (err) {
             logger.error(err);
@@ -176,6 +180,56 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusD
                     }, 1, instance._id, null, actionLog._id);
                     return;
                 }
+
+                // While passing extra attribute to chef cookbook "rlcatalyst" is used as attribute.
+                if (nexusData) {
+                    objectArray.push({
+                        "rlcatalyst": {
+                            "nexusUrl": nexusData.nexusUrl
+                        }
+                    });
+                    objectArray.push({
+                        "rlcatalyst": {
+                            "version": nexusData.version
+                        }
+                    });
+                    if (nexusData.containerId) {
+                        objectArray.push({
+                            "rlcatalyst": {
+                                "containerId": nexusData.containerId
+                            }
+                        });
+                    }
+                    if (nexusData.containerPort) {
+                        objectArray.push({
+                            "rlcatalyst": {
+                                "containerPort": nexusData.containerPort
+                            }
+                        });
+                    }
+                    if (nexusData.containerPort) {
+                        objectArray.push({
+                            "rlcatalyst": {
+                                "dockerRepo": nexusData.dockerRepo
+                            }
+                        });
+                    }
+
+                    if (nexusData.upgrade) {
+                        objectArray.push({
+                            "rlcatalyst": {
+                                "upgrade": nexusData.upgrade
+                            }
+                        });
+                    }
+                    objectArray.push({
+                        "rlcatalyst": {
+                            "applicationNodeIP": instance.instanceIP
+                        }
+                    });
+                }
+                logger.debug("AppDeploy attributes: ", JSON.stringify(objectArray));
+                var attributeObj = utils.mergeObjects(objectArray);
                 configmgmtDao.getChefServerDetails(instance.chef.serverId, function(err, chefDetails) {
                     if (err) {
                         var timestampEnded = new Date().getTime();
