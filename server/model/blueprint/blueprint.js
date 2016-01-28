@@ -115,27 +115,27 @@ var BlueprintSchema = new Schema({
 });
 
 function getBlueprintConfigType(blueprint) {
-    var BlueprintConfigType;
-    if ((blueprint.blueprintType === BLUEPRINT_TYPE.INSTANCE_LAUNCH) && blueprint.blueprintConfig) {
-        BlueprintConfigType = InstanceBlueprint;
-    } else if ((blueprint.blueprintType === BLUEPRINT_TYPE.DOCKER) && blueprint.blueprintConfig) {
-        BlueprintConfigType = DockerBlueprint;
-    } else if ((blueprint.blueprintType === BLUEPRINT_TYPE.AWS_CLOUDFORMATION) && blueprint.blueprintConfig) {
-        BlueprintConfigType = CloudFormationBlueprint;
-    } else if ((blueprint.blueprintType === BLUEPRINT_TYPE.AZURE_ARM_TEMPLATE) && blueprint.blueprintConfig) {
-        BlueprintConfigType = ARMTemplateBlueprint;
-    } else if ((blueprint.blueprintType === BLUEPRINT_TYPE.OPENSTACK_LAUNCH || blueprint.blueprintType === BLUEPRINT_TYPE.HPPUBLICCLOUD_LAUNCH) && blueprint.blueprintConfig) {
-        BlueprintConfigType = OpenstackBlueprint;
-    } else if ((blueprint.blueprintType === BLUEPRINT_TYPE.AZURE_LAUNCH) && blueprint.blueprintConfig) {
-        BlueprintConfigType = InstanceBlueprint;
-    } else if ((blueprint.blueprintType === BLUEPRINT_TYPE.VMWARE_LAUNCH) && blueprint.blueprintConfig) {
-        logger.debug('this is test');
-        BlueprintConfigType = VmwareBlueprint;
-    } else {
-        return;
-    }
-    var blueprintConfigType = new BlueprintConfigType(blueprint.blueprintConfig);
-    return blueprintConfigType;
+	var BlueprintConfigType;
+	if ((blueprint.blueprintType === BLUEPRINT_TYPE.INSTANCE_LAUNCH) && blueprint.blueprintConfig) {
+		BlueprintConfigType = InstanceBlueprint;
+	} else if ((blueprint.blueprintType === BLUEPRINT_TYPE.DOCKER) && blueprint.blueprintConfig) {
+		BlueprintConfigType = DockerBlueprint;
+	} else if ((blueprint.blueprintType === BLUEPRINT_TYPE.AWS_CLOUDFORMATION) && blueprint.blueprintConfig) {
+		BlueprintConfigType = CloudFormationBlueprint;
+	} else if ((blueprint.blueprintType === BLUEPRINT_TYPE.AZURE_ARM_TEMPLATE) && blueprint.blueprintConfig) {
+		BlueprintConfigType = ARMTemplateBlueprint;
+	} else if ((blueprint.blueprintType === BLUEPRINT_TYPE.OPENSTACK_LAUNCH || blueprint.blueprintType === BLUEPRINT_TYPE.HPPUBLICCLOUD_LAUNCH) && blueprint.blueprintConfig) {
+		BlueprintConfigType = OpenstackBlueprint;
+	} else if ((blueprint.blueprintType === BLUEPRINT_TYPE.AZURE_LAUNCH) && blueprint.blueprintConfig) {
+		BlueprintConfigType = AzureBlueprint;
+	} else if ((blueprint.blueprintType === BLUEPRINT_TYPE.VMWARE_LAUNCH) && blueprint.blueprintConfig) {
+		logger.debug('this is test');
+		BlueprintConfigType = VmwareBlueprint;
+	} else {
+		return;
+	}
+	var blueprintConfigType = new BlueprintConfigType(blueprint.blueprintConfig);
+	return blueprintConfigType;
 }
 
 // instance methods

@@ -4,6 +4,7 @@ var extend = require('mongoose-schema-extend');
 var ObjectId = require('mongoose').Types.ObjectId;
 
 
+var instancesDao = require('_pr/model/classes/instance/instance');
 var logsDao = require('_pr/model/dao/logsdao.js');
 var Docker = require('_pr/model/docker.js');
 var appConfig = require('_pr/config');
@@ -123,7 +124,9 @@ ARMTemplateBlueprintSchema.methods.launch = function(launchParams, callback) {
 				credentialcryptography.encryptCredential(credentials, function(err, encryptedCredentials) {
 					if (err) {
 						logger.error('azure encryptCredential error', err);
-						res.send(500, err);
+						callback({
+							message:"Unable to encryptCredential"
+						});
 						return;
 					}
 					logger.debug('Credentials encrypted..');
@@ -180,7 +183,9 @@ ARMTemplateBlueprintSchema.methods.launch = function(launchParams, callback) {
 					instancesDao.createInstance(instance, function(err, data) {
 						if (err) {
 							logger.error("Failed to create Instance", err);
-							res.send(500);
+							callback({
+								message:"Unable to create instance in db"
+							})
 							return;
 						}
 						instance.id = data._id;
@@ -296,9 +301,8 @@ ARMTemplateBlueprintSchema.methods.launch = function(launchParams, callback) {
 												function(err, retCode) {
 													if (err) {
 														logger.error("Failed _docker.checkDockerStatus", err);
-														res.send(500);
 														return;
-														//res.end('200');
+														
 
 													}
 													logger.debug('Docker Check Returned:' + retCode);
@@ -491,7 +495,7 @@ ARMTemplateBlueprintSchema.methods.launch = function(launchParams, callback) {
 			}, function(err, stackData) {
 				if (err) {
 					logger.error("Unable to launch CloudFormation Stack", err);
-					res.send(500, {
+					callback({
 						message: "Unable to launch ARM Template"
 					});
 					return;
@@ -504,7 +508,7 @@ ARMTemplateBlueprintSchema.methods.launch = function(launchParams, callback) {
 				}, function(err, deployedTemplateData) {
 					if (err) {
 						logger.error("Unable to get arm deployed template", err);
-						res.status(500).send({
+						callback({
 							message: "Error occured while fetching deployed template status"
 						});
 						return;
@@ -532,10 +536,12 @@ ARMTemplateBlueprintSchema.methods.launch = function(launchParams, callback) {
 					}, function(err, azureArmDeployement) {
 						if (err) {
 							logger.error("Unable to save arm data in DB", err);
-							res.status(500).send(errorResponses.db.error);
+							callback({
+								message:"unable to save arm in db"
+							});
 							return;
 						}
-						res.status(200).send({
+						callback(null,{
 							armId: azureArmDeployement._id
 						});
 

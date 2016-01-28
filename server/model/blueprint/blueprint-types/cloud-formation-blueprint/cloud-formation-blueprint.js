@@ -22,6 +22,8 @@ var AWSProvider = require('_pr/model/classes/masters/cloudprovider/awsCloudProvi
 var credentialcryptography = require('_pr/lib/credentialcryptography');
 var CloudFormation = require('_pr/model/cloud-formation');
 var AWSCloudFormation = require('_pr/lib/awsCloudFormation.js');
+var AwsAutoScaleInstance = require('_pr/model/aws-auto-scale-instance');
+var AWSKeyPair = require('_pr/model/classes/masters/cloudprovider/keyPair.js');
 
 
 
