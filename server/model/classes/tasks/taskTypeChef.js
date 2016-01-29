@@ -41,7 +41,7 @@ chefTaskSchema.methods.getNodes = function() {
 };
 
 // Instance Method :- run task
-chefTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData, blueprintIds,envId, onExecute, onComplete) {
+chefTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData, blueprintIds, envId, onExecute, onComplete) {
     var self = this;
     logger.debug("self: ", JSON.stringify(self));
     var count = 0;
@@ -57,32 +57,52 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusD
                 }
                 if (blueprint) {
                     blueprint.extraRunlist = self.runlist;
-                    logger.debug("envId=== ",envId);
+                    logger.debug("envId=== ", envId);
                     blueprint.launch({
                         envId: envId,
                         ver: null,
                         stackName: null,
                         sessionUser: userName
                     }, function(err, launchData) {
+                        logger.debug("error while launching BluePrint: ",err);
+                        logger.debug("Launching BluePrint Data: ",JSON.stringify(launchData));
+                        var instanceResultList = [];
                         if (err) {
-                            logger.debug("==== ",err);
                             if (blueprintIds.length == count) {
-                                logger.debug("========");
-                                onExecute({
-                                    message: "Server Behaved Unexpectedly"
-                                });
-                                onComplete(null, null, {
-                                    runlist: self.runlist
-                                });
+                                if (typeof onExecute === 'function') {
+                                    onExecute({
+                                        message: "Server Behaved Unexpectedly"
+                                    });
+                                }
+                                var overallStatus = 1;
+                                var result = {
+                                    status: 'failed'
+                                }
+                                instanceResultList.push(result);
+                                if (typeof onComplete === 'function') {
+                                    onComplete(null, overallStatus, {
+                                        instancesResults: instanceResultList
+                                    });
+                                }
                             }
                         }
                         if (blueprintIds.length == count) {
-                            onExecute({
-                                message: "Server Behaved Unexpectedly"
-                            });
-                            onComplete(null, null, {
-                                runlist: self.runlist
-                            });
+                            if (typeof onExecute === 'function') {
+                                onExecute({
+                                    message: "Blueprint Launched Successfully.For log please check Instance."
+                                });
+                            }
+
+                            var result = {
+                                status: 'success'
+                            }
+                            var overallStatus = 0;
+                            instanceResultList.push(result);
+                            if (typeof onComplete === 'function') {
+                                onComplete(null, overallStatus, {
+                                    instancesResults: instanceResultList
+                                });
+                            }
                         }
                     });
                 }

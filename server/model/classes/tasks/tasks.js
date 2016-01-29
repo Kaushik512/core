@@ -130,7 +130,7 @@ taskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData,
     }
     var timestamp = new Date().getTime();
     var taskHistory = null;
-    task.execute(userName, baseUrl, choiceParam, nexusData,blueprintIds, function(err, taskExecuteData, taskHistoryEntry) {
+    task.execute(userName, baseUrl, choiceParam, nexusData,blueprintIds,envId, function(err, taskExecuteData, taskHistoryEntry) {
         if (err) {
             callback(err, null);
             return;
