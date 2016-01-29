@@ -34,6 +34,9 @@ var MongoStore = require('connect-mongo')(expressSession);
 var mongoDbConnect = require('_pr/lib/mongodb');
 var mongoose = require('mongoose');
 
+
+var cronTabManager = require('_pr/cronjobs');
+
 logger.debug('Starting Catalyst');
 logger.debug('Logger Initialized');
 var LDAPUser = require('_pr/model/ldap-user/ldap-user.js');
@@ -169,6 +172,8 @@ io.sockets.on('connection', function(socket) {
 		socket.emit('log', line);
 	});
 });
+
+cronTabManager.start();
 
 server.listen(app.get('port'), function() {
 	logger.debug('Express server listening on port ' + app.get('port'));
