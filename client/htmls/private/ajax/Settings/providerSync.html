@@ -1,0 +1,317 @@
+<style>
+
+  .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+    border-top: 0px !important;
+  }
+
+  tr.show-settings:hover .settings{
+    display:block;
+  }
+
+  div.settings{
+    display:none;
+    width: 32px;
+    height: 18px;
+  }
+
+  .dropdown-content{
+    border-radius: 5px;
+      left: -30px;
+      min-width: 98px;
+      right: 0;
+  }
+
+  .show-settings input{
+    border: 1px solid #999;
+  }
+
+  .show-settings input, span{
+    height: 20px;
+  }
+
+</style>
+
+<div class="clearfix"></div>
+<ul class="nav nav-tabs " role="tablist">
+  <li class="active"><a href="#organiz" role="tab" data-toggle="tab">Instances</a></li>
+</ul>
+
+<!-- Tab panes -->
+<div  class="tab-content instancesListContainer">
+  <div  class="tab-pane active tabContent table-responsive" id="instanceListDiv" style="display:=block">
+    <table class="table table-hover table-bordered" id="instanceListTable" style="font-size:13px;margin-bottom:55px";>
+    
+    <thead>
+      <tr>
+        <th style="text-align: center">Name/Id</th>
+        <th style="text-align: center">OS</th>
+        <th style="text-align: center">IP Address</th>
+        <th style="text-align: center">Managed</th>
+        <th style="text-align: center">status</th>
+        <th style="text-align: center">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      
+
+    </tbody>
+  </table>
+   <footer class="footer">
+      <div style="text-align:center" class="clearfix form-actions">
+        <div>
+            <input type="button" id="buttonForIP" style="margin-left:200px;" value="Import Nodes" class="btn btn-primary showChefImportNodesModalBtn">
+        </div>
+      </div>
+    </footer>
+ 
+
+</div>
+
+</div>  
+
+<div class="modal fade" id="providerSyncModal" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="" id="myForm12" autocomplete="off">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Import Nodes</h4>
+      </div>
+      <div class="modal-body modalbody-height">
+         
+          
+          <div class="col-lg-6">
+            
+              <label for="exampleInputEmail1">Organization</label>
+                <select id="puppetImportOrgSelect"  class="width-100 aaa" disabled>
+                  
+                </select>
+            
+          </div>
+
+          
+
+          <div class="col-lg-6 topNew">  
+              <label for="exampleInputEmail1">Business Groups<span class="control-label redSpan">&nbsp;*</span></label>
+
+              <select id="puppetImportBgSelect"  class="width-100 aaaaa" cdata="catalyst" cat-validation="required" autofocus>
+
+                
+              </select>
+            
+          </div>
+
+
+          
+          
+        <div class="col-lg-6" style="display:none">
+          
+            <label for="exampleInputEmail1">Environment<span class="control-label redSpan">&nbsp;*</span></label>
+            <div class="">
+              <select id="puppetImportEnvSelect"  class="width-100" >
+                    
+              </select>
+            </div>
+          
+        </div>
+
+          <div class="col-lg-6" style="margin-top:20px;">
+            <label for="exampleInputEmail1">Project<span class="control-label redSpan">&nbsp;*</span></label>
+            
+              <select id="puppetImportProjectSelect"  class="width-100">
+              </select>
+            
+          </div>
+
+          <div class="col-lg-6 credentialSection" style="margin-top:20px;">
+        
+            <label for="exampleInputEmail1">Username<span class="control-label redSpan">&nbsp;*</span></label>
+            
+            <input type="text" name="importUsernameInput" class="form-control" id="importUsernameInput" required value="" autofocus>
+              <b class="tooltip tooltip-top-right">
+              <i class="fa fa-user txt-color-teal"></i> Please enter Instance Username</b>
+          
+        
+          </div>
+      
+          <div class="col-lg-6" style="margin-top:20px;">
+            <label for="">Choose Authentication Type</label>
+            <select id="pemFileDropdown2"  class="authenticationType width-100" cdata="catalyst" cat-validation="required">
+              <option value="password">Password</option>
+              <option value="pemFile">Pem File</option>
+            </select>
+          
+          </div>
+
+          
+      
+      <div class="col-lg-6" style="display:none">
+        
+          <label for="exampleInputEmail1">Provider</label>
+          
+          <select id="puppetImportProviderSelect"  class="form-control" cat-validation="required">
+                
+          </select>
+        
+        
+      </div>
+      
+      
+      <div class="col-lg-6 credentialSection authPassword" style="margin-top:20px;">
+        
+          <label for="exampleInputEmail1">Password</label>
+          
+          <input type="password" class="form-control" id="importPasswordInput" required="true" cdata="catalyst" cat-validation="required"><span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-initialvalue="" style="visibility:hidden;">Required</span>
+            <b class="tooltip tooltip-top-right">
+            <i class="fa fa-lock txt-color-teal"></i> Please enter Instance Password</b>
+          
+        
+      </div>
+
+      <div class="col-lg-6 credentialSection authPemFile" style="margin-top:20px;">
+        <div class="smart-forms">
+            <label for="exampleInputEmail1">Pem File</label>
+            <label for="" name="field" class="file">
+                <span class="button btn-primary">Browse</span>
+                <input id="importPemfileInput" type="file" class="gui-file">
+                <input type="text" readonly="" class="gui-input">
+            </label>
+        </div>
+      </div>
+
+     
+      <div class="col-lg-6 hidden" style="margin-top:15px;">
+          <label class="">Assign Users<span class="control-label redSpan">&nbsp;*</span></label>
+          
+              <div class="userListLoadingContainer"></div>
+              <select class="custom-scroll" multiple="" id="userListSelect" style="display:none" cdata="catalyst" cat-validation="required">
+                  <option value="1">User1</option>
+                  <option value="2">User2</option>
+                  <option value="3">User3</option>
+                  <option value="4">User4</option>
+                  <option value="5">User5</option>
+              </select> 
+          
+      </div>
+    
+    
+         
+      </div>
+      <div class="modal-footer">
+          <div class="marginForButtons">
+            <label id="saveSpinner" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
+          <a type="button" class="btn btn-default" data-dismiss="modal">Close</a>
+          <button type="button" class="btn btn-primary importNodesBtn">Import</button>
+        </div>
+      </div>
+      </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="chefImportNodesResultModal" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Importing Nodes</h4>
+      </div>
+      <div class="modal-body">
+      </div>
+       <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script type="text/javascript">
+
+(function() {
+  var $tbody = $('#instanceListTable tbody');
+  function loadManagedInstances(managnedData) {
+
+    for(var i=0;i<managnedData.length;i++) {
+      var $tr = $('<tr></tr>');
+      var $tdId = $('<td></td>').append(managnedData[i].id);
+      $tr.append($tdId);
+
+      var $tdOs = $('<td></td>').append(managnedData[i].os);
+      $tr.append($tdOs);
+
+      var $tdIpAddress = $('<td></td>').append(managnedData[i].ipAddress);
+      $tr.append($tdIpAddress);
+
+      var $tdIsManagd = $('<td></td>').append(true);
+      $tr.append($tdIsManagd);
+
+      var $tdStatus = $('<td></td>').append(managnedData[i].status);
+      $tr.append($tdStatus);
+
+      var $tdAction = $('<td></td>').append('<input type="button" value="delete">');
+      $tr.append($tdAction);
+
+      $tbody.append($tr);
+    }
+
+  }
+
+  function loadUnmanagedInstances(unManagnedData) {
+
+    for(var i=0;i<unManagnedData.length;i++) {
+      var $tr = $('<tr></tr>');
+      var $tdId = $('<td></td>').append(unManagnedData[i].id);
+      $tr.append($tdId);
+
+      var $tdOs = $('<td></td>').append(unManagnedData[i].os);
+      $tr.append($tdOs);
+
+      var $tdIpAddress = $('<td></td>').append(unManagnedData[i].ipAddress);
+      $tr.append($tdIpAddress);
+
+      var $tdIsManagd = $('<td></td>').append(false);
+      $tr.append($tdIsManagd);
+
+      var $tdStatus = $('<td></td>').append(unManagnedData[i].status);
+      $tr.append($tdStatus);
+
+      var $tdAction = $('<td></td>').append('<input type="checkbox" value="">');
+      $tr.append($tdAction);
+
+      $tbody.append($tr);
+    }
+
+  }
+
+  //loading Data
+  setTimeout(function() {
+    loadManagedInstances([{
+      id: 'i-93883',
+      os: 'ubuntu',
+      ipAddress: '9.7.6.4',
+      status: 'running',
+    }, {
+      id: 'i-23344',
+      os: 'cent os',
+      ipAddress: '23.22.55.66',
+      status: 'running',
+    }]);
+
+    loadUnmanagedInstances([{
+      id: 'i-5555334',
+      os: 'windows',
+      ipAddress: '192.168.1.1',
+      status: 'running',
+    }, {
+      id: 'i-434343',
+      os: 'cent os',
+      ipAddress: '127.0.0.1',
+      status: 'stopped',
+    }]);
+
+  }, 3000);
+
+  
+})();
+</script>
