@@ -391,6 +391,23 @@ BlueprintSchema.statics.getById = function(id, callback) {
     });
 };
 
+BlueprintSchema.statics.getByIds = function(ids, callback) {
+    logger.debug('finding blueprint by id ===>' + ids);
+    if (ids && ids.length) {
+        this.find({
+            "_id": {
+                $in: ids
+            }
+        }, function(err, blueprints) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            callback(null, blueprints);
+        });
+    }
+};
+
 BlueprintSchema.statics.removeById = function(id, callback) {
     this.remove({
         "_id": ObjectId(id)
@@ -497,7 +514,7 @@ BlueprintSchema.methods.getCookBookAttributes = function(instanceIP, callback) {
             var attributeObj = utils.mergeObjects(objectArray);
             callback(null, attributeObj);
         });
-    }
+    } /*else*/
     if (blueprint.docker) {
         objectArray.push({
             "rlcatalyst": {

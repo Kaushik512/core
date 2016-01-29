@@ -311,12 +311,16 @@ AWSInstanceBlueprintSchema.methods.launch = function(launchParams, callback) {
                                                     return;
                                             }
                                             launchParams.blueprintData.getCookBookAttributes(instance.instanceIP, function(err, jsonAttributes) {
+                                                
+
+                                                logger.debug('bootstraping node');
                                                 var runlist = instance.runlist;
-                                                if (launchParams.extraRunlist) {
-                                                    runlist = launchParams.extraRunlist.concat(instance.runlist);
+                                                logger.debug("launchParams.blueprintData.extraRunlist: ",JSON.stringify(launchParams.blueprintData.extraRunlist));
+                                                if (launchParams.blueprintData.extraRunlist) {
+                                                    runlist = launchParams.blueprintData.extraRunlist.concat(instance.runlist);
                                                 }
 
-                                                
+                                                logger.debug("runlist: ",JSON.stringify(runlist));
                                                 launchParams.infraManager.bootstrapInstance({
                                                     instanceIp: instance.instanceIP,
                                                     pemFilePath: tempUncryptedPemFileLoc,
