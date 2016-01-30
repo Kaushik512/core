@@ -880,6 +880,8 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
     var $tableapplicationTest = $tableClone;
     var $tableapplicationTbody = $tableClone.find('tbody');
     $.get('/app/deploy/project/' + projectId + '/list', function(deployData) {
+
+
         deployData.forEach(function(appDeployDataObj) {
             function createMainCard(applicationName,versionNumber){
                 var tempStr = '';
@@ -954,12 +956,12 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
             }
             //alert(sortedappdataList);
             sortedappdataList.sort(sortAscending);
-            alert(sortedappdataList);
+            //alert(sortedappdataList);
             
             for(var m=0; m<unsortedappdataList.length;m++){
             	indexedList.push(jQuery.inArray(unsortedappdataList[m], sortedappdataList));
             }
-            console.log(indexedList);
+            //console.log(indexedList);
 
             var applicationInstanceName = [];
             var applicationNodeIP = [];
