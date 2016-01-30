@@ -930,6 +930,8 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
                 finalArray.push(tempStr);
                 //finalArray.push($childPresentCard);
             };
+
+            
             function sortAscending(data_A, data_B){
 				data_A = convertToDateObj(data_A);
 			    data_B = convertToDateObj(data_B);
@@ -950,13 +952,14 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
             	sortedappdataList.push(appDeployDataObj.applicationLastDeploy[j]);
 	            unsortedappdataList.push(appDeployDataObj.applicationLastDeploy[j]);
             }
-            
+            //alert(sortedappdataList);
             sortedappdataList.sort(sortAscending);
+            alert(sortedappdataList);
             
             for(var m=0; m<unsortedappdataList.length;m++){
             	indexedList.push(jQuery.inArray(unsortedappdataList[m], sortedappdataList));
             }
-
+            console.log(indexedList);
 
             var applicationInstanceName = [];
             var applicationNodeIP = [];
@@ -967,16 +970,26 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
             var envId = [];
             var appLogs = [];
             for(var n=0;n<indexedList.length;n++){
-            	applicationInstanceName.push(appDeployDataObj.applicationInstanceName[indexedList[n]]);
-            	applicationNodeIP.push(appDeployDataObj.applicationNodeIP[indexedList[n]]);
-            	applicationLastDeploy.push(appDeployDataObj.applicationLastDeploy[indexedList[n]]);
-            	applicationStatus.push(appDeployDataObj.applicationStatus[indexedList[n]]);
-            	containerId.push(appDeployDataObj.containerId[indexedList[n]]);
-            	hostName.push(appDeployDataObj.hostName[indexedList[n]]);
-            	envId.push(appDeployDataObj.envId[indexedList[n]]);
-            	appLogs.push(appDeployDataObj.appLogs[indexedList[n]]);
-            }
+            	console.log(appDeployDataObj.applicationLastDeploy[indexedList[n]]);
+            	// applicationInstanceName.push(appDeployDataObj.applicationInstanceName[indexedList[n]]);
+            	// applicationNodeIP.push(appDeployDataObj.applicationNodeIP[indexedList[n]]);
+            	// applicationLastDeploy.push(appDeployDataObj.applicationLastDeploy[indexedList[n]]);
+            	// applicationStatus.push(appDeployDataObj.applicationStatus[indexedList[n]]);
+            	// containerId.push(appDeployDataObj.containerId[indexedList[n]]);
+            	// hostName.push(appDeployDataObj.hostName[indexedList[n]]);
+            	// envId.push(appDeployDataObj.envId[indexedList[n]]);
+            	// appLogs.push(appDeployDataObj.appLogs[indexedList[n]]);
 
+            	applicationInstanceName[indexedList[n]] = appDeployDataObj.applicationInstanceName[n];
+            	applicationNodeIP[indexedList[n]]=appDeployDataObj.applicationNodeIP[n];
+            	applicationLastDeploy[indexedList[n]] = appDeployDataObj.applicationLastDeploy[n];
+            	applicationStatus[indexedList[n]] = appDeployDataObj.applicationStatus[n];
+            	containerId[indexedList[n]] = appDeployDataObj.containerId[n];
+            	hostName[indexedList[n]]=appDeployDataObj.hostName[n];
+            	envId[indexedList[n]] = appDeployDataObj.envId[n];
+            	appLogs[indexedList[n]] = appDeployDataObj.appLogs[n];
+            }
+            console.log(applicationLastDeploy);
             var sortedappDeployDataObj = {
             	"applicationName": applicationName,
             	"applicationVersion": versionNumber,
@@ -1431,10 +1444,15 @@ function ConvertTimeformat(format, str, formatStr) {
 	return (sHours + ":" + sMinutes + ":" + sSeconds);
 }
 
+/*"2016-1-20 09:20:34AM",
+            "2016-1-20 10:20:34AM",
+            "2016-1-20 05:20:34AM",
+            "2016-1-20 11:40:34AM"*/
 function convertToDateObj(strInputDate) {
-	var dateStr = strInputDate.split(' ')[0];
-	var timeStr = strInputDate.split(' ')[1];
-	var formatStr = strInputDate.split(' ')[2];
+	var strSplit = strInputDate.split(' ');
+	var dateStr = strSplit[0];
+	var timeStr = strSplit[1];
+	var formatStr = strSplit[2];
 	var str = ConvertTimeformat("24", timeStr, formatStr);
 	if(dateStr.length == 8){
 	  	var year = strInputDate.substring(0, 2);
@@ -1442,20 +1460,27 @@ function convertToDateObj(strInputDate) {
 	    var month = strInputDate.substring(3, 5);
 	    month = parseInt(month);
 	    var day = strInputDate.substring(6, 8);
+	  }else if(dateStr.length == 9){
+	  	var year = strInputDate.substring(0, 4);
+		var month = strInputDate.substring(5, 6);
+		month = parseInt(month);
+		var day = strInputDate.substring(7, 9);
 	  }else{
 	  	var year = strInputDate.substring(0, 4);
-			var month = strInputDate.substring(5, 7);
-			month = parseInt(month);
-			var day = strInputDate.substring(8, 10);
+		var month = strInputDate.substring(5, 7);
+		month = parseInt(month);
+		var day = strInputDate.substring(8, 10);
 	  }
 	// var year = strInputDate.substring(0, 2);
 	// var month = strInputDate.substring(3, 5);
 	// month = parseInt(month);
 	// var day = strInputDate.substring(6, 8);
+	//alert(day+'======='+strInputDate);
 	var hour = str.substring(0, 2);
 	var minute = str.substring(3, 5);
 	var second = str.substring(6, 8);
 	var dateConverted = new Date(year, month - 1, day, hour, minute, second);
+	//alert(dateConverted + ' ==== '+strInputDate);
 	return dateConverted;
 }
 
