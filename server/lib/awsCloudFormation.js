@@ -34,6 +34,8 @@ var AWSCloudFormation = function(awsSettings) {
         } else {
             options.TemplateURL = stackOptions.templateBody;
         }
+
+        
         cloudFormation.createStack(options, function(err, stackData) {
             if (err) {
                 callback(err, null);

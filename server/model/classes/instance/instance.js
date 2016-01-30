@@ -1484,10 +1484,9 @@ var InstancesDao = function() {
     };
 
     this.getInstanceByIP = function(instanceIp, callback) {
+        instanceIp = instanceIp.trim();
         Instances.find({
             "instanceIP": instanceIp
-        }, {
-            'actionLogs': false
         }, function(err, data) {
             if (err) {
                 logger.error("Failed getInstanceById (%s)", instanceId, err);
