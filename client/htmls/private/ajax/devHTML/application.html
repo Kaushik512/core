@@ -864,11 +864,11 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
     $('#tableContainer').empty().append($tableClone);
     $tableClone.DataTable({
         columns: arrEnv,
-        /*"bSort": false,
+        "bSort": false,
         "aoColumnDefs": [
           { 'bSortable': true, 'aTargets': [ 0 ] }
-       	],*/
-       	"bSort": false,
+       	],
+       	// "bSort": false,
         "bAutoWidth": false,
         "bProcessing": true,
         "bDeferRender": true,
