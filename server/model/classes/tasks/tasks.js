@@ -131,11 +131,7 @@ taskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData,
     var timestamp = new Date().getTime();
     var taskHistory = null;
     task.execute(userName, baseUrl, choiceParam, nexusData, blueprintIds, envId, function(err, taskExecuteData, taskHistoryEntry) {
-        logger.debug("error::::::::::::: ",err);
-        logger.debug("taskExecuteData: ",JSON.stringify(taskExecuteData));
-        logger.debug("taskHistoryEntry: ",JSON.stringify(taskHistoryEntry));
         if (err) {
-            logger.debug("inside error::::::::::::: ",err);
             callback(err, null);
             return;
         }

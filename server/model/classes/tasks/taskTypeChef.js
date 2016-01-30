@@ -48,6 +48,8 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusD
         var count = 0;
         var onCompleteResult = [];
         var overallStatus = 0;
+        var launchedBluprintIds = [];
+        var failedBluprintIds = [];
 
         function blueprintOnCompleteHandler(err, status, blueprintId, output) {
             count++;
@@ -59,14 +61,34 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusD
             if (status) {
                 result.status = 'failed';
                 overallStatus = 1;
+                failedBluprintIds.push(blueprintId);
+            } else {
+                launchedBluprintIds.push(blueprintId);
             }
             onCompleteResult.push(result);
 
             if (count === blueprintIds.length) {
+                if (typeof onExecute === 'function') {
+                    var msg;
+                    if (!launchedBluprintIds.length) {
+                        msg = "Unable to launch blueprints";
+                    } else if (launchedBluprintIds.length === blueprintIds.length) {
+                        msg = "Blueprints launched: " + blueprintIds + ",  To see logs go to Instance.";
+                    } else {
+                        msg = "Go to instances to see log.";
+                    }
+                    onExecute(null, {
+                        blueprintMessage: msg,
+                        onCompleteResult: onCompleteResult
+                    });
+                }
+
                 if (typeof onComplete === 'function') {
-                    logger.debug("onComplete fired for blueprint: ", overallStatus + "  " + onCompleteResult);
-                    onComplete(null, overallStatus, {
-                        blueprintResults: onCompleteResult
+                    process.nextTick(function() {
+                        logger.debug("onComplete fired for blueprint: ", overallStatus + "  " + onCompleteResult);
+                        onComplete(null, overallStatus, {
+                            blueprintResults: onCompleteResult
+                        });
                     });
                 }
             }
@@ -101,15 +123,10 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusD
                             status = 1;
                         }
                         blueprintOnCompleteHandler(err, status, blueprint.id, launchData);
-
                     });
                 })(blueprints[i]);
             }
-            if (typeof onExecute === 'function') {
-                onExecute(null, {
-                    message: "Blueprints launched: " + blueprintIds + ",  To see logs go to Instance."
-                });
-            }
+
         });
 
         return;

@@ -86,7 +86,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 return;
             }
             var blueprintIds = [];
-            if(task.blueprintIds){
+            if(task.blueprintIds.length){
                 blueprintIds = task.blueprintIds
             }
             task.execute(req.session.user.cn, req.protocol + '://' + req.get('host'), choiceParam, nexusData,blueprintIds,task.envId, function(err, taskRes, historyData) {
