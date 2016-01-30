@@ -98,6 +98,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 if (historyData) {
                     taskRes.historyId = historyData.id;
                 }
+                logger.debug("taskRes::::: ",JSON.stringify(taskRes));
                 res.send(taskRes);
             });
         });

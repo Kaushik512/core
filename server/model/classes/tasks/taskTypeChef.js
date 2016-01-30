@@ -63,8 +63,8 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusD
             onCompleteResult.push(result);
 
             if (count === blueprintIds.length) {
-                logger.debug("onComplete fired....",typeof onComplete);
                 if (typeof onComplete === 'function') {
+                    logger.debug("onComplete fired for blueprint: ", overallStatus + "  " + onCompleteResult);
                     onComplete(null, overallStatus, {
                         blueprintResults: onCompleteResult
                     });
@@ -89,7 +89,6 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusD
                 (function(blueprint) {
                     blueprint.extraRunlist = self.runlist;
                     logger.debug("envId=== ", envId);
-                    logger.debug("runlist::::: ",JSON.stringify(blueprint));
                     blueprint.launch({
                         envId: envId,
                         ver: null,
@@ -105,16 +104,12 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusD
 
                     });
                 })(blueprints[i]);
-
             }
             if (typeof onExecute === 'function') {
-                onExecute({
-                    message: "Blueprints launched, To see logs go to Instance.",
-                    blueprintIds: blueprintIds
+                onExecute(null, {
+                    message: "Blueprints launched: " + blueprintIds + ",  To see logs go to Instance."
                 });
             }
-
-
         });
 
         return;

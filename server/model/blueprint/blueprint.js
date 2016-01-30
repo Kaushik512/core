@@ -448,7 +448,7 @@ BlueprintSchema.methods.getCookBookAttributes = function(instanceIP, callback) {
     var attributeObj = {};
     var objectArray = [];
     // While passing extra attribute to chef cookbook "rlcatalyst" is used as attribute.
-    if (blueprint.nexus) {
+    if (blueprint.nexus.url) {
         var nexusRepoUrl = "";
         var url = blueprint.nexus.url;
         var repoName = blueprint.nexus.repoName;
@@ -512,10 +512,12 @@ BlueprintSchema.methods.getCookBookAttributes = function(instanceIP, callback) {
                 logger.debug("No artifact version found.");
             }
             var attributeObj = utils.mergeObjects(objectArray);
+            logger.debug('firing callback nexus');
             callback(null, attributeObj);
         });
     } /*else*/
-    if (blueprint.docker) {
+    logger.debug('blueprint docker ==>',blueprint.docker,'typeof ==>',typeof blueprint.docker);
+    if (blueprint.docker.image) {
         objectArray.push({
             "rlcatalyst": {
                 "containerId": blueprint.docker.containerId
@@ -543,6 +545,7 @@ BlueprintSchema.methods.getCookBookAttributes = function(instanceIP, callback) {
         });
         var attrs = utils.mergeObjects(objectArray);
         process.nextTick(function() {
+            logger.debug('firing callback docker');
             callback(null, attrs);
         });
 

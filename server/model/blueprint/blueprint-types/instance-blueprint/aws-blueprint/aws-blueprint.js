@@ -310,17 +310,18 @@ AWSInstanceBlueprintSchema.methods.launch = function(launchParams, callback) {
                                                 if (instance.hardware.os != 'windows')
                                                     return;
                                             }
+                                            var tempCount = 0;
                                             launchParams.blueprintData.getCookBookAttributes(instance.instanceIP, function(err, jsonAttributes) {
-                                                
 
-                                                logger.debug('bootstraping node');
+                                                tempCount++;
+                                                logger.debug('bootstraping node ==>'+tempCount);
                                                 var runlist = instance.runlist;
-                                                logger.debug("launchParams.blueprintData.extraRunlist: ",JSON.stringify(launchParams.blueprintData.extraRunlist));
+                                                logger.debug("launchParams.blueprintData.extraRunlist: ", JSON.stringify(launchParams.blueprintData.extraRunlist));
                                                 if (launchParams.blueprintData.extraRunlist) {
                                                     runlist = launchParams.blueprintData.extraRunlist.concat(instance.runlist);
                                                 }
 
-                                                logger.debug("runlist: ",JSON.stringify(runlist));
+                                                logger.debug("runlist: ", JSON.stringify(runlist));
                                                 launchParams.infraManager.bootstrapInstance({
                                                     instanceIp: instance.instanceIP,
                                                     pemFilePath: tempUncryptedPemFileLoc,
