@@ -35,7 +35,7 @@ var mongoDbConnect = require('_pr/lib/mongodb');
 var mongoose = require('mongoose');
 
 
-var cronTabManager = require('_pr/cronjobs');
+
 
 logger.debug('Starting Catalyst');
 logger.debug('Logger Initialized');
@@ -173,6 +173,8 @@ io.sockets.on('connection', function(socket) {
 	});
 });
 
+
+var cronTabManager = require('_pr/cronjobs');
 cronTabManager.start();
 
 server.listen(app.get('port'), function() {
