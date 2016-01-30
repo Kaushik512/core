@@ -103,7 +103,7 @@
 										                </div>
 										            </div>
 										            <div class="col-lg-12 col-sm-12 col-xs-12" style="display:none">
-														<span class="applicationNamePipelineView"></span>
+														<span class="applicationEnvNamePipelineView"></span>
 														<span class="applicationInstanceNamePipelineView"></span>
 														<span class="hostNamePipelineView"></span>  
 														<span class="applicationNodeIPPipelineView"></span>  
@@ -445,38 +445,17 @@
                 </div>
                 <div class="modal-body">
                     <div class="">
-                        <table class="table table-bordered" cellpadding="5px" width="100%" id="">
+                        <table class="table table-bordered" cellpadding="5px" width="100%" id="envSpecificDataTable">
                             <thead>
                                 <tr class="tableStyleColor">
-                                    <th>Application Details</th>
-                                    <th>Application Values</th>
+                                    <th>Node IP</th>
+                                    <th>Last Deploy</th>
+                                    <th>Status</th>
+                                    <th>Logs</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Application Name :</td>
-                                    <td class="appNameModal"></td>
-                                </tr>
-                                <!-- <tr>
-                                    <td>App-Instance Name :</td>
-                                    <td class="appInstanceNameModal"></td>
-                                </tr> -->
-                                <tr>
-                                    <td>Host :</td>
-                                    <td class="hostNameModal"></td>
-                                </tr>
-                                <tr>
-                                    <td>Node IP :</td>
-                                    <td class="nodeIpModal"></td>
-                                </tr>
-                                <tr>
-                                    <td>Container Name/ID :</td>
-                                    <td class="containerIdModal"></td>
-                                </tr>
-                                <tr>
-                                    <td>Status :</td>
-                                    <td class="statusModal"></td>
-                                </tr>
+                                
                             </tbody>
                         </table>
                     </div>
@@ -894,51 +873,32 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
                 return tempStr;
             }
 
-            function createStatusPresentCard(appDeployDataObj,applicationName,callback){
+            function createStatusPresentCard(appDeployDataObj,indexofData){
                 var tempStr = '';
-                       
                 var $childCardTemplate = $('.childCardTemplate');
                 var $childPresentCard = $childCardTemplate.clone(true);
                 $childPresentCard.css({
                     display: 'inline-flex'
                 });
-                //alert(typeof matchedEnv);
-                //alert("Hello");
-                //alert("Matched Env:=>"+matchedEnv);
-                var count =0;
-                for(var i=0;i<appDeployDataObj.envId.length;i++){
-                    //alert(typeof appDeployDataObj.envId[i]);
-                    (function(i){
-                        count++;
-                        //alert(appDeployDataObj.applicationNodeIP[i]);
-                        $childPresentCard.find('.applicationChildIP').html(appDeployDataObj.applicationNodeIP[i]);
-                        $childPresentCard.find('.lastapplicationDeploy').html(appDeployDataObj.applicationLastDeploy[i]);
+                //alert(appDeployDataObj.applicationNodeIP[indexofData]);
+                //var count =0;
+                $childPresentCard.find('.applicationChildIP').html(appDeployDataObj.applicationNodeIP[indexofData]);
+                $childPresentCard.find('.lastapplicationDeploy').html(appDeployDataObj.applicationLastDeploy[indexofData]);
+                if(appDeployDataObj.applicationStatus[indexofData] === "Successful"){
+                    $childPresentCard.find('.imgHeight').attr("src","img/aws_logo_started.png");
+                    $childPresentCard.find('.applicationChildDetails').removeClass('btn-primary btn-danger').addClass('btn-success');
 
-                        if(appDeployDataObj.applicationStatus[i] === "Successful"){
-                            $childPresentCard.find('.imgHeight').attr("src","img/aws_logo_started.png");
-                            $childPresentCard.find('.applicationChildDetails').removeClass('btn-primary btn-danger').addClass('btn-success');
-
-                        }else{
-                            $childPresentCard.find('.imgHeight').attr("src","img/aws_logo_stopped.png");
-                            $childPresentCard.find('.applicationChildDetails').removeClass('btn-primary btn-success').addClass('btn-danger');
-                        }
-                        
-                        $childPresentCard.find('.applicationNamePipelineView').html(applicationName);
-                        $childPresentCard.find('.applicationInstanceNamePipelineView').html(appDeployDataObj.applicationInstanceName[i]);
-                        $childPresentCard.find('.hostNamePipelineView').html(appDeployDataObj.hostName[i]);
-                        $childPresentCard.find('.applicationNodeIPPipelineView').html(appDeployDataObj.applicationNodeIP[i]);
-                        $childPresentCard.find('.containerIdPipelineView').html(appDeployDataObj.containerId[i]);
-                        $childPresentCard.find('.applicationStatusPipelineView').html(appDeployDataObj.applicationStatus[i]);
-                        if(count === appDeployDataObj.envId.length){
-                            var $childCardtemplateStr = $childPresentCard.prop('outerHTML');
-                            tempStr = tempStr + $childCardtemplateStr;
-                            callback(null,tempStr);
-                        }
-                    })(i);
+                }else{
+                    $childPresentCard.find('.imgHeight').attr("src","img/aws_logo_stopped.png");
+                    $childPresentCard.find('.applicationChildDetails').removeClass('btn-primary btn-success').addClass('btn-danger');
                 }
+                $childPresentCard.find('.applicationEnvNamePipelineView').html(appDeployDataObj.envId[indexofData]);
+                var $childCardtemplateStr = $childPresentCard.prop('outerHTML');
+                tempStr = tempStr + $childCardtemplateStr;
+                finalArray.push(tempStr);
+                //finalArray.push($childPresentCard);
             };
-            function sortAscending(data_A, data_B)
-			{
+            function sortAscending(data_A, data_B){
 				data_A = convertToDateObj(data_A);
 			    data_B = convertToDateObj(data_B);
 			    return (data_B - data_A);
@@ -998,30 +958,55 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
             	"envId": envId,
             	"appLogs": appLogs
             };
+            
+            var presentDataDetailsObj = {};
 
             //alert(JSON.stringify(sortedappDeployDataObj));
-
+            var appSortedEnvList = sortedappDeployDataObj.envId;
+            // var specificEnvArr =[];
             for (var j = 0; j < arrSequence.length; j++) {
-                //countColumn++;
-                //alert(arrSequence[j]);
                 //application main card
                 
                 if(j==0 && arrSequence[0]==""){
-                	finalArray.push("TestMain");
-                    /*var obj = createMainCard(applicationName,versionNumber);
-                    finalArray.push(createMainCard(applicationName,versionNumber));*/
+                	//finalArray.push("TestMain");
+                    finalArray.push(createMainCard(applicationName,versionNumber));
                 }
-                else if($.inArray(arrSequence[j],applicationEnvList)!=-1){
-                	/*createStatusPresentCard(sortedappDeployDataObj,applicationName,function(err,data){
-                        //alert(data);
-                        finalArray.push(data);
-                    });*/
-                	finalArray.push("Present");
+
+                else if($.inArray(arrSequence[j],appSortedEnvList)!=-1){
+                	var index = $.inArray(arrSequence[j],appSortedEnvList);
+                	//alert("Index of Arr is:"+index);
+                	createStatusPresentCard(sortedappDeployDataObj,index);
+                	var specificEnvArr =[];
+                	var specificEnvobj = {
+                		"applicationInstanceName": sortedappDeployDataObj.applicationInstanceName[index],
+                		"applicationNodeIP": sortedappDeployDataObj.applicationNodeIP[index],
+                		"applicationLastDeploy": sortedappDeployDataObj.applicationLastDeploy[index],
+                		"applicationStatus": sortedappDeployDataObj.applicationStatus[index],
+                		"containerId": sortedappDeployDataObj.containerId[index],
+                		"hostName": sortedappDeployDataObj.hostName[index],
+                		"envId": sortedappDeployDataObj.envId[index],
+                		"appLogs": sortedappDeployDataObj.appLogs[index]
+                	};
+                	specificEnvArr.push(specificEnvobj);
+                	
+                	presentDataDetailsObj[arrSequence[j]] = specificEnvArr;
+
+
+                	sortedappDeployDataObj.applicationInstanceName.splice(index,1);
+                	sortedappDeployDataObj.applicationNodeIP.splice(index,1);
+                	sortedappDeployDataObj.applicationLastDeploy.splice(index,1);
+                	sortedappDeployDataObj.applicationStatus.splice(index,1);
+                	sortedappDeployDataObj.containerId.splice(index,1);
+                	sortedappDeployDataObj.hostName.splice(index,1);
+                	sortedappDeployDataObj.envId.splice(index,1);
+                	sortedappDeployDataObj.appLogs.splice(index,1);
+                	//finalArray.push(htmlString);
+                	// finalArray.push("Present");
                 	
                 }else{
                     //application status absent card
-                    finalArray.push('Absent');
-                    /*var tempStr = '';
+                    //finalArray.push('Absent');
+                    var tempStr = '';
                     var $childCardTemplate = $('.childCardTemplate');
                     var $childPresentCard = $childCardTemplate.clone(true);
                     $childPresentCard.css({
@@ -1040,11 +1025,54 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
                     
                     var $childCardtemplateStr = $childPresentCard.prop('outerHTML');
                     tempStr = tempStr + $childCardtemplateStr;
-                    finalArray.push(tempStr);*/
+                    finalArray.push(tempStr);
                 } 
             }
+            //alert(JSON.stringify(sortedappDeployDataObj));
 
-            /*for (var j = 0; j < arrEnv.length; j++) {
+            var appLastDeployArr = sortedappDeployDataObj.applicationLastDeploy;
+
+
+            //alert(JSON.stringify(presentDataDetailsObj));
+            //alert(presentDataDetailsObj.length);
+
+            for (var key in presentDataDetailsObj) {
+			  if (presentDataDetailsObj.hasOwnProperty(key)) {
+			  	for(var p=0; p<appLastDeployArr.length;p++){
+			  		if(key == sortedappDeployDataObj.envId[p]){
+			  			
+	                	var specificEnvPresentobj = {
+	                		"applicationInstanceName": sortedappDeployDataObj.applicationInstanceName[p],
+	                		"applicationNodeIP": sortedappDeployDataObj.applicationNodeIP[p],
+	                		"applicationLastDeploy": sortedappDeployDataObj.applicationLastDeploy[p],
+	                		"applicationStatus": sortedappDeployDataObj.applicationStatus[p],
+	                		"containerId": sortedappDeployDataObj.containerId[p],
+	                		"hostName": sortedappDeployDataObj.hostName[p],
+	                		"envId": sortedappDeployDataObj.envId[p],
+	                		"appLogs": sortedappDeployDataObj.appLogs[p]
+	                	};
+	                	presentDataDetailsObj[key].push(specificEnvPresentobj);
+			  		}
+			  	}
+			  }
+			}
+
+
+			//alert(JSON.stringify(presentDataDetailsObj));
+            
+			//presentDatawithNameVerObj.push(presentDataDetailsObj);
+			//alert(versionNumber);
+			//var presentDatawithNameVerObj = {};
+			//presentDatawithNameVerObj[applicationName+'_'+versionNumber] = presentDataDetailsObj;
+            	
+			//alert(JSON.stringify(presentDatawithNameVerObj));
+
+
+
+
+
+
+            for (var j = 0; j < arrEnv.length; j++) {
 	           var finalString = $(finalArray).get(-1);
 	           finalArray.pop();
 	           var firstSubStr = finalString.lastIndexOf('<span');
@@ -1053,12 +1081,14 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
 	           var finalstr = finalString.substring(0,firstSubStr);
 	           var superFinalString = finalstr +"</div>";
 	           finalArray.push(superFinalString);
-	       	}*/
+	       	}
 
-
-
+	       	//alert(typeof finalArray);
+	       	//finalArray.attr("data-appName",versionNumber);
             
-           $tableapplicationTest.dataTable().fnAddData(finalArray);
+           var rowIndex = $tableapplicationTest.dataTable().fnAddData(finalArray);
+           var row = $tableapplicationTest.dataTable().fnGetNodes(rowIndex);
+           $(row).data('appNameVer',presentDataDetailsObj);
 
         }); 
 		
@@ -1075,7 +1105,59 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
 
 function moreinfoDetailsPipelineViewClickHandler(e) {
     var $modal = $('#modalDetailsAppDeploy');
-    var applicationNamePipelineText = $(this).parents().eq(5).find('.applicationNamePipelineView').html();
+    //alert("Hello");
+    //console.log($(this));
+	/*if (!$.fn.dataTable.isDataTable('#envSpecificDataTable')) {
+	    var $envSpecificDataArr = $('#envSpecificDataTable').DataTable({
+			"pagingType": "full_numbers",
+			"iDisplayLength": 5,
+			"aLengthMenu": [
+				[5, 40, 100, -1],
+				[5, 40, 100, "All"]
+			],
+			"aaSorting": [
+				[5, 'desc']
+			],
+			"aoColumns": [{
+				"bSortable": true
+			}, {
+				"bSortable": true
+			}, {
+				"bSortable": true
+			}, {
+				"bSortable": true
+			}]
+		});
+	}*/
+    var $row = jQuery(this).closest("tr");
+	var rowSetDataDetailsObj = $row.data("appNameVer");
+	//alert(JSON.stringify(rowSetDataDetailsObj));
+	var applicationNamePipelineText = $(this).parents().eq(5).find('.applicationEnvNamePipelineView').html();
+	var $envSpecificDataArr = $('#envSpecificDataTable').DataTable();
+	for (var key in rowSetDataDetailsObj) {
+		if (rowSetDataDetailsObj.hasOwnProperty(key)) {
+			if(key == applicationNamePipelineText){
+				
+				
+				$envSpecificDataArr.clear();
+				for(var k=0;k<rowSetDataDetailsObj[key].length;k++){
+					
+				    $envSpecificDataArr.row.add([
+				        rowSetDataDetailsObj[key][k].applicationNodeIP,
+						rowSetDataDetailsObj[key][k].applicationLastDeploy,
+						rowSetDataDetailsObj[key][k].applicationStatus,
+						rowSetDataDetailsObj[key][k].appLogs
+				    ]).draw();
+				}
+				$('#envSpecificDataTable_length').hide();
+				$('#envSpecificDataTable_filter').hide();
+			}
+		}
+	}
+	//alert(applicationNamePipelineText);
+    //var applicationNamePipelineText = $(this).parents().eq(10).html();
+    //alert(applicationNamePipelineText);
+    /*var applicationNamePipelineText = $(this).parents().eq(5).find('.applicationEnvNamePipelineView').html();
     $modal.find('.appNameModal').html(applicationNamePipelineText);
 
     var appInstanceNameCardSpanText = $(this).parents().eq(5).find('.applicationInstanceNamePipelineView').html();
@@ -1091,7 +1173,7 @@ function moreinfoDetailsPipelineViewClickHandler(e) {
     $modal.find('.containerIdModal').html(containerIdPipelineText);
 
     var applicationStatusPipelineText = $(this).parents().eq(5).find('.applicationStatusPipelineView').html();
-    $modal.find('.statusModal').html(applicationStatusPipelineText);
+    $modal.find('.statusModal').html(applicationStatusPipelineText);*/
 
     $modal.modal('show');
 }
