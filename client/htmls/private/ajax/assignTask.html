@@ -91,9 +91,20 @@
                                                          <select id="jobListJenkins" class="width-100 form-control" disabled>
                                                          </select>
                                                       </div>
-                                                      <div class="col-lg-12 col-md-12 margintop15">
+                                                      <div class="col-lg-12 col-md-12 margintop5">
+                                                         <div class="col-lg-12 nodesTable">
+                                                            <div class="smart-form">
+                                                               <label>Blueprints</label> 
+                                                               <div id="jenkinsBlueprint" class="">
+                                                                  <ul id="selectedBlueprintJenkinsTask" class="selectedNodesJenkinsTaskCSS">
+                                                                  </ul>
+                                                               </div>
+                                                            </div>
+                                                         </div>
+                                                      </div>
+                                                      <div class="col-lg-12 col-md-12 margintop5">
                                                          <label>Job Description</label>
-                                                         <textarea id="jenkinsDescription"  style="width:100%" rows="8" cols="15" name="description"></textarea>
+                                                         <textarea id="jenkinsDescription"  style="width:100%" rows="2" cols="15" name="description"></textarea>
                                                       </div>
                                                    </div>
                                                    <!--jenkins dropdown ends here-->
@@ -131,18 +142,22 @@
                                                       <div class="col-lg-12 nodesTable">
                                                          <div class="smart-form">
                                                             <div class="row margin0">
-                                                               <label style="font-size:13px;" class="radio">
-                                                                 <input type="radio" id="jobNodeDetailsId" class="jobTypeSelectorRadioBtn" name="jobDetType" data-jobdetails="Nodes"><i></i> 
-                                                                 <img style="margin-top:-5px;" src="img/templateicons/Select-nodes---deployment.png">
-                                                                  Nodes 
-                                                                  <span style="color:red">*</span>
-                                                               </label>
-                                                            <label style="font-size:13px;" class="radio">
-                                                              <input id="selectBlueprintInputId" class="jobTypeSelectorRadioBtn" type="radio" name="jobDetType" data-jobdetails="Blueprint"><i></i>
-                                                              <img style="margin-top:-5px;" src="img/templateicons/Create-run-list---deployment.png">
-                                                              Blueprints
-                                                              <span style="color:red">*</span>
-                                                            </label>
+                                                               <div class="col-lg-6 col-md-12">
+                                                                  <label class="radio">
+                                                                    <input type="radio" id="jobNodeDetailsId" class="jobTypeSelectorRadioBtn" name="jobDetType" data-jobdetails="Nodes"><i></i> 
+                                                                    <img src="img/templateicons/Select-nodes---deployment.png" class="margintopMinus5">
+                                                                     Nodes 
+                                                                     <span class="colorRed">*</span>
+                                                                  </label>
+                                                               </div>
+                                                               <div class="col-lg-6 col-md-12">
+                                                                  <label class="radio">
+                                                                    <input id="selectBlueprintInputId" class="jobTypeSelectorRadioBtn" type="radio" name="jobDetType" data-jobdetails="Blueprint"><i></i>
+                                                                    <img src="img/templateicons/Create-run-list---deployment.png" class="margintopMinus5">
+                                                                    Blueprints
+                                                                    <span class="colorRed">*</span>
+                                                                  </label>
+                                                               </div>
                                                             </div>
                                                             
                                                             <div id="Nodes" class="jobDetailsClass col-lg-12">
@@ -220,7 +235,7 @@
                                                          <div class="smart-form">
                                                             <label>
                                                             <img style="margin-top:-5px;" src="img/templateicons/Select-nodes---deployment.png">
-                                                            Select Nodes <span style="color:red">*</span>
+                                                            Select Nodes <span class="colorRed">*</span>
                                                             </label>
                                                             <ul id="selectedNodesPuppetTask" class="deploymentNodeList selectedNodesTaskCSS">
                                                             </ul>
@@ -854,6 +869,16 @@ $.get('../organizations/' + orgId + '/businessgroups/' + bgId + '/projects/' + p
       var $li = $('<li><label class="checkbox" style="margin: 5px;font-size:13px;"><input type="checkbox" name="deploymentBlueprintsCheckBox" value="' + data.blueprints[i]._id + '"><i></i>' + blueprintName + '</label></li>'); 
       if (blueprintName) {
          $('#selectedBlueprintChefTask').append($li);
+      }
+   }
+});
+$.get('../organizations/' + orgId + '/businessgroups/' + bgId + '/projects/' + projectId + '/environments/' + envId + '/', function(data) {
+   
+   for (var i = 0; i < data.blueprints.length; i++) {
+      var blueprintName = data.blueprints[i].name;
+      var $li = $('<li><label class="checkbox" style="margin: 5px;font-size:13px;"><input type="checkbox" name="deploymentBlueprintsCheckBox" value="' + data.blueprints[i]._id + '"><i></i>' + blueprintName + '</label></li>'); 
+      if (blueprintName) {
+         $('#selectedBlueprintJenkinsTask').append($li);
       }
    }
 });

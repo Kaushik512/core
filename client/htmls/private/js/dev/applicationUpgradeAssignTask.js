@@ -659,6 +659,15 @@ $(document).ready(function() {
                 });
                 return false;
             }
+
+            var $selectedJenkinsBlueprints = $('#selectedBlueprintJenkinsTask input[type=checkbox]');
+            var jenkinsBlueprintList = [];
+            $selectedJenkinsBlueprints.each(function() {
+                if (this.checked) {
+                    jenkinsBlueprintList.push(this.value);
+                }
+            });
+            taskData.blueprintIds = jenkinsBlueprintList;
             var jenkinsJobDescription = $('textarea#jenkinsDescription').val();
             var usersList = [].concat($('#jenkinsUserList').val());
             if (!usersList.length) {

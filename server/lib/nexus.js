@@ -126,6 +126,7 @@ var Nexus = function() {
             if (err) {
                 logger.debug(500, "Failed to fetch Nexus Server from DB.", err);
                 callback(err, null);
+                return;
             }
             if (nexus.length) {
                 var options_auth = {

@@ -391,6 +391,23 @@ BlueprintSchema.statics.getById = function(id, callback) {
     });
 };
 
+BlueprintSchema.statics.getByIds = function(ids, callback) {
+    logger.debug('finding blueprint by id ===>' + ids);
+    if (ids && ids.length) {
+        this.find({
+            "_id": {
+                $in: ids
+            }
+        }, function(err, blueprints) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            callback(null, blueprints);
+        });
+    }
+};
+
 BlueprintSchema.statics.removeById = function(id, callback) {
     this.remove({
         "_id": ObjectId(id)
@@ -431,7 +448,7 @@ BlueprintSchema.methods.getCookBookAttributes = function(instanceIP, callback) {
     var attributeObj = {};
     var objectArray = [];
     // While passing extra attribute to chef cookbook "rlcatalyst" is used as attribute.
-    if (blueprint.nexus) {
+    if (blueprint.nexus.url) {
         var nexusRepoUrl = "";
         var url = blueprint.nexus.url;
         var repoName = blueprint.nexus.repoName;
@@ -495,10 +512,12 @@ BlueprintSchema.methods.getCookBookAttributes = function(instanceIP, callback) {
                 logger.debug("No artifact version found.");
             }
             var attributeObj = utils.mergeObjects(objectArray);
+            logger.debug('firing callback nexus');
             callback(null, attributeObj);
         });
-    }
-    if (blueprint.docker) {
+    } /*else*/
+    logger.debug('blueprint docker ==>',blueprint.docker,'typeof ==>',typeof blueprint.docker);
+    if (blueprint.docker.image) {
         objectArray.push({
             "rlcatalyst": {
                 "containerId": blueprint.docker.containerId
@@ -526,6 +545,7 @@ BlueprintSchema.methods.getCookBookAttributes = function(instanceIP, callback) {
         });
         var attrs = utils.mergeObjects(objectArray);
         process.nextTick(function() {
+            logger.debug('firing callback docker');
             callback(null, attrs);
         });
 

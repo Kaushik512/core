@@ -86,7 +86,7 @@ var taskSchema = new Schema({
 // instance method :-  
 
 // Executes a task
-taskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData,blueprintIds,envId, callback, onComplete) {
+taskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData, blueprintIds, envId, callback, onComplete) {
     logger.debug('Executing');
     var task;
     var self = this;
@@ -130,11 +130,12 @@ taskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData,
     }
     var timestamp = new Date().getTime();
     var taskHistory = null;
-    task.execute(userName, baseUrl, choiceParam, nexusData,blueprintIds, function(err, taskExecuteData, taskHistoryEntry) {
+    task.execute(userName, baseUrl, choiceParam, nexusData, blueprintIds, envId, function(err, taskExecuteData, taskHistoryEntry) {
         if (err) {
             callback(err, null);
             return;
         }
+        
         // hack for composite task
         if (taskHistoryEntry) {
             var keys = Object.keys(taskHistoryData);
@@ -233,8 +234,14 @@ taskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData,
         if (taskHistory) {
             taskHistory.timestampEnded = self.timestampEnded;
             taskHistory.status = self.lastTaskStatus;
-            if (resultData && resultData.instancesResults && resultData.instancesResults.length) {
-                taskHistory.executionResults = resultData.instancesResults;
+            logger.debug("resultData: ",JSON.stringify(resultData));
+            if (resultData) {
+                if (resultData.instancesResults && resultData.instancesResults.length) {
+                    taskHistory.executionResults = resultData.instancesResults;
+                } else if (resultData.blueprintResults && resultData.blueprintResults.length) {
+                    taskHistory.blueprintExecutionResults = resultData.blueprintResults;
+                }
+
             }
             taskHistory.save();
         }
