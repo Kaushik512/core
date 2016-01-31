@@ -516,7 +516,7 @@ BlueprintSchema.methods.getCookBookAttributes = function(instanceIP, callback) {
             callback(null, attributeObj);
         });
     } /*else*/
-    logger.debug('blueprint docker ==>',blueprint.docker,'typeof ==>',typeof blueprint.docker);
+    logger.debug('blueprint docker ==>', blueprint.docker, 'typeof ==>', typeof blueprint.docker);
     if (blueprint.docker.image) {
         objectArray.push({
             "rlcatalyst": {
