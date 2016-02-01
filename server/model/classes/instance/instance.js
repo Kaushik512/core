@@ -247,6 +247,7 @@ InstanceSchema.index({
 var Instances = mongoose.model('instances', InstanceSchema);
 
 var InstancesDao = function() {
+
 	this.searchInstances = function(searchquery, options, callback) {
 		logger.debug("Enter searchInstances query - (%s)", searchquery);
 		Instances.textSearch(searchquery, options, function(err, data) {
@@ -1485,10 +1486,9 @@ var InstancesDao = function() {
 	};
 
 	this.getInstanceByIP = function(instanceIp, callback) {
+		instanceIp = instanceIp.trim();
 		Instances.find({
 			"instanceIP": instanceIp
-		}, {
-			'actionLogs': false
 		}, function(err, data) {
 			if (err) {
 				logger.error("Failed getInstanceById (%s)", instanceId, err);
@@ -1499,7 +1499,6 @@ var InstancesDao = function() {
 
 		});
 	};
-
 	this.getByOrgProviderAndPlatformId = function(opts, callback) {
 
 		Instances.find({
@@ -1540,6 +1539,34 @@ var InstancesDao = function() {
 
 		});
 	};
+
+	this.getByProviderId = function(providerId, callback) {
+		if (!providerId) {
+			process.nextTick(function() {
+				callback({
+					message: "Invalid provider id"
+				});
+
+			});
+			return;
+		}
+
+		Instances.find({
+			"providerId": providerId
+		}, {
+			'actionLogs': false
+		}, function(err, instances) {
+			if (err) {
+				logger.error("Failed getByOrgProviderId (%s)", opts, err);
+				callback(err, null);
+				return;
+			}
+
+			callback(null, instances);
+
+		});
+	};
+
 };
 
 module.exports = new InstancesDao();

@@ -30,6 +30,7 @@ var vmware = require('./routes_vmware.js');
 var application = require('./routes_application');
 var jira = require('./routes_jira');
 var provider = require('./routes_provider');
+var providerCommon = require('./routes_providercommon');
 var vmimage = require('./routes_vmImages');
 var chefClientExecution = require('./routes_chefClientExecutionResponse');
 var appConfig = require('_pr/config');
@@ -96,6 +97,7 @@ module.exports.setRoutes = function(app) {
 	jira.setRoutes(app, sessionVerificationFunc);
 
 	provider.setRoutes(app, sessionVerificationFunc);
+	providerCommon.setRoutes(app, sessionVerificationFunc);
 
 	vmimage.setRoutes(app, sessionVerificationFunc);
 

@@ -58,7 +58,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     }
                 });
             }else{
-                res.status(404).send("Project not found for instance: ",instanceIp);
+                res.status(404).send("Project not found for instanceip.");
                 return;
             }
         });

@@ -117,27 +117,41 @@ function sync() {
 																	for (var n = 0; n < unManagedInstances.length; n++) {
 																		if (unManagedInstances[n].platformId === awsInstances[m].InstanceId) {
 																			unManagedInstances[n].state = awsInstances[m].State.Name;
-																			if (unManagedInstances[n].state === 'running') {
-																				unManagedInstances[n].instanceIP = awsInstances[m].PublicIpAddress || awsInstances[m].PrivateIpAddress;
+																			if (unManagedInstances[n].state === 'terminated') {
+																				unManagedInstances[n].remove();
+																			} else {
+																				if (unManagedInstances[n].state === 'running') {
+																					unManagedInstances[n].instanceIP = awsInstances[m].PublicIpAddress || awsInstances[m].PrivateIpAddress;
+																				}
+																				unManagedInstances[n].save();
 																			}
-																			unManagedInstances[n].save();
+
 																			foundInUnManaged = true;
 																			unManagedInstances.splice(n, 1);
 																			break;
 																		}
 																	}
 																	if (!foundInUnManaged) { //making entry in unmanaged database
-																		unManagedInstancesDao.createNew({
-																			orgId: org.rowid,
-																			providerId: provider._id,
-																			providerType: 'aws',
-																			providerData: {
-																				region: region
-																			},
-																			platformId: awsInstances[m].InstanceId,
-																			instanceIP: awsInstances[m].PublicIpAddress || awsInstances[m].PrivateIpAddress,
-																			state: awsInstances[m].State.Name,
-																		});
+																		var os = 'linux';
+																		if (awsInstances[m].State.Name !== 'terminated') {
+																			if (awsInstances[m].Platform && awsInstances[m].Platform === 'Windows') {
+																				os = 'widows';
+																			}
+
+																			unManagedInstancesDao.createNew({
+																				orgId: org.rowid,
+																				providerId: provider._id,
+																				providerType: 'aws',
+																				providerData: {
+																					region: region
+																				},
+																				platformId: awsInstances[m].InstanceId,
+																				ip: awsInstances[m].PublicIpAddress || awsInstances[m].PrivateIpAddress,
+																				os: os,
+																				state: awsInstances[m].State.Name,
+																			});
+																		}
+
 																	}
 
 																}
