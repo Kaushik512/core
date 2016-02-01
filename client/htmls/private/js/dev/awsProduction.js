@@ -1876,7 +1876,7 @@
 	                    }else{
 	                    	$('#chooseGroupId > option:eq(1)').attr('selected', true).change();
 	                    }
-	                    getNexusServerRepoArtifact(nexusId, repoName,groupId);
+	                    //getNexusServerRepoArtifact(nexusId, repoName,groupId);
 	                } else {
 	                	$('.groupClass').hide();
 	                    $('.containerIdClass').show();
