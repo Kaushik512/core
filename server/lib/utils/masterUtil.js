@@ -550,7 +550,7 @@ var MasterUtil = function() {
             if (err) {
                 callback(err, null);
             }
-            if (orgs) {
+            if (orgs.length) {
                 for (var j1 = 0; j1 < orgs.length; j1++) {
                     if (orgs[j1].id === '1') {
                         orgList.push(orgs[j1]);

@@ -18,7 +18,7 @@ limitations under the License.
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  * Written by Gobinda Das <gobinda.das@relevancelab.com>,
- * Jan 2016
+ * Dec 2015
  */
 
 // This file is like a installer which will install global settings into DB.

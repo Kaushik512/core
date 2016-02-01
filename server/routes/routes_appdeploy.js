@@ -17,9 +17,10 @@ limitations under the License.
 /* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
- * Written by Gobinda Das <gobinda.das@relevancelab.com>, 
- * Aug 2015
+ * Written by Gobinda Das <gobinda.das@relevancelab.com>,
+ * Dec 2015
  */
+
 
 
 // The file contains all the end points for AppDeploy
@@ -74,7 +75,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                     }
                 });
             }else{
-                res.status(404).send("Project not found for instance: ",instanceIp);
+                res.status(404).send("Project not found for instanceip.");
                 return;
             }
         });
