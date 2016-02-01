@@ -170,7 +170,7 @@ AWSInstanceBlueprintSchema.methods.launch = function(launchParams, callback) {
 							return;
 						}
 
-						
+
 						var newinstanceIDs = [];
 
 						function addinstancewrapper(instanceData, instancesLength) {
@@ -183,6 +183,9 @@ AWSInstanceBlueprintSchema.methods.launch = function(launchParams, callback) {
 								envId: launchParams.envId,
 								providerId: launchParams.cloudProviderId,
 								providerType: launchParams.cloudProviderType,
+								providerData: {
+									region: aKeyPair.region
+								},
 								keyPairId: self.keyPairId,
 								chefNodeName: instanceData.InstanceId,
 								runlist: launchParams.version.runlist,
@@ -301,7 +304,7 @@ AWSInstanceBlueprintSchema.methods.launch = function(launchParams, callback) {
 
 										logger.debug('intance wait success');
 
-										
+
 										//decrypting pem file
 										var cryptoConfig = appConfig.cryptoSettings;
 										var tempUncryptedPemFileLoc = appConfig.tempDir + uuid.v4();

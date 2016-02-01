@@ -273,7 +273,7 @@ BlueprintSchema.methods.launch = function(opts, callback) {
 							bgId: self.bgId,
 							projectId: self.projectId,
 							appUrls: appUrls,
-							sessionUser: opts.user,
+							sessionUser: opts.sessionUser,
 							users: self.users,
 							blueprintData: self,
 						}, function(err, launchData) {
@@ -293,7 +293,7 @@ BlueprintSchema.methods.launch = function(opts, callback) {
 						bgId: self.bgId,
 						projectId: self.projectId,
 						appUrls: appUrls,
-						sessionUser: opts.user,
+						sessionUser: opts.sessionUser,
 						users: self.users,
 						blueprintData: self,
 					}, function(err, launchData) {

@@ -318,6 +318,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 							}
 						}
 
+						
 						blueprint.launch({
 							envId: req.query.envId,
 							ver: req.query.version,

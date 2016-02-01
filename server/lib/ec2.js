@@ -63,7 +63,6 @@ var EC2 = function(awsSettings) {
                 logger.debug("Got instanceState info with error: ",err);
                 callback(err,null);
             }
-            logger.debug("Got instanceState info: ",JSON.stringify(data));
             callback(null, data);
         });
 

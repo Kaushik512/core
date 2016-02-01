@@ -49,7 +49,10 @@
                                      <td datafield="orgName"></td>
                                     <!-- <td datafield="accountid"></td> -->
                                     <td>
-                                        <div class="btn-group tableactionWidth">
+                                        <div class="btn-group">
+                                            <a class="btn btn-xs btn-info pull-left" title="Sync Instances">
+                                                <i class="ace-icon fa fa-refresh bigger-120"></i>
+                                            </a>
                                             <a class="btn btn-xs btn-info pull-left" title="Edit">
                                                 <i class="ace-icon fa fa-pencil bigger-120"></i>
                                             </a>
@@ -390,6 +393,7 @@
                     }
 
                 }
+
                 if (editButton) {
                     editButton.attr("href", "#ajax/Settings/" + createFileName + "?" + idFieldValue);
                     //checking for createfilename and checking for the resources as per the JSON
@@ -467,6 +471,17 @@
                     importbutton.removeClass('btn-xs');
                     importbutton.addClass('btn-sg');
                     importbutton.addClass('tableactionbutton');
+                }
+
+                var syncButton = $('.rowtemplate').find('a[title="Sync Instances"]');
+                // var tdorgname = $('.rowtemplate').find('td[datafield="orgname"]');
+                //&& tdorgname.length > 0
+                if (syncButton && syncButton.length > 0) {
+
+                    syncButton.attr("href", "#ajax/Settings/providerSync.html?" + idFieldValue);
+                    syncButton.removeClass('btn-xs');
+                    syncButton.addClass('btn-sg');
+                    syncButton.addClass('tableactionbutton');
                 }
 
 
