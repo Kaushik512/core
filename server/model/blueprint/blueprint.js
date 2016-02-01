@@ -28,6 +28,7 @@ var CloudFormationBlueprint = require('./blueprint-types/cloud-formation-bluepri
 var ARMTemplateBlueprint = require('./blueprint-types/arm-template-blueprint/arm-template-blueprint');
 var utils = require('../classes/utils/utils.js');
 var nexus = require('_pr/lib/nexus.js');
+var masterUtil = require('_pr/lib/utils/masterUtil.js');
 
 
 
@@ -449,6 +450,14 @@ BlueprintSchema.methods.getCookBookAttributes = function(instanceIP, callback) {
     var objectArray = [];
     // While passing extra attribute to chef cookbook "rlcatalyst" is used as attribute.
     if (blueprint.nexus.url) {
+        /*masterUtil.updateProject(repoData.projectId, repoData.repoName, function(err, data) {
+            if(err){
+                logger.debug("Failed to updateProject: ",err);
+            }
+            if(data){
+                logger.debug("updateProject successful.");
+            }
+        });*/
         var nexusRepoUrl = "";
         var url = blueprint.nexus.url;
         var repoName = blueprint.nexus.repoName;

@@ -3344,74 +3344,13 @@ module.exports.setRoutes = function(app, sessionVerification) {
         var appName = req.body.appName;
         var appDescription = req.body.description;
         var projectId = req.params.anId;
-        var count = 0;
-        d4dModelNew.d4dModelMastersProjects.find({
-            rowid: projectId,
-            id: '4'
-        }, function(err, project) {
-            if (err) {
-                logger.debug("Failed to find Project", err);
-                return;
+        masterUtil.updateProject(projectId,appName,function(err,data){
+            if(err){
+                logger.debug("Failed to update Project with repo.");
+                //res.status(500).send("Failed to update Project with repo.");
             }
-            if (project.length) {
-                var appdeploy = project[0].appdeploy;
-                if (appdeploy.length) {
-                    for (var i = 0; i < appdeploy.length; i++) {
-                        if (appdeploy[i].applicationname === appName) {
-                            count++;
-                        }
-                    }
-                    if (!count) {
-                        d4dModelNew.d4dModelMastersProjects.update({
-                            rowid: projectId,
-                            id: '4'
-                        }, {
-                            $push: {
-                                "appdeploy": {
-                                    applicationname: appName,
-                                    appdescription: appDescription
-                                }
-                            }
-                        }, {
-                            upsert: false
-                        }, function(err, data) {
-                            if (err) {
-                                logger.debug('Err while updating d4dModelMastersProjects' + err);
-                                res.send(err);
-                                return;
-                            }
-                            logger.debug('Updated project ' + req.params.anId + ' with App Name : ' + req.body.appName);
-                            res.send(data);
-                            return;
-                        });
-                    } else {
-                        res.send(200);
-                        return;
-                    }
-                } else {
-                    d4dModelNew.d4dModelMastersProjects.update({
-                        rowid: projectId,
-                        id: '4'
-                    }, {
-                        $push: {
-                            "appdeploy": {
-                                applicationname: appName,
-                                appdescription: appDescription
-                            }
-                        }
-                    }, {
-                        upsert: false
-                    }, function(err, data) {
-                        if (err) {
-                            logger.debug('Err while updating d4dModelMastersProjects' + err);
-                            res.send(err);
-                            return;
-                        }
-                        logger.debug('Updated project ' + req.params.anId + ' with App Name : ' + req.body.appName);
-                        res.send(data);
-                        return;
-                    });
-                }
+            if(data){
+                res.status(200).send("Updated Project with repo.");
             }
         });
     });

@@ -11,6 +11,7 @@ var exec = require('child_process').exec;
 var readline = require('readline');
 
 var currentDirectory = __dirname;
+
 function getDefaultsConfig() {
     var config = {
         express: {
@@ -255,27 +256,39 @@ function installPackageJson() {
 }
 
 function restoreSeedData(config, callback) {
-    var procMongoRestore = spawn('mongorestore', ['--host', config.db.host, '--port', config.db.port, '--db', config.db.dbName, '--drop', '../seed/mongodump/devops_new/']);
-    procMongoRestore.on('error', function(mongoRestoreError) {
-        console.error("mongorestore error ==> ", mongoRestoreError);
-    });
-    procMongoRestore.stdout.on('data', function(data) {
-        console.log("" + data);
-    });
-    procMongoRestore.stderr.on('data', function(data) {
-        console.log("" + data);
-    });
-    procMongoRestore.on('close', function(mongoRestoreCode) {
-        if (mongoRestoreCode === 0) {
-            console.log('mongo restore successfull');
-            fse = require('fs-extra');
-            console.log('copying seed data');
-            fse.copySync('../seed/catalyst', config.catalystHome);
-            callback();
-        } else {
-            throw "Unable to restore mongodb"
+    var mongoDbClient = require('mongodb');
+
+    mongoDbClient.connect('mongodb://' + config.db.host + ':' + config.db.port + '/' + config.db.dbName, function(err, db) {
+        if (err) {
+            throw "unable to connect to mongodb"
+            return;
         }
+        db.dropDatabase();
+        
+        var procMongoRestore = spawn('mongorestore', ['--host', config.db.host, '--port', config.db.port, '--db', config.db.dbName, '--drop', '../seed/mongodump/devops_new/']);
+        procMongoRestore.on('error', function(mongoRestoreError) {
+            console.error("mongorestore error ==> ", mongoRestoreError);
+        });
+        procMongoRestore.stdout.on('data', function(data) {
+            console.log("" + data);
+        });
+        procMongoRestore.stderr.on('data', function(data) {
+            console.log("" + data);
+        });
+        procMongoRestore.on('close', function(mongoRestoreCode) {
+            if (mongoRestoreCode === 0) {
+                console.log('mongo restore successfull');
+                fse = require('fs-extra');
+                console.log('copying seed data');
+                fse.copySync('../seed/catalyst', config.catalystHome);
+                callback();
+            } else {
+                throw "Unable to restore mongodb"
+            }
+        });
+
     });
+
 }
 
 function setupLdapUser(config, callback) {
@@ -336,7 +349,7 @@ function createConfigFile(config) {
     fs.writeFileSync('config/catalyst-config.json', configJson);
 }
 console.log('Installing node packages required for installation');
-proc = spawn('npm', ['install', "command-line-args@0.5.3", 'mkdirp@0.5.0', 'fs-extra@0.18.0', 'ldapjs@0.7.1']);
+proc = spawn('npm', ['install', "command-line-args@0.5.3", 'mkdirp@0.5.0', 'fs-extra@0.18.0', 'ldapjs@0.7.1', 'mongodb@2.1.4']);
 proc.on('close', function(code) {
     if (code !== 0) {
         throw "Unable to install packages"
@@ -362,8 +375,8 @@ proc.on('close', function(code) {
                         installPackageJson();
                     });
                 } else {*/
-                    createConfigFile(config);
-                    installPackageJson();
+                createConfigFile(config);
+                installPackageJson();
                 //}
             });
         } else {

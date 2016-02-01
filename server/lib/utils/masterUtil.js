@@ -1886,30 +1886,30 @@ var MasterUtil = function() {
                         if (appData.length) {
                             var filterArray = [];
                             var finalJson = [];
-                            for(var j=0;j<appData.length;j++){
-                                var str = appData[j].applicationName+"@"+appData[j].applicationVersion;
-                                if(filterArray.length === 0){
+                            for (var j = 0; j < appData.length; j++) {
+                                var str = appData[j].applicationName + "@" + appData[j].applicationVersion;
+                                if (filterArray.length === 0) {
                                     filterArray.push(str);
                                 }
-                                if(filterArray.indexOf(str) === -1){
+                                if (filterArray.indexOf(str) === -1) {
                                     filterArray.push(str);
                                 }
                             }
-                            logger.debug("created array: ",JSON.stringify(filterArray));
+                            logger.debug("created array: ", JSON.stringify(filterArray));
                             var count = 0;
-                            for(var k=0;k<filterArray.length;k++){
-                                (function(k){
+                            for (var k = 0; k < filterArray.length; k++) {
+                                (function(k) {
                                     var arrayValue = filterArray[k].split("@");
-                                    logger.debug("name: ",arrayValue[0]);
-                                    logger.debug("Version: ",arrayValue[1]);
-                                    AppDeploy.getAppDeployByAppNameAndVersion(arrayValue[0],arrayValue[1],function(err,filteredData){
+                                    logger.debug("name: ", arrayValue[0]);
+                                    logger.debug("Version: ", arrayValue[1]);
+                                    AppDeploy.getAppDeployByAppNameAndVersion(arrayValue[0], arrayValue[1], function(err, filteredData) {
                                         count++;
-                                        if(err){
-                                            logger.error("Failed to get filteredData: ",err);
+                                        if (err) {
+                                            logger.error("Failed to get filteredData: ", err);
                                             return;
                                         }
-                                        logger.debug("filteredData array: ",JSON.stringify(filteredData));
-                                        if(filteredData.length){
+                                        logger.debug("filteredData array: ", JSON.stringify(filteredData));
+                                        if (filteredData.length) {
                                             var applicationName = filteredData[0].applicationName;
                                             var applicationVersion = filteredData[0].applicationVersion;
                                             var projectId = filteredData[0].projectId;
@@ -1921,7 +1921,7 @@ var MasterUtil = function() {
                                             var hostName = [];
                                             var envId = [];
                                             var appLog = [];
-                                            for(var l=0;l<filteredData.length;l++){
+                                            for (var l = 0; l < filteredData.length; l++) {
                                                 applicationInstanceName.push(filteredData[l].applicationInstanceName);
                                                 applicationNodeIP.push(filteredData[l].applicationNodeIP);
                                                 applicationLastDeploy.push(filteredData[l].applicationLastDeploy);
@@ -1932,24 +1932,24 @@ var MasterUtil = function() {
                                                 appLog.push(filteredData[l].appLogs);
                                             }
                                             var tempJson = {
-                                                "applicationName":applicationName,
-                                                "applicationVersion":applicationVersion,                                                
-                                                "projectId":projectId,
-                                                "applicationInstanceName":applicationInstanceName,
-                                                "applicationNodeIP":applicationNodeIP,
-                                                "applicationLastDeploy":applicationLastDeploy,
-                                                "applicationStatus":applicationStatus,
-                                                "containerId":containerId,
-                                                "hostName":hostName,
-                                                "envId":envId,
-                                                "appLogs" : appLog
+                                                "applicationName": applicationName,
+                                                "applicationVersion": applicationVersion,
+                                                "projectId": projectId,
+                                                "applicationInstanceName": applicationInstanceName,
+                                                "applicationNodeIP": applicationNodeIP,
+                                                "applicationLastDeploy": applicationLastDeploy,
+                                                "applicationStatus": applicationStatus,
+                                                "containerId": containerId,
+                                                "hostName": hostName,
+                                                "envId": envId,
+                                                "appLogs": appLog
                                             };
                                             finalJson.push(tempJson);
-                                            if(filterArray.length === count){
-                                                logger.debug("Send finalJson: ",JSON.stringify(finalJson));
-                                                callback(null,finalJson);
+                                            if (filterArray.length === count) {
+                                                logger.debug("Send finalJson: ", JSON.stringify(finalJson));
+                                                callback(null, finalJson);
                                             }
-                                        }else{
+                                        } else {
                                             return;
                                         }
                                     });
@@ -1966,7 +1966,82 @@ var MasterUtil = function() {
             } else {
                 callback(null, null);
             }
-        })
+        });
+    };
+
+    // update project with app name
+    this.updateProject = function(projectId, appName, callback) {
+        var appDescription = appName + " deployed.";
+        var count = 0;
+        d4dModelNew.d4dModelMastersProjects.find({
+            rowid: projectId,
+            id: '4'
+        }, function(err, project) {
+            if (err) {
+                logger.debug("Failed to find Project", err);
+                return;
+            }
+            if (project.length) {
+                var appdeploy = project[0].appdeploy;
+                if (appdeploy.length) {
+                    for (var i = 0; i < appdeploy.length; i++) {
+                        if (appdeploy[i].applicationname === appName) {
+                            count++;
+                        }
+                    }
+                    if (!count) {
+                        d4dModelNew.d4dModelMastersProjects.update({
+                            rowid: projectId,
+                            id: '4'
+                        }, {
+                            $push: {
+                                "appdeploy": {
+                                    applicationname: appName,
+                                    appdescription: appDescription
+                                }
+                            }
+                        }, {
+                            upsert: false
+                        }, function(err, data) {
+                            if (err) {
+                                logger.debug('Err while updating d4dModelMastersProjects' + err);
+                                callback(err, null);
+                                return;
+                            }
+                            logger.debug('Updated project ' + req.params.anId + ' with App Name : ' + req.body.appName);
+                            callback(null, data);
+                            return;
+                        });
+                    } else {
+                        callback(null, data);
+                        return;
+                    }
+                } else {
+                    d4dModelNew.d4dModelMastersProjects.update({
+                        rowid: projectId,
+                        id: '4'
+                    }, {
+                        $push: {
+                            "appdeploy": {
+                                applicationname: appName,
+                                appdescription: appDescription
+                            }
+                        }
+                    }, {
+                        upsert: false
+                    }, function(err, data) {
+                        if (err) {
+                            logger.debug('Err while updating d4dModelMastersProjects' + err);
+                            callback(err, null);
+                            return;
+                        }
+                        logger.debug('Updated project ' + req.params.anId + ' with App Name : ' + req.body.appName);
+                        callback(null, data);
+                        return;
+                    });
+                }
+            }
+        });
     };
 }
 

@@ -473,7 +473,14 @@ CloudFormationBlueprintSchema.methods.launch = function(launchParams, callback) 
                                                                             if (instance.hardware.os != 'windows')
                                                                                 return;
                                                                         }
-                                                                        launchParams.blueprintData.getCookBookAttributes(instance.instanceIP, function(err, jsonAttributes) {
+                                                                        var repoData = {};
+                                                                        repoData['projectId'] = launchParams.blueprintData.projectId;
+                                                                        if (launchParams.blueprintData.nexus.repoName) {
+                                                                            repoData['repoName'] = launchParams.blueprintData.nexus.repoName;
+                                                                        } else if (launchParams.blueprintData.docker.image) {
+                                                                            repoData['repoName'] = launchParams.blueprintData.docker.image;
+                                                                        }
+                                                                        launchParams.blueprintData.getCookBookAttributes(instance.instanceIP, repoData, function(err, jsonAttributes) {
                                                                             var runlist = instance.runlist;
                                                                             logger.debug("launchParams.blueprintData.extraRunlist: ", JSON.stringify(launchParams.blueprintData.extraRunlist));
                                                                             if (launchParams.blueprintData.extraRunlist) {

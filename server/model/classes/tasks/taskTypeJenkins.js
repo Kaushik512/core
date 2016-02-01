@@ -39,7 +39,8 @@ var jenkinsTaskSchema = taskTypeSchema.extend({
 jenkinsTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData, blueprintIds, envId, onExecute, onComplete) {
     logger.debug("Choice Param in::: ", choiceParam);
     var self = this;
-    if (blueprintIds.length) {
+    // For now removed blueprint launch via jenkins, later will use this
+    /*if (blueprintIds.length) {
         var count = 0;
         var onCompleteResult = [];
         var overallStatus = 0;
@@ -126,7 +127,7 @@ jenkinsTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nex
 
         return;
 
-    } else {
+    } else {*/
 
         configmgmtDao.getJenkinsDataFromId(this.jenkinsServerId, function(err, jenkinsData) {
             if (err) {
@@ -321,7 +322,7 @@ jenkinsTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nex
                 });
             }
         });
-    }
+    //}
 
 };
 

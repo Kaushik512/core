@@ -307,7 +307,18 @@ vmwareInstanceBlueprintSchema.methods.launch = function(launchParams, callback) 
                                             log: "Instance Ready..about to bootstrap",
                                             timestamp: timestampStarted
                                         });
-                                        launchParams.blueprintData.getCookBookAttributes(instance.instanceIP, function(err, jsonAttributes) {
+                                        var repoData = {
+                                            "projectId": launchParams.blueprintData.projectId,
+                                            "repoName": launchParams.blueprintData.nexus.repoName
+                                        };
+                                        var repoData = {};
+                                        repoData['projectId'] = launchParams.blueprintData.projectId;
+                                        if (launchParams.blueprintData.nexus.repoName) {
+                                            repoData['repoName'] = launchParams.blueprintData.nexus.repoName;
+                                        } else if (launchParams.blueprintData.docker.image) {
+                                            repoData['repoName'] = launchParams.blueprintData.docker.image;
+                                        }
+                                        launchParams.blueprintData.getCookBookAttributes(instance.instanceIP, repoData, function(err, jsonAttributes) {
                                             var runlist = instance.runlist;
                                             logger.debug("launchParams.blueprintData.extraRunlist: ", JSON.stringify(launchParams.blueprintData.extraRunlist));
                                             if (launchParams.blueprintData.extraRunlist) {

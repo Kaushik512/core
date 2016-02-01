@@ -92,7 +92,7 @@ var Nexus = function() {
                 client.methods.jsonMethod(function(data, response) {
                     //try {
                         var json = parser.toJson(data);
-                        logger.debug("data: ", typeof json);
+                        logger.debug("artifact data: ", json);
                         json = JSON.parse(json);
                         logger.debug("Parsed json: ", JSON.stringify(json));
                         var artifactList = [];
@@ -101,11 +101,14 @@ var Nexus = function() {
                             if (artifacts.length) {
                                 for (var i = 0; i < artifacts.length; i++) {
                                     if (repoName === artifacts[i].repoId) {
+                                        var resourceURI = artifacts[i].resourceURI.replace(/\s/g, '');
+                                        artifacts[i]['resourceURI'] = resourceURI;
                                         artifactList.push(artifacts[i]);
                                     }
                                 }
                             }
                         }
+                        logger.debug("artifacts:::::  ",JSON.stringify(artifactList));
                         callback(null, artifactList);
 
                     /*} catch (err) {
