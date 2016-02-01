@@ -1,3 +1,19 @@
+/*
+Copyright [2016] [Gobinda Das]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 /* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
@@ -13,6 +29,7 @@ var AppDeploy = require('_pr/model/app-deploy/app-deploy');
 var errorResponses = require('./error_responses');
 var AppData = require('_pr/model/app-deploy/app-data');
 var masterUtil = require('_pr/lib/utils/masterUtil.js');
+var instancesDao = require('../model/classes/instance/instance');
 
 
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
@@ -35,13 +52,29 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     // Create AppDeploy
     app.post('/app/deploy', function(req, res) {
         logger.debug("Got appDeploy data: ", JSON.stringify(req.body.appDeployData));
-        AppDeploy.createNew(req.body.appDeployData, function(err, appDeploy) {
+        var appDeployData = req.body.appDeployData;
+        var instanceIp = appDeployData.applicationNodeIP.split(" ")[0];
+        instancesDao.getInstanceByIP(instanceIp, function(err, instance) {
             if (err) {
-                res.status(500).send(errorResponses.db.error);
+                logger.error("Failed to fetch instance: ", err);
+                res.status(500).send("Failed to fetch instance.");
                 return;
             }
-            if (appDeploy) {
-                res.status(200).send(appDeploy);
+            if (instance.length) {
+                var anInstance = instance[0];
+                appDeployData['projectId'] = anInstance.projectId;
+                AppDeploy.createNew(appDeployData, function(err, appDeploy) {
+                    if (err) {
+                        res.status(500).send(errorResponses.db.error);
+                        return;
+                    }
+                    if (appDeploy) {
+                        res.status(200).send(appDeploy);
+                        return;
+                    }
+                });
+            }else{
+                res.status(404).send("Project not found for instance: ",instanceIp);
                 return;
             }
         });

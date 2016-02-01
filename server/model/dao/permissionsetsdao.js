@@ -1,3 +1,19 @@
+/*
+Copyright [2016] [Anshul Srivastava]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 /* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
@@ -55,6 +71,34 @@ var PermissionsetsDao = function() {
                 callback(err, null);
                 return;
             }
+        });
+    };
+
+    // Save all permission informations.
+    this.createNew = function(permissionData, callback) {
+        var permission = new Permissionsets(permissionData);
+        permission.save(function(err, permissionData) {
+            if (err) {
+                logger.debug("Got error while creating permission: ", err);
+                callback(err, null);
+            }
+            if (permissionData) {
+                logger.debug("Created permission: ");
+                callback(null, permissionData);
+            }
+        });
+    };
+
+    // Get all permission informations.
+    this.listPermissionSets = function(callback) {
+        var that = this;
+        Permissionsets.find(function(err, permissionData) {
+            if (err) {
+                logger.debug("Got error while getting permission: ", err);
+                callback(err, null);
+            }
+            logger.debug("get permission: ");
+            callback(null, permissionData);
         });
     };
 

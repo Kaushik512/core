@@ -1,3 +1,19 @@
+/*
+Copyright [2016] [Gobinda Das]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 /* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
@@ -127,16 +143,8 @@ function getDefaultsConfig() {
             port: '27017'
         },
         authStrategy: {
-            local: false,
-            externals: true
-        },
-        ldap: {
-            host: '54.68.204.110',
-            port: 389,
-            adminUser: 'Admin',
-            adminPass: 'ReleV@ance',
-            baseDn: 'dc=d4d-ldap,dc=relevancelab,dc=com',
-            ou: ''
+            local: true,
+            externals: false
         },
         logServerUrl: '',
         features: {
@@ -231,8 +239,8 @@ function getConfig(config, options) {
     config.db.host = options['db-host'] ? options['db-host'] : config.db.host;
     config.db.port = options['db-port'] ? options['db-port'] : config.db.port;
     config.db.dbName = options['db-name'] ? options['db-name'] : config.db.dbName;
-    config.ldap.host = options['ldap-host'] ? options['ldap-host'] : config.ldap.host;
-    config.ldap.port = options['ldap-port'] ? options['ldap-port'] : config.ldap.port;
+    //config.ldap.host = options['ldap-host'] ? options['ldap-host'] : config.ldap.host;
+    //config.ldap.port = options['ldap-port'] ? options['ldap-port'] : config.ldap.port;
     if (options['max-instance-count']) {
         var maxInstanceCount = parseInt(options['max-instance-count']);
         if (maxInstanceCount) {
@@ -364,15 +372,15 @@ proc.on('close', function(code) {
         if (options['seed-data']) {
             fsExtra.emptydirSync(config.catalystDataDir);
             restoreSeedData(config, function() {
-                if (options['ldap-user']) {
+                /*if (options['ldap-user']) {
                     setupLdapUser(config, function() {
                         createConfigFile(config);
                         installPackageJson();
                     });
-                } else {
+                } else {*/
                     createConfigFile(config);
                     installPackageJson();
-                }
+                //}
             });
         } else {
             createConfigFile(config);

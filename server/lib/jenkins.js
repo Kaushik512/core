@@ -1,3 +1,19 @@
+/*
+Copyright [2016] [Gobinda Das]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 /* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
@@ -10,8 +26,6 @@ var logger = require('_pr/logger')(module);
 var url = require('url');
 var fs = require('fs');
 var Client = require('node-rest-client').Client;
-
-var slackMsg = require('../routes/routes_slack');
 
 
 
@@ -81,11 +95,6 @@ var Jenkins = function(options) {
                 return;
             }
             callback(null, data);
-            str = data.fullDisplayName;
-            var res = str.split(" ");
-            var res1 = str.split("#");
-            msg = res[0]+" - Build" +res[1] +"- Successful: Check console output at jenkins.rlcatalyst.com/job/"+res[0]+"/"+res1[1]+" to view the results";
-            slackMsg.slackMessage('https://hooks.slack.com/services/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','#catalyst_alert','@vimal.mishra',msg);
         });
     };
 

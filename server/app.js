@@ -1,3 +1,19 @@
+/*
+Copyright [2016] [Gobinda Das]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 /* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
@@ -29,22 +45,34 @@ var expressBodyParser = require('body-parser');
 var multipart = require('connect-multiparty');
 var expressMultipartMiddleware = multipart();
 var appConfig = require('_pr/config');
+var mongoose = require('mongoose');
 var MongoStore = require('connect-mongo')(expressSession);
 var mongoDbConnect = require('_pr/lib/mongodb');
 var mongoose = require('mongoose');
 
 logger.debug('Starting Catalyst');
 logger.debug('Logger Initialized');
-
-// setting up up passport authentication strategy
-passport.use(new passportLdapStrategy({
-  host: appConfig.ldap.host,
-  port: appConfig.ldap.port,
-  baseDn: appConfig.ldap.baseDn,
-  ou: appConfig.ldap.ou,
-  usernameField: 'username',
-  passwordField: 'pass'
-}));
+var LDAPUser = require('_pr/model/ldap-user/ldap-user.js');
+LDAPUser.getLdapUser(function(err, ldapData) {
+    if (err) {
+        logger.error("Failed to get ldap-user: ", err);
+        return;
+    }
+    if (ldapData.length) {
+        // setting up up passport authentication strategy
+        var ldapUser =ldapData[0];
+        passport.use(new passportLdapStrategy({
+            host: ldapUser.host,
+            port: ldapUser.port,
+            baseDn: ldapUser.baseDn,
+            ou: ldapUser.ou,
+            usernameField: 'username',
+            passwordField: 'pass'
+        }));
+    }else{
+        logger.debug("No Ldap User found.");
+    }
+});
 
 passport.serializeUser(function(user, done) {
   done(null, user);
@@ -119,6 +147,8 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 }*/
 
 var server = http.createServer(app);
+
+
 // setting up socket.io
 io = io.listen(server, {
   log: false
@@ -152,3 +182,4 @@ io.sockets.on('connection', function(socket) {
 server.listen(app.get('port'), function() {
   logger.debug('Express server listening on port ' + app.get('port'));
 });
+
