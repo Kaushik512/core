@@ -443,21 +443,21 @@ BlueprintSchema.statics.getBlueprintsByOrgBgProject = function(orgId, bgId, proj
     });
 };
 
-BlueprintSchema.methods.getCookBookAttributes = function(instanceIP, callback) {
+BlueprintSchema.methods.getCookBookAttributes = function(instanceIP,repoData, callback) {
     var blueprint = this;
     //merging attributes Objects
     var attributeObj = {};
     var objectArray = [];
     // While passing extra attribute to chef cookbook "rlcatalyst" is used as attribute.
     if (blueprint.nexus.url) {
-        /*masterUtil.updateProject(repoData.projectId, repoData.repoName, function(err, data) {
-            if(err){
-                logger.debug("Failed to updateProject: ",err);
+        masterUtil.updateProject(repoData.projectId, repoData.repoName, function(err, data) {
+            if (err) {
+                logger.debug("Failed to updateProject: ", err);
             }
-            if(data){
+            if (data) {
                 logger.debug("updateProject successful.");
             }
-        });*/
+        });
         var nexusRepoUrl = "";
         var url = blueprint.nexus.url;
         var repoName = blueprint.nexus.repoName;
@@ -523,10 +523,9 @@ BlueprintSchema.methods.getCookBookAttributes = function(instanceIP, callback) {
             var attributeObj = utils.mergeObjects(objectArray);
             logger.debug('firing callback nexus');
             callback(null, attributeObj);
+            return;
         });
-    } /*else*/
-    logger.debug('blueprint docker ==>', blueprint.docker, 'typeof ==>', typeof blueprint.docker);
-    if (blueprint.docker.image) {
+    } else if (blueprint.docker.image) {
         objectArray.push({
             "rlcatalyst": {
                 "containerId": blueprint.docker.containerId
@@ -553,11 +552,13 @@ BlueprintSchema.methods.getCookBookAttributes = function(instanceIP, callback) {
             }
         });
         var attrs = utils.mergeObjects(objectArray);
+        callback(null, attrs);
+        return;
+    } else {
+        logger.debug('firing empty callback');
         process.nextTick(function() {
-            logger.debug('firing callback docker');
-            callback(null, attrs);
+            callback(null, {});
         });
-
     }
 };
 
