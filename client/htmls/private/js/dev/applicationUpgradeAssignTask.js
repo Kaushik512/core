@@ -199,7 +199,7 @@ $(document).ready(function() {
 
     function loadUIData(taskData) {
         //console.log(taskData);
-        //   alert(JSON.stringify(taskData));
+        //alert(JSON.stringify(taskData));
         console.log("I am in loadUIData");
         var $ccrs = $chefCookbookRoleSelector(urlParams.org, function(data) {
 
@@ -212,6 +212,7 @@ $(document).ready(function() {
 
         });
         if (taskData) {
+            //alert("On edit part");
             console.log("I am in loadUIData inside taskData");
             $('.widget-header').find('.widget-margin').html('Edit Job');
             $('.inputTaskName').val(taskData.name);
@@ -291,6 +292,16 @@ $(document).ready(function() {
                 }
 
             }
+            /*if (taskData && taskData.taskType === 'chef') {
+
+                console.log('reading chef data as:', taskData.taskConfig);
+                //  alert(taskData.taskConfig.parameterized.length);
+                if (taskData.taskConfig.nodeIds.length > 0) {
+                    for (var j = 0; j < taskData.taskConfig.nodeIds.length; j++) {
+                        $('#selectedBlueprintChefTask').find('li input[type=checkbox]').prop('checked', true);
+                    }
+                }  
+            }*/
 
         }
 
@@ -300,7 +311,6 @@ $(document).ready(function() {
         $.get('../organizations/' + urlParams.org + '/businessgroups/' + urlParams['bg'] + '/projects/' + urlParams.projid + '/environments/' + urlParams.envid + '/instances', function(data) {
             var $deploymentNodeList = $('.deploymentNodeList').empty();
             for (var i = 0; i < data.length; i++) {
-
 
                 // if (!(data[i].chef && data[i].chef.serverId)) {
                 //     continue;
@@ -342,6 +352,28 @@ $(document).ready(function() {
                         $('#selectedNodesPuppetTask').append($li);
                     }
 
+                }
+            }
+        });
+
+        $.get('../organizations/' + urlParams.org + '/businessgroups/' + urlParams['bg'] + '/projects/' + urlParams.projid + '/environments/' + urlParams.envid + '/', function(data) {
+            var $deploymentBlueprintList = $('.deploymentBlueprintList').empty();
+            for (var i = 0; i < data.blueprints.length; i++) {
+                var blueprintName = data.blueprints[i].name;
+                //alert(blueprintName);
+                var checked = false;
+                if (taskData && (taskData.taskType === 'chef') && taskData.blueprintIds && taskData.blueprintIds.length) {
+                    if (taskData.blueprintIds.indexOf(data.blueprints[i]._id) !== -1) {
+                        alert("Here");
+                        checked = true;
+                    }
+                }
+                var $li = $('<li><label class="checkbox" style="margin: 5px;font-size:13px;"><input type="checkbox" name="deploymentBlueprintsCheckBox" value="' + data.blueprints[i]._id + '"><i></i>' + blueprintName + '</label></li>'); 
+                if (checked) {
+                    $li.find('input')[0].checked = true;
+                }
+                if (blueprintName) {
+                    $('#selectedBlueprintChefTask').append($li);
                 }
             }
         });
@@ -546,6 +578,7 @@ $(document).ready(function() {
                     nodesList.push(this.value);
                 }
             });
+            //alert(JSON.stringify(nodesList));
 
             var $selectedBlueprints = $('#selectedBlueprintChefTask input[type=checkbox]');
             var blueprintList = [];
@@ -554,8 +587,15 @@ $(document).ready(function() {
                     blueprintList.push(this.value);
                 }
             });
-
+            //alert(JSON.stringify(blueprintList));
             if (!nodesList.length && !blueprintList.length) {
+                bootbox.alert({
+                    message: 'Please choose either nodes or blueprints',
+                    title: "Error"
+                });
+                return false;
+            }
+            if (nodesList.length && blueprintList.length) {
                 bootbox.alert({
                     message: 'Please choose either nodes or blueprints',
                     title: "Error"
@@ -800,7 +840,9 @@ $(document).ready(function() {
 
                 return false;
             } else {
-                //  alert(JSON.stringify(reqBody));
+                //alert("Chef job edit part");
+                  alert(JSON.stringify(reqBody));
+                  //alert(urlParams.taskId);
                 $.post('../tasks/' + urlParams.taskId + '/update', reqBody, function(data) {
                     console.log(data);
                     window.initializeTaskArea([data]);

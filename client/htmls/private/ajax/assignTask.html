@@ -839,6 +839,11 @@
 $('#jobNodeDetailsId').trigger('click');
 $(".jobTypeSelectorRadioBtn").click(function() {
     var val = $(this).attr('data-jobdetails');
+    /*if(val == "Nodes"){
+      $('#selectedBlueprintChefTask').find('li input[type=checkbox]').prop('checked', false);
+    }else if(val == "Blueprint"){
+      $('#selectedNodesChefTask').find('li input[type=checkbox]').prop('checked', false);
+    }*/
     $('.jobDetailsClass').hide();
     $('#'+val).show();
 });
@@ -862,7 +867,7 @@ var projectId = urlParams['projid'];
 var envId = urlParams['envid'];
 var orgId = urlParams['org'];
 var bgId = urlParams['bg'];
-$.get('../organizations/' + orgId + '/businessgroups/' + bgId + '/projects/' + projectId + '/environments/' + envId + '/', function(data) {
+/*$.get('../organizations/' + orgId + '/businessgroups/' + bgId + '/projects/' + projectId + '/environments/' + envId + '/', function(data) {
    
    for (var i = 0; i < data.blueprints.length; i++) {
       var blueprintName = data.blueprints[i].name;
@@ -871,8 +876,8 @@ $.get('../organizations/' + orgId + '/businessgroups/' + bgId + '/projects/' + p
          $('#selectedBlueprintChefTask').append($li);
       }
    }
-});
-$.get('../organizations/' + orgId + '/businessgroups/' + bgId + '/projects/' + projectId + '/environments/' + envId + '/', function(data) {
+});*/
+/*$.get('../organizations/' + orgId + '/businessgroups/' + bgId + '/projects/' + projectId + '/environments/' + envId + '/', function(data) {
    
    for (var i = 0; i < data.blueprints.length; i++) {
       var blueprintName = data.blueprints[i].name;
@@ -881,5 +886,5 @@ $.get('../organizations/' + orgId + '/businessgroups/' + bgId + '/projects/' + p
          $('#selectedBlueprintJenkinsTask').append($li);
       }
    }
-});
+});*/
 </script>
