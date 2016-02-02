@@ -1181,7 +1181,7 @@
 	                                return false;
 	                            }*/
 	                            /*alert($(this).prop("checked"));*/
-	                            if ($(this).prop("checked")) {
+	                            //if ($(this).prop("checked")) {
 	                                if (nexusServerType === "nexus") {
 	                                    var artifactId = $chooseArtifacts.find('option:selected').val();
 	                                    if (!artifactId) {
@@ -1226,7 +1226,7 @@
 	                                    };
 	                                    reqBody.docker = docker;
 	                                }
-	                            }
+	                           // }
 	                            console.log($('#compositedockertable').find('.dockerimagesrow').length);
 	                            $('.dockerimagesrow').each(function() {
 	                                dockerimages = {};

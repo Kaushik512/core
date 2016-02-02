@@ -753,7 +753,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
                 docker: docker
 			};
 
-			logger.debug('req:', blueprintData);
+			logger.debug('req blueprintData:', blueprintData);
 			var dockerData, instanceData;
 			logger.debug('req.body.blueprintData.blueprintType:', blueprintType);
 			if (blueprintType === 'docker') {
