@@ -499,7 +499,8 @@ taskSchema.statics.updateTaskById = function(taskId, taskData, callback) {
             taskConfig: taskConfig,
             taskType: taskData.taskType,
             description: taskData.description,
-            jobResultURLPattern: taskData.jobResultURL
+            jobResultURLPattern: taskData.jobResultURL,
+            blueprintIds: taskData.blueprintIds
         }
     }, {
         upsert: false

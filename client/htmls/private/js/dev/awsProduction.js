@@ -892,7 +892,6 @@
 	            //Selection of Orgname from localstorage 
 	            $('#orgnameSelect').val(localStorage.getItem('selectedOrgId'));
 	            console.log('role-Selected before ==> ', $('#tab2 .role-Selected').length);
-	            //console.log("======================= "+$('.productdiv2.role-Selected').first().attr('templatetype'));
 	            if ($('.productdiv2.role-Selected').length > 0) {
 	                //Setting controls connected to docker to hidden
 	                $('.forDocker').hide();
@@ -1649,7 +1648,7 @@
 	            var projectId = $(this).val();
 	            if ($('.checkConfigApp').prop("checked")) {
 	                getNexusServer();
-	                getDockerServer();
+	                //getDockerServer();
 	            } else {
 	                //var $nexusServer = $('#chooseNexusServer');
 	                $nexusServer.empty();
@@ -1659,7 +1658,7 @@
 	            $('.checkConfigApp').click(function() {
 	                if ($(this).prop("checked")) {
 	                    getNexusServer();
-	                    getDockerServer();
+	                    //getDockerServer();
 	                } else {
 	                    //var $nexusServer = $('#chooseNexusServer');
 	                    $nexusServer.empty();
@@ -1713,14 +1712,39 @@
 	                        for (var i = 0; i < nexus.length; i++) {
 	                            $('#chooseNexusServer').append('<option data-groupId = "' + nexus[i].groupid + '" data-nexusUrl = "' + nexus[i].hostname + '" value=' + nexus[i].rowid + ' data-serverType = "' + nexus[i].configType + '">' + nexus[i].nexusservername + '</option>');
 	                            //$nexusServer.append('<option data-nexusUrl = "' + nexus[i].hostname + '" value=' + nexus[i].rowid + ' data-serverType = "' + nexus[i].configType + '">' + nexus[i].nexusservername + '</option>');
-	                        }
+	                        } 
 	                    }
-	                    $('#chooseNexusServer > option:eq(1)').attr('selected', true).change();
-	                    //$nexusServer.find('option:eq(1)').attr('selected', true).change();
+	                    $.get('/d4dMasters/readmasterjsonnew/18', function(dockerData) {
+		                    if (dockerData.length) {
+		                        for (var i = 0; i < dockerData.length; i++) {
+		                            $nexusServer.append('<option value=' + dockerData[i].rowid + ' data-serverType = "' + dockerData[i].configType + '">' + dockerData[i].dockerreponame + '</option>');
+		                        }
+		                    }
+		                    var exists ={},elm;
+		                    $nexusServer.find('option').each(function() {
+		                    	if(nexus.length){
+		                    		if($(this).attr('data-serverType') == 'nexus'){
+					            		elm = $(this).attr('data-serverType');
+									    if(!exists[elm]){
+									      $(this).attr('selected', true).change();
+									      exists[elm] = true;
+									   	}
+					            	}
+		                    	}else{
+		                    		if($(this).attr('data-serverType') == 'docker'){
+					            		elm = $(this).attr('data-serverType');
+									    if(!exists[elm]){
+									      $(this).attr('selected', true).change();
+									      exists[elm] = true;
+									   	}
+					            	}
+		                    	}
+							});
+		                });
 	                });
 	            }
 
-	            function getDockerServer() {
+	            /*function getDockerServer() {
 	                $.get('/d4dMasters/readmasterjsonnew/18', function(dockerData) {
 	                    if (dockerData.length) {
 	                        for (var i = 0; i < dockerData.length; i++) {
@@ -1728,7 +1752,7 @@
 	                        }
 	                    }
 	                });
-	            }
+	            }*/
 	            // var $nexusServer = $('#chooseNexusServer');
 	            $nexusServer.change(function(e) {
 	                // var nexusServerType = $('#chooseNexusServer :selected').attr('data-serverType');
@@ -1874,7 +1898,6 @@
 	                    } else {
 	                        $('#chooseGroupId > option:eq(1)').attr('selected', true).change();
 	                    }
-	                    getNexusServerRepoArtifact(nexusId, repoName, groupId);
 	                } else {
 	                    $('.groupClass').hide();
 	                    $('.containerIdClass').show();
