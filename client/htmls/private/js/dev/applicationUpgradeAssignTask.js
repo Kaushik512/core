@@ -198,8 +198,6 @@ $(document).ready(function() {
     });
 
     function loadUIData(taskData) {
-        //console.log(taskData);
-        //alert(JSON.stringify(taskData));
         console.log("I am in loadUIData");
         var $ccrs = $chefCookbookRoleSelector(urlParams.org, function(data) {
 
@@ -212,7 +210,7 @@ $(document).ready(function() {
 
         });
         if (taskData) {
-            //alert("On edit part");
+            //On edit click for a Job.
             console.log("I am in loadUIData inside taskData");
             $('.widget-header').find('.widget-margin').html('Edit Job');
             $('.inputTaskName').val(taskData.name);
@@ -290,19 +288,7 @@ $(document).ready(function() {
                 } else {
                     $("input[type='radio'][name='paramCheck'][id='addParametersFalse']").prop('checked', false);
                 }
-
             }
-            /*if (taskData && taskData.taskType === 'chef') {
-
-                console.log('reading chef data as:', taskData.taskConfig);
-                //  alert(taskData.taskConfig.parameterized.length);
-                if (taskData.taskConfig.nodeIds.length > 0) {
-                    for (var j = 0; j < taskData.taskConfig.nodeIds.length; j++) {
-                        $('#selectedBlueprintChefTask').find('li input[type=checkbox]').prop('checked', true);
-                    }
-                }  
-            }*/
-
         }
 
         var $taskType = $('#taskType');
@@ -360,11 +346,9 @@ $(document).ready(function() {
             var $deploymentBlueprintList = $('.deploymentBlueprintList').empty();
             for (var i = 0; i < data.blueprints.length; i++) {
                 var blueprintName = data.blueprints[i].name;
-                //alert(blueprintName);
                 var checked = false;
                 if (taskData && (taskData.taskType === 'chef') && taskData.blueprintIds && taskData.blueprintIds.length) {
                     if (taskData.blueprintIds.indexOf(data.blueprints[i]._id) !== -1) {
-                        alert("Here");
                         checked = true;
                     }
                 }
@@ -544,11 +528,8 @@ $(document).ready(function() {
 
     //save form for jenkins and chef
     $('#taskForm').submit(function(e) {
-        //   alert('check');
-        // alert('breaking');
         var taskType = $('#taskType').val();
         var taskData = {};
-        //alert(taskType);
         taskData.taskType = taskType;
 
         if (taskType === 'chef') {
@@ -578,7 +559,6 @@ $(document).ready(function() {
                     nodesList.push(this.value);
                 }
             });
-            //alert(JSON.stringify(nodesList));
 
             var $selectedBlueprints = $('#selectedBlueprintChefTask input[type=checkbox]');
             var blueprintList = [];
@@ -587,7 +567,7 @@ $(document).ready(function() {
                     blueprintList.push(this.value);
                 }
             });
-            //alert(JSON.stringify(blueprintList));
+            
             if (!nodesList.length && !blueprintList.length) {
                 bootbox.alert({
                     message: 'Please choose either nodes or blueprints',
@@ -840,9 +820,7 @@ $(document).ready(function() {
 
                 return false;
             } else {
-                //alert("Chef job edit part");
-                  alert(JSON.stringify(reqBody));
-                  //alert(urlParams.taskId);
+                //alert(JSON.stringify(reqBody));
                 $.post('../tasks/' + urlParams.taskId + '/update', reqBody, function(data) {
                     console.log(data);
                     window.initializeTaskArea([data]);
