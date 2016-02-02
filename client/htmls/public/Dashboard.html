@@ -24,6 +24,78 @@
               <i class="fa fa-th fa-cogs" style="margin-right: 5px; color: rgb(64, 186, 241); font-size: 18px;"></i>
             </a> -->
           </div>
+
+          <div class="row rowTemplate">
+          </div>
+
+
+          <div class="col-lg-3 col-md-3 col-xs-6 childProviderTemplate" style="display:none">
+            <div class="small-box bg-aqua">
+              <div class="inner">
+                <h3>&nbsp;</h3>
+                <p>Provider name: <br><span>AWS</span></p>
+              </div>
+              <div class="icon">
+                <i class="fa fa-th"></i>
+              </div>
+              <a class="small-box-footer" href="#">
+                More info <i class="fa fa-arrow-circle-right"></i>
+              </a>
+            </div>
+          </div>
+
+
+          <div class="col-lg-3 col-md-3 col-xs-6 childTotalInstanceTemplate" style="display:none">
+            <div class="small-box bg-aqua">
+              <div class="inner">
+                <h3>&nbsp;</h3>
+                <p>Total <br>No. of Instances</p>
+              </div>
+              <div class="icon">
+                <i class="fa fa-laptop"></i>
+              </div>
+              <a class="small-box-footer" href="#">
+                More info <i class="fa fa-arrow-circle-right"></i>
+              </a>
+            </div>
+          </div>
+
+
+          <div class="col-lg-3 col-md-3 col-xs-6 childManagedInstanceTemplate" style="display:none">
+            <div class="small-box bg-aqua">
+              <div class="inner">
+                <h3>&nbsp;</h3>
+                <p>Total <br>No. of Managed Instances</p>
+              </div>
+              <div class="icon">
+                <i class="fa fa-cube"></i>
+              </div>
+              <a class="small-box-footer" href="#">
+                More Info <i class="fa fa-arrow-circle-right"></i>
+              </a>
+            </div>
+          </div>
+          
+
+
+          <div class="col-lg-3 col-md-3 col-xs-6 childUnmanagedInstanceTemplate" style="display:none">
+            <div class="small-box bg-aqua">
+              <div class="inner">
+                <h3>&nbsp;</h3>
+                <p>Total <br>No. of Unmanaged Instances</p>
+              </div>
+              <div class="icon">
+                <i class="fa fa-dollar"></i>
+              </div>
+              <a class="small-box-footer" href="#">
+               More info <i class="fa fa-arrow-circle-right"></i>
+              </a>
+            </div>
+          </div>
+
+
+
+
           <div id="collapseInfrastructure" class="panel-collapse collapse in">
             <div class="panel-body">
               <div id="infrastructurecardview">
@@ -95,6 +167,21 @@
   </body>
 <script type="text/javascript">
   $(document).ready(function() {
+    $.get('../allproviders/list', function(totalProviders) {
+      var totalCountProviders;
+      var awsProvidersCount = totalProviders.awsProviders.length;
+      var openstackProvidersCount = totalProviders.openstackProviders.length;
+      var vmwareProvidersCount = totalProviders.vmwareProviders.length;
+      var hpPlublicCloudProvidersCount = totalProviders.hpPlublicCloudProviders.length;
+      var azureProvidersCount = totalProviders.azureProviders.length;
+
+      totalCountProviders = awsProvidersCount + openstackProvidersCount + vmwareProvidersCount + hpPlublicCloudProvidersCount + azureProvidersCount;
+      $('#totalProviders').empty();
+      $('#totalProviders').append(totalCountProviders);
+      for(var i=0;i<totalCountProviders;i++){
+        alert("Arab");
+      }
+    }).fail(function() {});
     /*
     $('#totalInstancesMoreInfo').click(function() {
       //alert("Clicked");
