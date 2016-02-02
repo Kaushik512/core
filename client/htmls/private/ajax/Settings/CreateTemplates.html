@@ -71,7 +71,7 @@
                                           
                                              <label for="">
 
-                                             Select Docker Repo <span class="control-label redSpan">&nbsp;*</span>
+                                             Select Docker Repo 
                                              </label>
                                              
                                              <select id="dockerreponame" class="choosedockerRepo width-100" sourcepath="18" datapath="masterjson.rows.row"  cdata="catalyst">
@@ -101,7 +101,7 @@
                                        
                                     
                                        
-                                          <div class="col-lg-6 col-md-6 forDocker" style="margin-top:16px">
+                                          <div class="col-lg-6 col-md-6 forDocker hidden" style="margin-top:16px">
                                              
                                                 <label for="">
                                                 Title
@@ -116,12 +116,12 @@
                                           </div>
                                           <div class="col-lg-6 col-md-6 forDocker" style="margin-top:16px;">
                                              <label for="">
-                                             Add  Docker Repo Path
+                                             Add  Docker Repo Path <span class="control-label redSpan">&nbsp;*</span>
                                              <label id="msgOrgName2" style="display:none;color:red;float:right;">Required</label>
                                              </label>
-                                             
-                                                <div class="input-group">
-                                                   <input name="ctl00$MainContent$costcode" value="" id="dockercontainers" class="form-control" type="text" datavalues="dockercontainerpaths" targetelement="dockercontainerpaths"  relatedlist="dockercontainerpathstitle" show="imgDed">
+                                             <input name="ctl00$MainContent$costcode" value="" id="dockercontainers" class="form-control" type="text" datavalues="dockercontainerpaths" targetelement="dockercontainerpaths"  relatedlist="dockercontainerpathstitle" show="imgDed">
+                                                <div class="input-group hidden">
+                                                   
                                                    <span class="input-group-addon" style="padding:1px !important;">
                                                    <input type="button" class="btn btn-sm btn-primary" title="Check to add to list" style="width:53px;height:34px;" value="Add" onclick="addToTargetList($('#dockercontainers'),$('#dockercontainerstitle'));" />
                                                    </span>
@@ -607,9 +607,14 @@
    $(document).ready(function() {
            $("#templatename").focus();
            $('#myForm6').submit(function() {
-                   $(this).validate();
+                  
                    var templateType = $('#templatetypename').val();
+                   if(templateType === 'Docker'){
+                        addToTargetList($('#dockercontainers'),$('#templatename'));
+                     }
+                   $(this).validate();
                    if (templateType === 'Docker' || templateType === 'SoftwareStack' || location.toString().indexOf('?new') === -1) {
+
                        $('#template').removeAttr('cat-validation', 'required');
                        if ($(this).valid) {
                            /*alert('valid form submitted'); // for demo*/
