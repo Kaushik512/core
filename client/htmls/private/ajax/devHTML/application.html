@@ -483,8 +483,8 @@
 						<i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Log Details
 					</h4>
                 </div>
-                <div class="modal-body">
-                    <div class="appLogsSpecific">
+                <div class="modal-body modalHeightHelp">
+                    <div class="appLogsSpecific colorDarkBlue">
                         
                     </div>
                 </div>
@@ -1183,9 +1183,12 @@ function moreinfoDetailsPipelineViewClickHandler(e) {
 				
 				$envSpecificDataArr.clear();
 				for(var k=0;k<rowSetDataDetailsObj[key].length;k++){
-					
-					var $tdlogs = '<a class="btn btn-primary btn-sm width27borderradius50 appSpecificLogs" data-logs="'+rowSetDataDetailsObj[key][k].appLogs+'"><i class="fa fa-info font-size-11"></i></a>';
-					//$tdlogs.attr("logsInfo",rowSetDataDetailsObj[key][k].appLogs);
+					var rowSetDetailsLogs = rowSetDataDetailsObj[key][k].appLogs;
+					rowSetDetailsLogs = rowSetDetailsLogs.replace(/"/g, '');
+					//str = str.replace(/'/g, '');
+					var $tdlogs = '<a id="'+k+'_appSpecificLogsId" class="btn btn-primary btn-sm width27borderradius50 appSpecificLogs" data-logs="'+rowSetDetailsLogs+'"><i class="fa fa-info font-size-11"></i></a>';
+					//$(row).data('appNameVer',presentDataDetailsObj);
+					$('#'+k+'_appSpecificLogsId').data("logsInfo",rowSetDataDetailsObj[key][k].appLogs);
 				    $envSpecificDataArr.row.add([
 				        rowSetDataDetailsObj[key][k].applicationNodeIP,
 						rowSetDataDetailsObj[key][k].applicationLastDeploy,
@@ -1202,7 +1205,12 @@ function moreinfoDetailsPipelineViewClickHandler(e) {
 	}
     
     function appSpecificLogsViewClickHandler(){
+    	//alert($(this));
+    	//console.log($(this));
+    	// var rowSetDataDetailsObj1 = $(this).data("logsInfo");
+    	// console.log(rowSetDataDetailsObj1);
     	var dataLogs = $(this).attr('data-logs');
+    	//alert(dataLogs);
     	var $modal = $('#modallogsSpecificDetails');
     	var datahttp = dataLogs.indexOf("http://");
 		if (datahttp == 0) {
@@ -1214,7 +1222,8 @@ function moreinfoDetailsPipelineViewClickHandler(e) {
 			$modal.find('.appLogsSpecific').append(dataLogs);
     		$modal.modal('show');
 		}
-		e.preventdefault();	
+		/*e.preventdefault();	*/
+		return false;
     }
     $modal.modal('show');
 }
