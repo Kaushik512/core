@@ -656,156 +656,152 @@ $(function() {
         //console.log(this.files);
         $(this).next().val(this.files[0].name);
     });
-    $('.importNodesBtn').click(function(e) {
-        var $checkBoxes = $('.nodeCheckBox:checked');
-        var reqBody = {};
-        reqBody.orgId = $orgListInput.val();
-        reqBody.bgId = $bgList.val();
-        reqBody.projectId = $projectList.val();
-        reqBody.envID = $envList.val();
-        /*if(!reqBody.bgId || !reqBody.bgId.length){
-    alert('Please Select Business Groups & Project');
-    return;
-   }*/
+  $('.importNodesBtn').click(function(e) {
+    var $checkBoxes = $('.nodeCheckBox:checked');
+    var reqBody = {};
+    reqBody.orgId = $orgListInput.val();
+    reqBody.bgId = $bgList.val();
+    reqBody.projectId = $projectList.val();
+    reqBody.envID = $envList.val();
 
-      if (!((reqBody.bgId && reqBody.bgId.length) && (reqBody.projectId && reqBody.projectId.length) && reqBody.projectId !== 'choose' && reqBody.bgId !== 'choose')) {
-            alert('Please Select a Business Group & Project');
-        return;
-        }
+
+    if (!((reqBody.bgId && reqBody.bgId.length) && (reqBody.projectId && reqBody.projectId.length) && reqBody.projectId !== 'choose' && reqBody.bgId !== 'choose')) {
+      alert('Please Select a Business Group & Project');
+      return;
+    }
 
 
 
-        reqBody.selectedNodes = [];
-        $checkBoxes.each(function() {
-            reqBody.selectedNodes.push($(this).attr('data-nodeName'));
-        });
-
-        reqBody.credentials = {};
-        reqBody.credentials.username = $('#importUsernameInput').val();
-
-        var $dropdown = $('#pemFileDropdown2');
-        if (!($dropdown.val() === 'pemFile')) {
-            reqBody.credentials.password = $('#importPasswordInput').val();
-            if (!reqBody.credentials.username) {
-                alert('Please Enter Username');
-                return;
-            }
-            if (!reqBody.credentials.password) {
-                alert('Please Enter Password or Choose a Pem file');
-                return;
-            }
-            reqBody.users = $('#userListSelect').val();
-            if (!reqBody.users || !reqBody.users.length) {
-                alert('Please Choose Users');
-                return;
-            }
-            console.log(reqBody);
-
-            makeRequest();
-        } else {
-            var pemFileInput = $('#importPemfileInput').get(0);
-            if (!reqBody.credentials.username) {
-                alert('Please Enter Username');
-                return;
-            }
-            if (!pemFileInput.files.length) {
-                alert('Please Choose a Pem file');
-                return;
-            }
-
-            reqBody.users = $('#userListSelect').val();
-            if (!reqBody.users || !reqBody.users.length) {
-                alert('Please Choose Users');
-                return;
-            }
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                // Render thumbnail.
-                reqBody.credentials.pemFileData = e.target.result;
-
-                makeRequest();
-
-            };
-            // Read in the image file as a data URL.
-            reader.readAsText(pemFileInput.files[0]);
-
-        }
-
-        function makeRequest() {
-            $('#saveSpinner').removeClass('hidden');
-            $('.importNodesBtn').attr('disabled', 'disabled');
-            console.log(reqBody);
-            $.post('../chef/servers/' + urlParams.chefId + '/sync/nodes', reqBody, function(data) {
-                console.log(data);
-                var $chefResultModalContainer = $('#chefImportNodesResultModal');
-                var $modalBody = $chefResultModalContainer.find('.modal-body');
-                $modalBody.empty();
-                var $progressBar = $('<progress value="0" max="' + reqBody.selectedNodes.length + '"></progress>').css({
-                    width: '100%'
-                });
-                var $msgDiv = $('<div class="messageDiv"></div>').css({
-                    width: '100%'
-                });
-
-                $modalBody.append($progressBar).append($msgDiv);
-                $('#saveSpinner').addClass('hidden');
-
-                $('#chefImportNodesModal').modal('hide');
-                $chefResultModalContainer.modal('show');
-                var timeout;
-                var count = 0;
-
-                function pollTaskStatus(taskId, timestamp) {
-                    timeout = setTimeout(function() {
-                        $.get('../taskstatus/' + taskId + '/status?timestamp=' + timestamp, function(data) {
-                            console.log(data);
-                            if (!data.completed) {
-                                if (data.statusList && data.statusList.length) {
-
-                                    $progressBar.val(data.statusList.length);
-                                    $msgDiv.empty();
-                                    for (var i = 0; i < data.statusList.length; i++) {
-                                        $msgDiv.append($('<div></div>').append(data.statusList[i].status.message));
-                                    }
-
-                                    pollTaskStatus(taskId, data.statusList[data.statusList.length - 1].timestamp);
-                                } else {
-                                    pollTaskStatus(taskId, timestamp);
-                                }
-                            } else {
-                                if (data.statusList && data.statusList.length) {
-                                    $progressBar.val(data.statusList.length);
-                                    $msgDiv.empty();
-                                    for (var i = 0; i < data.statusList.length; i++) {
-                                        $msgDiv.append($('<div></div>').append(data.statusList[i].status.message));
-                                    }
-                                }
-                                $progressBar.val(reqBody.selectedNodes.length);
-                                if (reqBody.selectedNodes.length) {
-
-                                    var nodeData = $($checkBoxes[0]).data('node');
-                                    if (nodeData && nodeData.chef_environment) {
-                                        //$chefResultModalContainer.modal('hide');
-                                        loadTreeFuncNew();
-                                        //window.location.href = '#ajax/Dev.html?org='+reqBody.orgId+'&projid='+reqBody.projectId+'&envid='+nodeData.chef_environment;
-
-                                    }
-                                }
-                            }
-                        })
-                    }, 1000);
-
-                }
-                pollTaskStatus(data.taskId, 0);
-                //Refreshing the workzone tree
-
-            }).error(function() {
-                alert('Unable to import instances. Please try again later');
-            });
-        }
-
+    reqBody.selectedNodes = [];
+    $checkBoxes.each(function() {
+      reqBody.selectedNodes.push($(this).attr('data-nodeName'));
     });
 
+    reqBody.credentials = {};
+    reqBody.credentials.username = $('#importUsernameInput').val();
+
+    var $dropdown = $('#pemFileDropdown2');
+    if (!($dropdown.val() === 'pemFile')) {
+      reqBody.credentials.password = $('#importPasswordInput').val();
+      if (!reqBody.credentials.username) {
+        alert('Please Enter Username');
+        return;
+      }
+      if (!reqBody.credentials.password) {
+        alert('Please Enter Password or Choose a Pem file');
+        return;
+      }
+      reqBody.users = $('#userListSelect').val();
+      if (!reqBody.users || !reqBody.users.length) {
+        alert('Please Choose Users');
+        return;
+      }
+      console.log(reqBody);
+
+      makeRequest();
+    } else {
+      var pemFileInput = $('#importPemfileInput').get(0);
+      if (!reqBody.credentials.username) {
+        alert('Please Enter Username');
+        return;
+      }
+      if (!pemFileInput.files.length) {
+        alert('Please Choose a Pem file');
+        return;
+      }
+
+      reqBody.users = $('#userListSelect').val();
+      if (!reqBody.users || !reqBody.users.length) {
+        alert('Please Choose Users');
+        return;
+      }
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        // Render thumbnail.
+        reqBody.credentials.pemFileData = e.target.result;
+
+        makeRequest();
+
+      };
+      // Read in the image file as a data URL.
+      reader.readAsText(pemFileInput.files[0]);
+
+    }
+
+    function makeRequest() {
+      $('#saveSpinner').removeClass('hidden');
+      $('.importNodesBtn').attr('disabled', 'disabled');
+      console.log(reqBody);
+      $.post('../chef/servers/' + urlParams.chefId + '/sync/nodes', reqBody, function(data) {
+        console.log(data);
+        var $chefResultModalContainer = $('#chefImportNodesResultModal');
+        var $modalBody = $chefResultModalContainer.find('.modal-body');
+        $modalBody.empty();
+        var $progressBar = $('<progress value="0" max="' + reqBody.selectedNodes.length + '"></progress>').css({
+          width: '100%'
+        });
+        var $msgDiv = $('<div class="messageDiv"></div>').css({
+          width: '100%'
+        });
+
+        $modalBody.append($progressBar).append($msgDiv);
+        $('#saveSpinner').addClass('hidden');
+
+        $('#chefImportNodesModal').modal('hide');
+        $chefResultModalContainer.modal('show');
+        var timeout;
+        var count = 0;
+
+        function pollTaskStatus(taskId, timestamp) {
+          timeout = setTimeout(function() {
+            $.get('../taskstatus/' + taskId + '/status?timestamp=' + timestamp, function(data) {
+              console.log(data);
+              if (!data.completed) {
+                if (data.statusList && data.statusList.length) {
+
+                  $progressBar.val(data.statusList.length);
+                  $msgDiv.empty();
+                  for (var i = 0; i < data.statusList.length; i++) {
+                    $msgDiv.append($('<div></div>').append(data.statusList[i].status.message));
+                  }
+
+                  pollTaskStatus(taskId, data.statusList[data.statusList.length - 1].timestamp);
+                } else {
+                  pollTaskStatus(taskId, timestamp);
+                }
+              } else {
+                if (data.statusList && data.statusList.length) {
+                  $progressBar.val(data.statusList.length);
+                  $msgDiv.empty();
+                  for (var i = 0; i < data.statusList.length; i++) {
+                    $msgDiv.append($('<div></div>').append(data.statusList[i].status.message));
+                  }
+                }
+                $progressBar.val(reqBody.selectedNodes.length);
+                if (reqBody.selectedNodes.length) {
+
+                  var nodeData = $($checkBoxes[0]).data('node');
+                  if (nodeData && nodeData.chef_environment) {
+                    //$chefResultModalContainer.modal('hide');
+                    loadTreeFuncNew();
+                    //window.location.href = '#ajax/Dev.html?org='+reqBody.orgId+'&projid='+reqBody.projectId+'&envid='+nodeData.chef_environment;
+
+                  }
+                }
+              }
+            })
+          }, 1000);
+
+        }
+        pollTaskStatus(data.taskId, 0);
+        //Refreshing the workzone tree
+
+      }).error(function() {
+        alert('Unable to import instances. Please try again later');
+      });
+    }
+
+  });
 });
 
 
