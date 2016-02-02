@@ -18,7 +18,11 @@ module.exports.getInstance = function(httpOrPort, opts) {
 	if (io) {
 		return io;
 	}
-	io = Server(httpOrPort, opts);
+	if (httpOrPort) {
+		io = Server(httpOrPort, opts);
+	} else {
+		io = Server(opts);
+	}
 	initAuth(io, opts.authFunc);
 	return io;
 };

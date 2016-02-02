@@ -152,6 +152,8 @@ function getDefaultsConfig() {
         },
         maxInstanceCount: 0,
 
+        cronjobTimeDelay: '"*/3 * * * *"',
+
         //getter methods
         get catalystHome() {
             return this.catalystDataDir + '/' + this.catalysHomeDirName + '/';

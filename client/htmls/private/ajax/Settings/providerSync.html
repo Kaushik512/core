@@ -50,6 +50,7 @@
         <th style="text-align: center">Name/Id</th>
         <th style="text-align: center">OS</th>
         <th style="text-align: center">IP Address</th>
+        <th style="text-align: center">Region</th>
         <th style="text-align: center">Managed</th>
         <th style="text-align: center">status</th>
         <th style="text-align: center">Actions</th>
@@ -463,6 +464,14 @@
       var $tdIpAddress = $('<td></td>').append(managnedData[i].instanceIP);
       $tr.append($tdIpAddress);
 
+      
+      var region = ''; 
+      if(managnedData[i].providerData && managnedData[i].providerData.region) {
+        region = managnedData[i].providerData.region;
+      } 
+      var $tdRegion = $('<td></td>').append(region);
+      $tr.append($tdRegion);
+
       var $tdIsManagd = $('<td></td>').css({
         'background-color': 'green'
       });
@@ -505,6 +514,14 @@
 
       var $tdIpAddress = $('<td></td>').append(unManagnedData[i].ip);
       $tr.append($tdIpAddress);
+      
+      var region = ''; 
+      if(unManagnedData[i].providerData && unManagnedData[i].providerData.region) {
+        region = unManagnedData[i].providerData.region;
+      } 
+      var $tdRegion = $('<td></td>').append(region);
+      $tr.append($tdRegion);
+
 
       var $tdIsManagd = $('<td></td>').css({
         'background-color':'red'
