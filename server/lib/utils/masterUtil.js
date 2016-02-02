@@ -2008,12 +2008,12 @@ var MasterUtil = function() {
                                 callback(err, null);
                                 return;
                             }
-                            logger.debug('Updated project ' + req.params.anId + ' with App Name : ' + req.body.appName);
+                            logger.debug('Updated project ');
                             callback(null, data);
                             return;
                         });
                     } else {
-                        callback(null, data);
+                        callback(null, []);
                         return;
                     }
                 } else {
@@ -2035,7 +2035,7 @@ var MasterUtil = function() {
                             callback(err, null);
                             return;
                         }
-                        logger.debug('Updated project ' + req.params.anId + ' with App Name : ' + req.body.appName);
+                        logger.debug('Updated project ');
                         callback(null, data);
                         return;
                     });

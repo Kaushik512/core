@@ -1171,17 +1171,13 @@
 	                            var $chooseVersions = $('#chooseVersions');
 	                            var appVersion = $chooseVersions.val();
 	                            var nexusUrl = $nexusServer.find('option:selected').attr('data-nexusUrl');
-	                            //var nexusServerType = $('#chooseNexusServer :selected').attr('data-serverType');
 	                            var nexusServerType = $nexusServer.find('option:selected').attr('data-serverType');
 	                            var nexusRepoUrl = "";
 	                            var repoId = $chooseRepository.find('option:selected').val();
 	                            var nexusRepoId = $nexusServer.find('option:selected').val();
-	                            /*if (!repoId) {
-	                                alert("Please select repository.");
-	                                return false;
-	                            }*/
-	                            /*alert($(this).prop("checked"));*/
-	                            //if ($(this).prop("checked")) {
+
+	                            //alert($('.checkConfigApp').prop("checked"));
+	                            if ($('.checkConfigApp').prop("checked")) {
 	                                if (nexusServerType === "nexus") {
 	                                    var artifactId = $chooseArtifacts.find('option:selected').val();
 	                                    if (!artifactId) {
@@ -1195,22 +1191,24 @@
 	                                    }
 	                                    var $chooseGroupId = $('#chooseGroupId');
 	                                    var groupId = $chooseGroupId.find('option:selected').val().replace(/\./g, '/');
-	                                    // var groupId = $chooseArtifacts.find('option:selected').attr('data-groupId').replace(/\./g, '/');
-	                                    /*if (repoId === "petclinic") {
-	                                        nexusRepoUrl = nexusUrl + "/service/local/repositories/" + repoId + "/content/" + groupId + "/" + artifactId + "/" + versionId + "/" + artifactId + "-" + versionId + ".war";
-	                                    } else {
-	                                        nexusRepoUrl = nexusUrl + "/service/local/repositories/" + repoId + "/content/" + groupId + "/" + artifactId + "/" + versionId + "/" + artifactId + "-" + versionId + ".zip";
-	                                    }*/
+	                                    var repoURIObj = $("#chooseArtifacts").data();
+	                                    var nexusRepoUrl = "";
+	                                    if (repoURIObj) {
+	                                        for (var i = 0; i < repoURIObj.repoObj.length; i++) {
+	                                            if (artifactId === repoURIObj.repoObj[i].artifactId && versionId === repoURIObj.repoObj[i].version) {
+	                                                nexusRepoUrl = repoURIObj.repoObj[i].resourceURI;
+	                                            }
+	                                        }
+	                                    }
 	                                    var nexus = {
 	                                        "repoId": nexusRepoId,
-	                                        "url": nexusUrl,
+	                                        "url": nexusRepoUrl,
 	                                        "version": appVersion,
 	                                        "repoName": repoId,
 	                                        "artifactId": artifactId,
 	                                        "groupId": groupId
 	                                    };
 	                                    reqBody.nexus = nexus;
-	                                    //alert(JSON);
 	                                } else {
 	                                    var dockerImage = $chooseRepository.val();
 	                                    var containerId = $('#containerIdDiv').val();
@@ -1226,7 +1224,7 @@
 	                                    };
 	                                    reqBody.docker = docker;
 	                                }
-	                           // }
+	                            }
 	                            console.log($('#compositedockertable').find('.dockerimagesrow').length);
 	                            $('.dockerimagesrow').each(function() {
 	                                dockerimages = {};
@@ -1925,7 +1923,7 @@
 	                                    uniqueArtifacts.push(checker);
 	                                }
 	                            }
-	                            $( "#chooseArtifacts" ).data( "repoObj", repoList );
+	                            $("#chooseArtifacts").data("repoObj", repoList);
 	                            for (var j = 0; j < uniqueArtifacts.length; j++) {
 	                                $('#chooseArtifacts').append('<option data-groupId="' + uniqueArtifacts[j].groupId + '" value=' + uniqueArtifacts[j].artifactId + '>' + uniqueArtifacts[j].artifactId + '</option>');
 	                            }

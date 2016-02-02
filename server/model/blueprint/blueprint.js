@@ -443,15 +443,14 @@ BlueprintSchema.statics.getBlueprintsByOrgBgProject = function(orgId, bgId, proj
     });
 };
 
-BlueprintSchema.methods.getCookBookAttributes = function(instanceIP,repoData, callback) {
+BlueprintSchema.methods.getCookBookAttributes = function(instanceIP, repoData, callback) {
     var blueprint = this;
     //merging attributes Objects
     var attributeObj = {};
     var objectArray = [];
     // While passing extra attribute to chef cookbook "rlcatalyst" is used as attribute.
-    logger.debug("this blueprint: ",JSON.stringify(blueprint));
+    var temp = new Date().getTime();
     if (blueprint.nexus.url) {
-        logger.debug("nexus has url:");
         masterUtil.updateProject(repoData.projectId, repoData.repoName, function(err, data) {
             if (err) {
                 logger.debug("Failed to updateProject: ", err);
@@ -460,7 +459,6 @@ BlueprintSchema.methods.getCookBookAttributes = function(instanceIP,repoData, ca
                 logger.debug("updateProject successful.");
             }
         });
-        var nexusRepoUrl = "";
         var url = blueprint.nexus.url;
         var repoName = blueprint.nexus.repoName;
         var groupId = blueprint.nexus.groupId;
@@ -480,15 +478,9 @@ BlueprintSchema.methods.getCookBookAttributes = function(instanceIP,repoData, ca
         nexus.getNexusArtifactVersions(blueprint.nexus.repoId, repoName, groupId, artifactId, function(err, data) {
             if (err) {
                 logger.debug("Failed to fetch Repository from Mongo: ", err);
-                // repoName is hardcoded, need to find better way to make dynamic.
-                if (repoName === "petclinic") {
-                    nexusRepoUrl = url + "/service/local/repositories/" + repoName + "/content/" + groupId + "/" + artifactId + "/" + version + "/" + artifactId + "-" + version + ".war";
-                } else {
-                    nexusRepoUrl = url + "/service/local/repositories/" + repoName + "/content/" + groupId + "/" + artifactId + "/" + version + "/" + artifactId + "-" + version + ".zip";
-                }
                 objectArray.push({
                     "rlcatalyst": {
-                        "nexusUrl": nexusRepoUrl
+                        "nexusUrl": url
                     }
                 });
                 objectArray.push({
@@ -499,33 +491,80 @@ BlueprintSchema.methods.getCookBookAttributes = function(instanceIP,repoData, ca
             }
 
             if (data) {
+                var flag = false;
                 var versions = data.metadata.versioning[0].versions[0].version;
                 var latestVersionIndex = versions.length;
                 var latestVersion = versions[latestVersionIndex - 1];
-                logger.debug("Got latest catalyst version from nexus: ", latestVersion);
-                // repoName is hardcoded, need to find better way to make dynamic
-                if (repoName === "petclinic") {
-                    nexusRepoUrl = url + "/service/local/repositories/" + repoName + "/content/" + groupId + "/" + artifactId + "/" + latestVersion + "/" + artifactId + "-" + latestVersion + ".war";
-                } else {
-                    nexusRepoUrl = url + "/service/local/repositories/" + repoName + "/content/" + groupId + "/" + artifactId + "/" + latestVersion + "/" + artifactId + "-" + latestVersion + ".zip";
-                }
-                objectArray.push({
-                    "rlcatalyst": {
-                        "nexusUrl": nexusRepoUrl
+                //logger.debug("Got latest catalyst version from nexus: ", latestVersion);
+
+                nexus.getNexusArtifact(blueprint.nexus.repoId, repoName, groupId, function(err, artifacts) {
+                    if (err) {
+                        logger.debug("Failed to get artifacts.");
+                        objectArray.push({
+                            "rlcatalyst": {
+                                "nexusUrl": url
+                            }
+                        });
+                        objectArray.push({
+                            "rlcatalyst": {
+                                "version": version
+                            }
+                        });
+                    } else {
+                        if (artifacts.length) {
+                            for (var i = 0; i < artifacts.length; i++) {
+                                if (latestVersion === artifacts[i].version && artifactId === artifacts[i].artifactId) {
+                                    url = artifacts[i].resourceURI;
+
+                                    objectArray.push({
+                                        "rlcatalyst": {
+                                            "nexusUrl": url
+                                        }
+                                    });
+                                    objectArray.push({
+                                        "rlcatalyst": {
+                                            "version": latestVersion
+                                        }
+                                    });
+                                    flag = true;
+                                    //logger.debug("latest objectArray::: ", JSON.stringify(objectArray));
+                                    break;
+                                }
+
+                            }
+                            if (!flag) {
+                                objectArray.push({
+                                    "rlcatalyst": {
+                                        "nexusUrl": url
+                                    }
+                                });
+                                objectArray.push({
+                                    "rlcatalyst": {
+                                        "version": version
+                                    }
+                                });
+                            }
+                        } else {
+                            objectArray.push({
+                                "rlcatalyst": {
+                                    "nexusUrl": url
+                                }
+                            });
+                            objectArray.push({
+                                "rlcatalyst": {
+                                    "version": latestVersion
+                                }
+                            });
+                        }
                     }
-                });
-                objectArray.push({
-                    "rlcatalyst": {
-                        "version": latestVersion
-                    }
+                    var attributeObj = utils.mergeObjects(objectArray);
+                    callback(null, attributeObj);
+                    return;
                 });
             } else {
                 logger.debug("No artifact version found.");
             }
-            var attributeObj = utils.mergeObjects(objectArray);
-            logger.debug('firing callback nexus');
-            callback(null, attributeObj);
-            return;
+
         });
     } else if (blueprint.docker.image) {
         objectArray.push({
@@ -557,7 +596,6 @@ BlueprintSchema.methods.getCookBookAttributes = function(instanceIP,repoData, ca
         callback(null, attrs);
         return;
     } else {
-        logger.debug('firing empty callback');
         process.nextTick(function() {
             callback(null, {});
         });
