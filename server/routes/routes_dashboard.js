@@ -14,12 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- * Written by Arabinda Behera <arabinda.behera@relevancelab.com>,
- * december 2015
- */
+
 
 // This file act as a Controller which contains dashboard related all end points.
 var logger = require('_pr/logger')(module);
