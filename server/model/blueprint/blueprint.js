@@ -449,7 +449,9 @@ BlueprintSchema.methods.getCookBookAttributes = function(instanceIP,repoData, ca
     var attributeObj = {};
     var objectArray = [];
     // While passing extra attribute to chef cookbook "rlcatalyst" is used as attribute.
+    logger.debug("this blueprint: ",JSON.stringify(blueprint));
     if (blueprint.nexus.url) {
+        logger.debug("nexus has url:");
         masterUtil.updateProject(repoData.projectId, repoData.repoName, function(err, data) {
             if (err) {
                 logger.debug("Failed to updateProject: ", err);
