@@ -158,8 +158,7 @@ var server = http.createServer(app);
 var io = socketIo.getInstance(server, {
 	log: false,
 	authFunc: function(socket, next) {
-    
-		sessionMiddleware(socket.request, socket.request.res, next);
+  		sessionMiddleware(socket.request, socket.request.res, next);
 	}
 });
 
