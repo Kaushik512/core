@@ -545,6 +545,14 @@
     border-color: #aaa;
     color: #fff;
 }
+.theadcolor{
+    background-color: #ddd !important;
+}
+.tablebordercolor{
+    border-style:solid;
+    border-width:0 1px 1px !important;
+    border-color: #ddd;
+}
 /*.secondChildSpanTemplate{
     padding-left: 15%;
 }*/

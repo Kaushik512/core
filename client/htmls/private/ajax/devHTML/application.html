@@ -139,7 +139,7 @@
 									<!-- <img src="img/arrow_right.png" class="spanChildImage"> -->
 								</span>
 							</div>
-							<div class="col-md-12" id="divapplicationcardview" style="padding-left:0px; padding-right:0px;padding-top:10px">
+							<div class="col-md-12 tablebordercolor" id="divapplicationcardview" style="padding-left:0px; padding-right:0px;padding-top:10px">
                 				<table class="tableClone dataTable table-custom table-condensed" cellpadding="5px" width="100%" style="border-bottom:1px solid #ddd" style="display:none">
 
 				                </table>
@@ -878,7 +878,7 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
         "bLengthChange": true
     });
     $tableClone.addClass('margintop35');
-    $tableClone.find('thead th').addClass('padding-left5per');
+    $tableClone.find('thead th').addClass('padding-left5per theadcolor');
     var $tableapplicationTest = $tableClone;
     var $tableapplicationTbody = $tableClone.find('tbody');
     $.get('/app/deploy/project/' + projectId + '/list', function(deployData) {
