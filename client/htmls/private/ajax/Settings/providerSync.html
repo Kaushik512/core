@@ -37,22 +37,23 @@
 
 <div class="clearfix"></div>
 <ul class="nav nav-tabs " role="tablist">
-  <li class="active"><a href="#organiz" role="tab" data-toggle="tab">Instances</a></li>
+  <li class="active"><a href="#organiz" role="tab" data-toggle="tab">ManagedInstances</a></li>
+  <li><a href="#unmanaged" role="tab" data-toggle="tab">UnmanagedInstances</a></li>
 </ul>
 
+<div class="tab-content">
 <!-- Tab panes -->
-<div  class="tab-content instancesListContainer">
-  <div  class="tab-pane active tabContent table-responsive" id="instanceListDiv" >
+<div  class="tab-pane active instancesListContainer" id="organiz">
+  <div  class="tabContent table-responsive" id="instanceListDiv" >
     <table class="table table-hover table-bordered" id="instanceListTable" style="font-size:13px;margin-bottom:55px;text-align: center";>
     
     <thead>
       <tr>
-        <th style="text-align: center">Name/Id</th>
+        <th style="text-align: center">InstanceId</th>
         <th style="text-align: center">OS</th>
         <th style="text-align: center">IP Address</th>
         <th style="text-align: center">Region</th>
-        <th style="text-align: center">Managed</th>
-        <th style="text-align: center">status</th>
+        <th style="text-align: center">Status</th>
         <th style="text-align: center">Actions</th>
       </tr>
     </thead>
@@ -62,18 +63,41 @@
 
     </tbody>
   </table>
-   <footer class="footer">
+</div>
+</div>
+
+<div  class="tab-pane unmanagedInstancesListContainer" id="unmanaged">
+  <div  class="tabContent table-responsive" id="unmanagedinstanceListDiv" >
+    <table class="table table-hover table-bordered" id="unmanagedinstanceListTable" style="font-size:13px;margin-bottom:55px;text-align: center";>
+    
+    <thead>
+      <tr>
+        <th style="text-align: center">InstanceId</th>
+        <th style="text-align: center">OS</th>
+        <th style="text-align: center">IP Address</th>
+        <th style="text-align: center">Region</th>
+        <th style="text-align: center">Status</th>
+        <th style="text-align: center">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      
+
+    </tbody>
+  </table>
+</div>
+
+</div>  
+<footer class="footer">
       <div style="text-align:center" class="clearfix form-actions">
         <div>
             <input type="button" id="providerSyncBtn" style="margin-left:200px;" value="Import Instances" class="btn btn-primary showChefImportNodesModalBtn">
         </div>
       </div>
     </footer>
- 
-
 </div>
-
-</div>  
+<!--tab content oevr-->
 
 <div class="modal fade" id="providerSyncModal" data-backdrop="static">
   <div class="modal-dialog">
@@ -230,15 +254,7 @@
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-
-
-
-
 <script type="text/javascript">
-
-
-
-
 
 (function() {
 
@@ -443,13 +459,6 @@
 
   });
  
-
-
-  
-
-
-
-
   var $tbody = $('#instanceListTable tbody');
   function loadManagedInstances(managnedData) {
 
@@ -472,10 +481,10 @@
       var $tdRegion = $('<td></td>').append(region);
       $tr.append($tdRegion);
 
-      var $tdIsManagd = $('<td></td>').css({
+  /*    var $tdIsManagd = $('<td></td>').css({
         'background-color': 'green'
       });
-      $tr.append($tdIsManagd);
+      $tr.append($tdIsManagd);*/
 
       var $tdStatus = $('<td></td>').append(managnedData[i].instanceState);
       $tr.append($tdStatus);
@@ -511,8 +520,9 @@
 
   }
 
+  
   function loadUnmanagedInstances(unManagnedData) {
-
+    var $tbody = $('#unmanagedinstanceListDiv tbody');
     for(var i=0;i<unManagnedData.length;i++) {
       var $tr = $('<tr></tr>').attr('instanceId',unManagnedData[i]._id);
       var $tdId = $('<td></td>').append(unManagnedData[i].platformId);
@@ -532,10 +542,10 @@
       $tr.append($tdRegion);
 
 
-      var $tdIsManagd = $('<td></td>').css({
+  /*    var $tdIsManagd = $('<td></td>').css({
         'background-color':'red'
       }).append(false);
-      $tr.append($tdIsManagd);
+      $tr.append($tdIsManagd);*/
 
       var $tdStatus = $('<td></td>').append(unManagnedData[i].state);
       $tr.append($tdStatus);
@@ -556,12 +566,15 @@
   $.get('/providers/' + urlParams.providerId + '/managedInstances', function(managedInstances) {
     
     loadManagedInstances(managedInstances);
+     $('#instanceListDiv').show();
+  });
+
     $.get('/providers/' + urlParams.providerId + '/unmanagedInstances', function(unmanagnedInstances) {
       loadUnmanagedInstances(unmanagnedInstances);
-      $('#instanceListDiv').show();
+      $('#unmanagedinstanceListDiv').show();
 
     });
-  });
+ 
 
 
   $('.importNodesBtn').click(function(e) {
