@@ -83,9 +83,9 @@ chefTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusD
                     if (!launchedBluprintIds.length) {
                         msg = "Unable to launch blueprints";
                     } else if (launchedBluprintIds.length === blueprintIds.length) {
-                        msg = "Blueprints launched: " + blueprintIds + ", to see logs go to Instances.";
+                        msg = "Your Selected Blueprint is being Launched,You can monitor logs from the Launched Instances.";
                     } else {
-                        msg = "Go to instances to see log.";
+                        msg = "You can monitor logs from the Launched Instances.";
                     }
                     onExecute(null, {
                         blueprintMessage: msg,
