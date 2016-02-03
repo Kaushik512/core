@@ -1,6 +1,3 @@
-<script>
-// $(".tree-view").hide();
-</script>
 <style type="text/css">
 #createProvider .marginbottom {
     margin-bottom: 10px;
@@ -76,14 +73,12 @@
                                                                 <option value="">Select Provider</option>
                                                                 <option value="AWS">AWS</option>
                                                                 <option value="OPENSTACK">OpenStack</option>
-                                                                <option value="HPPUBLICCLOUD">HP Public Cloud</option>
                                                                 <option value="VMWARE">VMware</option>
                                                                 <option value="AZURE">Azure</option>
                                                             </select>
                                                         </div>
                                                         <div class="col-lg-6 col-md-6">
                                                             <label for="">Name:<span style="color: Red;" class="control-label">&nbsp;*</span></label>
-                                                            <!-- <i class="icon-append fa fa-building"></i> -->
                                                             <input name="providerName" placeholder="Enter Name of the Provider" id="name" class="form-control" type="text" cdata="catalyst" cat-validation="required">
                                                         </div>
                                                     </div>
@@ -91,96 +86,81 @@
                                                         <!-- -->
                                                         <div class="col-lg-6 col-md-6">
                                                             <label for="">Access Key:<span style="color: Red;" class="control-label">&nbsp;*</span></label>
-                                                            <!-- <i class="icon-append fa fa-building"></i> -->
                                                             <input name="accessKey" id="accessKey" class="form-control" type="text" cdata="catalyst" cat-validation="required" placeholder="Enter the Access Key"> <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility: hidden;">Required</span></div>
                                                         <div class="col-lg-6 col-md-6">
                                                             <label for="">Secret Key:<span style="color: Red;" class="control-label">&nbsp;*</span></label>
-                                                            <!-- <i class="icon-append fa fa-building"></i> -->
                                                             <input name="secretKey" id="secretKey" class="form-control" type="text" cdata="catalyst" cat-validation="required" placeholder="Enter the Secret Key"> <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility: hidden;">Required</span></div>
                                                     </div>
                                                     <div class="row forvmware">
                                                         <div class="col-lg-6 col-md-6">
                                                             <label for="">Username:<span style="color: Red;" class="control-label">&nbsp;*</span></label>
-                                                            <!-- <i class="icon-append fa fa-building"></i> -->
                                                             <input name="vmwareusername" id="vmwareusername" class="form-control" type="text" cdata="catalyst" cat-validation-vmware="required" placeholder="Enter Username"> <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility: hidden;">Required</span></div>
                                                         <div class="col-lg-6 col-md-6">
                                                             <label for="">Password:<span style="color: Red;" class="control-label">&nbsp;*</span></label>
-                                                            <!-- <i class="icon-append fa fa-building"></i> -->
                                                             <input name="vmwarepassword" id="vmwarepassword" class="form-control" type="password" cdata="catalyst" cat-validation-vmware="required" placeholder="Enter the Password"> <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility: hidden;">Required</span></div>
                                                         <div class="col-lg-6 col-md-6">
                                                             <label for="">Host:<span style="color: Red;" class="control-label">&nbsp;*</span></label>
-                                                            <!-- <i class="icon-append fa fa-building"></i> -->
                                                             <input name="vmwarehost" id="vmwarehost" class="form-control" type="text" cdata="catalyst" cat-validation-vmware="required" placeholder="Enter the Host"> <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility: hidden;">Required</span></div>
                                                         <div class="col-lg-6 col-md-6">
                                                             <label for="">DC:<span style="color: Red;" class="control-label">&nbsp;*</span></label>
-                                                            <!-- <i class="icon-append fa fa-building"></i> -->
                                                             <input name="vmwaredc" id="vmwaredc" class="form-control" type="text" cdata="catalyst" cat-validation-vmware="required" placeholder="Enter the Host"> <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility: hidden;">Required</span></div>
                                                     </div>
                                                     <div class="row foropenstack">
-                                                        <!-- -->
+                                                        
                                                         <div class="col-lg-6 col-md-6">
                                                             <label for="">Username:<span style="color: Red;" class="control-label">&nbsp;*</span></label>
-                                                            <!-- <i class="icon-append fa fa-building"></i> -->
                                                             <input name="openstackusername" id="openstackusername" class="form-control" type="text" cdata="catalyst" cat-validation-openstack="required" placeholder="Enter Username"> <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility: hidden;">Required</span></div>
                                                         <div class="col-lg-6 col-md-6">
                                                             <label for="">Password:<span style="color: Red;" class="control-label">&nbsp;*</span></label>
-                                                            <!-- <i class="icon-append fa fa-building"></i> -->
                                                             <input name="openstackpassword" id="openstackpassword" class="form-control" type="password" cdata="catalyst" cat-validation-openstack="required" placeholder="Enter the Password"> <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility: hidden;">Required</span></div>
                                                         <div class="col-lg-6 col-md-6">
                                                             <label for="">Host:<span style="color: Red;" class="control-label">&nbsp;*</span></label>
-                                                            <!-- <i class="icon-append fa fa-building"></i> -->
                                                             <input name="openstackhost" id="openstackhost" class="form-control" type="text" cdata="catalyst" cat-validation-openstack="required" placeholder="Enter the Host" onBlur="populateurls($(this));"> <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility: hidden;">Required</span></div>
                                                         <div class="col-lg-6 col-md-6">
                                                             <label for="">Project Name:<span style="color: Red;" class="control-label">&nbsp;*</span></label>
-                                                            <!-- <i class="icon-append fa fa-building"></i> -->
                                                             <input name="openstackprojectname" id="openstackprojectname" class="form-control" type="text" cdata="catalyst" cat-validation-openstack="required" placeholder="Enter the Project Name"> <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility: hidden;">Required</span></div>
                                                         <div class="col-lg-6 col-md-6">
                                                             <label for="">Tenant ID:<span style="color: Red;" class="control-label">&nbsp;*</span></label>
-                                                            <!-- <i class="icon-append fa fa-building"></i> -->
                                                             <input name="openstacktenantid" id="openstacktenantid" class="form-control" type="text" cdata="catalyst" cat-validation-openstack="required" placeholder="Enter the Host"> <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility: hidden;">Required</span></div>
                                                         <div class="col-lg-6 col-md-6">
                                                             <label for="">Tenant Name:<span style="color: Red;" class="control-label">&nbsp;*</span></label>
-                                                            <!-- <i class="icon-append fa fa-building"></i> -->
                                                             <input name="openstacktenantname" id="openstacktenantname" class="form-control" type="text" cdata="catalyst" cat-validation-openstack="required" placeholder="Enter the Tenant Name"> <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility: hidden;">Required</span>
                                                         </div>
                                                         <hr/>
                                                         <div class="col-lg-6 col-md-6">
                                                             <label for="">Compute:<span style="color: Red;" class="control-label">&nbsp;*</span></label>
-                                                            <!-- <i class="icon-append fa fa-building"></i> -->
                                                             <input name="openstackendpointcompute" id="openstackendpointcompute" class="form-control" type="text" cdata="catalyst" cat-validation-openstack="required" placeholder="Enter the Compute Service Endpoint"> <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility: hidden;">Required</span>
                                                         </div>
                                                         <div class="col-lg-6 col-md-6">
                                                             <label for="">Identity:<span style="color: Red;" class="control-label">&nbsp;*</span></label>
-                                                            <!-- <i class="icon-append fa fa-building"></i> -->
                                                             <input name="openstackendpointidentity" id="openstackendpointidentity" class="form-control" type="text" cdata="catalyst" cat-validation-openstack="required" placeholder="Enter the Compute Service Endpoint"> <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility: hidden;">Required</span>
                                                         </div>
                                                         <div class="col-lg-6 col-md-6">
                                                             <label for="">Network:</label>
-                                                            <!-- <i class="icon-append fa fa-building"></i> -->
                                                             <input name="openstackendpointnetwork" id="openstackendpointnetwork" class="form-control" type="text" cdata="catalyst" placeholder="Enter the Network Service Endpoint"> <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility: hidden;">Required</span>
                                                         </div>
                                                         <div class="col-lg-6 col-md-6">
                                                             <label for="">Image:</label>
-                                                            <!-- <i class="icon-append fa fa-building"></i> -->
                                                             <input name="openstackendpointimage" id="openstackendpointimage" class="form-control" type="text" cdata="catalyst" placeholder="Enter the Image Service Endpoint"> <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility: hidden;">Required</span>
                                                         </div>
                                                         <div class="col-lg-6 col-md-6 hidden">
                                                             <label for="">EC2:</label>
-                                                            <!-- <i class="icon-append fa fa-building"></i> -->
                                                             <input name="openstackendpointec2" id="openstackendpointec2" class="form-control" type="text" cdata="catalyst" placeholder="Enter the EC2 Service Endpoint"> <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility: hidden;">Required</span>
                                                         </div>
                                                         <div class="col-lg-6 col-md-6">
                                                             <label for="">Key Name:<span style="color: Red;" class="control-label">&nbsp;*</span></label>
-                                                            <!-- <i class="icon-append fa fa-building"></i> -->
                                                             <input name="openstackkeyname" id="openstackkeyname" class="form-control" type="text" cdata="catalyst" placeholder="Enter Instance Key Name"> <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility: hidden;">Required</span></div>
                                                         <div class="col-lg-6 col-md-6">
+                                                            <div class="smart-forms">
                                                             <label for="">Upload .pem file for Instance:<span style="color: Red;" class="control-label">&nbsp;*</span></label>
-                                                            <!-- <i class="icon-append fa fa-building"></i> -->
-                                                            <input name="openstackinstancepem" id="openstackinstancepem" class="form-control" type="file" cdata="catalyst" placeholder="Enter the Password"> <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility: hidden;">Required</span>
+                                                            <label for="openstackinstancepem" name="field" class="field file">
+                                                            <div class="imgdiv" value="1"></div>
+                                                              <span class="button btn-primary">Browse</span><input name="openstackinstancepem" id="openstackinstancepem" keyfield="configname" type="file" class="gui-file file" name="fileObject"><input type="text" readonly="" class="gui-input fileOPPem" name="fileName"><input type="text" class="folderpath" style="visibility:hidden;" cdata="catalyst" />
+                                                          </label>
+                                                          </div>
                                                         </div>
                                                     </div>
                                                     <div class="row forhppubliccloud">
-                                                        <!-- -->
                                                         <div class="col-lg-6 col-md-6">
                                                             <label for="">Region:</label>
                                                             <select id="hppubliccloudregion" name="hppubliccloudregion" class="chooseOrganization width-100" style="vertical-align: central" cdata="catalyst" skiprowid="yes">
@@ -188,17 +168,13 @@
                                                                 <option value="region-a.geo-1.identity.hpcloudsvc.com">US West</option>
                                                                 <option value="region-b.geo-1.identity.hpcloudsvc.com">US East</option>
                                                             </select>
-                                                            <!-- <i class="icon-append fa fa-building"></i> -->
                                                             <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility: hidden;">Required</span></div>
                                                         <div class="col-lg-6 col-md-6">
                                                             <label for="">Key Name:<span style="color: Red;" class="control-label">&nbsp;*</span></label>
-                                                            <!-- <i class="icon-append fa fa-building"></i> -->
                                                             <input name="hppubliccloudkeyname" id="hppubliccloudkeyname" class="form-control" type="text" cdata="catalyst" placeholder="Enter Instance Key Name"> <span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility: hidden;">Required</span></div>
                                                         <div class="col-lg-6 col-md-6">
                                                             <div class="smart-forms">
                                                             <label for="">Upload .pem file for Instance:<span style="color: Red;" class="control-label">&nbsp;*</span></label>
-                                                            
-                                                            <!-- <input name="hppubliccloudinstancepem" id="hppubliccloudinstancepem" class="form-control" type="file" cdata="catalyst" placeholder="Enter the Password"> -->
                                                             <label for="hpFileName" name="field" class="field file">
                                                             <div class="imgdiv" value="1"></div>
                                                               <span class="button btn-primary">Browse</span><input name="hpFileName" id="hpFileName" keyfield="configname" type="file" class="gui-file file" name="fileObject"><input type="text" readonly="" class="gui-input fileHPPem" name="fileName"><input type="text" class="folderpath" style="visibility:hidden;" cdata="catalyst" />
@@ -214,9 +190,6 @@
                                                          <div class="col-lg-6 col-md-6">
                                                             <div class="smart-forms">
                                                             <label for="">Upload .pem file:<span style="color: Red;" class="control-label">&nbsp;*</span></label>
-                                                            <!-- <i class="icon-append fa fa-building"></i> -->
-                                                            <!-- <input name="azurepem" id="azurepem" class="form-control" type="file" cdata="catalyst" placeholder="Enter the pem file"> -->
-                                                        
                                                             <label for="azurepem" name="field" class="field file">
                                                               <div class="imgdiv" value="1"></div>
                                                               <span class="button btn-primary">Browse</span><input name="azurepem" id="azurepem" keyfield="configname" type="file" class="gui-file file" name="fileObject"><input type="text" readonly="" class="gui-input fileAzurePem" name="fileName"><input type="text" class="folderpath" style="visibility:hidden;" cdata="catalyst" />
@@ -228,8 +201,6 @@
                                                         <div class="col-lg-6 col-md-6 forazure">
                                                             <div class="smart-forms">
                                                             <label for="">Upload private key file:<span style="color: Red;" class="control-label">&nbsp;*</span></label>
-                                                            <!-- <i class="icon-append fa fa-building"></i> -->
-                                                            <!-- <input name="azurekey" id="azurekey" class="form-control" type="file" cdata="catalyst" placeholder="Enter the key file"> -->
                                                             <label for="azurekey" class="field file">
                                                               <div class="imgdiv" value="1"></div>
                                                               <span class="button btn-primary">Browse</span><input name="azurekey" id="azurekey" keyfield="configname" type="file" class="gui-file"><input type="text" readonly="" class="gui-input fileAzureKey" name="fileName">
@@ -333,7 +304,6 @@
                 $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/vmware/g, 'hppubliccloud'));
                 $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/openstack/g, 'hppubliccloud'));
                 $('#myForm54').attr('action', $('#myForm54').attr('action').replace(/azure/g, 'hppubliccloud'));
-               // $('.widget-main').css('height','425px').css('overflow-y','scroll'); //to be removed after the the class if fixed globally
             } else if (pv == 'OPENSTACK') {
                 $('.foropenstack').show();
                 $('.forhppubliccloud').hide();
@@ -408,7 +378,6 @@
             $(this).select();
             $("#msgOrgName").hide();
         });
-        //enableUniqueCheckingForInputs(9);
     }
 
     inLineReady();
@@ -485,8 +454,6 @@
     }
 
     function setValueshppubliccloud(data) {
-        //alert(JSON.stringify(data));
-
         $('#name').val(data.providerName);
         $('#providertype').val(data.providerType.toUpperCase()).select2();
         $('#providertype').trigger('change');
@@ -521,7 +488,6 @@
     function setValuesAzure(data) {
         $('#name').val(data.providerName);
         $('#azureSubscriptionId').val(data.subscriptionId);
-       // $('#azureStorageAccount').val(data.storageAccount);
         $('#providertype').val(data.providerType.toUpperCase()).select2();
         $('#providertype').trigger('change');
         bindChange_importPemFile();
@@ -556,7 +522,10 @@
         $('#openstackendpointidentity').val(data.serviceendpoints.identity);
 
         $('#openstackendpointimage').val(data.serviceendpoints.image);
-
+        bindChange_importPemFile();
+        var $pemFileLocation = $('.foropenstack');
+        $pemFileLocation.find('input.fileOPPem').val(data.pemfile);
+        alert(data.pemfile);
         $('#openstackendpointnetwork').val(data.serviceendpoints.network);
 
 
@@ -631,12 +600,8 @@
         }
         $('#myForm54').ajaxForm({
             beforeSubmit: function(arr, $form, options) {
-                // The array of form data takes the following form: 
-                // [ { name: 'username', value: 'jresig' }, { name: 'password', value: 'secret' } ] 
-
                 // return false to cancel submit       
                 if ($('#providertype').val() == 'OPENSTACK' || $('#providertype').val() == 'HPPUBLICCLOUD') {
-                    //alert('in');
                     if (isFormValidOpenStack(null, 'cat-validation-openstack')) {
                         appendLoader();
                         return true;
@@ -718,7 +683,6 @@
                     data = typeof data == "string" ? JSON.parse(data) : data;
                     d4ddata = data;
                     setValues(data);
-                    //checkForKeyPair();
                 },
                 error: function(jqxhr) {
                     removeLoader();
@@ -736,8 +700,6 @@
                         data = typeof data == "string" ? JSON.parse(data) : data;
                         d4ddata = data;
                         setValuesopenstack(data);
-
-                        //checkForKeyPair();
                     },
                     error: function(jqxhr) {
                         
@@ -749,7 +711,7 @@
                         
                         bootbox.alert(data);
                     }
-                }); //else getopenstackprovider
+                });
 
             }
             var getValueshppubliccloud = function() {
@@ -761,8 +723,6 @@
                         data = typeof data == "string" ? JSON.parse(data) : data;
                         d4ddata = data;
                         setValueshppubliccloud(data);
-
-                        //checkForKeyPair();
                     },
                     error: function(jqxhr) {
                         
@@ -773,7 +733,7 @@
                         
                         bootbox.alert(data);
                     }
-                }); //else getopenstackprovider
+                }); 
 
             }
 
@@ -786,8 +746,6 @@
                         data = typeof data == "string" ? JSON.parse(data) : data;
                         d4ddata = data;
                         setValuesAzure(data);
-                        
-                        //checkForKeyPair();
                     },
                     error: function(jqxhr) {
                         
@@ -815,7 +773,6 @@
                         setValuesvmware(data);
                         removeLoader();
                         bootbox.alert(jqxhr.status);
-                        //checkForKeyPair();
                     },
                     error: function(jqxhr) {
                         
@@ -868,97 +825,8 @@
                     $(this).trigger('change');
                 }
             });
-
-            //$('select.region').trigger('change'); 
         });
     }
-
-    /* function saveProviderData(){
-       appendLoader();
-
-
-       var getRegionListForFormSubmission=function(){
-         var list=[];
-         $('select.region').each(function(){
-           var obj={},keyPair=[];
-           obj.region=$(this).val();
-           $(this).parents('.addNewRegion').find('.pemrow').each(function(){
-             obj["name"]=$(this).find('select.keyvalue').val();
-             obj["fileName"] =$(this).find('input.filename').val();
-             //  "file":$(this).find('input.file')[0].files[0]
-           });
-           list.push(obj);
-         });        
-         return list;
-       },appendINObject=function(soruceObj,DestObj){
-         for(key in soruceObj){
-           if(soruceObj.hasOwnProperty(key))
-             DestObj.append(key,soruceObj[key]);
-         }
-       },
-       reqBody={},
-       formdata1;
-
-       reqBody.name=$('#name').val().trim();
-       reqBody.accessKey=$('#accessKey').val().trim();
-       reqBody.secretKey=$('#secretKey').val().trim();
-       reqBody.providerType=$('#providertype').val().trim();
-       reqBody.keyPairs=getRegionListForFormSubmission();
-
-       
-       formdata1=new FormData();
-      // formdata.append('regions',reqBody.regions.keyPairs[0].file,reqBody.regions.keyPairs[0].file_name);
-      //appendINObject(reqBody,FormData1);
-      formdata1.append('name',reqBody.name);
-      formdata1.append('accessKey',reqBody.accessKey);
-      formdata1.append('secretKey',reqBody.secretKey);
-      formdata1.append('providerType',reqBody.providerType);
-      formdata1.append('keyPairs',reqBody.keyPairs);
-      formdata1.append("fileName",$('input[type="file"]')[0].files[0]);
-      var serialize=$('form').serialize();
-      console.log(serialize)
-       //console.log(reqBody);
-
-       if(!UtilityMethods.getIdFromURL()){
-         var url="/aws/providers"
-       }else{
-         var url="/aws/providers/"+UtilityMethods.getIdFromURL()+"/update"
-       }
-
-       $.ajax({
-        method: "POST",
-        url: url,
-        data: serialize,  
-      /*  mimeType:"multipart/form-data",
-       contentType: false,
-       cache: false,*/
-    /* processData:false,
-    success: function(data, success) {
-     // alert(1);
-              //alert('Successfully Saved ' + data);
-              if (data!=500) {
-                if ($('#btncancel').length){
-                  $('#btncancel').click(); 
-                }                
-                removeLoader();
-              }
-              else{
-               removeLoader();
-               alert(data.toString());
-             }
-           },
-           error: function(jqxhr) {
-            removeLoader();
-            bootbox.alert(jqxhr.status);
-          },
-          failure: function(data) {
-            bootbox.alert(data);
-          }
-        });
-
-  }
-*/
-
     function createTemplate(parentToAttach) {
         var that = this,
             parentEl = $(parentToAttach).addClass('customTemplateParent');

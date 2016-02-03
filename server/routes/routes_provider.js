@@ -1508,6 +1508,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var providerName = req.body.providerName;
         var providerType = req.body.providerType;
         var openstackkeyname = req.body.openstackkeyname;
+        var openstackpemfile = req.files.openstackinstancepem.originalFilename;
         var orgId = req.body.orgId;
 
         var serviceendpoints = {
@@ -1597,6 +1598,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         projectname: openstackprojectname,
                         serviceendpoints: serviceendpoints,
                         keyname: openstackkeyname,
+                        pemfile: openstackpemfile,
                         orgId: orgId
                     };
                     openstackProvider.getopenstackProviderByName(providerData.providerName, providerData.orgId, function(err, prov) {
@@ -1629,6 +1631,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         host: openstackhost,
                                         providerName: provider.providerName,
                                         providerType: provider.providerType,
+                                        pemfile : provider.openstackpemfile,
                                         orgId: orgs[0].rowid,
                                         orgName: orgs[0].orgname,
                                         tenantid: openstacktenantid,
@@ -1777,6 +1780,9 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var providerType = req.body.providerType.trim();
         var providerId = req.params.providerId.trim();
         var openstackkeyname = req.body.openstackkeyname;
+        //var openstackpemfile = req.files.openstackinstancepem.originalFilename;
+        logger.debug("====== ",JSON.stringify(req.files));
+        var openstackpemfile = req.files.fileObject;
         var orgId = req.body.orgId;
         var providerId = req.params.providerId;
 
@@ -1847,6 +1853,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             providerType: providerType,
             serviceendpoints: serviceendpoints,
             keyname: openstackkeyname,
+            pemfile: openstackpemfile,
             orgId: orgId
         };
 
@@ -1891,6 +1898,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     host: openstackhost,
                                     providerName: providerData.providerName,
                                     providerType: providerData.providerType,
+                                    pemfile: openstackpemfile,
                                     orgId: orgs[0].rowid,
                                     orgName: orgs[0].orgname
                                 };

@@ -61,7 +61,7 @@
                                                         <!-- <select id="orgname" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central" cdata="catalyst" cat-validation="required" cat-validation="required" linkedfields="['configname']" onchange="$('#configname').change();">
                                                             <option value="">Select an Organization</option>
                                                         </select> -->
-                                                        <select id="orgname" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central" cdata="catalyst" cat-validation="required" cat-validation="required" linkedfields="['configname']" onchange="loadCookbookSelectorControlFromOrgId('orgname')">
+                                                        <select id="orgname" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central" cdata="catalyst" cat-validation="required"  linkedfields="['configname']" onchange="loadCookbookSelectorControlFromOrgId('orgname')">
                                                             <option value="">Select an Organization</option>
                                                         </select>
 
@@ -74,7 +74,7 @@
                                              Select Docker Repo <span class="control-label redSpan">&nbsp;*</span>
                                              </label>
                                              
-                                             <select id="dockerreponame" class="choosedockerRepo width-100" sourcepath="18" datapath="masterjson.rows.row"  cdata="catalyst">
+                                             <select id="dockerreponame" class="choosedockerRepo width-100" sourcepath="18" datapath="masterjson.rows.row"  cdata="catalyst" cat-validation="required">
                                              </select>
                                           
                                           
@@ -288,7 +288,7 @@
    $(document).ready(function() {
       pageSetUp();
    $(".choosetemplateType").select2();
-   $(".choosedockerRepo").select2();
+   
    $(".choosechefserver").trigger('change').select2();
    $("select").select2();
     /*$('.forDocker').show();

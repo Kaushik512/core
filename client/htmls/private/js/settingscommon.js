@@ -602,7 +602,7 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
         if (idFieldValue) {
             if (imageTD) {
                 if (imageTD.length > 0) {
-                    var imgpath = 'img/logo.png';
+                    var imgpath = '';
                     if (imageTD.html().indexOf('<img') >= 0 || imageTD.html().length === 0) {
                         imageTD.html(''); //fix for image tag gettnig embedded. - Vinod
                         imageTD.append($('<img src="' + imgpath + '" style="height:28px;width:auto"/>'));
@@ -611,8 +611,10 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
                         imgpath = '/d4dMasters/image/' + idFieldValue + '__' + imageTD.attr('datafieldoriginal') + '__' + imageTD.html();
                     }
 
-                    if (item.id === "16") {
+                    if (item.id === "16" || item.id ==="17") {
+                       
                         switch (item.templatetypename) {
+
                             case "AppFactory":
                                 imgpath = '/d4dMasters/image/16ae9c94-19f6-485a-8c17-9af7a0f5f23d__designtemplateicon__Appfactory.png';
                                 break;
