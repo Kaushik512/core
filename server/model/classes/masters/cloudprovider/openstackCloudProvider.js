@@ -14,12 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- * Written by Gobinda Das <gobinda.das@relevancelab.com>, 
- * May 2015
- */
 
 // This file act as a Model which contains provider schema and dao methods.
 
@@ -29,7 +23,7 @@ var extend = require('mongoose-schema-extend');
 var ObjectId = require('mongoose').Types.ObjectId;
 var schemaValidator = require('../../../dao/schema-validator');
 var uniqueValidator = require('mongoose-unique-validator');
-var ProviderUtil = require('../../../../lib/utils/providerUtil.js');
+var ProviderUtil = require('_pr/lib/utils/providerUtil.js');
 
 var Schema = mongoose.Schema;
 
@@ -106,11 +100,6 @@ var openstackProviderSchema = new Schema({
         required: true,
         trim: true
     },
-    pemfile: {
-        type: String,
-        required: true,
-        trim: true
-    },
     orgId: {
         type: [String],
         required: true,
@@ -139,11 +128,8 @@ openstackProviderSchema.statics.createNew = function(req, providerData, callback
             callback(err, null);
             return;
         }
-
-        var pemId = aProvider['_id'] + req.files.openstackinstancepem.originalFilename;
-
         var keyPair = {
-            _id: pemId 
+            _id: aProvider['_id']
         }
         ProviderUtil.saveAwsPemFiles(keyPair, req.files.openstackinstancepem, function(err, flag) {
             if (err) {
@@ -275,7 +261,6 @@ openstackProviderSchema.statics.updateopenstackProviderById = function(providerI
             tenantname: providerData.tenantname,
             providerType: providerData.providerType,
             keyname: providerData.keyname,
-            pemfile: providerData.pemfile,
             serviceendpoints: {
                 compute: providerData.serviceendpoints.compute,
                 network: providerData.serviceendpoints.network,

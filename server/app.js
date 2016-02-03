@@ -14,12 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- * Written by Gobinda Das <gobinda.das@relevancelab.com>,
- * Dec 2015
- */
 
 var express = require("express");
 var app = express();
@@ -49,6 +43,9 @@ var mongoose = require('mongoose');
 var MongoStore = require('connect-mongo')(expressSession);
 var mongoDbConnect = require('_pr/lib/mongodb');
 var mongoose = require('mongoose');
+
+
+
 
 logger.debug('Starting Catalyst');
 logger.debug('Logger Initialized');
@@ -155,8 +152,7 @@ var server = http.createServer(app);
 var io = socketIo.getInstance(server, {
 	log: false,
 	authFunc: function(socket, next) {
-    
-		sessionMiddleware(socket.request, socket.request.res, next);
+  		sessionMiddleware(socket.request, socket.request.res, next);
 	}
 });
 
@@ -185,6 +181,10 @@ io.sockets.on('connection', function(socket) {
 		socket.emit('log', line);
 	});
 });
+
+
+var cronTabManager = require('_pr/cronjobs');
+cronTabManager.start();
 
 server.listen(app.get('port'), function() {
 	logger.debug('Express server listening on port ' + app.get('port'));

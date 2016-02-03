@@ -1040,7 +1040,7 @@ limitations under the License.
 								}
 								var $providerInput = $('<select id="cftProviderInput" class="form-control"></select>').append(providerStr);
 								var $providerInputContainer = $(
-									'<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftParameterLabelContainer" for=""><span class="cftParameterLabel">Choose Provider</span></label><div class="input-groups"></div></div>'
+									'<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftParameterLabelContainer" for=""><span class="cftParameterLabel">Choose Provider</span><span class="control-label redSpan">&nbsp;*</span></label><div class="input-groups"></div></div>'
 								);
 								$providerInputContainer.find('.input-groups').append($providerInput);
 								$.get('/vmimages/regions/list', function(regionList) {
@@ -1051,7 +1051,7 @@ limitations under the License.
 									}
 									var $regionInput = $('<select id="cftRegionInput" class="form-control"></select>').append(regionOptStr);
 									var $regionInputContainer = $(
-										'<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftParameterLabelContainer" for=""><span class="cftParameterLabel required">Choose Region</span></label><div class="input-groups"></div></div>'
+										'<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftParameterLabelContainer" for=""><span class="cftParameterLabel required">Choose Region</span><span class="control-label redSpan">&nbsp;*</span></label><div class="input-groups"></div></div>'
 									);
 									$regionInputContainer.find('.input-groups').append($regionInput);
 									$.get('/d4dMasters/cftTemplate?templateFile=' + cftTemplateFileName, function(data) {
@@ -1087,7 +1087,7 @@ limitations under the License.
 												$parameterInput.attr('data-cftParameter-type', parameter.type);
 												$parameterInput.attr('data-cftParameter-name', keys[i]);
 												var $inputContainer = $(
-													'<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftParameterLabelContainer" for=""><span class="cftParameterLabel"></span></label><div class="input-groups"></div></div>'
+													'<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftParameterLabelContainer" for=""><span class="cftParameterLabel"></span><span class="control-label redSpan">&nbsp;*</span></label><div class="input-groups"></div></div>'
 												);
 												$inputContainer.find('.input-groups').append($parameterInput);
 												$inputContainer.find('.cftParameterLabel').append(keys[i]);
@@ -1108,7 +1108,7 @@ limitations under the License.
 											'<div class="panel panel-default cft-resource-editPanel"><div class="panel-heading"><h4 class="panel-title"><a class="panel-toggle" data-toggle="collapse" data-parent="#cft-resource-editArea" href="#" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><span class="heading-text"></span></a></h4></div><div id="CollapseEditorgParam" class="panel-collapse collapse" style="height: auto;"><div class="panel-body" style="padding-left: 8px;"></div></div></div>'
 										);
 										var $inputContainerTemplate = $(
-											'<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftResourceLabelContainer" for=""><span class="cftResourceLabel"></span></label><div class="input-groups"></div></div>'
+											'<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftResourceLabelContainer" for=""><span class="cftResourceLabel"></span><span class="control-label redSpan">&nbsp;*</span></label><div class="input-groups"></div></div>'
 										);
 										var $resourceInputTemplate = $('<input class="cftResourceInput form-control" type="text" autofocus="autofocus">');
 										var hasResource = false;

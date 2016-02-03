@@ -14,12 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- * Written by Gobinda Das <gobinda.das@relevancelab.com>,
- * Dec 2015
- */
 
 // This file act as a request mapping i.e. it will decide which request will go to which routes.
 
@@ -46,6 +40,7 @@ var vmware = require('./routes_vmware.js');
 var application = require('./routes_application');
 var jira = require('./routes_jira');
 var provider = require('./routes_provider');
+var providerCommon = require('./routes_providercommon');
 var vmimage = require('./routes_vmImages');
 var chefClientExecution = require('./routes_chefClientExecutionResponse');
 var appConfig = require('_pr/config');
@@ -112,6 +107,7 @@ module.exports.setRoutes = function(app) {
 	jira.setRoutes(app, sessionVerificationFunc);
 
 	provider.setRoutes(app, sessionVerificationFunc);
+	providerCommon.setRoutes(app, sessionVerificationFunc);
 
 	vmimage.setRoutes(app, sessionVerificationFunc);
 

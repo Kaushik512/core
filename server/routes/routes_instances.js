@@ -14,13 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- * Written by Anshul Srivastava and Gobinda Das <gobinda.das@relevancelab.com>,
- * May 2015
- */
-
 // This file act as a Controller which contains Instance related all end points.
 
 var blueprintsDao = require('../model/dao/blueprints');
@@ -115,89 +108,89 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 		});
 	});
 
-    app.post('/instances/:platformId/remediation', function(req, res) {
-        logger.debug("Enter get() for /instances/%s/redemption", req.params.platformId);
-        instancesDao.getInstanceByPlatformId(req.params.platformId, function(err, instances) {
-            if (err) {
-                logger.error("Failed to fetch ActionLogs: ", err);
-                res.status(500).send({
-                    message: "DB error"
-                });
-                return;
-            }
-            if (!instances.length) {
-                res.send(404, {
-                    message: "Instance not found"
-                });
-                return;
-            }
-            var instance = instances[0];
-            credentialCryptography.decryptCredential(instance.credentials, function(err, decryptedCredentials) {
-                if (err) {
-                    res.status(500).send({
-                        message: "error occured while decrypting credentials"
-                    });
-                    return;
-                }
-                var sshParamObj = {
-                    host: instance.instanceIP,
-                    port: 22,
-                    username: instance.credentials.username,
-                };
-                var sudoCmd;
-                if (decryptedCredentials.pemFileLocation) {
-                    sshParamObj.privateKey = decryptedCredentials.pemFileLocation;
-                } else {
-                    sshParamObj.password = decryptedCredentials.password;
-                }
-                // service: any service running on machine (apache2,mysql)
-                // action: start/stop
-                
-                var serviceCmd = "service " + req.body.service + " " + req.body.action;
-                var sudoCmd = "sudo";
-                if (sshParamObj.password) {
-                    sudoCmd = 'echo \"' + sshParamObj.password + '\" | sudo -S';
-                }
-                serviceCmd = sudoCmd + " " + serviceCmd;
+	app.post('/instances/:platformId/remediation', function(req, res) {
+		logger.debug("Enter get() for /instances/%s/redemption", req.params.platformId);
+		instancesDao.getInstanceByPlatformId(req.params.platformId, function(err, instances) {
+			if (err) {
+				logger.error("Failed to fetch ActionLogs: ", err);
+				res.status(500).send({
+					message: "DB error"
+				});
+				return;
+			}
+			if (!instances.length) {
+				res.send(404, {
+					message: "Instance not found"
+				});
+				return;
+			}
+			var instance = instances[0];
+			credentialCryptography.decryptCredential(instance.credentials, function(err, decryptedCredentials) {
+				if (err) {
+					res.status(500).send({
+						message: "error occured while decrypting credentials"
+					});
+					return;
+				}
+				var sshParamObj = {
+					host: instance.instanceIP,
+					port: 22,
+					username: instance.credentials.username,
+				};
+				var sudoCmd;
+				if (decryptedCredentials.pemFileLocation) {
+					sshParamObj.privateKey = decryptedCredentials.pemFileLocation;
+				} else {
+					sshParamObj.password = decryptedCredentials.password;
+				}
+				// service: any service running on machine (apache2,mysql)
+				// action: start/stop
+
+				var serviceCmd = "service " + req.body.service + " " + req.body.action;
+				var sudoCmd = "sudo";
+				if (sshParamObj.password) {
+					sudoCmd = 'echo \"' + sshParamObj.password + '\" | sudo -S';
+				}
+				serviceCmd = sudoCmd + " " + serviceCmd;
 
 
-                var sshConnection = new SSH(sshParamObj);
+				var sshConnection = new SSH(sshParamObj);
 
-                sshConnection.exec(serviceCmd, function(err, ret) {
-                    if (decryptedCredentials.pemFileLocation) {
-                        fileIo.removeFile(decryptedCredentials.pemFileLocation, function(err) {
-                            if (err) {
-                                logger.error("Unable to delete temp pem file =>", err);
-                            } else {
-                                logger.error("temp pem file deleted =>", err);
-                            }
-                        });
-                    }
-                    if (err) {
-                        res.status(500).send({
-                            message: "Unable to run service cmd on instance"
-                        });
-                        return;
-                    }
-                    if (ret === 0) {
-                        res.send(200, {
-                            message: "cmd ran successfully"
-                        });
-                    } else {
-                        res.status(500).send({
-                            message: "cmd failed. code : " + ret
-                        });
-                    }
+				sshConnection.exec(serviceCmd, function(err, ret) {
+					if (decryptedCredentials.pemFileLocation) {
+						fileIo.removeFile(decryptedCredentials.pemFileLocation, function(err) {
+							if (err) {
+								logger.error("Unable to delete temp pem file =>", err);
+							} else {
+								logger.error("temp pem file deleted =>", err);
+							}
+						});
+					}
+					if (err) {
+						res.status(500).send({
+							message: "Unable to run service cmd on instance"
+						});
+						return;
+					}
+					if (ret === 0) {
+						res.send(200, {
+							message: "cmd ran successfully"
+						});
+					} else {
+						res.status(500).send({
+							message: "cmd failed. code : " + ret
+						});
+					}
 
-                }, function(stdout) {
-                    logger.debug(stdout.toString());
-                }, function(stderr) {
-                    logger.debug(stderr.toString());
-                });
+				}, function(stdout) {
+					logger.debug(stdout.toString());
+				}, function(stderr) {
+					logger.debug(stderr.toString());
+				});
 
-            });
-        });
-    });
+			});
+		});
+	});
 
 	app.all('/instances/*', sessionVerificationFunc);
 
@@ -1715,8 +1708,26 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 										res.status(500).send("Unable to get Provider.");
 										return;
 									}
-									AWSKeyPair.getAWSKeyPairByProviderId(aProvider._id, function(err, keyPair) {
-										logger.debug("keyPairs length: ", keyPair[0].region);
+
+									function getRegion(callback) {
+										if (data[0].providerData && data[0].providerData.region) {
+											process.nextTick(function() {
+												callback(null, data[0].providerData.region);
+											});
+										} else {
+											AWSKeyPair.getAWSKeyPairByProviderId(aProvider._id, function(err, keyPair) {
+												if (err) {
+													callback(err);
+													return;
+												}
+												callback(null, keyPair[0].region);
+											});
+
+										}
+
+									}
+									getRegion(function(err, region) {
+
 										if (err) {
 											res.status(500).send("Error getting to fetch Keypair.")
 										}
@@ -1734,7 +1745,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 											var ec2 = new EC2({
 												"access_key": decryptedKeys[0],
 												"secret_key": decryptedKeys[1],
-												"region": keyPair[0].region
+												"region": region
 											});
 											ec2.stopInstance([data[0].platformId], function(err, stoppingInstances) {
 												if (err) {
@@ -2065,8 +2076,26 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 										res.status(500).send("Unable to find Provider.");
 										return;
 									}
-									AWSKeyPair.getAWSKeyPairByProviderId(aProvider._id, function(err, keyPair) {
-										logger.debug("keyPairs length::::: ", keyPair[0].region);
+
+									function getRegion(callback) {
+										if (data[0].providerData && data[0].providerData.region) {
+											process.nextTick(function() {
+												callback(null, data[0].providerData.region);
+											});
+										} else {
+											AWSKeyPair.getAWSKeyPairByProviderId(aProvider._id, function(err, keyPair) {
+												if (err) {
+													callback(err);
+													return;
+												}
+												callback(null, keyPair[0].region);
+											});
+
+										}
+
+									}
+									getRegion(function(err, region) {
+										
 										if (err) {
 											res.status(500).send("Error getting to fetch Keypair.")
 										}
@@ -2102,7 +2131,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 											var ec2 = new EC2({
 												"access_key": decryptedKeys[0],
 												"secret_key": decryptedKeys[1],
-												"region": keyPair[0].region
+												"region": region
 											});
 											ec2.startInstance([data[0].platformId], function(err, startingInstances) {
 												if (err) {
@@ -2898,7 +2927,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 	});
 
-    // Now for some reason moving this end point to out of authentication: Gobinda
+	// Now for some reason moving this end point to out of authentication: Gobinda
 
 	/*app.post('/instances/:instanceId/remediation', function(req, res) {
 		logger.debug("Enter get() for /instances/%s/redemption", req.params.instanceId);

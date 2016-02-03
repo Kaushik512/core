@@ -14,12 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- * Written by Gobinda Das <gobinda.das@relevancelab.com>,
- * Dec 2015
- */
+
 
 var logger = require('_pr/logger')(module);
 var mongoose = require('mongoose');
@@ -273,7 +268,7 @@ BlueprintSchema.methods.launch = function(opts, callback) {
 							bgId: self.bgId,
 							projectId: self.projectId,
 							appUrls: appUrls,
-							sessionUser: opts.user,
+							sessionUser: opts.sessionUser,
 							users: self.users,
 							blueprintData: self,
 						}, function(err, launchData) {
@@ -293,7 +288,7 @@ BlueprintSchema.methods.launch = function(opts, callback) {
 						bgId: self.bgId,
 						projectId: self.projectId,
 						appUrls: appUrls,
-						sessionUser: opts.user,
+						sessionUser: opts.sessionUser,
 						users: self.users,
 						blueprintData: self,
 					}, function(err, launchData) {
