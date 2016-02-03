@@ -89,6 +89,7 @@ if (!$.fn.dataTable.isDataTable('#tableRunlist')) {
         "bLengthChange": false,
         "paging": false,
         "bFilter": false,
+        "bSort":false,
         "aoColumns": [{
             "bSortable": false
         }]

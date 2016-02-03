@@ -27,6 +27,7 @@ var Schema = mongoose.Schema;
 
 var AppDataSchema = new Schema({
     nodeIp: String,
+    repoURL: String,
     server: String,
     repository: String,
     groupId: String,
