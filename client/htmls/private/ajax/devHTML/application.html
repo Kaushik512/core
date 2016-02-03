@@ -143,7 +143,7 @@
                 				<table class="tableClone dataTable table-custom table-condensed" cellpadding="5px" width="100%" style="border-bottom:1px solid #ddd" style="display:none">
 
 				                </table>
-				                <div class="table-responsive table-div" id="tableContainer">
+				                <div class="table-responsive table-div tableOverflow" id="tableContainer">
 				                    
 				                </div>
             				</div>
@@ -245,32 +245,32 @@
 					</h4>
 				</div>
 				<div class="modal-body">
-			<form id="formconfigureapplication">
-			<table class="table table-bordered" cellpadding="5px" width="100%" id="tableconfigureapplication">
-			<thead>
-			<tr class="tableStyleColor">
-			<th>Stages/Environments</th>
-			<th>Active</th>
-			<th>UP/DOWN</th>
-			</tr>
-			</thead>
-			<tbody>
-			</tbody>
-			</table>
-			</form>
-			</div>
-			<div class="modal-footer">
-				<div class="btn-group" style="margin-left:200px;">  
-					<a class="btn btn-default" data-dismiss="modal">
-					<i class="ace-icon fa fa-times bigger-110"></i>
-					Cancel
-					</a>                               
-					<a class="btn btn-primary appdeployConfigureSaveBtn" style="margin-left:10px;">
-					<i class="ace-icon fa fa-save bigger-110"></i>
-					Save
-					</a>
+					<form id="formconfigureapplication">
+						<table class="table table-bordered" cellpadding="5px" width="100%" id="tableconfigureapplication">
+							<thead>
+								<tr class="tableStyleColor">
+									<th>Stages/Environments</th>
+									<th>Active</th>
+									<th>UP/DOWN</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</form>
 				</div>
-			</div>
+				<div class="modal-footer">
+					<div class="btn-group" style="margin-left:200px;">  
+						<a class="btn btn-default" data-dismiss="modal">
+						<i class="ace-icon fa fa-times bigger-110"></i>
+						Cancel
+						</a>                               
+						<a class="btn btn-primary appdeployConfigureSaveBtn" style="margin-left:10px;">
+						<i class="ace-icon fa fa-save bigger-110"></i>
+						Save
+						</a>
+					</div>
+				</div>
 			</form>
 		</div>
 		<!-- /.modal-content -->
@@ -514,8 +514,7 @@
 				<div class="modal-body">
 					<div class="logsForAppDeploy">
 					</div>
-					<div class="logsForAppDeploy">
-					</div>
+					
 				</div>
 				<div class="modal-footer">
 					<div class="btn-group" style="margin-left:200px;">
@@ -747,36 +746,7 @@ $(document).ready(function() {
 	$('#defaultViewButtonNewDeploy').on('click', newAppDeployClickHandler);
 });
 
-/*function getAllPipelineApplicationData() {
-	var projectId = urlParams.projid;
-	var envNameSelected = "";
-	$.get('/app/deploy/pipeline/project/' + projectId, function(dataPipeline) {
-		if (dataPipeline == null || dataPipeline == "undefined" || dataPipeline.length == 0) {
-			return false;
-		}
-		if (dataPipeline[0].envId.length > 0) {
-			getenvName(function(envName) {
-				envNameSelected = envName;
-				for (var i = 0; i < dataPipeline[0].envId.length; i++) {
-					var envUniqueText = dataPipeline[0].envId[i];
-					createPipelineArea(envUniqueText, envNameSelected, projectId);
-				}
-			});
-		} else {
-			$.get('/d4dMasters/project/' + projectId, function(dataforenvName) {
-				var individualenvName = dataforenvName[0].environmentname;
-				individualenvName = individualenvName.split(",");
-				getenvName(function(envName) {
-					envNameSelected = envName;
-					for (var i = 0; i < individualenvName.length; i++) {
-						var envUniqueText = individualenvName[i];
-						createPipelineArea(envUniqueText, envNameSelected, projectId);
-					}
-				});
-			});
-		}
-	}).fail(function() {});
-}*/
+
 getAllPipelineViewData();
 
 function getAllPipelineViewData() {
@@ -864,6 +834,7 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
     var $tableClone = $('.tableClone').clone();
     $tableClone.removeClass('tableClone');
     $('#tableContainer').empty().append($tableClone);
+    //alert(JSON.stringify(arrEnv));
     $tableClone.DataTable({
         columns: arrEnv,
         "bSort": false,
@@ -877,7 +848,7 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
         "bFilter": true,
         "bLengthChange": true
     });
-    $tableClone.addClass('margintop35');
+    $tableClone.addClass('margintop40');
     $tableClone.find('thead th').addClass('padding-left5per theadcolor');
     var $tableapplicationTest = $tableClone;
     var $tableapplicationTbody = $tableClone.find('tbody');
@@ -898,7 +869,6 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
 		    );
 		});
         sorteddeployData.forEach(function(appDeployDataObj) {
-        	//alert(JSON.stringify(appDeployDataObj));
             function createMainCard(applicationName,versionNumber){
                 var tempStr = '';
                        
@@ -969,19 +939,15 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
             //var sortedappdataList = [];
 
             for(var j=0;j<applicationEnvList.length;j++){
-            	//alert(appDeployDataObj.applicationLastDeploy[j]);
             	sortedappdataList.push(appDeployDataObj.applicationLastDeploy[j]);
 	            unsortedappdataList.push(appDeployDataObj.applicationLastDeploy[j]);
             }
-            //alert(sortedappdataList);
-            sortedappdataList.sort(sortAscending);
-            //alert(sortedappdataList);
+           	sortedappdataList.sort(sortAscending);
             
             for(var m=0; m<unsortedappdataList.length;m++){
             	indexedList.push(jQuery.inArray(unsortedappdataList[m], sortedappdataList));
             }
-            //console.log(indexedList);
-
+            
             var applicationInstanceName = [];
             var applicationNodeIP = [];
             var applicationLastDeploy = [];
@@ -991,22 +957,12 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
             var envId = [];
             var appLogs = [];
             for(var n=0;n<indexedList.length;n++){
-            	console.log(appDeployDataObj.applicationLastDeploy[indexedList[n]]);
-            	// applicationInstanceName.push(appDeployDataObj.applicationInstanceName[indexedList[n]]);
-            	// applicationNodeIP.push(appDeployDataObj.applicationNodeIP[indexedList[n]]);
-            	// applicationLastDeploy.push(appDeployDataObj.applicationLastDeploy[indexedList[n]]);
-            	// applicationStatus.push(appDeployDataObj.applicationStatus[indexedList[n]]);
-            	// containerId.push(appDeployDataObj.containerId[indexedList[n]]);
-            	// hostName.push(appDeployDataObj.hostName[indexedList[n]]);
-            	// envId.push(appDeployDataObj.envId[indexedList[n]]);
-            	// appLogs.push(appDeployDataObj.appLogs[indexedList[n]]);
-            	//alert(appDeployDataObj.applicationLastDeploy[n]);
-            	convertToDateObj(appDeployDataObj.applicationLastDeploy[n]);
-            	//alert(appDeployDataObj.applicationLastDeploy[n]);
+            	var appLastDeployObj = convertToDateObj(appDeployDataObj.applicationLastDeploy[n]);
+            	var appDeployLastTime = convertToDateCustom(appLastDeployObj);
 
             	applicationInstanceName[indexedList[n]] = appDeployDataObj.applicationInstanceName[n];
             	applicationNodeIP[indexedList[n]]=appDeployDataObj.applicationNodeIP[n];
-            	applicationLastDeploy[indexedList[n]] = appDeployDataObj.applicationLastDeploy[n];
+            	applicationLastDeploy[indexedList[n]] = appDeployLastTime;
             	applicationStatus[indexedList[n]] = appDeployDataObj.applicationStatus[n];
             	containerId[indexedList[n]] = appDeployDataObj.containerId[n];
             	hostName[indexedList[n]]=appDeployDataObj.hostName[n];
@@ -1097,13 +1053,7 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
                     finalArray.push(tempStr);
                 } 
             }
-            //alert(JSON.stringify(sortedappDeployDataObj));
-
             var appLastDeployArr = sortedappDeployDataObj.applicationLastDeploy;
-
-
-            //alert(JSON.stringify(presentDataDetailsObj));
-            //alert(presentDataDetailsObj.length);
 
             for (var key in presentDataDetailsObj) {
 			  if (presentDataDetailsObj.hasOwnProperty(key)) {
@@ -1125,22 +1075,6 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
 			  	}
 			  }
 			}
-
-
-			//alert(JSON.stringify(presentDataDetailsObj));
-            
-			//presentDatawithNameVerObj.push(presentDataDetailsObj);
-			//alert(versionNumber);
-			//var presentDatawithNameVerObj = {};
-			//presentDatawithNameVerObj[applicationName+'_'+versionNumber] = presentDataDetailsObj;
-            	
-			//alert(JSON.stringify(presentDatawithNameVerObj));
-
-
-
-
-
-
             for (var j = 0; j < arrEnv.length; j++) {
 	           var finalString = $(finalArray).get(-1);
 	           finalArray.pop();
@@ -1277,93 +1211,15 @@ function createAttribTableRowFromJson(attributes) {
 		getVal(attributeObj, '');
 	}
 }
-/*$('.createAppConfigure').click(function() {
-	var selectedEnvironments = [];
-	var allEnvironments = [];
-	var $tableconfigureapplication = $('#tableconfigureapplication');
-	var $tbody = $tableconfigureapplication.find('tbody').empty();
-	var projectId = urlParams.projid;
-	$.ajax({
-		url: '/app/deploy/pipeline/project/' + projectId,
-		type: "GET",
-		async: true,
-		success: function(dataPipeline) {
-			if (dataPipeline.length) {
-				for (var i = 0; i < dataPipeline[0].envId.length; i++) {
-					selectedEnvironments.push(dataPipeline[0].envId[i]);
-				}
-				for (var i = 0; i < dataPipeline[0].envSequence.length; i++) {
-					allEnvironments.push(dataPipeline[0].envSequence[i]);
-				}
-				if (selectedEnvironments.length == 0) {
-					$.get('/d4dMasters/project/' + projectId, function(dataforenvName) {
-						var individualenvName = dataforenvName[0].environmentname;
-						individualenvName = individualenvName.split(",");
-						for (var i = 0; i < individualenvName.length; i++) {
-							var checked = "";
-							if ($.inArray(individualenvName[i], individualenvName) > -1) {
-								checked = "checked";
-							}
-							var $tr = $('<tr/>').attr({
-								'data-configureApplication': individualenvName[i]
-							});
-							var $tdenvName = $('<td class="configAppDeployUniqueName"/>').html(individualenvName[i]);
-							var $tdActive = $('<td/>').html("<div class='iphone-toggle-buttons'><ul style='padding: 0px; margin: 0px;list-style-type: none;'><li><label for='checkbox-" + i + "'><input type='checkbox' class='appDeployCheckboxOrder' name='checkbox-" + i + "' id='checkbox-" + i + "' " + checked + " /><span></span></label></li></ul></div>");
-							var $tdupdown = $('<td/>').html("<a class='btn btn-default btn-primary up' style='border-radius:50%;height:27px;width:27px;padding-top:0px' type='button'><i style='font-size:12px;margin-left:-5px;margin-top:5px;' class='fa  fa-chevron-up'></i></a><a class='btn btn-default btn-primary down' style='border-radius:50%;height:27px;width:27px;padding-top:0px;margin-left:10px' type='button'><i style='font-size:12px;margin-left:-5px;margin-top:5px;' class='fa  fa-chevron-down'></i></a>");
-							$tr.append($tdenvName).append($tdActive).append($tdupdown);
-							$tbody.append($tr);
-						}
-						$tableconfigureapplication.append($tbody);
-						$tableconfigureapplication.find(".up,.down").click(function() {
-							var row = $(this).parents("tr:first");
-							if ($(this).is(".up")) {
-								row.insertBefore(row.prev());
-							} else {
-								row.insertAfter(row.next());
-							}
-						});
-					});
-				} else {
-					for (var i = 0; i < allEnvironments.length; i++) {
-						var checked = "";
-						if ($.inArray(allEnvironments[i], selectedEnvironments) > -1) {
-							checked = "checked";
-						}
-						var $tr = $('<tr/>').attr({
-							'data-configureApplication': allEnvironments[i]
-						});
-						var $tdenvName = $('<td class="configAppDeployUniqueName"/>').html(allEnvironments[i]);
-						var $tdActive = $('<td/>').html("<div class='iphone-toggle-buttons'><ul style='padding: 0px; margin: 0px;list-style-type: none;'><li><label for='checkbox-" + i + "'><input type='checkbox' class='appDeployCheckboxOrder' name='checkbox-" + i + "' id='checkbox-" + i + "' " + checked + " /><span></span></label></li></ul></div>");
-						var $tdupdown = $('<td/>').html("<a class='btn btn-default btn-primary up' style='border-radius:50%;height:27px;width:27px;padding-top:0px' type='button'><i style='font-size:12px;margin-left:-5px;margin-top:5px;' class='fa  fa-chevron-up'></i></a><a class='btn btn-default btn-primary down' style='border-radius:50%;height:27px;width:27px;padding-top:0px;margin-left:10px' type='button'><i style='font-size:12px;margin-left:-5px;margin-top:5px;' class='fa  fa-chevron-down'></i></a>");
-						$tr.append($tdenvName).append($tdActive).append($tdupdown);
-						$tbody.append($tr);
-					}
-					$tableconfigureapplication.append($tbody);
-					$tableconfigureapplication.find(".up,.down").click(function() {
-						var row = $(this).parents("tr:first");
-						if ($(this).is(".up")) {
-							row.insertBefore(row.prev());
-						} else {
-							row.insertAfter(row.next());
-						}
-					});
-				}
-			}
-		},
-		error: function() {}
-	});
-});*/
+
 $('.createAppConfigure').click(function() {
     var selectedEnvironments = [];
     var allEnvironments = [];
     var $tableconfigureapplication = $('#tableconfigureapplication');
     var $tbody = $tableconfigureapplication.find('tbody').empty();
     var projectId = urlParams.projid;
-    $.ajax({
-        url: '/app/deploy/pipeline/project/' + projectId,
-        type: "GET",
-        async: true,
-        success: function(dataPipeline) {
+    $.get('/d4dMasters/project/' + projectId, function(dataforenvName) {
+    	$.get('/app/deploy/pipeline/project/' + projectId,function(dataPipeline) {
             if (dataPipeline.length) {
                 for (var i = 0; i < dataPipeline[0].envId.length; i++) {
                     selectedEnvironments.push(dataPipeline[0].envId[i]);
@@ -1371,35 +1227,44 @@ $('.createAppConfigure').click(function() {
                 for (var i = 0; i < dataPipeline[0].envSequence.length; i++) {
                     allEnvironments.push(dataPipeline[0].envSequence[i]);
                 }
+                var individualenvNamePrnt = dataforenvName[0].environmentname;
+			    individualenvNamePrnt = individualenvNamePrnt.split(",");
+			    
+			    console.log("allsequenceEnvironments",allEnvironments);
+			    console.log("individualenvNamePrnt",individualenvNamePrnt);
+			    for(var x=0;x<individualenvNamePrnt.length;x++){
+			    	if ($.inArray(individualenvNamePrnt[x], allEnvironments) == -1) {
+		                allEnvironments.push(individualenvNamePrnt[x]);
+		            }
+			    }
                 if (selectedEnvironments.length == 0) {
-                    $.get('/d4dMasters/project/' + projectId, function(dataforenvName) {
-                        var individualenvName = dataforenvName[0].environmentname;
-                        individualenvName = individualenvName.split(",");
-                        for (var i = 0; i < individualenvName.length; i++) {
-                            var checked = "";
-                            if ($.inArray(individualenvName[i], individualenvName) > -1) {
-                                checked = "checked";
-                            }
-                            var $tr = $('<tr/>').attr({
-                                'data-configureApplication': individualenvName[i]
-                            });
-                            var $tdenvName = $('<td class="configAppDeployUniqueName"/>').html(individualenvName[i]);
-                            var $tdActive = $('<td/>').html("<div class='iphone-toggle-buttons'><ul style='padding: 0px; margin: 0px;list-style-type: none;'><li><label for='checkbox-" + i + "'><input type='checkbox' class='appDeployCheckboxOrder' name='checkbox-" + i + "' id='checkbox-" + i + "' " + checked + " /><span></span></label></li></ul></div>");
-                            var $tdupdown = $('<td/>').html("<a class='btn btn-default btn-primary up' style='border-radius:50%;height:27px;width:27px;padding-top:0px' type='button'><i style='font-size:12px;margin-left:-5px;margin-top:5px;' class='fa  fa-chevron-up'></i></a><a class='btn btn-default btn-primary down' style='border-radius:50%;height:27px;width:27px;padding-top:0px;margin-left:10px' type='button'><i style='font-size:12px;margin-left:-5px;margin-top:5px;' class='fa  fa-chevron-down'></i></a>");
-                            $tr.append($tdenvName).append($tdActive).append($tdupdown);
-                            $tbody.append($tr);
-                        }
-                        $tableconfigureapplication.append($tbody);
-                        $tableconfigureapplication.find(".up,.down").click(function() {
-                            var row = $(this).parents("tr:first");
-                            if ($(this).is(".up")) {
-                                row.insertBefore(row.prev());
-                            } else {
-                                row.insertAfter(row.next());
-                            }
-                        });
-                    });
-                } else {
+                	var individualenvName = dataforenvName[0].environmentname;
+			        individualenvName = individualenvName.split(",");
+			        for (var i = 0; i < individualenvName.length; i++) {
+			            var checked = "";
+			            if ($.inArray(individualenvName[i], individualenvName) > -1) {
+			                checked = "checked";
+			            }
+			            var $tr = $('<tr/>').attr({
+			                'data-configureApplication': individualenvName[i]
+			            });
+			            var $tdenvName = $('<td class="configAppDeployUniqueName"/>').html(individualenvName[i]);
+			            var $tdActive = $('<td/>').html("<div class='iphone-toggle-buttons'><ul style='padding: 0px; margin: 0px;list-style-type: none;'><li><label for='checkbox-" + i + "'><input type='checkbox' class='appDeployCheckboxOrder' name='checkbox-" + i + "' id='checkbox-" + i + "' " + checked + " /><span></span></label></li></ul></div>");
+			            var $tdupdown = $('<td/>').html("<a class='btn btn-default btn-primary up' style='border-radius:50%;height:27px;width:27px;padding-top:0px' type='button'><i style='font-size:12px;margin-left:-5px;margin-top:5px;' class='fa  fa-chevron-up'></i></a><a class='btn btn-default btn-primary down' style='border-radius:50%;height:27px;width:27px;padding-top:0px;margin-left:10px' type='button'><i style='font-size:12px;margin-left:-5px;margin-top:5px;' class='fa  fa-chevron-down'></i></a>");
+			            $tr.append($tdenvName).append($tdActive).append($tdupdown);
+			            $tbody.append($tr);
+			        }
+			        $tableconfigureapplication.append($tbody);
+			        $tableconfigureapplication.find(".up,.down").click(function() {
+			            var row = $(this).parents("tr:first");
+			            if ($(this).is(".up")) {
+			                row.insertBefore(row.prev());
+			            } else {
+			                row.insertAfter(row.next());
+			            }
+			        });
+                }
+                else {
                     for (var i = 0; i < allEnvironments.length; i++) {
                         var checked = "";
                         if ($.inArray(allEnvironments[i], selectedEnvironments) > -1) {
@@ -1425,47 +1290,33 @@ $('.createAppConfigure').click(function() {
                     });
                 }
             }else{
-                $.get('/d4dMasters/project/' + projectId, function(dataforenvName) {
-                    var individualenvName = dataforenvName[0].environmentname;
-                    individualenvName = individualenvName.split(",");
-                    for (var i = 0; i < individualenvName.length; i++) {
-                        selectedEnvironments.push(individualenvName[i]);
-                        allEnvironments.push(individualenvName[i]);
-                    }
-                    if(selectedEnvironments[individualenvName.length] == allEnvironments[individualenvName.length]){
-                        $.get('/d4dMasters/project/' + projectId, function(dataforenvName) {
-                            var individualenvName = dataforenvName[0].environmentname;
-                            individualenvName = individualenvName.split(",");
-                            for (var i = 0; i < individualenvName.length; i++) {
-                                var checked = "";
-                                if ($.inArray(individualenvName[i], individualenvName) > -1) {
-                                    checked = "checked";
-                                }
-                                var $tr = $('<tr/>').attr({
-                                    'data-configureApplication': individualenvName[i]
-                                });
-                                var $tdenvName = $('<td class="configAppDeployUniqueName"/>').html(individualenvName[i]);
-                                var $tdActive = $('<td/>').html("<div class='iphone-toggle-buttons'><ul style='padding: 0px; margin: 0px;list-style-type: none;'><li><label for='checkbox-" + i + "'><input type='checkbox' class='appDeployCheckboxOrder' name='checkbox-" + i + "' id='checkbox-" + i + "' " + checked + " /><span></span></label></li></ul></div>");
-                                var $tdupdown = $('<td/>').html("<a class='btn btn-default btn-primary up' style='border-radius:50%;height:27px;width:27px;padding-top:0px' type='button'><i style='font-size:12px;margin-left:-5px;margin-top:5px;' class='fa  fa-chevron-up'></i></a><a class='btn btn-default btn-primary down' style='border-radius:50%;height:27px;width:27px;padding-top:0px;margin-left:10px' type='button'><i style='font-size:12px;margin-left:-5px;margin-top:5px;' class='fa  fa-chevron-down'></i></a>");
-                                $tr.append($tdenvName).append($tdActive).append($tdupdown);
-                                $tbody.append($tr);
-                            }
-                            $tableconfigureapplication.append($tbody);
-                            $tableconfigureapplication.find(".up,.down").click(function() {
-                                var row = $(this).parents("tr:first");
-                                if ($(this).is(".up")) {
-                                    row.insertBefore(row.prev());
-                                } else {
-                                    row.insertAfter(row.next());
-                                }
-                            });
-                        });
-                    }
-                });
-
+            	var individualenvName = dataforenvName[0].environmentname;
+		        individualenvName = individualenvName.split(",");
+		        for (var i = 0; i < individualenvName.length; i++) {
+		            var checked = "";
+		            if ($.inArray(individualenvName[i], individualenvName) > -1) {
+		                checked = "checked";
+		            }
+		            var $tr = $('<tr/>').attr({
+		                'data-configureApplication': individualenvName[i]
+		            });
+		            var $tdenvName = $('<td class="configAppDeployUniqueName"/>').html(individualenvName[i]);
+		            var $tdActive = $('<td/>').html("<div class='iphone-toggle-buttons'><ul style='padding: 0px; margin: 0px;list-style-type: none;'><li><label for='checkbox-" + i + "'><input type='checkbox' class='appDeployCheckboxOrder' name='checkbox-" + i + "' id='checkbox-" + i + "' " + checked + " /><span></span></label></li></ul></div>");
+		            var $tdupdown = $('<td/>').html("<a class='btn btn-default btn-primary up' style='border-radius:50%;height:27px;width:27px;padding-top:0px' type='button'><i style='font-size:12px;margin-left:-5px;margin-top:5px;' class='fa  fa-chevron-up'></i></a><a class='btn btn-default btn-primary down' style='border-radius:50%;height:27px;width:27px;padding-top:0px;margin-left:10px' type='button'><i style='font-size:12px;margin-left:-5px;margin-top:5px;' class='fa  fa-chevron-down'></i></a>");
+		            $tr.append($tdenvName).append($tdActive).append($tdupdown);
+		            $tbody.append($tr);
+		        }
+		        $tableconfigureapplication.append($tbody);
+		        $tableconfigureapplication.find(".up,.down").click(function() {
+		            var row = $(this).parents("tr:first");
+		            if ($(this).is(".up")) {
+		                row.insertBefore(row.prev());
+		            } else {
+		                row.insertAfter(row.next());
+		            }
+		        });
             }
-        },
-        error: function() {}
+        });        
     });
 });
 function ConvertTimeformat(format, str, formatStr) {
@@ -1520,279 +1371,13 @@ function convertToDateObj(strInputDate) {
 	//alert(dateConverted + ' ==== '+strInputDate);
 	return dateConverted;
 }
-
-/*function createPipelineArea(envName, selectedEnv, projectId) {
-	var $stageContainer = $('.stageContainer');
-	var $envSpecificAppTemplate = $('.envSpecificAppTemplate');
-
-	var $clonePipeline = $envSpecificAppTemplate.clone(true);
-	var id = envName + '_pipeLine';
-	$clonePipeline.attr('id', id);
-	$clonePipeline.css({
-		display: 'block'
-	});
-	$clonePipeline.addClass('newEnvSpecificAppTemplate').removeClass('envSpecificAppTemplate');
-
-	$clonePipeline.find('.envSpecificAppname u').html(envName);
-	$stageContainer.append($clonePipeline);
-	$.ajax({
-		url: '/app/deploy/env/' + envName + '/project/' + projectId + '/list',
-		type: "GET",
-		async: true,
-		success: function(data) {
-			var sortedDataList = [];
-			var sortedData = {};
-			if (data.length) {
-				for (var i = 0; i < data.length; i++) {
-					(function(i) {
-
-						if (!data[i].applicationInstanceName) {
-							if (data[i].hostName) {
-								data[i].applicationInstanceName = data[i].hostName;
-							} else {
-								data[i].applicationInstanceName = "NA";
-							}
-						}
-						if (!sortedData[data[i].applicationInstanceName]) {
-							sortedData[data[i].applicationInstanceName] = data[i];
-						} else {
-							var prevDate = convertToDateObj(sortedData[data[i].applicationInstanceName].applicationLastDeploy);
-
-							var newDate = convertToDateObj(data[i].applicationLastDeploy);
-							if (prevDate - newDate < 0) {
-								sortedData[data[i].applicationInstanceName] = data[i];
-							}
-						}
-						sortedDataList.push(sortedData);
-					})(i);
-				}
-			}
-			var keys = Object.keys(sortedData);
-			var newData = [];
-			for (var i = 0; i < keys.length; i++) {
-				newData.push(sortedData[keys[i]]);
-			}
-
-			constructPipelineUI(newData, id);
-			if (envName != selectedEnv) {
-				$('#' + id).children().css({
-					'opacity': '0.5'
-				});
-				$('#' + id).children().bind('click', function() {
-					return false;
-				});
-			}
-		},
-		error: function() {
-
-		}
-	});
-	return $clonePipeline;
+function convertToDateCustom(d){
+	var datestring = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +
+    d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2) + ":" + d.getSeconds();
+    return datestring;
 }
 
-function constructPipelineUI(data, $clonePipeline) {
-	$('.loadingAppDeploySpinner').hide();
-	for (var i = 0; i < data.length; i++) {
-		var $envSpecificAppInstanceUniqueCard = $('.envSpecificAppInstanceUniqueCard');
 
-		var $cloneAppInstanceUniqueCard = $envSpecificAppInstanceUniqueCard.clone(true);
-		$cloneAppInstanceUniqueCard.css({
-			display: 'block'
-		});
-		$cloneAppInstanceUniqueCard.addClass('newEnvSpecificAppInstanceUniqueCard').removeClass('envSpecificAppInstanceUniqueCard');
-
-		if (data[i].projectId) {
-			//Application Type as Image in Card.
-			if (!data[i].applicationType) {
-				data[i].applicationType = "NA";
-			}
-			if (data[i].applicationType == 'Package') {
-				var loc = 'img/package.png';
-				$cloneAppInstanceUniqueCard.find('.domain-roles-icon img').attr("src", loc);
-			} else if (data[i].applicationType == 'Docker') {
-				var loc = 'img/app-store-icons/Docker.png';
-				$cloneAppInstanceUniqueCard.find('.domain-roles-icon img').attr("src", loc);
-			} else if (data[i].applicationType == 'NA') {
-				var loc = 'img/blank.png';
-				$cloneAppInstanceUniqueCard.find('.domain-roles-icon img').attr("src", loc);
-			}
-
-			//Application Instance Name in Card.
-			if (!data[i].applicationInstanceName) {
-				if (data[i].hostName) {
-					data[i].applicationInstanceName = data[i].hostName;
-				} else {
-					data[i].applicationInstanceName = "NA";
-				}
-			}
-			var $appInstanceNameCardSpan = $cloneAppInstanceUniqueCard.find('.appInstanceNameCardSpan');
-			$appInstanceNameCardSpan.html(data[i].applicationInstanceName);
-
-			//Application Version in Card
-			if (!data[i].applicationVersion) {
-				data[i].applicationVersion = "NA";
-			}
-			var $appInstanceVersionCardSpan = $cloneAppInstanceUniqueCard.find('.versionAppDeploy');
-			$appInstanceVersionCardSpan.html(data[i].applicationVersion);
-
-
-			//Application Last Deploy in Card
-			if (!data[i].applicationLastDeploy) {
-				data[i].applicationLastDeploy = "NA";
-			}
-			var applicationLastDeployTime = data[i].applicationLastDeploy;
-			if ((applicationLastDeployTime.toLowerCase().indexOf("am") > -1) || (applicationLastDeployTime.toLowerCase().indexOf("pm") > -1)) {
-				applicationLastDeployTime = applicationLastDeployTime;
-			} else {
-				applicationLastDeployTime = getLocaleTime(applicationLastDeployTime);
-			}
-			var $appInstanceLastDeployCardSpan = $cloneAppInstanceUniqueCard.find('.lastdeployAppDeploy');
-			$appInstanceLastDeployCardSpan.html(applicationLastDeployTime);
-
-
-			//Application appName in Card
-			if (!data[i].applicationName) {
-				data[i].applicationName = "NA";
-			}
-			var $appInstanceApplicationNameCardSpan = $cloneAppInstanceUniqueCard.find('.applicationNamePipeline');
-			$appInstanceApplicationNameCardSpan.html(data[i].applicationName);
-
-			//Application Hostname in Card
-			if (!data[i].hostName) {
-				data[i].hostName = "NA";
-			}
-			var $appInstanceHostNameCardSpan = $cloneAppInstanceUniqueCard.find('.hostNamePipeline');
-			$appInstanceHostNameCardSpan.html(data[i].hostName);
-
-
-			//Application  Node IP in Card
-			if (!data[i].applicationNodeIP) {
-				data[i].applicationNodeIP = "NA";
-			}
-			var $appInstanceNodeIpCardSpan = $cloneAppInstanceUniqueCard.find('.applicationNodeIPPipeline');
-			$appInstanceNodeIpCardSpan.html(data[i].applicationNodeIP);
-
-
-			//Application ContainerId in Card
-			if (!data[i].containerId) {
-				data[i].containerId = "NA";
-			}
-			var $appInstanceContainerIdCardSpan = $cloneAppInstanceUniqueCard.find('.containerIdPipeline');
-			$appInstanceContainerIdCardSpan.html(data[i].containerId);
-
-
-			//Application type in Card
-			if (!data[i].applicationType) {
-				data[i].applicationType = "NA";
-			}
-			var $appInstanceApplicationTypeCardSpan = $cloneAppInstanceUniqueCard.find('.applicationTypePipeline');
-			$appInstanceApplicationTypeCardSpan.html(data[i].applicationType);
-
-
-			//Application Status in Card
-			if (!data[i].applicationStatus) {
-				data[i].applicationStatus = "NA";
-			}
-			var $appInstanceApplicationStatusCardSpan = $cloneAppInstanceUniqueCard.find('.applicationStatusPipeline');
-			$appInstanceApplicationStatusCardSpan.html(data[i].applicationStatus);
-
-			//Application Details in Card
-			var detailsAppDeploy;
-			if (!data[i]._id) {
-				detailsAppDeploy = "NA";
-			} else {
-				detailsAppDeploy = '<a class="btn btn-primary btn-sm width27borderradius50 moreinfoDetailsPipeline padding3"><i class="fa fa-th font-size-12"></i></a>';
-			}
-			var $appInstancelogsAppDeployCardSpan = $cloneAppInstanceUniqueCard.find('.appCard-panel-foot-actionchildfirstDiv');
-			$appInstancelogsAppDeployCardSpan.append(detailsAppDeploy);
-
-
-			//Application Logs Deploy in Card
-			var logsAppDeploy;
-			if (!data[i]._id) {
-				logsAppDeploy = "NA";
-			} else {
-				logsAppDeploy = '<a class="btn btn-primary btn-sm width27borderradius50 moreinfoAppDeployPipeline padding4" id=' + data[i]._id + ' title="Logs Info"><i class="fa fa-info font-size-14"></i></a>';
-			}
-			var $appInstancelogsAppDeployCardSpan = $cloneAppInstanceUniqueCard.find('.appCard-panel-foot-actionchildsecondDiv');
-			$appInstancelogsAppDeployCardSpan.append(logsAppDeploy);
-
-			//Application Upgrade in Card
-			var upgradeAppDeploy;
-			if (!data[i]._id) {
-				upgradeAppDeploy = "NA";
-			} else {
-				upgradeAppDeploy = '<a class="btn btn-primary btn-sg tableactionbutton width27borderradius50 moreinfoUpgradePipelineAppDeploy padding2" title="Upgrade"><i class="ace-icon fa fa-upload bigger-120"></i></a>';
-			}
-			var $appInstanceUpgardeCardSpan = $cloneAppInstanceUniqueCard.find('.appCard-panel-foot-actionchildthirdDiv');
-			$appInstanceUpgardeCardSpan.append(upgradeAppDeploy);
-		}
-		$('#' + $clonePipeline).append($cloneAppInstanceUniqueCard);
-	}
-}*/
-
-
-/*var $stageContainer = $('.stageContainer');
-$stageContainer.on('click', '.moreinfoDetailsPipeline', moreinfoDetailsPipelineClickHandler);
-$stageContainer.on('click', '.moreinfoAppDeployPipeline', moreInfoAppDeployPipelineClickHandler);
-$stageContainer.on('click', '.moreinfoUpgradePipelineAppDeploy', moreInfoUpgradeAppDeployPipelineClickHandler);*/
-/*$('.appdeployConfigureSaveBtn').click(function() {
-	var $tableconfigureapplication = $('#tableconfigureapplication');
-	var projectId = urlParams.projid;
-	var envNameSelected = "";
-	$('.stageContainer').empty();
-	var configureEnvArray = [];
-	var configureEnvArraySequence = [];
-
-	$tableconfigureapplication.find('tbody tr').each(function() {
-		$tr = $(this);
-		var envUniqueTextAllEnv = $tr.find('.configAppDeployUniqueName').text();
-		configureEnvArraySequence.push(envUniqueTextAllEnv);
-	});
-
-
-
-	$tableconfigureapplication.find('tbody tr').filter(':has(:checkbox:checked)').each(function() {
-		var $tr = $(this);
-		var envUniqueText = $tr.find('.configAppDeployUniqueName').text();
-		configureEnvArray.push(envUniqueText);
-	});
-
-
-	getenvName(function(envName) {
-		envNameSelected = envName;
-		if (configureEnvArray.length > 0) {
-			configureEnvArray.forEach(function(envUniqueText) {
-				createPipelineArea(envUniqueText, envNameSelected, projectId);
-			});
-		} else {
-			configureEnvArraySequence.forEach(function(envUniqueText) {
-				createPipelineArea(envUniqueText, envNameSelected, projectId);
-			});
-		}
-	});
-	var dataDeployPipeline = {
-		"appDeployPipelineData": {
-			"loggedInUser": "",
-		}
-	};
-	var projectId = urlParams.projid;
-	dataDeployPipeline.appDeployPipelineData.projectId = projectId;
-	dataDeployPipeline.appDeployPipelineData.envId = configureEnvArray;
-	dataDeployPipeline.appDeployPipelineData.envSequence = configureEnvArraySequence;
-	$.ajax({
-		url: '/app/deploy/data/pipeline/configure',
-		data: JSON.stringify(dataDeployPipeline),
-		type: 'POST',
-		contentType: "application/json",
-		success: function(data) {
-			$('#modalappcardConfigure').modal('hide');
-		},
-		error: function(jqxhr) {
-			$('#modalappcardConfigure').modal('hide');
-		}
-	});
-});*/
 $('.appdeployConfigureSaveBtn').click(function() {
     var $tableconfigureapplication = $('#tableconfigureapplication');
     var projectId = urlParams.projid;
