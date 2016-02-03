@@ -25,7 +25,8 @@
             </a> -->
           </div>
 
-          <div class="row rowTemplate">
+          <div class="row rowTemplate" style="display:none">
+          
           </div>
 
 
@@ -33,7 +34,11 @@
             <div class="small-box bg-aqua">
               <div class="inner">
                 <h3>&nbsp;</h3>
-                <p>Provider name: <br><span>AWS</span></p>
+                <p>
+                  <div style="margin-top:-15px;">Provider name </div>
+                  <br>
+                  <span class="providerName" style="font-weight:bold"></span>
+                </p>
               </div>
               <div class="icon">
                 <i class="fa fa-th"></i>
@@ -48,8 +53,8 @@
           <div class="col-lg-3 col-md-3 col-xs-6 childTotalInstanceTemplate" style="display:none">
             <div class="small-box bg-aqua">
               <div class="inner">
-                <h3>&nbsp;</h3>
-                <p>Total <br>No. of Instances</p>
+                <h3>0</h3>
+                <p> <br>No. of Instances</p>
               </div>
               <div class="icon">
                 <i class="fa fa-laptop"></i>
@@ -64,8 +69,8 @@
           <div class="col-lg-3 col-md-3 col-xs-6 childManagedInstanceTemplate" style="display:none">
             <div class="small-box bg-aqua">
               <div class="inner">
-                <h3>&nbsp;</h3>
-                <p>Total <br>No. of Managed Instances</p>
+                <h3 class="countMangedInstance">0</h3>
+                <p> <br>No. of Managed Instances</p>
               </div>
               <div class="icon">
                 <i class="fa fa-cube"></i>
@@ -81,11 +86,11 @@
           <div class="col-lg-3 col-md-3 col-xs-6 childUnmanagedInstanceTemplate" style="display:none">
             <div class="small-box bg-aqua">
               <div class="inner">
-                <h3>&nbsp;</h3>
-                <p>Total <br>No. of Unmanaged Instances</p>
+                <h3 class="countUnmangedInstance">0</h3>
+                <p> <br>No. of Unmanaged Instances</p>
               </div>
               <div class="icon">
-                <i class="fa fa-dollar"></i>
+                <i class="fa fa-external-link"></i>
               </div>
               <a class="small-box-footer" href="#">
                More info <i class="fa fa-arrow-circle-right"></i>
@@ -150,7 +155,7 @@
                         <p>Total <br>No. of Unmanaged Instances</p>
                       </div>
                       <div class="icon">
-                        <i class="fa fa-dollar"></i>
+                        <i class="fa fa-external-link"></i>
                       </div>
                       <a id="unmanagedInstancesMoreInfo" class="small-box-footer" href="#">
                        More info <i class="fa fa-arrow-circle-right"></i>
@@ -158,6 +163,10 @@
                     </div>
                   </div>
 
+                </div>
+                <div id="awsProviderView">
+                </div>
+                <div id="openstackProviderView">
                 </div>
               </div>
             </div>
@@ -177,10 +186,109 @@
 
       totalCountProviders = awsProvidersCount + openstackProvidersCount + vmwareProvidersCount + hpPlublicCloudProvidersCount + azureProvidersCount;
       $('#totalProviders').empty();
+      $('#awsProviderView').empty();
+      $('#openstackProviderView').empty();
       $('#totalProviders').append(totalCountProviders);
-      for(var i=0;i<totalCountProviders;i++){
-        alert("Arab");
+      for(var i=0;i<awsProvidersCount;i++){
+        //alert(totalProviders.awsProviders[i].providerName);
+        var $rowTemplate = $('.rowTemplate').clone();
+        $rowTemplate.removeClass('rowTemplate');
+
+        var $childProviderTemplate = $('.childProviderTemplate').clone();
+        $childProviderTemplate.removeClass('childProviderTemplate');
+        var awsSpecificProvName = totalProviders.awsProviders[i].providerName;
+        $childProviderTemplate.find('.providerName').empty().append(awsSpecificProvName);
+
+        var providerId = totalProviders.awsProviders[i]._id;
+        var totalInstances;
+        //var managedInstances;
+        //var unmanagedInstances;
+
+        var $childManagedInstanceTemplate = $('.childManagedInstanceTemplate').clone();
+        $childManagedInstanceTemplate.removeClass('childManagedInstanceTemplate');
+        $.get('../providers/'+providerId+'/managedInstances', function(data) {
+          $childManagedInstanceTemplate.find('.countMangedInstance').empty().append(data.length);
+          //managedInstances = data.length;
+          //alert(managedInstances);
+        });
+
+
+        var $childUnmanagedInstanceTemplate = $('.childUnmanagedInstanceTemplate').clone();
+        $childUnmanagedInstanceTemplate.removeClass('childUnmanagedInstanceTemplate');
+        $.get('../providers/'+providerId+'/unmanagedInstances', function(data) {
+          $childUnmanagedInstanceTemplate.find('.countUnmangedInstance').empty().append(data.length);
+          //unmanagedInstances = data.length;
+        });
+
+        var $childTotalInstanceTemplate = $('.childTotalInstanceTemplate').clone();
+        $childTotalInstanceTemplate.removeClass('childTotalInstanceTemplate');
+        //totalInstances = managedInstances + unmanagedInstances;
+        //alert(totalInstances);
+
+        
+        $rowTemplate.append($childProviderTemplate);
+        $rowTemplate.append($childTotalInstanceTemplate);
+        $rowTemplate.append($childManagedInstanceTemplate);
+        $rowTemplate.append($childUnmanagedInstanceTemplate);
+
+
+        $childUnmanagedInstanceTemplate.css({display:'block'});
+        $childManagedInstanceTemplate.css({display:'block'});
+        $childTotalInstanceTemplate.css({display:'block'});
+        $childProviderTemplate.css({display:'block'});
+        $rowTemplate.css({display:'block'});
+        $('#awsProviderView').append($rowTemplate);
       }
+      /*for(var i=0;i<openstackProvidersCount;i++){
+        //alert(totalProviders.awsProviders[i].providerName);
+        var $rowTemplate = $('.rowTemplate').clone();
+        $rowTemplate.removeClass('rowTemplate');
+
+        var $childProviderTemplate = $('.childProviderTemplate').clone();
+        $childProviderTemplate.removeClass('childProviderTemplate');
+        var openstackSpecificProvName = totalProviders.openstackProviders[i].providerName;
+        $childProviderTemplate.find('.providerName').empty().append(openstackSpecificProvName);
+
+        var providerId = totalProviders.openstackProviders[i]._id;
+        var totalInstances;
+        //var managedInstances;
+        //var unmanagedInstances;
+
+        var $childManagedInstanceTemplate = $('.childManagedInstanceTemplate').clone();
+        $childManagedInstanceTemplate.removeClass('childManagedInstanceTemplate');
+        // $.get('../providers/'+providerId+'/managedInstances', function(data) {
+        //   $childManagedInstanceTemplate.find('.countMangedInstance').empty().append(data.length);
+        //   //managedInstances = data.length;
+        //   //alert(managedInstances);
+        // });
+
+
+        var $childUnmanagedInstanceTemplate = $('.childUnmanagedInstanceTemplate').clone();
+        $childUnmanagedInstanceTemplate.removeClass('childUnmanagedInstanceTemplate');
+        // $.get('../providers/'+providerId+'/unmanagedInstances', function(data) {
+        //   $childUnmanagedInstanceTemplate.find('.countUnmangedInstance').empty().append(data.length);
+        //   //unmanagedInstances = data.length;
+        // });
+
+        var $childTotalInstanceTemplate = $('.childTotalInstanceTemplate').clone();
+        $childTotalInstanceTemplate.removeClass('childTotalInstanceTemplate');
+        //totalInstances = managedInstances + unmanagedInstances;
+        //alert(totalInstances);
+
+        
+        $rowTemplate.append($childProviderTemplate);
+        $rowTemplate.append($childTotalInstanceTemplate);
+        $rowTemplate.append($childManagedInstanceTemplate);
+        $rowTemplate.append($childUnmanagedInstanceTemplate);
+
+
+        $childUnmanagedInstanceTemplate.css({display:'block'});
+        $childManagedInstanceTemplate.css({display:'block'});
+        $childTotalInstanceTemplate.css({display:'block'});
+        $childProviderTemplate.css({display:'block'});
+        $rowTemplate.css({display:'block'});
+        $('#openstackProviderView').append($rowTemplate);
+      }*/
     }).fail(function() {});
     /*
     $('#totalInstancesMoreInfo').click(function() {
