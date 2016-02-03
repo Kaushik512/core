@@ -133,9 +133,9 @@
 									    <h4>Promote</h4>
 									</div> -->
 									
-									<div id="triangles" style="margin-top:25px">
+									<!-- <div id="triangles" style="margin-top:25px">
 									    <div style="font-size:10px;margin-top:-7px;margin-left:1px;color:#fff">Promote</div>
-									</div>
+									</div> -->
 									<!-- <img src="img/arrow_right.png" class="spanChildImage"> -->
 								</span>
 							</div>
@@ -969,6 +969,7 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
             //var sortedappdataList = [];
 
             for(var j=0;j<applicationEnvList.length;j++){
+            	//alert(appDeployDataObj.applicationLastDeploy[j]);
             	sortedappdataList.push(appDeployDataObj.applicationLastDeploy[j]);
 	            unsortedappdataList.push(appDeployDataObj.applicationLastDeploy[j]);
             }
@@ -999,6 +1000,9 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
             	// hostName.push(appDeployDataObj.hostName[indexedList[n]]);
             	// envId.push(appDeployDataObj.envId[indexedList[n]]);
             	// appLogs.push(appDeployDataObj.appLogs[indexedList[n]]);
+            	//alert(appDeployDataObj.applicationLastDeploy[n]);
+            	convertToDateObj(appDeployDataObj.applicationLastDeploy[n]);
+            	//alert(appDeployDataObj.applicationLastDeploy[n]);
 
             	applicationInstanceName[indexedList[n]] = appDeployDataObj.applicationInstanceName[n];
             	applicationNodeIP[indexedList[n]]=appDeployDataObj.applicationNodeIP[n];
@@ -1186,9 +1190,9 @@ function moreinfoDetailsPipelineViewClickHandler(e) {
 					var rowSetDetailsLogs = rowSetDataDetailsObj[key][k].appLogs;
 					rowSetDetailsLogs = rowSetDetailsLogs.replace(/"/g, '');
 					//str = str.replace(/'/g, '');
-					var $tdlogs = '<a id="'+k+'_appSpecificLogsId" class="btn btn-primary btn-sm width27borderradius50 appSpecificLogs" data-logs="'+rowSetDetailsLogs+'"><i class="fa fa-info font-size-11"></i></a>';
+					var $tdlogs = '<a class="btn btn-primary btn-sm width27borderradius50 appSpecificLogs nonClickwithGrgrayedout" data-logs="'+rowSetDetailsLogs+'"><i class="fa fa-info font-size-11"></i></a>';
 					//$(row).data('appNameVer',presentDataDetailsObj);
-					$('#'+k+'_appSpecificLogsId').data("logsInfo",rowSetDataDetailsObj[key][k].appLogs);
+					//$('#'+k+'_appSpecificLogsId').data("logsInfo",rowSetDataDetailsObj[key][k].appLogs);
 				    $envSpecificDataArr.row.add([
 				        rowSetDataDetailsObj[key][k].applicationNodeIP,
 						rowSetDataDetailsObj[key][k].applicationLastDeploy,
@@ -1481,10 +1485,6 @@ function ConvertTimeformat(format, str, formatStr) {
 	return (sHours + ":" + sMinutes + ":" + sSeconds);
 }
 
-/*"2016-1-20 09:20:34AM",
-            "2016-1-20 10:20:34AM",
-            "2016-1-20 05:20:34AM",
-            "2016-1-20 11:40:34AM"*/
 function convertToDateObj(strInputDate) {
 	var strSplit = strInputDate.split(' ');
 	var dateStr = strSplit[0];

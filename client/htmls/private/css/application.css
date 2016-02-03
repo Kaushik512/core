@@ -556,6 +556,10 @@
 .colorDarkBlue{
     color:DarkBlue;
 }
+.nonClickwithGrgrayedout{
+    opacity: 0.5;
+    pointer-events: none;
+}
 /*.secondChildSpanTemplate{
     padding-left: 15%;
 }*/
