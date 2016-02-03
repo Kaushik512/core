@@ -9,17 +9,17 @@ var instancesDao = require('_pr/model/classes/instance/instance');
 var unManagedInstancesDao = require('_pr/model/unmanaged-instance')
 
 
-// var socketIo = require('_pr/socket.io').getInstance();
+var socketIo = require('_pr/socket.io').getInstance();
 
-// var socketCloudFormationAutoScate = socketIo.of('/cloudFormationAutoScaleGroup');
+var socketCloudFormationAutoScate = socketIo.of('/cloudFormationAutoScaleGroup');
 
-// socketCloudFormationAutoScate.on('connection', function(socket) {
-// 	socket.on('joinCFRoom', function(data) {
-// 		logger.debug('room joined', data);
-// 		socket.join(data.orgId + ':' + data.bgId + ':' + data.projId + ':' + data.envId);
-// 	});
+socketCloudFormationAutoScate.on('connection', function(socket) {
+	socket.on('joinCFRoom', function(data) {
+		logger.debug('room joined', data);
+		socket.join(data.orgId + ':' + data.bgId + ':' + data.projId + ':' + data.envId);
+	});
 
-// });
+});
 
 function sync() {
 
@@ -106,7 +106,7 @@ function sync() {
 																		found = true;
 
 																		//sending socket event
-																		//socketCloudFormationAutoScate.to(instances[n].orgId + ':' + instances[n].bgId + ':' + instances[n].projectId + ':' + instances[n].envId).emit('instanceStateChanged', instances[n]);
+																		socketCloudFormationAutoScate.to(instances[n].orgId + ':' + instances[n].bgId + ':' + instances[n].projectId + ':' + instances[n].envId).emit('instanceStateChanged', instances[n]);
 
 																		instances.splice(n, 1);
 																		break;
@@ -172,7 +172,7 @@ function sync() {
 										function fetchComplete() {
 											for (var p = 0; p < instances.length; p++) {
 												instances[p].instanceState = "terminated";
-												//socketCloudFormationAutoScate.to(instances[p].orgId + ':' + instances[p].bgId + ':' + instances[p].projectId + ':' + instances[p].envId).emit('instanceStateChanged', instances[p]);
+												socketCloudFormationAutoScate.to(instances[p].orgId + ':' + instances[p].bgId + ':' + instances[p].projectId + ':' + instances[p].envId).emit('instanceStateChanged', instances[p]);
 												instances[p].save();
 											}
 											for (var r = 0; r < unManagedInstances.length; r++) {

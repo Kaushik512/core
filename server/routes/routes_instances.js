@@ -14,13 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- * Written by Anshul Srivastava and Gobinda Das <gobinda.das@relevancelab.com>,
- * May 2015
- */
-
 // This file act as a Controller which contains Instance related all end points.
 
 var blueprintsDao = require('../model/dao/blueprints');

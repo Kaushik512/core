@@ -14,12 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- * Written by Gobinda Das <gobinda.das@relevancelab.com> and Arabinda Behera<arabinda.behera@relevancelab.com>, 
- * Aug 2015
- */
 
 // This file act as a Controller which contains Jenkins related all end points.
 
