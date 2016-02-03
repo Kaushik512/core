@@ -1,9 +1,19 @@
-/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- * Written by Gobinda Das <gobinda.das@relevancelab.com>,
- * Dec 2015
- */
+/*
+Copyright [2016] [Gobinda Das]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 
 var express = require("express");
 var app = express();
@@ -33,6 +43,9 @@ var mongoose = require('mongoose');
 var MongoStore = require('connect-mongo')(expressSession);
 var mongoDbConnect = require('_pr/lib/mongodb');
 var mongoose = require('mongoose');
+
+
+
 
 logger.debug('Starting Catalyst');
 logger.debug('Logger Initialized');
@@ -135,8 +148,7 @@ var server = http.createServer(app);
 var io = socketIo.getInstance(server, {
 	log: false,
 	authFunc: function(socket, next) {
-    
-		sessionMiddleware(socket.request, socket.request.res, next);
+  		sessionMiddleware(socket.request, socket.request.res, next);
 	}
 });
 
@@ -165,6 +177,10 @@ io.sockets.on('connection', function(socket) {
 		socket.emit('log', line);
 	});
 });
+
+
+var cronTabManager = require('_pr/cronjobs');
+cronTabManager.start();
 
 server.listen(app.get('port'), function() {
 	logger.debug('Express server listening on port ' + app.get('port'));

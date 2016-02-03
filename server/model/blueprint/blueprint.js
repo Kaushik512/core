@@ -1,9 +1,20 @@
-/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- * Written by Gobinda Das <gobinda.das@relevancelab.com>,
- * Dec 2015
- */
+/*
+Copyright [2016] [Gobinda Das]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+
 
 var logger = require('_pr/logger')(module);
 var mongoose = require('mongoose');
@@ -200,112 +211,111 @@ BlueprintSchema.methods.launch = function(opts, callback) {
     var infraManager = this.getInfraManagerData();
     var self = this;
     configmgmtDao.getEnvNameFromEnvId(opts.envId, function(err, envName) {
-        if (err) {
-            callback({
-                message: "Failed to get env name from env id"
-            }, null);
-            return;
-        }
-        if (!envName) {
-            callback({
-                "message": "Unable to find environment name from environment id"
-            });
-            return;
-        }
+		if (err) {
+			callback({
+				message: "Failed to get env name from env id"
+			}, null);
+			return;
+		}
+		if (!envName) {
+			callback({
+				"message": "Unable to find environment name from environment id"
+			});
+			return;
+		}
 
-        configmgmtDao.getChefServerDetails(infraManager.infraManagerId, function(err, chefDetails) {
-            if (err) {
-                logger.error("Failed to getChefServerDetails", err);
-                callback({
-                    message: "Failed to getChefServerDetails"
-                }, null);
-                return;
-            }
-            if (!chefDetails) {
-                logger.error("No CHef Server Detailed available.", err);
-                callback({
-                    message: "No Chef Server Detailed available"
-                }, null);
-                return;
-            }
-            var chef = new Chef({
-                userChefRepoLocation: chefDetails.chefRepoLocation,
-                chefUserName: chefDetails.loginname,
-                chefUserPemFile: chefDetails.userpemfile,
-                chefValidationPemFile: chefDetails.validatorpemfile,
-                hostedChefUrl: chefDetails.url
-            });
-            logger.debug('Chef Repo Location = ', chefDetails.chefRepoLocation);
+		configmgmtDao.getChefServerDetails(infraManager.infraManagerId, function(err, chefDetails) {
+			if (err) {
+				logger.error("Failed to getChefServerDetails", err);
+				callback({
+					message: "Failed to getChefServerDetails"
+				}, null);
+				return;
+			}
+			if (!chefDetails) {
+				logger.error("No CHef Server Detailed available.", err);
+				callback({
+					message: "No Chef Server Detailed available"
+				}, null);
+				return;
+			}
+			var chef = new Chef({
+				userChefRepoLocation: chefDetails.chefRepoLocation,
+				chefUserName: chefDetails.loginname,
+				chefUserPemFile: chefDetails.userpemfile,
+				chefValidationPemFile: chefDetails.validatorpemfile,
+				hostedChefUrl: chefDetails.url
+			});
+			logger.debug('Chef Repo Location = ', chefDetails.chefRepoLocation);
 
-            var blueprintConfigType = getBlueprintConfigType(self);
+			var blueprintConfigType = getBlueprintConfigType(self);
 
-            if (!self.appUrls) {
-                self.appUrls = [];
-            }
-            var appUrls = self.appUrls;
-            if (appConfig.appUrls && appConfig.appUrls.length) {
-                appUrls = appUrls.concat(appConfig.appUrls);
-            }
+			if (!self.appUrls) {
+				self.appUrls = [];
+			}
+			var appUrls = self.appUrls;
+			if (appConfig.appUrls && appConfig.appUrls.length) {
+				appUrls = appUrls.concat(appConfig.appUrls);
+			}
 
-            chef.getEnvironment(envName, function(err, env) {
-                if (err) {
-                    logger.error("Failed chef.getEnvironment", err);
-                    res.send(500);
-                    return;
-                }
+			chef.getEnvironment(envName, function(err, env) {
+				if (err) {
+					logger.error("Failed chef.getEnvironment", err);
+					res.send(500);
+					return;
+				}
 
-                if (!env) {
-                    logger.debug("Blueprint env ID = ", req.query.envId);
-                    chef.createEnvironment(envName, function(err) {
-                        if (err) {
-                            logger.error("Failed chef.createEnvironment", err);
-                            res.send(500);
-                            return;
-                        }
-                        blueprintConfigType.launch({
-                            infraManager: chef,
-                            ver: opts.ver,
-                            envName: envName,
-                            envId: opts.envId,
-                            stackName: opts.stackName,
-                            blueprintName: self.name,
-                            orgId: self.orgId,
-                            bgId: self.bgId,
-                            projectId: self.projectId,
-                            appUrls: appUrls,
-                            sessionUser: opts.user,
-                            users: self.users,
-                            blueprintData: self,
-                        }, function(err, launchData) {
-                            callback(err, launchData);
-                        });
+				if (!env) {
+					logger.debug("Blueprint env ID = ", req.query.envId);
+					chef.createEnvironment(envName, function(err) {
+						if (err) {
+							logger.error("Failed chef.createEnvironment", err);
+							res.send(500);
+							return;
+						}
+						blueprintConfigType.launch({
+							infraManager: chef,
+							ver: opts.ver,
+							envName: envName,
+							envId: opts.envId,
+							stackName: opts.stackName,
+							blueprintName: self.name,
+							orgId: self.orgId,
+							bgId: self.bgId,
+							projectId: self.projectId,
+							appUrls: appUrls,
+							sessionUser: opts.sessionUser,
+							users: self.users,
+							blueprintData: self,
+						}, function(err, launchData) {
+							callback(err, launchData);
+						});
 
-                    });
-                } else {
-                    blueprintConfigType.launch({
-                        infraManager: chef,
-                        ver: opts.ver,
-                        envName: envName,
-                        envId: opts.envId,
-                        stackName: opts.stackName,
-                        blueprintName: self.name,
-                        orgId: self.orgId,
-                        bgId: self.bgId,
-                        projectId: self.projectId,
-                        appUrls: appUrls,
-                        sessionUser: opts.user,
-                        users: self.users,
-                        blueprintData: self,
-                    }, function(err, launchData) {
-                        callback(err, launchData);
-                    });
-                }
+					});
+				} else {
+					blueprintConfigType.launch({
+						infraManager: chef,
+						ver: opts.ver,
+						envName: envName,
+						envId: opts.envId,
+						stackName: opts.stackName,
+						blueprintName: self.name,
+						orgId: self.orgId,
+						bgId: self.bgId,
+						projectId: self.projectId,
+						appUrls: appUrls,
+						sessionUser: opts.sessionUser,
+						users: self.users,
+						blueprintData: self,
+					}, function(err, launchData) {
+						callback(err, launchData);
+					});
+				}
 
-            });
+			});
 
-        });
-    });
-
+		});
+	});
 };
 
 // static methods

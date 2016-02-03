@@ -1,9 +1,19 @@
-/* Copyright (C) Relevance Lab Private Limited- All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- * Written by Gobinda Das <gobinda.das@relevancelab.com>,
- * Dec 2015
- */
+/*
+Copyright [2016] [Gobinda Das]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 
 var mongoose = require('mongoose');
 var ObjectId = require('mongoose').Types.ObjectId;
@@ -132,6 +142,7 @@ var InstanceSchema = new Schema({
         trim: true
     },
     providerType: String,
+    providerData: Schema.Types.Mixed,
     keyPairId: {
         type: String,
         required: false,
@@ -246,6 +257,7 @@ InstanceSchema.index({
 var Instances = mongoose.model('instances', InstanceSchema);
 
 var InstancesDao = function() {
+
     this.searchInstances = function(searchquery, options, callback) {
         logger.debug("Enter searchInstances query - (%s)", searchquery);
         Instances.textSearch(searchquery, options, function(err, data) {
@@ -1497,6 +1509,74 @@ var InstancesDao = function() {
 
         });
     };
+    this.getByOrgProviderAndPlatformId = function(opts, callback) {
+
+        Instances.find({
+            "orgId": opts.orgId,
+            "providerId": opts.providerId,
+            platformId: opts.platformId
+        }, {
+            'actionLogs': false
+        }, function(err, instances) {
+            if (err) {
+                logger.error("Failed getByOrgProviderAndPlatformId (%s)", opts, err);
+                callback(err, null);
+                return;
+            }
+            if (instances.length) {
+                callback(null, instances[0]);
+            } else {
+                callback(null, null);
+            }
+        });
+    };
+
+    this.getByOrgProviderId = function(opts, callback) {
+
+        Instances.find({
+            "orgId": opts.orgId,
+            "providerId": opts.providerId
+        }, {
+            'actionLogs': false
+        }, function(err, instances) {
+            if (err) {
+                logger.error("Failed getByOrgProviderId (%s)", opts, err);
+                callback(err, null);
+                return;
+            }
+
+            callback(null, instances);
+
+        });
+    };
+
+    this.getByProviderId = function(providerId, callback) {
+        if (!providerId) {
+            process.nextTick(function() {
+                callback({
+                    message: "Invalid provider id"
+                });
+
+            });
+            return;
+        }
+
+        Instances.find({
+            "providerId": providerId
+        }, {
+            'actionLogs': false
+        }, function(err, instances) {
+            if (err) {
+                logger.error("Failed getByOrgProviderId (%s)", opts, err);
+                callback(err, null);
+                return;
+            }
+
+            callback(null, instances);
+
+        });
+    };
+
 };
 
 module.exports = new InstancesDao();

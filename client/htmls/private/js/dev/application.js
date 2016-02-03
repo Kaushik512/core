@@ -37,7 +37,6 @@ $(document).ready(function() {
     $('#defaultViewButtonNewDeploy').on('click', newAppDeployClickHandler);
 });
 
-
 getAllPipelineViewData();
 
 function getAllPipelineViewData() {
