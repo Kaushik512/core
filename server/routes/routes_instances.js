@@ -826,6 +826,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 	});
 	//Coposite Docker container launch 
 	app.get('/instances/dockercompositeimagepull/:instanceid/:dockerreponame/:dockercomposejson', function(req, res) {
+
+
 		var generateDockerLaunchParams = function(runparams) {
 			logger.debug('rcvd runparams --->', runparams);
 			var launchparams = [];
@@ -906,19 +908,29 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 					res.end('No Docker Found');
 					return;
 				}
+
 				configmgmtDao.getMasterRow(18, 'dockerreponame', req.params.dockerreponame, function(err, data) {
 					if (!err) {
+						var dock = null;
 						logger.debug('Docker Repo ->', JSON.stringify(data));
-						var dock = JSON.parse(data);
-						logger.debug('username:', dock.dockeruserid);
+						if(data){
+							dock = JSON.parse(data);
+							logger.debug('username:', dock.dockeruserid);
+						}
+						else{
+							logger.debug('No Docker Repo found. Would pull only public repos.')
+						}
+						
 						var _docker = new Docker();
 						var stdmessages = '';
 						var imagecount = 0; //to count the no of images started.
 						var pullandrundocker = function(imagename, tagname, runparams, startparams, execcommand, containername, callback) {
 							imagecount++;
-							var cmd = "sudo docker login -e " + dock.dockeremailid + ' -u ' + dock.dockeruserid + ' -p ' + dock.dockerpassword;
+							var cmd = ""
+							if(dock)
+								cmd = "sudo docker login -e " + dock.dockeremailid + ' -u ' + dock.dockeruserid + ' -p ' + dock.dockerpassword + ' && ';
 							//removing docker userID
-							cmd += ' && sudo docker pull ' + decodeURIComponent(imagename);
+							cmd += 'sudo docker pull ' + decodeURIComponent(imagename);
 							logger.debug('Intermediate cmd: ', cmd);
 							if (tagname != null) {
 								cmd += ':' + tagname;
