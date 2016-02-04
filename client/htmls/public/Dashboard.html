@@ -170,6 +170,10 @@
                 </div>
                 <div id="vmwareProvidersView">
                 </div>
+                <div id="hpPlublicCloudProvidersView">
+                </div>
+                <div id="azureProvidersView">
+                </div>
               </div>
             </div>
           </div>
@@ -267,7 +271,6 @@
         })(i);
       }
       
-
       for(var j=0;j<openstackProvidersCount;j++){
         (function(j){
           var $rowTemplate = $('.rowTemplate').clone();
@@ -349,6 +352,88 @@
           $rowTemplate.css({display:'block'});
           $('#vmwareProvidersView').append($rowTemplate);
         })(k);
+      }
+      for(var l=0;l<hpPlublicCloudProvidersCount;l++){
+        (function(l){
+          var $rowTemplate = $('.rowTemplate').clone();
+          $rowTemplate.removeClass('rowTemplate');
+
+          var $childProviderTemplate = $('.childProviderTemplate').clone();
+          $childProviderTemplate.removeClass('childProviderTemplate');
+          var hpPlublicCloudProvidersName = totalProviders.hpPlublicCloudProviders[l].providerName;
+          //alert(hpPlublicCloudProvidersName);
+          $childProviderTemplate.find('.providerName').empty().append(hpPlublicCloudProvidersName);
+
+          var providerId = totalProviders.hpPlublicCloudProviders[l]._id;
+          var totalInstances;
+          
+
+          var $childManagedInstanceTemplate = $('.childManagedInstanceTemplate').clone();
+          $childManagedInstanceTemplate.removeClass('childManagedInstanceTemplate');
+          
+
+
+          var $childUnmanagedInstanceTemplate = $('.childUnmanagedInstanceTemplate').clone();
+          $childUnmanagedInstanceTemplate.removeClass('childUnmanagedInstanceTemplate');
+          
+
+          var $childTotalInstanceTemplate = $('.childTotalInstanceTemplate').clone();
+          $childTotalInstanceTemplate.removeClass('childTotalInstanceTemplate');
+          
+          $rowTemplate.append($childProviderTemplate);
+          $rowTemplate.append($childTotalInstanceTemplate);
+          $rowTemplate.append($childManagedInstanceTemplate);
+          $rowTemplate.append($childUnmanagedInstanceTemplate);
+
+
+          $childUnmanagedInstanceTemplate.css({display:'block'});
+          $childManagedInstanceTemplate.css({display:'block'});
+          $childTotalInstanceTemplate.css({display:'block'});
+          $childProviderTemplate.css({display:'block'});
+          $rowTemplate.css({display:'block'});
+          $('#hpPlublicCloudProvidersView').append($rowTemplate);
+        })(l);
+      }
+      for(var m=0;m<azureProvidersCount;m++){
+        (function(m){
+          var $rowTemplate = $('.rowTemplate').clone();
+          $rowTemplate.removeClass('rowTemplate');
+
+          var $childProviderTemplate = $('.childProviderTemplate').clone();
+          $childProviderTemplate.removeClass('childProviderTemplate');
+          var azureProvidersName = totalProviders.azureProviders[m].providerName;
+          //alert(azureProvidersName);
+          $childProviderTemplate.find('.providerName').empty().append(azureProvidersName);
+
+          var providerId = totalProviders.azureProviders[m]._id;
+          var totalInstances;
+          
+
+          var $childManagedInstanceTemplate = $('.childManagedInstanceTemplate').clone();
+          $childManagedInstanceTemplate.removeClass('childManagedInstanceTemplate');
+          
+
+
+          var $childUnmanagedInstanceTemplate = $('.childUnmanagedInstanceTemplate').clone();
+          $childUnmanagedInstanceTemplate.removeClass('childUnmanagedInstanceTemplate');
+          
+
+          var $childTotalInstanceTemplate = $('.childTotalInstanceTemplate').clone();
+          $childTotalInstanceTemplate.removeClass('childTotalInstanceTemplate');
+          
+          $rowTemplate.append($childProviderTemplate);
+          $rowTemplate.append($childTotalInstanceTemplate);
+          $rowTemplate.append($childManagedInstanceTemplate);
+          $rowTemplate.append($childUnmanagedInstanceTemplate);
+
+
+          $childUnmanagedInstanceTemplate.css({display:'block'});
+          $childManagedInstanceTemplate.css({display:'block'});
+          $childTotalInstanceTemplate.css({display:'block'});
+          $childProviderTemplate.css({display:'block'});
+          $rowTemplate.css({display:'block'});
+          $('#hpPlublicCloudProvidersView').append($rowTemplate);
+        })(m);
       }
       // alert(awsTotalInstanceCount);
       /*if(awsTotalInstanceCount > 0){
