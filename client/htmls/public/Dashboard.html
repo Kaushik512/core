@@ -53,14 +53,14 @@
           <div class="col-lg-3 col-md-3 col-xs-6 childTotalInstanceTemplate" style="display:none">
             <div class="small-box bg-aqua">
               <div class="inner">
-                <h3>0</h3>
+                <h3 class="countTotalInstance">0</h3>
                 <p> <br>No. of Instances</p>
               </div>
               <div class="icon">
                 <i class="fa fa-laptop"></i>
               </div>
-              <a class="small-box-footer" href="#">
-                More info <i class="fa fa-arrow-circle-right"></i>
+              <a class="small-box-footer managedUnmanagedCSS" href="#">
+                <!-- More info <i class="fa fa-arrow-circle-right"></i> -->
               </a>
             </div>
           </div>
@@ -75,8 +75,8 @@
               <div class="icon">
                 <i class="fa fa-cube"></i>
               </div>
-              <a class="small-box-footer" href="#">
-                More Info <i class="fa fa-arrow-circle-right"></i>
+              <a class="small-box-footer managedUnmanagedCSS" href="#">
+                <!-- More Info <i class="fa fa-arrow-circle-right"></i> -->
               </a>
             </div>
           </div>
@@ -92,8 +92,8 @@
               <div class="icon">
                 <i class="fa fa-external-link"></i>
               </div>
-              <a class="small-box-footer" href="#">
-               More info <i class="fa fa-arrow-circle-right"></i>
+              <a class="small-box-footer convertUnmanagedtoManaged" target="_parent">
+               Convert <i class="fa fa-arrow-circle-right"></i>
               </a>
             </div>
           </div>
@@ -128,8 +128,8 @@
                       <div class="icon">
                         <i class="fa fa-laptop"></i>
                       </div>
-                      <a id="totalInstancesMoreInfo" class="small-box-footer" href="#">
-                        More info <i class="fa fa-arrow-circle-right"></i>
+                      <a id="" class="small-box-footer managedUnmanagedCSS" href="#">
+                        <!-- More info <i class="fa fa-arrow-circle-right"></i> -->
                       </a>
                     </div>
                   </div>
@@ -142,8 +142,8 @@
                       <div class="icon">
                         <i class="fa fa-cube"></i>
                       </div>
-                      <a id="totalmanagedInstancesMoreInfo" class="small-box-footer" href="#">
-                        More Info <i class="fa fa-arrow-circle-right"></i>
+                      <a id="" class="small-box-footer managedUnmanagedCSS" href="#">
+                        <!-- More Info <i class="fa fa-arrow-circle-right"></i> -->
                       </a>
                     </div>
                   </div>
@@ -157,8 +157,8 @@
                       <div class="icon">
                         <i class="fa fa-external-link"></i>
                       </div>
-                      <a id="unmanagedInstancesMoreInfo" class="small-box-footer" href="#">
-                       More info <i class="fa fa-arrow-circle-right"></i>
+                      <a id="" class="small-box-footer managedUnmanagedCSS" href="#">
+                       <!-- Convert <i class="fa fa-arrow-circle-right"></i> -->
                       </a>
                     </div>
                   </div>
@@ -167,6 +167,8 @@
                 <div id="awsProviderView">
                 </div>
                 <div id="openstackProviderView">
+                </div>
+                <div id="vmwareProvidersView">
                 </div>
               </div>
             </div>
@@ -189,107 +191,171 @@
       $('#awsProviderView').empty();
       $('#openstackProviderView').empty();
       $('#totalProviders').append(totalCountProviders);
+      var awsTotalInstanceCount = 0;
+      var count =0;
       for(var i=0;i<awsProvidersCount;i++){
         //alert(totalProviders.awsProviders[i].providerName);
-        var $rowTemplate = $('.rowTemplate').clone();
-        $rowTemplate.removeClass('rowTemplate');
+        //debugger;
+        (function(i){
+          var $rowTemplate = $('.rowTemplate').clone();
+          $rowTemplate.removeClass('rowTemplate');
 
-        var $childProviderTemplate = $('.childProviderTemplate').clone();
-        $childProviderTemplate.removeClass('childProviderTemplate');
-        var awsSpecificProvName = totalProviders.awsProviders[i].providerName;
-        $childProviderTemplate.find('.providerName').empty().append(awsSpecificProvName);
+          var $childProviderTemplate = $('.childProviderTemplate').clone();
+          $childProviderTemplate.removeClass('childProviderTemplate');
+          var awsSpecificProvName = totalProviders.awsProviders[i].providerName;
+          $childProviderTemplate.find('.providerName').empty().append(awsSpecificProvName);
 
-        var providerId = totalProviders.awsProviders[i]._id;
-        var totalInstances;
-        //var managedInstances;
-        //var unmanagedInstances;
+          //alert(awsSpecificProvName);
+          var providerId = totalProviders.awsProviders[i]._id;
+          //alert(providerId);
 
-        var $childManagedInstanceTemplate = $('.childManagedInstanceTemplate').clone();
-        $childManagedInstanceTemplate.removeClass('childManagedInstanceTemplate');
-        $.get('../providers/'+providerId+'/managedInstances', function(data) {
-          $childManagedInstanceTemplate.find('.countMangedInstance').empty().append(data.length);
-          //managedInstances = data.length;
-          //alert(managedInstances);
-        });
+          var $childManagedInstanceTemplate = $('.childManagedInstanceTemplate').clone();
+          $childManagedInstanceTemplate.removeClass('childManagedInstanceTemplate');
 
+          var $childUnmanagedInstanceTemplate = $('.childUnmanagedInstanceTemplate').clone();
+          $childUnmanagedInstanceTemplate.removeClass('childUnmanagedInstanceTemplate');
 
-        var $childUnmanagedInstanceTemplate = $('.childUnmanagedInstanceTemplate').clone();
-        $childUnmanagedInstanceTemplate.removeClass('childUnmanagedInstanceTemplate');
-        $.get('../providers/'+providerId+'/unmanagedInstances', function(data) {
-          $childUnmanagedInstanceTemplate.find('.countUnmangedInstance').empty().append(data.length);
-          //unmanagedInstances = data.length;
-        });
-
-        var $childTotalInstanceTemplate = $('.childTotalInstanceTemplate').clone();
-        $childTotalInstanceTemplate.removeClass('childTotalInstanceTemplate');
-        //totalInstances = managedInstances + unmanagedInstances;
-        //alert(totalInstances);
-
-        
-        $rowTemplate.append($childProviderTemplate);
-        $rowTemplate.append($childTotalInstanceTemplate);
-        $rowTemplate.append($childManagedInstanceTemplate);
-        $rowTemplate.append($childUnmanagedInstanceTemplate);
+          var $childTotalInstanceTemplate = $('.childTotalInstanceTemplate').clone();
+          $childTotalInstanceTemplate.removeClass('childTotalInstanceTemplate');
 
 
-        $childUnmanagedInstanceTemplate.css({display:'block'});
-        $childManagedInstanceTemplate.css({display:'block'});
-        $childTotalInstanceTemplate.css({display:'block'});
-        $childProviderTemplate.css({display:'block'});
-        $rowTemplate.css({display:'block'});
-        $('#awsProviderView').append($rowTemplate);
+          $.get('../providers/'+providerId+'/managedInstances', function(dataManaged) {
+            var managedInstancesLength = dataManaged.length;
+            //console.log("Arab");
+            $childManagedInstanceTemplate.find('.countMangedInstance').empty().append(managedInstancesLength);
+            var totalManagedUnmanagedData;
+            var managedData = dataManaged.length;
+
+            $.get('../providers/'+providerId+'/unmanagedInstances', function(dataUnmanaged) {
+              count++;
+              console.log(dataUnmanaged.length);
+              $childUnmanagedInstanceTemplate.find('.countUnmangedInstance').empty().append(dataUnmanaged.length);
+              
+              var convertHrefmanaged = "/private/index.html#ajax/Settings/providerSync.html?"+providerId;
+              $childUnmanagedInstanceTemplate.find('.convertUnmanagedtoManaged').click(function(){
+               // alert("Hello");
+                
+                if (top.location != location) {
+                  window.top.location.href = convertHrefmanaged;
+                }
+              });
+              var unmanagedData = dataUnmanaged.length;
+              totalManagedUnmanagedData = managedData + unmanagedData;
+              //alert(totalManagedUnmanagedData);
+              awsTotalInstanceCount = awsTotalInstanceCount + totalManagedUnmanagedData;
+              // alert(awsTotalInstanceCount);
+              if(count === awsProvidersCount){
+                //alert(awsTotalInstanceCount);
+              }
+              $childTotalInstanceTemplate.find('.countTotalInstance').empty().append(totalManagedUnmanagedData);
+            });
+            
+          });
+
+          $rowTemplate.append($childProviderTemplate);
+          $rowTemplate.append($childTotalInstanceTemplate);
+          $rowTemplate.append($childManagedInstanceTemplate);
+          $rowTemplate.append($childUnmanagedInstanceTemplate);
+
+
+          $childUnmanagedInstanceTemplate.css({display:'block'});
+          $childManagedInstanceTemplate.css({display:'block'});
+          $childTotalInstanceTemplate.css({display:'block'});
+          $childProviderTemplate.css({display:'block'});
+          $rowTemplate.css({display:'block'});
+          $('#awsProviderView').append($rowTemplate);
+        })(i);
       }
-      /*for(var i=0;i<openstackProvidersCount;i++){
-        //alert(totalProviders.awsProviders[i].providerName);
-        var $rowTemplate = $('.rowTemplate').clone();
-        $rowTemplate.removeClass('rowTemplate');
+      
 
-        var $childProviderTemplate = $('.childProviderTemplate').clone();
-        $childProviderTemplate.removeClass('childProviderTemplate');
-        var openstackSpecificProvName = totalProviders.openstackProviders[i].providerName;
-        $childProviderTemplate.find('.providerName').empty().append(openstackSpecificProvName);
+      for(var j=0;j<openstackProvidersCount;j++){
+        (function(j){
+          var $rowTemplate = $('.rowTemplate').clone();
+          $rowTemplate.removeClass('rowTemplate');
 
-        var providerId = totalProviders.openstackProviders[i]._id;
-        var totalInstances;
-        //var managedInstances;
-        //var unmanagedInstances;
+          var $childProviderTemplate = $('.childProviderTemplate').clone();
+          $childProviderTemplate.removeClass('childProviderTemplate');
+          var openstackSpecificProvName = totalProviders.openstackProviders[j].providerName;
+          //alert(openstackSpecificProvName);
+          $childProviderTemplate.find('.providerName').empty().append(openstackSpecificProvName);
 
-        var $childManagedInstanceTemplate = $('.childManagedInstanceTemplate').clone();
-        $childManagedInstanceTemplate.removeClass('childManagedInstanceTemplate');
-        // $.get('../providers/'+providerId+'/managedInstances', function(data) {
-        //   $childManagedInstanceTemplate.find('.countMangedInstance').empty().append(data.length);
-        //   //managedInstances = data.length;
-        //   //alert(managedInstances);
-        // });
+          var providerId = totalProviders.openstackProviders[j]._id;
+          var totalInstances;
+          
+
+          var $childManagedInstanceTemplate = $('.childManagedInstanceTemplate').clone();
+          $childManagedInstanceTemplate.removeClass('childManagedInstanceTemplate');
+          
 
 
-        var $childUnmanagedInstanceTemplate = $('.childUnmanagedInstanceTemplate').clone();
-        $childUnmanagedInstanceTemplate.removeClass('childUnmanagedInstanceTemplate');
-        // $.get('../providers/'+providerId+'/unmanagedInstances', function(data) {
-        //   $childUnmanagedInstanceTemplate.find('.countUnmangedInstance').empty().append(data.length);
-        //   //unmanagedInstances = data.length;
-        // });
-
-        var $childTotalInstanceTemplate = $('.childTotalInstanceTemplate').clone();
-        $childTotalInstanceTemplate.removeClass('childTotalInstanceTemplate');
-        //totalInstances = managedInstances + unmanagedInstances;
-        //alert(totalInstances);
-
-        
-        $rowTemplate.append($childProviderTemplate);
-        $rowTemplate.append($childTotalInstanceTemplate);
-        $rowTemplate.append($childManagedInstanceTemplate);
-        $rowTemplate.append($childUnmanagedInstanceTemplate);
+          var $childUnmanagedInstanceTemplate = $('.childUnmanagedInstanceTemplate').clone();
+          $childUnmanagedInstanceTemplate.removeClass('childUnmanagedInstanceTemplate');
+          
+          var $childTotalInstanceTemplate = $('.childTotalInstanceTemplate').clone();
+          $childTotalInstanceTemplate.removeClass('childTotalInstanceTemplate');
+          
+          
+          $rowTemplate.append($childProviderTemplate);
+          $rowTemplate.append($childTotalInstanceTemplate);
+          $rowTemplate.append($childManagedInstanceTemplate);
+          $rowTemplate.append($childUnmanagedInstanceTemplate);
 
 
-        $childUnmanagedInstanceTemplate.css({display:'block'});
-        $childManagedInstanceTemplate.css({display:'block'});
-        $childTotalInstanceTemplate.css({display:'block'});
-        $childProviderTemplate.css({display:'block'});
-        $rowTemplate.css({display:'block'});
-        $('#openstackProviderView').append($rowTemplate);
+          $childUnmanagedInstanceTemplate.css({display:'block'});
+          $childManagedInstanceTemplate.css({display:'block'});
+          $childTotalInstanceTemplate.css({display:'block'});
+          $childProviderTemplate.css({display:'block'});
+          $rowTemplate.css({display:'block'});
+          $('#openstackProviderView').append($rowTemplate);
+        })(j);
+      }
+      for(var k=0;k<vmwareProvidersCount;k++){
+        (function(k){
+          var $rowTemplate = $('.rowTemplate').clone();
+          $rowTemplate.removeClass('rowTemplate');
+
+          var $childProviderTemplate = $('.childProviderTemplate').clone();
+          $childProviderTemplate.removeClass('childProviderTemplate');
+          var vmwareProvidersName = totalProviders.vmwareProviders[k].providerName;
+          //alert(vmwareProvidersName);
+          $childProviderTemplate.find('.providerName').empty().append(vmwareProvidersName);
+
+          var providerId = totalProviders.vmwareProviders[k]._id;
+          var totalInstances;
+          
+
+          var $childManagedInstanceTemplate = $('.childManagedInstanceTemplate').clone();
+          $childManagedInstanceTemplate.removeClass('childManagedInstanceTemplate');
+          
+
+
+          var $childUnmanagedInstanceTemplate = $('.childUnmanagedInstanceTemplate').clone();
+          $childUnmanagedInstanceTemplate.removeClass('childUnmanagedInstanceTemplate');
+          
+
+          var $childTotalInstanceTemplate = $('.childTotalInstanceTemplate').clone();
+          $childTotalInstanceTemplate.removeClass('childTotalInstanceTemplate');
+          
+          $rowTemplate.append($childProviderTemplate);
+          $rowTemplate.append($childTotalInstanceTemplate);
+          $rowTemplate.append($childManagedInstanceTemplate);
+          $rowTemplate.append($childUnmanagedInstanceTemplate);
+
+
+          $childUnmanagedInstanceTemplate.css({display:'block'});
+          $childManagedInstanceTemplate.css({display:'block'});
+          $childTotalInstanceTemplate.css({display:'block'});
+          $childProviderTemplate.css({display:'block'});
+          $rowTemplate.css({display:'block'});
+          $('#vmwareProvidersView').append($rowTemplate);
+        })(k);
+      }
+      // alert(awsTotalInstanceCount);
+      /*if(awsTotalInstanceCount > 0){
+        alert(awsTotalInstanceCount);
       }*/
     }).fail(function() {});
+    
     /*
     $('#totalInstancesMoreInfo').click(function() {
       //alert("Clicked");

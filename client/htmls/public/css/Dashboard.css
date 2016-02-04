@@ -213,4 +213,8 @@
   border-color: #40baf1;
   color:#fff;
 }
+.managedUnmanagedCSS{
+  height:27px;
+  pointer-events:none;
+}
 
