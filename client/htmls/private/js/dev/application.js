@@ -406,7 +406,7 @@ function moreinfoDetailsPipelineViewClickHandler(e) {
 
     }
 
-    function appSpecificLogsViewClickHandler() {
+    function appSpecificLogsViewClickHandler(e) {
         var dataLogs = $(this).attr('data-logs');
         var $modal = $('#modallogsSpecificDetails');
         var datahttp = dataLogs.indexOf("http://");
@@ -425,7 +425,7 @@ function moreinfoDetailsPipelineViewClickHandler(e) {
                 return false;
             });
         }
-        e.preventDefault();
+        e.preventdefault();
         
     }
     $modal.modal('show');
