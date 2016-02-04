@@ -2691,7 +2691,7 @@ function addToTargetList(inputctrl, inputctrl1) {
 		if (inputctrl.val() == '' || inputctrl1.val() == '') //validating if both the controls have values
 		{
 			bootbox.alert({
-                message:'Ensure you have a Title and Valid Docker Path before adding',
+                message:'Ensure you have a Valid Docker Path before adding',
                 title:'Warning'
             });
 			inputctrl.focus();

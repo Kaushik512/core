@@ -463,7 +463,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var vmwarehost = req.body.vmwarehost;
         var vmwaredc = req.body.vmwaredc;
         var providerName = req.body.providerName;
-        var providerType = req.body.providerType;
         var orgId = req.body.orgId;
 
         if (typeof vmwareusername === 'undefined' || vmwareusername.length === 0) {
@@ -486,10 +485,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             res.status(400).send("Please Enter Name.");
             return;
         }
-        if (typeof providerType === 'undefined' || providerType.length === 0) {
-            res.status(400).send("Please Enter ProviderType.");
-            return;
-        }
         if (typeof orgId === 'undefined' || orgId.length === 0) {
             res.status(400);
             res.send("Please Select Any Organization.");
@@ -502,7 +497,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             password: vmwarepassword,
             host: vmwarehost,
             providerName: providerName,
-            providerType: providerType,
             tenantid: vmwaredc,
             orgId: orgId
         };
@@ -546,7 +540,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     password: vmwarepassword,
                                     host: vmwarehost,
                                     providerName: providerName,
-                                    providerType: providerType,
                                     dc: vmwaredc,
                                     orgId: orgs[0].rowid,
                                     orgName: orgs[0].orgname
@@ -1322,7 +1315,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
         var azureSubscriptionId = req.body.azureSubscriptionId;
         var providerName = req.body.providerName;
-        var providerType = req.body.providerType.toLowerCase();
         var providerId = req.params.providerId;
 
         logger.debug("Pem file name:", req.files.azurepem.originalFilename);
@@ -1353,16 +1345,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             res.status(400).send("Please Enter Name.");
             return;
         }
-        if (typeof providerType === 'undefined' || providerType.length === 0) {
-            res.status(400).send("Please Enter ProviderType.");
-            return;
-        }
-
+        
         var providerData = {
             id: 9,
             azureSubscriptionId: azureSubscriptionId,
             providerName: providerName,
-            providerType: providerType,
             pemFileName: pemFileName,
             keyFileName: keyFileName,
             orgId: orgId
@@ -1406,7 +1393,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     id: 9,
                                     subscriptionId: azureSubscriptionId,
                                     providerName: providerData.providerName,
-                                    providerType: providerData.providerType,
                                     pemFileName: pemFileName,
                                     keyFileName: keyFileName,
                                     orgId: orgs[0].rowid,
@@ -1768,7 +1754,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var openstacktenantname = req.body.openstacktenantname;
         var openstackprojectname = req.body.openstackprojectname;
         var providerName = req.body.providerName.trim();
-        var providerType = req.body.providerType.trim();
         var providerId = req.params.providerId.trim();
         var openstackkeyname = req.body.openstackkeyname;
         var orgId = req.body.orgId;
@@ -1803,10 +1788,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             res.status(400).send("Please Enter Name.");
             return;
         }
-        if (typeof providerType === 'undefined' || providerType.length === 0) {
-            res.status(400).send("Please Enter ProviderType.");
-            return;
-        }
         if (typeof openstacktenantname === 'undefined' || openstacktenantname.length === 0) {
             res.status(400).send("Please Enter Tenant Name.");
             return;
@@ -1838,7 +1819,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             tenantname: openstacktenantname,
             projectname: openstackprojectname,
             providerName: providerName,
-            providerType: providerType,
             serviceendpoints: serviceendpoints,
             keyname: openstackkeyname,
             orgId: orgId
@@ -1884,7 +1864,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     password: openstackpassword,
                                     host: openstackhost,
                                     providerName: providerData.providerName,
-                                    providerType: providerData.providerType,
                                     orgId: orgs[0].rowid,
                                     orgName: orgs[0].orgname
                                 };
@@ -2225,7 +2204,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var accessKey = req.body.accessKey.trim();
         var secretKey = req.body.secretKey.trim();
         var providerName = req.body.providerName.trim();
-        var providerType = req.body.providerType.trim();
         var providerId = req.params.providerId.trim();
         var orgId = req.body.orgId;
         if (typeof providerId === 'undefined' || providerId.length === 0) {
@@ -2242,10 +2220,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         }
         if (typeof providerName === 'undefined' || providerName.length === 0) {
             res.status(400).send("{Please Enter Name.}");
-            return;
-        }
-        if (typeof providerType === 'undefined' || providerType.length === 0) {
-            res.status(400).send("{Please Enter ProviderType.}");
             return;
         }
 
@@ -2269,7 +2243,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         accessKey: encryptedKeys[0],
                         secretKey: encryptedKeys[1],
                         providerName: providerName,
-                        providerType: providerType,
                         orgId: orgId
                     };
                     var ec2 = new EC2({

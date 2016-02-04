@@ -202,8 +202,7 @@ vmwareProviderSchema.statics.updatevmwareProviderById = function(providerId, pro
             username: providerData.username,
             password: providerData.password,
             host: providerData.host,
-            dc: providerData.tenantid,
-            providerType: providerData.providerType
+            dc: providerData.tenantid
         }
     }, {
         upsert: false

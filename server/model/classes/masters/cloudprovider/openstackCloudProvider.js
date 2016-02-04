@@ -259,7 +259,6 @@ openstackProviderSchema.statics.updateopenstackProviderById = function(providerI
             host: providerData.host,
             tenantid: providerData.tenantid,
             tenantname: providerData.tenantname,
-            providerType: providerData.providerType,
             keyname: providerData.keyname,
             serviceendpoints: {
                 compute: providerData.serviceendpoints.compute,

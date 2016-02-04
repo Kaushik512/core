@@ -249,9 +249,8 @@
       </div>
    </div>
 </div>
-
-<!--row ends here-->
-<!--Popup for selecting a cloud provider before proceeding-->
+    <!--row ends here-->
+    <!--Popup for selecting a cloud provider before proceeding-->
 <script type="text/javascript" src="js/jquery.form.js"></script>
 <script>
 
@@ -430,6 +429,7 @@ function checkForKeyPair(e) {
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 $('.modal-dialog').find('.close').trigger('click');
                 bootbox.alert(XMLHttpRequest.responseText);
+                $('#btnsubmit').attr('disabled','disabled');
                 $region.parents('.addNewRegion').find('select.keyvalue').html('<option value=""> Select Keypair</option>').val("").select2();
                 removeLoader();
             }
@@ -679,10 +679,10 @@ $(document).ready(function() {
         $('#openstackinstancepem').attr('cat-validation-openstack','required');
     } else {
         $('.widget-header').find('h4.widget-margin').html('Edit Provider');
-        $('#providertype').attr('disabled','disabled');
+        //$('#providertype').attr('disabled','disabled');
         $('#openstackinstancepem').removeAttr('cat-validation-openstack','required');
         $('#myForm54').attr('action', '/aws/providers/' + UtilityMethods.getIdFromURL() + '/update');
-
+        $('#providertype').attr('disabled','disabled');
         $.ajax({
             method: "GET",
             url: "/aws/providers/" + UtilityMethods.getIdFromURL(),
