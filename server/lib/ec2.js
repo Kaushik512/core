@@ -44,7 +44,7 @@ var EC2 = function(awsSettings) {
     var that = this;
 
     this.describeInstances = function(instanceIds, callback) {
-        logger.debug('fetching instances for ==>',instanceIds);
+        //logger.debug('fetching instances for ==>',instanceIds);
         var options = {};
 
         if (instanceIds && instanceIds.length) {
