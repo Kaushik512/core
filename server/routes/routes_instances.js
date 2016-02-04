@@ -3111,10 +3111,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         }
                         res.send(logString);
                     } else {
-                        res.send(logString);
+                        res.send("No logs available.");
                     }
 
                 });
+            }else{
+            	res.send("No logs available.");
             }
         });
     });
