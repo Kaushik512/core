@@ -80,10 +80,10 @@ function getAllPipelineViewData() {
                 var envUniqueText = dataPipeline[0].envSequence[j];
                 arrSequence.push(envUniqueText);
             }
-            if(arrSequence[dataPipeline[0].envSequence.length] && arrEnv[dataPipeline[0].envId.length]){
-                creationPipelineTableView(projectId,arrEnv,arrPresentEnvSeq);
+            if (arrSequence[dataPipeline[0].envSequence.length] && arrEnv[dataPipeline[0].envId.length]) {
+                creationPipelineTableView(projectId, arrEnv, arrPresentEnvSeq);
             }
-            
+
         } else {
             $.get('/d4dMasters/project/' + projectId, function(dataforenvName) {
                 var individualenvName = dataforenvName[0].environmentname;
@@ -109,8 +109,8 @@ function getAllPipelineViewData() {
 
                 console.log('array sequence');
                 console.log(arrSequence);
-                if(arrSequence[individualenvName.length]){
-                    creationPipelineTableView(projectId,arrEnv,arrPresentEnvSeq);
+                if (arrSequence[individualenvName.length]) {
+                    creationPipelineTableView(projectId, arrEnv, arrPresentEnvSeq);
                 }
 
             }).fail(function() {});
@@ -118,7 +118,7 @@ function getAllPipelineViewData() {
     }).fail(function() {});
 }
 
-function creationPipelineTableView(projectId,arrEnv,arrSequence){
+function creationPipelineTableView(projectId, arrEnv, arrSequence) {
     //alert("I am in pipeline Tableview");
     console.log(arrEnv);
     var $tableClone = $('.tableClone').clone();
@@ -127,9 +127,10 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
     $tableClone.DataTable({
         columns: arrEnv,
         "bSort": false,
-        "aoColumnDefs": [
-          { 'bSortable': true, 'aTargets': [ 1 ] }
-        ],
+        "aoColumnDefs": [{
+            'bSortable': true,
+            'aTargets': [1]
+        }],
         "bAutoWidth": false,
         "bProcessing": true,
         "bDeferRender": true,
@@ -143,44 +144,43 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
     $.get('/app/deploy/project/' + projectId + '/list', function(deployData) {
 
         var sorteddeployData = deployData;
-        cmp = function(x, y){
-            return x > y ? 1 : x < y ? -1 : 0; 
+        cmp = function(x, y) {
+            return x > y ? 1 : x < y ? -1 : 0;
         };
 
         //sort name ascending then id descending
-        deployData.sort(function(a, b){
+        deployData.sort(function(a, b) {
             //note the minus before -cmp, for descending order
-            return cmp( 
-                [cmp(a.applicationName, b.applicationName), -cmp(a.applicationVersion, b.applicationVersion)], 
-                [cmp(b.applicationName, a.applicationName), -cmp(b.applicationVersion, a.applicationVersion)]
+            return cmp(
+                [cmp(a.applicationName, b.applicationName), -cmp(a.applicationVersion, b.applicationVersion)], [cmp(b.applicationName, a.applicationName), -cmp(b.applicationVersion, a.applicationVersion)]
             );
         });
         sorteddeployData.forEach(function(appDeployDataObj) {
-            function createMainCard(applicationName,versionNumber){
+            function createMainCard(applicationName, versionNumber) {
                 var tempStr = '';
-                       
+
                 var $mainCardTemplate = $('.mainCardTemplate');
 
                 var $mainCard = $mainCardTemplate.clone(true);
                 $mainCard.css({
                     display: 'inline-flex'
                 });
-                
+
                 $mainCard.find('.applicationMainIP').html(applicationName);
                 $mainCard.find('.versionMain').html(versionNumber);
 
-                if(applicationName === "catalyst" ||applicationName === "Catalyst"){
-                    $mainCard.find('.mainImageHeight').attr("src","img/rsz_logo.png");    
-                }else{
-                    $mainCard.find('.mainImageHeight').attr("src","img/petclinic.png");
+                if (applicationName === "catalyst" || applicationName === "Catalyst") {
+                    $mainCard.find('.mainImageHeight').attr("src", "img/rsz_logo.png");
+                } else {
+                    $mainCard.find('.mainImageHeight').attr("src", "img/petclinic.png");
                 }
-                
+
                 var $mainCardtemplateStr = $mainCard.prop('outerHTML');
                 tempStr = tempStr + $mainCardtemplateStr;
                 return tempStr;
             }
 
-            function createStatusPresentCard(appDeployDataObj,indexofData){
+            function createStatusPresentCard(appDeployDataObj, indexofData) {
                 var tempStr = '';
                 var $childCardTemplate = $('.childCardTemplate');
                 var $childPresentCard = $childCardTemplate.clone(true);
@@ -193,12 +193,12 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
                 $childPresentCard.find('.lastapplicationDeploy').html(appDeployDataObj.applicationLastDeploy[indexofData]);
                 var appStatusCard = appDeployDataObj.applicationStatus[indexofData].toUpperCase();
                 //alert(appStatusCard);
-                if(appStatusCard === "SUCCESSFUL" || appStatusCard === "SUCCESSFULL" || appStatusCard === "SUCCESS"){
-                    $childPresentCard.find('.imgHeight').attr("src","img/aws_logo_started.png");
+                if (appStatusCard === "SUCCESSFUL" || appStatusCard === "SUCCESSFULL" || appStatusCard === "SUCCESS") {
+                    $childPresentCard.find('.imgHeight').attr("src", "img/aws_logo_started.png");
                     $childPresentCard.find('.applicationChildDetails').removeClass('btn-primary btn-danger').addClass('btn-success');
 
-                }else{
-                    $childPresentCard.find('.imgHeight').attr("src","img/aws_logo_stopped.png");
+                } else {
+                    $childPresentCard.find('.imgHeight').attr("src", "img/aws_logo_stopped.png");
                     $childPresentCard.find('.applicationChildDetails').removeClass('btn-primary btn-success').addClass('btn-danger');
                 }
                 $childPresentCard.find('.applicationEnvNamePipelineView').html(appDeployDataObj.envId[indexofData]);
@@ -208,8 +208,8 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
                 //finalArray.push($childPresentCard);
             };
 
-            
-            function sortAscending(data_A, data_B){
+
+            function sortAscending(data_A, data_B) {
                 data_A = convertToDateObj(data_A);
                 data_B = convertToDateObj(data_B);
                 return (data_B - data_A);
@@ -218,22 +218,22 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
             var applicationName = appDeployDataObj.applicationName;
             var versionNumber = appDeployDataObj.applicationVersion;
             var applicationEnvList = appDeployDataObj.envId;
-            
-            
+
+
             var sortedappdataList = [];
             var unsortedappdataList = [];
             var indexedList = [];
 
-            for(var j=0;j<applicationEnvList.length;j++){
+            for (var j = 0; j < applicationEnvList.length; j++) {
                 sortedappdataList.push(appDeployDataObj.applicationLastDeploy[j]);
                 unsortedappdataList.push(appDeployDataObj.applicationLastDeploy[j]);
             }
             sortedappdataList.sort(sortAscending);
-            
-            for(var m=0; m<unsortedappdataList.length;m++){
+
+            for (var m = 0; m < unsortedappdataList.length; m++) {
                 indexedList.push(jQuery.inArray(unsortedappdataList[m], sortedappdataList));
             }
-            
+
             var applicationInstanceName = [];
             var applicationNodeIP = [];
             var applicationLastDeploy = [];
@@ -242,16 +242,16 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
             var hostName = [];
             var envId = [];
             var appLogs = [];
-            for(var n=0;n<indexedList.length;n++){
+            for (var n = 0; n < indexedList.length; n++) {
                 var appLastDeployObj = convertToDateObj(appDeployDataObj.applicationLastDeploy[n]);
                 var appDeployLastTime = convertToDateCustom(appLastDeployObj);
 
                 applicationInstanceName[indexedList[n]] = appDeployDataObj.applicationInstanceName[n];
-                applicationNodeIP[indexedList[n]]=appDeployDataObj.applicationNodeIP[n];
+                applicationNodeIP[indexedList[n]] = appDeployDataObj.applicationNodeIP[n];
                 applicationLastDeploy[indexedList[n]] = appDeployLastTime;
                 applicationStatus[indexedList[n]] = appDeployDataObj.applicationStatus[n];
                 containerId[indexedList[n]] = appDeployDataObj.containerId[n];
-                hostName[indexedList[n]]=appDeployDataObj.hostName[n];
+                hostName[indexedList[n]] = appDeployDataObj.hostName[n];
                 envId[indexedList[n]] = appDeployDataObj.envId[n];
                 appLogs[indexedList[n]] = appDeployDataObj.appLogs[n];
             }
@@ -269,21 +269,19 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
                 "envId": envId,
                 "appLogs": appLogs
             };
-            
+
             var presentDataDetailsObj = {};
 
             var appSortedEnvList = sortedappDeployDataObj.envId;
             for (var j = 0; j < arrSequence.length; j++) {
                 //application main card
-                
-                if(j==0 && arrSequence[0]==""){
-                    finalArray.push(createMainCard(applicationName,versionNumber));
-                }
 
-                else if($.inArray(arrSequence[j],appSortedEnvList)!=-1){
-                    var index = $.inArray(arrSequence[j],appSortedEnvList);
-                    createStatusPresentCard(sortedappDeployDataObj,index);
-                    var specificEnvArr =[];
+                if (j == 0 && arrSequence[0] == "") {
+                    finalArray.push(createMainCard(applicationName, versionNumber));
+                } else if ($.inArray(arrSequence[j], appSortedEnvList) != -1) {
+                    var index = $.inArray(arrSequence[j], appSortedEnvList);
+                    createStatusPresentCard(sortedappDeployDataObj, index);
+                    var specificEnvArr = [];
                     var specificEnvobj = {
                         "applicationInstanceName": sortedappDeployDataObj.applicationInstanceName[index],
                         "applicationNodeIP": sortedappDeployDataObj.applicationNodeIP[index],
@@ -295,19 +293,19 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
                         "appLogs": sortedappDeployDataObj.appLogs[index]
                     };
                     specificEnvArr.push(specificEnvobj);
-                    
+
                     presentDataDetailsObj[arrSequence[j]] = specificEnvArr;
 
 
-                    sortedappDeployDataObj.applicationInstanceName.splice(index,1);
-                    sortedappDeployDataObj.applicationNodeIP.splice(index,1);
-                    sortedappDeployDataObj.applicationLastDeploy.splice(index,1);
-                    sortedappDeployDataObj.applicationStatus.splice(index,1);
-                    sortedappDeployDataObj.containerId.splice(index,1);
-                    sortedappDeployDataObj.hostName.splice(index,1);
-                    sortedappDeployDataObj.envId.splice(index,1);
-                    sortedappDeployDataObj.appLogs.splice(index,1);
-                }else{
+                    sortedappDeployDataObj.applicationInstanceName.splice(index, 1);
+                    sortedappDeployDataObj.applicationNodeIP.splice(index, 1);
+                    sortedappDeployDataObj.applicationLastDeploy.splice(index, 1);
+                    sortedappDeployDataObj.applicationStatus.splice(index, 1);
+                    sortedappDeployDataObj.containerId.splice(index, 1);
+                    sortedappDeployDataObj.hostName.splice(index, 1);
+                    sortedappDeployDataObj.envId.splice(index, 1);
+                    sortedappDeployDataObj.appLogs.splice(index, 1);
+                } else {
                     //application status absent card
                     var tempStr = '';
                     var $childCardTemplate = $('.childCardTemplate');
@@ -317,55 +315,55 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
                     });
                     $childPresentCard.find('.applicationChildIP').html('');
                     $childPresentCard.find('.lastDeploySpan').html('');
-                    $childPresentCard.find('.imgHeight').attr("src","img/rsz_inactive.png");
+                    $childPresentCard.find('.imgHeight').attr("src", "img/rsz_inactive.png");
                     $childPresentCard.find('.applicationChildDetails').removeClass('btn-primary').addClass('btn-grey');
                     $childPresentCard.find('.lastapplicationDeploy').html('');
                     $childPresentCard.children().css({
                         'opacity': '0.5',
                         'pointer-events': 'none'
                     });
-                    
+
                     var $childCardtemplateStr = $childPresentCard.prop('outerHTML');
                     tempStr = tempStr + $childCardtemplateStr;
                     finalArray.push(tempStr);
-                } 
+                }
             }
             var appLastDeployArr = sortedappDeployDataObj.applicationLastDeploy;
 
             for (var key in presentDataDetailsObj) {
-              if (presentDataDetailsObj.hasOwnProperty(key)) {
-                for(var p=0; p<appLastDeployArr.length;p++){
-                    if(key == sortedappDeployDataObj.envId[p]){
-                        
-                        var specificEnvPresentobj = {
-                            "applicationInstanceName": sortedappDeployDataObj.applicationInstanceName[p],
-                            "applicationNodeIP": sortedappDeployDataObj.applicationNodeIP[p],
-                            "applicationLastDeploy": sortedappDeployDataObj.applicationLastDeploy[p],
-                            "applicationStatus": sortedappDeployDataObj.applicationStatus[p],
-                            "containerId": sortedappDeployDataObj.containerId[p],
-                            "hostName": sortedappDeployDataObj.hostName[p],
-                            "envId": sortedappDeployDataObj.envId[p],
-                            "appLogs": sortedappDeployDataObj.appLogs[p]
-                        };
-                        presentDataDetailsObj[key].push(specificEnvPresentobj);
+                if (presentDataDetailsObj.hasOwnProperty(key)) {
+                    for (var p = 0; p < appLastDeployArr.length; p++) {
+                        if (key == sortedappDeployDataObj.envId[p]) {
+
+                            var specificEnvPresentobj = {
+                                "applicationInstanceName": sortedappDeployDataObj.applicationInstanceName[p],
+                                "applicationNodeIP": sortedappDeployDataObj.applicationNodeIP[p],
+                                "applicationLastDeploy": sortedappDeployDataObj.applicationLastDeploy[p],
+                                "applicationStatus": sortedappDeployDataObj.applicationStatus[p],
+                                "containerId": sortedappDeployDataObj.containerId[p],
+                                "hostName": sortedappDeployDataObj.hostName[p],
+                                "envId": sortedappDeployDataObj.envId[p],
+                                "appLogs": sortedappDeployDataObj.appLogs[p]
+                            };
+                            presentDataDetailsObj[key].push(specificEnvPresentobj);
+                        }
                     }
                 }
-              }
             }
             for (var j = 0; j < arrEnv.length; j++) {
-               var finalString = $(finalArray).get(-1);
-               finalArray.pop();
-               var firstSubStr = finalString.lastIndexOf('<span');
-               var lastSubStr = finalString.lastIndexOf('</span>');
+                var finalString = $(finalArray).get(-1);
+                finalArray.pop();
+                var firstSubStr = finalString.lastIndexOf('<span');
+                var lastSubStr = finalString.lastIndexOf('</span>');
 
-               var finalstr = finalString.substring(0,firstSubStr);
-               var superFinalString = finalstr +"</div>";
-               finalArray.push(superFinalString);
+                var finalstr = finalString.substring(0, firstSubStr);
+                var superFinalString = finalstr + "</div>";
+                finalArray.push(superFinalString);
             }
-           var rowIndex = $tableapplicationTest.dataTable().fnAddData(finalArray);
-           var row = $tableapplicationTest.dataTable().fnGetNodes(rowIndex);
-           $(row).data('appNameVer',presentDataDetailsObj);
-        }); 
+            var rowIndex = $tableapplicationTest.dataTable().fnAddData(finalArray);
+            var row = $tableapplicationTest.dataTable().fnGetNodes(rowIndex);
+            $(row).data('appNameVer', presentDataDetailsObj);
+        });
     });
     /*setTimeout(function(){
         var childCardTemplWidth = $('#tableContainer .childCardTemplate').outerWidth();
@@ -374,24 +372,25 @@ function creationPipelineTableView(projectId,arrEnv,arrSequence){
         var actualSetDiff = diff/2;
         $('#tableContainer .childCardTemplate .secondChildSpanTemplate').css('padding-left',actualSetDiff);
     },10000);*/
-    $tableapplicationTbody.on('click','.applicationChildDetails',moreinfoDetailsPipelineViewClickHandler);
+    $tableapplicationTbody.on('click', '.applicationChildDetails', moreinfoDetailsPipelineViewClickHandler);
 }
 
 function moreinfoDetailsPipelineViewClickHandler(e) {
     var $modal = $('#modalDetailsAppDeploy');
-    
+
     var $row = $(this).closest("tr");
     var rowSetDataDetailsObj = $row.data("appNameVer");
     var applicationNamePipelineText = $(this).parents().eq(5).find('.applicationEnvNamePipelineView').html();
     var $envSpecificDataArr = $('#envSpecificDataTable').DataTable();
     for (var key in rowSetDataDetailsObj) {
         if (rowSetDataDetailsObj.hasOwnProperty(key)) {
-            if(key == applicationNamePipelineText){
+            if (key == applicationNamePipelineText) {
                 $envSpecificDataArr.clear();
-                for(var k=0;k<rowSetDataDetailsObj[key].length;k++){
+                for (var k = 0; k < rowSetDataDetailsObj[key].length; k++) {
                     var rowSetDetailsLogs = rowSetDataDetailsObj[key][k].appLogs;
+                    var nodeIp = rowSetDataDetailsObj[key][k].applicationNodeIP;
                     rowSetDetailsLogs = rowSetDetailsLogs.replace(/"/g, '');
-                    var $tdlogs = '<a class="btn btn-primary btn-sm width27borderradius50 appSpecificLogs nonClickwithGrgrayedout" data-logs="'+rowSetDetailsLogs+'"><i class="fa fa-info font-size-11"></i></a>';
+                    var $tdlogs = '<a class="btn btn-primary btn-sm width27borderradius50 appSpecificLogs " data-logs="' + rowSetDetailsLogs + '"  data-nodeIp="' + nodeIp + '"><i class="fa fa-info font-size-11"></i></a>';
                     $envSpecificDataArr.row.add([
                         rowSetDataDetailsObj[key][k].applicationNodeIP,
                         rowSetDataDetailsObj[key][k].applicationLastDeploy,
@@ -402,12 +401,12 @@ function moreinfoDetailsPipelineViewClickHandler(e) {
                 $('#envSpecificDataTable_length').hide();
                 $('#envSpecificDataTable_filter').hide();
             }
-            $envSpecificDataArr.on('click','.appSpecificLogs',appSpecificLogsViewClickHandler);
+            $envSpecificDataArr.on('click', '.appSpecificLogs', appSpecificLogsViewClickHandler);
         }
 
     }
-    
-    function appSpecificLogsViewClickHandler(){
+
+    function appSpecificLogsViewClickHandler() {
         var dataLogs = $(this).attr('data-logs');
         var $modal = $('#modallogsSpecificDetails');
         var datahttp = dataLogs.indexOf("http://");
@@ -416,9 +415,13 @@ function moreinfoDetailsPipelineViewClickHandler(e) {
             window.open(dataLogs, "_blank");
         } else {
             $modal.find('.appLogsSpecific').empty();
-            dataLogs = dataLogs.replace(/,/g, "<br />");
-            $modal.find('.appLogsSpecific').append(dataLogs);
-            $modal.modal('show');
+            var nodeIp = $(this).attr('data-nodeIp');
+            var $modal = $('#modallogsSpecificDetails');
+            var projectId = urlParams.projid;
+            $.get('/instances/' + nodeIp + '/project/' + projectId + '/logs', function(data) {
+                $modal.find('.appLogsSpecific').append(data);
+                $modal.modal('show');
+            });
         }
         return false;
     }
@@ -478,7 +481,7 @@ $('.createAppConfigure').click(function() {
     var $tbody = $tableconfigureapplication.find('tbody').empty();
     var projectId = urlParams.projid;
     $.get('/d4dMasters/project/' + projectId, function(dataforenvName) {
-        $.get('/app/deploy/pipeline/project/' + projectId,function(dataPipeline) {
+        $.get('/app/deploy/pipeline/project/' + projectId, function(dataPipeline) {
             if (dataPipeline.length) {
                 for (var i = 0; i < dataPipeline[0].envId.length; i++) {
                     selectedEnvironments.push(dataPipeline[0].envId[i]);
@@ -488,10 +491,10 @@ $('.createAppConfigure').click(function() {
                 }
                 var individualenvNamePrnt = dataforenvName[0].environmentname;
                 individualenvNamePrnt = individualenvNamePrnt.split(",");
-                
-                console.log("allsequenceEnvironments",allEnvironments);
-                console.log("individualenvNamePrnt",individualenvNamePrnt);
-                for(var x=0;x<individualenvNamePrnt.length;x++){
+
+                console.log("allsequenceEnvironments", allEnvironments);
+                console.log("individualenvNamePrnt", individualenvNamePrnt);
+                for (var x = 0; x < individualenvNamePrnt.length; x++) {
                     if ($.inArray(individualenvNamePrnt[x], allEnvironments) == -1) {
                         allEnvironments.push(individualenvNamePrnt[x]);
                     }
@@ -522,8 +525,7 @@ $('.createAppConfigure').click(function() {
                             row.insertAfter(row.next());
                         }
                     });
-                }
-                else {
+                } else {
                     for (var i = 0; i < allEnvironments.length; i++) {
                         var checked = "";
                         if ($.inArray(allEnvironments[i], selectedEnvironments) > -1) {
@@ -548,7 +550,7 @@ $('.createAppConfigure').click(function() {
                         }
                     });
                 }
-            }else{
+            } else {
                 var individualenvName = dataforenvName[0].environmentname;
                 individualenvName = individualenvName.split(",");
                 for (var i = 0; i < individualenvName.length; i++) {
@@ -575,9 +577,10 @@ $('.createAppConfigure').click(function() {
                     }
                 });
             }
-        });        
+        });
     });
 });
+
 function ConvertTimeformat(format, str, formatStr) {
     var time = str;
     var hours = Number(time.match(/^(\d+)/)[1]);
@@ -601,18 +604,18 @@ function convertToDateObj(strInputDate) {
     var timeStr = strSplit[1];
     var formatStr = strSplit[2];
     var str = ConvertTimeformat("24", timeStr, formatStr);
-    if(dateStr.length == 8){
+    if (dateStr.length == 8) {
         var year = strInputDate.substring(0, 2);
-        year = 20+year;
+        year = 20 + year;
         var month = strInputDate.substring(3, 5);
         month = parseInt(month);
         var day = strInputDate.substring(6, 8);
-    }else if(dateStr.length == 9){
+    } else if (dateStr.length == 9) {
         var year = strInputDate.substring(0, 4);
         var month = strInputDate.substring(5, 6);
         month = parseInt(month);
         var day = strInputDate.substring(7, 9);
-    }else{
+    } else {
         var year = strInputDate.substring(0, 4);
         var month = strInputDate.substring(5, 7);
         month = parseInt(month);
@@ -629,9 +632,10 @@ function convertToDateObj(strInputDate) {
     //alert(dateConverted + ' ==== '+strInputDate);
     return dateConverted;
 }
-function convertToDateCustom(d){
-    var datestring = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +
-    d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2) + ":" + d.getSeconds();
+
+function convertToDateCustom(d) {
+    var datestring = ("0" + d.getDate()).slice(-2) + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" +
+        d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2) + ":" + d.getSeconds();
     return datestring;
 }
 
@@ -665,8 +669,8 @@ $('.appdeployConfigureSaveBtn').click(function() {
         arrPresentEnvSeq.push(envUniqueText);
         configureEnvArray.push(envUniqueText);
     });
-    
-    creationPipelineTableView(projectId,arrEnv,arrPresentEnvSeq);
+
+    creationPipelineTableView(projectId, arrEnv, arrPresentEnvSeq);
     var dataDeployPipeline = {
         "appDeployPipelineData": {
             "loggedInUser": "",
@@ -797,7 +801,7 @@ $nexusServer.change(function(e) {
         $('.containerPortClass').hide();
         resetAllFields();
         var groupId = $('#chooseNexusServer :selected').attr('data-groupId').split(",");
-        for(var g=0; g< groupId.length; g++){
+        for (var g = 0; g < groupId.length; g++) {
             $('#chooseGroupId').append('<option value="' + groupId[g] + '">' + groupId[g] + '</option>');
         }
         getNexusServerRepo($(this).val());
@@ -897,7 +901,7 @@ $chooseRepository.change(function(e) {
         $('#chooseGroupId').append('<option value="">Choose Group ID</option>');
 
         var groupId = $('#chooseNexusServer :selected').attr('data-groupId').split(",");
-        for(var g=0; g< groupId.length; g++){
+        for (var g = 0; g < groupId.length; g++) {
             $('#chooseGroupId').append('<option value="' + groupId[g] + '">' + groupId[g] + '</option>');
         }
         var $repositoryUrl = $('#repositoryUrl');
@@ -924,16 +928,16 @@ $chooseGroupId.change(function(e) {
     var repoName = $('#chooseRepository').find('option:selected').attr('data-repoName');
     var nexusId = $('#chooseNexusServer').val();
     var groupId = $('#chooseGroupId').val();
-    getNexusServerRepoArtifact(nexusId, repoName,groupId);
+    getNexusServerRepoArtifact(nexusId, repoName, groupId);
 });
 
-function getNexusServerRepoArtifact(nexusId, repoName,groupId) {
+function getNexusServerRepoArtifact(nexusId, repoName, groupId) {
     $('.artifactsspinner').css('display', 'inline-block');
     var $chooseArtifacts = $('#chooseArtifacts');
     $chooseArtifacts.empty();
     $('#chooseArtifacts').append('<option value="">Choose Artifacts</option>');
     if (nexusId && repoName) {
-        $.get('/nexus/' + nexusId + '/repositories/' + repoName + '/group/'+groupId+'/artifact', function(artifacts) {
+        $.get('/nexus/' + nexusId + '/repositories/' + repoName + '/group/' + groupId + '/artifact', function(artifacts) {
             $('.artifactsspinner').css('display', 'none');
             if (artifacts.length) {
                 var repoList = [];
@@ -950,7 +954,7 @@ function getNexusServerRepoArtifact(nexusId, repoName,groupId) {
                         uniqueArtifacts.push(checker);
                     }
                 }
-                $( "#chooseArtifacts" ).data( "repoObj", repoList );
+                $("#chooseArtifacts").data("repoObj", repoList);
                 for (var j = 0; j < uniqueArtifacts.length; j++) {
                     $('#chooseArtifacts').append('<option data-groupId="' + uniqueArtifacts[j].groupId + '" value=' + uniqueArtifacts[j].artifactId + '>' + uniqueArtifacts[j].artifactId + '</option>');
                 }
@@ -986,14 +990,14 @@ function getNexusServerRepoArtifactVersions(nexusId, repoName, groupId, artifact
     $chooseVersions.empty();
     $('#chooseVersions').append('<option value="">Choose Versions</option>');
     if (nexusId && repoName && groupId && artifactId) {
-        $.get('/nexus/'+nexusId+'/repositories/'+repoName+'/group/'+groupId+'/artifact/'+artifactId+'/versions',function(data){
+        $.get('/nexus/' + nexusId + '/repositories/' + repoName + '/group/' + groupId + '/artifact/' + artifactId + '/versions', function(data) {
             $('.versionspinner').css('display', 'none');
-            if(data){
+            if (data) {
                 var versions = data.metadata.versioning[0].versions[0].version;
-                    for (var i = 0; i < versions.length; i++) {
-                        $('#chooseVersions').append('<option value=' + versions[i] + '>' + versions[i] + '</option>');
-                    }
-            }else{
+                for (var i = 0; i < versions.length; i++) {
+                    $('#chooseVersions').append('<option value=' + versions[i] + '>' + versions[i] + '</option>');
+                }
+            } else {
                 $('.versionspinner').css('display', 'none');
             }
 
@@ -1043,26 +1047,26 @@ $('.saveNewAppDeploy').on('click', function() {
 });
 
 // Deploy New App for Docker Container
-function deployNewForDocker(){
+function deployNewForDocker() {
     var nexusId = $('#chooseNexusServer').find('option:selected').val();
-    if(!nexusId){
+    if (!nexusId) {
         alert("Please select repository server.");
         return false;
     }
     var repoId = $('#chooseRepository').find('option:selected').val();
-    if(!repoId){
+    if (!repoId) {
         alert("Please select repository.");
         return false;
     }
     var containerId = $('#containerIdInput').val();
     var containerPort = $('#containerPort').val();
 
-    if(!containerPort){
+    if (!containerPort) {
         alert("Please specify port.");
         return false;
     }
     var taskId = $('#chooseJobType').find('option:selected').val();
-    if(!taskId){
+    if (!taskId) {
         alert("Please select job.");
         return false;
     }
@@ -1072,8 +1076,8 @@ function deployNewForDocker(){
     var envId = urlParams.envid;
     var appName = repoId.split("/")[1];
     var upgrade = $('#upgradeValue').val();
-    var nexusData={
-        "nexusData":{
+    var nexusData = {
+        "nexusData": {
             "nexusUrl": "",
             "version": "",
             "containerId": containerId,
@@ -1083,53 +1087,52 @@ function deployNewForDocker(){
         }
     };
 
-    $.get('/d4dMasters/project/'+projectId, function(projData) {
-        if(projData.length){
+    $.get('/d4dMasters/project/' + projectId, function(projData) {
+        if (projData.length) {
             var reqBody = {
                 "appName": appName,
-                "description": appName+" deployed."
+                "description": appName + " deployed."
             };
             $.ajax({
-                url: '/d4dMasters/project/'+projectId+'/appdeploy/appName/update',
+                url: '/d4dMasters/project/' + projectId + '/appdeploy/appName/update',
                 data: JSON.stringify(reqBody),
                 type: 'POST',
                 contentType: "application/json",
-                success: function(data) { 
-                },
+                success: function(data) {},
                 error: function(jqxhr) {
                     //alert("Failed to update update appName in Project.")
                 }
             });
         }
     });
-        $('a[data-executetaskid='+taskId+']').trigger('click',nexusData);
-        $('#modalUpgradeAppDeploy').modal('hide');
-        var $containerIdName = $('#containerIdInput').val('');
+    $('a[data-executetaskid=' + taskId + ']').trigger('click', nexusData);
+    $('#modalUpgradeAppDeploy').modal('hide');
+    var $containerIdName = $('#containerIdInput').val('');
 }
 
-function upgradeOrDeploy(){
+function upgradeOrDeploy() {
     var nexusId = $('#chooseNexusServer').find('option:selected').val();
-    if(!nexusId){
+    if (!nexusId) {
         alert("Please select repository server.");
         return false;
     }
     var repoId = $('#chooseRepository').find('option:selected').val();
-    if(!repoId){
+    if (!repoId) {
         alert("Please select repository.");
         return false;
     }
     var artifactId = $('#chooseArtifacts').find('option:selected').val();
-    if(!artifactId){
+    if (!artifactId) {
         alert("Please select artifact.");
         return false;
     }
     var versionId = $('#chooseVersions').find('option:selected').val();
-    if(!versionId){
+    if (!versionId) {
         alert("Please select version.");
         return false;
     }
     var taskId = $('#chooseJobType').find('option:selected').val();
-    if(!taskId){
+    if (!taskId) {
         alert("Please select job.");
         return false;
     }
@@ -1140,17 +1143,17 @@ function upgradeOrDeploy(){
     var groupId = $('#chooseArtifacts').find('option:selected').attr('data-groupId').replace(/\./g, '/');
     var nexusUrl = $('#chooseNexusServer').find('option:selected').attr('data-nexusUrl');
     var nexusRepoUrl = "";
-    var repoURIObj = $( "#chooseArtifacts" ).data();
-    if(repoURIObj){
-        for(var i=0;i< repoURIObj.repoObj.length;i++){
-            if(artifactId === repoURIObj.repoObj[i].artifactId && versionId === repoURIObj.repoObj[i].version){
+    var repoURIObj = $("#chooseArtifacts").data();
+    if (repoURIObj) {
+        for (var i = 0; i < repoURIObj.repoObj.length; i++) {
+            if (artifactId === repoURIObj.repoObj[i].artifactId && versionId === repoURIObj.repoObj[i].version) {
                 nexusRepoUrl = repoURIObj.repoObj[i].resourceURI;
             }
         }
     }
     var upgrade = $('#upgradeValue').val();
-    var nexusData={
-        "nexusData":{
+    var nexusData = {
+        "nexusData": {
             "nexusUrl": nexusRepoUrl,
             "version": versionId,
             "containerId": "",
@@ -1160,19 +1163,19 @@ function upgradeOrDeploy(){
         }
     };
 
-    $.get('/d4dMasters/project/'+projectId, function(projData) {
-        if(projData.length){
-        var reqBody = {
-            "appName": repoId,
-            "description": repoId+" deployed."
+    $.get('/d4dMasters/project/' + projectId, function(projData) {
+        if (projData.length) {
+            var reqBody = {
+                "appName": repoId,
+                "description": repoId + " deployed."
             };
             $.ajax({
-                url: '/d4dMasters/project/'+projectId+'/appdeploy/appName/update',
+                url: '/d4dMasters/project/' + projectId + '/appdeploy/appName/update',
                 data: JSON.stringify(reqBody),
                 type: 'POST',
                 contentType: "application/json",
-                success: function(data) { 
-        
+                success: function(data) {
+
                 },
                 error: function(jqxhr) {
                     //alert("Failed to update update appName in Project.")
@@ -1180,7 +1183,7 @@ function upgradeOrDeploy(){
             });
         }
     });
-    $('a[data-executetaskid='+taskId+']').trigger('click',nexusData);
+    $('a[data-executetaskid=' + taskId + ']').trigger('click', nexusData);
     $('#modalUpgradeAppDeploy').modal('hide');
     var $containerIdName = $('#containerIdInput').val('');
 }
