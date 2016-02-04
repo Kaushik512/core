@@ -413,6 +413,7 @@ function moreinfoDetailsPipelineViewClickHandler(e) {
         if (datahttp == 0) {
             $modal.find('.appLogsSpecific').empty();
             window.open(dataLogs, "_blank");
+            return false;
         } else {
             $modal.find('.appLogsSpecific').empty();
             var nodeIp = $(this).attr('data-nodeIp');
@@ -421,9 +422,10 @@ function moreinfoDetailsPipelineViewClickHandler(e) {
             $.get('/instances/' + nodeIp + '/project/' + projectId + '/logs', function(data) {
                 $modal.find('.appLogsSpecific').append(data);
                 $modal.modal('show');
+                return false;
             });
         }
-        return false;
+        
     }
     $modal.modal('show');
 }
