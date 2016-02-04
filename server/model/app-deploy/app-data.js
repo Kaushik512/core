@@ -35,7 +35,8 @@ var AppDataSchema = new Schema({
     version: String,
     projectId: String,
     envId: String,
-    taskId: String
+    taskId: String,
+    status: String
 });
 
 
