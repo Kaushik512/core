@@ -425,6 +425,7 @@ function moreinfoDetailsPipelineViewClickHandler(e) {
                 return false;
             });
         }
+        e.preventDefault();
         
     }
     $modal.modal('show');
