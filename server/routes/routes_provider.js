@@ -33,6 +33,7 @@ var masterUtil = require('../lib/utils/masterUtil.js');
 var usersDao = require('../model/users.js');
 var configmgmtDao = require('../model/d4dmasters/configmgmt.js');
 var Cryptography = require('../lib/utils/cryptography');
+var rc = require('node-rest-client').Client;
 var appConfig = require('_pr/config');
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
     // Return AWS Provider respect to id.
@@ -2916,4 +2917,22 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             res.send(nodeList);
         });
     });
+   
+      app.get('/aws/providers/:id/dashboard',function(req,res){
+              var Client = new rc();
+              var id = req.params.id;
+              Client.get('http://127.0.0.1:3000/aws/providers/'+id,
+                       function(body,response)
+                       {
+                          console.log(body);
+                          var  access = body.accessKey;
+                          var secret = body.secretKey;
+                          EC2.getcost(access,secret,function(err,cost){
+                                           res.json(cost);
+                                        });
+                              });
+                });
+
+
+    
 }
