@@ -97,9 +97,9 @@
         <div style="color:white;float:left">
             <p style="padding-top: 20px; padding-left: 10px;font-size:12px">© 2015 Relevance Lab. All rights reserved</p>
         </div>
-        <div style="color:white;float:right;margin-right:10px;font-size:12px" class="versionJenkins">
+        <div style="color:white;float:right;margin-right:10px;font-size:12px" class="versionApp">
             <p style="padding-top: 20px; padding-left: 10px;">Version :
-                <span class="jenkinVersion"></span>
+                <span class="appVersion"></span>
             </p>
         </div>
     </footer>
@@ -126,13 +126,11 @@
         $('#loginBtn').click(function() {
             localStorage.clear();
         });
-        $.get('/jenkins/version', function(data) {
+        $.get('/applications/latest/version', function(data) {
             if (typeof data.version != "undefined") {
-            	//alert(data.version);
-                //data = JSON.parse(data);
-                $(".jenkinVersion").append(data.version);
+                $(".appVersion").append(data.version);
             }else{
-            	$(".versionJenkins").hide();
+            	$(".versionApp").hide();
             }
         });
     });

@@ -21,8 +21,30 @@ limitations under the License.
 
 var Application = require('../model/classes/application/application');
 var logger = require('_pr/logger')(module);
+var fs = require('fs');
+var currentDirectory = __dirname;
 
 module.exports.setRoutes = function(app, sessionVerification) {
+
+    // Returning deployed app version
+    app.get('/applications/latest/version', function(req, res) {
+        var appVersion;
+        try {
+            appVersion = fs.readFileSync(currentDirectory + '/../../version.json', {
+                'encoding': 'utf8'
+            });
+
+            appVersion = JSON.parse(appVersion);
+
+        } catch (err) {
+            logger.error(err);
+            res.send({});
+            return;
+        }
+        res.send(appVersion);
+        return;
+    });
+    
     app.all('/applications/*', sessionVerification);
 
     app.get('/applications/:applicationId', function(req, res) {

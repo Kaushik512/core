@@ -37,163 +37,179 @@ var VmwareBlueprint = require('./blueprint-types/instance-blueprint/vmware-bluep
 
 var CloudFormationBlueprint = require('./blueprint-types/cloud-formation-blueprint/cloud-formation-blueprint');
 var ARMTemplateBlueprint = require('./blueprint-types/arm-template-blueprint/arm-template-blueprint');
+var utils = require('../classes/utils/utils.js');
+var nexus = require('_pr/lib/nexus.js');
+var masterUtil = require('_pr/lib/utils/masterUtil.js');
 
 
 
 var BLUEPRINT_TYPE = {
-	DOCKER: 'docker',
-	AWS_CLOUDFORMATION: 'aws_cf',
-	INSTANCE_LAUNCH: "instance_launch",
-	OPENSTACK_LAUNCH: "openstack_launch",
-	HPPUBLICCLOUD_LAUNCH: "hppubliccloud_launch",
-	AZURE_LAUNCH: "azure_launch",
-	VMWARE_LAUNCH: "vmware_launch",
-	AZURE_ARM_TEMPLATE: "azure_arm"
+    DOCKER: 'docker',
+    AWS_CLOUDFORMATION: 'aws_cf',
+    INSTANCE_LAUNCH: "instance_launch",
+    OPENSTACK_LAUNCH: "openstack_launch",
+    HPPUBLICCLOUD_LAUNCH: "hppubliccloud_launch",
+    AZURE_LAUNCH: "azure_launch",
+    VMWARE_LAUNCH: "vmware_launch",
+    AZURE_ARM_TEMPLATE: "azure_arm"
 };
 
 var Schema = mongoose.Schema;
 
 var BlueprintSchema = new Schema({
-	orgId: {
-		type: String,
-		required: true,
-		trim: true,
-		validate: schemaValidator.orgIdValidator
-	},
-	bgId: {
-		type: String,
-		required: true,
-		trim: true,
-		validate: schemaValidator.bgIdValidator
-	},
-	projectId: {
-		type: String,
-		required: true,
-		trim: true,
-		validate: schemaValidator.projIdValidator
-	},
-	name: {
-		type: String,
-		required: true,
-		trim: true,
-		validate: schemaValidator.blueprintNameValidator
-	},
-	blueprintType: {
-		type: String,
-		required: true,
-		trim: true
-	},
-	iconpath: {
-		type: String,
-		trim: true
-	},
-	appUrls: [{
-		name: String,
-		url: String
-	}],
-	templateId: {
-		type: String,
-		required: true,
-		trim: true
-	},
-	users: [{
-		type: String,
-		required: true,
-		trim: true,
-		validate: schemaValidator.catalystUsernameValidator
-	}],
-	templateType: {
-		type: String,
-		required: true,
-		trim: true
-	},
-	blueprintConfig: Schema.Types.Mixed
+    orgId: {
+        type: String,
+        required: true,
+        trim: true,
+        validate: schemaValidator.orgIdValidator
+    },
+    bgId: {
+        type: String,
+        required: true,
+        trim: true,
+        validate: schemaValidator.bgIdValidator
+    },
+    projectId: {
+        type: String,
+        required: true,
+        trim: true,
+        validate: schemaValidator.projIdValidator
+    },
+    name: {
+        type: String,
+        required: true,
+        trim: true,
+        validate: schemaValidator.blueprintNameValidator
+    },
+    blueprintType: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    iconpath: {
+        type: String,
+        trim: true
+    },
+    appUrls: [{
+        name: String,
+        url: String
+    }],
+    templateId: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    users: [{
+        type: String,
+        required: true,
+        trim: true,
+        validate: schemaValidator.catalystUsernameValidator
+    }],
+    templateType: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    nexus: {
+        repoId: String,
+        url: String,
+        version: String,
+        repoName: String,
+        groupId: String,
+        artifactId: String
+    },
+    docker: {
+        image: String,
+        containerId: String,
+        containerPort: String
+    },
+    blueprintConfig: Schema.Types.Mixed
 });
 
 function getBlueprintConfigType(blueprint) {
-	var BlueprintConfigType;
-	if ((blueprint.blueprintType === BLUEPRINT_TYPE.INSTANCE_LAUNCH) && blueprint.blueprintConfig) {
-		BlueprintConfigType = InstanceBlueprint;
-	} else if ((blueprint.blueprintType === BLUEPRINT_TYPE.DOCKER) && blueprint.blueprintConfig) {
-		BlueprintConfigType = DockerBlueprint;
-	} else if ((blueprint.blueprintType === BLUEPRINT_TYPE.AWS_CLOUDFORMATION) && blueprint.blueprintConfig) {
-		BlueprintConfigType = CloudFormationBlueprint;
-	} else if ((blueprint.blueprintType === BLUEPRINT_TYPE.AZURE_ARM_TEMPLATE) && blueprint.blueprintConfig) {
-		BlueprintConfigType = ARMTemplateBlueprint;
-	} else if ((blueprint.blueprintType === BLUEPRINT_TYPE.OPENSTACK_LAUNCH || blueprint.blueprintType === BLUEPRINT_TYPE.HPPUBLICCLOUD_LAUNCH) && blueprint.blueprintConfig) {
-		BlueprintConfigType = OpenstackBlueprint;
-	} else if ((blueprint.blueprintType === BLUEPRINT_TYPE.AZURE_LAUNCH) && blueprint.blueprintConfig) {
-		BlueprintConfigType = AzureBlueprint;
-	} else if ((blueprint.blueprintType === BLUEPRINT_TYPE.VMWARE_LAUNCH) && blueprint.blueprintConfig) {
-		logger.debug('this is test');
-		BlueprintConfigType = VmwareBlueprint;
-	} else {
-		return;
-	}
-	var blueprintConfigType = new BlueprintConfigType(blueprint.blueprintConfig);
-	return blueprintConfigType;
+    var BlueprintConfigType;
+    if ((blueprint.blueprintType === BLUEPRINT_TYPE.INSTANCE_LAUNCH) && blueprint.blueprintConfig) {
+        BlueprintConfigType = InstanceBlueprint;
+    } else if ((blueprint.blueprintType === BLUEPRINT_TYPE.DOCKER) && blueprint.blueprintConfig) {
+        BlueprintConfigType = DockerBlueprint;
+    } else if ((blueprint.blueprintType === BLUEPRINT_TYPE.AWS_CLOUDFORMATION) && blueprint.blueprintConfig) {
+        BlueprintConfigType = CloudFormationBlueprint;
+    } else if ((blueprint.blueprintType === BLUEPRINT_TYPE.AZURE_ARM_TEMPLATE) && blueprint.blueprintConfig) {
+        BlueprintConfigType = ARMTemplateBlueprint;
+    } else if ((blueprint.blueprintType === BLUEPRINT_TYPE.OPENSTACK_LAUNCH || blueprint.blueprintType === BLUEPRINT_TYPE.HPPUBLICCLOUD_LAUNCH) && blueprint.blueprintConfig) {
+        BlueprintConfigType = OpenstackBlueprint;
+    } else if ((blueprint.blueprintType === BLUEPRINT_TYPE.AZURE_LAUNCH) && blueprint.blueprintConfig) {
+        BlueprintConfigType = AzureBlueprint;
+    } else if ((blueprint.blueprintType === BLUEPRINT_TYPE.VMWARE_LAUNCH) && blueprint.blueprintConfig) {
+        logger.debug('this is test');
+        BlueprintConfigType = VmwareBlueprint;
+    } else {
+        return;
+    }
+    var blueprintConfigType = new BlueprintConfigType(blueprint.blueprintConfig);
+    return blueprintConfigType;
 }
 
 // instance methods
 BlueprintSchema.methods.update = function(updateData, callback) {
-	var blueprintConfigType = getBlueprintConfigType(this);
-	if (!blueprintConfigType) {
-		process.nextTick(function() {
-			callback({
-				message: "Invalid Blueprint Type"
-			}, null);
-		});
-	}
-	blueprintConfigType.update(updateData);
-	this.blueprintConfig = blueprintConfigType;
-	this.save(function(err, updatedBlueprint) {
-		if (err) {
-			callback(err, null);
-			return;
-		}
-		callback(null, updatedBlueprint);
-	});
+    var blueprintConfigType = getBlueprintConfigType(this);
+    if (!blueprintConfigType) {
+        process.nextTick(function() {
+            callback({
+                message: "Invalid Blueprint Type"
+            }, null);
+        });
+    }
+    blueprintConfigType.update(updateData);
+    this.blueprintConfig = blueprintConfigType;
+    this.save(function(err, updatedBlueprint) {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        callback(null, updatedBlueprint);
+    });
 };
 
 BlueprintSchema.methods.getVersionData = function(ver) {
-	var blueprintConfigType = getBlueprintConfigType(this);
-	if (!blueprintConfigType) {
-		return null;
-	}
+    var blueprintConfigType = getBlueprintConfigType(this);
+    if (!blueprintConfigType) {
+        return null;
+    }
 
-	return blueprintConfigType.getVersionData(ver);
+    return blueprintConfigType.getVersionData(ver);
 };
 
 BlueprintSchema.methods.getLatestVersion = function() {
-	var blueprintConfigType = getBlueprintConfigType(this);
-	if (!blueprintConfigType) {
-		return null;
-	}
+    var blueprintConfigType = getBlueprintConfigType(this);
+    if (!blueprintConfigType) {
+        return null;
+    }
 
-	return blueprintConfigType.getLatestVersion();
+    return blueprintConfigType.getLatestVersion();
 };
 
 BlueprintSchema.methods.getInfraManagerData = function() {
-	var blueprintConfigType = getBlueprintConfigType(this);
-	if (!blueprintConfigType) {
-		return null;
-	}
+    var blueprintConfigType = getBlueprintConfigType(this);
+    if (!blueprintConfigType) {
+        return null;
+    }
 
-	return blueprintConfigType.getInfraManagerData();
+    return blueprintConfigType.getInfraManagerData();
 }
 
 BlueprintSchema.methods.getCloudProviderData = function() {
-	var blueprintConfigType = getBlueprintConfigType(this);
-	if (!blueprintConfigType) {
-		return null;
-	}
+    var blueprintConfigType = getBlueprintConfigType(this);
+    if (!blueprintConfigType) {
+        return null;
+    }
 
-	return blueprintConfigType.getCloudProviderData();
+    return blueprintConfigType.getCloudProviderData();
 }
 
 BlueprintSchema.methods.launch = function(opts, callback) {
-	var infraManager = this.getInfraManagerData();
-	var self = this;
+    var infraManager = this.getInfraManagerData();
+    var self = this;
     configmgmtDao.getEnvNameFromEnvId(opts.envId, function(err, envName) {
 		if (err) {
 			callback({
@@ -300,123 +316,300 @@ BlueprintSchema.methods.launch = function(opts, callback) {
 
 		});
 	});
-
 };
 
 // static methods
 BlueprintSchema.statics.createNew = function(blueprintData, callback) {
-	logger.debug('blueprintData.cloudFormationData ==>', blueprintData.cloudFormationData);
+    logger.debug('blueprintData.cloudFormationData ==>', blueprintData.cloudFormationData);
 
-	var blueprintConfig, blueprintType;
-	if ((blueprintData.blueprintType === BLUEPRINT_TYPE.INSTANCE_LAUNCH) && blueprintData.instanceData) {
-		blueprintType = BLUEPRINT_TYPE.INSTANCE_LAUNCH;
-		blueprintConfig = InstanceBlueprint.createNew(blueprintData.instanceData);
-	} else if ((blueprintData.blueprintType === BLUEPRINT_TYPE.DOCKER) && blueprintData.dockerData) {
-		blueprintType = BLUEPRINT_TYPE.DOCKER;
-		blueprintConfig = DockerBlueprint.createNew(blueprintData.dockerData);
-	} else if ((blueprintData.blueprintType === BLUEPRINT_TYPE.AWS_CLOUDFORMATION) && blueprintData.cloudFormationData) {
-		blueprintType = BLUEPRINT_TYPE.AWS_CLOUDFORMATION;
-		blueprintConfig = CloudFormationBlueprint.createNew(blueprintData.cloudFormationData);
-	} else if ((blueprintData.blueprintType === BLUEPRINT_TYPE.AZURE_ARM_TEMPLATE) && blueprintData.armTemplateData) {
-		blueprintType = BLUEPRINT_TYPE.AZURE_ARM_TEMPLATE;
-		blueprintConfig = ARMTemplateBlueprint.createNew(blueprintData.armTemplateData);
-	} else if ((blueprintData.blueprintType === BLUEPRINT_TYPE.OPENSTACK_LAUNCH) && blueprintData.instanceData) {
-		blueprintType = BLUEPRINT_TYPE.OPENSTACK_LAUNCH;
-		logger.debug('blueprintData openstack instacedata ==>', blueprintData.instanceData);
-		blueprintConfig = OpenstackBlueprint.createNew(blueprintData.instanceData);
-	} else if ((blueprintData.blueprintType === BLUEPRINT_TYPE.HPPUBLICCLOUD_LAUNCH) && blueprintData.instanceData) {
-		blueprintType = BLUEPRINT_TYPE.HPPUBLICCLOUD_LAUNCH;
-		logger.debug('blueprintData openstack instacedata ==>', blueprintData.instanceData);
-		blueprintConfig = OpenstackBlueprint.createNew(blueprintData.instanceData);
-	} else if ((blueprintData.blueprintType === BLUEPRINT_TYPE.AZURE_LAUNCH) && blueprintData.instanceData) {
-		blueprintType = BLUEPRINT_TYPE.AZURE_LAUNCH;
-		logger.debug('blueprintData azure instacedata ==>', blueprintData.instanceData);
-		blueprintConfig = AzureBlueprint.createNew(blueprintData.instanceData);
-		blueprintConfig.cloudProviderData = AzureBlueprint.createNew(blueprintData.instanceData);
-	} else if ((blueprintData.blueprintType === BLUEPRINT_TYPE.VMWARE_LAUNCH) && blueprintData.instanceData) {
-		blueprintType = BLUEPRINT_TYPE.VMWARE_LAUNCH;
-		logger.debug('blueprintData vmware instacedata ==>', blueprintData.instanceData);
-		blueprintConfig = VmwareBlueprint.createNew(blueprintData.instanceData);
+    var blueprintConfig, blueprintType;
+    if ((blueprintData.blueprintType === BLUEPRINT_TYPE.INSTANCE_LAUNCH) && blueprintData.instanceData) {
+        blueprintType = BLUEPRINT_TYPE.INSTANCE_LAUNCH;
+        blueprintConfig = InstanceBlueprint.createNew(blueprintData.instanceData);
+    } else if ((blueprintData.blueprintType === BLUEPRINT_TYPE.DOCKER) && blueprintData.dockerData) {
+        blueprintType = BLUEPRINT_TYPE.DOCKER;
+        blueprintConfig = DockerBlueprint.createNew(blueprintData.dockerData);
+    } else if ((blueprintData.blueprintType === BLUEPRINT_TYPE.AWS_CLOUDFORMATION) && blueprintData.cloudFormationData) {
+        blueprintType = BLUEPRINT_TYPE.AWS_CLOUDFORMATION;
+        blueprintConfig = CloudFormationBlueprint.createNew(blueprintData.cloudFormationData);
+    } else if ((blueprintData.blueprintType === BLUEPRINT_TYPE.AZURE_ARM_TEMPLATE) && blueprintData.armTemplateData) {
+        blueprintType = BLUEPRINT_TYPE.AZURE_ARM_TEMPLATE;
+        blueprintConfig = ARMTemplateBlueprint.createNew(blueprintData.armTemplateData);
+    } else if ((blueprintData.blueprintType === BLUEPRINT_TYPE.OPENSTACK_LAUNCH) && blueprintData.instanceData) {
+        blueprintType = BLUEPRINT_TYPE.OPENSTACK_LAUNCH;
+        logger.debug('blueprintData openstack instacedata ==>', blueprintData.instanceData);
+        blueprintConfig = OpenstackBlueprint.createNew(blueprintData.instanceData);
+    } else if ((blueprintData.blueprintType === BLUEPRINT_TYPE.HPPUBLICCLOUD_LAUNCH) && blueprintData.instanceData) {
+        blueprintType = BLUEPRINT_TYPE.HPPUBLICCLOUD_LAUNCH;
+        logger.debug('blueprintData openstack instacedata ==>', blueprintData.instanceData);
+        blueprintConfig = OpenstackBlueprint.createNew(blueprintData.instanceData);
+    } else if ((blueprintData.blueprintType === BLUEPRINT_TYPE.AZURE_LAUNCH) && blueprintData.instanceData) {
+        blueprintType = BLUEPRINT_TYPE.AZURE_LAUNCH;
+        logger.debug('blueprintData azure instacedata ==>', blueprintData.instanceData);
+        blueprintConfig = AzureBlueprint.createNew(blueprintData.instanceData);
+        blueprintConfig.cloudProviderData = AzureBlueprint.createNew(blueprintData.instanceData);
+    } else if ((blueprintData.blueprintType === BLUEPRINT_TYPE.VMWARE_LAUNCH) && blueprintData.instanceData) {
+        blueprintType = BLUEPRINT_TYPE.VMWARE_LAUNCH;
+        logger.debug('blueprintData vmware instacedata ==>', blueprintData.instanceData);
+        blueprintConfig = VmwareBlueprint.createNew(blueprintData.instanceData);
 
-	} else {
-		process.nextTick(function() {
-			callback({
-				message: "Invalid Blueprint Type sdds"
-			}, null);
-		});
-		return;
-	}
-	logger.debug('blueprin type ', blueprintData);
-	var blueprintObj = {
-		orgId: blueprintData.orgId,
-		bgId: blueprintData.bgId,
-		projectId: blueprintData.projectId,
-		name: blueprintData.name,
-		appUrls: blueprintData.appUrls,
-		iconpath: blueprintData.iconpath,
-		templateId: blueprintData.templateId,
-		templateType: blueprintData.templateType,
-		users: blueprintData.users,
-		blueprintConfig: blueprintConfig,
-		blueprintType: blueprintType
-	};
-	var blueprint = new Blueprints(blueprintObj);
-	logger.debug('saving');
-	blueprint.save(function(err, blueprint) {
-		if (err) {
-			logger.error(err);
-			callback(err, null);
-			return;
-		}
-		logger.debug('save Complete');
-		callback(null, blueprint);
-	});
+    } else {
+        process.nextTick(function() {
+            callback({
+                message: "Invalid Blueprint Type sdds"
+            }, null);
+        });
+        return;
+    }
+    logger.debug('blueprin type ', blueprintData);
+    var blueprintObj = {
+        orgId: blueprintData.orgId,
+        bgId: blueprintData.bgId,
+        projectId: blueprintData.projectId,
+        name: blueprintData.name,
+        appUrls: blueprintData.appUrls,
+        iconpath: blueprintData.iconpath,
+        templateId: blueprintData.templateId,
+        templateType: blueprintData.templateType,
+        users: blueprintData.users,
+        blueprintConfig: blueprintConfig,
+        blueprintType: blueprintType,
+        nexus: blueprintData.nexus,
+        docker: blueprintData.docker
+    };
+    var blueprint = new Blueprints(blueprintObj);
+    logger.debug('saving');
+    blueprint.save(function(err, blueprint) {
+        if (err) {
+            logger.error(err);
+            callback(err, null);
+            return;
+        }
+        logger.debug('save Complete');
+        callback(null, blueprint);
+    });
 };
 
 
 BlueprintSchema.statics.getById = function(id, callback) {
-	logger.debug('finding blueprint by id ===>' + id);
-	this.findById(id, function(err, blueprint) {
-		if (err) {
-			callback(err, null);
-			return;
-		}
-		callback(null, blueprint);
-	});
+    logger.debug('finding blueprint by id ===>' + id);
+    this.findById(id, function(err, blueprint) {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        callback(null, blueprint);
+    });
+};
+
+BlueprintSchema.statics.getByIds = function(ids, callback) {
+    logger.debug('finding blueprint by id ===>' + ids);
+    if (ids && ids.length) {
+        this.find({
+            "_id": {
+                $in: ids
+            }
+        }, function(err, blueprints) {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            callback(null, blueprints);
+        });
+    }
 };
 
 BlueprintSchema.statics.removeById = function(id, callback) {
-	this.remove({
-		"_id": ObjectId(id)
-	}, function(err, data) {
-		if (err) {
-			callback(err, null);
-			return;
-		}
-		callback(null, data);
-	});
+    this.remove({
+        "_id": ObjectId(id)
+    }, function(err, data) {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        callback(null, data);
+    });
 
 };
 
 BlueprintSchema.statics.getBlueprintsByOrgBgProject = function(orgId, bgId, projId, filterBlueprintType, callback) {
-	logger.debug("Enter getBlueprintsByOrgBgProject(%s,%s, %s, %s, %s)", orgId, bgId, projId, filterBlueprintType);
-	var queryObj = {
-		orgId: orgId,
-		bgId: bgId,
-		projectId: projId,
-	}
-	if (filterBlueprintType) {
-		queryObj.templateType = filterBlueprintType;
-	}
+    logger.debug("Enter getBlueprintsByOrgBgProject(%s,%s, %s, %s, %s)", orgId, bgId, projId, filterBlueprintType);
+    var queryObj = {
+        orgId: orgId,
+        bgId: bgId,
+        projectId: projId,
+    }
+    if (filterBlueprintType) {
+        queryObj.templateType = filterBlueprintType;
+    }
 
-	this.find(queryObj, function(err, blueprints) {
-		if (err) {
-			callback(err, null);
-			return;
-		}
-		logger.debug("Exit getBlueprintsByOrgBgProject(%s,%s, %s, %s, %s)", orgId, bgId, projId, filterBlueprintType);
-		callback(null, blueprints);
-	});
+    this.find(queryObj, function(err, blueprints) {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        logger.debug("Exit getBlueprintsByOrgBgProject(%s,%s, %s, %s, %s)", orgId, bgId, projId, filterBlueprintType);
+        callback(null, blueprints);
+    });
+};
+
+BlueprintSchema.methods.getCookBookAttributes = function(instanceIP, repoData, callback) {
+    var blueprint = this;
+    //merging attributes Objects
+    var attributeObj = {};
+    var objectArray = [];
+    // While passing extra attribute to chef cookbook "rlcatalyst" is used as attribute.
+    var temp = new Date().getTime();
+    if (blueprint.nexus.url) {
+        masterUtil.updateProject(repoData.projectId, repoData.repoName, function(err, data) {
+            if (err) {
+                logger.debug("Failed to updateProject: ", err);
+            }
+            if (data) {
+                logger.debug("updateProject successful.");
+            }
+        });
+        var url = blueprint.nexus.url;
+        var repoName = blueprint.nexus.repoName;
+        var groupId = blueprint.nexus.groupId;
+        var artifactId = blueprint.nexus.artifactId;
+        var version = blueprint.nexus.version;
+        objectArray.push({
+            "rlcatalyst": {
+                "upgrade": false
+            }
+        });
+        objectArray.push({
+            "rlcatalyst": {
+                "applicationNodeIP": instanceIP
+            }
+        });
+
+        nexus.getNexusArtifactVersions(blueprint.nexus.repoId, repoName, groupId, artifactId, function(err, data) {
+            if (err) {
+                logger.debug("Failed to fetch Repository from Mongo: ", err);
+                objectArray.push({
+                    "rlcatalyst": {
+                        "nexusUrl": url
+                    }
+                });
+                objectArray.push({
+                    "rlcatalyst": {
+                        "version": version
+                    }
+                });
+            }
+
+            if (data) {
+                var flag = false;
+                var versions = data.metadata.versioning[0].versions[0].version;
+                var latestVersionIndex = versions.length;
+                var latestVersion = versions[latestVersionIndex - 1];
+                //logger.debug("Got latest catalyst version from nexus: ", latestVersion);
+
+                nexus.getNexusArtifact(blueprint.nexus.repoId, repoName, groupId, function(err, artifacts) {
+                    if (err) {
+                        logger.debug("Failed to get artifacts.");
+                        objectArray.push({
+                            "rlcatalyst": {
+                                "nexusUrl": url
+                            }
+                        });
+                        objectArray.push({
+                            "rlcatalyst": {
+                                "version": version
+                            }
+                        });
+                    } else {
+                        if (artifacts.length) {
+                            for (var i = 0; i < artifacts.length; i++) {
+                                if (latestVersion === artifacts[i].version && artifactId === artifacts[i].artifactId) {
+                                    url = artifacts[i].resourceURI;
+
+                                    objectArray.push({
+                                        "rlcatalyst": {
+                                            "nexusUrl": url
+                                        }
+                                    });
+                                    objectArray.push({
+                                        "rlcatalyst": {
+                                            "version": latestVersion
+                                        }
+                                    });
+                                    flag = true;
+                                    //logger.debug("latest objectArray::: ", JSON.stringify(objectArray));
+                                    break;
+                                }
+
+                            }
+                            if (!flag) {
+                                objectArray.push({
+                                    "rlcatalyst": {
+                                        "nexusUrl": url
+                                    }
+                                });
+                                objectArray.push({
+                                    "rlcatalyst": {
+                                        "version": version
+                                    }
+                                });
+                            }
+                        } else {
+                            objectArray.push({
+                                "rlcatalyst": {
+                                    "nexusUrl": url
+                                }
+                            });
+                            objectArray.push({
+                                "rlcatalyst": {
+                                    "version": latestVersion
+                                }
+                            });
+                        }
+                    }
+                    var attributeObj = utils.mergeObjects(objectArray);
+                    callback(null, attributeObj);
+                    return;
+                });
+            } else {
+                logger.debug("No artifact version found.");
+            }
+
+        });
+    } else if (blueprint.docker.image) {
+        objectArray.push({
+            "rlcatalyst": {
+                "containerId": blueprint.docker.containerId
+            }
+        });
+        objectArray.push({
+            "rlcatalyst": {
+                "containerPort": blueprint.docker.containerPort
+            }
+        });
+        objectArray.push({
+            "rlcatalyst": {
+                "dockerRepo": blueprint.docker.image
+            }
+        });
+        objectArray.push({
+            "rlcatalyst": {
+                "upgrade": false
+            }
+        });
+        objectArray.push({
+            "rlcatalyst": {
+                "applicationNodeIP": instanceIP
+            }
+        });
+        var attrs = utils.mergeObjects(objectArray);
+        callback(null, attrs);
+        return;
+    } else {
+        process.nextTick(function() {
+            callback(null, {});
+        });
+    }
 };
 
 var Blueprints = mongoose.model('blueprints', BlueprintSchema);

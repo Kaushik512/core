@@ -20,214 +20,85 @@ var mongoose = require('mongoose');
 var ObjectId = require('mongoose').Types.ObjectId;
 var uniqueValidator = require('mongoose-unique-validator');
 var schemaValidator = require('_pr/model/utils/schema-validator');
-var AppDeploy = require('_pr/model/app-deploy/app-deploy');
 
 // File which contains App Data DB schema and DAO methods. 
 
 var Schema = mongoose.Schema;
 
 var AppDataSchema = new Schema({
-    applicationName: {
-        type: String,
-        unique: true
-    },
+    nodeIp: String,
+    repoURL: String,
+    server: String,
+    repository: String,
+    groupId: String,
+    artifactId: String,
+    version: String,
     projectId: String,
-    description: String
+    envId: String,
+    taskId: String,
+    status: String
 });
 
-// Get all appData informations.
-AppDataSchema.statics.getAppData = function(callback) {
-    this.find(function(err, appData) {
-        if (err) {
-            logger.debug("Got error while fetching appData: ", err);
-            callback(err, null);
-        }
-        if (appData) {
-            logger.debug("Got appData: ", JSON.stringify(appData));
-            callback(null, appData);
-        }
-    });
-};
 
-// Save all appData informations.
-AppDataSchema.statics.createNew = function(appDeployData, callback) {
-    var aDeploy = new this(appDeployData);
+// Save or update appData informations.
+AppDataSchema.statics.createNewOrUpdate = function(appData, callback) {
     this.find({
-        applicationName: appDeployData.applicationName,
-        projectId: appDeployData.projectId
-    }, function(err, data) {
+        nodeIp: appData.nodeIp,
+        projectId: appData.projectId,
+        envId: envId
+    }, function(err, aData) {
         if (err) {
             logger.debug("Error fetching record.", err);
+            callback(err, null);
         }
         if (data.length) {
-            callback(true, null);
-        } else {
-            aDeploy.save(function(err, appDeploy) {
+            var setData = {};
+            var keys = Object.keys(appData);
+            for (var i = 0; i < keys.length; i++) {
+                setData[keys[i]] = appData[keys[i]];
+            }
+            var that = this;
+            that.update({
+                nodeIp: appData.nodeIp,
+                projectId: appData.projectId,
+                envId: envId
+            }, {
+                $set: setData
+            }, {
+                upsert: false
+            }, function(err, updatedData) {
                 if (err) {
-                    logger.debug("Got error while creating AppDeploy: ", err);
+                    logger.debug("Failed to update: ", err);
                     callback(err, null);
                 }
-                if (appDeploy) {
-                    logger.debug("Creating AppDeploy: ", JSON.stringify(appDeploy));
-                    callback(null, appDeploy);
+                callback(null, updatedData);
+            });
+        } else {
+            this.save(function(err, appData) {
+                if (err) {
+                    logger.debug("Got error while creating appData: ", err);
+                    callback(err, null);
                 }
+                logger.debug("Creating appData: ", JSON.stringify(appData));
+                callback(null, appData);
             });
         }
     });
 };
 
-// Get AppDeploy by name.
-AppDataSchema.statics.getAppDataByName = function(appName, callback) {
+// Get AppData by ip,project,env.
+AppDataSchema.statics.getAppDataByIpAndProjectAndEnv = function(nodeIp, projectId, envId, callback) {
     this.find({
-        applicationName: appName
+        nodeIp: appData.nodeIp,
+        projectId: appData.projectId,
+        envId: envId
     }, function(err, anAppData) {
         if (err) {
             logger.debug("Got error while fetching appData: ", err);
             callback(err, null);
         }
-        if (anAppData.length) {
-            var appData = [];
-
-            AppDeploy.getAppDeployByName(appName, function(err, data) {
-                if (err) {
-                    logger.debug("App deploy fetch error.", err);
-                }
-                if (data.length) {
-                    for (var i = 0; i < data.length; i++) {
-                        var dummyData = {
-                            _id: data[i]._id,
-                            applicationName: data[i].applicationName,
-                            applicationInstanceName: data[i].applicationInstanceName,
-                            applicationVersion: data[i].applicationVersion,
-                            applicationNodeIP: data[i].applicationNodeIP,
-                            applicationLastDeploy: data[i].applicationLastDeploy,
-                            applicationStatus: data[i].applicationStatus,
-                            projectId: anAppData[0].projectId,
-                            envId: data[i].envId,
-                            description: anAppData[0].description,
-                            applicationType: data[i].applicationType,
-                            containerId: data[i].containerId,
-                            hostName: data[i].hostName
-                        };
-                        appData.push(dummyData);
-                    }
-                    callback(null, appData);
-                } else {
-                    callback(null, data);
-                }
-            });
-        } else {
-            logger.debug("Else part..");
-            callback(null, anAppData);
-        }
-    });
-};
-
-// Get all appData informations.
-AppDataSchema.statics.getAppDataWithDeploy = function(envName, callback) {
-    this.find(function(err, appData) {
-        if (err) {
-            logger.debug("Got error while fetching appData: ", err);
-            callback(err, null);
-        }
-        if (appData.length) {
-            var appDataList = [];
-            var count = 0;
-            for (var j = 0; j < appData.length; j++) {
-                (function(j) {
-                    AppDeploy.getAppDeployByName(appData[j].applicationName, function(err, data) {
-                        count++;
-                        if (err) {
-                            logger.debug("App deploy fetch error.", err);
-                        }
-                        if (data.length) {
-                            for (var i = 0; i < data.length; i++) {
-                                var dummyData = {
-                                    _id: data[i]._id,
-                                    applicationName: data[i].applicationName,
-                                    applicationInstanceName: data[i].applicationInstanceName,
-                                    applicationVersion: data[i].applicationVersion,
-                                    applicationNodeIP: data[i].applicationNodeIP,
-                                    applicationLastDeploy: data[i].applicationLastDeploy,
-                                    applicationStatus: data[i].applicationStatus,
-                                    projectId: appData[j].projectId,
-                                    envId: data[i].envId,
-                                    description: appData[j].description,
-                                    applicationType: data[i].applicationType,
-                                    containerId: data[i].containerId,
-                                    hostName: data[i].hostName
-                                };
-                                appDataList.push(dummyData);
-                            }
-                            if (count === appData.length) {
-                                callback(null, appDataList);
-                            }
-                        } else {
-                            if (count === appData.length) {
-                                callback(null, appDataList);
-                            }
-                        }
-                    });
-                })(j);
-            }
-
-        } else {
-            callback(null, []);
-        }
-    });
-};
-
-// Get all appData informations.
-AppDataSchema.statics.getAppDataWithDeployList = function(envName, callback) {
-    var that = this;
-    AppDeploy.getAppDeployListByEnvId(envName, function(err, data) {
-        if (err) {
-            logger.debug("App deploy fetch error.", err);
-        }
-        logger.debug("App deploy .", JSON.stringify(data));
-        if (data.length) {
-            var appDataList = [];
-            var count = 0;
-            for (var i = 0; i < data.length; i++) {
-                (function(i) {
-                    that.find({
-                        applicationName: data[i].applicationName
-                    }, function(err, appData) {
-                        count++;
-                        if (err) {
-                            logger.debug("Failed to fetch app data", err);
-                            callback(err, null);
-                        }
-                        if (appData) {
-                            var dummyData = {
-                                _id: data[i].id,
-                                applicationName: data[i].applicationName,
-                                applicationInstanceName: data[i].applicationInstanceName,
-                                applicationVersion: data[i].applicationVersion,
-                                applicationNodeIP: data[i].applicationNodeIP,
-                                applicationLastDeploy: data[i].applicationLastDeploy,
-                                applicationStatus: data[i].applicationStatus,
-                                projectId: appData[0].projectId,
-                                envId: data[i].envId,
-                                description: appData[0].description,
-                                applicationType: data[i].applicationType,
-                                containerId: data[i].containerId,
-                                hostName: data[i].hostName
-                            };
-                            appDataList.push(dummyData);
-                            if (count === data.length) {
-                                callback(null, appDataList);
-                            }
-                        } else {
-                            callback(null, []);
-                        }
-
-                    });
-                })(i);
-            }
-        } else {
-            callback(null, []);
-        }
+        logger.debug("Got appData: ", JSON.stringify(anAppData));
+        callback(null, anAppData);
     });
 };
 
