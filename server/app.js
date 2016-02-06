@@ -94,11 +94,7 @@ mongoDbConnect(dboptions, function(err) {
 });
 
 var mongoStore = new MongoStore({
-	// db: appConfig.db.dbName,
-	// host: appConfig.db.host,
-	// port: appConfig.db.port
-	mongooseConnection: mongoose.connection
-
+    mongooseConnection: mongoose.connection
 }, function() {
 
 });

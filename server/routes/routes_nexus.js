@@ -74,12 +74,12 @@ module.exports.setRoutes = function(app, verificationFunc) {
     	});
     });
 
-    app.get('/nexus/:anId/repositories/:repoName/artifact',function(req,res){
+    app.get('/nexus/:anId/repositories/:repoName/group/:groupId/artifact',function(req,res){
     	logger.debug("Called nexus repositories..");
     	if(!req.params.anId){
     		res.status(500).send("Nexus Id can't be empty.");
     	}
-    	nexus.getNexusArtifact(req.params.anId,req.params.repoName,function(err,artifact){
+    	nexus.getNexusArtifact(req.params.anId,req.params.repoName,req.params.groupId,function(err,artifact){
     		if(err){
     			logger.debug("Error while fetching nexus artifact.");
     			res.status(500).send("Error while fetching nexus artifact.");
@@ -94,12 +94,12 @@ module.exports.setRoutes = function(app, verificationFunc) {
     	});
     });
 
-    app.post('/nexus/:anId/repositories/:repoName/artifact/versions',function(req,res){
+    app.get('/nexus/:anId/repositories/:repoName/group/:groupId/artifact/:artifactId/versions',function(req,res){
     	logger.debug("Called nexus repositories..");
     	if(!req.params.anId){
     		res.status(500).send("Nexus Id can't be empty.");
     	}
-    	nexus.getNexusArtifactVersions(req.params.anId,req.params.repoName,req.body,function(err,versions){
+    	nexus.getNexusArtifactVersions(req.params.anId,req.params.repoName,req.params.groupId,req.params.artifactId,function(err,versions){
     		if(err){
     			logger.debug("Error while fetching nexus artifact versions.");
     			res.status(500).send("Error while fetching nexus artifact versions.");

@@ -91,9 +91,20 @@
                                                          <select id="jobListJenkins" class="width-100 form-control" disabled>
                                                          </select>
                                                       </div>
-                                                      <div class="col-lg-12 col-md-12 margintop15">
+                                                      <div class="col-lg-12 col-md-12 margintop5" style="display:none">
+                                                         <div class="col-lg-12 nodesTable">
+                                                            <div class="smart-form">
+                                                               <label>Blueprints</label> 
+                                                               <div id="jenkinsBlueprint" class="">
+                                                                  <ul id="selectedBlueprintJenkinsTask" class="selectedNodesJenkinsTaskCSS">
+                                                                  </ul>
+                                                               </div>
+                                                            </div>
+                                                         </div>
+                                                      </div>
+                                                      <div class="col-lg-12 col-md-12 margintop5">
                                                          <label>Job Description</label>
-                                                         <textarea id="jenkinsDescription"  style="width:100%" rows="8" cols="15" name="description"></textarea>
+                                                         <textarea id="jenkinsDescription"  style="width:100%" rows="9" cols="15" name="description"></textarea>
                                                       </div>
                                                    </div>
                                                    <!--jenkins dropdown ends here-->
@@ -130,12 +141,35 @@
                                                    <div class="col-lg-6 col-md-6" style="margin-top:5px;">
                                                       <div class="col-lg-12 nodesTable">
                                                          <div class="smart-form">
-                                                            <label>
-                                                            <img style="margin-top:-5px;" src="img/templateicons/Select-nodes---deployment.png">
-                                                            Select Nodes <span style="color:red">*</span>
-                                                            </label>
-                                                            <ul id="selectedNodesChefTask" class="deploymentNodeList selectedNodesTaskCSS">
-                                                            </ul>
+                                                            <div class="row margin0">
+                                                               <div class="col-lg-6 col-md-12">
+                                                                  <label class="radio">
+                                                                    <input type="radio" id="jobNodeDetailsId" class="jobTypeSelectorRadioBtn" name="jobDetType" data-jobdetails="Nodes"><i></i> 
+                                                                    <img src="img/templateicons/Select-nodes---deployment.png" class="margintopMinus5">
+                                                                     Nodes 
+                                                                     <span class="colorRed">*</span>
+                                                                  </label>
+                                                               </div>
+                                                               <div class="col-lg-6 col-md-12">
+                                                                  <label class="radio">
+                                                                    <input id="selectBlueprintInputId" class="jobTypeSelectorRadioBtn" type="radio" name="jobDetType" data-jobdetails="Blueprint"><i></i>
+                                                                    <img src="img/templateicons/Create-run-list---deployment.png" class="margintopMinus5">
+                                                                    Blueprints
+                                                                    <span class="colorRed">*</span>
+                                                                  </label>
+                                                               </div>
+                                                            </div>
+                                                            
+                                                            <div id="Nodes" class="jobDetailsClass col-lg-12">
+                                                               <ul id="selectedNodesChefTask" class="deploymentNodeList selectedNodesTaskCSS">
+                                                               </ul>
+                                                            </div>
+                                                            <div id="Blueprint" class="jobDetailsClass col-lg-12" style="display:none">
+                                                               <ul id="selectedBlueprintChefTask" class="deploymentBlueprintList selectedNodesTaskCSS">
+                                                               </ul>
+                                                            </div>
+                                                            <!-- <ul id="selectedNodesChefTask" class="deploymentNodeList selectedNodesTaskCSS">
+                                                            </ul> -->
                                                          </div>
                                                       </div>
                                                    </div>
@@ -201,7 +235,7 @@
                                                          <div class="smart-form">
                                                             <label>
                                                             <img style="margin-top:-5px;" src="img/templateicons/Select-nodes---deployment.png">
-                                                            Select Nodes <span style="color:red">*</span>
+                                                            Select Nodes <span class="colorRed">*</span>
                                                             </label>
                                                             <ul id="selectedNodesPuppetTask" class="deploymentNodeList selectedNodesTaskCSS">
                                                             </ul>
@@ -802,5 +836,55 @@
 
 <script src="js/dev/applicationUpgradeAssignTask.js"></script>
 <script type="text/javascript">
+$('#jobNodeDetailsId').trigger('click');
+$(".jobTypeSelectorRadioBtn").click(function() {
+    var val = $(this).attr('data-jobdetails');
+    /*if(val == "Nodes"){
+      $('#selectedBlueprintChefTask').find('li input[type=checkbox]').prop('checked', false);
+    }else if(val == "Blueprint"){
+      $('#selectedNodesChefTask').find('li input[type=checkbox]').prop('checked', false);
+    }*/
+    $('.jobDetailsClass').hide();
+    $('#'+val).show();
+});
 
+var urlParams = {};
+(window.onpopstate = function() {
+   var url = window.location.href;
+   var indexOfQues = url.lastIndexOf("?");
+   if (indexOfQues != -1) {
+       var sub = url.substring(indexOfQues + 1);
+       console.log(sub);
+       var params = sub.split('&')
+       for (var i = 0; i < params.length; i++) {
+           var paramParts = params[i].split('=');
+           urlParams[paramParts[0]] = paramParts[1];
+       }
+   }
+
+})();
+var projectId = urlParams['projid'];
+var envId = urlParams['envid'];
+var orgId = urlParams['org'];
+var bgId = urlParams['bg'];
+/*$.get('../organizations/' + orgId + '/businessgroups/' + bgId + '/projects/' + projectId + '/environments/' + envId + '/', function(data) {
+   
+   for (var i = 0; i < data.blueprints.length; i++) {
+      var blueprintName = data.blueprints[i].name;
+      var $li = $('<li><label class="checkbox" style="margin: 5px;font-size:13px;"><input type="checkbox" name="deploymentBlueprintsCheckBox" value="' + data.blueprints[i]._id + '"><i></i>' + blueprintName + '</label></li>'); 
+      if (blueprintName) {
+         $('#selectedBlueprintChefTask').append($li);
+      }
+   }
+});*/
+/*$.get('../organizations/' + orgId + '/businessgroups/' + bgId + '/projects/' + projectId + '/environments/' + envId + '/', function(data) {
+   
+   for (var i = 0; i < data.blueprints.length; i++) {
+      var blueprintName = data.blueprints[i].name;
+      var $li = $('<li><label class="checkbox" style="margin: 5px;font-size:13px;"><input type="checkbox" name="deploymentBlueprintsCheckBox" value="' + data.blueprints[i]._id + '"><i></i>' + blueprintName + '</label></li>'); 
+      if (blueprintName) {
+         $('#selectedBlueprintJenkinsTask').append($li);
+      }
+   }
+});*/
 </script>
