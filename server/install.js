@@ -146,7 +146,7 @@ function getDefaultsConfig() {
         },
         maxInstanceCount: 0,
 
-        cronjobTimeDelay: '"*/3 * * * *"',
+       // cronjobTimeDelay: '"* * * * * *"',
 
         //getter methods
         get catalystHome() {
