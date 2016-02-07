@@ -171,6 +171,13 @@
     overflow-y: auto;
     margin-top: 5px!important;
 }
+.selectedNodesJenkinsTaskCSS {
+    border: 1px solid #dddddd;
+    list-style: none outside none;
+    height: 94px;
+    overflow-y: auto;
+    margin-top: 5px!important;
+}
 .selectedNodesCustomTaskCSS {
     border: 1px solid #dddddd;
     list-style: none outside none;
@@ -197,6 +204,9 @@
 }
 .margintop15 {
     margin-top: 15px !important;
+}
+.margintop35 {
+    margin-top: 35px !important;
 }
 .margintop-56 {
     margin-top: -56px !important;
@@ -4318,4 +4328,10 @@ form.cmxform .gray * {
     float:right;
     margin-top:36px;
     margin-right: 16px;
+}
+.margintopMinus5{
+    margin-top:-5px !important;
+}
+.colorRed{
+    color:red;
 }

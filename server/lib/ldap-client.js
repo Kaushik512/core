@@ -14,10 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-
 var logger = require('_pr/logger')(module);
 var ldap = require('ldapjs');
-
 var setDefaults = function(options) {
     options.host || (options.host = 'localhost');
     options.port || (options.port = '389');
@@ -52,18 +50,15 @@ function createDnString(username, baseDn, ou) {
     str += baseDn;
     return str;
 }
-
 var Ldap = function(options) {
     logger.debug('options ==>', options);
     if (!options) {
         options = {};
     }
     options = setDefaults(options);
-
     var client = ldap.createClient({
         url: 'ldap://' + options.host + ':' + options.port
     });
-
     this.authenticate = function(username, password, callback) {
         var dnString = createDnString(username, options.baseDn, options.ou);
         client.bind(dnString, password, function(err, user) {
@@ -87,7 +82,6 @@ var Ldap = function(options) {
             }
         });
     };
-
     this.close = function(callback) {
         client.unbind(function(err) {
             if (typeof callback === 'function') {
@@ -95,7 +89,6 @@ var Ldap = function(options) {
             }
         });
     };
-
     this.createUser = function(username, password, fname, lname, callback) {
         logger.debug('Entered Create User in Ldap', username, password, fname, lname);
         var entry = {
@@ -123,7 +116,6 @@ var Ldap = function(options) {
                     logger.debug('code == >', err.code);
                     logger.debug('name == >', err.name);
                     logger.debug('message == >', err.message);
-
                     callback(err.message, null);
                 } else {
                     logger.debug('created');
@@ -132,7 +124,5 @@ var Ldap = function(options) {
             });
         });
     };
-
 }
-
 module.exports = Ldap;

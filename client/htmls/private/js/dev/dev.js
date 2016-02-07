@@ -65,111 +65,109 @@ function devCall() {
 
     //for removing the selected blueprint in the blueprint tab
     window.removeSelectedBlueprint = function() {
-    var blueprintId = $('.productdiv1.role-Selected1').attr('data-blueprintid');
-    if (blueprintId) {
-        bootbox.confirm({
-            message: "Are you sure you would like to remove this blueprint?",
-            title: "Confirmation",
-            callback: function(result) {
-                if (!result) {
-                    return;
-                } else {
-                    $.ajax({
-                        url: '/blueprints/' + blueprintId,
-                        type: 'DELETE',
-                        success: function(data) {
-                            if (data) {
-                                var $bcc = $('.productdiv1.role-Selected1').closest('.blueprintContainer');
-                                $('.productdiv1.role-Selected1').parent().detach();
-                                //Check if the closest bluprintcontainer is empty, if empty then hide it.
+        var blueprintId = $('.productdiv1.role-Selected1').attr('data-blueprintid');
+        if (blueprintId) {
+            bootbox.confirm({
+                message: "Are you sure you would like to remove this blueprint?",
+                title: "Confirmation",
+                callback: function(result) {
+                    if (!result) {
+                        return;
+                    } else {
+                        $.ajax({
+                            url: '/blueprints/' + blueprintId,
+                            type: 'DELETE',
+                            success: function(data) {
+                                if (data) {
+                                    var $bcc = $('.productdiv1.role-Selected1').closest('.blueprintContainer');
+                                    $('.productdiv1.role-Selected1').parent().detach();
+                                    //Check if the closest bluprintcontainer is empty, if empty then hide it.
 
-                                if ($bcc.find('.panel-body').children().length <= 0) {
-                                    $bcc.addClass('hidden');
+                                    if ($bcc.find('.panel-body').children().length <= 0) {
+                                        $bcc.addClass('hidden');
+                                    }
+                                } else
+                                    bootbox.alert(data);
+                            }
+                        });
+                    }
+                }
+            });
+        } else {
+            bootbox.alert('Please select a blueprint to remove.');
+        }
+    }
+    window.removeStack = function() {
+        var $selectedCard = $('.productdiv1.role-Selected1');
+
+        var stackId = $selectedCard.attr('data-stackId');
+        if (stackId) {
+            //found now delete
+            bootbox.confirm({
+                message: "Are you sure you would like to remove this stack? This will remove all the instances related to this stack.",
+                title: "Confirmation",
+                callback: function(result) {
+                    if (!result) {
+                        return;
+                    }
+                    $.ajax({
+                        url: '/cloudformation/' + stackId,
+                        method: 'DELETE',
+                        success: function(data) {
+                            var $bcc = $selectedCard.parent().remove();
+                            if (data.instanceIds) {
+                                for (var i = 0; i < data.instanceIds.length; i++) {
+                                    $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + data.instanceIds[i] + ']').parents('.domain-role-thumbnailDev').remove();
+                                    var table = $('#tableinstanceview').DataTable();
+                                    table.row('[data-instanceid=' + data.instanceIds[i] + ']').remove().draw(false);
+
                                 }
-                            } else
-                                bootbox.alert(data);
-                        }
+                            }
+                        },
+                        error: function() {}
                     });
                 }
-            }
-        });
-    } else {
-        bootbox.alert('Please select a blueprint to remove.');
+            });
+        } else {
+            bootbox.alert('Please select a stack to remove.');
+        }
     }
-}
-    window.removeStack = function() {
-    var $selectedCard = $('.productdiv1.role-Selected1');
 
-    var stackId = $selectedCard.attr('data-stackId');
-    if (stackId) {
-        //found now delete
-        bootbox.confirm({
-            message: "Are you sure you would like to remove this stack? This will remove all the instances related to this stack.",
-            title: "Confirmation",
-            callback: function(result) {
-                if (!result) {
-                    return;
-                }
-                $.ajax({
-                    url: '/cloudformation/' + stackId,
-                    method: 'DELETE',
-                    success: function(data) {
-                        var $bcc = $selectedCard.parent().remove();
-                        if (data.instanceIds) {
-                            for (var i = 0; i < data.instanceIds.length; i++) {
-                                $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + data.instanceIds[i] + ']').parents('.domain-role-thumbnailDev').remove();
-                                var table = $('#tableinstanceview').DataTable();
-                                table.row('[data-instanceid=' + data.instanceIds[i] + ']').remove().draw(false);
+    window.removeArmDeployment = function() {
+        var $selectedCard = $('.productdiv1.role-Selected1');
 
-                            }
-                        }
-                    },
-                    error: function() {
+        var armId = $selectedCard.attr('data-armId');
+        if (armId) {
+            //found now delete
+            bootbox.confirm({
+                message: "Are you sure you would like to remove this arm deployment? This will remove all the instances related to this deployment.",
+                title: "Confirmation",
+                callback: function(result) {
+                    if (!result) {
+                        return;
                     }
-                });
-            }
-        });
-    } else {
-        bootbox.alert('Please select a stack to remove.');
-    }
-}
+                    $.ajax({
+                        url: '/azure-arm/' + armId,
+                        method: 'DELETE',
+                        success: function(data) {
+                            var $bcc = $selectedCard.parent().remove();
+                            if (data.instanceIds) {
+                                for (var i = 0; i < data.instanceIds.length; i++) {
+                                    $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + data.instanceIds[i] + ']').parents('.domain-role-thumbnailDev').remove();
+                                    var table = $('#tableinstanceview').DataTable();
+                                    table.row('[data-instanceid=' + data.instanceIds[i] + ']').remove().draw(false);
 
-window.removeArmDeployment = function() {
-    var $selectedCard = $('.productdiv1.role-Selected1');
-
-    var armId = $selectedCard.attr('data-armId');
-    if (armId) {
-        //found now delete
-        bootbox.confirm({
-            message: "Are you sure you would like to remove this arm deployment? This will remove all the instances related to this deployment.",
-            title: "Confirmation",
-            callback: function(result) {
-                if (!result) {
-                    return;
-                }
-                $.ajax({
-                    url: '/azure-arm/' + armId,
-                    method: 'DELETE',
-                    success: function(data) {
-                        var $bcc = $selectedCard.parent().remove();
-                        if (data.instanceIds) {
-                            for (var i = 0; i < data.instanceIds.length; i++) {
-                                $('#divinstancescardview').find('.domain-roles-caption[data-instanceId=' + data.instanceIds[i] + ']').parents('.domain-role-thumbnailDev').remove();
-                                var table = $('#tableinstanceview').DataTable();
-                                table.row('[data-instanceid=' + data.instanceIds[i] + ']').remove().draw(false);
-
+                                }
                             }
-                        }
-                    },
-                    error: function() {
-                    }
-                });
-            }
-        });
-    } else {
-        bootbox.alert('Please select a arm deployment to remove.');
+                        },
+                        error: function() {}
+                    });
+                }
+            });
+        } else {
+            bootbox.alert('Please select a arm deployment to remove.');
+        }
     }
-}
 
 
 
@@ -2563,10 +2561,10 @@ window.removeArmDeployment = function() {
                                     $liRead.click(function(e) {
                                         var $blueprintReadContainerCFT = $('#modalForReadCFT');
 
-                                        if(blueprint.templateType == 'arm') {
-                                          $blueprintReadContainerCFT.find('.modal-title').html('Blueprint Information-ARM');
+                                        if (blueprint.templateType == 'arm') {
+                                            $blueprintReadContainerCFT.find('.modal-title').html('Blueprint Information-ARM');
                                         } else {
-                                          $blueprintReadContainerCFT.find('.modal-title').html('Blueprint Information-CFT');
+                                            $blueprintReadContainerCFT.find('.modal-title').html('Blueprint Information-CFT');
                                         }
 
                                         //  alert(JSON.stringify(data));
@@ -3262,10 +3260,10 @@ window.removeArmDeployment = function() {
                                 }
 
                                 if (blueprintType === 'aws_cf' || blueprintType === 'azure_arm') {
-                                    if(blueprintType === 'azure_arm') {
-                                      $('#cftForm').find('.modal-title').html('Enter Deployment Name');
+                                    if (blueprintType === 'azure_arm') {
+                                        $('#cftForm').find('.modal-title').html('Enter Deployment Name');
                                     } else {
-                                      $('#cftForm').find('.modal-title').html('Enter Unique Stack Name');
+                                        $('#cftForm').find('.modal-title').html('Enter Unique Stack Name');
                                     }
                                     jQuery.validator.addMethod("noSpace", function(value, element) {
                                         return value.indexOf(" ") < 0 && value != "";
@@ -3704,16 +3702,16 @@ window.removeArmDeployment = function() {
                         $('[data-armId=' + stackId + ']').find('.stackStatus').html('Succeeded').css({
                             'color': 'green'
                         });
-                    setTimeout(function() {
-                        $.get('/azure-arm/' + stackId + '/instances', function(instances) {
-                            if (instances.length) {
-                                $('#tabInstanceStatus').hide();
-                            }
-                            for (var i = 0; i < instances.length; i++) {
-                                addInstanceToDOM(instances[i]);
-                            }
-                        });
-                    }, 20000);
+                        setTimeout(function() {
+                            $.get('/azure-arm/' + stackId + '/instances', function(instances) {
+                                if (instances.length) {
+                                    $('#tabInstanceStatus').hide();
+                                }
+                                for (var i = 0; i < instances.length; i++) {
+                                    addInstanceToDOM(instances[i]);
+                                }
+                            });
+                        }, 20000);
                         break;
                     case 'Failed':
                         $('[data-armId=' + stackId + ']').find('.stackStatus').html('Failed').css({
@@ -3775,7 +3773,7 @@ window.removeArmDeployment = function() {
 
 
             $cftStackContainer.append($clonedDiv);
-             pollARMStatus(arm._id);
+            pollARMStatus(arm._id);
 
             $clonedDiv.find('.productdiv1').click(function() {
                 $('.role-Selected1').removeClass('role-Selected1');
@@ -3968,7 +3966,7 @@ window.removeArmDeployment = function() {
                 }
 
             });
-            
+
             $('.AzureArmTab').click(function(e) {
                 var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(5)');
                 var getbreadcrumbullength = getbreadcrumbul.length;
@@ -4728,6 +4726,47 @@ window.removeArmDeployment = function() {
                                                 var date = new Date().setTime(data.timestamp);
                                                 var taskTimestamp = new Date(date).toLocaleString(); //converts to human readable strings
                                                 $('tr[data-taskId="' + taskId + '"] .taskrunTimestamp').html(taskTimestamp);
+                                                if (data.blueprintMessage) {
+                                                    $modal.find('.loadingContainer').hide();
+                                                    $modal.find('.outputArea').hide();
+                                                    var $errorContainer = $modal.find('.errorMsgContainer').show();
+
+                                                    $errorContainer.html($('<span></span>').css({
+                                                        'color': '#40baf1'
+                                                    }).append(data.blueprintMessage));
+                                                    if (data.onCompleteResult) {
+                                                        for (var l = 0; l < data.onCompleteResult.length; l++) {
+                                                            var result = data.onCompleteResult[l].result;
+                                                            if (result.id && result.id.length) {
+                                                                for (var m = 0; m < result.id.length; m++) {
+                                                                    $.get('../instances/' + result.id[m], function(data) {
+                                                                        addInstanceToDOM(data);
+                                                                        // serachBoxInInstance.updateData(data,"add",undefined);
+                                                                    });
+
+                                                                }
+
+                                                            } else {
+                                                                if (result.stackId) {
+                                                                    $.get('/cloudformation/' + result.stackId, function(stack) {
+                                                                        addStackToDom(stack);
+                                                                    })
+                                                                    return;
+                                                                } else if (result.armId) {
+                                                                    $.get('/azure-arm/' + result.armId, function(armData) {
+                                                                        addARMToDom(armData);
+                                                                    })
+
+                                                                    return;
+                                                                }
+                                                            }
+
+                                                        }
+                                                    }
+
+                                                    return;
+
+                                                }
 
                                                 showTaskLogs(taskId, data.historyId, true);
 
@@ -4929,6 +4968,7 @@ window.removeArmDeployment = function() {
                             });
                         });
                     } else if (data[i].taskType === 'jenkins') {
+                        //alert(JSON.stringify(data[i]));
                         //history for jenkins job type...description mentioned above..
                         var $tdHistory = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="History" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-header bigger-120"></i></a>');
                         $tdHistory.find('a').data('taskId', data[i]._id).data('autosyncFlag', data[i].taskConfig.autoSyncFlag).attr('data-historyTaskId', data[i]._id).click(function(e) {
@@ -4958,9 +4998,30 @@ window.removeArmDeployment = function() {
                                 //console.table(taskHistories);
                                 for (var i = 0; i < taskHistories.length; i++) {
                                     (function(i) {
-                                        var $trHistoryRow = $('<tr/>');
-                                        var jenkUrl = jenk_url + taskHistories[i].buildNumber;
-                                        var $tdBuildNumber = $('<td/>').append('<a style="word-break: break-all;" href="' + jenkUrl + '" title="' + jenkUrl + '" target="_blank">' + taskHistories[i].buildNumber + '</a>');
+                                        var jenkUrl = "";
+                                        var $tdBuildNumber = "";
+                                        var $trHistoryRow = "";
+                                        var $tdBuildNumber = "";
+                                        // Handled history if task has Blueprint
+                                        if (taskHistories[i].blueprintExecutionResults && taskHistories[i].blueprintExecutionResults.length) {
+                                            if (taskHistories[i].jobName) {
+                                                $trHistoryRow = $('<tr/>');
+                                                jenkUrl = taskHistories[i].jobName;
+                                                $tdBuildNumber = $('<td/>').append('<a style="word-break: break-all;" title="' + taskHistories[i].jobName + '" target="_blank">' + taskHistories[i].jobName + '</a>');
+                                            }
+                                        } else if (taskHistories[i].buildNumber) {
+                                            $trHistoryRow = $('<tr/>');
+                                            jenkUrl = jenk_url + taskHistories[i].buildNumber;
+                                            $tdBuildNumber = $('<td/>').append('<a style="word-break: break-all;" href="' + jenkUrl + '" title="' + jenkUrl + '" target="_blank">' + taskHistories[i].buildNumber + '</a>');
+                                        } else {
+                                            // Handled history if task has Blueprint
+                                            $trHistoryRow = $('<tr/>');
+                                            jenkUrl = taskHistories[i].jobName;
+                                            $tdBuildNumber = $('<td/>').append('<a style="word-break: break-all;" title="' + taskHistories[i].jobName + '" target="_blank">' + taskHistories[i].jobName + '</a>');
+
+                                        }
+                                        //var $trHistoryRow = $('<tr/>');
+                                        //var $tdBuildNumber = $('<td/>').append('<a style="word-break: break-all;" href="' + jenkUrl + '" title="' + jenkUrl + '" target="_blank">' + taskHistories[i].buildNumber + '</a>');
                                         //var $tdBuildNumber = $('<td/>').append('<a style="word-break: break-all;" href="#' +  + '" title="' +  + '" target="_blank">' + taskHistories[i].buildNumber + '</a>');
                                         $trHistoryRow.append($tdBuildNumber);
 

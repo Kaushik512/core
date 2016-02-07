@@ -89,6 +89,7 @@ if (!$.fn.dataTable.isDataTable('#tableRunlist')) {
         "bLengthChange": false,
         "paging": false,
         "bFilter": false,
+        "bSort":false,
         "aoColumns": [{
             "bSortable": false
         }]
@@ -214,8 +215,6 @@ $(document).ready(function() {
     });
 
     function loadUIData(taskData) {
-        //console.log(taskData);
-        //   alert(JSON.stringify(taskData));
         console.log("I am in loadUIData");
         var $ccrs = $chefCookbookRoleSelector(urlParams.org, function(data) {
 
@@ -228,6 +227,7 @@ $(document).ready(function() {
 
         });
         if (taskData) {
+            //On edit click for a Job.
             console.log("I am in loadUIData inside taskData");
             $('.widget-header').find('.widget-margin').html('Edit Job');
             $('.inputTaskName').val(taskData.name);
@@ -305,9 +305,7 @@ $(document).ready(function() {
                 } else {
                     $("input[type='radio'][name='paramCheck'][id='addParametersFalse']").prop('checked', false);
                 }
-
             }
-
         }
 
         var $taskType = $('#taskType');
@@ -316,7 +314,6 @@ $(document).ready(function() {
         $.get('../organizations/' + urlParams.org + '/businessgroups/' + urlParams['bg'] + '/projects/' + urlParams.projid + '/environments/' + urlParams.envid + '/instances', function(data) {
             var $deploymentNodeList = $('.deploymentNodeList').empty();
             for (var i = 0; i < data.length; i++) {
-
 
                 // if (!(data[i].chef && data[i].chef.serverId)) {
                 //     continue;
@@ -358,6 +355,26 @@ $(document).ready(function() {
                         $('#selectedNodesPuppetTask').append($li);
                     }
 
+                }
+            }
+        });
+
+        $.get('../organizations/' + urlParams.org + '/businessgroups/' + urlParams['bg'] + '/projects/' + urlParams.projid + '/environments/' + urlParams.envid + '/', function(data) {
+            var $deploymentBlueprintList = $('.deploymentBlueprintList').empty();
+            for (var i = 0; i < data.blueprints.length; i++) {
+                var blueprintName = data.blueprints[i].name;
+                var checked = false;
+                if (taskData && (taskData.taskType === 'chef') && taskData.blueprintIds && taskData.blueprintIds.length) {
+                    if (taskData.blueprintIds.indexOf(data.blueprints[i]._id) !== -1) {
+                        checked = true;
+                    }
+                }
+                var $li = $('<li><label class="checkbox" style="margin: 5px;font-size:13px;"><input type="checkbox" name="deploymentBlueprintsCheckBox" value="' + data.blueprints[i]._id + '"><i></i>' + blueprintName + '</label></li>'); 
+                if (checked) {
+                    $li.find('input')[0].checked = true;
+                }
+                if (blueprintName) {
+                    $('#selectedBlueprintChefTask').append($li);
                 }
             }
         });
@@ -528,11 +545,8 @@ $(document).ready(function() {
 
     //save form for jenkins and chef
     $('#taskForm').submit(function(e) {
-        //   alert('check');
-        // alert('breaking');
         var taskType = $('#taskType').val();
         var taskData = {};
-        //alert(taskType);
         taskData.taskType = taskType;
 
         if (taskType === 'chef') {
@@ -562,9 +576,25 @@ $(document).ready(function() {
                     nodesList.push(this.value);
                 }
             });
-            if (!nodesList.length) {
+
+            var $selectedBlueprints = $('#selectedBlueprintChefTask input[type=checkbox]');
+            var blueprintList = [];
+            $selectedBlueprints.each(function() {
+                if (this.checked) {
+                    blueprintList.push(this.value);
+                }
+            });
+            
+            if (!nodesList.length && !blueprintList.length) {
                 bootbox.alert({
-                    message: 'Please choose nodes',
+                    message: 'Please choose either nodes or blueprints',
+                    title: "Error"
+                });
+                return false;
+            }
+            if (nodesList.length && blueprintList.length) {
+                bootbox.alert({
+                    message: 'Please choose either nodes or blueprints',
                     title: "Error"
                 });
                 return false;
@@ -578,8 +608,10 @@ $(document).ready(function() {
                 alert('Please choose runlist');
                 return false;
             }*/
+            taskData.blueprintIds = blueprintList;
             taskData.nodeIds = nodesList;
             taskData.runlist = runlist;
+            //alert(JSON.stringify(taskData));
             //taskData.attributesjson = $('#attrtextarea').val().trim();
             $trAttribute = $('#attributesViewListTable').find('tbody tr');
             var attributes = [];
@@ -664,6 +696,16 @@ $(document).ready(function() {
                 });
                 return false;
             }
+
+            // Currently removed blueprint launch from jenkins
+           /* var $selectedJenkinsBlueprints = $('#selectedBlueprintJenkinsTask input[type=checkbox]');
+            var jenkinsBlueprintList = [];
+            $selectedJenkinsBlueprints.each(function() {
+                if (this.checked) {
+                    jenkinsBlueprintList.push(this.value);
+                }
+            });
+            taskData.blueprintIds = jenkinsBlueprintList;*/
             var jenkinsJobDescription = $('textarea#jenkinsDescription').val();
             var usersList = [].concat($('#jenkinsUserList').val());
             if (!usersList.length) {
@@ -796,7 +838,7 @@ $(document).ready(function() {
 
                 return false;
             } else {
-                //  alert(JSON.stringify(reqBody));
+                //alert(JSON.stringify(reqBody));
                 $.post('../tasks/' + urlParams.taskId + '/update', reqBody, function(data) {
                     console.log(data);
                     window.initializeTaskArea([data]);

@@ -30,7 +30,7 @@ var compositeTaskSchema = taskTypeSchema.extend({
 });
 
 // Instance Method :- run composite task
-compositeTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData, onExecute, onComplete) {
+compositeTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData, blueprintIds, onExecute, onComplete) {
     var Tasks;
     var taskHistory = new TaskHistory();
     if (!Tasks) {

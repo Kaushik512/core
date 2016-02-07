@@ -21,6 +21,7 @@ var mongoose = require('mongoose');
 var ObjectId = require('mongoose').Types.ObjectId;
 var uniqueValidator = require('mongoose-unique-validator');
 var schemaValidator = require('_pr/model/utils/schema-validator');
+var mongoosePaginate = require('mongoose-paginate');
 
 // File which contains App Deploy DB schema and DAO methods. 
 
@@ -45,6 +46,7 @@ var AppDeploySchema = new Schema({
 
 });
 
+AppDeploySchema.plugin(mongoosePaginate);
 // Get all AppDeploy informations.
 AppDeploySchema.statics.getAppDeploy = function(callback) {
     this.find(function(err, appDeploy) {
@@ -274,9 +276,9 @@ AppDeploySchema.statics.getAppDeployByProjectId = function(projectId, appName, c
 
 // Get all AppDeploy informations by AppNameAndVersion.
 AppDeploySchema.statics.getAppDeployByAppNameAndVersion = function(appName, version, callback) {
-    logger.debug("appName: ",appName);
-    logger.debug("version: ",version);
-    var that =this;
+    logger.debug("appName: ", appName);
+    logger.debug("version: ", version);
+    var that = this;
     that.find({
         "applicationName": appName,
         "applicationVersion": version
@@ -289,6 +291,43 @@ AppDeploySchema.statics.getAppDeployByAppNameAndVersion = function(appName, vers
             logger.debug("Got AppDeploy: ", JSON.stringify(appDeploy));
             callback(null, appDeploy);
         }
+    });
+};
+
+// Get all AppDeploy informations. with pagination
+AppDeploySchema.statics.getAppDeployWithPage = function(offset, limit, sortBy, searchBy, callback) {
+    var query = {};
+    var k;
+    if (searchBy) {
+        for(k in searchBy){
+            if(searchBy.hasOwnProperty(k)){
+                query[k] = {
+                    $in: searchBy[k]
+                }
+            }
+        }
+        /*query.applicationName= {
+            $regex: new RegExp(searchBy, "i")
+        }*/
+    };
+    var options = {
+        sort: {},
+        lean: false,
+        offset: offset,
+        limit: limit
+    };
+    if (sortBy) {
+        var key;
+        for(key in sortBy){
+            if(sortBy.hasOwnProperty(key)){
+                options.sort[key] = sortBy[key]
+            }
+        }
+    }
+    logger.debug("options: ", JSON.stringify(options));
+    logger.debug("query: ", JSON.stringify(query));
+    this.paginate(query, options).then(function(appDeploy) {
+        callback(null, appDeploy);
     });
 };
 
