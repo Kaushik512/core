@@ -19,6 +19,7 @@ limitations under the License.
 
 var logger = require('_pr/logger')(module);
 var EC2 = require('../lib/ec2.js');
+var cost = require('../lib/dashboard.js');
 var d4dModelNew = require('../model/d4dmasters/d4dmastersmodelnew.js');
 var AWSProvider = require('../model/classes/masters/cloudprovider/awsCloudProvider.js');
 var openstackProvider = require('../model/classes/masters/cloudprovider/openstackCloudProvider.js');
@@ -2918,17 +2919,20 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         });
     });
    
-      app.get('/aws/providers/:id/dashboard',function(req,res){
-              var Client = new rc();
+      app.get('/aws/dashboard/providers/:id',function(req,res){
+              var client = new rc();
               var id = req.params.id;
-              Client.get('http://127.0.0.1:3000/aws/providers/'+id,
+               console.log(id);
+              client.get('http://localhost:3001/aws/providers/'+id,
                        function(body,response)
                        {
-                          console.log(body);
-                          var  access = body.accessKey;
-                          var secret = body.secretKey;
-                          EC2.getcost(access,secret,function(err,cost){
-                                           res.json(cost);
+                          var json = JSON.parse(body);
+                          var  access = json.accessKey;
+                          var secret = json.secretKey;
+                          console.log(access,secret);
+                 
+                          cost.getcost(access,secret,function(err,cost){
+                                           res.send(cost);
                                         });
                               });
                 });
