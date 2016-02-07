@@ -60,7 +60,6 @@
                 <i class="fa fa-laptop"></i>
               </div>
               <a class="small-box-footer managedUnmanagedCSS" href="#">
-                <!-- More info <i class="fa fa-arrow-circle-right"></i> -->
               </a>
             </div>
           </div>
@@ -76,7 +75,6 @@
                 <i class="fa fa-cube"></i>
               </div>
               <a class="small-box-footer managedUnmanagedCSS" href="#">
-                <!-- More Info <i class="fa fa-arrow-circle-right"></i> -->
               </a>
             </div>
           </div>
@@ -129,7 +127,6 @@
                         <i class="fa fa-laptop"></i>
                       </div>
                       <a id="" class="small-box-footer managedUnmanagedCSS" href="#">
-                        <!-- More info <i class="fa fa-arrow-circle-right"></i> -->
                       </a>
                     </div>
                   </div>
@@ -143,7 +140,6 @@
                         <i class="fa fa-cube"></i>
                       </div>
                       <a id="" class="small-box-footer managedUnmanagedCSS" href="#">
-                        <!-- More Info <i class="fa fa-arrow-circle-right"></i> -->
                       </a>
                     </div>
                   </div>
@@ -158,29 +154,68 @@
                         <i class="fa fa-external-link"></i>
                       </div>
                       <a id="" class="small-box-footer managedUnmanagedCSS" href="#">
-                       <!-- Convert <i class="fa fa-arrow-circle-right"></i> -->
                       </a>
                     </div>
                   </div>
 
                 </div>
                 <div class="row noProviderView" style="display:none">
+                  <!-- <div id="noenvwarning" class="alert alert-warning noEnvWarning text-center">
+                    <span>Please add the provider details </span>
+                    <span id="noProviderCard" >
+                        <i class="fa fa-plus noProviderFaIconCSS2" style=""></i>
+                    </span>
+                    <span>to get the complete dashboard.</span>
+                  </div> -->
                   <div class="col-lg-3 col-md-3 col-xs-6">
-                    <div class="small-box bg-aqua" style="height:150px">
-                      
-                      <a id="noProviderCard" style="position: absolute; left: 50%; top: 50%; transform: translateX(-50%) translateY(-50%); border: 3px dotted rgb(255, 255, 255); cursor: pointer;">
-                        <i class="fa fa-plus" style="color: rgb(255, 255, 255); padding: 10px; font-size: 27px;"></i>
+                    <div class="small-box bg-aqua" style="height:154px">
+                      <div style="text-align:center;padding-top:10px"><b>Add Provider Details</b></div>
+                      <a id="noProviderCard" class="noProviderCardCSS" style="">
+                        <i class="fa fa-plus noProviderFaIconCSS"></i>
                       </a>
-                      <!-- <div class="inner">
-                        <h3 id="totalProviders">&nbsp;</h3>
-                        <p>Total <br>Number of Providers</p>
+                      <a id="" class="small-box-footer managedUnmanagedCSS" href="#" style="margin-top:96px;">
+                        
+                      </a>
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-3 col-xs-6">
+                    <div class="small-box bg-aqua">
+                      <div class="inner">
+                        <h3 id="">0</h3>
+                        <p>Total <br>No. of Instances</p>
                       </div>
                       <div class="icon">
-                        <i class="fa fa-th"></i>
+                        <i class="fa fa-laptop"></i>
                       </div>
-                      <a id="providerMoreInfo" class="small-box-footer" href="#">
-                        More info <i class="fa fa-arrow-circle-right"></i>
-                      </a> -->
+                      <a id="" class="small-box-footer managedUnmanagedCSS" href="#">
+                        
+                      </a>
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-3 col-xs-6">
+                    <div class="small-box bg-aqua">
+                      <div class="inner">
+                        <h3 id="">0</h3>
+                        <p>Total <br>No. of Managed Instances</p>
+                      </div>
+                      <div class="icon">
+                        <i class="fa fa-cube"></i>
+                      </div>
+                      <a id="" class="small-box-footer managedUnmanagedCSS" href="#">
+                      </a>
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-3 col-xs-6">
+                    <div class="small-box bg-aqua">
+                      <div class="inner">
+                        <h3 id="">0</h3>
+                        <p>Total <br>No. of Unmanaged Instances</p>
+                      </div>
+                      <div class="icon">
+                        <i class="fa fa-external-link"></i>
+                      </div>
+                      <a id="" class="small-box-footer managedUnmanagedCSS" href="#">
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -205,12 +240,10 @@
     var managedTotal =0, unmanagedTotal=0, managedunmanagedTotal=0;
     function updateTotalCount(type, id, count){
       if(type==="managed"){
-        //managedMap.push (id, count);
         managedTotal += count;
         $('#totalmanagedInstances').html(managedTotal);
       }
       if(type==="unmanaged"){
-        //unmanagedMap.push (id, count);
         unmanagedTotal += count;
         $('#totalunmanagedInstances').html(unmanagedTotal);
       }
@@ -223,6 +256,8 @@
       var providerListLink = "/private/index.html#ajax/Settings/ProvidersList.html";
       if (top.location != location) {
         window.top.location.href = providerListLink;
+      }else{
+        window.location.href = providerListLink;
       }
     });
 
@@ -230,6 +265,8 @@
       var noproviderListLink = "/private/index.html#ajax/Settings/CreateProviders.html?new";
       if (top.location != location) {
         window.top.location.href = noproviderListLink;
+      }else{
+        window.location.href = noproviderListLink;
       }
     });
     $.get('../allproviders/list', function(totalProviders) {
@@ -271,6 +308,8 @@
             $childProviderTemplate.find('.providerSpecificMoreInfo').click(function(){
               if (top.location != location) {
                 window.top.location.href = providerSpecificHref;
+              }else{
+                window.location.href = providerSpecificHref;
               }
             });
 
@@ -305,6 +344,8 @@
                 $childUnmanagedInstanceTemplate.find('.convertUnmanagedtoManaged').click(function(){
                   if (top.location != location) {
                     window.top.location.href = convertHrefmanaged;
+                  }else{
+                    window.location.href = convertHrefmanaged;
                   }
                 });
                 var unmanagedData = dataUnmanaged.length;
@@ -358,6 +399,8 @@
             $childProviderTemplate.find('.providerSpecificMoreInfo').click(function(){
               if (top.location != location) {
                 window.top.location.href = providerSpecificHref;
+              }else{
+                window.location.href = providerSpecificHref;
               }
             });
 
@@ -409,6 +452,8 @@
             $childProviderTemplate.find('.providerSpecificMoreInfo').click(function(){
               if (top.location != location) {
                 window.top.location.href = providerSpecificHref;
+              }else{
+                window.location.href = providerSpecificHref;
               }
             });
             
@@ -461,6 +506,8 @@
             $childProviderTemplate.find('.providerSpecificMoreInfo').click(function(){
               if (top.location != location) {
                 window.top.location.href = providerSpecificHref;
+              }else{
+                window.location.href = providerSpecificHref;
               }
             });
 
@@ -512,6 +559,8 @@
             $childProviderTemplate.find('.providerSpecificMoreInfo').click(function(){
               if (top.location != location) {
                 window.top.location.href = providerSpecificHref;
+              }else{
+                window.location.href = providerSpecificHref;
               }
             });
 
@@ -549,147 +598,5 @@
         $('.noProviderView').show();
       }
     }).fail(function() {});
-    
-    /*
-    $('#totalInstancesMoreInfo').click(function() {
-      //alert("Clicked");
-      $.ajax({
-        type: "get",
-        dataType: "json",
-        async: false,
-        url: '../track',
-        success: function(data) {
-          for (var i = 0; i < data.length; i++) {
-            for (var j = 0; j < data[i].itemUrls.length; j++) {
-              //alert(data[i].itemUrls[j].url); 
-              if(data[i].itemUrls[j].url == 'http://awsdashboard.rlcatalyst.com/summary'){
-                $('#totalInstancesMoreInfo').attr("href","http://awsdashboard.rlcatalyst.com/summary").attr("target","_blank");
-              }
-              for (var k = 0; k < data[i].itemUrls[j].childItem.length; k++) {
-                //alert(data[i].itemUrls[j].childItem.url);
-                if(data[i].itemUrls[j].childItem.url == 'http://awsdashboard.rlcatalyst.com/summary'){
-                  $('#totalInstancesMoreInfo').attr("href","http://awsdashboard.rlcatalyst.com/summary").attr("target","_blank");
-                }
-              }
-            }
-          }
-        }
-      });
-    });
-    $('#costMoreInfo').click(function() {
-      //alert("Clicked");
-      $.ajax({
-        type: "get",
-        dataType: "json",
-        async: false,
-        url: '../track',
-        success: function(data) {
-          for (var i = 0; i < data.length; i++) {
-            for (var j = 0; j < data[i].itemUrls.length; j++) {
-              //alert(data[i].itemUrls[j].url); 
-              if(data[i].itemUrls[j].url == 'http://awsdashboard.rlcatalyst.com/cost'){
-                $('#costMoreInfo').attr("href","http://awsdashboard.rlcatalyst.com/cost").attr("target","_blank");
-              }
-              for (var k = 0; k < data[i].itemUrls[j].childItem.length; k++) {
-                //alert(data[i].itemUrls[j].childItem.url);
-                if(data[i].itemUrls[j].childItem.url == 'http://awsdashboard.rlcatalyst.com/cost'){
-                  $('#costMoreInfo').attr("href","http://awsdashboard.rlcatalyst.com/cost").attr("target","_blank");
-                }
-              }
-            }
-          }
-        }
-      });
-    });
-    $('.infrastructureConfigureSaveBtn').click(function() {
-      var $tableinfrastructureDashboard = $('#tableinfrastructureDashboard');
-      var $collapseInfrastructure = $('#collapseInfrastructure');
-      $collapseInfrastructure.find('.infrastructureClass').hide();
-
-      $tableinfrastructureDashboard.find('tbody tr input').filter(':checked').each(function() {
-        createInfrastructureDashboard($(this).val());
-      });
-
-      function createInfrastructureDashboard(uniqueText){
-        $collapseInfrastructure.find('.infrastructureClass').filter('[data-text="' + uniqueText + '"]').show();
-      }
-      $('#modaldashboardinfrastructurecardConfigure').modal('hide');
-    });
-    $('.buildConfigureSaveBtn').click(function() {
-      var $tablebuildDashboard = $('#tablebuildDashboard');
-      var $collapseBuild = $('#collapseBuild');
-
-      $collapseBuild.find('.buildCiCdClass').hide();
-
-      $tablebuildDashboard.find('tbody tr input').filter(':checked').each(function() {
-        createBuildDashboard($(this).val());
-      });
-      
-      function createBuildDashboard(uniqueText){
-        $collapseBuild.find('.buildCiCdClass').filter('[data-text="' + uniqueText + '"]').show();
-      }
-      $('#modaldashboardbuildcardConfigure').modal('hide');
-    });
-
-    $.get('/dashboard/providers/dashboardlanding', function(dashboardlandingDetails) {
-      var jenkinsServerId = dashboardlandingDetails[0].jenkinsReferenceValue;
-      var jobName = dashboardlandingDetails[0].jobsListValue;
-      $.get('/jenkins/' + jenkinsServerId + '/dashboardjobs/' + jobName, function(jobsList) {
-        $('#totalBuilds').empty();
-        $('#totalbuildsPassed').empty();
-        $('#totalbuildsDeployed').empty();
-        $('#totalBuilds').append(jobsList.buildCount);
-        $('#totalbuildsPassed').append(jobsList.sucessbuildCount);
-        $('#totalbuildsDeployed').append(jobsList.sucessbuildCount);
-      }).fail(function(jxhr) {
-        var msg = "Jenkins Server Behaved Unexpectedly.";
-        if (jxhr.responseJSON && jxhr.responseJSON.message) {
-          msg = jxhr.responseJSON.message;
-        } else if (jxhr.responseText) {
-          msg = jxhr.responseText;
-        }
-        bootbox.alert(msg);
-      });
-    });
-
-    $.get('../allproviders/list', function(totalProviders) {
-      var totalcountproviders;
-      var awsproviderscount = totalProviders.awsProviders.length;
-      var openstackproviderscount = totalProviders.openstackProviders.length;
-      var vmwareproviderscount = totalProviders.vmwareProviders.length;
-      var hpplubliccloudproviderscount = totalProviders.hpPlublicCloudProviders.length;
-      var azureproviderscount = totalProviders.azureProviders.length;
-
-      totalcountproviders = awsproviderscount + openstackproviderscount + vmwareproviderscount + hpplubliccloudproviderscount + azureproviderscount;
-      $('#totalProviders').empty();
-      $('#totalProviders').append(totalcountproviders);
-    }).fail(function() {});
-
-    //Total Instances API
-    $.get('../dashboard/providers/totalinstances', function(totalinstances) {
-      $('#totalInstances').empty();
-      $('#totalInstances').append(totalinstances[0].totalinstancecount);
-    }).fail(function() {});
-
-    //Total Costs API
-    $.get('../dashboard/providers/totalcosts', function(totalcosts) {
-      $('#totalCosts').empty();
-      var totalcostcount;
-      if(!totalcosts.length){
-        totalcostcount = "Yet to fetch..."
-      }else{
-        totalcostcount = '$'+totalcosts[0].totalcostcount;
-      }
-      $('#totalCosts').append(totalcostcount);
-    }).fail(function() {});
-
-
-
-    //Total managedinstances API
-    $.get('../dashboard/providers/totalmanagedinstances', function(totalmanagedinstances) {
-      $('#managedInstances').empty();
-      $('#managedInstances').append(totalmanagedinstances);
-    }).fail(function() {});*/
   });
-
 </script>

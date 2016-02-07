@@ -217,4 +217,23 @@
   height:27px;
   pointer-events:none;
 }
-
+.noProviderCardCSS{
+  position: absolute !important;
+  left: 50% !important; 
+  top: 50% !important; 
+  transform: translateX(-50%) translateY(-50%) !important; 
+  border: 3px dotted rgb(255, 255, 255) !important;
+  cursor: pointer;
+}
+.noProviderFaIconCSS{
+  color: rgb(255, 255, 255) !important; 
+  padding: 10px !important; 
+  font-size: 27px !important;
+}
+.noProviderFaIconCSS2{
+  padding: 3px !important; 
+  font-size: 18px !important;
+  cursor: pointer; 
+  margin: 0px 10px; 
+  border: 2px dotted #ddd;
+}
