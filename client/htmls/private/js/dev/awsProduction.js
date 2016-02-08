@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-
 if (!$.fn.dataTable.isDataTable('#tableRunlistForBlueprint')) {
 	$tasksRunlist = $('#tableRunlistForBlueprint').DataTable({
 		"pagingType": "full_numbers",
@@ -251,34 +250,11 @@ function showdockertemplateadder() {
 	$('#dockertemplatetagselector').empty().val('');
 	$('#myModalDockerTemplateContainer').modal('show');
 }
-var launchparams = '';
-$('[dockerparamkey]').each(function() {
-	if ($(this).val() != '') {
-		var itms = $(this).val().split(',');
-		for (itm in itms) launchparams += ' ' + $(this).attr('dockerparamkey') + ' ' + itms[itm];
-	}
-});
-$('#' + $('#myModalLabelDockerContainer').attr('saveto')).val(launchparams);
-return (launchparams);
-}
-
 
 function addrows() { //only for testing to be removed
 	addDockerTemplateToTable('one', 'one/one', "latest");
 	addDockerTemplateToTable('two', 'two/two', "latest");
 	addDockerTemplateToTable('three', 'three/three', "latest");
-}
-var $dockertemplaterow = '<tr class="dockerimagesrow"><td >' + $cdt.find('tr').length + '</td><td paramtype="dockercontainerpathstitle">' + title +
-	'</td><td  paramtype="dockercontainerpaths">' + repopath + '</td><td paramtype="dockerrepotags">' + tagname +
-	'</td><td><input type="text" paramtype="dockerlaunchparameters" id="launchparam' + uniqueid + '" class="" value=" ' + optionallaunchparams +
-	'"><input type="hidden" paramtype="dockerreponame" id="dockerreponame' + uniqueid + '" class="" value="' + reponame + '"><a onclick="loadLaunchParams(\'launchparam' + uniqueid +
-	'\');" href="javascript:void(0);"><i class="icon-append fa fa-list-alt fa-lg" title="Launch Parameters"></i></a></td><td ><a class="dockerimageselectorup" id="dockerimageselectorup' +
-	uniqueid + '"  href="javascript:movetablerow(\'dockerimageselectorup\',' + uniqueid +
-	');"><i class="fa fa-chevron-circle-up fa-lg"></i></a><a class="dockerimageselectordown" id="dockerimageselectordown' + uniqueid +
-	'" href="javascript:movetablerow(\'dockerimageselectordown\',' + uniqueid +
-	');" style="padding-left:5px;"><i class="fa fa-chevron-circle-down fa-lg"></i></a><button class="btn btn-xs btn-danger pull-right" value="Remove" title="Remove" id="dockerimageremove' +
-	uniqueid + '" onClick="javascript:removeimage(\'dockerimageremove\',' + uniqueid + ');"><i class="ace-icon fa fa-trash-o fa-lg"></i></button></td></tr>';
-$cdt.append($dockertemplaterow);
 }
 
 function imagechanged() {
@@ -344,8 +320,6 @@ function movetablerow(what, index) {
 	}
 	renumberDockerImageTable();
 }
-renumberDockerImageTable();
-}
 
 function loadLaunchParams(lpinput) {
 	$('[dockerparamkey]').val('');
@@ -386,9 +360,6 @@ function loadLaunchParams(lpinput) {
 	}
 	$('#myModalLabelDockerContainer').attr('saveto', lpinput).modal('show');
 }
-$('#myModalLabelDockerContainer').attr('saveto', lpinput).modal('show');
-}
-
 
 function helperConstructOption(data, keyList, nameKey, valueKey) {
 	function getOptionAppend(obj, keyList, nameKey, valueKey) {
@@ -438,9 +409,6 @@ function getProviderList() {
 		}
 	});
 }
-return str;
-}
-
 
 function getImagesWithOSFilter() {
 	function getFilteredList(data, value) {
@@ -511,9 +479,7 @@ function getImageInstances() {
 		});
 	});
 }
-$('#providerId').on('change', loadData);
-$('#instanceOS').on('change', loadData);
-}
+var regionList;
 
 function getCompleteRegionList() {
 	$.get('/vmimages/regions/list', function(data) {
@@ -579,8 +545,6 @@ function getSecurityGroup() {
 	}
 	$('#vpcId').on('change', populateData);
 }
-$('#vpcId').on('change', populateData);
-}
 
 function getkeypairList() {
 	function getRegionName(regionValue) {
@@ -609,26 +573,6 @@ function getkeypairList() {
 			});
 		}
 	});
-}
-$('#providerId').on('change', function() {
-	var key = $(this).val();
-	if (key) {
-		$.get('/aws/providers/' + key, function(data) {
-			var keylist = data.keyPairs;
-			var str = '<option value="">Select KeyPairs</option>';
-			for (var i = 0; i < keylist.length; i++) {
-				str = str + '<option value="' + keylist[i]._id + '">' + keylist[i].keyPairName + '</option>';
-			}
-			$('#keypairId').html(str);
-			/*bring Region list from providers*/
-			var str1 = '<option value="">Select Region</option>';
-			for (var i = 0; i < keylist.length; i++) {
-				str1 = str1 + '<option value="' + keylist[i].region + '">' + getRegionName(keylist[i].region) + ' | ' + keylist[i].region + '</option>';
-			}
-			$('#region').html(str1);
-		});
-	}
-});
 }
 
 function getVPC() {
@@ -678,9 +622,6 @@ function getVPC() {
 	$('#providerId').on('change', populateData);
 	$('#region').on('change', populateData);
 }
-$('#providerId').on('change', populateData);
-$('#region').on('change', populateData);
-}
 
 function getSubnet() {
 	function populateData() {
@@ -725,9 +666,6 @@ function getSubnet() {
 	}
 	$('#vpcId').on('change', populateData);
 }
-$('#vpcId').on('change', populateData);
-}
-
 
 function resetForm() {
 	$('[multiselect]').empty();
@@ -767,7 +705,7 @@ $(document).ready(function() {
 	var sortbyid = function SortByID(x, y) {
 		return x.position - y.position;
 	}
-
+	
 	$('#selectOrgName').change(function(e) {
 		$.get('/d4dMasters/readmasterjsonnew/16', function(data) {
 			data = JSON.parse(data);
@@ -975,7 +913,7 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 			var $selectedItem = $('.role-Selected');
 			// alert('in ' + $selectedItem.length);
 			if (!$selectedItem.length) {
-				bootbox.alert('please choose a blueprint design');
+				alert('please choose a blueprint design');
 				return false;
 			}
 			//Selection of Orgname from localstorage 
