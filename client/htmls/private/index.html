@@ -1,605 +1,424 @@
 <!DOCTYPE html>
 <html lang="en-us">
-
-    <head>
-        <meta charset="utf-8">
-        <title>Catalyst</title>
-        <meta name="description" content="">
-        <meta name="author" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-        <link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.css">
-        <link rel="stylesheet" type="text/css" media="screen" href="css/catalyst.css">
-        <link rel="stylesheet" type="text/css" media="screen" href="css/smartCustom.min.css">
-        <link rel="stylesheet" type="text/css" media="screen" href="css/jqueryUI.min.css">
-        <link rel="stylesheet" type="text/css" media="screen" href="css/font-awesome.min.css">
-        <link rel="stylesheet" href="js/jquery-filetree/jqueryFileTree.css" />
-    </head>
-<body class="custom-theme">
-    
+  <head>
+    <meta charset="utf-8">
+    <title>Catalyst</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/catalyst.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/smartCustom.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/jqueryUI.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="js/jquery-filetree/jqueryFileTree.css" />
+  </head>
+  <body class="custom-theme">
     <!-- HEADER -->
     <!-- Header starts here -->
     <header>
-        <nav class="navbar navbar-default">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                </button>
-            </div>
-            <div class="navbar-brand"><img src="img/logo.png" class="iconLogo" alt="logo"></div>
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <!--left side navbar-->
-                <ul class="nav navbar-nav">
-                    <li class="left-projects-links hidden" data-target="#Workspace" navigation="Workspace,Workspace1">
-                        <a class="active navigationTab" id="workZoneNew" href="#" onclick="setleftnavigation(this,'org');">
-                        <i class="fa fa-credit-card txt-color-blue"></i>&nbsp;WORKZONE 
-                        </a>
-                    </li>
-
-                    <!--design starts here-->
-                    <li class="left-projects-links hidden" id="designStyle" data-target="#blueprints"  navigation="blueprints">
-                        <a href="#ajax/Aws-Production.html" id="designNew" onclick="setleftnavigation(this,'Design');" class="navigationTab">
-                        <i class="fa fa-puzzle-piece"></i>&nbsp;DESIGN
-                        </a>
-                    </li>
-
-                    <!--track-->
-                    <li class="left-projects-links hidden" id="trackStyle" data-target="#Track" navigation="Track">
-                        <a class="dropdown-toggle navigationTab" href="#ajax/trackSettings.html" id="trackNew"  onclick="setleftnavigation(this,'Track');"><i class="fa fa-anchor"></i>&nbsp;TRACK</a>
-                    </li>
-                    <!--track ends here-->
-
-                    <!--right side navbar-->
-                    <span class="navRight">
-                        <li class="left-projects-links active" id="liuserinfo"></li>
-
-                        <!--Settings tab-->
-                        <li class="left-projects-links hidden" data-target="#Settings"   navigation="Settings">
-                            <a class="dropdown-toggle navigationTab" href="#ajax/Settings/Dashboard.html" id="settingsNew"  onclick="setleftnavigation(this,'Settings');"><i class="fa fa-cog"></i>&nbsp;SETTINGS</a>
-                        </li>
-
-                        <!--help-->
-                        <li class="left-projects-links"><a href="http://help.relevancelab.com/dokuwiki" target="_blank" id="dokuNew"><i class="fa fa-question"></i>&nbsp;Help</a>
-                        </li>
-
-                        <!--logout-->
-                        <li id="logout" class="btn-header transparent pull-right logouttop">
-                            <!-- ../auth/signout -->
-                            <span><a href="#" logoutlink="/auth/signout" title="Sign Out">
-                            <i class="fa fa-sign-out"></i>
-                            </a></span>
-                        </li>
-
-                    </span>
-                </ul>
-            </div>
-        </nav>
+      <nav class="navbar navbar-default">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          </button>
+        </div>
+        <div class="navbar-brand"><img src="img/logo.png" class="iconLogo" alt="logo"></div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <!--left side navbar-->
+          <ul class="nav navbar-nav">
+            <li class="left-projects-links hidden" data-target="#Workspace" navigation="Workspace,Workspace1">
+              <a class="active navigationTab" id="workZoneNew" href="#" onclick="setleftnavigation(this,'org');">
+              <i class="fa fa-credit-card txt-color-blue"></i>&nbsp;WORKZONE 
+              </a>
+            </li>
+            <!--design starts here-->
+            <li class="left-projects-links hidden" id="designStyle" data-target="#blueprints"  navigation="blueprints">
+              <a href="#ajax/Aws-Production.html" id="designNew" onclick="setleftnavigation(this,'Design');" class="navigationTab">
+              <i class="fa fa-puzzle-piece"></i>&nbsp;DESIGN
+              </a>
+            </li>
+            <!--track-->
+            <li class="left-projects-links hidden" id="trackStyle" data-target="#Track" navigation="Track">
+              <a class="dropdown-toggle navigationTab" href="#ajax/trackSettings.html" id="trackNew"  onclick="setleftnavigation(this,'Track');"><i class="fa fa-anchor"></i>&nbsp;TRACK</a>
+            </li>
+            <!--track ends here-->
+            <!--right side navbar-->
+            <span class="navRight">
+              <li class="left-projects-links active" id="liuserinfo"></li>
+              <!--Settings tab-->
+              <li class="left-projects-links hidden" data-target="#Settings"   navigation="Settings">
+                <a class="dropdown-toggle navigationTab" href="#ajax/Settings/Dashboard.html" id="settingsNew"  onclick="setleftnavigation(this,'Settings');"><i class="fa fa-cog"></i>&nbsp;SETTINGS</a>
+              </li>
+              <!--help-->
+              <li class="left-projects-links"><a href="http://help.relevancelab.com/dokuwiki" target="_blank" id="dokuNew"><i class="fa fa-question"></i>&nbsp;Help</a>
+              </li>
+              <!--logout-->
+              <li id="logout" class="btn-header transparent pull-right logouttop">
+                <!-- ../auth/signout -->
+                <span><a href="#" logoutlink="/auth/signout" title="Sign Out">
+                <i class="fa fa-sign-out"></i>
+                </a></span>
+              </li>
+            </span>
+          </ul>
+        </div>
+      </nav>
     </header>
     <!--HEADER ends here -->
-
     <!-- Left panel : Navigation area -->
     <aside id="left-panel">
-        <div id="Workspace1">
-            <div class="leftSpaceStyle">
-                <div class="hiddencollapse treeStyle">WORKZONE</div>
-            </div>
-            <div id="tree" class="font-size-12"></div>
+      <div id="Workspace1">
+        <div class="leftSpaceStyle">
+          <div class="hiddencollapse treeStyle">WORKZONE</div>
         </div>
-        <!--for track-->
-        <div id="trackShow" style="display:none;">
-            <div class="leftSpaceStyle">
-                <div class="hiddencollapse treeStyle">TRACK</div>
-            </div>
-            <div id="trackTree" class="font-size-12"></div>
+        <div id="tree" class="font-size-12"></div>
+      </div>
+      <!--for track-->
+      <div id="trackShow" style="display:none;">
+        <div class="leftSpaceStyle">
+          <div class="hiddencollapse treeStyle">TRACK</div>
         </div>
-        <!--track ends here-->
-        <div id="Settings_nav" style="display:none;">
-            <div class="leftSpaceStyle">
-                <div class="hiddencollapse treeStyle">SETTINGS</div>
-            </div>
-            <div id="setting_tree" class="font-size-12"></div>
+        <div id="trackTree" class="font-size-12"></div>
+      </div>
+      <!--track ends here-->
+      <div id="Settings_nav" style="display:none;">
+        <div class="leftSpaceStyle">
+          <div class="hiddencollapse treeStyle">SETTINGS</div>
         </div>
-        <nav class="font-size-12">
+        <div id="setting_tree" class="font-size-12"></div>
+      </div>
+      <nav class="font-size-12">
+        </ul>
+        <ul class="menu-item-parentdemo" id="Workspace">
+        </ul>
+        <ul class="menu-item-parentdemo hidden" id="Track">
+        </ul>
+        <ul class="menu-item-parentdemo hidden" id="blueprints" providerselected="aws">
+          <li class="active open">
+            <a href="#" class="activeProviderOpen"><i class="fa fa-lg fa-fw fa-sitemap"></i><span class="menu-item-parent trackAlign"><strong>PROVIDERS</strong></span>
+            </a>
+            <ul class="visibleClass">
+              <li>
+                <a href="ajax/Aws-Production.html" onclick="$('#blueprints').attr('providerselected','aws');" class="devops_providers">
+                  <div class="aws" title="AWS"><span class="menu-item-parent provider-images trackAlign">&nbsp;&nbsp;AWS</span></div>
+                </a>
+              </li>
+              <li>
+                <a href="ajax/DesignBlueprintAzure.html?provider=azure" onclick="$('#blueprints').attr('providerselected','azure');"  class="devops_providers">
+                  <div class="azure" title="Azure"><span class="menu-item-parent provider-images trackAlign">&nbsp;&nbsp;AZURE</span></div>
+                </a>
+              </li>
+              <li>
+                <a href="ajax/DesignBlueprint.html?provider=os" onclick="$('#blueprints').attr('providerselected','openstack');"  class="devops_providers">
+                  <div class="openstack" title="Open Stack"><span class="menu-item-parent provider-images trackAlign">&nbsp;OPENSTACK</span></div>
+                </a>
+              </li>
+              <li>
+                <a href="ajax/DesignBlueprintVmware.html?provider=vmware" onclick="$('#blueprints').attr('providerselected','vmware');" class="devops_providers">
+                  <div class="vmware" title="Vmware"><span class="menu-item-parent provider-images trackAlign">&nbsp;VMWARE</span></div>
+                </a>
+              </li>
             </ul>
-            <ul class="menu-item-parentdemo" id="Workspace">
-            </ul>
-            <ul class="menu-item-parentdemo hidden" id="Track">
-            </ul>
-            <ul class="menu-item-parentdemo hidden" id="blueprints" providerselected="aws">
-                <li class="active open">
-                    <a href="#" class="activeProviderOpen"><i class="fa fa-lg fa-fw fa-sitemap"></i><span class="menu-item-parent trackAlign"><strong>PROVIDERS</strong></span>
-                    </a>
-                    <ul class="visibleClass">
-                        <li>
-                            <a href="ajax/Aws-Production.html" onclick="$('#blueprints').attr('providerselected','aws');" class="devops_providers">
-                                <div class="aws" title="AWS"><span class="menu-item-parent provider-images trackAlign">&nbsp;&nbsp;AWS</span></div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="ajax/DesignBlueprintAzure.html?provider=azure" onclick="$('#blueprints').attr('providerselected','azure');"  class="devops_providers">
-                                <div class="azure" title="Azure"><span class="menu-item-parent provider-images trackAlign">&nbsp;&nbsp;Azure</span></div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="ajax/DesignBlueprint.html?provider=os" onclick="$('#blueprints').attr('providerselected','openstack');"  class="devops_providers">
-                                <div class="openstack" title="Open Stack"><span class="menu-item-parent provider-images trackAlign">&nbsp;Open Stack</span></div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="ajax/DesignBlueprintVmware.html?provider=vmware" onclick="$('#blueprints').attr('providerselected','vmware');" class="devops_providers">
-                                <div class="vmware" title="Vmware"><span class="menu-item-parent provider-images trackAlign">&nbsp;VMware</span></div>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </nav>
-        <span class="minifyme"> <i class="fa fa-arrow-circle-left hit"></i> </span>
+          </li>
+        </ul>
+      </nav>
+      <span class="minifyme"> <i class="fa fa-arrow-circle-left hit"></i> </span>
     </aside>
     <!-- END NAVIGATION -->
-
     <!-- MAIN PANEL -->
     <div id="main" role="main">
-        <!-- RIBBON -->
-        <div id="ribbon">
-            <div class="demo1">
-                <div id="hide-menu" style="margin-top:-3px;">
-                    <span> <a href="javascript:void(0);" title="Collapse Menu">
-                    <i class="fa fa-sitemap txt-color-lightwhite"></i></a> </span>
-                </div>
-            </div>
-            <!-- breadcrumb -->
-            <ol class="breadcrumb">
-                <!-- This is auto generated -->
-            </ol>
+      <!-- RIBBON -->
+      <div id="ribbon">
+        <div class="demo1">
+          <div id="hide-menu" style="margin-top:-3px;">
+            <span> <a href="javascript:void(0);" title="Collapse Menu">
+            <i class="fa fa-sitemap txt-color-lightwhite"></i></a> </span>
+          </div>
         </div>
-        <!-- MAIN CONTENT -->
-        <div id="content">
-        </div>
-        <!--hiding the comment for no org available when the organization and environments are present-->
-        <div id="noenvwarning" class="hidden alert alert-warning noEnvWarning">
-            <img style="width:50px;height:40px" src="img/warning.png" alt="warning"/><span style="margin-left:20px;">There are no Environments available. Please check your</span>
-            <ul style="list-style-type:none;text-align:center">
-                <li class="left-projects-links hidden" data-target="#Settings" navigation="Settings">
-                    <a class="navigationTab" href="#ajax/Settings/Dashboard.html" id="settingsNewClick"  onclick="setleftnavigation(this,'Settings');">&nbsp;SETTINGS</a>
-                </li>
-            </ul>
-        </div>
-        <!--noEnv Error for consumer and designer-->
-        <div id="noEnvError" class="hidden alert alert-warning noEnvWarningConsumerDesigner"><img style="width:50px;height:40px" src="img/warning.png" alt="warning"/><span style="margin-left:20px;">There are no Workzone items to display.</span>
-        </div>
-        <!--error ends-->
-        <!-- END MAIN CONTENT -->
+        <!-- breadcrumb -->
+        <ol class="breadcrumb">
+          <!-- This is auto generated -->
+        </ol>
+      </div>
+      <!-- MAIN CONTENT -->
+      <div id="content">
+      </div>
+      <!--hiding the comment for no org available when the organization and environments are present-->
+      <div id="noenvwarning" class="hidden alert alert-warning noEnvWarning">
+        <img style="width:50px;height:40px" src="img/warning.png" alt="warning"/><span style="margin-left:20px;">There are no Environments available. Please check your</span>
+        <ul style="list-style-type:none;text-align:center">
+          <li class="left-projects-links hidden" data-target="#Settings" navigation="Settings">
+            <a class="navigationTab" href="#ajax/Settings/Dashboard.html" id="settingsNewClick"  onclick="setleftnavigation(this,'Settings');">&nbsp;SETTINGS</a>
+          </li>
+        </ul>
+      </div>
+      <!--noEnv Error for consumer and designer-->
+      <div id="noEnvError" class="hidden alert alert-warning noEnvWarningConsumerDesigner"><img style="width:50px;height:40px" src="img/warning.png" alt="warning"/><span style="margin-left:20px;">There are no Workzone items to display.</span>
+      </div>
+      <!--error ends-->
+      <!-- END MAIN CONTENT -->
     </div>
     <!-- END MAIN PANEL -->
     <div id="shortcut" style="margin-left: 100px;margin-top: 90px;">
-        <ul class="orgsList">
-        </ul>
+      <ul class="orgsList">
+      </ul>
     </div>
     <!-- END SHORTCUT AREA -->
     <div id="main-collapse" style="margin-top: 50px;">
-        <ul class="" style="width:100%">
-            <li class="collapseActive">
-                <a href="#ajax/Dev.html">WORKZONE</a>
-            </li>
-            <li>
-                <a href="#ajax/Aws-Production.html">DESIGN</a>
-            </li>
-            <li>
-                <a href="#ajax/Settings/OrgList.html"><span>SETTINGS</span></a>
-            </li>
-        </ul>
+      <ul class="" style="width:100%">
+        <li class="collapseActive">
+          <a href="#ajax/Dev.html">WORKZONE</a>
+        </li>
+        <li>
+          <a href="#ajax/Aws-Production.html">DESIGN</a>
+        </li>
+        <li>
+          <a href="#ajax/Settings/OrgList.html"><span>SETTINGS</span></a>
+        </li>
+      </ul>
     </div>
     <!--modal for instance edit-->
     <div class="modal fade" id="modalforInstanceEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form role="form" class="cmxform" id="instanceEditNew">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">
-                            &nbsp;Edit Instance Name
-                        </h4>
-                    </div>
-                    <div class="modal-body">
-                        <fieldset>
-                            <div class="col-lg-6 col-md-6 col-sm-6">
-                                <label for="instanceEditName">Name<span class="control-label redSpan">&nbsp;*</span></label>
-                                <input type="text" name="instanceEditName" class="form-control" id="instanceEditName" autofocus/>
-                            </div>
-                            <input type="hidden" id="instanceIDHiddenInput">
-                        </fieldset>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <input type="submit" id="editSaveBTN" class="btn btn-primary" value="Save" />
-                    </div>
-                </form>
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form role="form" class="cmxform" id="instanceEditNew">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title">
+                &nbsp;Edit Instance Name
+              </h4>
             </div>
+            <div class="modal-body">
+              <fieldset>
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                  <label for="instanceEditName">Name<span class="control-label redSpan">&nbsp;*</span></label>
+                  <input type="text" name="instanceEditName" class="form-control" id="instanceEditName" autofocus/>
+                </div>
+                <input type="hidden" id="instanceIDHiddenInput">
+              </fieldset>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <input type="submit" id="editSaveBTN" class="btn btn-primary" value="Save" />
+            </div>
+          </form>
         </div>
+      </div>
     </div>
     <!--modal for instance edit ends-->
     <!--modal for blueprint read-->
     <div class="modal fade bs-example-modal-lg" id="modalForRead" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" id="myModalLabel"></h4>
-                </div>
-                <div class="modal-body modalHeightHelp">
-                    <!--os and the 1st tier-->
-                    <table class="table table-bordered">
-                        <thead>
-                            <th class="paramStyle">Parameters</th>
-                            <th class="valueStyle">Values</th>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="tdStyleInfo">Blueprint Name:</td>
-                                <td>
-                                    <input  id="blueprintNameInputNew" disabled="disabled" class="form-control">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="tdStyleInfo">Template Type:</td>
-                                <td>
-                                    <input id="blueprintTemplateType" disabled="disabled" class="form-control">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="tdStyleInfo">Organisation Name:</td>
-                                <td>
-                                    <input id="blueprintORG" disabled="disabled" class="form-control">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="tdStyleInfo">Business Group:</td>
-                                <td>
-                                    <input id="blueprintBU" disabled="disabled" class="form-control">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="tdStyleInfo">Project Name:</td>
-                                <td>
-                                    <input id="blueprintProject" disabled="disabled" class="form-control">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="tdStyleInfo">Operating System:</td>
-                                <td>
-                                    <input id="instanceOSNew" class="form-control" disabled="disabled">                                                      
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="tdStyleInfo">Instance Type:</td>
-                                <td>
-                                    <input id="instancesizeNew" disabled="disabled" class="form-control">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="tdStyleInfo">Provider Type:</td>
-                                <td>
-                                    <input id="instanceProviderType" disabled="disabled" class="form-control">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="tdStyleInfo">Provider Name:</td>
-                                <td>
-                                    <input id="instanceProviderName" disabled="disabled" class="form-control">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="tdStyleInfo">Region:</td>
-                                <td>
-                                    <input id="instanceRegion" disabled="disabled" class="form-control">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="tdStyleInfo">Image:</td>
-                                <td>
-                                    <input id="instanceImage" disabled="disabled" class="form-control">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="tdStyleInfo">Keypair:</td>
-                                <td> 
-                                    <input id="instancekeyPair" disabled="disabled" class="form-control">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="tdStyleInfo">VPC ID:</td>
-                                <td>
-                                    <input id="instanceVPC" class="form-control" disabled="disabled">                                               
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="tdStyleInfo">Subnet:</td>
-                                <td>
-                                    <input id="instanceSubnetId" class="form-control" disabled="disabled">                                          
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="tdStyleInfo">Security Group:</td>
-                                <td>
-                                    <input id="instanceSecurityGroupId" class="form-control" disabled="disabled">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="tdStyleInfo">Version:</td>
-                                <td>
-                                    <input id="instanceVersion" class="form-control" disabled="disabled">                                    
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="tdStyleInfo">Runlist:</td>
-                                <td>
-                                    <input id="instanceRunlist" class="form-control" disabled="disabled">                                           
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="myModalLabel"></h4>
+          </div>
+          <div class="modal-body modalHeightHelp">
+            <!--os and the 1st tier-->
+            <table class="table table-bordered">
+              <thead>
+                <th class="paramStyle">Parameters</th>
+                <th class="valueStyle">Values</th>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="tdStyleInfo">Blueprint Name:</td>
+                  <td>
+                    <input  id="blueprintNameInputNew" disabled="disabled" class="form-control">
+                  </td>
+                </tr>
+                <tr>
+                  <td class="tdStyleInfo">Template Type:</td>
+                  <td>
+                    <input id="blueprintTemplateType" disabled="disabled" class="form-control">
+                  </td>
+                </tr>
+                <tr>
+                  <td class="tdStyleInfo">Organisation Name:</td>
+                  <td>
+                    <input id="blueprintORG" disabled="disabled" class="form-control">
+                  </td>
+                </tr>
+                <tr>
+                  <td class="tdStyleInfo">Business Group:</td>
+                  <td>
+                    <input id="blueprintBU" disabled="disabled" class="form-control">
+                  </td>
+                </tr>
+                <tr>
+                  <td class="tdStyleInfo">Project Name:</td>
+                  <td>
+                    <input id="blueprintProject" disabled="disabled" class="form-control">
+                  </td>
+                </tr>
+                <tr>
+                  <td class="tdStyleInfo">Operating System:</td>
+                  <td>
+                    <input id="instanceOSNew" class="form-control" disabled="disabled">                                                      
+                  </td>
+                </tr>
+                <tr>
+                  <td class="tdStyleInfo">Instance Type:</td>
+                  <td>
+                    <input id="instancesizeNew" disabled="disabled" class="form-control">
+                  </td>
+                </tr>
+                <tr>
+                  <td class="tdStyleInfo">Provider Type:</td>
+                  <td>
+                    <input id="instanceProviderType" disabled="disabled" class="form-control">
+                  </td>
+                </tr>
+                <tr>
+                  <td class="tdStyleInfo">Provider Name:</td>
+                  <td>
+                    <input id="instanceProviderName" disabled="disabled" class="form-control">
+                  </td>
+                </tr>
+                <tr>
+                  <td class="tdStyleInfo">Region:</td>
+                  <td>
+                    <input id="instanceRegion" disabled="disabled" class="form-control">
+                  </td>
+                </tr>
+                <tr>
+                  <td class="tdStyleInfo">Image:</td>
+                  <td>
+                    <input id="instanceImage" disabled="disabled" class="form-control">
+                  </td>
+                </tr>
+                <tr>
+                  <td class="tdStyleInfo">Keypair:</td>
+                  <td> 
+                    <input id="instancekeyPair" disabled="disabled" class="form-control">
+                  </td>
+                </tr>
+                <tr>
+                  <td class="tdStyleInfo">VPC ID:</td>
+                  <td>
+                    <input id="instanceVPC" class="form-control" disabled="disabled">                                               
+                  </td>
+                </tr>
+                <tr>
+                  <td class="tdStyleInfo">Subnet:</td>
+                  <td>
+                    <input id="instanceSubnetId" class="form-control" disabled="disabled">                                          
+                  </td>
+                </tr>
+                <tr>
+                  <td class="tdStyleInfo">Security Group:</td>
+                  <td>
+                    <input id="instanceSecurityGroupId" class="form-control" disabled="disabled">
+                  </td>
+                </tr>
+                <tr>
+                  <td class="tdStyleInfo">Version:</td>
+                  <td>
+                    <input id="instanceVersion" class="form-control" disabled="disabled">                                    
+                  </td>
+                </tr>
+                <tr>
+                  <td class="tdStyleInfo">Runlist:</td>
+                  <td>
+                    <input id="instanceRunlist" class="form-control" disabled="disabled">                                           
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
+          </div>
         </div>
+      </div>
     </div>
     <!--modal for blueprint edit read-->
     <!--modal for blueprint read-->
     <div class="modal fade bs-example-modal-lg" id="modalForReadCFT" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-    <div class="modal-dialog">
+      <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" class="titleCFTDocker" id="myModalLabel"></h4>
-            </div>
-            <div class="modal-body">
-                <fieldset>
-                    <!--os and the 1st tier-->
-                    <table class="table table-bordered">
-                        <thead>
-                            <th class="paramStyle">Parameters</th>
-                            <th class="valueStyle">Values</th>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="tdStyleInfo">Blueprint Name:</td>
-                                <td>
-                                    <input  id="blueprintNameCFT" disabled="disabled" class="form-control">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="tdStyleInfo">Template Type:</td>
-                                <td>
-                                    <input id="blueprintTemplateTypeCFT" disabled="disabled" class="form-control">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="tdStyleInfo">Organisation Name:</td>
-                                <td>
-                                    <input id="blueprintORG" disabled="disabled" class="form-control">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="tdStyleInfo">Business Group:</td>
-                                <td>
-                                    <input id="blueprintBU" disabled="disabled" class="form-control">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="tdStyleInfo">Project Name:</td>
-                                <td>
-                                    <input id="blueprintProject" disabled="disabled" class="form-control">
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </fieldset>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
-            </div>
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" class="titleCFTDocker" id="myModalLabel"></h4>
+          </div>
+          <div class="modal-body">
+            <fieldset>
+              <!--os and the 1st tier-->
+              <table class="table table-bordered">
+                <thead>
+                  <th class="paramStyle">Parameters</th>
+                  <th class="valueStyle">Values</th>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="tdStyleInfo">Blueprint Name:</td>
+                    <td>
+                      <input  id="blueprintNameCFT" disabled="disabled" class="form-control">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="tdStyleInfo">Template Type:</td>
+                    <td>
+                      <input id="blueprintTemplateTypeCFT" disabled="disabled" class="form-control">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="tdStyleInfo">Organisation Name:</td>
+                    <td>
+                      <input id="blueprintORG" disabled="disabled" class="form-control">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="tdStyleInfo">Business Group:</td>
+                    <td>
+                      <input id="blueprintBU" disabled="disabled" class="form-control">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="tdStyleInfo">Project Name:</td>
+                    <td>
+                      <input id="blueprintProject" disabled="disabled" class="form-control">
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </fieldset>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
+          </div>
         </div>
+      </div>
     </div>
-</div>
-    <!--modal for blueprint edit read-->
-    <!--modal for help-->
-    <div class="modal fade" id="modalForHelp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog " style="">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">
-                        &nbsp;CookBook Information
-                    </h4>
-                </div>
-                <div class="modal-body modalHeightHelp">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>CookBook Name</th>
-                                <th>Description</th>
-                            <tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>apache2-windows</td>
-                                <td>Installation &amp; Configuration of Apache Server</td>
-                            </tr>
-                            <tr>
-                                <td>apache2</td>
-                                <td>Installation &amp; Configuration of Apache Server</td>
-                            </tr>
-                            <!--2nd set-->
-                            <tr>
-                                <td>cassandra</td>
-                                <td>Installation and configuration of Cassandra Server</td>
-                            </tr>
-                            <tr>
-                                <td>eclipse_windows</td>
-                                <td>Installtion of Eclispe on Windows</td>
-                            </tr>
-                            <!--3rd set-->
-                            <tr>
-                                <td>visualstudio_windows</td>
-                                <td>Installation of Visual Studio</td>
-                            </tr>
-                            <tr>
-                                <td>iis</td>
-                                <td>Installation and configuration of IIS Server</td>
-                            </tr>
-                            <!--4th set-->
-                            <tr>
-                                <td>jboss7</td>
-                                <td>Installation and Configuration of JBOSS7 Server</td>
-                            </tr>
-                            <tr>
-                                <td>tomcat</td>
-                                <td>Installs and configures Tomcat, Java servlet engine and webserver</td>
-                            </tr>
-                            <!--5th set-->
-                            <tr>
-                                <td>weblogic</td>
-                                <td>Installation and Configuration of weblogic</td>
-                            </tr>
-                            <tr>
-                                <td>java</td>
-                                <td>Installation of Java</td>
-                            </tr>
-                            <!--6th set-->
-                            <tr>
-                                <td>java_windows</td>
-                                <td>Installation of Java</td>
-                            </tr>
-                            <tr>
-                                <td>nodejs</td>
-                                <td>Installation of NodeJS and npm package</td>
-                            </tr>
-                            <!--7th set-->
-                            <tr>
-                                <td>php</td>
-                                <td>Installation and Configuration of PHP</td>
-                            </tr>
-                            <tr>
-                                <td>lamp_role</td>
-                                <td>Installation and Configuration of LAMP stack</td>
-                            </tr>
-                            <!--8th set-->
-                            <tr>
-                                <td>mysql-windows</td>
-                                <td>Installation and Configuration of Mysql</td>
-                            </tr>
-                            <tr>
-                                <td>mysql</td>
-                                <td>Installation and Configuration of Mysql</td>
-                            </tr>
-                            <!--9th set-->
-                            <tr>
-                                <td>oracle_windows</td>
-                                <td>Installation and Configuration of Oracle</td>
-                            </tr>
-                            <tr>
-                                <td>postgresql</td>
-                                <td>Installation and Configurationof postgresql</td>
-                            </tr>
-                            <!--10th set-->
-                            <tr>
-                                <td>service_apache</td>
-                                <td>Service cookbook for apache server</td>
-                            </tr>
-                            <tr>
-                                <td>service_iptables</td>
-                                <td>Service cookbook for firewall</td>
-                            </tr>
-                            <!--11th set-->
-                            <tr>
-                                <td>service_jboss</td>
-                                <td>Service cookbook for Jboss server</td>
-                            </tr>
-                            <tr>
-                                <td>service_mysql</td>
-                                <td>Service cookbook for Mysql</td>
-                            </tr>
-                            <!--12th set-->
-                            <tr>
-                                <td>service_nginx</td>
-                                <td>Service cookbook for nginx </td>
-                            </tr>
-                            <tr>
-                                <td>service_tomcat</td>
-                                <td>Service cookbook for tomcat</td>
-                            </tr>
-                            <!--13th set-->
-                            <tr>
-                                <td>service_weblogic</td>
-                                <td>service cookbook for weblogic</td>
-                            </tr>
-                            <tr>
-                                <td>seven_zip</td>
-                                <td>Installation of 7Zip</td>
-                            </tr>
-                            <!--14th set-->
-                            <tr>
-                                <td>git</td>
-                                <td>Installs git and optionally sets up a git server as a daemon under runit</td>
-                            </tr>
-                            <tr>
-                                <td>wget_windows</td>
-                                <td>Installs wget on windows</td>
-                            </tr>
-                            <!--15th set-->
-                            <tr>
-                                <td>toad_windows</td>
-                                <td>Installation and Configuration of TOAD</td>
-                            </tr>
-                            <tr>
-                                <td>docker</td>
-                                <td>Installation and Configuration of docker engine</td>
-                            </tr>
-                            <tr>
-                                <td>jenkins</td>
-                                <td>Installs and configures Jenkins CI master &amp; node slaves</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--modal for help ends here-->
-    
-    <script src="js/libs/jquery-2.0.2.min.js"></script>
-    <script src="js/libs/jquery-ui-1.10.3.min.js"></script>
-    <script src="js/libs/modernizr-2.5.3.min.js"></script>
-    <script src="js/select2.min.js"></script>
-    <script src="js/bootstrap-treeview.js"></script>
-    
-    <script src="js/bootstrap/bootstrap.min.js"></script>
-    <!-- CUSTOM NOTIFICATION -->
-    <script src="js/notification/SmartNotification.min.js"></script>
-    <!-- JARVIS WIDGETS -->
-    <script src="js/smartwidgets/jarvis.widget.min.js"></script>
-    <script src="js/plugin/bootstrap-wizard/jquery.bootstrap.wizard.js"></script>
-    <script src="js/plugin/bootbox/bootbox.min.js"></script>
-    
-    <script src="/private/js/jquery.dataTables.min.js"></script>
-    <script src="js/jquery.tablesorter.min.js"></script>
-    <script src="js/jquery.validate.min.js"></script>
-    <script src="js/additional-methods.min.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="js/app.js"></script>
-
-    <script src="js/dev/dev.js"></script>
-    
 
     
+<script src="js/libs/jquery-2.0.2.min.js"></script>
+<script src="js/libs/jquery-ui-1.10.3.min.js"></script>
+<script src="js/libs/modernizr-2.5.3.min.js"></script>
+<script src="js/select2.min.js"></script>
+<script src="js/bootstrap-treeview.js"></script>
+
+<script src="js/bootstrap/bootstrap.min.js"></script>
+<!-- CUSTOM NOTIFICATION -->
+<script src="js/notification/SmartNotification.min.js"></script>
+<!-- JARVIS WIDGETS -->
+<script src="js/smartwidgets/jarvis.widget.min.js"></script>
+<script src="js/plugin/bootstrap-wizard/jquery.bootstrap.wizard.js"></script>
+<script src="js/plugin/bootbox/bootbox.min.js"></script>
+
+<script src="/private/js/jquery.dataTables.min.js"></script>
+<script src="js/jquery.tablesorter.min.js"></script>
+<script src="js/jquery.validate.min.js"></script>
+<script src="js/additional-methods.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/app.js"></script>
+
+<script src="js/dev/dev.js"></script>
     
 <!-- MAIN APP JS FILE -->
 <script type="text/javascript">
@@ -759,22 +578,22 @@ var SettingTreeJson = [{
             "icon": "fa fa-lg fa-fw fa-tags"
 
         }, {
-                "name": "organizations",
-                "text": "Chef Server",
-                "borderColor": "#000",
-                "href": "#ajax/Settings/ConfigManagementList.html",
-                "selectable": true,
-                "icon": "fa fa-lg fa-fw fa-random"
+            "name": "organizations",
+            "text": "Chef Server",
+            "borderColor": "#000",
+            "href": "#ajax/Settings/ConfigManagementList.html",
+            "selectable": true,
+            "icon": "fa fa-lg fa-fw fa-random"
 
-        },  {
-                "name": "organizations",
-                "text": "Environments",
-                "borderColor": "#000",
-                "href": "#ajax/Settings/EnvironmentConceptList.html",
-                "selectable": true,
-                "icon": "fa fa-lg fa-fw fa-tint",
-                "parent": "devops",
-                "nodetype": "EnvironmentConceptList"
+        }, {
+            "name": "organizations",
+            "text": "Environments",
+            "borderColor": "#000",
+            "href": "#ajax/Settings/EnvironmentConceptList.html",
+            "selectable": true,
+            "icon": "fa fa-lg fa-fw fa-tint",
+            "parent": "devops",
+            "nodetype": "EnvironmentConceptList"
 
         }],
         "borderColor": "#000",
@@ -924,7 +743,7 @@ var SettingTreeJson = [{
             "href": "#ajax/Settings/DashboardSettings.html",
             "selectable": true,
             "icon": "fa fa-lg fa-fw fa-files-o"
-        },{
+        }, {
             "name": "templates",
             "text": "Dashboard Landing",
             "borderColor": "#000",
@@ -1129,7 +948,6 @@ var loadTreeFuncNew = function(lazy) {
 
 
 
-
 function getUrlParameter(sParam) {
     var u = $('#workZoneNew').attr('href').split('?');
     var sPageURL = u[1];
@@ -1165,7 +983,7 @@ function getUrlParameter(sParam) {
 }
 
 $(document).keypress("l", function(e) {
-    if (e.ctrlKey && e.altKey && (String.fromCharCode(e.which) === 'l' || String.fromCharCode(e.which) === 'L')) {  
+    if (e.ctrlKey && e.altKey && (String.fromCharCode(e.which) === 'l' || String.fromCharCode(e.which) === 'L')) {
         window.open('/private/catlog.html', 'Catalyst Log');
     }
 });
@@ -1254,7 +1072,7 @@ function selectEnv() {
         }
 
 
-    } else { 
+    } else {
         //not found ... trying to find first element in any org
         envFound = selectFirstEnvironment();
     }

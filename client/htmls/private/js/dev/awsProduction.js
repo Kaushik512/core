@@ -58,6 +58,7 @@ function updatecompositedockertableemptymessage() {
 	}
 }
 $(document).ready(function() {
+	$('#selectOrgName').trigger('change');
 	var $addal = $("#addanotherlink"); //#ajax/Aws-Production.html?addnew
 	if (window.url.indexOf('addnew') > 0) $addal.attr('href', '#ajax/Aws-Production.html?addanother');
 	else $addal.attr('href', '#ajax/Aws-Production.html?addnew');
@@ -671,6 +672,7 @@ function resetForm() {
 	$('[multiselect]').empty();
 }
 $(document).ready(function() {
+	$('#selectOrgName').trigger('change');
 	getProviderList();
 	getImageInstances();
 	getSecurityGroup();
@@ -705,7 +707,7 @@ $(document).ready(function() {
 	var sortbyid = function SortByID(x, y) {
 		return x.position - y.position;
 	}
-	
+
 	$('#selectOrgName').change(function(e) {
 		$.get('/d4dMasters/readmasterjsonnew/16', function(data) {
 			data = JSON.parse(data);
@@ -798,6 +800,7 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 		console.log(navigation, index)
 		if (index === 1) {
 			$('#viewCreateNew').addClass('hidden');
+			$('#selectOrgName').attr('disabled', true);
 			$("#tabheader").html('Choose Templates');
 			var $selectedItem = $('.role-Selected');
 			if (!$selectedItem.length) {
@@ -913,7 +916,7 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 			var $selectedItem = $('.role-Selected');
 			// alert('in ' + $selectedItem.length);
 			if (!$selectedItem.length) {
-				alert('please choose a blueprint design');
+				bootbox.alert('please choose a blueprint design');
 				return false;
 			}
 			//Selection of Orgname from localstorage 
@@ -1547,6 +1550,7 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 		if (index === 0) {
 			$("#tabheader").html('Choose Template Type');
 			$('#viewCreateNew').removeClass('hidden');
+			$('#selectOrgName').attr('disabled', false);
 			var wizard = $wizard.data('bootstrapWizard');
 			wizard.enableNextBtn();
 		} else if (index === 1) {
@@ -1596,7 +1600,6 @@ $.ajax({
 		var $envList = $('#envList');
 		for (var i = 0; i < data.length; i++) {
 			$('#selectOrgName').append($('<option></option>').val(data[i].rowid).html(data[i].name));
-			var selectOrgID = $('#orgIDCheck').val();
 			$orgListInput.append($('<option></option>').val(data[i].rowid).html(data[i].name).data('bglist', data[i].nodes).data('project', data[i].nodes[0].nodes).data('envList', data[i].nodes[0].nodes));
 		}
 		$orgListInput.change(function(e) {

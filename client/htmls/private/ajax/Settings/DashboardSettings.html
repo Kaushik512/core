@@ -3,108 +3,124 @@ textarea{
 width:100%;
 }
 </style>
+
+
 <div class="row">
-    
-        <div class="col-md-12">
-
-            <div class="widget-box">
-                <div class="widget-header">
-                    <h5 class="widget-title widgetColor">
-                        <strong>List of Dashboards</strong>
-                    </h5>
-                    <div class="widget-toolbar no-border">
-                        <div>
-
-                          <!--new button for adding a new item-->
-                        <a href="#modalForTrackEdit" type="reset" data-backdrop="false" data-toggle="modal" class="btn btn-minier btn-primary addDashboardItem">
-                            <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>&nbsp;New
-                        </a>                                                                                                            
-                    </div>
-                </div>
-
-            </div>
-            <div class="widget-body">
-                <div class="widget-main widgetHeight">
-                    <div class="col-md-12 table-responsive tablePadding">
-                         
-                          
-                         <table id="trackTable" class="tableData table table-striped table-bordered table-hover dataTable no-footer textCenter" cellpadding="5px">
-                             
-                                <thead>
-                                    <tr class="rowCustomStyle">
-                                        <td>Type</td>
-                                        <td>Parent Name</td>
-                                        <td>Description</td>
-                                        <td>Action</td>
-                                    </tr>
-                                </thead>
-                                <tbody id="trackTableInput">
-                
-                                </tbody>
-                                    
-                            </table>
-                          
-                        
-                    </div>
-                </div> <!--widget main ends here-->
-              </div> <!--widget body ends here-->
-            </div> <!--widget box ends here-->  
-        </div>  <!-- col-lg-12 ends here-->
-</div>   <!--row ends here-->     
-
+  <div class="col-md-12">
+    <div class="widget-box">
+      <div class="widget-header">
+        <h5 class="widget-title widgetColor">
+          <strong>List of Dashboards</strong>
+        </h5>
+        <div class="widget-toolbar no-border">
+          <div>
+            <!--new button for adding a new item-->
+            <a href="#modalForTrackEdit" type="reset" data-backdrop="false" data-toggle="modal" class="btn btn-minier btn-primary addDashboardItem">
+            <i class="ace-icon ace-icon fa fa-plus bigger-110"></i>&nbsp;New
+            </a>                                                                                                            
+          </div>
+        </div>
+      </div>
+      <div class="widget-body">
+        <div class="widget-main widgetHeight">
+          <div class="col-md-12 table-responsive tablePadding">
+            <table id="trackTable" class="tableData table table-striped table-bordered table-hover dataTable no-footer textCenter" cellpadding="5px">
+              <thead>
+                <tr class="rowCustomStyle">
+                  <td>Type</td>
+                  <td>Parent Name</td>
+                  <td>Child Name</td>
+                  <td>Description</td>
+                  <td>Action</td>
+                </tr>
+              </thead>
+              <tbody id="trackTableInput">
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!--widget main ends here-->
+      </div>
+      <!--widget body ends here-->
+    </div>
+    <!--widget box ends here-->  
+  </div>
+  <!-- col-lg-12 ends here-->
+</div>
+<!--row ends here-->     
+<div class="childContainer hidden" id="childItemSeries">
+  <div class="col-lg-6 col-md-6 margintop15">
+    <label for="">Child Name:</label>
+    <div class="input-groups" id="childNameLabel">
+      <input type="text" name="childName" class="childNameItem form-control" id="childName"/>
+    </div>
+  </div>
+  <div class="col-lg-6 col-md-6 margintop15">
+    <label for="">Child URL:</label>
+    <div class="input-groups" id="childUrlLabel">
+      <input type="url" name="childUrl" class="childUrlItem form-control" id="childUrl"/> 
+    </div>
+  </div>
+</div>
 <!--modal for ItemList-->
 <div class="modal fade" id="modalForTrackEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-   <div class="modal-dialog " style="">
-      <div class="modal-content">
-         <form role="form" id="trackItemUrl">
-            <div class="modal-header">
-               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-               <h4 class="modal-title">
-               </h4>
-            </div>
-            <div class="modal-body">
-                <fieldset class="fieldsetCustom">
-                <div class="col-lg-6 col-md-6">
-                  <label for="">Type:<span class="control-label redSpan">&nbsp;*</span></label>
-                  <div class="input-groups">
-                  <select id="trackType" name="trackType" class="required form-control width-100" style="vertical-align:central">
-                  </select>
-                  </div>
-               </div>
-               <div class="col-lg-6 col-md-6">
-                  <label for="">Description:</label>
-                  <input type="text" name="trackDescription" class="trackDescription form-control" id="trackDescription">
-               </div>
-
-              <div class="itemURLContainer" id="itemSeries"> 
-                     <div class="col-lg-6 col-md-6 margintop15">
-                        <label for="">Item Name:<span class="control-label redSpan">&nbsp;*</span></label>
-                        <div class="input-groups">
-                        <input type="text" name="trackName" class="required trackNameItem form-control" id="trackName"/>
-                        </div>
-                     </div>
-                     <div class="col-lg-6 col-md-6 margintop15">
-                        <label for="trackUrl">Item URL:<span class="control-label redSpan">&nbsp;*</span></label>
-                        <div class="input-groups">
-                        <input type="url" name="trackUrl" class="required trackUrlItem form-control" id="trackUrl"/> 
-                        </div>
-                     </div>
+  <div class="modal-dialog " style="">
+    <div class="modal-content">
+      <form role="form" id="trackItemUrl">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">
+          </h4>
+        </div>
+        <div class="modal-body">
+          <fieldset class="fieldsetCustom">
+            <div class="col-lg-6 col-md-6">
+              <label for="">Type:</label>
+              <div class="input-groups">
+                <select id="trackType" name="trackType" class="required form-control width-100" style="vertical-align:central">
+                  <option value="">Choose Type</option>
+                  <option value="Provider">Provider</option>
+                  <option value="Monitoring">Monitoring</option>
+                  <option value="Logs">Logs</option>
+                  <option value="Notifications">Notifications</option>
+                </select>
               </div>
-                <input type="hidden" id="trackEditHiddenInputId">
-                <input type="hidden" id="trackEditHiddenInput">
-                <input type="hidden" id="trackItemHiddenInputNameUrl">
-            </fieldset>
             </div>
-            <div class="modal-footer">
-               <label id="saveItemSpinner" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
-               <a type="button" class="btn btn-default" data-dismiss="modal"><i class="ace-icon fa fa-times bigger-110"></i>&nbsp;Cancel</a>
-               <button type="submit" id="saveBtnTrack" class="btn btn-primary" value="Save"><i class="ace-icon fa fa-check bigger-110"></i>&nbsp;Save</button>
+            <div class="col-lg-6 col-md-6">
+              <label for="">Description:</label>
+              <input type="text" name="trackDescription" class="trackDescription form-control" id="trackDescription">
             </div>
-         </form>
-      </div>
-   </div>
+            <div class="itemURLContainer" id="itemSeries">
+              <div class="col-lg-6 col-md-6 margintop15">
+                <label for="">Item Name:</label>
+                <div class="input-groups">
+                  <input type="text" name="trackName" class="required trackNameItem form-control" id="trackName"/>
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-6 margintop15">
+                <label for="trackUrl">Item URL:</label>
+                <div class="input-groups">
+                  <input type="url" name="trackUrl" class="required trackUrlItem form-control" id="trackUrl"/> 
+                </div>
+              </div>
+            </div>
+            <div class="childAppendContainer">
+            </div>
+            <a href="javascript:void(0)" class="clearfix pull-right addChildItem" data-backdrop="false" data-toggle="modal">Add Child Item</a>
+            <input type="hidden" id="trackEditHiddenInputId">
+            <input type="hidden" id="trackEditHiddenInput">
+            <input type="hidden" id="trackItemHiddenInputNameUrl">
+          </fieldset>
+        </div>
+        <div class="modal-footer">
+          <label id="saveItemSpinner" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
+          <a type="button" class="btn btn-default" data-dismiss="modal"><i class="ace-icon fa fa-times bigger-110"></i>&nbsp;Close</a>
+          <button type="submit" id="saveBtnTrack" class="btn btn-primary" value="Save"><i class="ace-icon fa fa-check bigger-110"></i>&nbsp;Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
-<!--modal for Itemlist-->   
 
 
 <script>
@@ -120,9 +136,11 @@ if (!$.fn.dataTable.isDataTable('#trackTable')) {
             "bSortable": false
         }, {
             "bSortable": false
-        },{
+        }, {
             "bSortable": false
-        },{
+        }, {
+            "bSortable": false
+        }, {
             "bSortable": false
         }]
 
@@ -131,39 +149,24 @@ if (!$.fn.dataTable.isDataTable('#trackTable')) {
 
 //calling the global track functionality when track params are available..
 $(document).ready(function(e) {
-    getTrackType();
     getGlobalTrack();
 });
 
-function getTrackType(){
-    var trackType = '../trackType';
-    $.get(trackType, function(data) {
-
-        console.log(data);
-        if (data && data.length) {
-            for (var kk = 0; kk < data.length; kk++) {
-                var str = '<option>' + data[kk].type + '</option>';
-                $('#trackType').append(str);
-            }
-        }
-    }).fail(function(jxhr) {
-        var msg = "Server Behaved Unexpectedly";
-        if (jxhr.responseJSON && jxhr.responseJSON.message) {
-            msg = jxhr.responseJSON.message;
-        } else if (jxhr.responseText) {
-            msg = jxhr.responseText;
-        }
-        bootbox.alert(msg);
-    });
-
-}
-
+//when the user closes the modal the childContainer will be hidden..
+$('#modalForTrackEdit').on('hidden.bs.modal', function() {
+    $('.childContainer').addClass('hidden');
+    return false;
+});
 
 //when the user clicks on the new button the setting the value to 'new' for the hidden field to know that user is creating the new item..
 $('.addDashboardItem').click(function(e) {
     $('#trackItemUrl').trigger('reset');
     $('.modal-header').find('.modal-title').html('Create New Dashboard Item');
-    $('#trackEditHiddenInput').val('new');   
+    $('#trackEditHiddenInput').val('new');
+});
+
+$('.addChildItem').click(function() {
+    $('#childItemSeries').clone().appendTo('.childAppendContainer').removeClass('hidden').removeAttr('id');
 });
 
 //to show the focus on first input ....
@@ -175,7 +178,7 @@ $(document).on('shown.bs.modal', function(e) {
 //form validation for dashboard save
 var validator = $('#trackItemUrl').validate({
     rules: {
-       trackUrl : {
+        trackUrl: {
             url: true
         }
     },
@@ -230,7 +233,7 @@ var validator = $('#trackItemUrl').validate({
         }
     }
 });
-$('a.addDashboardItem[type="reset"]').on('click',function(e) {
+$('a.addDashboardItem[type="reset"]').on('click', function(e) {
     validator.resetForm();
 });
 $(document).on('change', '.select2-offscreen', function() {
@@ -262,6 +265,8 @@ function getGlobalTrack() {
                 createTableForTrack(data[kk]);
             }
         }
+
+
     }).fail(function(jxhr) {
         var msg = "Server Behaved Unexpectedly";
         if (jxhr.responseJSON && jxhr.responseJSON.message) {
@@ -290,6 +295,19 @@ function createTableForTrack(trackData) {
 
                 var $tdParent = $('<td class="trackParent"/>').append('<a title="' + trackData.itemUrls[j].url + '" target="_blank" href="' + trackData.itemUrls[j].url + '">' + trackData.itemUrls[j].name + '</a>');
 
+                var $child = $('<td class="trackChild"/>');
+
+                if (trackData.itemUrls[j].childItem && trackData.itemUrls[j].childItem.length) {
+
+                    for (var k = 0; k < trackData.itemUrls[j].childItem.length; k++) {
+                        (function(k) {
+                            $child.append('<a title="' + trackData.itemUrls[j].childItem[k].url + '" target="_blank" href="' + trackData.itemUrls[j].childItem[k].url + '">' + trackData.itemUrls[j].childItem[k].name + '</a>').append('&nbsp;&nbsp;');
+                        })(k);
+                    }
+                } else {
+                    $child = $('<td class="trackChild">-</td>');
+                }
+
                 var $tdAction = $('<td/>');
 
                 $tdAction.append('<div class="btn-group"><button class="btn btn-info pull-left btn-sg tableactionbutton editRowTrackUrl" data-placement="top" value="Update" title="Edit"><i class="ace-icon fa fa-pencil bigger-120"></i></button></div>').append('<div style="margin-left:14px;" class="btn-group"><button class="btn btn-danger pull-left btn-sg tableactionbutton globalTrackUrlRemove" data-placement="top" value="Remove" title="Delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
@@ -310,6 +328,16 @@ function createTableForTrack(trackData) {
                     $editModal.find('#trackDescription').val(trackData.itemUrls[j].description);
 
                     $editModal.find('#trackType').val(trackData.type);
+                    if (trackData.itemUrls[j].childItem && trackData.itemUrls[j].childItem.length) {
+                        $('.childAppendContainer').empty();
+                        for (var p = 0; p < trackData.itemUrls[j].childItem.length; p++) {
+
+                            var $cloneChild = $('#childItemSeries').clone().removeClass('hidden').removeAttr('id');
+                            $cloneChild.find("input.childNameItem").val(trackData.itemUrls[j].childItem[p].name);
+                            $cloneChild.find("input.childUrlItem").val(trackData.itemUrls[j].childItem[p].url);
+                            $('.childAppendContainer').append($cloneChild);
+                        }
+                    }
 
                     var id = $(this).parents('tr').attr('data-itemUrlId');
                     $editModal.find('#trackEditHiddenInputId').val(trackData._id);
@@ -334,6 +362,7 @@ function createTableForTrack(trackData) {
                                     method: 'DELETE',
                                     success: function() {
                                         $trackDatatable.row($tr).remove().draw(false);
+
                                     },
                                     error: function(jxhr) {
                                         bootbox.alert(result);
@@ -354,7 +383,7 @@ function createTableForTrack(trackData) {
                     return false;
                 });
 
-                $tr.append($tdType).append($tdParent).append($tdDescription).append($tdAction);
+                $tr.append($tdType).append($tdParent).append($child).append($tdDescription).append($tdAction);
                 $trackNameList.append($tr);
                 $trackDatatable.row.add($tr).draw();
             })(j);
@@ -380,14 +409,28 @@ $('#trackItemUrl').submit(function(e) {
 
         var itemName = $this.find('.trackNameItem').val().trim();
         var itemURL = $this.find('.trackUrlItem').val().trim();
+        var $childURLContainers = $('.childContainer');
         var itemDescription = $this.find('#trackDescription').val().trim();
+        var childItem = [];
         if (itemName && itemURL) {
             itemUrls.push({
                 name: itemName,
                 url: itemURL,
-                description: itemDescription
+                description: itemDescription,
+                childItem: childItem
             });
         }
+        $childURLContainers.each(function() {
+            $this = $(this);
+            var childItemName = $this.find('.childNameItem').val().trim();
+            var childItemURL = $this.find('.childUrlItem').val().trim();
+            if (childItemName && childItemURL) {
+                itemUrls[0].childItem.push({
+                    name: childItemName,
+                    url: childItemURL
+                });
+            }
+        });
 
         trackData.itemUrls = itemUrls;
         trackData.type = $form.find('#trackType').val();
@@ -417,6 +460,8 @@ $('#trackItemUrl').submit(function(e) {
                 "type": trackData.type
             };
         }
+        console.log('====', reqBody);
+
         $.ajax({
             method: "POST",
             url: url,
@@ -444,12 +489,20 @@ $('#trackItemUrl').submit(function(e) {
 
                     $('#saveBtnTrack').removeAttr('disabled');
                 } else {
+                    console.log(dashboardEditNew);
                     var $tr = $('tr[data-itemUrlId="' + itemId + '"]');
                     $tr.find('.trackType').html(reqBody.type);
                     console.log("reqBody" + JSON.stringify(reqBody.itemUrls));
                     $tr.find('.trackParent').html('<a style="word-break:break-word;" href="' + reqBody.itemUrls.url + '" target="_blank">' + reqBody.itemUrls.name + '</a> ');
 
                     $tr.find('.trackDescription').html(reqBody.itemUrls.description);
+                    var $trChild = $tr.find('.trackChild').empty();
+                    if (reqBody.itemUrls.childItem && reqBody.itemUrls.childItem.length) {
+                        for (var q = 0; q < reqBody.itemUrls.childItem.length; q++) {
+                            console.log("childItem" + JSON.stringify(reqBody.itemUrls.childItem));
+                            $trChild.append('<a style="word-break:break-word;" href="' + reqBody.itemUrls.childItem[q].url + '" target="_blank">' + reqBody.itemUrls.childItem[q].name + '</a>').append('&nbsp;&nbsp;');
+                        }
+                    }
                     $tr.data('trackData', {
                         _id: trackId,
                         itemUrls: trackData.itemUrls,

@@ -45,8 +45,8 @@
 
 <!--tabs start here-->
 <ul class="nav nav-tabs " role="tablist">
-   <li class="active"><a href="#organiz" role="tab" data-toggle="tab">Managed Instances</a></li>
-   <li><a href="#unmanaged" role="tab" data-toggle="tab">Unmanaged Instances</a></li>
+   <li class="active"><a href="#organiz" role="tab" data-toggle="tab" data-toggle="tooltip" title="Node which has been bootstrapped by Catalyst">Managed Instances</a></li>
+   <li><a href="#unmanaged" role="tab" data-toggle="tab" data-toggle="tooltip" title="Node which has not been bootstrapped by Catalyst">UnManaged Instances</a></li>
    <span><a class="syncClick" title="Refresh view">Sync&nbsp;<i class="fa fa-refresh fa-lg " id="instanceRefreshSpinner"></i></a></span>
 </ul>
 
@@ -67,7 +67,7 @@
                   <th style="text-align: center">Actions</th>
                </tr>
             </thead>
-            <tbody>
+            <tbody class="managedInstance">
             </tbody>
          </table>
       </div>
@@ -87,7 +87,7 @@
                   <th style="text-align: center">Actions</th>
                </tr>
             </thead>
-            <tbody>
+            <tbody class="unManagedInstance">
             </tbody>
          </table>
       </div>
@@ -219,6 +219,58 @@
 <!-- /.modal -->
 
 <script type="text/javascript">
+
+//initialising the datatable...
+if (!$.fn.dataTable.isDataTable('#instanceListTable')) {
+    var $instanceManagedDatatable = $('#instanceListTable').DataTable({
+        "pagingType": "full_numbers",
+        "bInfo": false,
+        "bLengthChange": false,
+        "paging": false,
+        "bFilter": false,
+        "aaSorting": [[ 4, "asc" ]],
+        "aoColumns": [{
+            "bSortable": false
+        }, {
+            "bSortable": false
+        }, {
+            "bSortable": false
+        }, {
+            "bSortable": false
+        }, {
+            "bSortable": false
+        }, {
+            "bSortable": false
+        }]
+
+    });
+}
+
+//initialising the datatable...
+if (!$.fn.dataTable.isDataTable('#unmanagedinstanceListTable')) {
+    var $instanceUnManagedDatatable = $('#unmanagedinstanceListTable').DataTable({
+        "pagingType": "full_numbers",
+        "bInfo": false,
+        "bLengthChange": false,
+        "paging": false,
+        "bFilter": false,
+        "aaSorting": [[ 4, "asc" ]],
+        "aoColumns": [{
+            "bSortable": false
+        }, {
+            "bSortable": false
+        }, {
+            "bSortable": false
+        }, {
+            "bSortable": false
+        }, {
+            "bSortable": false
+        }, {
+            "bSortable": false
+        }]
+
+    });
+}
 
 (function() {
 
@@ -395,7 +447,7 @@
 
 
   function loadManagedInstances(managnedData) {
-    var $tbody = $('#instanceListTable tbody').empty();
+    var $tbody = $('#managedInstance tbody').empty();
     for (var i = 0; i < managnedData.length; i++) {
       var $tr = $('<tr></tr>');
       var $tdId = $('<td></td>').append(managnedData[i].platformId);
@@ -427,10 +479,10 @@
             method: 'DELETE',
             url: '/instances/' + id,
             success: function() {
-              $tr.remove();
+              $instanceManagedDatatable.row($tr).remove().draw(false);
             },
             error: function() {
-              alert('unable to delete instance');
+              bootbox.alert('unable to delete instance');
             }
           });
         });
@@ -438,12 +490,13 @@
       var $tdAction = $('<td></td>').append($button);
       $tr.append($tdAction);
       $tbody.append($tr);
+      $instanceManagedDatatable.row.add($tr).draw();
     }
   }
 
 
   function loadUnmanagedInstances(unManagnedData) {
-    var $tbody = $('#unmanagedinstanceListDiv tbody').empty();
+    var $tbody = $('#unManagedInstance tbody').empty();
     for (var i = 0; i < unManagnedData.length; i++) {
       var $tr = $('<tr></tr>').attr('instanceId', unManagnedData[i]._id);
       var $tdId = $('<td></td>').append(unManagnedData[i].platformId);
@@ -469,8 +522,8 @@
       }
       var $tdAction = $('<td></td>').append($input);
       $tr.append($tdAction);
-
       $tbody.append($tr);
+      $instanceUnManagedDatatable.row.add($tr).draw();
     }
   }
 
