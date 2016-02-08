@@ -217,6 +217,10 @@
   height:27px;
   pointer-events:none;
 }
+.footer-box-css{
+  height:27px;
+  pointer-events:none;
+}
 .noProviderCardCSS{
   position: absolute !important;
   left: 50% !important; 
