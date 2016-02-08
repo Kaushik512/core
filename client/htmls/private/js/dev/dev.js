@@ -3501,7 +3501,7 @@ function devCall() {
                             var $tdAttribEditor = $('<td/>').append($attributeInput);
                             var desc = attributesList[i].attributes[attributesNamesList[j]]['description'];
                             if (desc) {
-                                var $tooltipAnchor = $('<a href="#" data-toggle="tooltip" title="' + desc + '!" style="margin-left:15px"><i class="fa fa-info"></i></a>');
+                                var $tooltipAnchor = $('<a data-toggle="tooltip" title="' + desc + '!" style="margin-left:15px"><img src="img/help.png"/></a>');
                                 $tooltipAnchor.tooltip();
                                 $tdAttribEditor.append($tooltipAnchor);
                             }
@@ -3552,7 +3552,7 @@ function devCall() {
                         });
                     } else {
                         if ($this.attr('data-attributeRequired') === 'true') {
-                            alert("Please fill in the required attributes");
+                            bootbox.alert("Please fill in the required attributes");
                             return false;
                         }
                     }

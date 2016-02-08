@@ -539,6 +539,8 @@ if (!$.fn.dataTable.isDataTable('#unmanagedinstanceListTable')) {
   $('.syncClick').click(function() {
     $('#instanceRefreshSpinner').addClass('fa-spin');
     $('a.syncClick').attr('href', 'index.html#ajax/Settings/providerSync.html?' + urlParams.providerId);
+    $instanceManagedDatatable.clear().draw();
+    $instanceUnManagedDatatable.clear().draw();
     getManagedInstances();
     getUnmanagedInstances();
     setTimeout(function() {
