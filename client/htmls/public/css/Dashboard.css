@@ -237,3 +237,34 @@
   margin: 0px 10px; 
   border: 2px dotted #ddd;
 }
+.noProviderCardHeight{
+  height:154px
+}
+.addProviderDetails{
+  text-align:center;
+  padding-top:10px
+}
+.noProviderFooter{
+  margin-top:96px;
+}
+.margintop-15{
+  margin-top:-15px;
+}
+.accordianName{
+  color:#3a87ad;
+  font-size:12px;
+}
+.font-bold{
+  font-weight:bold;
+}
+@media (max-width: 767px) {
+  .noProviderCardHeight{
+    height:142px;
+  }
+  .margintop-15{
+    margin-top: -25px;
+  }
+  .noProviderFooter{
+    margin-top: 86px;
+  }  
+}

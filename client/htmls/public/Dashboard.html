@@ -6,8 +6,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" media="screen" href="css/Dashboard.css">
     <link rel="stylesheet" type="text/css" media="screen" href="css/application.css">
-    </script>
-    </script>
   </head>
   <body>
     <div class="panel-group smart-accordion-default">
@@ -17,7 +15,7 @@
               <a data-toggle="collapse" data-parent="#accordion-Infrastructure" href="#collapseInfrastructure" > 
                 <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> 
                 <i class="fa fa-fw fa-minus-circle txt-color-blue"></i>
-                <b style="color:#3a87ad;font-size:12px;">Infrastructure</b>
+                <b class="accordianName">Infrastructure</b>
               </a>
            </h4>
             <!-- <a href="#modaldashboardinfrastructurecardConfigure" data-toggle="modal" class="createAppConfigure" style="float:right;margin-top:-30px">
@@ -26,18 +24,16 @@
           </div>
 
           <div class="row rowTemplate" style="display:none">
-          
           </div>
-
 
           <div class="col-lg-3 col-md-3 col-xs-6 childProviderTemplate" style="display:none">
             <div class="small-box bg-aqua">
               <div class="inner">
                 <h3>&nbsp;</h3>
                 <p>
-                  <div style="margin-top:-15px;">Provider name </div>
+                  <div class="margintop-15">Provider name </div>
                   <br>
-                  <span class="providerName" style="font-weight:bold"></span>
+                  <span class="providerName font-bold"></span>
                 </p>
               </div>
               <div class="icon">
@@ -48,7 +44,6 @@
               </a>
             </div>
           </div>
-
 
           <div class="col-lg-3 col-md-3 col-xs-6 childTotalInstanceTemplate" style="display:none">
             <div class="small-box bg-aqua">
@@ -64,7 +59,6 @@
             </div>
           </div>
 
-
           <div class="col-lg-3 col-md-3 col-xs-6 childManagedInstanceTemplate" style="display:none">
             <div class="small-box bg-aqua">
               <div class="inner">
@@ -78,8 +72,6 @@
               </a>
             </div>
           </div>
-          
-
 
           <div class="col-lg-3 col-md-3 col-xs-6 childUnmanagedInstanceTemplate" style="display:none">
             <div class="small-box bg-aqua">
@@ -95,9 +87,6 @@
               </a>
             </div>
           </div>
-
-
-
 
           <div id="collapseInfrastructure" class="panel-collapse collapse in">
             <div class="panel-body">
@@ -160,22 +149,14 @@
 
                 </div>
                 <div class="row noProviderView" style="display:none">
-                  <!-- <div id="noenvwarning" class="alert alert-warning noEnvWarning text-center">
-                    <span>Please add the provider details </span>
-                    <span id="noProviderCard" >
-                        <i class="fa fa-plus noProviderFaIconCSS2" style=""></i>
-                    </span>
-                    <span>to get the complete dashboard.</span>
-                  </div> -->
                   <div class="col-lg-3 col-md-3 col-xs-6">
-                    <div class="small-box bg-aqua" style="height:154px">
-                      <div style="text-align:center;padding-top:10px"><b>Add Provider Details</b></div>
-                      <a id="noProviderCard" class="noProviderCardCSS" style="">
+                    <div class="small-box bg-aqua noProviderCardHeight">
+                      <div class="addProviderDetails"><b>Add Provider Details</b></div>
+                      <span id="noProviderCard" class="noProviderCardCSS" style="">
                         <i class="fa fa-plus noProviderFaIconCSS"></i>
-                      </a>
-                      <a id="" class="small-box-footer managedUnmanagedCSS" href="#" style="margin-top:96px;">
-                        
-                      </a>
+                      </span>
+                      <span class="small-box-footer managedUnmanagedCSS noProviderFooter">
+                      </span>
                     </div>
                   </div>
                   <div class="col-lg-3 col-md-3 col-xs-6">
@@ -187,7 +168,7 @@
                       <div class="icon">
                         <i class="fa fa-laptop"></i>
                       </div>
-                      <a id="" class="small-box-footer managedUnmanagedCSS" href="#">
+                      <a class="small-box-footer managedUnmanagedCSS" href="#">
                         
                       </a>
                     </div>
@@ -234,369 +215,6 @@
           </div>
       </div>
     </div>
+    <script src="js/dashboard.js"></script>
   </body>
-<script type="text/javascript">
-  $(document).ready(function() {
-    var managedTotal =0, unmanagedTotal=0, managedunmanagedTotal=0;
-    function updateTotalCount(type, id, count){
-      if(type==="managed"){
-        managedTotal += count;
-        $('#totalmanagedInstances').html(managedTotal);
-      }
-      if(type==="unmanaged"){
-        unmanagedTotal += count;
-        $('#totalunmanagedInstances').html(unmanagedTotal);
-      }
-      if(type==="managedunmanaged"){
-        managedunmanagedTotal +=count;
-        $('#totalInstances').html(managedunmanagedTotal);
-      }
-    }
-    $('#providerMoreInfo').click(function(){
-      var providerListLink = "/private/index.html#ajax/Settings/ProvidersList.html";
-      if (top.location != location) {
-        window.top.location.href = providerListLink;
-      }else{
-        window.location.href = providerListLink;
-      }
-    });
-
-    $('#noProviderCard').click(function(){
-      var noproviderListLink = "/private/index.html#ajax/Settings/CreateProviders.html?new";
-      if (top.location != location) {
-        window.top.location.href = noproviderListLink;
-      }else{
-        window.location.href = noproviderListLink;
-      }
-    });
-    $.get('../allproviders/list', function(totalProviders) {
-      var totalcountproviders;
-      var awsproviderscount = totalProviders.awsProviders.length;
-      var openstackproviderscount = totalProviders.openstackProviders.length;
-      var vmwareproviderscount = totalProviders.vmwareProviders.length;
-      var hpplubliccloudproviderscount = totalProviders.hpPlublicCloudProviders.length;
-      var azureproviderscount = totalProviders.azureProviders.length;
-
-      totalcountproviders = awsproviderscount + openstackproviderscount + vmwareproviderscount + hpplubliccloudproviderscount + azureproviderscount;
-      $('#totalProviders').empty();
-      $('#awsProviderView').empty();
-      $('#openstackProviderView').empty();
-      $('#vmwareProvidersView').empty();
-      $('#hpPlublicCloudProvidersView').empty();
-      $('#azureProvidersView').empty();
-
-      if(totalcountproviders > 0){
-        $('#totalProviders').append(totalcountproviders);
-        var awstotalinstancecount = 0;
-        var countaws =0;
-
-        for(var i=0;i<awsproviderscount;i++){
-          (function(i){
-            var $rowTemplate = $('.rowTemplate').clone();
-            $rowTemplate.removeClass('rowTemplate');
-
-            var $childProviderTemplate = $('.childProviderTemplate').clone();
-            $childProviderTemplate.removeClass('childProviderTemplate');
-            var awsSpecificProvName = totalProviders.awsProviders[i].providerName;
-            $childProviderTemplate.find('.providerName').empty().append(awsSpecificProvName);
-            $childProviderTemplate.find('.small-box').removeClass('bg-aqua').addClass('bg-green');
-
-            var providerid = totalProviders.awsProviders[i]._id;
-            //alert(providerid);
-
-            var providerSpecificHref = "/private/index.html#ajax/Settings/CreateProviders.html?"+providerid;
-            $childProviderTemplate.find('.providerSpecificMoreInfo').click(function(){
-              if (top.location != location) {
-                window.top.location.href = providerSpecificHref;
-              }else{
-                window.location.href = providerSpecificHref;
-              }
-            });
-
-            var $childManagedInstanceTemplate = $('.childManagedInstanceTemplate').clone();
-            $childManagedInstanceTemplate.removeClass('childManagedInstanceTemplate');
-            $childManagedInstanceTemplate.find('.small-box').removeClass('bg-aqua').addClass('bg-green');
-
-            var $childUnmanagedInstanceTemplate = $('.childUnmanagedInstanceTemplate').clone();
-            $childUnmanagedInstanceTemplate.removeClass('childUnmanagedInstanceTemplate');
-            $childUnmanagedInstanceTemplate.find('.small-box').removeClass('bg-aqua').addClass('bg-green');
-
-            var $childTotalInstanceTemplate = $('.childTotalInstanceTemplate').clone();
-            $childTotalInstanceTemplate.removeClass('childTotalInstanceTemplate');
-            $childTotalInstanceTemplate.find('.small-box').removeClass('bg-aqua').addClass('bg-green');
-
-            $.get('../providers/'+providerid+'/managedInstances', function(dataManaged) {
-              var managedInstancesLength = dataManaged.length;
-              //console.log("Arab");
-              $childManagedInstanceTemplate.find('.countMangedInstance').empty().append(managedInstancesLength);
-
-
-              var totalManagedUnmanagedData;
-              var managedData = dataManaged.length;
-              updateTotalCount("managed",providerid,managedData);
-
-              $.get('../providers/'+providerid+'/unmanagedInstances', function(dataUnmanaged) {
-                countaws++;
-                //console.log(dataUnmanaged.length);
-                $childUnmanagedInstanceTemplate.find('.countUnmangedInstance').empty().append(dataUnmanaged.length);
-                
-                var convertHrefmanaged = "/private/index.html#ajax/Settings/providerSync.html?"+providerid;
-                $childUnmanagedInstanceTemplate.find('.convertUnmanagedtoManaged').click(function(){
-                  if (top.location != location) {
-                    window.top.location.href = convertHrefmanaged;
-                  }else{
-                    window.location.href = convertHrefmanaged;
-                  }
-                });
-                var unmanagedData = dataUnmanaged.length;
-
-                updateTotalCount("unmanaged",providerid,unmanagedData);
-
-                totalManagedUnmanagedData = managedData + unmanagedData;
-
-                updateTotalCount("managedunmanaged",providerid,totalManagedUnmanagedData);
-                //alert(totalManagedUnmanagedData);
-                awstotalinstancecount = awstotalinstancecount + totalManagedUnmanagedData;
-                // alert(awstotalinstancecount);
-                if(countaws === awsproviderscount){
-                  //alert(awstotalinstancecount);
-                }
-                $childTotalInstanceTemplate.find('.countTotalInstance').empty().append(totalManagedUnmanagedData);
-              });
-              
-            });
-
-            $rowTemplate.append($childProviderTemplate);
-            $rowTemplate.append($childTotalInstanceTemplate);
-            $rowTemplate.append($childManagedInstanceTemplate);
-            $rowTemplate.append($childUnmanagedInstanceTemplate);
-
-
-            $childUnmanagedInstanceTemplate.css({display:'block'});
-            $childManagedInstanceTemplate.css({display:'block'});
-            $childTotalInstanceTemplate.css({display:'block'});
-            $childProviderTemplate.css({display:'block'});
-            $rowTemplate.css({display:'block'});
-            $('#awsProviderView').append($rowTemplate);
-          })(i);
-        }
-        for(var j=0;j<azureproviderscount;j++){
-          (function(j){
-            var $rowTemplate = $('.rowTemplate').clone();
-            $rowTemplate.removeClass('rowTemplate');
-
-            var $childProviderTemplate = $('.childProviderTemplate').clone();
-            $childProviderTemplate.removeClass('childProviderTemplate');
-            var azureProvidersName = totalProviders.azureProviders[j].providerName;
-            //alert(azureProvidersName);
-            $childProviderTemplate.find('.providerName').empty().append(azureProvidersName);
-            $childProviderTemplate.find('.small-box').removeClass('bg-aqua').addClass('bg-yellow');
-
-            var providerid = totalProviders.azureProviders[j]._id;
-            var totalInstances;
-            
-            var providerSpecificHref = "/private/index.html#ajax/Settings/CreateProviders.html?"+providerid;
-            $childProviderTemplate.find('.providerSpecificMoreInfo').click(function(){
-              if (top.location != location) {
-                window.top.location.href = providerSpecificHref;
-              }else{
-                window.location.href = providerSpecificHref;
-              }
-            });
-
-            var $childManagedInstanceTemplate = $('.childManagedInstanceTemplate').clone();
-            $childManagedInstanceTemplate.removeClass('childManagedInstanceTemplate');
-            $childManagedInstanceTemplate.find('.small-box').removeClass('bg-aqua').addClass('bg-yellow');
-            
-
-
-            var $childUnmanagedInstanceTemplate = $('.childUnmanagedInstanceTemplate').clone();
-            $childUnmanagedInstanceTemplate.removeClass('childUnmanagedInstanceTemplate');
-            $childUnmanagedInstanceTemplate.find('.small-box').removeClass('bg-aqua').addClass('bg-yellow');
-            
-
-            var $childTotalInstanceTemplate = $('.childTotalInstanceTemplate').clone();
-            $childTotalInstanceTemplate.removeClass('childTotalInstanceTemplate');
-            $childTotalInstanceTemplate.find('.small-box').removeClass('bg-aqua').addClass('bg-yellow');
-            
-            $rowTemplate.append($childProviderTemplate);
-            $rowTemplate.append($childTotalInstanceTemplate);
-            $rowTemplate.append($childManagedInstanceTemplate);
-            $rowTemplate.append($childUnmanagedInstanceTemplate);
-
-
-            $childUnmanagedInstanceTemplate.css({display:'block'});
-            $childManagedInstanceTemplate.css({display:'block'});
-            $childTotalInstanceTemplate.css({display:'block'});
-            $childProviderTemplate.css({display:'block'});
-            $rowTemplate.css({display:'block'});
-            $('#azureProvidersView').append($rowTemplate);
-          })(j);
-        }
-        for(var k=0;k<vmwareproviderscount;k++){
-          (function(k){
-            var $rowTemplate = $('.rowTemplate').clone();
-            $rowTemplate.removeClass('rowTemplate');
-
-            var $childProviderTemplate = $('.childProviderTemplate').clone();
-            $childProviderTemplate.removeClass('childProviderTemplate');
-            var vmwareProvidersName = totalProviders.vmwareProviders[k].providerName;
-            //alert(vmwareProvidersName);
-            $childProviderTemplate.find('.providerName').empty().append(vmwareProvidersName);
-            $childProviderTemplate.find('.small-box').removeClass('bg-aqua').addClass('bg-blue');
-
-            var providerid = totalProviders.vmwareProviders[k]._id;
-            var totalInstances;
-
-            var providerSpecificHref = "/private/index.html#ajax/Settings/CreateProviders.html?"+providerid;
-            $childProviderTemplate.find('.providerSpecificMoreInfo').click(function(){
-              if (top.location != location) {
-                window.top.location.href = providerSpecificHref;
-              }else{
-                window.location.href = providerSpecificHref;
-              }
-            });
-            
-
-            var $childManagedInstanceTemplate = $('.childManagedInstanceTemplate').clone();
-            $childManagedInstanceTemplate.removeClass('childManagedInstanceTemplate');
-            $childManagedInstanceTemplate.find('.small-box').removeClass('bg-aqua').addClass('bg-blue');
-            
-
-
-            var $childUnmanagedInstanceTemplate = $('.childUnmanagedInstanceTemplate').clone();
-            $childUnmanagedInstanceTemplate.removeClass('childUnmanagedInstanceTemplate');
-            $childUnmanagedInstanceTemplate.find('.small-box').removeClass('bg-aqua').addClass('bg-blue');
-            
-
-            var $childTotalInstanceTemplate = $('.childTotalInstanceTemplate').clone();
-            $childTotalInstanceTemplate.removeClass('childTotalInstanceTemplate');
-            $childTotalInstanceTemplate.find('.small-box').removeClass('bg-aqua').addClass('bg-blue');
-            
-            $rowTemplate.append($childProviderTemplate);
-            $rowTemplate.append($childTotalInstanceTemplate);
-            $rowTemplate.append($childManagedInstanceTemplate);
-            $rowTemplate.append($childUnmanagedInstanceTemplate);
-
-
-            $childUnmanagedInstanceTemplate.css({display:'block'});
-            $childManagedInstanceTemplate.css({display:'block'});
-            $childTotalInstanceTemplate.css({display:'block'});
-            $childProviderTemplate.css({display:'block'});
-            $rowTemplate.css({display:'block'});
-            $('#vmwareProvidersView').append($rowTemplate);
-          })(k);
-        }
-        for(var l=0;l<hpplubliccloudproviderscount;l++){
-          (function(l){
-            var $rowTemplate = $('.rowTemplate').clone();
-            $rowTemplate.removeClass('rowTemplate');
-
-            var $childProviderTemplate = $('.childProviderTemplate').clone();
-            $childProviderTemplate.removeClass('childProviderTemplate');
-            var hpPlublicCloudProvidersName = totalProviders.hpPlublicCloudProviders[l].providerName;
-            //alert(hpPlublicCloudProvidersName);
-            $childProviderTemplate.find('.providerName').empty().append(hpPlublicCloudProvidersName);
-            $childProviderTemplate.find('.small-box').removeClass('bg-aqua').addClass('bg-teal');
-
-            var providerid = totalProviders.hpPlublicCloudProviders[l]._id;
-            var totalInstances;
-            
-            var providerSpecificHref = "/private/index.html#ajax/Settings/CreateProviders.html?"+providerid;
-            $childProviderTemplate.find('.providerSpecificMoreInfo').click(function(){
-              if (top.location != location) {
-                window.top.location.href = providerSpecificHref;
-              }else{
-                window.location.href = providerSpecificHref;
-              }
-            });
-
-            var $childManagedInstanceTemplate = $('.childManagedInstanceTemplate').clone();
-            $childManagedInstanceTemplate.removeClass('childManagedInstanceTemplate');
-            $childManagedInstanceTemplate.find('.small-box').removeClass('bg-aqua').addClass('bg-teal');
-            
-
-
-            var $childUnmanagedInstanceTemplate = $('.childUnmanagedInstanceTemplate').clone();
-            $childUnmanagedInstanceTemplate.removeClass('childUnmanagedInstanceTemplate');
-            $childUnmanagedInstanceTemplate.find('.small-box').removeClass('bg-aqua').addClass('bg-teal');
-            
-
-            var $childTotalInstanceTemplate = $('.childTotalInstanceTemplate').clone();
-            $childTotalInstanceTemplate.removeClass('childTotalInstanceTemplate');
-            $childTotalInstanceTemplate.find('.small-box').removeClass('bg-aqua').addClass('bg-teal');
-            
-            $rowTemplate.append($childProviderTemplate);
-            $rowTemplate.append($childTotalInstanceTemplate);
-            $rowTemplate.append($childManagedInstanceTemplate);
-            $rowTemplate.append($childUnmanagedInstanceTemplate);
-
-
-            $childUnmanagedInstanceTemplate.css({display:'block'});
-            $childManagedInstanceTemplate.css({display:'block'});
-            $childTotalInstanceTemplate.css({display:'block'});
-            $childProviderTemplate.css({display:'block'});
-            $rowTemplate.css({display:'block'});
-            $('#hpPlublicCloudProvidersView').append($rowTemplate);
-          })(l);
-        }
-        for(var m=0;m<openstackproviderscount;m++){
-          (function(m){
-            var $rowTemplate = $('.rowTemplate').clone();
-            $rowTemplate.removeClass('rowTemplate');
-
-            var $childProviderTemplate = $('.childProviderTemplate').clone();
-            $childProviderTemplate.removeClass('childProviderTemplate');
-            var openstackSpecificProvName = totalProviders.openstackProviders[m].providerName;
-            //alert(openstackSpecificProvName);
-            $childProviderTemplate.find('.providerName').empty().append(openstackSpecificProvName);
-            $childProviderTemplate.find('.small-box').removeClass('bg-aqua').addClass('bg-red');
-
-            var providerid = totalProviders.openstackProviders[m]._id;
-            var totalInstances;
-            
-            var providerSpecificHref = "/private/index.html#ajax/Settings/CreateProviders.html?"+providerid;
-            $childProviderTemplate.find('.providerSpecificMoreInfo').click(function(){
-              if (top.location != location) {
-                window.top.location.href = providerSpecificHref;
-              }else{
-                window.location.href = providerSpecificHref;
-              }
-            });
-
-            var $childManagedInstanceTemplate = $('.childManagedInstanceTemplate').clone();
-            $childManagedInstanceTemplate.removeClass('childManagedInstanceTemplate');
-            $childManagedInstanceTemplate.find('.small-box').removeClass('bg-aqua').addClass('bg-red');
-            
-
-
-            var $childUnmanagedInstanceTemplate = $('.childUnmanagedInstanceTemplate').clone();
-            $childUnmanagedInstanceTemplate.removeClass('childUnmanagedInstanceTemplate');
-            $childUnmanagedInstanceTemplate.find('.small-box').removeClass('bg-aqua').addClass('bg-red');
-            
-            var $childTotalInstanceTemplate = $('.childTotalInstanceTemplate').clone();
-            $childTotalInstanceTemplate.removeClass('childTotalInstanceTemplate');
-            $childTotalInstanceTemplate.find('.small-box').removeClass('bg-aqua').addClass('bg-red');
-            
-            $rowTemplate.append($childProviderTemplate);
-            $rowTemplate.append($childTotalInstanceTemplate);
-            $rowTemplate.append($childManagedInstanceTemplate);
-            $rowTemplate.append($childUnmanagedInstanceTemplate);
-
-
-            $childUnmanagedInstanceTemplate.css({display:'block'});
-            $childManagedInstanceTemplate.css({display:'block'});
-            $childTotalInstanceTemplate.css({display:'block'});
-            $childProviderTemplate.css({display:'block'});
-            $rowTemplate.css({display:'block'});
-            $('#openstackProviderView').append($rowTemplate);
-          })(m);
-        }
-      }else{
-        var $presentProviderView = $('.infrastructureClass');
-        $presentProviderView.hide();
-        $('.noProviderView').show();
-      }
-    }).fail(function() {});
-  });
-</script>
+</html>
