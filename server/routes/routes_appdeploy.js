@@ -13,10 +13,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
-
-// The file contains all the end points for AppDeploy
-
 var logger = require('_pr/logger')(module);
 var AppDeploy = require('_pr/model/app-deploy/app-deploy');
 var errorResponses = require('./error_responses');
@@ -182,7 +178,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             }
         });
     });
-
     // Appdeploy api supported by pagination,search and sort
     app.post('/app/deploy/list', function(req, res) {
         logger.debug("req query: ", JSON.stringify(req.query));
