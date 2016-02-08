@@ -257,7 +257,7 @@ InstanceSchema.index({
 var Instances = mongoose.model('instances', InstanceSchema);
 
 var InstancesDao = function() {
-
+	
     this.searchInstances = function(searchquery, options, callback) {
         logger.debug("Enter searchInstances query - (%s)", searchquery);
         Instances.textSearch(searchquery, options, function(err, data) {
