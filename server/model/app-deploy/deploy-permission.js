@@ -21,47 +21,37 @@ var ObjectId = require('mongoose').Types.ObjectId;
 var uniqueValidator = require('mongoose-unique-validator');
 var schemaValidator = require('_pr/model/utils/schema-validator');
 
-// File which contains App Data DB schema and DAO methods. 
+// File which contains App Data Permission DB schema and DAO methods. 
 
 var Schema = mongoose.Schema;
 
-var AppDataSchema = new Schema({
+var DeployPermissionSchema = new Schema({
     projectId: String,
     envId: String,
-    version: String,
-    nexus:{
-        repoURL: String,
-        nodeIps: [String]
-    },
-    docker:{
-        image: String,
-        container: String,
-        port: String,
-        nodeIps: [String]
-    }
+    isApproved: String
 });
 
 
-// Save or update appData informations.
-AppDataSchema.statics.createNewOrUpdate = function(appData, callback) {
+// Save or update appData Permission informations.
+DeployPermissionSchema.statics.createNewOrUpdate = function(permission, callback) {
     this.find({
-        projectId: appData.projectId,
-        envId: appData.envId
-    }, function(err, aData) {
+        projectId: permission.projectId,
+        envId: permission.envId
+    }, function(err, aPermission) {
         if (err) {
             logger.debug("Error fetching record.", err);
             callback(err, null);
         }
-        if (data.length) {
+        if (aPermission.length) {
             var setData = {};
-            var keys = Object.keys(appData);
+            var keys = Object.keys(permission);
             for (var i = 0; i < keys.length; i++) {
-                setData[keys[i]] = appData[keys[i]];
+                setData[keys[i]] = permission[keys[i]];
             }
             var that = this;
             that.update({
-                projectId: appData.projectId,
-                envId: appData.envId
+                projectId: permission.projectId,
+                envId: permission.envId
             }, {
                 $set: setData
             }, {
@@ -74,32 +64,32 @@ AppDataSchema.statics.createNewOrUpdate = function(appData, callback) {
                 callback(null, updatedData);
             });
         } else {
-            this.save(function(err, appData) {
+            this.save(function(err, aPermission) {
                 if (err) {
-                    logger.debug("Got error while creating appData: ", err);
+                    logger.debug("Got error while creating a Permission: ", err);
                     callback(err, null);
                 }
-                logger.debug("Creating appData: ", JSON.stringify(appData));
-                callback(null, appData);
+                logger.debug("Creating a Permission: ", JSON.stringify(aPermission));
+                callback(null, aPermission);
             });
         }
     });
 };
 
-// Get AppData by project,env.
-AppDataSchema.statics.getAppDataByProjectAndEnv = function(projectId, envId, callback) {
+// Get AppData by ip,project,env.
+DeployPermissionSchema.statics.getDeployPermissionByProjectAndEnv = function(projectId, envId, callback) {
     this.find({
         projectId: projectId,
         envId: envId
-    }, function(err, anAppData) {
+    }, function(err, permission) {
         if (err) {
-            logger.debug("Got error while fetching appData: ", err);
+            logger.debug("Got error while fetching permission: ", err);
             callback(err, null);
         }
-        logger.debug("Got appData: ", JSON.stringify(anAppData));
-        callback(null, anAppData);
+        logger.debug("Got permission: ", JSON.stringify(permission));
+        callback(null, permission);
     });
 };
 
-var AppData = mongoose.model("appData", AppDataSchema);
-module.exports = AppData;
+var DeployPermission = mongoose.model("deployPermission", DeployPermissionSchema);
+module.exports = DeployPermission;
