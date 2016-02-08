@@ -25,7 +25,10 @@ var uniqueValidator = require('mongoose-unique-validator');
 var Schema = mongoose.Schema;
 
 var TrackTypeSchema = new Schema({
-    type: String,
+    subType: [{
+        name:String,
+    }],
+    type:String,
     description: String
 });
 
@@ -67,8 +70,9 @@ TrackTypeSchema.statics.updateTrack = function(trackTypeId, trackTypeData, callb
         "_id": new ObjectId(trackTypeId)
     }, {
         $set: {
-            type: trackTypeData.type,
-            description: trackTypeData.description
+            "name": trackTypeData.type,
+            "subType.$.name": trackTypeData.subType,
+            "description": trackTypeData.description
         }
     }, {
         upsert: false

@@ -1,21 +1,17 @@
-<script>
-//   $(".tree-view").hide();
-   
-</script>
 <div class="row">
    <div class="col-md-12">
       <div class="col-md-12">
-        <form action="" id="myForm101">
-         <div class="widget-box">
-            <div class="widget-header">
-               <h4 class="widget-margin" style="color:black;">Nexus Configuration Management  <span id="spnconfigmanagement"></span></h4>
-            </div>
-            <div class="widget-body">
-               <div class="widget-main" style="min-height:350px;">
-                  <div>
-                     <section id="widget-grid" class="">
-                        <!-- START ROW -->
-                        <div class="row">             
+         <form action="" id="myForm101">
+            <div class="widget-box">
+               <div class="widget-header">
+                  <h4 class="widget-margin" style="color:black;">Nexus Configuration Management  <span id="spnconfigmanagement"></span></h4>
+               </div>
+               <div class="widget-body">
+                  <fieldset>
+                     <div class="widget-main">
+                        <section id="widget-grid" class="">
+                           <!-- START ROW -->
+                           <div class="row">
                               <!-- Widget ID (each widget will need unique ID)-->
                               <div class="jarviswidget" id="wid-id-3" data-widget-editbutton="false" data-widget-custombutton="false">
                                  <!-- widget div-->
@@ -23,39 +19,73 @@
                                     <!-- widget content -->
                                     <div class="widget-body no-padding">
                                        <div class="col-lg-6 col-md-6">
-                                             <label for="">Nexus Server Name:<span class="control-label redSpan">&nbsp;*</span></label>
-                                             <!-- <i class="icon-append fa fa-building"></i> -->
-                                             <input name="ctl00$MainContent$orgname" value="" id="nexusservername" class="form-control" type="text"  cdata="catalyst" unique="true"  cat-validation="required,max15">
+                                          <label for="">Nexus Server Name:<span class="control-label redSpan">&nbsp;*</span></label>
+                                          <div class="input-groups">
+                                             <input name="" value="" id="nexusservername" class="required form-control" type="text"  cdata="catalyst" unique="true"  cat-validation="required,max15">
                                           </div>
+                                       </div>
+                                       <div class="col-lg-6 col-md-6">
+                                          <label for="">User Name:<span class="control-label redSpan">&nbsp;*</span></label>
+                                          <div class="input-groups">
+                                             <input autocomplete="false" name="username" id="username" class="required form-control" cdata="catalyst" type="text">
+                                          </div>
+                                       </div>
+                                       <div class="col-lg-6 col-md-6 appNameLabel">
+                                          <label for="name">Password:<span class="control-label redSpan">&nbsp;*</span></label>
+                                          <div class="input-groups">
+                                             <input name="nexuspassword" id="nexuspassword" class="required form-control" type="text" cdata="catalyst"  cat-validation="required,max15">
+                                          </div>
+                                       </div>
+                                       <div class="col-lg-6 col-md-6 appNameLabel">
+                                          <label for="link">Nexus Server URL:<span class="control-label redSpan">&nbsp;*</span></label>
+                                          <div class="input-groups">
+                                             <input type="text" unique="true" name="hostname" id="hostname" class="required form-control" type="text"  cdata="catalyst"  cat-validation="required" type="url">
+                                          </div>
+                                       </div>
+                                       <div class="col-lg-6 col-md-6 appNameLabel">
+                                          <label for="name">Organization:<span class="control-label redSpan">&nbsp;*</span></label>
+                                          <div class="input-groups">
+                                          <select id="orgname" name="orgname" unique="true" class="required chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst">
+                                             <option value="">Select an Organization</option>
+                                          </select>
+                                        </div>
+                                     </div>
+                                       <div class="col-lg-6 col-md-6 appNameLabel">
+                                          <label for="name">Nexus Group ID:<span class="control-label redSpan">&nbsp;*</span></label>
+                                          <div class="input-groups">
+                                             <input name="groupid" id="groupid" class="required form-control" type="text"  cdata="catalyst"  cat-validation="required">
+                                          </div>
+                                       </div>
+=======
                                           
                                           
                                              <div class="col-lg-6 col-md-6">
-                                                <label for="name">User Name:<span class="control-label redSpan">&nbsp;*</span></label>
-                                                <!-- <i class="icon-append fa fa-building"></i> -->
-                                                <input name="ctl00$MainContent$orgname" value="" id="username" class="form-control" type="text"  cdata="catalyst"  cat-validation="required,max15">
-                                             </div>
-                                             <div class="col-lg-6 col-md-6" style="margin-top:25px">
-                                                <label for="name">Password:<span class="control-label redSpan">&nbsp;*</span></label>
-                                                <!-- <i class="icon-append fa fa-building"></i> -->
-                                                <input name="ctl00$MainContent$orgname" value="" id="nexuspassword" class="form-control" type="password"  cdata="catalyst"  cat-validation="required,max15">
-                                             </div>
+                                          <label for="">User Name:<span class="control-label redSpan">&nbsp;*</span></label>
+                                          <div class="input-groups">
+                                             <input autocomplete="false" name="username" id="username" class="required form-control" cdata="catalyst" type="text">
+                                          </div>
+                                       </div>
+                                             <div class="col-lg-6 col-md-6 appNameLabel">
+                                          <label for="name">Password:<span class="control-label redSpan">&nbsp;*</span></label>
+                                          <div class="input-groups">
+                                             <input name="nexuspassword" id="nexuspassword" class="required form-control" type="text" cdata="catalyst"  cat-validation="required,max15">
+                                          </div>
+                                       </div>
                                           
-                                              <div class="col-lg-6 col-md-6" style="margin-top:25px">
-                                                <label for="link">Nexus Server URL:<span class="control-label redSpan">&nbsp;*</span></label>
-                                                <!-- <i class="icon-append fa fa-building"></i> -->
-                                                <input type="text" unique="true" name="ctl00$MainContent$orgname" value="" id="hostname" class="form-control" type="text"  cdata="catalyst"  cat-validation="required" type="url"  name="website">
-                                             </div>
-                                             <div class="col-lg-6 col-md-6" style="margin-top:25px">
-                                                <label for="name">Organization:<span class="control-label redSpan">&nbsp;*</span></label>
-                                                <select id="orgname" unique="true" class="chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst"  cat-validation="required">
-                                                   <option value="">Select an Organization</option>
-                                                </select>
-                                                <span data-val-controltovalidate="domainname" id="MainContent_Req_domainname" data-val="true" data-val-evaluationfunction="RequiredFieldValidatorEvaluateIsValid" data-val-initialvalue="" style="visibility:hidden;">Required</span>
-                                             </div>
-                                             <!-- <div class="col-lg-6 col-md-6" style="margin-top:25px">
-                                                <label for="name">Nexus Group ID:<span class="control-label redSpan">&nbsp;*</span></label>
-                                                <input name="ctl00$MainContent$orgname" value="" id="groupid" class="form-control" type="text"  cdata="catalyst"  cat-validation="required">
-                                             </div> -->
+                                               <div class="col-lg-6 col-md-6 appNameLabel">
+                                          <label for="link">Nexus Server URL:<span class="control-label redSpan">&nbsp;*</span></label>
+                                          <div class="input-groups">
+                                             <input type="text" unique="true" name="hostname" id="hostname" class="required form-control" type="text"  cdata="catalyst"  cat-validation="required" type="url">
+                                          </div>
+                                       </div>
+                                       <div class="col-lg-6 col-md-6 appNameLabel">
+                                          <label for="name">Organization:<span class="control-label redSpan">&nbsp;*</span></label>
+                                          <div class="input-groups">
+                                          <select id="orgname" name="orgname" unique="true" class="required chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst">
+                                             <option value="">Select an Organization</option>
+                                          </select>
+                                        </div>
+                                     </div>
                                              <div class="col-lg-6 col-md-6">
                                                 <a style="cursor:pointer;" data-toggle="modal" data-backdrop="  false" id="nexusGroupAnchorDetails" href="#nexusGroupDetailsModal"> <img title="Add Nexus Group Details" data-placement="top" rel="tooltip" style="float:right;margin-top:20px;" src="img/add.png"></a>
                                                 <label style="float:left;margin-top:20px;">Nexus Group ID Details :</label>
@@ -78,17 +108,18 @@
                                              </div>
                                           </div>                                          
                                     </div>
-                                    <!-- end widget content -->
                                  </div>
-                                 <!-- end widget div -->
+                                 <!-- end widget content -->
                               </div>
-                              <!-- end widget -->             
-                        </div>
-                        <!-- END ROW -->
-                     </section>
-                     <!-- end widget grid -->
-                  </div>
+                              <!-- end widget div -->
+                           </div>
+                           <!-- end widget -->             
+                        </section>
+                        <!-- end widget grid -->
+                     </div>
+                  </fieldset>
                </div>
+
             </div>
             <div class="widget-toolbox clearfix">
                <div class="btn-group pull-right">
@@ -102,8 +133,8 @@
                 </button>
                </div>
             </div>
-         </div>
-       </form><!--form ends-->
+         </form>
+         <!--form ends-->
       </div>
    </div>
 </div> <!--row ends-->
@@ -144,7 +175,6 @@
    //Form Name
   $(document).ready(function() {
    $(".chooseOrganization").select2();
-   //isUserTypeSuperAdmin();
    $('#frmconfigmanagement').hide();
   });
   $(document).ready(function() {
@@ -255,84 +285,151 @@
       }
     });
   }
-   function inLineReady() {
-       
-       $("input[type='text']").on("click", function () {
-           $(this).select();
-           $("#msgOrgName").hide();
-       });
-       $("#popupSelectProvider").modal({ keyboard: false, backdrop: "static" });
-       readformnew(26); //26 is for Nexus
-       //
-      /* if(typeof $('#myForm101').find('button[rowid]').attr('rowid') != 'undefined')
-          $('#orgname').attr('disabled','disabled');*/
-        
-       $('#content').css("opacity", "1 !important");
-       //Force opening the left navigation menu
-       if ($('#navSettings').is(":visible") == false) {
-           $('#navSettings').css("display", '');
-           $('#navSettings > ul > li').first().addClass('open');
-           $('#navSettings > ul > li > ul').css("display", "none");
-           $('#navSettings > ul > li > ul').first().css("display", "block");
-       }
-       //redrawing the breadcrumb and selecting the tree
-       $('#ulsettingstree > li').removeClass('active');
-       $('#ulsettingstree > li').each(function () {
-           if ($(this).text().trim() == "Projects")
-               $(this).addClass('active');
-       });
-      
-       $('#content').css('opacity','1 !important');
-       drawBreadCrumb1();
-       //enableUniqueCheckingForInputs(26);
-   }
-   
-   inLineReady();
-   
+  //redrawing the breadcrumb and selecting the tree
+  $('#ulsettingstree > li').removeClass('active');
+  $('#ulsettingstree > li').each(function() {
+    if ($(this).text().trim() == "Projects")
+      $(this).addClass('active');
+  });
+
+  $('#content').css('opacity', '1 !important');
+  drawBreadCrumb1();
+}
+
+inLineReady();
 </script>
 <script>
-   $(document).ready(function () {
-      $("#nexusservername").focus();
-      
-     });
 
-    $('#myForm101').submit(function() {
-      var $form = $('#myForm101');
-      var nexusDesc = [];
-      var nexusData = {};
-      nexusData.username = $form.find('#username').val();
-      nexusData.nexuspassword = $form.find('#nexuspassword').val();
-      nexusData.hostname = $form.find('#hostname').val();
-       var reqBody = {
-            nexusDesc: [nexusData]
+$(document).ready(function() {
+  $("#nexusservername").focus();
+  var isEditActivate = location.href.toString().split('?')[1] === "new" ? false : true;
+  if (isEditActivate) {
+    $('#orgname').attr('disabled', 'disabled');    
+    $('input#nexuspassword').removeAttr('type');
+    $('input#nexuspassword').attr('type', 'password');
+  }
+  //form validation for dashboard save
+  var validator = $('#myForm101').validate({
+    rules: {
+      hostname: {
+        url: true
+      }
+    },
+    onkeyup: false,
+    errorClass: "error",
+
+    //put error message behind each form element
+    errorPlacement: function(error, element) {
+      console.log(error, element);
+      var elem = $(element);
+      if (element.parent('.input-groups').length) {
+        error.insertBefore(element.parent());
+      } else {
+        if (element.parent('div.inputGroups')) {
+          console.log(element);
+          console.log(element.parent);
+          error.insertBefore('div.inputGroups');
         }
-        var url = '../nexus/authenticate'
-        var reqBody = {
-          "username": nexusData.username,
-          "nexuspassword": nexusData.nexuspassword,
-          "hostname": nexusData.hostname
-        };
 
-         $.ajax({
-              method: "POST",
-              url: url,
-              data: reqBody,
-              success: function(data, success) {
-                      if(!data.length){
-                        bootbox.alert('Invalid Nexus Server Details.');
-                      }else{
-                        if(validateForm()) {saveform('26');};
-                      return false; // for demo
-                      }
-              },
-              error: function(jqxhr) {
-                 bootbox.alert(jqxhr.responseText);
-              },
-              failure: function(jqxhr) {
-                 bootbox.alert(jqxhr.responseText);
-              }
-          });
-         return false;
+        $("select.select2-me").each(function(index, el) {
+
+          if ($(this).is("[data-rule-required]") &&
+            $(this).attr("data-rule-required") == "true") {
+            $(this).on('select2-close', function(e) {
+              $(this).valid()
+            });
+          }
         });
+      }
+    },
+
+    //When there is an error normally you just add the class to the element.
+    // But in the case of select2s you must add it to a UL to make it visible.
+    // The select element, which would otherwise get the class, is hidden from
+    // view.
+    highlight: function(element, errorClass, validClass) {
+      var elem = $(element);
+      if (elem.hasClass("select2-offscreen")) {
+        $("#s2id_" + elem.attr("id") + " ul").addClass(errorClass);
+      } else {
+        elem.addClass(errorClass);
+      }
+    },
+
+    //When removing make the same adjustments as when adding
+    unhighlight: function(element, errorClass, validClass) {
+      var elem = $(element);
+      if (elem.hasClass("select2-offscreen")) {
+        $("#s2id_" + elem.attr("id") + " ul").removeClass(errorClass);
+      } else {
+        elem.removeClass(errorClass);
+      }
+    }
+  });
+  $(document).on('change', '.select2-offscreen', function() {
+    if (!$.isEmptyObject(validator.submitted)) {
+      validator.form();
+    }
+  });
+  $(document).on("select2-opening", function(arg) {
+    var elem = $(arg.target);
+    if ($("#s2id_" + elem.attr("id") + " ul").hasClass("myErrorClass")) {
+      //jquery checks if the class exists before adding.
+      $(".select2-drop ul").addClass("myErrorClass");
+    } else {
+      $(".select2-drop ul").removeClass("myErrorClass");
+    }
+  });
+});
+
+
+
+$('#myForm101').submit(function(e) {
+  var isValidate = $("#myForm101").valid();
+  var nexusDesc = [];
+  var nexusData = {};
+  if (!isValidate) {
+    e.preventDefault();
+  } else {
+    e.preventDefault();
+    var $form = $('#myForm101');
+    nexusData.username = $form.find('#username').val();
+    nexusData.nexuspassword = $form.find('#nexuspassword').val();
+    nexusData.hostname = $form.find('#hostname').val();
+    var reqBody = {
+      nexusDesc: [nexusData]
+    }
+    var url = '../nexus/authenticate'
+    var reqBody = {
+      "username": nexusData.username,
+      "nexuspassword": nexusData.nexuspassword,
+      "hostname": nexusData.hostname
+    };
+
+    $.ajax({
+      method: "POST",
+      url: url,
+      data: reqBody,
+      success: function(data, success) {
+        if (!data.length) {
+          bootbox.alert('Invalid Nexus Server Details.');
+        } else {
+          if (validateForm()) {
+            saveform('26');
+          };
+          return false; // for demo
+        }
+      },
+      error: function(jqxhr) {
+        bootbox.alert(jqxhr.responseText);
+      },
+      failure: function(jqxhr) {
+        bootbox.alert(jqxhr.responseText);
+      }
+    });
+  }
+  return false;
+});
        
+
 </script>

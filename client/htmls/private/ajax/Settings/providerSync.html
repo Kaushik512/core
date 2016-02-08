@@ -16,245 +16,261 @@
 
   .dropdown-content{
     border-radius: 5px;
-      left: -30px;
-      min-width: 98px;
-      right: 0;
+    left: -30px;
+    min-width: 98px;
+    right: 0;
   }
 
   .show-settings input{
     border: 1px solid #999;
   }
 
-  .show-settings input, span{
-    height: 20px;
-  }
-
   .marginSpaceTop {
      margin-top:20px;"
+  }
+  .syncClick {
+    float:left;
+    cursor:pointer;
+    margin-top: 10px;
+    margin-left: 20px;
+  }
+  .styleRight{
+    float:right;margin-top: 4px;
   }
 
 </style>
 
-<div class="clearfix"></div>
+<!--button to navigate back to provider list-->
+<button class="btn btn-minier btn-primary styleRight" onclick="window.history.back();"><i class="ace-icon ace-icon fa fa-chevron-left bigger-110"></i>&nbsp;List of Providers</button>
+
+<!--tabs start here-->
 <ul class="nav nav-tabs " role="tablist">
-  <li class="active"><a href="#organiz" role="tab" data-toggle="tab">ManagedInstances</a></li>
-  <li><a href="#unmanaged" role="tab" data-toggle="tab">UnmanagedInstances</a></li>
+   <li class="active"><a href="#organiz" role="tab" data-toggle="tab" data-toggle="tooltip" title="Node which has been bootstrapped by Catalyst">Managed Instances</a></li>
+   <li><a href="#unmanaged" role="tab" data-toggle="tab" data-toggle="tooltip" title="Node which has not been bootstrapped by Catalyst">UnManaged Instances</a></li>
+   <span><a class="syncClick" title="Refresh view">Sync&nbsp;<i class="fa fa-refresh fa-lg " id="instanceRefreshSpinner"></i></a></span>
 </ul>
 
+<!--tab content starts here-->
 <div class="tab-content">
-<!-- Tab panes -->
-<div  class="tab-pane active instancesListContainer" id="organiz">
-  <div  class="tabContent table-responsive" id="instanceListDiv" >
-    <table class="table table-hover table-bordered" id="instanceListTable" style="font-size:13px;margin-bottom:55px;text-align: center";>
-    
-    <thead>
-      <tr>
-        <th style="text-align: center">InstanceId</th>
-        <th style="text-align: center">OS</th>
-        <th style="text-align: center">IP Address</th>
-        <th style="text-align: center">Region</th>
-        <th style="text-align: center">Status</th>
-        <th style="text-align: center">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      
-      
-
-    </tbody>
-  </table>
-</div>
-</div>
-
-<div  class="tab-pane unmanagedInstancesListContainer" id="unmanaged">
-  <div  class="tabContent table-responsive" id="unmanagedinstanceListDiv" >
-    <table class="table table-hover table-bordered" id="unmanagedinstanceListTable" style="font-size:13px;margin-bottom:55px;text-align: center";>
-    
-    <thead>
-      <tr>
-        <th style="text-align: center">InstanceId</th>
-        <th style="text-align: center">OS</th>
-        <th style="text-align: center">IP Address</th>
-        <th style="text-align: center">Region</th>
-        <th style="text-align: center">Status</th>
-        <th style="text-align: center">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      
-      
-
-    </tbody>
-  </table>
-</div>
-
-</div>  
-<footer class="footer">
-      <div style="text-align:center" class="clearfix form-actions">
-        <div>
-            <input type="button" id="providerSyncBtn" style="margin-left:200px;" value="Import Instances" class="btn btn-primary showChefImportNodesModalBtn">
-        </div>
+   <!-- Tab panes -->
+   <!--managed instances-->
+   <div  class="tab-pane active instancesListContainer" id="organiz">
+      <div  class="tabContent table-responsive" id="instanceListDiv" >
+         <table class="table table-hover table-bordered" id="instanceListTable" style="font-size:13px;margin-bottom:55px;text-align: center";>
+            <thead>
+               <tr>
+                  <th style="text-align: center">InstanceId</th>
+                  <th style="text-align: center">OS</th>
+                  <th style="text-align: center">IP Address</th>
+                  <th style="text-align: center">Region</th>
+                  <th style="text-align: center">Status</th>
+                  <th style="text-align: center">Actions</th>
+               </tr>
+            </thead>
+            <tbody class="managedInstance">
+            </tbody>
+         </table>
       </div>
-    </footer>
-</div>
-<!--tab content oevr-->
+   </div>
 
+   <!--unmanaged instances-->
+   <div  class="tab-pane unmanagedInstancesListContainer" id="unmanaged">
+      <div  class="tabContent table-responsive" id="unmanagedinstanceListDiv" >
+         <table class="table table-hover table-bordered" id="unmanagedinstanceListTable" style="font-size:13px;margin-bottom:55px;text-align: center";>
+            <thead>
+               <tr>
+                  <th style="text-align: center">InstanceId</th>
+                  <th style="text-align: center">OS</th>
+                  <th style="text-align: center">IP Address</th>
+                  <th style="text-align: center">Region</th>
+                  <th style="text-align: center">Status</th>
+                  <th style="text-align: center">Actions</th>
+               </tr>
+            </thead>
+            <tbody class="unManagedInstance">
+            </tbody>
+         </table>
+      </div>
+      <footer class="footer">
+         <div style="text-align:center" class="clearfix form-actions">
+            <div>
+               <input type="button" id="providerSyncBtn" style="margin-left:200px;" value="Import Instances" class="btn btn-primary showChefImportNodesModalBtn">
+            </div>
+         </div>
+      </footer>
+   </div>
+</div>
+<!--tab content over-->
+
+<!--import instance modal-->
 <div class="modal fade" id="providerSyncModal" data-backdrop="static">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form action="" id="myForm12" autocomplete="off">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title">Import Instance</h4>
-      </div>
-      <div class="modal-body modalbody-height">
-         
-          
-          <div class="col-lg-6 marginSpaceTop">
-            
-              <label for="exampleInputEmail1">Organization</label>
-              <div class="input-groups">
-                <select id="providerSyncOrgSelect"  class="width-100 form-control" disabled>
-                  
-                </select>
-                </div>
-            
-          </div>
-
-          
-
-          <div class="col-lg-6 marginSpaceTop">  
-              <label for="exampleInputEmail1">Business Groups<span class="control-label redSpan">&nbsp;*</span></label>
-          <div class="input-groups">
-              
-              <select id="providerSyncBgSelect"  class="width-100 form-control" cdata="catalyst" cat-validation="required" autofocus>
-
-                
-              </select>
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <form action="" id="myForm12" autocomplete="off">
+            <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+               <h4 class="modal-title">Import Instance</h4>
             </div>
-            
-          </div>
-
-        <div class="col-lg-6 marginSpaceTop" >
-            <label for="exampleInputEmail1">Project<span class="control-label redSpan">&nbsp;*</span></label>
-            <div class="input-groups">
-              
-              <select id="providerSyncProjectSelect"  class="width-100 form-control">
-              </select></div>
-            
-          </div>
-          
-          
-        <div class="col-lg-6 marginSpaceTop">
-          
-            <label for="exampleInputEmail1">Environment<span class="control-label redSpan">&nbsp;*</span></label>
-            <div class="input-groups">
-              <select id="providerSyncEnvSelect"  class="width-100 form-control" >
-                    
-              </select>
+            <div class="modal-body modalbody-height">
+               <div class="col-lg-6 marginSpaceTop">
+                  <label for="exampleInputEmail1">Organization</label>
+                  <div class="input-groups">
+                     <select id="providerSyncOrgSelect"  class="width-100 form-control" disabled>
+                     </select>
+                  </div>
+               </div>
+               <div class="col-lg-6 marginSpaceTop">
+                  <label for="exampleInputEmail1">Business Groups<span class="control-label redSpan">&nbsp;*</span></label>
+                  <div class="input-groups">
+                     <select id="providerSyncBgSelect"  class="width-100 form-control" cdata="catalyst" cat-validation="required" autofocus>
+                     </select>
+                  </div>
+               </div>
+               <div class="col-lg-6 marginSpaceTop" >
+                  <label for="exampleInputEmail1">Project<span class="control-label redSpan">&nbsp;*</span></label>
+                  <div class="input-groups">
+                     <select id="providerSyncProjectSelect"  class="width-100 form-control">
+                     </select>
+                  </div>
+               </div>
+               <div class="col-lg-6 marginSpaceTop">
+                  <label for="exampleInputEmail1">Environment<span class="control-label redSpan">&nbsp;*</span></label>
+                  <div class="input-groups">
+                     <select id="providerSyncEnvSelect"  class="width-100 form-control" >
+                     </select>
+                  </div>
+               </div>
+               <div class="col-lg-6 marginSpaceTop" >
+                  <label for="exampleInputEmail1">Config Management<span class="control-label redSpan">&nbsp;*</span></label>
+                  <div class="input-groups">
+                     <select id="providerSyncInfraManagerSelect"  class="width-100 form-control" >
+                     </select>
+                  </div>
+               </div>
+               <div class="col-lg-6 credentialSection marginSpaceTop" >
+                  <label for="exampleInputEmail1">Username<span class="control-label redSpan">&nbsp;*</span></label>
+                  <div class="input-groups"> 
+                     <input type="text" name="importUsernameInput" class="form-control" id="importUsernameInput" required value="" autofocus>
+                     <b class="tooltip tooltip-top-right">
+                     <i class="fa fa-user txt-color-teal"></i> Please enter Instance Username</b>
+                  </div>
+               </div>
+               <div class="col-lg-6 marginSpaceTop" >
+                  <label for="">Choose Authentication Type</label>
+                  <div class="input-groups">
+                     <select id="pemFileDropdown2"  class="authenticationType width-100 form-control" cdata="catalyst" cat-validation="required">
+                        <option value="password">Password</option>
+                        <option value="pemFile">Pem File</option>
+                     </select>
+                  </div>
+               </div>
+               <div class="col-lg-6 credentialSection authPassword marginSpaceTop">
+                  <label for="exampleInputEmail1">Password</label>
+                  <div class="input-groups">
+                     <input type="password" class="form-control" id="importPasswordInput" required="true" cdata="catalyst" cat-validation="required"><span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-initialvalue="" style="visibility:hidden;">Required</span>
+                     <b class="tooltip tooltip-top-right">
+                     <i class="fa fa-lock txt-color-teal"></i> Please enter Instance Password</b>
+                  </div>
+               </div>
+               <div class="col-lg-6 credentialSection authPemFile marginSpaceTop" >
+                  <div class="smart-forms">
+                     <label for="exampleInputEmail1">Pem File</label>
+                     <div class="input-groups">
+                        <label for="" name="field" class="file">
+                        <span class="button btn-primary">Browse</span>
+                        <input id="importPemfileInput" type="file" class="gui-file" onchange="$(this).next().val(this.files[0].name)">
+                        <input type="text" readonly="" class="gui-input">
+                        </label>
+                     </div>
+                  </div>
+               </div>
             </div>
-          
-        </div>
-
-        <div class="col-lg-6 marginSpaceTop" >
-          
-            <label for="exampleInputEmail1">Config Management<span class="control-label redSpan">&nbsp;*</span></label>
-            <div class="input-groups">
-              <select id="providerSyncInfraManagerSelect"  class="width-100 form-control" >
-                    
-              </select>
+            <div class="modal-footer">
+               <div class="marginForButtons">
+                  <label id="saveSpinner" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
+                  <a type="button" class="btn btn-default" data-dismiss="modal">Close</a>
+                  <button type="button" class="btn btn-primary importNodesBtn">Sync</button>
+               </div>
             </div>
-          
-        </div>
-
-          
-
-          <div class="col-lg-6 credentialSection marginSpaceTop" >
-        
-            <label for="exampleInputEmail1">Username<span class="control-label redSpan">&nbsp;*</span></label>
-           <div class="input-groups"> 
-            <input type="text" name="importUsernameInput" class="form-control" id="importUsernameInput" required value="" autofocus>
-              <b class="tooltip tooltip-top-right">
-              <i class="fa fa-user txt-color-teal"></i> Please enter Instance Username</b>
-          
-           </div>
-          </div>
-      
-          <div class="col-lg-6 marginSpaceTop" >
-            <label for="">Choose Authentication Type</label>
-            <div class="input-groups">
-            <select id="pemFileDropdown2"  class="authenticationType width-100 form-control" cdata="catalyst" cat-validation="required">
-              <option value="password">Password</option>
-              <option value="pemFile">Pem File</option>
-            </select>
-          </div>
-          
-          </div>
-
-          
-      
-     
-      
-      
-      <div class="col-lg-6 credentialSection authPassword marginSpaceTop">
-        
-          <label for="exampleInputEmail1">Password</label>
-           <div class="input-groups">
-          <input type="password" class="form-control" id="importPasswordInput" required="true" cdata="catalyst" cat-validation="required"><span data-val-controltovalidate="orgname" id="MainContent_Req_orgname" data-val="true" data-val-initialvalue="" style="visibility:hidden;">Required</span>
-            <b class="tooltip tooltip-top-right">
-            <i class="fa fa-lock txt-color-teal"></i> Please enter Instance Password</b>
-          </div>
-        
+         </form>
       </div>
-
-      <div class="col-lg-6 credentialSection authPemFile marginSpaceTop" >
-        <div class="smart-forms">
-            <label for="exampleInputEmail1">Pem File</label>
-            <div class="input-groups">
-            <label for="" name="field" class="file">
-                <span class="button btn-primary">Browse</span>
-                <input id="importPemfileInput" type="file" class="gui-file" onchange="$(this).next().val(this.files[0].name)">
-                <input type="text" readonly="" class="gui-input">
-            </label>
-          </div>
-        </div>
-      </div>
-
-     
-      
-    
-    
-         
-      </div>
-      <div class="modal-footer">
-          <div class="marginForButtons">
-            <label id="saveSpinner" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
-          <a type="button" class="btn btn-default" data-dismiss="modal">Close</a>
-          <button type="button" class="btn btn-primary importNodesBtn">Sync</button>
-        </div>
-      </div>
-      </form>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
+      <!-- /.modal-content -->
+   </div>
+   <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
 <div class="modal fade" id="providerSyncResultModal" data-backdrop="static">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title">Importing Instances</h4>
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Importing Instances</h4>
+         </div>
+         <div class="modal-body">
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+         </div>
       </div>
-      <div class="modal-body">
-      </div>
-       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+      <!-- /.modal-content -->
+   </div>
+   <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
 
 <script type="text/javascript">
+
+//initialising the datatable...
+if (!$.fn.dataTable.isDataTable('#instanceListTable')) {
+    var $instanceManagedDatatable = $('#instanceListTable').DataTable({
+        "pagingType": "full_numbers",
+        "bInfo": false,
+        "bLengthChange": false,
+        "paging": false,
+        "bFilter": false,
+        "aaSorting": [[ 4, "asc" ]],
+        "aoColumns": [{
+            "bSortable": false
+        }, {
+            "bSortable": false
+        }, {
+            "bSortable": false
+        }, {
+            "bSortable": false
+        }, {
+            "bSortable": false
+        }, {
+            "bSortable": false
+        }]
+
+    });
+}
+
+//initialising the datatable...
+if (!$.fn.dataTable.isDataTable('#unmanagedinstanceListTable')) {
+    var $instanceUnManagedDatatable = $('#unmanagedinstanceListTable').DataTable({
+        "pagingType": "full_numbers",
+        "bInfo": false,
+        "bLengthChange": false,
+        "paging": false,
+        "bFilter": false,
+        "aaSorting": [[ 4, "asc" ]],
+        "aoColumns": [{
+            "bSortable": false
+        }, {
+            "bSortable": false
+        }, {
+            "bSortable": false
+        }, {
+            "bSortable": false
+        }, {
+            "bSortable": false
+        }, {
+            "bSortable": false
+        }]
+
+    });
+}
 
 (function() {
 
@@ -271,7 +287,7 @@
 
   })();
 
-  var $orgListInput = $('#providerSyncOrgSelect').attr('disabled','disabled');
+  var $orgListInput = $('#providerSyncOrgSelect').attr('disabled', 'disabled');
   var $bgList = $('#providerSyncBgSelect');
   var $projectList = $('#providerSyncProjectSelect');
   var $envList = $('#providerSyncEnvSelect');
@@ -282,9 +298,7 @@
     $('.importNodesBtn').removeAttr('disabled');
     var perm = haspermission('instancelaunch', 'execute');
 
-    //alert(perm);
     if (!perm) {
-
       bootbox.alert('Insufficient permission to perform operation.');
       $('#chefImportNodesModal').modal('hide');
       return;
@@ -314,65 +328,48 @@
     }
   });
 
-  
-   
-   var serviceURL = "../d4dMasters/";
+
+
+  var serviceURL = "../d4dMasters/";
 
   function getRelatedValues_Top(jsonID, comparedField, filterByValue, outputField) {
     var result = [];
     readMasterJson_Top(jsonID);
-    //formData = d4ddata.masterjson;
-    //alert('Top' + JSON.stringify(d4ddata));
     if (d4ddata) {
-      //alert('grvt:' + JSON.stringify(d4ddata))  ;
       $.each(d4ddata, function(k, v) {
-
         if (v[comparedField] == filterByValue && v[outputField]) {
           result.push(v['rowid'] + '|' + v[outputField]);
         }
-
       });
-
     }
-    //alert(result.toString());
     return (result);
   }
 
   function getRelatedValues_Top_rowid(jsonID, comparedField, filterByValue, outputField) {
     var result = [];
     readMasterJson_Top(jsonID);
-    //formData = d4ddata.masterjson;
-    //alert('Top' + JSON.stringify(d4ddata));
     if (d4ddata) {
-      //alert('grvt:' + JSON.stringify(d4ddata))  ;
       $.each(d4ddata, function(k, v) {
-
         if (v[comparedField] == filterByValue && v[outputField]) {
           var rowids = v[outputField + '_rowid'].split(',');
           var txts = v[outputField].split(',');
           for (var i = 0; i < txts.length; i++) {
             result.push(rowids[i] + '|' + txts[i]);
           }
-
         }
-
       });
-
     }
-    //alert(result.toString());
     return (result);
   }
 
 
   function readMasterJson_Top(section) {
-    //alert(serviceURL + "readmasterjsonnew/" + section);
     $.ajax({
       type: "get",
       dataType: "text",
       async: false,
       url: serviceURL + "readmasterjsonnew/" + section,
       success: function(data) {
-        // alert(JSON.stringify(data));   
         d4ddata = JSON.parse(data);
       },
       failure: function(data) {
@@ -386,14 +383,10 @@
   //loading provider with org
   $.get('/providers/' + urlParams.providerId, function(provider) {
     var org = provider.org
-
     $orgListInput.append($('<option></option>').val(org.rowid).html(org.orgname).attr('selected', 'selected'));
-
     $bgList.empty();
     $bgList.append($('<option></option>').val('choose').html('Choose'));
-    //alert('Org Rowid' + data.orgname_rowid);
     var getBGs = getRelatedValues_Top(2, "orgname_rowid", org.rowid, "productgroupname");
-    //alert('getBGs ' + JSON.stringify(getBGs));
     for (var i = 0; i < getBGs.length; i++) {
       if (getBGs[i].indexOf('|') >= 0) {
         var txtval = getBGs[i].split('|');
@@ -401,8 +394,6 @@
       }
 
     }
-
-
 
     $bgList.change(function(e) {
       var bgName = $(this).val();
@@ -427,21 +418,16 @@
         return;
       }
       var getEnvs_ = getRelatedValues_Top_rowid(4, "rowid", projName, "environmentname");
-      //debugger;
-      //alert(JSON.stringify(getEnvs_));
       var getEnvs = getEnvs_.toString().replace(/"/g, '').split(',');
-      // alert(getEnvs.length);
-      // var getEnvs = JSON.parse(getEnvs_);
       for (var i = 0; i < getEnvs.length; i++) {
         if (getEnvs[i].indexOf('|') >= 0) {
           var txtval = getEnvs[i].split('|');
           $envList.append($('<option></option>').val(txtval[0]).html(txtval[1]));
-          // alert('Env: ' + txtval[0] + ' ' +  txtval[1]);
         }
       }
     });
     // loading inframanagers 
-    $.get(serviceURL + 'organization/' + org.rowid + '/configmanagement/list', function(configMgmntList){
+    $.get(serviceURL + 'organization/' + org.rowid + '/configmanagement/list', function(configMgmntList) {
       var $configManagementDropdown = $('#providerSyncInfraManagerSelect');
       for (var i = 0; i < configMgmntList.length; i++) {
         var $options = $('<option></option>');
@@ -458,11 +444,11 @@
     });
 
   });
- 
-  var $tbody = $('#instanceListTable tbody');
-  function loadManagedInstances(managnedData) {
 
-    for(var i=0;i<managnedData.length;i++) {
+
+  function loadManagedInstances(managnedData) {
+    var $tbody = $('#managedInstance tbody').empty();
+    for (var i = 0; i < managnedData.length; i++) {
       var $tr = $('<tr></tr>');
       var $tdId = $('<td></td>').append(managnedData[i].platformId);
       $tr.append($tdId);
@@ -473,26 +459,19 @@
       var $tdIpAddress = $('<td></td>').append(managnedData[i].instanceIP);
       $tr.append($tdIpAddress);
 
-
-      var region = ''; 
-      if(managnedData[i].providerData && managnedData[i].providerData.region) {
+      var region = '';
+      if (managnedData[i].providerData && managnedData[i].providerData.region) {
         region = managnedData[i].providerData.region;
-      } 
+      }
       var $tdRegion = $('<td></td>').append(region);
       $tr.append($tdRegion);
-
-  /*    var $tdIsManagd = $('<td></td>').css({
-        'background-color': 'green'
-      });
-      $tr.append($tdIsManagd);*/
-
       var $tdStatus = $('<td></td>').append(managnedData[i].instanceState);
       $tr.append($tdStatus);
 
       var $button = '';
-      
+
       if (managnedData[i].instanceState === 'terminated') {
-       
+
         $button = $('<input type="button">').val('Delete').attr('id', managnedData[i]._id);;
         $button.click(function() {
           var id = $(this).attr('id');
@@ -500,31 +479,26 @@
             method: 'DELETE',
             url: '/instances/' + id,
             success: function() {
-              $tr.remove();
+              $instanceManagedDatatable.row($tr).remove().draw(false);
             },
             error: function() {
-              alert('unable to delete instance');
+              bootbox.alert('unable to delete instance');
             }
           });
-
         });
-
       }
-
-      
       var $tdAction = $('<td></td>').append($button);
       $tr.append($tdAction);
-
       $tbody.append($tr);
+      $instanceManagedDatatable.row.add($tr).draw();
     }
-
   }
 
-  
+
   function loadUnmanagedInstances(unManagnedData) {
-    var $tbody = $('#unmanagedinstanceListDiv tbody');
-    for(var i=0;i<unManagnedData.length;i++) {
-      var $tr = $('<tr></tr>').attr('instanceId',unManagnedData[i]._id);
+    var $tbody = $('#unManagedInstance tbody').empty();
+    for (var i = 0; i < unManagnedData.length; i++) {
+      var $tr = $('<tr></tr>').attr('instanceId', unManagnedData[i]._id);
       var $tdId = $('<td></td>').append(unManagnedData[i].platformId);
       $tr.append($tdId);
 
@@ -533,48 +507,78 @@
 
       var $tdIpAddress = $('<td></td>').append(unManagnedData[i].ip);
       $tr.append($tdIpAddress);
-      
-      var region = ''; 
-      if(unManagnedData[i].providerData && unManagnedData[i].providerData.region) {
+
+      var region = '';
+      if (unManagnedData[i].providerData && unManagnedData[i].providerData.region) {
         region = unManagnedData[i].providerData.region;
-      } 
+      }
       var $tdRegion = $('<td></td>').append(region);
       $tr.append($tdRegion);
-
-
-  /*    var $tdIsManagd = $('<td></td>').css({
-        'background-color':'red'
-      }).append(false);
-      $tr.append($tdIsManagd);*/
-
       var $tdStatus = $('<td></td>').append(unManagnedData[i].state);
       $tr.append($tdStatus);
       var $input = '';
-      if(unManagnedData[i].state === 'running') {
+      if (unManagnedData[i].state === 'running') {
         $input = $('<input class="nodeCheckBox" type="checkbox">').val(unManagnedData[i]._id);
       }
- 
       var $tdAction = $('<td></td>').append($input);
       $tr.append($tdAction);
-
       $tbody.append($tr);
+      $instanceUnManagedDatatable.row.add($tr).draw();
     }
-
   }
 
-  //loading Data
-  $.get('/providers/' + urlParams.providerId + '/managedInstances', function(managedInstances) {
-    
-    loadManagedInstances(managedInstances);
-     $('#instanceListDiv').show();
+  $(document).ready(function(e) {
+    if (!urlParams.providerId) {
+      return;
+    }
+    getManagedInstances();
+    getUnmanagedInstances();
+  })
+
+  //sync of Instances(Refresh Button)
+  $('.syncClick').click(function() {
+    $('#instanceRefreshSpinner').addClass('fa-spin');
+    $('a.syncClick').attr('href', 'index.html#ajax/Settings/providerSync.html?' + urlParams.providerId);
+    $instanceManagedDatatable.clear().draw();
+    $instanceUnManagedDatatable.clear().draw();
+    getManagedInstances();
+    getUnmanagedInstances();
+    setTimeout(function() {
+      $('#instanceRefreshSpinner').removeClass('fa-spin');
+    }, 1000);
   });
 
+  //loading Managed Data
+  function getManagedInstances() {
+    $.get('/providers/' + urlParams.providerId + '/managedInstances', function(managedInstances) {
+      loadManagedInstances(managedInstances);
+      $('#instanceListDiv').show();
+    }).fail(function(jxhr) {
+      var msg = "Provider Sync Behaved Unexpectedly.";
+      if (jxhr.responseJSON && jxhr.responseJSON.message) {
+        msg = jxhr.responseJSON.message;
+      } else if (jxhr.responseText) {
+        msg = jxhr.responseText;
+      }
+      bootbox.alert(msg);
+    });
+  }
+
+  //loading UnManaged Data
+  function getUnmanagedInstances() {
     $.get('/providers/' + urlParams.providerId + '/unmanagedInstances', function(unmanagnedInstances) {
       loadUnmanagedInstances(unmanagnedInstances);
       $('#unmanagedinstanceListDiv').show();
-
+    }).fail(function(jxhr) {
+      var msg = "Provider Sync Behaved Unexpectedly.";
+      if (jxhr.responseJSON && jxhr.responseJSON.message) {
+        msg = jxhr.responseJSON.message;
+      } else if (jxhr.responseText) {
+        msg = jxhr.responseText;
+      }
+      bootbox.alert(msg);
     });
- 
+  }
 
 
   $('.importNodesBtn').click(function(e) {
@@ -591,8 +595,6 @@
       alert('Please Select a Business Group & Project');
       return;
     }
-
-
 
     reqBody.instanceIds = [];
     $checkBoxes.each(function() {
@@ -613,13 +615,6 @@
         alert('Please Enter Password or Choose a Pem file');
         return;
       }
-      // reqBody.users = $('#userListSelect').val();
-      // if (!reqBody.users || !reqBody.users.length) {
-      //   alert('Please Choose Users');
-      //   return;
-      // }
-      // console.log(reqBody);
-
       makeRequest();
     } else {
       var pemFileInput = $('#importPemfileInput').get(0);
@@ -631,15 +626,8 @@
         alert('Please Choose a Pem file');
         return;
       }
-
-      // reqBody.users = $('#userListSelect').val();
-      // if (!reqBody.users || !reqBody.users.length) {
-      //   alert('Please Choose Users');
-      //   return;
-      // }
       var reader = new FileReader();
       reader.onload = function(e) {
-        // Render thumbnail.
         reqBody.credentials.pemFileData = e.target.result;
 
         makeRequest();
@@ -656,7 +644,7 @@
       console.log(reqBody);
       $.post('../providers/' + urlParams.providerId + '/sync', reqBody, function(data) {
         console.log(data);
-         $('#providerSyncModal').modal('hide');
+        $('#providerSyncModal').modal('hide');
         var $chefResultModalContainer = $('#providerSyncResultModal');
         var $modalBody = $chefResultModalContainer.find('.modal-body');
         $modalBody.empty();
@@ -702,11 +690,8 @@
                 }
                 $progressBar.val(reqBody.selectedNodes.length);
                 if (reqBody.selectedNodes.length) {
-
                   var nodeData = $($checkBoxes[0]).data('node');
                   if (nodeData && nodeData.chef_environment) {
-                    //$chefResultModalContainer.modal('hide');
-                    //window.location.href = '#ajax/Dev.html?org='+reqBody.orgId+'&projid='+reqBody.projectId+'&envid='+nodeData.chef_environment;
                   }
                 }
               }
@@ -716,14 +701,10 @@
         }
         pollTaskStatus(data.taskId, 0);
         //Refreshing the workzone tree
-
       }).error(function() {
-        alert('Unable to import instances. Please try again later');
+        bootbox.alert('Unable to import instances. Please try again later');
       });
     }
-
   });
-
-  
 })();
 </script>

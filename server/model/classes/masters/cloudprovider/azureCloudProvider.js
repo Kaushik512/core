@@ -238,9 +238,6 @@ azurecloudProviderSchema.statics.updateAzureCloudProviderById = function(provide
             id: providerData.id,
             providerName: providerData.providerName,
             subscriptionId: providerData.azureSubscriptionId,
-            pemFileName: providerData.pemFileName,
-            keyFileName: providerData.keyFileName,
-            providerType: providerData.providerType,
             orgId: providerData.orgId
         }
     }, {

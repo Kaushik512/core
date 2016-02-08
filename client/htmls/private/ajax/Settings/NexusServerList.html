@@ -1,8 +1,3 @@
-
-<script>
-//    $(".tree-view").hide();   
-</script>
-
 <div class="row">
     <div class="col-md-12">
         <div class="col-md-12">
@@ -80,84 +75,52 @@
                                     
                             </table>
 
+<script>
 
-                                <script>
-                                    $(document).ready(function () {
-                                        var hasCreateConfigPermission = false;
-                                        /*if(haspermission('puppetserver','create')){
-                                            hasCreateConfigPermission=true;
-                                        }
-                                        if(!hasCreateConfigPermission){
-                                            $('#newConfig').addClass('hidden');
-                                        }*/
-                                       startup();
-                                        //isUserTypeSuperAdmin();
-                                    });
-                                    function isUserTypeSuperAdmin(){
-                                        $.get('/d4dMasters/loggedInUser',function(data){
-                                          if(!data.isSuperAdmin){
-                                          $('#newConfig').attr('disabled','disabled');
-                                          }
-                                          startup();
-                                        });
-                                      }
+$(document).ready(function() {
+    var hasCreateConfigPermission = false;
+    startup();
+});
 
-                                    function startup() {
-                                       
-                                        //setting the addnew button to launch popup
-                                        $("#addnewitem").attr('data-toggle', 'modal');
-                                        CreateTableFromJson(26,'username' , 'CreateNexusServer.html'); //26 is for Nexus
-                                        var tab = 'envtable';
-                                        $('#envtable').dataTable({
-                                            "dom": 't<"#tableFooterLeftDataTable"i><"#tableFooterRightDatatable"p>',
-                                            "pagingType": "full_numbers"
-                                        });
+function isUserTypeSuperAdmin() {
+    $.get('/d4dMasters/loggedInUser', function(data) {
+        if (!data.isSuperAdmin) {
+            $('#newConfig').attr('disabled', 'disabled');
+        }
+        startup();
+    });
+}
 
-                                        $('#tableFooterLeftDataTable').detach().appendTo('#tableFooterLeft');
-                                        $('#tableFooterRightDatatable').detach().appendTo('#tableFooterRight');
-                                        /*$('#' + tab + '_info').detach().appendTo('#tableFooterLeft');
-                                        $('#' + tab + '_paginate').detach().appendTo('#tableFooterRight');
-                                        $('#' + tab + '_filter').detach().appendTo('#envtable_tools1');
-                                        $('#' + tab + '_length').detach().appendTo('#envtable_tools2');*/
-                                        
-                                        $('#content').css("opacity", "1 !important");
-                                        
-                                        //Force opening the left navigation menu
-                                        if ($('#navSettings').is(":visible") == false) {
-                                            $('#navSettings').css("display", '');
-                                            $('#navSettings > ul > li').first().addClass('open');
-                                            $('#navSettings > ul > li > ul').css("display", "none");
-                                            $('#navSettings > ul > li > ul').first().css("display", "block");
-                                        }
-                                        //redrawing the breadcrumb and selecting the tree
-                                        $('#Settings  li').removeClass('active');
-                                        $('#Settings  li').each(function () {
-                                            if ($(this).text().trim() == "Config Management"){
-                                                $(this).addClass('active');
-                                            }
-                                        });
+function startup() {
 
-                                        //drawBreadCrumb1();
+    //setting the addnew button to launch popup
+    $("#addnewitem").attr('data-toggle', 'modal');
+    CreateTableFromJson(26, 'username', 'CreateNexusServer.html'); //26 is for Nexus
+    var tab = 'envtable';
+    $('#envtable').dataTable({
+        "dom": 't<"#tableFooterLeftDataTable"i><"#tableFooterRightDatatable"p>',
+        "pagingType": "full_numbers"
+    });
 
-                                    }
+    $('#tableFooterLeftDataTable').detach().appendTo('#tableFooterLeft');
+    $('#tableFooterRightDatatable').detach().appendTo('#tableFooterRight');
+    $('#content').css("opacity", "1 !important");
 
-                                   
+    //Force opening the left navigation menu
+    if ($('#navSettings').is(":visible") == false) {
+        $('#navSettings').css("display", '');
+        $('#navSettings > ul > li').first().addClass('open');
+        $('#navSettings > ul > li > ul').css("display", "none");
+        $('#navSettings > ul > li > ul').first().css("display", "block");
+    }
+    //redrawing the breadcrumb and selecting the tree
+    $('#Settings  li').removeClass('active');
+    $('#Settings  li').each(function() {
+        if ($(this).text().trim() == "Config Management") {
+            $(this).addClass('active');
+        }
+    });
+}
 
-                                </script>
-                            <div class="col-md-5">
 
-                            </div>
-                        </div>
-                        
-                    </div>
-                    <div class="widget-toolbox padding-8 clearfix dataTables_wrapper">
-                       <div id="tableFooterLeft" class="pull-left"></div>
-                       <div id="tableFooterRight" class="pull-right"></div>
-                    </div>
-                   
-                    
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+</script>

@@ -100,6 +100,11 @@ var openstackProviderSchema = new Schema({
         required: true,
         trim: true
     },
+    pemFileName : {
+        type: String,
+        required: true,
+        trim: true
+    },
     orgId: {
         type: [String],
         required: true,
@@ -128,9 +133,13 @@ openstackProviderSchema.statics.createNew = function(req, providerData, callback
             callback(err, null);
             return;
         }
+
+        var pemId = aProvider['_id'] + req.files.openstackinstancepem.originalFilename;
+
         var keyPair = {
-            _id: aProvider['_id']
+            _id: pemId
         }
+
         ProviderUtil.saveAwsPemFiles(keyPair, req.files.openstackinstancepem, function(err, flag) {
             if (err) {
                 logger.debug("Unable to save pem files.");
@@ -259,7 +268,6 @@ openstackProviderSchema.statics.updateopenstackProviderById = function(providerI
             host: providerData.host,
             tenantid: providerData.tenantid,
             tenantname: providerData.tenantname,
-            providerType: providerData.providerType,
             keyname: providerData.keyname,
             serviceendpoints: {
                 compute: providerData.serviceendpoints.compute,
