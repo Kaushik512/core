@@ -49,10 +49,13 @@ var jenkinsTaskSchema = taskTypeSchema.extend({
 jenkinsTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nexusData, blueprintIds, envId, onExecute, onComplete) {
     logger.debug("Choice Param in::: ", choiceParam);
     var self = this;
-    if (blueprintIds.length) {
+    // For now removed blueprint launch via jenkins, later will use this
+    /*if (blueprintIds.length) {
         var count = 0;
         var onCompleteResult = [];
         var overallStatus = 0;
+        var launchedBluprintIds = [];
+        var failedBluprintIds = [];
 
         function blueprintOnCompleteHandler(err, status, blueprintId, output) {
             count++;
@@ -64,14 +67,34 @@ jenkinsTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nex
             if (status) {
                 result.status = 'failed';
                 overallStatus = 1;
+                failedBluprintIds.push(blueprintId);
+            } else {
+                launchedBluprintIds.push(blueprintId);
             }
             onCompleteResult.push(result);
 
             if (count === blueprintIds.length) {
+                if (typeof onExecute === 'function') {
+                    var msg;
+                    if (!launchedBluprintIds.length) {
+                        msg = "Unable to launch blueprints";
+                    } else if (launchedBluprintIds.length === blueprintIds.length) {
+                        msg = "Blueprints launched: " + blueprintIds + ", to see logs go to Instances.";
+                    } else {
+                        msg = "Go to instances to see log.";
+                    }
+                    onExecute(null, {
+                        blueprintMessage: msg,
+                        onCompleteResult: onCompleteResult
+                    });
+                }
+
                 if (typeof onComplete === 'function') {
-                    logger.debug("onComplete fired for blueprint: ", overallStatus + "  " + onCompleteResult);
-                    onComplete(null, overallStatus, {
-                        blueprintResults: onCompleteResult
+                    process.nextTick(function() {
+                        logger.debug("onComplete fired for blueprint: ", overallStatus + "  " + onCompleteResult);
+                        onComplete(null, overallStatus, {
+                            blueprintResults: onCompleteResult
+                        });
                     });
                 }
             }
@@ -106,20 +129,15 @@ jenkinsTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nex
                             status = 1;
                         }
                         blueprintOnCompleteHandler(err, status, blueprint.id, launchData);
-
                     });
                 })(blueprints[i]);
             }
-            if (typeof onExecute === 'function') {
-                onExecute(null, {
-                    message: "Blueprints launched: " + blueprintIds + ",  To see logs go to Instance."
-                });
-            }
+
         });
 
         return;
 
-    } else {
+    } else {*/
 
         configmgmtDao.getJenkinsDataFromId(this.jenkinsServerId, function(err, jenkinsData) {
             if (err) {
@@ -314,7 +332,7 @@ jenkinsTaskSchema.methods.execute = function(userName, baseUrl, choiceParam, nex
                 });
             }
         });
-    }
+    //}
 
 };
 

@@ -908,7 +908,6 @@ limitations under the License.
 	            //Selection of Orgname from localstorage 
 	            $('#orgnameSelect').val(localStorage.getItem('selectedOrgId'));
 	            console.log('role-Selected before ==> ', $('#tab2 .role-Selected').length);
-	            //console.log("======================= "+$('.productdiv2.role-Selected').first().attr('templatetype'));
 	            if ($('.productdiv2.role-Selected').length > 0) {
 	                //Setting controls connected to docker to hidden
 	                $('.forDocker').hide();
@@ -1182,22 +1181,18 @@ limitations under the License.
 	                            var dockercompose = [];
 	                            var dockerimages = {};
 	                            var $nexusServer = $('#chooseNexusServer');
-					            var $chooseRepository = $('#chooseRepository');
-					            var $chooseArtifacts = $('#chooseArtifacts');
+	                            var $chooseRepository = $('#chooseRepository');
+	                            var $chooseArtifacts = $('#chooseArtifacts');
 	                            var $chooseVersions = $('#chooseVersions');
 	                            var appVersion = $chooseVersions.val();
 	                            var nexusUrl = $nexusServer.find('option:selected').attr('data-nexusUrl');
-	                            //var nexusServerType = $('#chooseNexusServer :selected').attr('data-serverType');
 	                            var nexusServerType = $nexusServer.find('option:selected').attr('data-serverType');
 	                            var nexusRepoUrl = "";
 	                            var repoId = $chooseRepository.find('option:selected').val();
 	                            var nexusRepoId = $nexusServer.find('option:selected').val();
-	                            /*if (!repoId) {
-	                                alert("Please select repository.");
-	                                return false;
-	                            }*/
-	                            /*alert($(this).prop("checked"));
-	                            if ($(this).prop("checked")) {*/
+
+	                            //alert($('.checkConfigApp').prop("checked"));
+	                            if ($('.checkConfigApp').prop("checked")) {
 	                                if (nexusServerType === "nexus") {
 	                                    var artifactId = $chooseArtifacts.find('option:selected').val();
 	                                    if (!artifactId) {
@@ -1211,22 +1206,24 @@ limitations under the License.
 	                                    }
 	                                    var $chooseGroupId = $('#chooseGroupId');
 	                                    var groupId = $chooseGroupId.find('option:selected').val().replace(/\./g, '/');
-	                                    // var groupId = $chooseArtifacts.find('option:selected').attr('data-groupId').replace(/\./g, '/');
-	                                    /*if (repoId === "petclinic") {
-	                                        nexusRepoUrl = nexusUrl + "/service/local/repositories/" + repoId + "/content/" + groupId + "/" + artifactId + "/" + versionId + "/" + artifactId + "-" + versionId + ".war";
-	                                    } else {
-	                                        nexusRepoUrl = nexusUrl + "/service/local/repositories/" + repoId + "/content/" + groupId + "/" + artifactId + "/" + versionId + "/" + artifactId + "-" + versionId + ".zip";
-	                                    }*/
+	                                    var repoURIObj = $("#chooseArtifacts").data();
+	                                    var nexusRepoUrl = "";
+	                                    if (repoURIObj) {
+	                                        for (var i = 0; i < repoURIObj.repoObj.length; i++) {
+	                                            if (artifactId === repoURIObj.repoObj[i].artifactId && versionId === repoURIObj.repoObj[i].version) {
+	                                                nexusRepoUrl = repoURIObj.repoObj[i].resourceURI;
+	                                            }
+	                                        }
+	                                    }
 	                                    var nexus = {
-	                                    	"repoId": nexusRepoId,
-	                                        "url": nexusUrl,
+	                                        "repoId": nexusRepoId,
+	                                        "url": nexusRepoUrl,
 	                                        "version": appVersion,
 	                                        "repoName": repoId,
 	                                        "artifactId": artifactId,
 	                                        "groupId": groupId
 	                                    };
 	                                    reqBody.nexus = nexus;
-	                                    //alert(JSON);
 	                                } else {
 	                                    var dockerImage = $chooseRepository.val();
 	                                    var containerId = $('#containerIdDiv').val();
@@ -1242,7 +1239,7 @@ limitations under the License.
 	                                    };
 	                                    reqBody.docker = docker;
 	                                }
-	                            //}
+	                            }
 	                            console.log($('#compositedockertable').find('.dockerimagesrow').length);
 	                            $('.dockerimagesrow').each(function() {
 	                                dockerimages = {};
@@ -1691,8 +1688,8 @@ limitations under the License.
 	                $chooseRepository.empty();
 	                $chooseRepository.append('<option value="">Choose Repositories</option>');
 	                // var $chooseGroupId = $('#chooseGroupId');
-					$chooseGroupId.empty();
-					$('#chooseGroupId').append('<option value="">Choose Group ID</option>');
+	                $chooseGroupId.empty();
+	                $('#chooseGroupId').append('<option value="">Choose Group ID</option>');
 	                //var $chooseArtifacts = $('#chooseArtifacts');
 	                $chooseArtifacts.empty();
 	                $chooseArtifacts.append('<option value="">Choose Artifacts</option>');
@@ -1800,7 +1797,7 @@ limitations under the License.
 						for(var g=0; g< groupId.length; g++){
 							$('#chooseGroupId').append('<option value="' + groupId[g] + '">' + groupId[g] + '</option>');
 						}*/
-						getNexusServerGroupId();
+	                    getNexusServerGroupId();
 	                    getNexusServerRepo($(this).val());
 	                } else { // It's Docker
 	                    resetAllFields();
@@ -1893,7 +1890,7 @@ limitations under the License.
 	                    $('.versionClass').show();
 	                    var $repositoryUrl = $('#repositoryUrl');
 	                    $repositoryUrl.val("");
-	                    
+
 	                    //var $chooseArtifacts = $('#chooseArtifacts');
 	                    $chooseArtifacts.empty();
 	                    $chooseArtifacts.append('<option value="">Choose Artifacts</option>');
@@ -1905,21 +1902,20 @@ limitations under the License.
 	                    var nexusId = $nexusServer.val();
 	                    var groupId = $('#chooseGroupId').val();
 	                    var $chooseGroupId = $('#chooseGroupId');
-						
-	                    if(!repoName){
-	                    	$chooseGroupId.empty();
-							$('#chooseGroupId').append('<option value="">Choose Group ID</option>');
 
-							var groupId = $('#chooseNexusServer :selected').attr('data-groupId').split(",");
-							for(var g=0; g< groupId.length; g++){
-								$('#chooseGroupId').append('<option value="' + groupId[g] + '">' + groupId[g] + '</option>');
-							}
-	                    }else{
-	                    	$('#chooseGroupId > option:eq(1)').attr('selected', true).change();
+	                    if (!repoName) {
+	                        $chooseGroupId.empty();
+	                        $('#chooseGroupId').append('<option value="">Choose Group ID</option>');
+
+	                        var groupId = $('#chooseNexusServer :selected').attr('data-groupId').split(",");
+	                        for (var g = 0; g < groupId.length; g++) {
+	                            $('#chooseGroupId').append('<option value="' + groupId[g] + '">' + groupId[g] + '</option>');
+	                        }
+	                    } else {
+	                        $('#chooseGroupId > option:eq(1)').attr('selected', true).change();
 	                    }
-	                    //getNexusServerRepoArtifact(nexusId, repoName,groupId);
 	                } else {
-	                	$('.groupClass').hide();
+	                    $('.groupClass').hide();
 	                    $('.containerIdClass').show();
 	                    $('.containerPortClass').show();
 	                    $('.repoUrlClass').hide();
@@ -1928,20 +1924,20 @@ limitations under the License.
 	                }
 	            });
 
-				function getNexusServerGroupId(){
-					var groupId = $('#chooseNexusServer :selected').attr('data-groupId').split(",");
-					for(var g=0; g< groupId.length; g++){
-						$('#chooseGroupId').append('<option value="' + groupId[g] + '">' + groupId[g] + '</option>');
-					}
-					$('#chooseGroupId > option:eq(1)').attr('selected', true).change();
-				}
-				//var $chooseGroupId = $('#chooseGroupId');
-				$chooseGroupId.change(function(e) {
-					var repoName = $('#chooseRepository').find('option:selected').attr('data-repoName');
-					var nexusId = $('#chooseNexusServer').val();
-					var groupId = $('#chooseGroupId').val();
-					getNexusServerRepoArtifact(nexusId, repoName,groupId);
-				});
+	            function getNexusServerGroupId() {
+	                var groupId = $('#chooseNexusServer :selected').attr('data-groupId').split(",");
+	                for (var g = 0; g < groupId.length; g++) {
+	                    $('#chooseGroupId').append('<option value="' + groupId[g] + '">' + groupId[g] + '</option>');
+	                }
+	                $('#chooseGroupId > option:eq(1)').attr('selected', true).change();
+	            }
+	            //var $chooseGroupId = $('#chooseGroupId');
+	            $chooseGroupId.change(function(e) {
+	                var repoName = $('#chooseRepository').find('option:selected').attr('data-repoName');
+	                var nexusId = $('#chooseNexusServer').val();
+	                var groupId = $('#chooseGroupId').val();
+	                getNexusServerRepoArtifact(nexusId, repoName, groupId);
+	            });
 
 	            function getNexusServerRepoArtifact(nexusId, repoName, groupId) {
 	                $('.artifactsspinner').css('display', 'inline-block');
@@ -1949,41 +1945,30 @@ limitations under the License.
 	                $chooseArtifacts.empty();
 	                $chooseArtifacts.append('<option value="">Choose Artifacts</option>');
 	                if (nexusId && repoName) {
-	                   $.get('/nexus/' + nexusId + '/repositories/' + repoName + '/group/'+groupId+'/artifact', function(artifacts) {
-							$('.artifactsspinner').css('display', 'none');
-							if (artifacts.length) {
-								var uniqueArtifacts = [];
-								var checker;
-								for (var i = 0; i < artifacts.length; i++) {
-									if (!checker || comparer(checker, artifacts[i]) != 0) {
-										checker = artifacts[i];
-										uniqueArtifacts.push(checker);
-									}
-								}
-								for (var j = 0; j < uniqueArtifacts.length; j++) {
-									$('#chooseArtifacts').append('<option data-groupId="' + uniqueArtifacts[j].groupId + '" value=' + uniqueArtifacts[j].artifactId + '>' + uniqueArtifacts[j].artifactId + '</option>');
-								}
-								$('#chooseArtifacts > option:eq(1)').attr('selected', true).change();
-							}
-						});
-	                   /* $.get('/nexus/' + nexusId + '/repositories/' + repoName + '/artifact', function(artifacts) {
+	                    $.get('/nexus/' + nexusId + '/repositories/' + repoName + '/group/' + groupId + '/artifact', function(artifacts) {
 	                        $('.artifactsspinner').css('display', 'none');
 	                        if (artifacts.length) {
+	                            var repoList = [];
 	                            var uniqueArtifacts = [];
 	                            var checker;
 	                            for (var i = 0; i < artifacts.length; i++) {
+	                                var repoObj = {};
+	                                repoObj['resourceURI'] = artifacts[i].resourceURI;
+	                                repoObj['version'] = artifacts[i].version;
+	                                repoObj['artifactId'] = artifacts[i].artifactId;
+	                                repoList.push(repoObj);
 	                                if (!checker || comparer(checker, artifacts[i]) != 0) {
 	                                    checker = artifacts[i];
 	                                    uniqueArtifacts.push(checker);
 	                                }
 	                            }
+	                            $("#chooseArtifacts").data("repoObj", repoList);
 	                            for (var j = 0; j < uniqueArtifacts.length; j++) {
-	                                $chooseArtifacts.append('<option data-groupId="' + uniqueArtifacts[j].groupId + '" value=' + uniqueArtifacts[j].artifactId + '>' + uniqueArtifacts[j].artifactId + '</option>');
+	                                $('#chooseArtifacts').append('<option data-groupId="' + uniqueArtifacts[j].groupId + '" value=' + uniqueArtifacts[j].artifactId + '>' + uniqueArtifacts[j].artifactId + '</option>');
 	                            }
+	                            $('#chooseArtifacts > option:eq(1)').attr('selected', true).change();
 	                        }
-	                        //$chooseArtifacts.find('option:eq(1)').attr('selected', true).change();
-	                        $('#chooseArtifacts > option:eq(1)').attr('selected', true).change();
-	                    });*/
+	                    });
 	                } else {
 	                    $('.artifactsspinner').css('display', 'none');
 	                }
@@ -2010,29 +1995,30 @@ limitations under the License.
 	                    return 1;
 	                }
 	            }
-	            function getNexusServerRepoArtifactVersions(nexusId, repoName, groupId, artifactId) {
-					$('.versionspinner').css('display', 'inline-block');
-					var $chooseVersions = $('#chooseVersions');
-					$chooseVersions.empty();
-					$('#chooseVersions').append('<option value="">Choose Versions</option>');
-					if (nexusId && repoName && groupId && artifactId) {
-						$.get('/nexus/'+nexusId+'/repositories/'+repoName+'/group/'+groupId+'/artifact/'+artifactId+'/versions',function(data){
-							$('.versionspinner').css('display', 'none');
-							if(data){
-								var versions = data.metadata.versioning[0].versions[0].version;
-									for (var i = 0; i < versions.length; i++) {
-										$('#chooseVersions').append('<option value=' + versions[i] + '>' + versions[i] + '</option>');
-									}
-								$chooseVersions.find('option:last-child').attr('selected', true).change();
-							}else{
-								$('.versionspinner').css('display', 'none');
-							}
 
-						});
-					} else {
-						$('.versionspinner').css('display', 'none');
-					}
-				}
+	            function getNexusServerRepoArtifactVersions(nexusId, repoName, groupId, artifactId) {
+	                $('.versionspinner').css('display', 'inline-block');
+	                var $chooseVersions = $('#chooseVersions');
+	                $chooseVersions.empty();
+	                $('#chooseVersions').append('<option value="">Choose Versions</option>');
+	                if (nexusId && repoName && groupId && artifactId) {
+	                    $.get('/nexus/' + nexusId + '/repositories/' + repoName + '/group/' + groupId + '/artifact/' + artifactId + '/versions', function(data) {
+	                        $('.versionspinner').css('display', 'none');
+	                        if (data) {
+	                            var versions = data.metadata.versioning[0].versions[0].version;
+	                            for (var i = 0; i < versions.length; i++) {
+	                                $('#chooseVersions').append('<option value=' + versions[i] + '>' + versions[i] + '</option>');
+	                            }
+	                            $chooseVersions.find('option:last-child').attr('selected', true).change();
+	                        } else {
+	                            $('.versionspinner').css('display', 'none');
+	                        }
+
+	                    });
+	                } else {
+	                    $('.versionspinner').css('display', 'none');
+	                }
+	            }
 	            /*function getNexusServerRepoArtifactVersions(nexusId, repoName, reqBody) {
 	                $('.versionspinner').css('display', 'inline-block');
 	                //var $chooseVersions = $('#chooseVersions');

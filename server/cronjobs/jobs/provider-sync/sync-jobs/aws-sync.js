@@ -134,8 +134,8 @@ function sync() {
 																	if (!foundInUnManaged) { //making entry in unmanaged database
 																		var os = 'linux';
 																		if (awsInstances[m].State.Name !== 'terminated') {
-																			if (awsInstances[m].Platform && awsInstances[m].Platform === 'Windows') {
-																				os = 'widows';
+																			if (awsInstances[m].Platform && awsInstances[m].Platform === 'windows') {
+																				os = 'windows';
 																			}
 
 																			unManagedInstancesDao.createNew({

@@ -553,6 +553,19 @@
     border-width:0 1px 1px !important;
     border-color: #ddd;
 }
+.colorDarkBlue{
+    color:DarkBlue;
+}
+.nonClickwithGrgrayedout{
+    opacity: 0.5;
+    pointer-events: none;
+}
+.margintop40{
+    margin-top: 40px !important;
+}
+.tableOverflow{
+    overflow: auto;
+}
 /*.secondChildSpanTemplate{
     padding-left: 15%;
 }*/

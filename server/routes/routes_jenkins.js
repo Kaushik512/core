@@ -26,23 +26,6 @@ var fs = require('fs');
 var currentDirectory = __dirname;
 
 module.exports.setRoutes = function(app, verificationFunc) {
-    app.get('/jenkins/version', function(req, res) {
-        var jenkinVversion;
-        try {
-            jenkinVversion = fs.readFileSync(currentDirectory + '/../../version.json', {
-                'encoding': 'utf8'
-            });
-
-            jenkinVversion = JSON.parse(jenkinVversion);
-
-        } catch (err) {
-            logger.error(err);
-            res.send({});
-            return;
-        }
-        res.send(jenkinVversion);
-        return;
-    });
     app.all('/jenkins/*', verificationFunc);
 
     app.get('/jenkins/', function(req, res) {

@@ -89,6 +89,7 @@ if (!$.fn.dataTable.isDataTable('#tableRunlist')) {
         "bLengthChange": false,
         "paging": false,
         "bFilter": false,
+        "bSort":false,
         "aoColumns": [{
             "bSortable": false
         }]
@@ -696,14 +697,15 @@ $(document).ready(function() {
                 return false;
             }
 
-            var $selectedJenkinsBlueprints = $('#selectedBlueprintJenkinsTask input[type=checkbox]');
+            // Currently removed blueprint launch from jenkins
+           /* var $selectedJenkinsBlueprints = $('#selectedBlueprintJenkinsTask input[type=checkbox]');
             var jenkinsBlueprintList = [];
             $selectedJenkinsBlueprints.each(function() {
                 if (this.checked) {
                     jenkinsBlueprintList.push(this.value);
                 }
             });
-            taskData.blueprintIds = jenkinsBlueprintList;
+            taskData.blueprintIds = jenkinsBlueprintList;*/
             var jenkinsJobDescription = $('textarea#jenkinsDescription').val();
             var usersList = [].concat($('#jenkinsUserList').val());
             if (!usersList.length) {

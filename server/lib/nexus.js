@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-
 // This file act as a interface between catalyst and nexus.
 
 
@@ -97,30 +96,27 @@ var Nexus = function() {
                 };
                 client = new Client(options_auth);
                 var nexusUrl = nexus[0].hostname + '/service/local/data_index?q=' + groupId;
-                logger.debug("======== ",nexusUrl);
                 client.registerMethod("jsonMethod", nexusUrl, "GET");
                 client.methods.jsonMethod(function(data, response) {
-                    //try {
-                        var json = parser.toJson(data);
-                        logger.debug("data: ", typeof json);
-                        json = JSON.parse(json);
-                        logger.debug("Parsed json: ", JSON.stringify(json));
-                        var artifactList = [];
-                        if (json) {
-                            var artifacts = json['search-results'].data.artifact;
-                            if (artifacts.length) {
-                                for (var i = 0; i < artifacts.length; i++) {
-                                    if (repoName === artifacts[i].repoId) {
-                                        artifactList.push(artifacts[i]);
-                                    }
+                    var json = parser.toJson(data);
+                    logger.debug("artifact data: ", json);
+                    json = JSON.parse(json);
+                    logger.debug("Parsed json: ", JSON.stringify(json));
+                    var artifactList = [];
+                    if (json) {
+                        var artifacts = json['search-results'].data.artifact;
+                        if (artifacts.length) {
+                            for (var i = 0; i < artifacts.length; i++) {
+                                if (repoName === artifacts[i].repoId) {
+                                    var resourceURI = artifacts[i].resourceURI.replace(/\s/g, '');
+                                    artifacts[i]['resourceURI'] = resourceURI;
+                                    artifactList.push(artifacts[i]);
                                 }
                             }
                         }
-                        callback(null, artifactList);
-
-                    /*} catch (err) {
-                        callback(err,null);
-                    }*/
+                    }
+                    logger.debug("artifacts:::::  ", JSON.stringify(artifactList));
+                    callback(null, artifactList);
                 });
             } else {
                 callback(null, null);

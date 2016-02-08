@@ -1,19 +1,3 @@
-/*
-Copyright [2016] [Revin Jacob]
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
-
 $(document).ready(function() {
     getAllApplicationData();
     //getAllPipelineApplicationData();
@@ -27,7 +11,6 @@ $(document).ready(function() {
     function newAppDeployClickHandler(e) {
         $('#containerIdDiv').removeAttr('disabled');
         $('#upgradeValue').val("");
-        $('.groupClass').hide();
         $('.containerIdClass').hide();
         $('.containerPortClass').hide();
         $('.repoUrlClass').hide();
@@ -54,7 +37,6 @@ $(document).ready(function() {
     $('#defaultViewButtonNewDeploy').on('click', newAppDeployClickHandler);
 });
 
-
 getAllPipelineViewData();
 
 function getAllPipelineViewData() {
@@ -75,43 +57,38 @@ function getAllPipelineViewData() {
     var projectId = urlParams.projid;
 
     $.get('/app/deploy/pipeline/project/' + projectId, function(dataPipeline) {
-        if (dataPipeline.length) {
+        if (dataPipeline[0].envId.length > 0) {
             var arrEnv = [];
-            var arrPresentEnvSeq = [];
             var arrSequence = [];
             arrEnv.push({
-                "title": 'App Details'
+                "title": ''
             });
             arrSequence.push('');
-            arrPresentEnvSeq.push('');
             for (var i = 0; i < dataPipeline[0].envId.length; i++) {
                 var envUniqueText = dataPipeline[0].envId[i];
                 var obj = {
                     "title": envUniqueText
                 };
                 arrEnv.push(obj);
-                arrPresentEnvSeq.push(envUniqueText);
             }
             for (var j = 0; j < dataPipeline[0].envSequence.length; j++) {
                 var envUniqueText = dataPipeline[0].envSequence[j];
                 arrSequence.push(envUniqueText);
             }
-            if (arrSequence[dataPipeline[0].envSequence.length] && arrEnv[dataPipeline[0].envId.length]) {
-                creationPipelineTableView(projectId, arrEnv, arrPresentEnvSeq);
+            if(arrSequence[dataPipeline[0].envSequence.length] && arrEnv[dataPipeline[0].envId.length]){
+                creationPipelineTableView(projectId,arrEnv,arrSequence);
             }
-
+            
         } else {
             $.get('/d4dMasters/project/' + projectId, function(dataforenvName) {
                 var individualenvName = dataforenvName[0].environmentname;
                 individualenvName = individualenvName.split(",");
                 var arrEnv = [];
                 var arrSequence = [];
-                var arrPresentEnvSeq = [];
                 arrEnv.push({
-                    "title": 'App Details'
+                    "title": ''
                 });
                 arrSequence.push('');
-                arrPresentEnvSeq.push('');
 
                 for (var i = 0; i < individualenvName.length; i++) {
                     var envUniqueText = individualenvName[i];
@@ -125,203 +102,126 @@ function getAllPipelineViewData() {
 
                 console.log('array sequence');
                 console.log(arrSequence);
-                if (arrSequence[individualenvName.length]) {
-                    creationPipelineTableView(projectId, arrEnv, arrPresentEnvSeq);
+                if(arrSequence[individualenvName.length]){
+                    creationPipelineTableView(projectId,arrEnv,arrSequence);
                 }
 
             }).fail(function() {});
         }
     }).fail(function() {});
 }
-
-function creationPipelineTableView(projectId, arrEnv, arrSequence) {
-    //alert("I am in pipeline Tableview");
-    console.log(arrEnv);
+function creationPipelineTableView(projectId,arrEnv,arrSequence){
     var $tableClone = $('.tableClone').clone();
     $tableClone.removeClass('tableClone');
     $('#tableContainer').empty().append($tableClone);
+    
     $tableClone.DataTable({
         columns: arrEnv,
         "bSort": false,
-        "aoColumnDefs": [{
-            'bSortable': true,
-            'aTargets': [1]
-        }],
         "bAutoWidth": false,
         "bProcessing": true,
         "bDeferRender": true,
-        "bFilter": true,
-        "bLengthChange": true
+        "bFilter": false,
+        "bLengthChange": false
     });
-    $tableClone.addClass('margintop40');
-    $tableClone.find('thead th').addClass('padding-left5per theadcolor');
+    $tableClone.find('thead th').addClass('padding-left5per');
     var $tableapplicationTest = $tableClone;
     var $tableapplicationTbody = $tableClone.find('tbody');
     $.get('/app/deploy/project/' + projectId + '/list', function(deployData) {
-
-        var sorteddeployData = deployData;
-        cmp = function(x, y) {
-            return x > y ? 1 : x < y ? -1 : 0;
-        };
-
-        //sort name ascending then id descending
-        deployData.sort(function(a, b) {
-            //note the minus before -cmp, for descending order
-            return cmp(
-                [cmp(a.applicationName, b.applicationName), -cmp(a.applicationVersion, b.applicationVersion)], [cmp(b.applicationName, a.applicationName), -cmp(b.applicationVersion, a.applicationVersion)]
-            );
-        });
-        sorteddeployData.forEach(function(appDeployDataObj) {
-            function createMainCard(applicationName, versionNumber) {
+        deployData.forEach(function(appDeployDataObj) {
+            function createMainCard(applicationName,versionNumber){
                 var tempStr = '';
-
+                       
                 var $mainCardTemplate = $('.mainCardTemplate');
 
                 var $mainCard = $mainCardTemplate.clone(true);
                 $mainCard.css({
                     display: 'inline-flex'
                 });
-
+                
                 $mainCard.find('.applicationMainIP').html(applicationName);
                 $mainCard.find('.versionMain').html(versionNumber);
 
-                if (applicationName === "catalyst" || applicationName === "Catalyst") {
-                    $mainCard.find('.mainImageHeight').attr("src", "img/rsz_logo.png");
-                } else {
-                    $mainCard.find('.mainImageHeight').attr("src", "img/petclinic.png");
+                if(applicationName === "catalyst"){
+                    $mainCard.find('.mainImageHeight').attr("src","img/rsz_logo.png");    
+                }else{
+                    $mainCard.find('.mainImageHeight').attr("src","img/petclinic.png");
                 }
-
+                
                 var $mainCardtemplateStr = $mainCard.prop('outerHTML');
                 tempStr = tempStr + $mainCardtemplateStr;
                 return tempStr;
             }
 
-            function createStatusPresentCard(appDeployDataObj, indexofData) {
+            function createStatusPresentCard(appDeployDataObj,applicationName,callback){
                 var tempStr = '';
+                       
                 var $childCardTemplate = $('.childCardTemplate');
                 var $childPresentCard = $childCardTemplate.clone(true);
                 $childPresentCard.css({
                     display: 'inline-flex'
                 });
-                //alert(appDeployDataObj.applicationNodeIP[indexofData]);
-                //var count =0;
-                $childPresentCard.find('.applicationChildIP').html(appDeployDataObj.applicationNodeIP[indexofData]);
-                $childPresentCard.find('.lastapplicationDeploy').html(appDeployDataObj.applicationLastDeploy[indexofData]);
-                var appStatusCard = appDeployDataObj.applicationStatus[indexofData].toUpperCase();
-                //alert(appStatusCard);
-                if (appStatusCard === "SUCCESSFUL" || appStatusCard === "SUCCESSFULL" || appStatusCard === "SUCCESS") {
-                    $childPresentCard.find('.imgHeight').attr("src", "img/aws_logo_started.png");
-                    $childPresentCard.find('.applicationChildDetails').removeClass('btn-primary btn-danger').addClass('btn-success');
+                var count =0;
+                for(var i=0;i<appDeployDataObj.envId.length;i++){
+                    
+                    (function(i){
+                        count++;
+                        $childPresentCard.find('.applicationChildIP').html(appDeployDataObj.applicationNodeIP[i]);
+                        $childPresentCard.find('.lastapplicationDeploy').html(appDeployDataObj.applicationLastDeploy[i]);
 
-                } else {
-                    $childPresentCard.find('.imgHeight').attr("src", "img/aws_logo_stopped.png");
-                    $childPresentCard.find('.applicationChildDetails').removeClass('btn-primary btn-success').addClass('btn-danger');
+                        if(appDeployDataObj.applicationStatus[i] === "Successful"){
+                            $childPresentCard.find('.imgHeight').attr("src","img/aws_logo_started.png");
+                            $childPresentCard.find('.applicationChildDetails').removeClass('btn-primary').addClass('btn-success');
+
+                        }else{
+                            $childPresentCard.find('.imgHeight').attr("src","img/aws_logo_stopped.png");
+                            $childPresentCard.find('.applicationChildDetails').removeClass('btn-primary').addClass('btn-danger');
+                        }
+                        
+                        $childPresentCard.find('.applicationNamePipelineView').html(applicationName);
+                        $childPresentCard.find('.applicationInstanceNamePipelineView').html(appDeployDataObj.applicationInstanceName[i]);
+                        $childPresentCard.find('.hostNamePipelineView').html(appDeployDataObj.hostName[i]);
+                        $childPresentCard.find('.applicationNodeIPPipelineView').html(appDeployDataObj.applicationNodeIP[i]);
+                        $childPresentCard.find('.containerIdPipelineView').html(appDeployDataObj.containerId[i]);
+                        $childPresentCard.find('.applicationStatusPipelineView').html(appDeployDataObj.applicationStatus[i]);
+                        if(count === appDeployDataObj.envId.length){
+                            var $childCardtemplateStr = $childPresentCard.prop('outerHTML');
+                            tempStr = tempStr + $childCardtemplateStr;
+                            callback(null,tempStr);
+                        }
+                    })(i);
                 }
-                $childPresentCard.find('.applicationEnvNamePipelineView').html(appDeployDataObj.envId[indexofData]);
-                var $childCardtemplateStr = $childPresentCard.prop('outerHTML');
-                tempStr = tempStr + $childCardtemplateStr;
-                finalArray.push(tempStr);
-                //finalArray.push($childPresentCard);
             };
 
-
-            function sortAscending(data_A, data_B) {
-                data_A = convertToDateObj(data_A);
-                data_B = convertToDateObj(data_B);
-                return (data_B - data_A);
-            }
+            var countColumn = 0;
+            var dummyArray = [];
             var finalArray = [];
             var applicationName = appDeployDataObj.applicationName;
             var versionNumber = appDeployDataObj.applicationVersion;
-            var applicationEnvList = appDeployDataObj.envId;
-
-
-            var sortedappdataList = [];
-            var unsortedappdataList = [];
-            var indexedList = [];
-
-            for (var j = 0; j < applicationEnvList.length; j++) {
-                sortedappdataList.push(appDeployDataObj.applicationLastDeploy[j]);
-                unsortedappdataList.push(appDeployDataObj.applicationLastDeploy[j]);
-            }
-            sortedappdataList.sort(sortAscending);
-
-            for (var m = 0; m < unsortedappdataList.length; m++) {
-                indexedList.push(jQuery.inArray(unsortedappdataList[m], sortedappdataList));
-            }
-
-            var applicationInstanceName = [];
-            var applicationNodeIP = [];
-            var applicationLastDeploy = [];
-            var applicationStatus = [];
-            var containerId = [];
-            var hostName = [];
-            var envId = [];
-            var appLogs = [];
-            for (var n = 0; n < indexedList.length; n++) {
-                var appLastDeployObj = convertToDateObj(appDeployDataObj.applicationLastDeploy[n]);
-                var appDeployLastTime = convertToDateCustom(appLastDeployObj);
-
-                applicationInstanceName[indexedList[n]] = appDeployDataObj.applicationInstanceName[n];
-                applicationNodeIP[indexedList[n]] = appDeployDataObj.applicationNodeIP[n];
-                applicationLastDeploy[indexedList[n]] = appDeployLastTime;
-                applicationStatus[indexedList[n]] = appDeployDataObj.applicationStatus[n];
-                containerId[indexedList[n]] = appDeployDataObj.containerId[n];
-                hostName[indexedList[n]] = appDeployDataObj.hostName[n];
-                envId[indexedList[n]] = appDeployDataObj.envId[n];
-                appLogs[indexedList[n]] = appDeployDataObj.appLogs[n];
-            }
-            console.log(applicationLastDeploy);
-            var sortedappDeployDataObj = {
-                "applicationName": applicationName,
-                "applicationVersion": versionNumber,
-                "projectId": projectId,
-                "applicationInstanceName": applicationInstanceName,
-                "applicationNodeIP": applicationNodeIP,
-                "applicationLastDeploy": applicationLastDeploy,
-                "applicationStatus": applicationStatus,
-                "containerId": containerId,
-                "hostName": hostName,
-                "envId": envId,
-                "appLogs": appLogs
-            };
-
-            var presentDataDetailsObj = {};
-
-            var appSortedEnvList = sortedappDeployDataObj.envId;
-            for (var j = 0; j < arrSequence.length; j++) {
+            var applicationEnvList=appDeployDataObj.envId;
+               for (var j = 0; j < arrSequence.length; j++) {
+                countColumn++;
                 //application main card
-
-                if (j == 0 && arrSequence[0] == "") {
-                    finalArray.push(createMainCard(applicationName, versionNumber));
-                } else if ($.inArray(arrSequence[j], appSortedEnvList) != -1) {
-                    var index = $.inArray(arrSequence[j], appSortedEnvList);
-                    createStatusPresentCard(sortedappDeployDataObj, index);
-                    var specificEnvArr = [];
-                    var specificEnvobj = {
-                        "applicationInstanceName": sortedappDeployDataObj.applicationInstanceName[index],
-                        "applicationNodeIP": sortedappDeployDataObj.applicationNodeIP[index],
-                        "applicationLastDeploy": sortedappDeployDataObj.applicationLastDeploy[index],
-                        "applicationStatus": sortedappDeployDataObj.applicationStatus[index],
-                        "containerId": sortedappDeployDataObj.containerId[index],
-                        "hostName": sortedappDeployDataObj.hostName[index],
-                        "envId": sortedappDeployDataObj.envId[index],
-                        "appLogs": sortedappDeployDataObj.appLogs[index]
-                    };
-                    specificEnvArr.push(specificEnvobj);
-
-                    presentDataDetailsObj[arrSequence[j]] = specificEnvArr;
-
-
-                    sortedappDeployDataObj.applicationInstanceName.splice(index, 1);
-                    sortedappDeployDataObj.applicationNodeIP.splice(index, 1);
-                    sortedappDeployDataObj.applicationLastDeploy.splice(index, 1);
-                    sortedappDeployDataObj.applicationStatus.splice(index, 1);
-                    sortedappDeployDataObj.containerId.splice(index, 1);
-                    sortedappDeployDataObj.hostName.splice(index, 1);
-                    sortedappDeployDataObj.envId.splice(index, 1);
-                    sortedappDeployDataObj.appLogs.splice(index, 1);
-                } else {
+                if(j==0 && arrSequence[j]===""){
+                    var obj = createMainCard(applicationName,versionNumber);
+                    finalArray.push(createMainCard(applicationName,versionNumber));
+                }
+                else if($.inArray(arrSequence[j],applicationEnvList)!==-1){
+                    //application status present card
+                    //alert($(arrSequence).get(-1));
+                    if($(arrSequence).get(-1) == arrSequence[j]){
+                        //alert("Matched");
+                        createStatusPresentCard(appDeployDataObj,applicationName,function(err,data){
+                            alert(data);
+                            finalArray.push(data);
+                        });
+                    }
+                    else{
+                        createStatusPresentCard(appDeployDataObj,applicationName,function(err,data){
+                            finalArray.push(data);
+                        });
+                    }
+                }else{
                     //application status absent card
                     var tempStr = '';
                     var $childCardTemplate = $('.childCardTemplate');
@@ -331,121 +231,116 @@ function creationPipelineTableView(projectId, arrEnv, arrSequence) {
                     });
                     $childPresentCard.find('.applicationChildIP').html('');
                     $childPresentCard.find('.lastDeploySpan').html('');
-                    $childPresentCard.find('.imgHeight').attr("src", "img/rsz_inactive.png");
+                    $childPresentCard.find('.imgHeight').attr("src","img/rsz_inactive.png");
                     $childPresentCard.find('.applicationChildDetails').removeClass('btn-primary').addClass('btn-grey');
                     $childPresentCard.find('.lastapplicationDeploy').html('');
-                    $childPresentCard.children().css({
-                        'opacity': '0.5',
-                        'pointer-events': 'none'
-                    });
-
+                    //$childPresentCard.find('.footer-innerdiv').html('');
+                        $childPresentCard.children().css({
+                            'opacity': '0.5',
+                            'pointer-events': 'none'
+                        });
+                    //$childPresentCard.find('.applicationChildDetails').attr('disabled');
+                    //$childPresentCard.find('.applicationChildmoreInfo').attr('disabled');
+                    
                     var $childCardtemplateStr = $childPresentCard.prop('outerHTML');
                     tempStr = tempStr + $childCardtemplateStr;
                     finalArray.push(tempStr);
-                }
+                } 
             }
-            var appLastDeployArr = sortedappDeployDataObj.applicationLastDeploy;
-
-            for (var key in presentDataDetailsObj) {
-                if (presentDataDetailsObj.hasOwnProperty(key)) {
-                    for (var p = 0; p < appLastDeployArr.length; p++) {
-                        if (key == sortedappDeployDataObj.envId[p]) {
-
-                            var specificEnvPresentobj = {
-                                "applicationInstanceName": sortedappDeployDataObj.applicationInstanceName[p],
-                                "applicationNodeIP": sortedappDeployDataObj.applicationNodeIP[p],
-                                "applicationLastDeploy": sortedappDeployDataObj.applicationLastDeploy[p],
-                                "applicationStatus": sortedappDeployDataObj.applicationStatus[p],
-                                "containerId": sortedappDeployDataObj.containerId[p],
-                                "hostName": sortedappDeployDataObj.hostName[p],
-                                "envId": sortedappDeployDataObj.envId[p],
-                                "appLogs": sortedappDeployDataObj.appLogs[p]
-                            };
-                            presentDataDetailsObj[key].push(specificEnvPresentobj);
-                        }
-                    }
-                }
-            }
-            for (var j = 0; j < arrEnv.length; j++) {
-                var finalString = $(finalArray).get(-1);
-                finalArray.pop();
-                var firstSubStr = finalString.lastIndexOf('<span');
-                var lastSubStr = finalString.lastIndexOf('</span>');
-
-                var finalstr = finalString.substring(0, firstSubStr);
-                var superFinalString = finalstr + "</div>";
-                finalArray.push(superFinalString);
-            }
-            var rowIndex = $tableapplicationTest.dataTable().fnAddData(finalArray);
-            var row = $tableapplicationTest.dataTable().fnGetNodes(rowIndex);
-            $(row).data('appNameVer', presentDataDetailsObj);
-        });
+            $tableapplicationTest.dataTable().fnAddData(finalArray);
+            //alert($('#tableContainer table tbody td').outerWidth()); 
+        });        
     });
-    /*setTimeout(function(){
-        var childCardTemplWidth = $('#tableContainer .childCardTemplate').outerWidth();
-        var firstChildSpanTemplWidth = $('#tableContainer .firstChildSpanTemplate').outerWidth();
-        var diff = childCardTemplWidth - firstChildSpanTemplWidth;
-        var actualSetDiff = diff/2;
-        $('#tableContainer .childCardTemplate .secondChildSpanTemplate').css('padding-left',actualSetDiff);
-    },10000);*/
-    $tableapplicationTbody.on('click', '.applicationChildDetails', moreinfoDetailsPipelineViewClickHandler);
+    
+    $tableapplicationTbody.on('click','.applicationChildDetails',moreinfoDetailsPipelineViewClickHandler);
 }
 
 function moreinfoDetailsPipelineViewClickHandler(e) {
     var $modal = $('#modalDetailsAppDeploy');
+    var applicationNamePipelineText = $(this).parents().eq(5).find('.applicationNamePipelineView').html();
+    $modal.find('.appNameModal').html(applicationNamePipelineText);
 
-    var $row = $(this).closest("tr");
-    var rowSetDataDetailsObj = $row.data("appNameVer");
-    var applicationNamePipelineText = $(this).parents().eq(5).find('.applicationEnvNamePipelineView').html();
-    var $envSpecificDataArr = $('#envSpecificDataTable').DataTable();
-    for (var key in rowSetDataDetailsObj) {
-        if (rowSetDataDetailsObj.hasOwnProperty(key)) {
-            if (key == applicationNamePipelineText) {
-                $envSpecificDataArr.clear();
-                for (var k = 0; k < rowSetDataDetailsObj[key].length; k++) {
-                    var rowSetDetailsLogs = rowSetDataDetailsObj[key][k].appLogs;
-                    var nodeIp = rowSetDataDetailsObj[key][k].applicationNodeIP;
-                    rowSetDetailsLogs = rowSetDetailsLogs.replace(/"/g, '');
-                    var $tdlogs = '<a class="btn btn-primary btn-sm width27borderradius50 appSpecificLogs " data-logs="' + rowSetDetailsLogs + '"  data-nodeIp="' + nodeIp + '"><i class="fa fa-info font-size-11"></i></a>';
-                    $envSpecificDataArr.row.add([
-                        rowSetDataDetailsObj[key][k].applicationNodeIP,
-                        rowSetDataDetailsObj[key][k].applicationLastDeploy,
-                        rowSetDataDetailsObj[key][k].applicationStatus,
-                        $tdlogs
-                    ]).draw();
-                }
-                $('#envSpecificDataTable_length').hide();
-                $('#envSpecificDataTable_filter').hide();
-            }
-            $envSpecificDataArr.on('click', '.appSpecificLogs', appSpecificLogsViewClickHandler);
-        }
+    var appInstanceNameCardSpanText = $(this).parents().eq(5).find('.applicationInstanceNamePipelineView').html();
+    $modal.find('.appInstanceNameModal').html(appInstanceNameCardSpanText);
 
-    }
+    var hostNamePipelineText = $(this).parents().eq(5).find('.hostNamePipelineView').html();
+    $modal.find('.hostNameModal').html(hostNamePipelineText);
 
-    function appSpecificLogsViewClickHandler(e) {
-        var dataLogs = $(this).attr('data-logs');
-        var $modal = $('#modallogsSpecificDetails');
-        var datahttp = dataLogs.indexOf("http://");
-        if (datahttp == 0) {
-            $modal.find('.appLogsSpecific').empty();
-            window.open(dataLogs, "_blank");
-            return false;
-        } else {
-            $modal.find('.appLogsSpecific').empty();
-            var nodeIp = $(this).attr('data-nodeIp');
-            var $modal = $('#modallogsSpecificDetails');
-            var projectId = urlParams.projid;
-            $.get('/instances/' + nodeIp + '/project/' + projectId + '/logs', function(data) {
-                $modal.find('.appLogsSpecific').append(data);
-                $modal.modal('show');
-                return false;
-            });
-        }
-        e.preventdefault();
-        
-    }
+    var applicationNodeIPPipelineText = $(this).parents().eq(5).find('.applicationNodeIPPipelineView').html();
+    $modal.find('.nodeIpModal').html(applicationNodeIPPipelineText);
+
+    var containerIdPipelineText = $(this).parents().eq(5).find('.containerIdPipelineView').html();
+    $modal.find('.containerIdModal').html(containerIdPipelineText);
+
+    var applicationStatusPipelineText = $(this).parents().eq(5).find('.applicationStatusPipelineView').html();
+    $modal.find('.statusModal').html(applicationStatusPipelineText);
+
     $modal.modal('show');
 }
+$('.appdeployConfigureSaveBtn').click(function() {
+    var $tableconfigureapplication = $('#tableconfigureapplication');
+    var projectId = urlParams.projid;
+    var configureEnvArray = [];
+    var configureEnvArraySequence = [];
+    var arrEnv = [];
+    var arrSequence = [];
+    arrEnv.push({
+        "title": ''
+    });
+    arrSequence.push('');
+    $tableconfigureapplication.find('tbody tr').each(function() {
+        $tr = $(this);
+        var envUniqueTextAllEnv = $tr.find('.configAppDeployUniqueName').text();
+        configureEnvArraySequence.push(envUniqueTextAllEnv);
+        arrSequence.push(envUniqueTextAllEnv);
+    });
+    $tableconfigureapplication.find('tbody tr').filter(':has(:checkbox:checked)').each(function() {
+        var $tr = $(this);
+        var envUniqueText = $tr.find('.configAppDeployUniqueName').text();
+        var obj = {
+            "title": envUniqueText
+        };
+        arrEnv.push(obj);
+        configureEnvArray.push(envUniqueText);
+    });
+    
+   creationPipelineTableView(projectId,arrEnv,arrSequence);
+   
+    /*getenvName(function(envName) {
+        envNameSelected = envName;
+        if (configureEnvArray.length > 0) {
+            configureEnvArray.forEach(function(envUniqueText) {
+                createPipelineArea(envUniqueText, envNameSelected, projectId);
+            });
+        } else {
+            configureEnvArraySequence.forEach(function(envUniqueText) {
+                createPipelineArea(envUniqueText, envNameSelected, projectId);
+            });
+        }
+    });*/
+    var dataDeployPipeline = {
+        "appDeployPipelineData": {
+            "loggedInUser": "",
+        }
+    };
+    var projectId = urlParams.projid;
+    dataDeployPipeline.appDeployPipelineData.projectId = projectId;
+    dataDeployPipeline.appDeployPipelineData.envId = configureEnvArray;
+    dataDeployPipeline.appDeployPipelineData.envSequence = configureEnvArraySequence;
+    $.ajax({
+        url: '/app/deploy/data/pipeline/configure',
+        data: JSON.stringify(dataDeployPipeline),
+        type: 'POST',
+        contentType: "application/json",
+        success: function(data) {
+            $('#modalappcardConfigure').modal('hide');
+        },
+        error: function(jqxhr) {
+            $('#modalappcardConfigure').modal('hide');
+        }
+    });
+   
+});
 
 function createAttribTableRowFromJson(attributes) {
     var $chefRunModalContainer = $('#chefRunModalContainer')
@@ -492,15 +387,17 @@ function createAttribTableRowFromJson(attributes) {
         getVal(attributeObj, '');
     }
 }
-
 $('.createAppConfigure').click(function() {
     var selectedEnvironments = [];
     var allEnvironments = [];
     var $tableconfigureapplication = $('#tableconfigureapplication');
     var $tbody = $tableconfigureapplication.find('tbody').empty();
     var projectId = urlParams.projid;
-    $.get('/d4dMasters/project/' + projectId, function(dataforenvName) {
-        $.get('/app/deploy/pipeline/project/' + projectId, function(dataPipeline) {
+    $.ajax({
+        url: '/app/deploy/pipeline/project/' + projectId,
+        type: "GET",
+        async: true,
+        success: function(dataPipeline) {
             if (dataPipeline.length) {
                 for (var i = 0; i < dataPipeline[0].envId.length; i++) {
                     selectedEnvironments.push(dataPipeline[0].envId[i]);
@@ -508,41 +405,33 @@ $('.createAppConfigure').click(function() {
                 for (var i = 0; i < dataPipeline[0].envSequence.length; i++) {
                     allEnvironments.push(dataPipeline[0].envSequence[i]);
                 }
-                var individualenvNamePrnt = dataforenvName[0].environmentname;
-                individualenvNamePrnt = individualenvNamePrnt.split(",");
-
-                console.log("allsequenceEnvironments", allEnvironments);
-                console.log("individualenvNamePrnt", individualenvNamePrnt);
-                for (var x = 0; x < individualenvNamePrnt.length; x++) {
-                    if ($.inArray(individualenvNamePrnt[x], allEnvironments) == -1) {
-                        allEnvironments.push(individualenvNamePrnt[x]);
-                    }
-                }
                 if (selectedEnvironments.length == 0) {
-                    var individualenvName = dataforenvName[0].environmentname;
-                    individualenvName = individualenvName.split(",");
-                    for (var i = 0; i < individualenvName.length; i++) {
-                        var checked = "";
-                        if ($.inArray(individualenvName[i], individualenvName) > -1) {
-                            checked = "checked";
+                    $.get('/d4dMasters/project/' + projectId, function(dataforenvName) {
+                        var individualenvName = dataforenvName[0].environmentname;
+                        individualenvName = individualenvName.split(",");
+                        for (var i = 0; i < individualenvName.length; i++) {
+                            var checked = "";
+                            if ($.inArray(individualenvName[i], individualenvName) > -1) {
+                                checked = "checked";
+                            }
+                            var $tr = $('<tr/>').attr({
+                                'data-configureApplication': individualenvName[i]
+                            });
+                            var $tdenvName = $('<td class="configAppDeployUniqueName"/>').html(individualenvName[i]);
+                            var $tdActive = $('<td/>').html("<div class='iphone-toggle-buttons'><ul style='padding: 0px; margin: 0px;list-style-type: none;'><li><label for='checkbox-" + i + "'><input type='checkbox' class='appDeployCheckboxOrder' name='checkbox-" + i + "' id='checkbox-" + i + "' " + checked + " /><span></span></label></li></ul></div>");
+                            var $tdupdown = $('<td/>').html("<a class='btn btn-default btn-primary up' style='border-radius:50%;height:27px;width:27px;padding-top:0px' type='button'><i style='font-size:12px;margin-left:-5px;margin-top:5px;' class='fa  fa-chevron-up'></i></a><a class='btn btn-default btn-primary down' style='border-radius:50%;height:27px;width:27px;padding-top:0px;margin-left:10px' type='button'><i style='font-size:12px;margin-left:-5px;margin-top:5px;' class='fa  fa-chevron-down'></i></a>");
+                            $tr.append($tdenvName).append($tdActive).append($tdupdown);
+                            $tbody.append($tr);
                         }
-                        var $tr = $('<tr/>').attr({
-                            'data-configureApplication': individualenvName[i]
+                        $tableconfigureapplication.append($tbody);
+                        $tableconfigureapplication.find(".up,.down").click(function() {
+                            var row = $(this).parents("tr:first");
+                            if ($(this).is(".up")) {
+                                row.insertBefore(row.prev());
+                            } else {
+                                row.insertAfter(row.next());
+                            }
                         });
-                        var $tdenvName = $('<td class="configAppDeployUniqueName"/>').html(individualenvName[i]);
-                        var $tdActive = $('<td/>').html("<div class='iphone-toggle-buttons'><ul style='padding: 0px; margin: 0px;list-style-type: none;'><li><label for='checkbox-" + i + "'><input type='checkbox' class='appDeployCheckboxOrder' name='checkbox-" + i + "' id='checkbox-" + i + "' " + checked + " /><span></span></label></li></ul></div>");
-                        var $tdupdown = $('<td/>').html("<a class='btn btn-default btn-primary up' style='border-radius:50%;height:27px;width:27px;padding-top:0px' type='button'><i style='font-size:12px;margin-left:-5px;margin-top:5px;' class='fa  fa-chevron-up'></i></a><a class='btn btn-default btn-primary down' style='border-radius:50%;height:27px;width:27px;padding-top:0px;margin-left:10px' type='button'><i style='font-size:12px;margin-left:-5px;margin-top:5px;' class='fa  fa-chevron-down'></i></a>");
-                        $tr.append($tdenvName).append($tdActive).append($tdupdown);
-                        $tbody.append($tr);
-                    }
-                    $tableconfigureapplication.append($tbody);
-                    $tableconfigureapplication.find(".up,.down").click(function() {
-                        var row = $(this).parents("tr:first");
-                        if ($(this).is(".up")) {
-                            row.insertBefore(row.prev());
-                        } else {
-                            row.insertAfter(row.next());
-                        }
                     });
                 } else {
                     for (var i = 0; i < allEnvironments.length; i++) {
@@ -569,34 +458,48 @@ $('.createAppConfigure').click(function() {
                         }
                     });
                 }
-            } else {
-                var individualenvName = dataforenvName[0].environmentname;
-                individualenvName = individualenvName.split(",");
-                for (var i = 0; i < individualenvName.length; i++) {
-                    var checked = "";
-                    if ($.inArray(individualenvName[i], individualenvName) > -1) {
-                        checked = "checked";
+            }else{
+                $.get('/d4dMasters/project/' + projectId, function(dataforenvName) {
+                    var individualenvName = dataforenvName[0].environmentname;
+                    individualenvName = individualenvName.split(",");
+                    for (var i = 0; i < individualenvName.length; i++) {
+                        selectedEnvironments.push(individualenvName[i]);
+                        allEnvironments.push(individualenvName[i]);
                     }
-                    var $tr = $('<tr/>').attr({
-                        'data-configureApplication': individualenvName[i]
-                    });
-                    var $tdenvName = $('<td class="configAppDeployUniqueName"/>').html(individualenvName[i]);
-                    var $tdActive = $('<td/>').html("<div class='iphone-toggle-buttons'><ul style='padding: 0px; margin: 0px;list-style-type: none;'><li><label for='checkbox-" + i + "'><input type='checkbox' class='appDeployCheckboxOrder' name='checkbox-" + i + "' id='checkbox-" + i + "' " + checked + " /><span></span></label></li></ul></div>");
-                    var $tdupdown = $('<td/>').html("<a class='btn btn-default btn-primary up' style='border-radius:50%;height:27px;width:27px;padding-top:0px' type='button'><i style='font-size:12px;margin-left:-5px;margin-top:5px;' class='fa  fa-chevron-up'></i></a><a class='btn btn-default btn-primary down' style='border-radius:50%;height:27px;width:27px;padding-top:0px;margin-left:10px' type='button'><i style='font-size:12px;margin-left:-5px;margin-top:5px;' class='fa  fa-chevron-down'></i></a>");
-                    $tr.append($tdenvName).append($tdActive).append($tdupdown);
-                    $tbody.append($tr);
-                }
-                $tableconfigureapplication.append($tbody);
-                $tableconfigureapplication.find(".up,.down").click(function() {
-                    var row = $(this).parents("tr:first");
-                    if ($(this).is(".up")) {
-                        row.insertBefore(row.prev());
-                    } else {
-                        row.insertAfter(row.next());
+                    if(selectedEnvironments[individualenvName.length] == allEnvironments[individualenvName.length]){
+                        $.get('/d4dMasters/project/' + projectId, function(dataforenvName) {
+                            var individualenvName = dataforenvName[0].environmentname;
+                            individualenvName = individualenvName.split(",");
+                            for (var i = 0; i < individualenvName.length; i++) {
+                                var checked = "";
+                                if ($.inArray(individualenvName[i], individualenvName) > -1) {
+                                    checked = "checked";
+                                }
+                                var $tr = $('<tr/>').attr({
+                                    'data-configureApplication': individualenvName[i]
+                                });
+                                var $tdenvName = $('<td class="configAppDeployUniqueName"/>').html(individualenvName[i]);
+                                var $tdActive = $('<td/>').html("<div class='iphone-toggle-buttons'><ul style='padding: 0px; margin: 0px;list-style-type: none;'><li><label for='checkbox-" + i + "'><input type='checkbox' class='appDeployCheckboxOrder' name='checkbox-" + i + "' id='checkbox-" + i + "' " + checked + " /><span></span></label></li></ul></div>");
+                                var $tdupdown = $('<td/>').html("<a class='btn btn-default btn-primary up' style='border-radius:50%;height:27px;width:27px;padding-top:0px' type='button'><i style='font-size:12px;margin-left:-5px;margin-top:5px;' class='fa  fa-chevron-up'></i></a><a class='btn btn-default btn-primary down' style='border-radius:50%;height:27px;width:27px;padding-top:0px;margin-left:10px' type='button'><i style='font-size:12px;margin-left:-5px;margin-top:5px;' class='fa  fa-chevron-down'></i></a>");
+                                $tr.append($tdenvName).append($tdActive).append($tdupdown);
+                                $tbody.append($tr);
+                            }
+                            $tableconfigureapplication.append($tbody);
+                            $tableconfigureapplication.find(".up,.down").click(function() {
+                                var row = $(this).parents("tr:first");
+                                if ($(this).is(".up")) {
+                                    row.insertBefore(row.prev());
+                                } else {
+                                    row.insertAfter(row.next());
+                                }
+                            });
+                        });
                     }
                 });
+
             }
-        });
+        },
+        error: function() {}
     });
 });
 
@@ -618,100 +521,20 @@ function ConvertTimeformat(format, str, formatStr) {
 }
 
 function convertToDateObj(strInputDate) {
-    var strSplit = strInputDate.split(' ');
-    var dateStr = strSplit[0];
-    var timeStr = strSplit[1];
-    var formatStr = strSplit[2];
+    var timeStr = strInputDate.split(' ')[1];
+    var formatStr = strInputDate.split(' ')[2];
     var str = ConvertTimeformat("24", timeStr, formatStr);
-    if (dateStr.length == 8) {
-        var year = strInputDate.substring(0, 2);
-        year = 20 + year;
-        var month = strInputDate.substring(3, 5);
-        month = parseInt(month);
-        var day = strInputDate.substring(6, 8);
-    } else if (dateStr.length == 9) {
-        var year = strInputDate.substring(0, 4);
-        var month = strInputDate.substring(5, 6);
-        month = parseInt(month);
-        var day = strInputDate.substring(7, 9);
-    } else {
-        var year = strInputDate.substring(0, 4);
-        var month = strInputDate.substring(5, 7);
-        month = parseInt(month);
-        var day = strInputDate.substring(8, 10);
-    }
-    // var year = strInputDate.substring(0, 2);
-    // var month = strInputDate.substring(3, 5);
-    // month = parseInt(month);
-    // var day = strInputDate.substring(6, 8);
+    var year = strInputDate.substring(0, 2);
+    var month = strInputDate.substring(3, 5);
+    month = parseInt(month);
+    var day = strInputDate.substring(6, 8);
     var hour = str.substring(0, 2);
     var minute = str.substring(3, 5);
     var second = str.substring(6, 8);
     var dateConverted = new Date(year, month - 1, day, hour, minute, second);
-    //alert(dateConverted + ' ==== '+strInputDate);
     return dateConverted;
 }
 
-function convertToDateCustom(d) {
-    var datestring = ("0" + d.getDate()).slice(-2) + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" +
-        d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2) + ":" + d.getSeconds();
-    return datestring;
-}
-
-
-$('.appdeployConfigureSaveBtn').click(function() {
-    var $tableconfigureapplication = $('#tableconfigureapplication');
-    var projectId = urlParams.projid;
-    var configureEnvArray = [];
-    var configureEnvArraySequence = [];
-    var arrEnv = [];
-    var arrSequence = [];
-    var arrPresentEnvSeq = [];
-    arrEnv.push({
-        "title": 'App Details'
-    });
-    arrSequence.push('');
-    arrPresentEnvSeq.push('');
-    $tableconfigureapplication.find('tbody tr').each(function() {
-        $tr = $(this);
-        var envUniqueTextAllEnv = $tr.find('.configAppDeployUniqueName').text();
-        configureEnvArraySequence.push(envUniqueTextAllEnv);
-        arrSequence.push(envUniqueTextAllEnv);
-    });
-    $tableconfigureapplication.find('tbody tr').filter(':has(:checkbox:checked)').each(function() {
-        var $tr = $(this);
-        var envUniqueText = $tr.find('.configAppDeployUniqueName').text();
-        var obj = {
-            "title": envUniqueText
-        };
-        arrEnv.push(obj);
-        arrPresentEnvSeq.push(envUniqueText);
-        configureEnvArray.push(envUniqueText);
-    });
-
-    creationPipelineTableView(projectId, arrEnv, arrPresentEnvSeq);
-    var dataDeployPipeline = {
-        "appDeployPipelineData": {
-            "loggedInUser": "",
-        }
-    };
-    var projectId = urlParams.projid;
-    dataDeployPipeline.appDeployPipelineData.projectId = projectId;
-    dataDeployPipeline.appDeployPipelineData.envId = configureEnvArray;
-    dataDeployPipeline.appDeployPipelineData.envSequence = configureEnvArraySequence;
-    $.ajax({
-        url: '/app/deploy/data/pipeline/configure',
-        data: JSON.stringify(dataDeployPipeline),
-        type: 'POST',
-        contentType: "application/json",
-        success: function(data) {
-            $('#modalappcardConfigure').modal('hide');
-        },
-        error: function(jqxhr) {
-            $('#modalappcardConfigure').modal('hide');
-        }
-    });
-});
 $('#instanceviewAppCard').click(function() {
     getenvName(function(envName) {
         var dataenvAccordianName = "Application Deployment for : " + envName;
@@ -730,8 +553,9 @@ function getEnvNameforConfigure() {
     $.get('/d4dMasters/project/' + projectId, function(dataforenvName) {
         var individualenvName = dataforenvName[0].environmentname;
         individualenvName = individualenvName.split(",");
+        alert(individualenvName.length);
         for (var i = 0; i < individualenvName.length; i++) {
-            //alert(individualenvName[i]);
+            alert(individualenvName[i]);
         }
     });
 }
@@ -740,9 +564,6 @@ function resetAllFields() {
     var $chooseRepository = $('#chooseRepository');
     $chooseRepository.empty();
     $('#chooseRepository').append('<option value="">Choose Repositories</option>');
-    var $chooseGroupId = $('#chooseGroupId');
-    $chooseGroupId.empty();
-    $('#chooseGroupId').append('<option value="">Choose Group ID</option>');
     var $chooseArtifacts = $('#chooseArtifacts');
     $chooseArtifacts.empty();
     $('#chooseArtifacts').append('<option value="">Choose Artifacts</option>');
@@ -779,7 +600,7 @@ function getNexusServer() {
         $('.reposerverspinner').css('display', 'none');
         if (nexus.length) {
             for (var i = 0; i < nexus.length; i++) {
-                $('#chooseNexusServer').append('<option data-groupId = "' + nexus[i].groupid + '" data-nexusUrl = "' + nexus[i].hostname + '" value=' + nexus[i].rowid + ' data-serverType = "' + nexus[i].configType + '">' + nexus[i].nexusservername + '</option>');
+                $('#chooseNexusServer').append('<option data-nexusUrl = "' + nexus[i].hostname + '" value=' + nexus[i].rowid + ' data-serverType = "' + nexus[i].configType + '">' + nexus[i].nexusservername + '</option>');
             }
         }
     });
@@ -799,13 +620,13 @@ var $nexusServer = $('#chooseNexusServer');
 $nexusServer.change(function(e) {
     var nexusServerType = $('#chooseNexusServer :selected').attr('data-serverType');
     if ($('#chooseNexusServer :selected').text() == 'Choose Server') {
-        $('.groupClass').hide();
         $('.containerIdClass').hide();
         $('.containerPortClass').hide();
         $('.repoUrlClass').hide();
         $('.artifactClass').hide();
         $('.versionClass').hide();
         $('.createTaskLinkUpgrade').attr('disabled', 'disabled');
+
         // Reset all values
         resetAllFields();
 
@@ -815,21 +636,16 @@ $nexusServer.change(function(e) {
         $('.repoUrlClass').show();
         $('.artifactClass').show();
         $('.versionClass').show();
-        $('.groupClass').show();
         $('.containerIdClass').hide();
         $('.containerPortClass').hide();
         resetAllFields();
-        var groupId = $('#chooseNexusServer :selected').attr('data-groupId').split(",");
-        for (var g = 0; g < groupId.length; g++) {
-            $('#chooseGroupId').append('<option value="' + groupId[g] + '">' + groupId[g] + '</option>');
-        }
         getNexusServerRepo($(this).val());
         getTasks();
     } else { // It's Docker
         resetAllFields();
         $('.containerUpgradeDeploy').show();
         $('.createTaskLinkUpgrade').removeAttr('disabled');
-        $('.groupClass').hide();
+
         $('.repoUrlClass').hide();
         $('.artifactClass').hide();
         $('.versionClass').hide();
@@ -915,14 +731,7 @@ $chooseRepository.change(function(e) {
         $('.repoUrlClass').show();
         $('.artifactClass').show();
         $('.versionClass').show();
-        var $chooseGroupId = $('#chooseGroupId');
-        $chooseGroupId.empty();
-        $('#chooseGroupId').append('<option value="">Choose Group ID</option>');
 
-        var groupId = $('#chooseNexusServer :selected').attr('data-groupId').split(",");
-        for (var g = 0; g < groupId.length; g++) {
-            $('#chooseGroupId').append('<option value="' + groupId[g] + '">' + groupId[g] + '</option>');
-        }
         var $repositoryUrl = $('#repositoryUrl');
         $repositoryUrl.val("");
         var $chooseArtifacts = $('#chooseArtifacts');
@@ -932,48 +741,37 @@ $chooseRepository.change(function(e) {
         $chooseVersions.empty();
         $('#chooseVersions').append('<option value="">Choose Versions</option>');
         $('#repositoryUrl').val($(this).find('option:selected').attr('data-repoUrl'));
+
+        var repoName = $(this).find('option:selected').attr('data-repoName');
+        var nexusId = $('#chooseNexusServer').val();
+        getNexusServerRepoArtifact(nexusId, repoName);
     } else {
         $('.containerIdClass').show();
         $('.containerPortClass').show();
-        $('.groupClass').hide();
         $('.repoUrlClass').hide();
         $('.artifactClass').hide();
         $('.versionClass').hide();
     }
+
 });
 
-var $chooseGroupId = $('#chooseGroupId');
-$chooseGroupId.change(function(e) {
-    var repoName = $('#chooseRepository').find('option:selected').attr('data-repoName');
-    var nexusId = $('#chooseNexusServer').val();
-    var groupId = $('#chooseGroupId').val();
-    getNexusServerRepoArtifact(nexusId, repoName, groupId);
-});
-
-function getNexusServerRepoArtifact(nexusId, repoName, groupId) {
+function getNexusServerRepoArtifact(nexusId, repoName) {
     $('.artifactsspinner').css('display', 'inline-block');
     var $chooseArtifacts = $('#chooseArtifacts');
     $chooseArtifacts.empty();
     $('#chooseArtifacts').append('<option value="">Choose Artifacts</option>');
     if (nexusId && repoName) {
-        $.get('/nexus/' + nexusId + '/repositories/' + repoName + '/group/' + groupId + '/artifact', function(artifacts) {
+        $.get('/nexus/' + nexusId + '/repositories/' + repoName + '/artifact', function(artifacts) {
             $('.artifactsspinner').css('display', 'none');
             if (artifacts.length) {
-                var repoList = [];
                 var uniqueArtifacts = [];
                 var checker;
                 for (var i = 0; i < artifacts.length; i++) {
-                    var repoObj = {};
-                    repoObj['resourceURI'] = artifacts[i].resourceURI;
-                    repoObj['version'] = artifacts[i].version;
-                    repoObj['artifactId'] = artifacts[i].artifactId;
-                    repoList.push(repoObj);
                     if (!checker || comparer(checker, artifacts[i]) != 0) {
                         checker = artifacts[i];
                         uniqueArtifacts.push(checker);
                     }
                 }
-                $("#chooseArtifacts").data("repoObj", repoList);
                 for (var j = 0; j < uniqueArtifacts.length; j++) {
                     $('#chooseArtifacts').append('<option data-groupId="' + uniqueArtifacts[j].groupId + '" value=' + uniqueArtifacts[j].artifactId + '>' + uniqueArtifacts[j].artifactId + '</option>');
                 }
@@ -991,8 +789,11 @@ $chooseArtifacts.change(function(e) {
     var repoName = $('#chooseRepository').find('option:selected').attr('data-repoName');
     var nexusId = $('#chooseNexusServer').val();
     var groupId = $(this).find('option:selected').attr('data-groupId');
-    var artifactId = $(this).val();
-    getNexusServerRepoArtifactVersions(nexusId, repoName, groupId, artifactId);
+    var reqBody = {
+        "groupId": groupId,
+        "artifactId": $(this).val()
+    };
+    getNexusServerRepoArtifactVersions(nexusId, repoName, reqBody);
 });
 
 var comparer = function compareObject(a, b) {
@@ -1003,23 +804,30 @@ var comparer = function compareObject(a, b) {
     }
 }
 
-function getNexusServerRepoArtifactVersions(nexusId, repoName, groupId, artifactId) {
+function getNexusServerRepoArtifactVersions(nexusId, repoName, reqBody) {
     $('.versionspinner').css('display', 'inline-block');
     var $chooseVersions = $('#chooseVersions');
     $chooseVersions.empty();
     $('#chooseVersions').append('<option value="">Choose Versions</option>');
-    if (nexusId && repoName && groupId && artifactId) {
-        $.get('/nexus/' + nexusId + '/repositories/' + repoName + '/group/' + groupId + '/artifact/' + artifactId + '/versions', function(data) {
-            $('.versionspinner').css('display', 'none');
-            if (data) {
-                var versions = data.metadata.versioning[0].versions[0].version;
-                for (var i = 0; i < versions.length; i++) {
-                    $('#chooseVersions').append('<option value=' + versions[i] + '>' + versions[i] + '</option>');
-                }
-            } else {
+    if (nexusId && repoName && reqBody.groupId && reqBody.artifactId) {
+        $.ajax({
+            url: '/nexus/' + nexusId + '/repositories/' + repoName + '/artifact/versions',
+            data: JSON.stringify(reqBody),
+            type: 'POST',
+            contentType: "application/json",
+            success: function(data) {
                 $('.versionspinner').css('display', 'none');
+                if (data) {
+                    var versions = data.metadata.versioning[0].versions[0].version;
+                    for (var i = 0; i < versions.length; i++) {
+                        $('#chooseVersions').append('<option value=' + versions[i] + '>' + versions[i] + '</option>');
+                    }
+                }
+            },
+            error: function(jqxhr) {
+                $('.versionspinner').css('display', 'none');
+                alert(jqxhr.responseText);
             }
-
         });
     } else {
         $('.versionspinner').css('display', 'none');
@@ -1102,7 +910,8 @@ function deployNewForDocker() {
             "containerId": containerId,
             "containerPort": containerPort,
             "dockerRepo": repoId,
-            "upgrade": upgrade
+            "upgrade": upgrade,
+            "projectId": projectId
         }
     };
 
@@ -1162,14 +971,12 @@ function upgradeOrDeploy() {
     var groupId = $('#chooseArtifacts').find('option:selected').attr('data-groupId').replace(/\./g, '/');
     var nexusUrl = $('#chooseNexusServer').find('option:selected').attr('data-nexusUrl');
     var nexusRepoUrl = "";
-    var repoURIObj = $("#chooseArtifacts").data();
-    if (repoURIObj) {
-        for (var i = 0; i < repoURIObj.repoObj.length; i++) {
-            if (artifactId === repoURIObj.repoObj[i].artifactId && versionId === repoURIObj.repoObj[i].version) {
-                nexusRepoUrl = repoURIObj.repoObj[i].resourceURI;
-            }
-        }
+    if (repoId === "petclinic") {
+        nexusRepoUrl = nexusUrl + "/service/local/repositories/" + repoId + "/content/" + groupId + "/" + artifactId + "/" + versionId + "/" + artifactId + "-" + versionId + ".war";
+    } else {
+        nexusRepoUrl = nexusUrl + "/service/local/repositories/" + repoId + "/content/" + groupId + "/" + artifactId + "/" + versionId + "/" + artifactId + "-" + versionId + ".zip";
     }
+
     var upgrade = $('#upgradeValue').val();
     var nexusData = {
         "nexusData": {
@@ -1178,7 +985,8 @@ function upgradeOrDeploy() {
             "containerId": "",
             "containerPort": "",
             "dockerRepo": "",
-            "upgrade": upgrade
+            "upgrade": upgrade,
+            "projectId": projectId
         }
     };
 
@@ -1326,27 +1134,6 @@ function getAllApplicationData() {
     });
 };
 
-function getParticularApplicationData(selectedAppName) {
-    $("#accordion-AppDeploy").empty();
-    var projectId = urlParams.projid;
-    getenvName(function(envName) {
-        $.ajax({
-            url: '/app/deploy/data/env/' + envName + '/' + selectedAppName + '/project/' + projectId + '/list',
-            type: 'GET',
-            contentType: "application/json",
-            success: function(data) {
-                constructUI(data);
-            },
-            error: function(jqxhr) {
-
-            },
-            failure: function(data) {
-
-            }
-        });
-    });
-}
-
 function constructUI(data) {
     $('.loadingAppDeploySpinner').hide();
     $("#accordion-AppDeploy").empty();
@@ -1355,6 +1142,11 @@ function constructUI(data) {
         var selectedAppName = $chooseApplication.val();
         if (typeof selectedAppName != 'undefined') {
             $('#appDeployName').append().text("  for '" + selectedAppName + "'");
+            /*$("#widgetAppDeploy").css({
+                "border-left": "1px solid rgb(221, 221, 221)",
+                "border-right": "1px solid rgb(221, 221, 221)",
+                "border-bottom": "1px solid rgb(221, 221, 221)"
+            });*/
             $('#widgetAppDeploy').show();
         } else {
             $('#appDeployName').append().text("");
@@ -1402,7 +1194,6 @@ function constructUI(data) {
         }
 
         function moreInfoUpgradeAppDeployClickHandler(e) {
-            $('.groupClass').hide();
             $('.repoUrlClass').hide();
             $('.artifactClass').hide();
             $('.versionClass').hide();
@@ -1663,6 +1454,7 @@ $("#tableappParamDeploy_filter").hide();
 var urlParams = {};
 (window.onpopstate = function() {
     var url = window.location.href;
+    alert(typeof url);
     var indexOfQues = url.lastIndexOf("?");
     if (indexOfQues != -1) {
         var sub = url.substring(indexOfQues + 1);

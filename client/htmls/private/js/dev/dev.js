@@ -785,24 +785,24 @@ function devCall() {
                 tableinstanceview = $('#tableinstanceview').DataTable({
                     "pagingType": "full_numbers",
                     "aoColumns": [{
-                            "bSortable": false
-                        },
-                        null, {
-                            "bSortable": false
-                        }, {
-                            "bSortable": false
-                        }, {
-                            "bSortable": false
-                        }, {
-                            "bSortable": false
-                        }, {
-                            "bSortable": false
-                        }, {
-                            "bSortable": false,
-                            "sWidth": "20%"
-                        }
-                    ]
-                    /*"fnRowCallback": function(nRow, aData, iDisplayIndex) {
+                                "bSortable": false
+                            },
+                            null, {
+                                "bSortable": false
+                            }, {
+                                "bSortable": false
+                            }, {
+                                "bSortable": false
+                            }, {
+                                "bSortable": false
+                            }, {
+                                "bSortable": false
+                            }, {
+                                "bSortable": false,
+                                "sWidth": "20%"
+                            }
+                        ]
+                        /*"fnRowCallback": function(nRow, aData, iDisplayIndex) {
 
                       $("td:first", nRow).html(iDisplayIndex + 1);
                       return nRow;
@@ -4426,9 +4426,9 @@ function devCall() {
                         //if(headerCount === 1) {
 
                         setTimeout(function() {
-                            $liHeader.find('a').click();
-                        }, 2000)
-                        //}
+                                $liHeader.find('a').click();
+                            }, 2000)
+                            //}
                     });
 
                 }
@@ -4731,7 +4731,9 @@ function devCall() {
                                                     $modal.find('.outputArea').hide();
                                                     var $errorContainer = $modal.find('.errorMsgContainer').show();
 
-                                                    $errorContainer.html(data.blueprintMessage);
+                                                    $errorContainer.html($('<span></span>').css({
+                                                        'color': '#40baf1'
+                                                    }).append(data.blueprintMessage));
                                                     if (data.onCompleteResult) {
                                                         for (var l = 0; l < data.onCompleteResult.length; l++) {
                                                             var result = data.onCompleteResult[l].result;
@@ -4761,7 +4763,7 @@ function devCall() {
 
                                                         }
                                                     }
-                                                   
+
                                                     return;
 
                                                 }
@@ -4966,6 +4968,7 @@ function devCall() {
                             });
                         });
                     } else if (data[i].taskType === 'jenkins') {
+                        //alert(JSON.stringify(data[i]));
                         //history for jenkins job type...description mentioned above..
                         var $tdHistory = $('<td style="vertical-align:inherit;text-align:center;"></td>').append('<a rel="tooltip" data-placement="top" data-original-title="History" data-toggle="modal" href="javascript:void(0)" class="btn btn-primary btn-sg tableactionbutton"><i class="ace-icon fa fa-header bigger-120"></i></a>');
                         $tdHistory.find('a').data('taskId', data[i]._id).data('autosyncFlag', data[i].taskConfig.autoSyncFlag).attr('data-historyTaskId', data[i]._id).click(function(e) {
@@ -4995,9 +4998,30 @@ function devCall() {
                                 //console.table(taskHistories);
                                 for (var i = 0; i < taskHistories.length; i++) {
                                     (function(i) {
-                                        var $trHistoryRow = $('<tr/>');
-                                        var jenkUrl = jenk_url + taskHistories[i].buildNumber;
-                                        var $tdBuildNumber = $('<td/>').append('<a style="word-break: break-all;" href="' + jenkUrl + '" title="' + jenkUrl + '" target="_blank">' + taskHistories[i].buildNumber + '</a>');
+                                        var jenkUrl = "";
+                                        var $tdBuildNumber = "";
+                                        var $trHistoryRow = "";
+                                        var $tdBuildNumber = "";
+                                        // Handled history if task has Blueprint
+                                        if (taskHistories[i].blueprintExecutionResults && taskHistories[i].blueprintExecutionResults.length) {
+                                            if (taskHistories[i].jobName) {
+                                                $trHistoryRow = $('<tr/>');
+                                                jenkUrl = taskHistories[i].jobName;
+                                                $tdBuildNumber = $('<td/>').append('<a style="word-break: break-all;" title="' + taskHistories[i].jobName + '" target="_blank">' + taskHistories[i].jobName + '</a>');
+                                            }
+                                        } else if (taskHistories[i].buildNumber) {
+                                            $trHistoryRow = $('<tr/>');
+                                            jenkUrl = jenk_url + taskHistories[i].buildNumber;
+                                            $tdBuildNumber = $('<td/>').append('<a style="word-break: break-all;" href="' + jenkUrl + '" title="' + jenkUrl + '" target="_blank">' + taskHistories[i].buildNumber + '</a>');
+                                        } else {
+                                            // Handled history if task has Blueprint
+                                            $trHistoryRow = $('<tr/>');
+                                            jenkUrl = taskHistories[i].jobName;
+                                            $tdBuildNumber = $('<td/>').append('<a style="word-break: break-all;" title="' + taskHistories[i].jobName + '" target="_blank">' + taskHistories[i].jobName + '</a>');
+
+                                        }
+                                        //var $trHistoryRow = $('<tr/>');
+                                        //var $tdBuildNumber = $('<td/>').append('<a style="word-break: break-all;" href="' + jenkUrl + '" title="' + jenkUrl + '" target="_blank">' + taskHistories[i].buildNumber + '</a>');
                                         //var $tdBuildNumber = $('<td/>').append('<a style="word-break: break-all;" href="#' +  + '" title="' +  + '" target="_blank">' + taskHistories[i].buildNumber + '</a>');
                                         $trHistoryRow.append($tdBuildNumber);
 
