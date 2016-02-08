@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+
 if (!$.fn.dataTable.isDataTable('#tableRunlistForBlueprint')) {
 	$tasksRunlist = $('#tableRunlistForBlueprint').DataTable({
 		"pagingType": "full_numbers",
@@ -53,11 +54,12 @@ $('#saveRunlist').click(function(e) {
 
 function updatecompositedockertableemptymessage() {
 	if ($('#compositedockertable').find('tr').length <= 1) {
+		//no rows found add empty message
 		$('#compositedockertable').append('<tr id="dockerimageemptytr"><td colspan="6" align="center">No images added</td></tr>');
 	}
 }
 $(document).ready(function() {
-	var $addal = $("#addanotherlink");
+	var $addal = $("#addanotherlink"); //#ajax/Aws-Production.html?addnew
 	if (window.url.indexOf('addnew') > 0) $addal.attr('href', '#ajax/Aws-Production.html?addanother');
 	else $addal.attr('href', '#ajax/Aws-Production.html?addnew');
 	$.ajax({
@@ -95,20 +97,18 @@ $(document).ready(function() {
 				reqBodyNew.bgId = $bgList.val();
 				reqBodyNew.projectId = $projectList.val();
 				reqBodyNew.envId = $envList.val();
-				$.get('../organizations/' + reqBodyNew.orgId + '/businessgroups/' + reqBodyNew.bgId + '/projects/' + reqBodyNew.projectId + '/environments/' + reqBodyNew.envId +
-					'/',
-					function(data) {
-						console.log('success---3---4');
-						//Syncing up the tree view based on url
-						initializeBlueprintAreaNew(data.blueprints);
+				$.get('../organizations/' + reqBodyNew.orgId + '/businessgroups/' + reqBodyNew.bgId + '/projects/' + reqBodyNew.projectId + '/environments/' + reqBodyNew.envId + '/', function(data) {
+					console.log('success---3---4');
+					//Syncing up the tree view based on url
+					initializeBlueprintAreaNew(data.blueprints);
+					$spinnerProject.addClass('hidden');
+					if (data.blueprints.length > 0) {
+						$('#accordion-2').removeClass('hidden');
 						$spinnerProject.addClass('hidden');
-						if (data.blueprints.length > 0) {
-							$('#accordion-2').removeClass('hidden');
-							$spinnerProject.addClass('hidden');
-						} else {
-							$spinnerProject.addClass('hidden');
-						}
-					});
+					} else {
+						$spinnerProject.addClass('hidden');
+					}
+				});
 			}); //choose env gets over
 			var bgProjects = {};
 			for (var i = 0; i < data.length; i++) {
@@ -133,7 +133,6 @@ $(document).ready(function() {
 			});
 		}
 	}); //getTreeNew gets over here
-
 	//form validation for blueprint save
 	var validator = $('#wizard-1').validate({
 		ignore: [],
@@ -243,16 +242,7 @@ function addDockerTemplateToTable(title, repopath, tagname, reponame, optionalla
 	if (!optionallaunchparams) {
 		optionallaunchparams = '';
 	}
-	var $dockertemplaterow = '<tr class="dockerimagesrow"><td >' + $cdt.find('tr').length + '</td><td paramtype="dockercontainerpathstitle">' + title +
-		'</td><td  paramtype="dockercontainerpaths">' + repopath + '</td><td paramtype="dockerrepotags">' + tagname +
-		'</td><td><input type="text" paramtype="dockerlaunchparameters" id="launchparam' + uniqueid + '" class="" value=" ' + optionallaunchparams +
-		'"><input type="hidden" paramtype="dockerreponame" id="dockerreponame' + uniqueid + '" class="" value="' + reponame + '"><a onclick="loadLaunchParams(\'launchparam' + uniqueid +
-		'\');" href="javascript:void(0);"><i class="icon-append fa fa-list-alt fa-lg" title="Launch Parameters"></i></a></td><td ><a class="dockerimageselectorup" id="dockerimageselectorup' +
-		uniqueid + '"  href="javascript:movetablerow(\'dockerimageselectorup\',' + uniqueid +
-		');"><i class="fa fa-chevron-circle-up fa-lg"></i></a><a class="dockerimageselectordown" id="dockerimageselectordown' + uniqueid +
-		'" href="javascript:movetablerow(\'dockerimageselectordown\',' + uniqueid +
-		');" style="padding-left:5px;"><i class="fa fa-chevron-circle-down fa-lg"></i></a><button class="btn btn-xs btn-danger pull-right" value="Remove" title="Remove" id="dockerimageremove' +
-		uniqueid + '" onClick="javascript:removeimage(\'dockerimageremove\',' + uniqueid + ');"><i class="ace-icon fa fa-trash-o fa-lg"></i></button></td></tr>';
+	var $dockertemplaterow = '<tr class="dockerimagesrow"><td >' + $cdt.find('tr').length + '</td><td paramtype="dockercontainerpathstitle">' + title + '</td><td  paramtype="dockercontainerpaths">' + repopath + '</td><td paramtype="dockerrepotags">' + tagname + '</td><td><input type="text" paramtype="dockerlaunchparameters" id="launchparam' + uniqueid + '" class="" value=" ' + optionallaunchparams + '"><input type="hidden" paramtype="dockerreponame" id="dockerreponame' + uniqueid + '" class="" value="' + reponame + '"><a onclick="loadLaunchParams(\'launchparam' + uniqueid + '\');" href="javascript:void(0);"><i class="icon-append fa fa-list-alt fa-lg" title="Launch Parameters"></i></a></td><td ><a class="dockerimageselectorup" id="dockerimageselectorup' + uniqueid + '"  href="javascript:movetablerow(\'dockerimageselectorup\',' + uniqueid + ');"><i class="fa fa-chevron-circle-up fa-lg"></i></a><a class="dockerimageselectordown" id="dockerimageselectordown' + uniqueid + '" href="javascript:movetablerow(\'dockerimageselectordown\',' + uniqueid + ');" style="padding-left:5px;"><i class="fa fa-chevron-circle-down fa-lg"></i></a><button class="btn btn-xs btn-danger pull-right" value="Remove" title="Remove" id="dockerimageremove' + uniqueid + '" onClick="javascript:removeimage(\'dockerimageremove\',' + uniqueid + ');"><i class="ace-icon fa fa-trash-o fa-lg"></i></button></td></tr>';
 	$cdt.append($dockertemplaterow);
 }
 
@@ -261,33 +251,55 @@ function showdockertemplateadder() {
 	$('#dockertemplatetagselector').empty().val('');
 	$('#myModalDockerTemplateContainer').modal('show');
 }
+var launchparams = '';
+$('[dockerparamkey]').each(function() {
+	if ($(this).val() != '') {
+		var itms = $(this).val().split(',');
+		for (itm in itms) launchparams += ' ' + $(this).attr('dockerparamkey') + ' ' + itms[itm];
+	}
+});
+$('#' + $('#myModalLabelDockerContainer').attr('saveto')).val(launchparams);
+return (launchparams);
+}
+
 
 function addrows() { //only for testing to be removed
 	addDockerTemplateToTable('one', 'one/one', "latest");
 	addDockerTemplateToTable('two', 'two/two', "latest");
 	addDockerTemplateToTable('three', 'three/three', "latest");
 }
+var $dockertemplaterow = '<tr class="dockerimagesrow"><td >' + $cdt.find('tr').length + '</td><td paramtype="dockercontainerpathstitle">' + title +
+	'</td><td  paramtype="dockercontainerpaths">' + repopath + '</td><td paramtype="dockerrepotags">' + tagname +
+	'</td><td><input type="text" paramtype="dockerlaunchparameters" id="launchparam' + uniqueid + '" class="" value=" ' + optionallaunchparams +
+	'"><input type="hidden" paramtype="dockerreponame" id="dockerreponame' + uniqueid + '" class="" value="' + reponame + '"><a onclick="loadLaunchParams(\'launchparam' + uniqueid +
+	'\');" href="javascript:void(0);"><i class="icon-append fa fa-list-alt fa-lg" title="Launch Parameters"></i></a></td><td ><a class="dockerimageselectorup" id="dockerimageselectorup' +
+	uniqueid + '"  href="javascript:movetablerow(\'dockerimageselectorup\',' + uniqueid +
+	');"><i class="fa fa-chevron-circle-up fa-lg"></i></a><a class="dockerimageselectordown" id="dockerimageselectordown' + uniqueid +
+	'" href="javascript:movetablerow(\'dockerimageselectordown\',' + uniqueid +
+	');" style="padding-left:5px;"><i class="fa fa-chevron-circle-down fa-lg"></i></a><button class="btn btn-xs btn-danger pull-right" value="Remove" title="Remove" id="dockerimageremove' +
+	uniqueid + '" onClick="javascript:removeimage(\'dockerimageremove\',' + uniqueid + ');"><i class="ace-icon fa fa-trash-o fa-lg"></i></button></td></tr>';
+$cdt.append($dockertemplaterow);
+}
 
 function imagechanged() {
 	$('#btnaddDockerTemplateToTable').attr('disabled', 'disabled');
 	$('#dockertemplateSpinner').removeClass('hidden');
 	$('#dockertemplatetagselector').empty().val('');
-	$.get('/d4dmasters/getdockertags/' + encodeURIComponent($('#dockertemplateselector').val().replace(/\//g, "$$$")) + '/' + $('#dockertemplateselector option:selected').attr('reponame'),
-		function(data) {
-			$('#dockertemplateSpinner').addClass('hidden');
-			if (data) {
-				var tagJson = JSON.parse(data);
-				var $dockertemplatetagselector = $('#dockertemplatetagselector');
-				$dockertemplatetagselector.empty();
-				tagJson.forEach(function(k, v) {
-					$dockertemplatetagselector.append('<option value="' + tagJson[v].name + '">' + tagJson[v].name + '</option>');
-					if (v >= tagJson.length - 1) {
-						$('#btnaddDockerTemplateToTable').removeAttr('disabled');
-					}
-				});
-				$dockertemplatetagselector.change();
-			}
-		});
+	$.get('/d4dmasters/getdockertags/' + encodeURIComponent($('#dockertemplateselector').val().replace(/\//g, "$$$")) + '/' + $('#dockertemplateselector option:selected').attr('reponame'), function(data) {
+		$('#dockertemplateSpinner').addClass('hidden');
+		if (data) {
+			var tagJson = JSON.parse(data);
+			var $dockertemplatetagselector = $('#dockertemplatetagselector');
+			$dockertemplatetagselector.empty();
+			tagJson.forEach(function(k, v) {
+				$dockertemplatetagselector.append('<option value="' + tagJson[v].name + '">' + tagJson[v].name + '</option>');
+				if (v >= tagJson.length - 1) {
+					$('#btnaddDockerTemplateToTable').removeAttr('disabled');
+				}
+			});
+			$dockertemplatetagselector.change();
+		}
+	});
 }
 
 function removeimage(what, index) {
@@ -332,6 +344,8 @@ function movetablerow(what, index) {
 	}
 	renumberDockerImageTable();
 }
+renumberDockerImageTable();
+}
 
 function loadLaunchParams(lpinput) {
 	$('[dockerparamkey]').val('');
@@ -341,6 +355,7 @@ function loadLaunchParams(lpinput) {
 		var execparam = fullparams.split(' -exec');
 		var startupparam;
 		if (execparam.length > 0 && typeof execparam[1] != "undefined") {
+			// alert(execparam[1]);
 			$('#additionalStartupcommandfield').val(execparam[1]);
 			if (execparam[0].indexOf('-c') > 0) //found a startup command
 			{
@@ -371,6 +386,9 @@ function loadLaunchParams(lpinput) {
 	}
 	$('#myModalLabelDockerContainer').attr('saveto', lpinput).modal('show');
 }
+$('#myModalLabelDockerContainer').attr('saveto', lpinput).modal('show');
+}
+
 
 function helperConstructOption(data, keyList, nameKey, valueKey) {
 	function getOptionAppend(obj, keyList, nameKey, valueKey) {
@@ -420,6 +438,9 @@ function getProviderList() {
 		}
 	});
 }
+return str;
+}
+
 
 function getImagesWithOSFilter() {
 	function getFilteredList(data, value) {
@@ -490,7 +511,9 @@ function getImageInstances() {
 		});
 	});
 }
-var regionList;
+$('#providerId').on('change', loadData);
+$('#instanceOS').on('change', loadData);
+}
 
 function getCompleteRegionList() {
 	$.get('/vmimages/regions/list', function(data) {
@@ -536,10 +559,7 @@ function getSecurityGroup() {
 				success: function(list) {
 					var str = '',
 						getTemplate = function(val, name) {
-							return '<label class="toggle font-sm" style="padding-left:4px;"><input onclick="if($(this).is(&quot;:checked&quot;)) {$(this).closest(&quot;label&quot;).' +
-								'css(&quot;background-color&quot;,&quot;#eeeeee&quot;);$(this).css(&quot;border-color&quot;,&quot;#3b9ff3&quot;);}else{$(this).closest(&quot;label&quot;).css(&quot;background-color&quot;,&quot;#ffffff&quot;);$(this).css(&quot;border-' +
-								'color&quot;,&quot;red&quot;);}" type="checkbox" id="checkbox-toggle" name="checkbox-toggle" rowid="1ae4f099-7adc-4089-81c6-db2248774142"' + 'value="' +
-								val + '" style="width:100%"><i data-swchoff-text="NO" data-swchon-text="YES"></i>' + name + '</label>';
+							return '<label class="toggle font-sm" style="padding-left:4px;"><input onclick="if($(this).is(&quot;:checked&quot;)) {$(this).closest(&quot;label&quot;).' + 'css(&quot;background-color&quot;,&quot;#eeeeee&quot;);$(this).css(&quot;border-color&quot;,&quot;#3b9ff3&quot;);}else{$(this).closest(&quot;label&quot;).css(&quot;background-color&quot;,&quot;#ffffff&quot;);$(this).css(&quot;border-' + 'color&quot;,&quot;red&quot;);}" type="checkbox" id="checkbox-toggle" name="checkbox-toggle" rowid="1ae4f099-7adc-4089-81c6-db2248774142"' + 'value="' + val + '" style="width:100%"><i data-swchoff-text="NO" data-swchon-text="YES"></i>' + name + '</label>';
 						},
 						list = bringAllOpenFirst(list),
 						len = list.length;
@@ -558,6 +578,8 @@ function getSecurityGroup() {
 		}
 	}
 	$('#vpcId').on('change', populateData);
+}
+$('#vpcId').on('change', populateData);
 }
 
 function getkeypairList() {
@@ -588,6 +610,26 @@ function getkeypairList() {
 		}
 	});
 }
+$('#providerId').on('change', function() {
+	var key = $(this).val();
+	if (key) {
+		$.get('/aws/providers/' + key, function(data) {
+			var keylist = data.keyPairs;
+			var str = '<option value="">Select KeyPairs</option>';
+			for (var i = 0; i < keylist.length; i++) {
+				str = str + '<option value="' + keylist[i]._id + '">' + keylist[i].keyPairName + '</option>';
+			}
+			$('#keypairId').html(str);
+			/*bring Region list from providers*/
+			var str1 = '<option value="">Select Region</option>';
+			for (var i = 0; i < keylist.length; i++) {
+				str1 = str1 + '<option value="' + keylist[i].region + '">' + getRegionName(keylist[i].region) + ' | ' + keylist[i].region + '</option>';
+			}
+			$('#region').html(str1);
+		});
+	}
+});
+}
 
 function getVPC() {
 	function populateData() {
@@ -617,11 +659,9 @@ function getVPC() {
 					}
 					for (var i = 0; i < filteredData.length; i++) {
 						if (filteredData[i].IsDefault) {
-							str = str + '<option selected value="' + filteredData[i].VpcId + '">' + filteredData[i].VpcId + ' (' + filteredData[i].CidrBlock +
-								') Default</option>';
+							str = str + '<option selected value="' + filteredData[i].VpcId + '">' + filteredData[i].VpcId + ' (' + filteredData[i].CidrBlock + ') Default</option>';
 						} else {
-							str = str + '<option value="' + filteredData[i].VpcId + '">' + filteredData[i].VpcId + ' (' + filteredData[i].CidrBlock + ') ' + (filteredData[i].Tags
-								.length ? filteredData[i].Tags[0].Value : "") + '</option>';
+							str = str + '<option value="' + filteredData[i].VpcId + '">' + filteredData[i].VpcId + ' (' + filteredData[i].CidrBlock + ') ' + (filteredData[i].Tags.length ? filteredData[i].Tags[0].Value : "") + '</option>';
 						}
 					}
 					$('#vpcId').html(str).trigger('change');
@@ -637,6 +677,9 @@ function getVPC() {
 	}
 	$('#providerId').on('change', populateData);
 	$('#region').on('change', populateData);
+}
+$('#providerId').on('change', populateData);
+$('#region').on('change', populateData);
 }
 
 function getSubnet() {
@@ -667,8 +710,7 @@ function getSubnet() {
 						}
 					}
 					for (var i = 0; i < filteredData.length; i++) {
-						str = str + '<option value="' + filteredData[i].SubnetId + '">' + filteredData[i].SubnetId + ' (' + filteredData[i].AvailabilityZone + ') ' + (
-							filteredData[i].Tags.length ? filteredData[i].Tags[0].Value : "") + '</option>';
+						str = str + '<option value="' + filteredData[i].SubnetId + '">' + filteredData[i].SubnetId + ' (' + filteredData[i].AvailabilityZone + ') ' + (filteredData[i].Tags.length ? filteredData[i].Tags[0].Value : "") + '</option>';
 					}
 					$spinnerSubnet.addClass('hidden');
 					$('#subnetId').html(str);
@@ -683,10 +725,11 @@ function getSubnet() {
 	}
 	$('#vpcId').on('change', populateData);
 }
+$('#vpcId').on('change', populateData);
+}
+
 
 function resetForm() {
-	//$('input').val('');
-	//$('select').val('');
 	$('[multiselect]').empty();
 }
 $(document).ready(function() {
@@ -797,6 +840,7 @@ $(document).ready(function() {
 			$("#templateContent #grid0").addClass("role-Selected");
 		});
 	});
+
 	$('#templateContent').on("click", '.blueprintdiv', function() {
 		$('#templateContent .role-Selected').removeClass('role-Selected');
 		$(this).addClass('role-Selected');
@@ -850,14 +894,8 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 							getImage = 'img/osIcons/' + getTemplateType + '.png';
 							getTempName = data[z]['name'];
 							getImageData = '\'' + JSON.stringify(data[z]) + '\'';
-
-							getIndividualData += '<div class="col-sm-3 col-lg-2 col-md-3">' + '<div class="productdiv2" data-templateId="' + getTempName + '" data-' +
-								'templateComponent="component' + z + '" ' + 'imagedata=' + getImageData + 'data-templateName="' + getTempName + '" data-' + 'templateType="' +
-								gallerytype + '" templatetype="' + gallerytype + '" templatename="' + getTempName + '" templatescookbooks="">' +
-								'<ul class="list-unstyled system-prop" style="text-align:center;">' + '<li><img style="height:40px;width:auto;" alt="" ' + 'src="' + getImage +
-								'">' + '</li><li style="font-size:12px;"><u><b>' + getTempName + '</b></u></li></ul></div></div>';
+							getIndividualData += '<div class="col-sm-3 col-lg-2 col-md-3">' + '<div class="productdiv2" data-templateId="' + getTempName + '" data-' + 'templateComponent="component' + z + '" ' + 'imagedata=' + getImageData + 'data-templateName="' + getTempName + '" data-' + 'templateType="' + gallerytype + '" templatetype="' + gallerytype + '" templatename="' + getTempName + '" templatescookbooks="">' + '<ul class="list-unstyled system-prop" style="text-align:center;">' + '<li><img style="height:40px;width:auto;" alt="" ' + 'src="' + getImage + '">' + '</li><li style="font-size:12px;"><u><b>' + getTempName + '</b></u></li></ul></div></div>';
 							if (z >= rowGridLength - 1) {
-
 								var wizard = $wizard.data('bootstrapWizard');
 								$('#individualTemplateNameGrid').show();
 							}
@@ -884,8 +922,7 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 						dockeremail = '';
 						console.log('here end ' + dockercontainerpathstitle);
 						//added to the docker template adder pop-up : Vinod
-						$('#dockertemplateselector').append('<option value="' + dockercontainerpaths + '" title="' + dockercontainerpaths + '" reponame="' + dockerreponame +
-							'">' + dockercontainerpathstitle + '</option>');
+						$('#dockertemplateselector').append('<option value="' + dockercontainerpaths + '" title="' + dockercontainerpaths + '" reponame="' + dockerreponame + '">' + dockercontainerpathstitle + '</option>');
 						var templateImgUrl = "img/logo.png";
 						if (getImage) {
 							templateImgUrl = "/d4dMasters/image/" + getRowID + "__templatesicon__" + getImage
@@ -894,28 +931,19 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 						if (data[z]['template_filename']) {
 							templateFileName = getRowID + '__template__' + data[z]['template_filename'];
 						}
-						getIndividualData += '<div class="col-sm-3 col-lg-2 col-md-3">' + '<div class="productdiv2" data-templateId="' + getTempName + '" data-' +
-							'templateComponent="component' + z + '" ' + 'dockercontainerpathstitle="' + dockercontainerpathstitle + '" ' + 'dockercontainerpaths="' +
-							dockercontainerpaths + '" ' + 'dockerreponame="' + dockerreponame + '" ' + 'data-templateName="' + getTempName + '" data-' + 'templateType="' +
-							gallerytype + '" templatetype="' + getTemplateType + '" templatename="' + getTempName + '" templatescookbooks="' + gettemplatescookbooks +
-							'" cftTemplateFileName="' + templateFileName + '">' + '<ul class="list-unstyled system-prop" style="text-align:center;">' +
-							'<li><img style="height:40px;width:auto;" alt="" ' + 'src="' + templateImgUrl + '">' + '</li><li style="font-size:12px;"><u><b>' + getTempName +
-							'</b></u></li>';
+						getIndividualData += '<div class="col-sm-3 col-lg-2 col-md-3">' + '<div class="productdiv2" data-templateId="' + getTempName + '" data-' + 'templateComponent="component' + z + '" ' + 'dockercontainerpathstitle="' + dockercontainerpathstitle + '" ' + 'dockercontainerpaths="' + dockercontainerpaths + '" ' + 'dockerreponame="' + dockerreponame + '" ' + 'data-templateName="' + getTempName + '" data-' + 'templateType="' + gallerytype + '" templatetype="' + getTemplateType + '" templatename="' + getTempName + '" templatescookbooks="' + gettemplatescookbooks + '" cftTemplateFileName="' + templateFileName + '">' + '<ul class="list-unstyled system-prop" style="text-align:center;">' + '<li><img style="height:40px;width:auto;" alt="" ' + 'src="' + templateImgUrl + '">' + '</li><li style="font-size:12px;"><u><b>' + getTempName + '</b></u></li>';
 						if (getTemplateType != "Docker" && getTemplateType != "docker") {
 							var cb = $chefCookbookRoleSelector.getRunlistNames(gettemplatescookbooks.split(','));
 							var licb = '';
-
 							for (var cbi = 0; cbi < cb.length; cbi++) {
 								licb += '<li style="font-size:10px;" blueprinttype="other">' + cb[cbi] + '</li>';
 							}
 							$('#individualTemplateNameGrid').show();
 						} else //when template type is docker
 						{
-
 							var cb = dockercontainerpathstitle.split(',');
 							var cbpath = dockercontainerpaths.split(',');
 							var licb = '';
-
 							for (var cbi = 0; cbi < cb.length; cbi++) {
 								licb += '<li style="font-size:10px;" path="' + cbpath[cbi] + '" title="Container" blueprinttype="dockercontainer">' + cb[cbi] + '</li>';
 							}
@@ -924,9 +952,7 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 						getIndividualData += licb + '</ul></div></div>';
 					}
 					$("#individualTemplateNameGrid").html("");
-
 					$("#individualTemplateNameGrid").append(getIndividualData).find('.productdiv2').first().click();
-
 					//Proceeding to next step when selected type is docker
 					if ($('#tab1').find('.role-Selected').attr('data-templatetype') === "Docker" || $('#tab1').find('.role-Selected').attr('data-templatetype') === "docker") {}
 					var wizard = $wizard.data('bootstrapWizard');
@@ -956,7 +982,6 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 			$('#orgnameSelect').val($('#orgIDCheck').val());
 			$('#orgnameSelect').attr('disabled', true);
 			console.log('role-Selected before ==> ', $('#tab2 .role-Selected').length);
-			//console.log("======================= "+$('.productdiv2.role-Selected').first().attr('templatetype'));
 			if ($('.productdiv2.role-Selected').length > 0) {
 				//Setting controls connected to docker to hidden
 				$('.forDocker').hide();
@@ -969,8 +994,7 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 					//Auto adding the selected template by default
 					var $dockerdiv = $('#tab2').find('.productdiv2.role-Selected').first();
 					$('.dockerimagesrow').detach();
-					addDockerTemplateToTable($dockerdiv.attr('templatename'), $dockerdiv.attr('dockercontainerpaths'), 'latest', $dockerdiv.attr('dockerreponame'), '--name ' + $dockerdiv
-						.attr('templatename'));
+					addDockerTemplateToTable($dockerdiv.attr('templatename'), $dockerdiv.attr('dockercontainerpaths'), 'latest', $dockerdiv.attr('dockerreponame'), '--name ' + $dockerdiv.attr('templatename'));
 					//Checking if docker then only Edit organization paramerters are to be shown
 					if (!$('#CollapseEditorgParam').hasClass('in')) {
 						$('a[href="#CollapseEditorgParam"]').click();
@@ -1002,9 +1026,7 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 								var dockerrepotags = [];
 								tagJson.forEach(function(k, v) {
 									if (v < 3) {
-										$('#dockerrepotagsdiv').append(
-											'<div class="codelistitem" style="margin-top:2px;padding-top:2px;border:1px solid #eeeeee; background-color:#eeeeee !important;height:26px;"><p class="bg-success"><i style="padding-left:10px;padding-right:10px" class="ace-icon fa fa-check"></i>' +
-											tagJson[v].name + '</p></div>');
+										$('#dockerrepotagsdiv').append('<div class="codelistitem" style="margin-top:2px;padding-top:2px;border:1px solid #eeeeee; background-color:#eeeeee !important;height:26px;"><p class="bg-success"><i style="padding-left:10px;padding-right:10px" class="ace-icon fa fa-check"></i>' + tagJson[v].name + '</p></div>');
 										if (dockerrepotags == '') dockerrepotags += tagJson[v].name;
 										else dockerrepotags += ',' + tagJson[v].name;
 									}
@@ -1045,9 +1067,7 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 								}
 							}
 							var $providerInput = $('<select id="cftProviderInput" class="form-control"></select>').append(providerStr);
-							var $providerInputContainer = $(
-								'<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftParameterLabelContainer" for=""><span class="cftParameterLabel">Choose Provider</span><span class="control-label redSpan">&nbsp;*</span></label><div class="input-groups"></div></div>'
-							);
+							var $providerInputContainer = $('<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftParameterLabelContainer" for=""><span class="cftParameterLabel">Choose Provider</span></label><div class="input-groups"></div></div>');
 							$providerInputContainer.find('.input-groups').append($providerInput);
 							$.get('/vmimages/regions/list', function(regionList) {
 								regionList = typeof regionList == "string" ? JSON.parse(regionList) : regionList;
@@ -1056,9 +1076,7 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 									regionOptStr = regionOptStr + '<option value="' + regionList[i].region + '">' + regionList[i].region_name + '</option>';
 								}
 								var $regionInput = $('<select id="cftRegionInput" class="form-control"></select>').append(regionOptStr);
-								var $regionInputContainer = $(
-									'<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftParameterLabelContainer" for=""><span class="cftParameterLabel required">Choose Region</span><span class="control-label redSpan">&nbsp;*</span></label><div class="input-groups"></div></div>'
-								);
+								var $regionInputContainer = $('<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftParameterLabelContainer" for=""><span class="cftParameterLabel required">Choose Region</span></label><div class="input-groups"></div></div>');
 								$regionInputContainer.find('.input-groups').append($regionInput);
 								$.get('/d4dMasters/cftTemplate?templateFile=' + cftTemplateFileName, function(data) {
 									var templateData = {};
@@ -1070,8 +1088,7 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 										return;
 									}
 									var formHtmlDivHtml = '';
-									$panelBody.empty().append($regionInputContainer).append($providerInputContainer).append(formHtmlDivHtml).append(
-										'<input type="hidden" id="cftTemplateFileInput" value="' + cftTemplateFileName + '"/>');
+									$panelBody.empty().append($regionInputContainer).append($providerInputContainer).append(formHtmlDivHtml).append('<input type="hidden" id="cftTemplateFileInput" value="' + cftTemplateFileName + '"/>');
 									var parameters = templateData.Parameters;
 									if (parameters) {
 										var keys = Object.keys(parameters);
@@ -1092,14 +1109,11 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 											}
 											$parameterInput.attr('data-cftParameter-type', parameter.type);
 											$parameterInput.attr('data-cftParameter-name', keys[i]);
-											var $inputContainer = $(
-												'<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftParameterLabelContainer" for=""><span class="cftParameterLabel"></span><span class="control-label redSpan">&nbsp;*</span></label><div class="input-groups"></div></div>'
-											);
+											var $inputContainer = $('<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftParameterLabelContainer" for=""><span class="cftParameterLabel"></span></label><div class="input-groups"></div></div>');
 											$inputContainer.find('.input-groups').append($parameterInput);
 											$inputContainer.find('.cftParameterLabel').append(keys[i]);
 											if (parameter.Description) {
-												var $desc = $('<span></span>').attr('title', parameter.Description).append(
-													'&nbsp;&nbsp;<img src="img/help.png"/>');
+												var $desc = $('<span></span>').attr('title', parameter.Description).append('&nbsp;&nbsp;<i class="fa fa-question"/>');
 												$inputContainer.find('.cftParameterLabelContainer').append($desc);
 											}
 											$panelBody.append($inputContainer);
@@ -1107,15 +1121,9 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 									}
 									var resources = templateData.Resources;
 									var resourceKeys = Object.keys(resources);
-									var $panelGroup = $(
-										'<div class="panel-group smart-accordion-default col-lg-12 col-md-12" id="cft-resource-editArea" style="margin-top:5px"></div>'
-									);
-									var $panel = $(
-										'<div class="panel panel-default cft-resource-editPanel"><div class="panel-heading"><h4 class="panel-title"><a class="panel-toggle" data-toggle="collapse" data-parent="#cft-resource-editArea" href="#" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><span class="heading-text"></span></a></h4></div><div id="CollapseEditorgParam" class="panel-collapse collapse" style="height: auto;"><div class="panel-body" style="padding-left: 8px;"></div></div></div>'
-									);
-									var $inputContainerTemplate = $(
-										'<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftResourceLabelContainer" for=""><span class="cftResourceLabel"></span><span class="control-label redSpan">&nbsp;*</span></label><div class="input-groups"></div></div>'
-									);
+									var $panelGroup = $('<div class="panel-group smart-accordion-default col-lg-12 col-md-12" id="cft-resource-editArea" style="margin-top:5px"></div>');
+									var $panel = $('<div class="panel panel-default cft-resource-editPanel"><div class="panel-heading"><h4 class="panel-title"><a class="panel-toggle" data-toggle="collapse" data-parent="#cft-resource-editArea" href="#" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><span class="heading-text"></span></a></h4></div><div id="CollapseEditorgParam" class="panel-collapse collapse" style="height: auto;"><div class="panel-body" style="padding-left: 8px;"></div></div></div>');
+									var $inputContainerTemplate = $('<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftResourceLabelContainer" for=""><span class="cftResourceLabel"></span></label><div class="input-groups"></div></div>');
 									var $resourceInputTemplate = $('<input class="cftResourceInput form-control" type="text" autofocus="autofocus">');
 									var hasResource = false;
 									// for runlist input
@@ -1129,8 +1137,7 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 										$('.cftResourceRunlistInput').empty().append($ccrs).data('$ccrs', $ccrs);
 									});
 									for (var i = 0; i < resourceKeys.length; i++) {
-										if (resources[resourceKeys[i]].Type === "AWS::EC2::Instance" || resources[resourceKeys[i]].Type ===
-											"AWS::AutoScaling::AutoScalingGroup") {
+										if (resources[resourceKeys[i]].Type === "AWS::EC2::Instance" || resources[resourceKeys[i]].Type === "AWS::AutoScaling::AutoScalingGroup") {
 											var resourceName = resourceKeys[i];
 											if (resources[resourceKeys[i]].Type === "AWS::AutoScaling::AutoScalingGroup") {
 												resourceName = "AutoScaleInstanceResource"
@@ -1247,6 +1254,66 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 							//constructing the docker composite json.
 							var dockercompose = [];
 							var dockerimages = {};
+							var $nexusServer = $('#chooseNexusServer');
+							var $chooseRepository = $('#chooseRepository');
+							var $chooseArtifacts = $('#chooseArtifacts');
+							var $chooseVersions = $('#chooseVersions');
+							var appVersion = $chooseVersions.val();
+							var nexusUrl = $nexusServer.find('option:selected').attr('data-nexusUrl');
+							var nexusServerType = $nexusServer.find('option:selected').attr('data-serverType');
+							var nexusRepoUrl = "";
+							var repoId = $chooseRepository.find('option:selected').val();
+							var nexusRepoId = $nexusServer.find('option:selected').val();
+
+							//alert($('.checkConfigApp').prop("checked"));
+							if ($('.checkConfigApp').prop("checked")) {
+								if (nexusServerType === "nexus") {
+									var artifactId = $chooseArtifacts.find('option:selected').val();
+									if (!artifactId) {
+										alert("Please select artifact.");
+										return false;
+									}
+									var versionId = $chooseVersions.find('option:selected').val();
+									if (!versionId) {
+										alert("Please select version.");
+										return false;
+									}
+									var $chooseGroupId = $('#chooseGroupId');
+									var groupId = $chooseGroupId.find('option:selected').val().replace(/\./g, '/');
+									var repoURIObj = $("#chooseArtifacts").data();
+									var nexusRepoUrl = "";
+									if (repoURIObj) {
+										for (var i = 0; i < repoURIObj.repoObj.length; i++) {
+											if (artifactId === repoURIObj.repoObj[i].artifactId && versionId === repoURIObj.repoObj[i].version) {
+												nexusRepoUrl = repoURIObj.repoObj[i].resourceURI;
+											}
+										}
+									}
+									var nexus = {
+										"repoId": nexusRepoId,
+										"url": nexusRepoUrl,
+										"version": appVersion,
+										"repoName": repoId,
+										"artifactId": artifactId,
+										"groupId": groupId
+									};
+									reqBody.nexus = nexus;
+								} else {
+									var dockerImage = $chooseRepository.val();
+									var containerId = $('#containerIdDiv').val();
+									var containerPort = $('#containerPort').val();
+									if (!dockerImage) {
+										alert("Please select repository.");
+										return false;
+									}
+									var docker = {
+										"image": dockerImage,
+										"containerId": containerId,
+										"containerPort": containerPort
+									};
+									reqBody.docker = docker;
+								}
+							}
 							console.log($('#compositedockertable').find('.dockerimagesrow').length);
 							$('.dockerimagesrow').each(function() {
 								dockerimages = {};
@@ -1256,14 +1323,12 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 								});
 								dockercompose.push(dockerimages);
 							});
-
 							reqBody.dockercompose = dockercompose;
 							//Get all the runlist 
 							var cbs = [];
 							var $ccrs = $('.cookbookShow').data('$ccrs');
 							cbs = $ccrs.getSelectedRunlist();
 							reqBody.runlist = cbs.join(); //$('#cookbookSelect').val();
-
 							var $ccrs = $('.cookbookShow').data('$ccrs');
 							reqBody.chefServerId = $ccrs.getChefServerId();
 							reqBody.instanceType = $('select.instanceType').val();
@@ -1275,7 +1340,6 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 								console.log('resetting');
 								var reqBody = {};
 							}
-
 							var $ccrs = $('.cookbookShow').data('$ccrs');
 							var cbs = [];
 							cbs = $ccrs.getSelectedRunlist();
@@ -1290,22 +1354,18 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 							reqBody.instanceOS = $instanceOsoptionsSelected.attr('data-instanceOS');
 							reqBody.instanceAmiid = $instanceOsoptionsSelected.attr('data-amiid');
 							reqBody.instanceUsername = $instanceOsoptionsSelected.attr('data-amiid-username');
-
 							reqBody.templateId = $('.productdiv2.role-Selected').attr('data-templateId');
 							reqBody.templateType = $('.productdiv2.role-Selected').attr('data-templateType');
 							reqBody.templateComponents = $('.productdiv2.role-Selected').attr('data-templateComponent').split(',');
-
 							reqBody.dockercontainerpaths = $('#dockerrepoListInput :selected').attr('repopath'); //$('.productdiv2.role-Selected').attr('dockercontainerpaths');
 							reqBody.dockerrepotags = $('.productdiv2.role-Selected').attr('dockerrepotags');
 							reqBody.dockerimagename = $('#dockerrepoListInput').val();
 							reqBody.dockerlaunchparameters = $('#dockerlaunchparameters').val();
 							reqBody.dockerreponame = $('.productdiv2.role-Selected').attr('dockerreponame');
-
 							reqBody.iconpath = $('.productdiv2.role-Selected').find('img[src*="__templatesicon__"]').first().attr('src');
 							reqBody.orgId = $('#orgnameSelect').val();
 							reqBody.bgId = $('#bgListInput').val();
 							reqBody.projectId = $('#projectListInput').val();
-
 							var imageIdentifier = $('#imageId').val();
 							var imageId = $('#imageId').find('option:selected').attr('_id');
 							var securityGroupIds = getSecurityCheckedList();
@@ -1315,7 +1375,6 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 							var vpcId = $('#vpcId').val();
 							var subnetId = $('#subnetId').val();
 							var region = $('#region').val();
-
 							reqBody.keyPairId = keyPairId;
 							reqBody.securityGroupIds = securityGroupIds;
 							reqBody.instanceType = instanceType;
@@ -1325,9 +1384,7 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 							reqBody.subnetId = subnetId;
 							reqBody.imageId = imageId;
 							reqBody.providerId = providerId;
-
 							reqBody.name = $('#blueprintNameInput').val();
-
 							$('#userListSelect').find('option').attr('selected', 'selected');
 							reqBody.users = $('#userListSelect').val();
 							if (!reqBody.users) {
@@ -1335,17 +1392,14 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 								return false;
 							}
 							//Checking for docker blueprint images
-							if (($('.productdiv2.role-Selected').first().attr('templatetype') == "Docker" || $('.productdiv2.role-Selected').first().attr('templatetype') ==
-									"docker") && $('#dockerimageemptytr').length > 0) {
+							if (($('.productdiv2.role-Selected').first().attr('templatetype') == "Docker" || $('.productdiv2.role-Selected').first().attr('templatetype') == "docker") && $('#dockerimageemptytr').length > 0) {
 								//no rows found add empty message
 								alert("Please add atleast one image");
 								return false;
 							}
-
 							var appUrls = [];
 							var $appUrlTableBody = $('#appUrlTable tbody');
 							var $trs = $appUrlTableBody.find('tr');
-
 							$trs.each(function(e) {
 								var $this = $(this);
 								if ($this.data('appUrlData')) {
@@ -1354,7 +1408,6 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 							});
 							reqBody.appUrls = appUrls;
 							// for cft templates
-
 							reqBody.cftProviderId = $('#cftProviderInput').val();
 							reqBody.region = $('#cftRegionInput').val();
 							var cftParameters = [];
@@ -1369,7 +1422,6 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 							});
 							reqBody.cftStackParameters = cftParameters;
 							reqBody.cftTemplateFile = $('#cftTemplateFileInput').val();
-
 							var cftInstances = [];
 							$('.cft-resource-editPanel').each(function() {
 								var $this = $(this);
@@ -1392,24 +1444,22 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 								if (($('.role-Selected').data('templatetype')).toLowerCase() === 'cloudformation') {
 									reqBody.blueprintType = 'aws_cf';
 								}
+								//alert(reqBody);
+								console.log(reqBody);
 								$.post('/organizations/' + reqBody.orgId + '/businessgroups/' + reqBody.bgId + '/projects/' + reqBody.projectId + '/blueprints', {
 									blueprintData: reqBody
 								}, function(data) {
 									console.log(data);
-
 									var validatorForm = $("#wizard-1").validate();
 									validatorForm.resetForm();
-
 									$('.blueprintSaveSuccess').show();
-									$('.blueprintNameSuccess').html('Blueprint&nbsp;&nbsp;<a id="blueprintInfo" data-toggle="modal">' + data.name +
-										'</a>&nbsp;&nbsp;Saved Successfully');
+									$('.blueprintNameSuccess').html('Blueprint&nbsp;&nbsp;<a id="blueprintInfo" data-toggle="modal">' + data.name + '</a>&nbsp;&nbsp;Saved Successfully');
 									$wizard.data('secondClick', true);
 									var wizard = $wizard.data('bootstrapWizard');
 									wizard.next();
 									wizard.disablePreviouBtn();
 									if (tempType === 'softwarestack' || tempType === 'osimage') {
 										$('a#blueprintInfo').attr('href', '#modalForRead').click(function(e) {
-
 											var $blueprintReadContainer = $('#modalForRead');
 											if (tempType === 'softwarestack') {
 												$('.modal-title').html('Blueprint Information-Software Stack');
@@ -1434,8 +1484,7 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 											$blueprintReadContainer.find('.modal-body #instanceVPC').val(data.blueprintConfig.cloudProviderData.vpcId);
 											// loop for getting runlist
 											for (var j = 0; j < data.blueprintConfig.infraManagerData.versionsList.length; j++) {
-												$blueprintReadContainer.find('.modal-body #instanceRunlist').val(data.blueprintConfig.infraManagerData.versionsList[
-													j].runlist);
+												$blueprintReadContainer.find('.modal-body #instanceRunlist').val(data.blueprintConfig.infraManagerData.versionsList[j].runlist);
 											}
 											//for getting the image Name
 											$.ajax({
@@ -1477,15 +1526,13 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 													$.get("/d4dMasters/readmasterjsonnew/4", function(tdata) {
 														for (var i = 0; i < tdata.length; i += 1) {
 															if (data.orgId == tdata[i].orgname_rowid) {
-																$blueprintReadContainer.find('.modal-body #blueprintORG').val(tdata[i].orgname[
-																	0]);
+																$blueprintReadContainer.find('.modal-body #blueprintORG').val(tdata[i].orgname[0]);
 															}
 															if (data.bgId == tdata[i].productgroupname_rowid) {
 																$blueprintReadContainer.find('.modal-body #blueprintBU').val(tdata[i].productgroupname);
 															}
 															if (data.projectId == tdata[i].rowid) {
-																$blueprintReadContainer.find('.modal-body #blueprintProject').val(tdata[i]
-																	.projectname);
+																$blueprintReadContainer.find('.modal-body #blueprintProject').val(tdata[i].projectname);
 															}
 														}
 													});
@@ -1511,15 +1558,13 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 													$.get("/d4dMasters/readmasterjsonnew/4", function(tdata) {
 														for (var i = 0; i < tdata.length; i += 1) {
 															if (data.orgId == tdata[i].orgname_rowid) {
-																$blueprintReadContainerCFT.find('.modal-body #blueprintORG').val(tdata[i].orgname[
-																	0]);
+																$blueprintReadContainerCFT.find('.modal-body #blueprintORG').val(tdata[i].orgname[0]);
 															}
 															if (data.bgId == tdata[i].productgroupname_rowid) {
 																$blueprintReadContainerCFT.find('.modal-body #blueprintBU').val(tdata[i].productgroupname);
 															}
 															if (data.projectId == tdata[i].rowid) {
-																$blueprintReadContainerCFT.find('.modal-body #blueprintProject').val(tdata[
-																	i].projectname);
+																$blueprintReadContainerCFT.find('.modal-body #blueprintProject').val(tdata[i].projectname);
 															}
 														}
 													});
@@ -1614,8 +1659,7 @@ $.ajax({
 		for (var i = 0; i < data.length; i++) {
 			$('#selectOrgName').append($('<option></option>').val(data[i].rowid).html(data[i].name));
 			var selectOrgID = $('#orgIDCheck').val();
-			$orgListInput.append($('<option></option>').val(data[i].rowid).html(data[i].name).data('bglist', data[i].nodes).data('project', data[i].nodes[0].nodes).data('envList', data[i]
-				.nodes[0].nodes));
+			$orgListInput.append($('<option></option>').val(data[i].rowid).html(data[i].name).data('bglist', data[i].nodes).data('project', data[i].nodes[0].nodes).data('envList', data[i].nodes[0].nodes));
 		}
 		$orgListInput.change(function(e) {
 			var orgName = $(this).val();
@@ -1673,11 +1717,422 @@ $.ajax({
 				$projectList.append($('<option></option>').val(getProjs[i].rowid).html(getProjs[i].name));
 			}
 		});
+		//Arab Code for Application Setup. 
+		/*var projectListValue = $projectList.val();
+		var $nexusServer = $('#chooseNexusServer');
+		$nexusServer.click(function(e) {
+			alert(projectListValue);
+			if(!projectListValue){
+				alert("Please Choose Project Before Proceeding....");
+			}
+		});*/
+		$('#chooseNexusServer').click(function(e) {
+			var projectSelName = $('#projectListInput option:selected').val();
+			if (!projectSelName || projectSelName == 'choose') {
+				alert("Please Choose Project Before Proceeding....");
+			}
+		});
+		$projectList.change(function(e) {
+			var $nexusServer = $('#chooseNexusServer');
+			var $chooseRepository = $('#chooseRepository');
+			var $chooseGroupId = $('#chooseGroupId');
+			var $chooseArtifacts = $('#chooseArtifacts');
+			var $chooseVersions = $('#chooseVersions');
+			var projectId = $(this).val();
+			if ($('.checkConfigApp').prop("checked")) {
+				getNexusServer();
+				//getDockerServer();
+			} else {
+				//var $nexusServer = $('#chooseNexusServer');
+				$nexusServer.empty();
+				$nexusServer.append('<option value="">Choose Server</option>');
+				resetAllFields();
+			}
+			$('.checkConfigApp').click(function() {
+				if ($(this).prop("checked")) {
+					getNexusServer();
+					//getDockerServer();
+				} else {
+					//var $nexusServer = $('#chooseNexusServer');
+					$nexusServer.empty();
+					$nexusServer.append('<option value="">Choose Server</option>');
+					resetAllFields();
+				}
+			});
+
+			function resetAllFields() {
+				//var $chooseRepository = $('#chooseRepository');
+				$chooseRepository.empty();
+				$chooseRepository.append('<option value="">Choose Repositories</option>');
+				// var $chooseGroupId = $('#chooseGroupId');
+				$chooseGroupId.empty();
+				$('#chooseGroupId').append('<option value="">Choose Group ID</option>');
+				//var $chooseArtifacts = $('#chooseArtifacts');
+				$chooseArtifacts.empty();
+				$chooseArtifacts.append('<option value="">Choose Artifacts</option>');
+				// var $chooseVersions = $('#chooseVersions');
+				$chooseVersions.empty();
+				$chooseVersions.append('<option value="">Choose Versions</option>');
+				var $repositoryUrl = $('#repositoryUrl');
+				$repositoryUrl.val("");
+				var $containerId = $('#containerIdDiv');
+				$containerId.val("");
+				var $containerPort = $('#containerPort');
+				$containerPort.val("");
+			}
+
+			function resetSpinners() {
+				$('.reposerverspinner').css('display', 'none');
+				$('.repospinner').css('display', 'none');
+				$('.repourlspinner').css('display', 'none');
+				$('.artifactsspinner').css('display', 'none');
+				$('.versionspinner').css('display', 'none');
+				$('.jobdetailsspinner').css('display', 'none');
+			}
+
+			function getNexusServer() {
+				resetAllFields();
+				//var $nexusServer = $('#chooseNexusServer');
+				$nexusServer.empty();
+				$nexusServer.append('<option value="">Choose Server</option>');
+				var $chooseJobType = $('#chooseJobType');
+				$chooseJobType.empty();
+				$('#chooseJobType').append('<option value="">Choose Job</option>');
+				$('.reposerverspinner').css('display', 'inline-block');
+				$.get('/d4dMasters/readmasterjsonnew/26', function(nexus) {
+					$('.reposerverspinner').css('display', 'none');
+					if (nexus.length) {
+						for (var i = 0; i < nexus.length; i++) {
+							$('#chooseNexusServer').append('<option data-groupId = "' + nexus[i].groupid + '" data-nexusUrl = "' + nexus[i].hostname + '" value=' + nexus[i].rowid + ' data-serverType = "' + nexus[i].configType + '">' + nexus[i].nexusservername + '</option>');
+							//$nexusServer.append('<option data-nexusUrl = "' + nexus[i].hostname + '" value=' + nexus[i].rowid + ' data-serverType = "' + nexus[i].configType + '">' + nexus[i].nexusservername + '</option>');
+						}
+					}
+					$.get('/d4dMasters/readmasterjsonnew/18', function(dockerData) {
+						if (dockerData.length) {
+							for (var i = 0; i < dockerData.length; i++) {
+								$nexusServer.append('<option value=' + dockerData[i].rowid + ' data-serverType = "' + dockerData[i].configType + '">' + dockerData[i].dockerreponame + '</option>');
+							}
+						}
+						var exists = {},
+							elm;
+						$nexusServer.find('option').each(function() {
+							if (nexus.length) {
+								if ($(this).attr('data-serverType') == 'nexus') {
+									elm = $(this).attr('data-serverType');
+									if (!exists[elm]) {
+										$(this).attr('selected', true).change();
+										exists[elm] = true;
+									}
+								}
+							} else {
+								if ($(this).attr('data-serverType') == 'docker') {
+									elm = $(this).attr('data-serverType');
+									if (!exists[elm]) {
+										$(this).attr('selected', true).change();
+										exists[elm] = true;
+									}
+								}
+							}
+						});
+					});
+				});
+			}
+
+			/*function getDockerServer() {
+			    $.get('/d4dMasters/readmasterjsonnew/18', function(dockerData) {
+			        if (dockerData.length) {
+			            for (var i = 0; i < dockerData.length; i++) {
+			                $nexusServer.append('<option value=' + dockerData[i].rowid + ' data-serverType = "' + dockerData[i].configType + '">' + dockerData[i].dockerreponame + '</option>');
+			            }
+			        }
+			    });
+			}*/
+			// var $nexusServer = $('#chooseNexusServer');
+			$nexusServer.change(function(e) {
+				// var nexusServerType = $('#chooseNexusServer :selected').attr('data-serverType');
+				var nexusServerType = $nexusServer.find('option:selected').attr('data-serverType');
+				if ($nexusServer.find('option:selected').text() == 'Choose Server') {
+					$('.groupClass').hide();
+					$('.containerIdClass').hide();
+					$('.containerPortClass').hide();
+					$('.repoUrlClass').hide();
+					$('.artifactClass').hide();
+					$('.versionClass').hide();
+					$('.createTaskLinkUpgrade').attr('disabled', 'disabled');
+					// Reset all values
+					resetAllFields();
+				} else if (nexusServerType == 'nexus') {
+					//$('.containerUpgradeDeploy').hide();
+					//$('.createTaskLinkUpgrade').removeAttr('disabled');
+					$('.groupClass').show();
+					$('.repoUrlClass').show();
+					$('.artifactClass').show();
+					$('.versionClass').show();
+					$('.containerIdClass').hide();
+					$('.containerPortClass').hide();
+					resetAllFields();
+					/*var groupId = $('#chooseNexusServer :selected').attr('data-groupId').split(",");
+						for(var g=0; g< groupId.length; g++){
+							$('#chooseGroupId').append('<option value="' + groupId[g] + '">' + groupId[g] + '</option>');
+						}*/
+					getNexusServerGroupId();
+					getNexusServerRepo($(this).val());
+				} else { // It's Docker
+					resetAllFields();
+					//$('.containerUpgradeDeploy').show();
+					//$('.createTaskLinkUpgrade').removeAttr('disabled');
+					$('.groupClass').hide();
+					$('.repoUrlClass').hide();
+					$('.artifactClass').hide();
+					$('.versionClass').hide();
+					$('.containerIdClass').show();
+					$('.containerPortClass').show();
+					var containerId = $('#containerIdInput').val();
+					//var upgrade = $('#upgradeValue').val();
+					// if (containerId != "NA" && upgrade == "true") {
+					// 	$('#containerIdDiv').val(containerId);
+					// 	$('#containerIdDiv').attr('disabled', 'disabled');
+					// }
+					getDockerRepoes();
+				}
+			});
+
+			function getDockerRepoes() {
+				$('.repospinner').css('display', 'inline-block');
+				//var $chooseRepository = $('#chooseRepository');
+				//var projectId = urlParams.projid;
+				if (projectId) {
+					$.get('/d4dMasters/project/' + projectId, function(anProject) {
+						$('.repospinner').css('display', 'none');
+						if (anProject.length) {
+							anProject = anProject[0];
+							if (anProject.repositories) {
+								var repositories = anProject.repositories.docker;
+								if (repositories.length) {
+									for (var x = 0; x < repositories.length; x++) {
+										$chooseRepository.append('<option value="' + repositories[x] + '">' + repositories[x] + '</option>');
+									}
+								}
+							}
+						}
+					});
+				} else {
+					$('.repospinner').css('display', 'none');
+				}
+			}
+
+			function getNexusServerRepo(nexusId) {
+				$('.repospinner').css('display', 'inline-block');
+				//var $chooseRepository = $('#chooseRepository');
+				//var projectId = urlParams.projid;
+				if (nexusId) {
+					$.get('/nexus/' + nexusId + '/repositories', function(nexusRepos) {
+						$('.repospinner').css('display', 'none');
+						if (nexusRepos.length) {
+							$.get('/d4dMasters/project/' + projectId, function(anProject) {
+								if (anProject.length) {
+									project = anProject[0];
+									if (project.repositories) {
+										var repositories = project.repositories.nexus;
+										if (repositories.length) {
+											for (var x = 0; x < repositories.length; x++) {
+												(function(x) {
+													for (var i = 0; i < nexusRepos.length; i++) {
+														if (repositories[x] === nexusRepos[i].name) {
+															$chooseRepository.append('<option data-repoName="' + nexusRepos[i].name + '" data-repoUrl="' + nexusRepos[i].resourceURI + '" value="' + nexusRepos[i].id + '">' + nexusRepos[i].name + '</option>');
+														}
+													}
+												})(x);
+											}
+											//$chooseRepository.find('option:selected').attr('selected', true).change();
+											$('#chooseRepository > option:eq(1)').attr('selected', true).change();
+										}
+									}
+								}
+							});
+						}
+					});
+				} else {
+					$('.repospinner').css('display', 'none');
+				}
+			}
+			//var $chooseRepository = $('#chooseRepository');
+			$chooseRepository.change(function(e) {
+				var nexusServerType = $nexusServer.find('option:selected').attr('data-serverType');
+				// var nexusServerType = $('#chooseNexusServer :selected').attr('data-serverType');
+				if (nexusServerType === 'nexus') {
+					$('.containerIdClass').hide();
+					$('.containerPortClass').hide();
+					$('.repoUrlClass').show();
+					$('.artifactClass').show();
+					$('.versionClass').show();
+					var $repositoryUrl = $('#repositoryUrl');
+					$repositoryUrl.val("");
+
+					//var $chooseArtifacts = $('#chooseArtifacts');
+					$chooseArtifacts.empty();
+					$chooseArtifacts.append('<option value="">Choose Artifacts</option>');
+					//var $chooseVersions = $('#chooseVersions');
+					$chooseVersions.empty();
+					$chooseVersions.append('<option value="">Choose Versions</option>');
+					$('#repositoryUrl').val($(this).find('option:selected').attr('data-repoUrl'));
+					var repoName = $(this).find('option:selected').attr('data-repoName');
+					var nexusId = $nexusServer.val();
+					var groupId = $('#chooseGroupId').val();
+					var $chooseGroupId = $('#chooseGroupId');
+
+					if (!repoName) {
+						$chooseGroupId.empty();
+						$('#chooseGroupId').append('<option value="">Choose Group ID</option>');
+
+						var groupId = $('#chooseNexusServer :selected').attr('data-groupId').split(",");
+						for (var g = 0; g < groupId.length; g++) {
+							$('#chooseGroupId').append('<option value="' + groupId[g] + '">' + groupId[g] + '</option>');
+						}
+					} else {
+						$('#chooseGroupId > option:eq(1)').attr('selected', true).change();
+					}
+				} else {
+					$('.groupClass').hide();
+					$('.containerIdClass').show();
+					$('.containerPortClass').show();
+					$('.repoUrlClass').hide();
+					$('.artifactClass').hide();
+					$('.versionClass').hide();
+				}
+			});
+
+			function getNexusServerGroupId() {
+				var groupId = $('#chooseNexusServer :selected').attr('data-groupId').split(",");
+				for (var g = 0; g < groupId.length; g++) {
+					$('#chooseGroupId').append('<option value="' + groupId[g] + '">' + groupId[g] + '</option>');
+				}
+				$('#chooseGroupId > option:eq(1)').attr('selected', true).change();
+			}
+			//var $chooseGroupId = $('#chooseGroupId');
+			$chooseGroupId.change(function(e) {
+				var repoName = $('#chooseRepository').find('option:selected').attr('data-repoName');
+				var nexusId = $('#chooseNexusServer').val();
+				var groupId = $('#chooseGroupId').val();
+				getNexusServerRepoArtifact(nexusId, repoName, groupId);
+			});
+
+			function getNexusServerRepoArtifact(nexusId, repoName, groupId) {
+				$('.artifactsspinner').css('display', 'inline-block');
+				//var $chooseArtifacts = $('#chooseArtifacts');
+				$chooseArtifacts.empty();
+				$chooseArtifacts.append('<option value="">Choose Artifacts</option>');
+				if (nexusId && repoName) {
+					$.get('/nexus/' + nexusId + '/repositories/' + repoName + '/group/' + groupId + '/artifact', function(artifacts) {
+						$('.artifactsspinner').css('display', 'none');
+						if (artifacts.length) {
+							var repoList = [];
+							var uniqueArtifacts = [];
+							var checker;
+							for (var i = 0; i < artifacts.length; i++) {
+								var repoObj = {};
+								repoObj['resourceURI'] = artifacts[i].resourceURI;
+								repoObj['version'] = artifacts[i].version;
+								repoObj['artifactId'] = artifacts[i].artifactId;
+								repoList.push(repoObj);
+								if (!checker || comparer(checker, artifacts[i]) != 0) {
+									checker = artifacts[i];
+									uniqueArtifacts.push(checker);
+								}
+							}
+							$("#chooseArtifacts").data("repoObj", repoList);
+							for (var j = 0; j < uniqueArtifacts.length; j++) {
+								$('#chooseArtifacts').append('<option data-groupId="' + uniqueArtifacts[j].groupId + '" value=' + uniqueArtifacts[j].artifactId + '>' + uniqueArtifacts[j].artifactId + '</option>');
+							}
+							$('#chooseArtifacts > option:eq(1)').attr('selected', true).change();
+						}
+					});
+				} else {
+					$('.artifactsspinner').css('display', 'none');
+				}
+			}
+			//var $chooseArtifacts = $('#chooseArtifacts');
+			$chooseArtifacts.change(function(e) {
+				//var $chooseVersions = $('#chooseVersions');
+				$chooseVersions.empty();
+				$chooseVersions.append('<option value="">Choose Versions</option>');
+				var repoName = $chooseRepository.find('option:selected').attr('data-repoName');
+				var nexusId = $nexusServer.val();
+				var groupId = $(this).find('option:selected').attr('data-groupId');
+				var artifactId = $(this).val();
+				/*var reqBody = {
+				    "groupId": groupId,
+				    "artifactId": $(this).val()
+				};*/
+				getNexusServerRepoArtifactVersions(nexusId, repoName, groupId, artifactId);
+			});
+			var comparer = function compareObject(a, b) {
+				if (a.artifactId === b.artifactId) {
+					return 0;
+				} else {
+					return 1;
+				}
+			}
+
+			function getNexusServerRepoArtifactVersions(nexusId, repoName, groupId, artifactId) {
+				$('.versionspinner').css('display', 'inline-block');
+				var $chooseVersions = $('#chooseVersions');
+				$chooseVersions.empty();
+				$('#chooseVersions').append('<option value="">Choose Versions</option>');
+				if (nexusId && repoName && groupId && artifactId) {
+					$.get('/nexus/' + nexusId + '/repositories/' + repoName + '/group/' + groupId + '/artifact/' + artifactId + '/versions', function(data) {
+						$('.versionspinner').css('display', 'none');
+						if (data) {
+							var versions = data.metadata.versioning[0].versions[0].version;
+							for (var i = 0; i < versions.length; i++) {
+								$('#chooseVersions').append('<option value=' + versions[i] + '>' + versions[i] + '</option>');
+							}
+							$chooseVersions.find('option:last-child').attr('selected', true).change();
+						} else {
+							$('.versionspinner').css('display', 'none');
+						}
+
+					});
+				} else {
+					$('.versionspinner').css('display', 'none');
+				}
+			}
+			/*function getNexusServerRepoArtifactVersions(nexusId, repoName, reqBody) {
+			    $('.versionspinner').css('display', 'inline-block');
+			    //var $chooseVersions = $('#chooseVersions');
+			    $chooseVersions.empty();
+			    $chooseVersions.append('<option value="">Choose Versions</option>');
+			    if (nexusId && repoName && reqBody.groupId && reqBody.artifactId) {
+			        $.ajax({
+			            url: '/nexus/' + nexusId + '/repositories/' + repoName + '/artifact/versions',
+			            data: JSON.stringify(reqBody),
+			            type: 'POST',
+			            contentType: "application/json",
+			            success: function(data) {
+			                $('.versionspinner').css('display', 'none');
+			                if (data) {
+			                    var versions = data.metadata.versioning[0].versions[0].version;
+			                    for (var i = 0; i < versions.length; i++) {
+			                        $chooseVersions.append('<option value=' + versions[i] + '>' + versions[i] + '</option>');
+			                    }
+			                    $chooseVersions.find('option:last-child').attr('selected', true).change();
+			                    //$('#chooseVersions > option:last-child').attr('selected', true).change();
+			                }
+			            },
+			            error: function(jqxhr) {
+			                $('.versionspinner').css('display', 'none');
+			                alert(jqxhr.responseText);
+			            }
+			        });
+			    } else {
+			        $('.versionspinner').css('display', 'none');
+			    }
+			}*/
+		});
 	}
 });
 (function() {
-	var $loadingContainer = $('.userListLoadingContainer').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />')
-		.show();
+	var $loadingContainer = $('.userListLoadingContainer').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />').show();
 	$.get('../users', function(userList) {
 		var $userListSelect = $('#userListSelect').empty();
 		userList = JSON.parse(userList);
@@ -1738,9 +2193,7 @@ $('#appURLForm').submit(function(e) {
 	var $tdURL = $('<td/>');
 	$tdURL.append(appUrl);
 	var $tdAction = $('<td/>');
-	$tdAction.append(
-		'<div class="btn-group"><button class="btn btn-danger pull-left btn-sg tableactionbutton deleteURL" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>'
-	);
+	$tdAction.append('<div class="btn-group"><button class="btn btn-danger pull-left btn-sg tableactionbutton deleteURL" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
 	$tdAction.find('.deleteURL').click(function() {
 		$row.remove();
 		var rowCount2 = $('#appUrlTable').find('tbody > tr').length;
@@ -1816,13 +2269,8 @@ function initializeBlueprintAreaNew(data) {
 					break;
 			}
 			console.log(tdata);
-			if ($("div." + tdata[i]['templatetype']).length === 0) {
-				$containerTempNew = '<div class="panel panel-default blueprintContainer hidden">' + '<div class="panel-heading">' + '<h4 class="panel-title">' + '<a href="#collapse' + i +
-					'" data-parent="#accordion-2" data-toggle="collapse" class="collapsed"> ' + '<i class="fa fa-fw fa-plus-circle txt-color-blue"></i> ' +
-					'<i class="fa fa-fw fa-minus-circle txt-color-red"></i>' + getDesignTypeName + '</a>' + '</h4></div><div class="panel-collapse collapse" id="collapse' + i + '">' +
-					'<div class="panel-body ' + getDesignType + '"></div>' + '</div>';
-				$('#accordion-2').append($containerTempNew);
-			}
+			$containerTempNew = '<div class="panel panel-default blueprintContainer hidden">' + '<div class="panel-heading">' + '<h4 class="panel-title">' + '<a href="#collapse' + i + '" data-parent="#accordion-2" data-toggle="collapse" class="collapsed"> ' + '<i class="fa fa-fw fa-plus-circle txt-color-blue"></i> ' + '<i class="fa fa-fw fa-minus-circle txt-color-red"></i>' + getDesignTypeName + '</a>' + '</h4></div><div class="panel-collapse collapse" id="collapse' + i + '">' + '<div class="panel-body ' + getDesignType + '"></div>' + '</div>';
+			$('#accordion-2').append($containerTempNew);
 		}
 		for (var i = 0; i < data.length; i++) {
 			console.log("data>>>>>>>>>>>" + JSON.stringify(data[i]));
@@ -1832,13 +2280,11 @@ function initializeBlueprintAreaNew(data) {
 				//   alert($currRolePanel.length);
 				if ($currRolePanel.length > 0) {
 					var $itemContainer = $('<div></div>').addClass("productdiv4");
-					var $itemBody = $('<div></div>').addClass('productdiv1 cardimage').attr('data-blueprintId', data[i]._id).attr('data-projectId', data[i].projectId).attr(
-						'data-envId', data[i].envId).attr('data-chefServerId', data[i].chefServerId).attr('data-templateType', data[i].templateType);
+					var $itemBody = $('<div></div>').addClass('productdiv1 cardimage').attr('data-blueprintId', data[i]._id).attr('data-projectId', data[i].projectId).attr('data-envId', data[i].envId).attr('data-chefServerId', data[i].chefServerId).attr('data-templateType', data[i].templateType);
 					var $ul = $('<ul></ul>').addClass('list-unstyled system-prop').css({
 						'text-align': 'center'
 					});
-					var $liRead = $('<a style="float:right;margin:5px;cursor:pointer" class="readBtn"><div class="moreInfo"></div></a>').attr('data-toggle', 'tooltip').attr(
-						'data-placement', 'top').attr('title', 'More Info');
+					var $liRead = $('<a style="float:right;margin:5px;cursor:pointer" class="readBtn"><div class="moreInfo"></div></a>').attr('data-toggle', 'tooltip').attr('data-placement', 'top').attr('title', 'More Info');
 					$ul.append($liRead);
 					var $img
 					if (data[i].iconpath) {
@@ -1852,8 +2298,7 @@ function initializeBlueprintAreaNew(data) {
 					$ul.append($liCardName);
 					var $selecteditBtnContainer = $('<div style="position:absolute;padding-left:27px;bottom:11px;"></div>');
 					//      if (data[i].versionsList) {
-					var $selectVerEdit = $('<a style="padding:0px 4px;margin-left:3px;border-radius:5px;" class="bpEditBtn"><i class="ace-icon fa fa-pencil"></i></a>').addClass(
-						'btn btn-primary').attr('data-toggle', 'tooltip').attr('data-placement', 'top').attr('title', 'Edit');
+					var $selectVerEdit = $('<a style="padding:0px 4px;margin-left:3px;border-radius:5px;" class="bpEditBtn"><i class="ace-icon fa fa-pencil"></i></a>').addClass('btn btn-primary').attr('data-toggle', 'tooltip').attr('data-placement', 'top').attr('title', 'Edit');
 					var $selectVer = null;
 					var tagLabel = '';
 					//Docker Check
@@ -1865,9 +2310,7 @@ function initializeBlueprintAreaNew(data) {
 						$itemBody.attr('dockercontainerpaths', data[i].dockercontainerpaths);
 						if (typeof data[i].blueprintConfig.dockerCompose != 'undefined') {
 							data[i].blueprintConfig.dockerCompose.forEach(function(k, v) {
-								var $liDockerRepoName = $(
-									'<li title="Docker Repo Name" class="dockerimagetext" style="text-align:left;margin-left:15px" ><i class="fa fa-check-square" style="padding-right:5px"/>' +
-									data[i].blueprintConfig.dockerCompose[v]["dockercontainerpathstitle"] + '</li>');
+								var $liDockerRepoName = $('<li title="Docker Repo Name" class="dockerimagetext" style="text-align:left;margin-left:15px" ><i class="fa fa-check-square" style="padding-right:5px"/>' + data[i].blueprintConfig.dockerCompose[v]["dockercontainerpathstitle"] + '</li>');
 								$ul.append($liDockerRepoName);
 							});
 						}
@@ -1905,16 +2348,13 @@ function initializeBlueprintAreaNew(data) {
 								getOrgProjDetails($blueprintReadContainerCFT);
 							});
 						})(data[i]);
-
 					} else {
 						$selectVer = $('<select style="padding:1px;padding-left:5px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId', data[i]._id);
 						if (data[i].templateType === 'chef' || data[i].templateType === 'ami') {
 							$selectVerEdit.hide();
 							$selectVer.hide();
-
 							//code for info about blueprints
 							(function(blueprint) {
-
 								$liRead.click(function(e) {
 									var $blueprintReadContainer = $('#modalForRead');
 									$blueprintReadContainer.find('.modal-body #blueprintNameInputNew').val(blueprint.name);
@@ -1931,7 +2371,6 @@ function initializeBlueprintAreaNew(data) {
 										success: function(data) {
 											console.log(data);
 											$blueprintReadContainer.find('.modal-body #instanceImage').val(data.name);
-
 										}
 									});
 									//for getting the Provider name,Type,Region,KeyPair
@@ -1946,7 +2385,6 @@ function initializeBlueprintAreaNew(data) {
 												$blueprintReadContainer.find('.modal-body #instanceRegion').val(data.keyPairs[k].region);
 												$blueprintReadContainer.find('.modal-body #instancekeyPair').val(data.keyPairs[k].keyPairName);
 											}
-
 										},
 										failure: function(data) {
 											alert(data.toString());
@@ -2000,11 +2438,9 @@ function initializeBlueprintAreaNew(data) {
 													$blueprintReadContainerCFT.find('.modal-body #blueprintORG').val(dataTree[j].name);
 													for (var p = 0; p < dataTree[j].businessGroups.length; p++) {
 														(function(p) {
-															$blueprintReadContainerCFT.find('.modal-body #blueprintBU').val(dataTree[j].businessGroups[
-																p].name);
+															$blueprintReadContainerCFT.find('.modal-body #blueprintBU').val(dataTree[j].businessGroups[p].name);
 															for (var x = 0; x < dataTree[j].businessGroups[p].projects.length; x++) {
-																$blueprintReadContainerCFT.find('.modal-body #blueprintProject').val(dataTree[j].businessGroups[
-																	p].projects[x].name);
+																$blueprintReadContainerCFT.find('.modal-body #blueprintProject').val(dataTree[j].businessGroups[p].projects[x].name);
 															}
 														})
 														(p);
@@ -2049,8 +2485,7 @@ function initializeBlueprintAreaNew(data) {
 					if ($selectVer.attr('class').indexOf('dockerrepotagselect') < 0) {
 						if (typeof data[i].blueprintConfig.infraManagerData !== 'undefined') {
 							for (var j = 0; j < data[i].blueprintConfig.infraManagerData.versionsList.length; j++) {
-								var $options = $('<option></option>').append(data[i].blueprintConfig.infraManagerData.versionsList[j].ver).val(data[i].blueprintConfig.infraManagerData
-									.versionsList[j].ver);
+								var $options = $('<option></option>').append(data[i].blueprintConfig.infraManagerData.versionsList[j].ver).val(data[i].blueprintConfig.infraManagerData.versionsList[j].ver);
 								$selectVer.append($options);
 							}
 						}
@@ -2115,3 +2550,9 @@ function removeSelectedBlueprint() {
 		});
 	}
 }
+$('#dockerRepoInputId').trigger('click');
+$(".repoTypeSelectorRadioBtn").click(function() {
+	var val = $(this).attr('data-repotype');
+	$('.repoTypeClass').hide();
+	$('#' + val).show();
+});

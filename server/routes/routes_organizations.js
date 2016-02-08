@@ -43,6 +43,7 @@ var CloudFormation = require('_pr/model/cloud-formation');
 var AzureArm = require('_pr/model/azure-arm');
 
 module.exports.setRoutes = function(app, sessionVerification) {
+
 	app.all('/organizations/*', sessionVerification);
 
 	app.get('/organizations/getTreeNew', function(req, res) {
@@ -713,6 +714,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
 		var templateType = req.body.blueprintData.templateType;
 		var users = req.body.blueprintData.users;
 		var blueprintType = req.body.blueprintData.blueprintType;
+        var nexus = req.body.blueprintData.nexus;
+        var docker = req.body.blueprintData.docker;
 
 		// a temp fix for invalid appurl data. will be removed in next iteration
 		var tempAppUrls = [];
@@ -754,10 +757,12 @@ module.exports.setRoutes = function(app, sessionVerification) {
 				templateId: templateId,
 				templateType: templateType,
 				users: users,
-				blueprintType: blueprintType
+				blueprintType: blueprintType,
+                nexus: nexus,
+                docker: docker
 			};
 
-			logger.debug('req:', blueprintData);
+			logger.debug('req blueprintData:', blueprintData);
 			var dockerData, instanceData;
 			logger.debug('req.body.blueprintData.blueprintType:', blueprintType);
 			if (blueprintType === 'docker') {

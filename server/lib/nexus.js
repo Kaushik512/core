@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-
 // This file act as a interface between catalyst and nexus.
 
 
@@ -67,9 +66,13 @@ var Nexus = function() {
                 var nexusUrl = nexus[0].hostname + '/service/local/repositories';
                 client.registerMethod("jsonMethod", nexusUrl, "GET");
                 var reqSubmit = client.methods.jsonMethod(function(data, response) {
-                    var json = parser.toJson(data);
-                    logger.debug("data: ", JSON.stringify(json));
-                    callback(null, json);
+                    try {
+                        var json = parser.toJson(data);
+                        logger.debug("data: ", JSON.stringify(json));
+                        callback(null, json);
+                    } catch (err) {
+                        callback(err, null);
+                    }
                 });
             } else {
                 callback(null, null);
@@ -77,7 +80,7 @@ var Nexus = function() {
         });
     }
 
-    this.getNexusArtifact = function(anId, repoName, callback) {
+    this.getNexusArtifact = function(anId, repoName, groupId, callback) {
         d4dModelNew.d4dModelMastersNexusServer.find({
             rowid: anId,
             id: "26"
@@ -92,22 +95,27 @@ var Nexus = function() {
                     password: nexus[0].nexuspassword
                 };
                 client = new Client(options_auth);
-                var nexusUrl = nexus[0].hostname + '/service/local/data_index?q=' + nexus[0].groupid;
+                var nexusUrl = nexus[0].hostname + '/service/local/data_index?q=' + groupId;
                 client.registerMethod("jsonMethod", nexusUrl, "GET");
                 client.methods.jsonMethod(function(data, response) {
                     var json = parser.toJson(data);
-                    logger.debug("data: ", typeof json);
+                    logger.debug("artifact data: ", json);
                     json = JSON.parse(json);
                     logger.debug("Parsed json: ", JSON.stringify(json));
                     var artifactList = [];
                     if (json) {
                         var artifacts = json['search-results'].data.artifact;
-                        for (var i = 0; i < artifacts.length; i++) {
-                            if (repoName === artifacts[i].repoId) {
-                                artifactList.push(artifacts[i]);
+                        if (artifacts.length) {
+                            for (var i = 0; i < artifacts.length; i++) {
+                                if (repoName === artifacts[i].repoId) {
+                                    var resourceURI = artifacts[i].resourceURI.replace(/\s/g, '');
+                                    artifacts[i]['resourceURI'] = resourceURI;
+                                    artifactList.push(artifacts[i]);
+                                }
                             }
                         }
                     }
+                    logger.debug("artifacts:::::  ", JSON.stringify(artifactList));
                     callback(null, artifactList);
                 });
             } else {
@@ -116,7 +124,7 @@ var Nexus = function() {
         });
     }
 
-    this.getNexusArtifactVersions = function(anId, repoName, reqBody, callback) {
+    this.getNexusArtifactVersions = function(anId, repoName, groupId, artifactId, callback) {
         d4dModelNew.d4dModelMastersNexusServer.find({
             rowid: anId,
             id: "26"
@@ -124,6 +132,7 @@ var Nexus = function() {
             if (err) {
                 logger.debug(500, "Failed to fetch Nexus Server from DB.", err);
                 callback(err, null);
+                return;
             }
             if (nexus.length) {
                 var options_auth = {
@@ -131,8 +140,8 @@ var Nexus = function() {
                     password: nexus[0].nexuspassword
                 };
                 client = new Client(options_auth);
-                var groupId = reqBody.groupId.replace(/\./g, '/');
-                var nexusUrl = nexus[0].hostname + '/service/local/repositories/' + repoName + '/content/' + groupId + '/' + reqBody.artifactId + '/maven-metadata.xml';
+                var gId = groupId.replace(/\./g, '/');
+                var nexusUrl = nexus[0].hostname + '/service/local/repositories/' + repoName + '/content/' + gId + '/' + artifactId + '/maven-metadata.xml';
                 client.registerMethod("jsonMethod", nexusUrl, "GET");
                 var reqSubmit = client.methods.jsonMethod(function(data, response) {
                     logger.debug("nexusUrl: ", nexusUrl);

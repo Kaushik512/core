@@ -47,7 +47,9 @@ var taskHistorySchema = new Schema({
     taskHistoryIds: [{
         taskId: String,
         historyId: String
-    }]
+    }],
+
+    blueprintExecutionResults: Schema.Types.Mixed
 });
 
 taskHistorySchema.method.update = function(status, timestampEnded, callback) {

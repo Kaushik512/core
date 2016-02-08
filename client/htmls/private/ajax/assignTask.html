@@ -1,66 +1,252 @@
 <div class="row">
-  <div class="col-md-12">
-    <div class="col-md-12">
-      <form action="" id="taskForm">
-        <div class="widget-box">
-          <div class="widget-header">
-            <h4 class="widget-margin" style="color:black;">Create New Job</h4>
-          </div>
-          <div class="widget-body">
-            <div class="widget-main" style="min-height:200px">
-              <section id="widget-grid" class="">
-                <!-- START ROW -->
-                <div class="row">
-                  <!-- Widget ID (each widget will need unique ID)-->
-                  <div class="jarviswidget" id="wid-id-3" data-widget-editbutton="false" data-widget-custombutton="false">
-                    <!-- widget div-->
-                    <div>
-                      <!-- widget content -->
-                      <div class="widget-body no-padding">
-                        <div class="containerTable col-lg-5 col-md-5">
-                          <!--table 1 -->
-                          <table class="table table-bordered">
-                            <thead>
-                              <tr>
-                                <th style="text-align:center">Job Details</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td>
-                                  <div class="col-lg-6 col-md-12" style="margin-top:5px;">
-                                    <label>
-                                    Select Job Type
-                                    </label>
-                                    <select id="taskType" class="chooseTasktype width-100 form-control">
-                                      <option id="Chef" value="chef">Chef</option>
-                                      <option id="Jenkins" value="jenkins">Jenkins</option>
-                                      <option id="Composite" value="composite">Composite</option>
-                                      <option id="Puppet" value="puppet">Puppet</option>
-                                    </select>
-                                  </div>
-                                  <!--chef dropdown starts here-->
-                                  <div id="chef-dropdown">
-                                    <div class="col-lg-6 col-md-12 jobStyle">
-                                      <label>
-                                      Job Name <span style="color:red">*</span>
-                                      </label>
-                                      <input id="chefTaskName" type="text" class="form-control inputTaskName" name="ctl00$MainContent$orgname">
+   <div class="col-md-12">
+      <div class="col-md-12">
+         <form action="" id="taskForm">
+            <div class="widget-box">
+               <div class="widget-header">
+                  <h4 class="widget-margin" style="color:black;">Create New Job</h4>
+               </div>
+               <div class="widget-body">
+                  <div class="widget-main" style="min-height:200px">
+                     <section id="widget-grid" class="">
+                        <!-- START ROW -->
+                        <div class="row">
+                           <!-- Widget ID (each widget will need unique ID)-->
+                           <div class="jarviswidget" id="wid-id-3" data-widget-editbutton="false" data-widget-custombutton="false">
+                              <!-- widget div-->
+                              <div>
+                                 <!-- widget content -->
+                                 <div class="widget-body no-padding">
+                                    <div class="containerTable col-lg-5 col-md-5">
+                                       <!--table 1 -->
+                                       <table class="table table-bordered">
+                                          <thead>
+                                             <tr>
+                                                <th style="text-align:center">Job Details</th>
+                                             </tr>
+                                          </thead>
+                                          <tbody>
+                                             <tr>
+                                                <td>
+                                                   <div class="col-lg-6 col-md-12" style="margin-top:5px;">
+                                                      <label>
+                                                      Select Job Type
+                                                      </label>
+                                                      <select id="taskType" class="chooseTasktype width-100 form-control">
+                                                         <option id="Chef" value="chef">Chef</option>
+                                                         <option id="Jenkins" value="jenkins">Jenkins</option>
+                                                         <option id="Composite" value="composite">Composite</option> 
+                                                         <option id="Puppet" value="puppet">Puppet</option>
+                                                      </select>
+                                                   </div>
+                                                   <!--chef dropdown starts here-->
+                                                   <div id="chef-dropdown">
+                                                      <div class="col-lg-6 col-md-12 jobStyle">
+                                                         <label>
+                                                         Job Name <span style="color:red">*</span>
+                                                         </label>
+                                                         <input id="chefTaskName" type="text" class="form-control inputTaskName" name="ctl00$MainContent$orgname">
+                                                      </div>
+                                                      <!--div for description for task type-->
+                                                      <div class="col-lg-12 col-md-12 margintop15">
+                                                         <label>Job Description</label>
+                                                         <textarea id="chefDescription" style="width:100%" rows="9" cols="15" name="description"></textarea>
+                                                      </div>
+                                                   </div>
+                                                   <!--chef dropdown ends here-->
+
+                                                   <!--puppet dropdown starts here-->
+                                                   <div id="Puppet-dropdown">
+                                                      <div class="col-lg-6 col-md-12 jobStyle">
+                                                         <label>
+                                                         Job Name <span style="color:red">*</span>
+                                                         </label>
+                                                         <input id="puppetTaskName" type="text" class="form-control inputTaskName" name="puppetTaskName">
+                                                      </div>
+                                                      <!--div for description for task type-->
+                                                      <div class="col-lg-12 col-md-12 margintop15">
+                                                         <label>Job Description</label>
+                                                         <textarea id="puppetDescription" style="width:100%" rows="9" cols="15" name="description"></textarea>
+                                                      </div>
+                                                   </div>
+                                                   <!--puppet dropdown ends here-->
+
+                                                   <!--jenkins dropdown starts here-->
+                                                   <div id="Jenkins-dropdown">
+                                                      <div class="col-lg-6 col-md-12 jobStyle">
+                                                         <label>Job Name<span style="color:red">*</span>
+                                                         </label>
+                                                         <input id="jenkinsTaskName" type="text" class="form-control inputTaskName" autofocus>                       
+                                                      </div>
+                                                      <div class="col-lg-6 col-md-12 margintop15">
+                                                         <label>Select Jenkins Server<span style="color:red">*</span>
+                                                         </label>
+                                                         <select id="jenkinsServerList" class="width-100 form-control">
+                                                            <option value="choose">Choose</option>
+                                                         </select>
+                                                      </div>
+                                                      <div class="col-lg-6 col-md-12 margintop15">
+                                                         <label>Select Job<span style="color:red">*</span></label>
+                                                         <label id="spinnerForJob" class="hidden"><img  style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
+                                                         <select id="jobListJenkins" class="width-100 form-control" disabled>
+                                                         </select>
+                                                      </div>
+                                                      <div class="col-lg-12 col-md-12 margintop5" style="display:none">
+                                                         <div class="col-lg-12 nodesTable">
+                                                            <div class="smart-form">
+                                                               <label>Blueprints</label> 
+                                                               <div id="jenkinsBlueprint" class="">
+                                                                  <ul id="selectedBlueprintJenkinsTask" class="selectedNodesJenkinsTaskCSS">
+                                                                  </ul>
+                                                               </div>
+                                                            </div>
+                                                         </div>
+                                                      </div>
+                                                      <div class="col-lg-12 col-md-12 margintop5">
+                                                         <label>Job Description</label>
+                                                         <textarea id="jenkinsDescription"  style="width:100%" rows="9" cols="15" name="description"></textarea>
+                                                      </div>
+                                                   </div>
+                                                   <!--jenkins dropdown ends here-->
+                                                   <!--Composite dropdown starts here-->
+                                                   <div id="Composite-dropdown">
+                                                      <div class="col-lg-6 col-md-12 jobStyle">
+                                                         <label>Job Name<span style="color:red">*</span>
+                                                         </label>
+                                                         <input id="compositeTaskName" type="text" cat-validation="required,nospecial" cdata="catalyst" class="form-control" autofocus>                       
+                                                      </div>
+                                                      <div class="col-lg-12 col-md-12 margintop15">
+                                                         <label>Job Description</label>
+                                                         <textarea id="compositeDescription"  style="width:100%" rows="8" cols="15" name="description"></textarea>
+                                                      </div>
+                                                   </div>
+                                                   <!--jenkins dropdown ends here-->
+                                                </td>
+                                             </tr>
+                                          </tbody>
+                                       </table>
                                     </div>
-                                    <!--div for description for task type-->
-                                    <div class="col-lg-12 col-md-12 margintop15">
-                                      <label>Job Description</label>
-                                      <textarea id="chefDescription" style="width:100%" rows="9" cols="15" name="description"></textarea>
+                                    <!--chef task type details-->
+                                    <div class="containerTable chefTaskType col-lg-7 col-md-7">
+                                       <!--table 2 -->
+                                       <table class="table table-bordered">
+                                          <thead>
+                                             <tr>
+                                                <th style="text-align:center" class="chefServerName"></th>
+                                             </tr>
+                                          </thead>
+                                          <tbody>
+                                             <tr>
+                                                <td>
+                                                   <div class="col-lg-6 col-md-6" style="margin-top:5px;">
+                                                      <div class="col-lg-12 nodesTable">
+                                                         <div class="smart-form">
+                                                            <div class="row margin0">
+                                                               <div class="col-lg-6 col-md-12">
+                                                                  <label class="radio">
+                                                                    <input type="radio" id="jobNodeDetailsId" class="jobTypeSelectorRadioBtn" name="jobDetType" data-jobdetails="Nodes"><i></i> 
+                                                                    <img src="img/templateicons/Select-nodes---deployment.png" class="margintopMinus5">
+                                                                     Nodes 
+                                                                     <span class="colorRed">*</span>
+                                                                  </label>
+                                                               </div>
+                                                               <div class="col-lg-6 col-md-12">
+                                                                  <label class="radio">
+                                                                    <input id="selectBlueprintInputId" class="jobTypeSelectorRadioBtn" type="radio" name="jobDetType" data-jobdetails="Blueprint"><i></i>
+                                                                    <img src="img/templateicons/Create-run-list---deployment.png" class="margintopMinus5">
+                                                                    Blueprints
+                                                                    <span class="colorRed">*</span>
+                                                                  </label>
+                                                               </div>
+                                                            </div>
+                                                            
+                                                            <div id="Nodes" class="jobDetailsClass col-lg-12">
+                                                               <ul id="selectedNodesChefTask" class="deploymentNodeList selectedNodesTaskCSS">
+                                                               </ul>
+                                                            </div>
+                                                            <div id="Blueprint" class="jobDetailsClass col-lg-12" style="display:none">
+                                                               <ul id="selectedBlueprintChefTask" class="deploymentBlueprintList selectedNodesTaskCSS">
+                                                               </ul>
+                                                            </div>
+                                                            <!-- <ul id="selectedNodesChefTask" class="deploymentNodeList selectedNodesTaskCSS">
+                                                            </ul> -->
+                                                         </div>
+                                                      </div>
+                                                   </div>
+                                                   <div class="col-lg-6 col-md-6" style="margin-top:5px;">
+                                                      <label>
+                                                      <i style="color:#40baf1;font-size:16px;" class="ace-icon fa fa-list-ul"></i>   
+                                                      Add Runlist
+                                                      </label>
+                                                      <a href="#chefRunlistModal" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;" class="addList" rel="tooltip" data-placement="top" title="Edit Runlist" /></a>
+                                                      <div style="height:146px;overflow-y:auto;" id="dbNameTable_wrapper" class="dataTables_wrapper no-footer">
+                                                         <table id="tableRunlist" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
+                                                            <thead>
+                                                               <tr class="rowCustomStyle">
+                                                                  <th style="text-align:center">View Runlist</th>
+                                                               </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            </tbody>
+                                                         </table>
+                                                      </div>
+                                                   </div>
+                                                   <div class="col-lg-12 col-md-12" style="margin-top:22px;">
+                                                      <label>
+                                                      <i style="color:#40baf1;font-size:16px;" class="ace-icon fa fa-list-ul"></i>   
+                                                      Cookbook Attributes <a href="#editAttributesModalContainer" id="editAttributesBtn" class="bpEditBtn btn btn-primary editAttributesBtnCSS" rel="tooltip" data-placement="top" data-original-title="Edit">
+                                                      <i class="ace-icon fa fa-pencil"></i>
+                                                      </a>
+                                                      </label>
+                                                      <textarea id="attrtextarea" style="width:100%;display:none" rows="6" onfocus="$('#attrmessage').html('');" onblur="validatejson($(this));" disabled> </textarea>
+                                                      <table id="attributesViewListTable" class="table table-striped table-bordered table-hover dataTable no-footer table-condensed tablesorter" cellpadding="5px" width="100%">
+                                                         <thead>
+                                                            <tr>
+                                                               <th>Attributes</th>
+                                                               <th>Values</th>
+                                                            </tr>
+                                                         </thead>
+                                                         <tbody class="attributesViewTableBody">
+                                                         </tbody>
+                                                      </table>
+                                                   </div>
+                                                </td>
+                                             </tr>
+                                          </tbody>
+                                       </table>
+                                       <!--table 2 ends -->
                                     </div>
-                                  </div>
-                                  <!--chef dropdown ends here-->
-                                  <!--puppet dropdown starts here-->
-                                  <div id="Puppet-dropdown">
-                                    <div class="col-lg-6 col-md-12 jobStyle">
-                                      <label>
-                                      Job Name <span style="color:red">*</span>
-                                      </label>
-                                      <input id="puppetTaskName" type="text" class="form-control inputTaskName" name="puppetTaskName">
+                                    <!--chef task type details ends here-->
+
+                                     <!--puppet task type details & select Nodes-->
+                                    <div class="containerTable puppetTaskType col-lg-7 col-md-7">
+                                       <!--table 2 -->
+                                       <table class="table table-bordered">
+                                          <thead>
+                                             <tr>
+                                                <th style="text-align:center" class="puppetServerName">Puppet Server</th>
+                                             </tr>
+                                          </thead>
+                                          <tbody>
+                                             <tr>
+                                                <td>
+                                                   <div class="col-lg-6 col-md-6" style="margin-top:5px;">
+                                                      <div class="col-lg-12 nodesTable">
+                                                         <div class="smart-form">
+                                                            <label>
+                                                            <img style="margin-top:-5px;" src="img/templateicons/Select-nodes---deployment.png">
+                                                            Select Nodes <span class="colorRed">*</span>
+                                                            </label>
+                                                            <ul id="selectedNodesPuppetTask" class="deploymentNodeList selectedNodesTaskCSS">
+                                                            </ul>
+                                                         </div>
+                                                      </div>
+                                                   </div>
+                                                </td>
+                                             </tr>
+                                          </tbody>
+                                       </table>
+                                       <!--table 2 ends -->
                                     </div>
                                     <!--div for description for task type-->
                                     <div class="col-lg-12 col-md-12 margintop15">
@@ -626,3 +812,31 @@
 </div>
 </div>
 <script src="js/dev/applicationUpgradeAssignTask.js"></script>
+<script type="text/javascript">
+$('#jobNodeDetailsId').trigger('click');
+$(".jobTypeSelectorRadioBtn").click(function() {
+  var val = $(this).attr('data-jobdetails');
+  $('.jobDetailsClass').hide();
+  $('#' + val).show();
+});
+
+var urlParams = {};
+(window.onpopstate = function() {
+  var url = window.location.href;
+  var indexOfQues = url.lastIndexOf("?");
+  if (indexOfQues != -1) {
+    var sub = url.substring(indexOfQues + 1);
+    console.log(sub);
+    var params = sub.split('&')
+    for (var i = 0; i < params.length; i++) {
+      var paramParts = params[i].split('=');
+      urlParams[paramParts[0]] = paramParts[1];
+    }
+  }
+
+})();
+var projectId = urlParams['projid'];
+var envId = urlParams['envid'];
+var orgId = urlParams['org'];
+var bgId = urlParams['bg'];
+</script>

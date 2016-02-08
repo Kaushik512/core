@@ -339,6 +339,4 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
 		}); // end haspermission
 	});
-
-
 };

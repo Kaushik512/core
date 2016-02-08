@@ -1,7 +1,7 @@
 "use strict"
 var fs = require('fs')
 var crontab = require('node-crontab');
-var appConfig = require('_pr/config');
+//var appConfig = require('_pr/config');
 var logger = require('_pr/logger')(module);
 
 
@@ -21,13 +21,13 @@ for (let i = 0; i < jobFiles.length; i++) {
 	}
 }
 
-var timeDelay = appConfig.cronjobTimeDelay || "*/3 * * * *";
+//var timeDelay = appConfig.cronjobTimeDelay || "* * * * * *";
 
 
 
 module.exports.start = function start() {
-	logger.info('starting cron job with delay ==> '+timeDelay);
+	//logger.info('starting cron job with delay ==> '+timeDelay);
 	for (let i = 0; i < jobs.length; i++) {
-		var jobId = crontab.scheduleJob(timeDelay, jobs[i]);
+		var jobId = crontab.scheduleJob("*/2 * * * *", jobs[i]);
 	}
 }
