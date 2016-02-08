@@ -2929,7 +2929,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                           var json = JSON.parse(body);
                           var  access = json.accessKey;
                           var secret = json.secretKey;
-                          console.log(access,secret);
                  
                           cost.getcost(access,secret,function(err,cost){
                                            res.send(cost);

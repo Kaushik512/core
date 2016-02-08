@@ -45,7 +45,7 @@ var callservice = function()
     json = {"costOfMonth":costOfMonth,"costOfDay":Number(costOfDay.toFixed(2)),"costOfYesterday":costOfYesterday,"elasticCloudCompute" : ec2,"simpleStorageService" : s3, "elasticIP" : ip, "ebsVolumes" : ebs, "route53" : r53};
     next(null,json);
     clearInterval(vii);
-    },10*1000);
+    },12*1000);
 
   }
 }
