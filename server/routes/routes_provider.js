@@ -1316,28 +1316,10 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var azureSubscriptionId = req.body.azureSubscriptionId;
         var providerName = req.body.providerName;
         var providerId = req.params.providerId;
-
-        logger.debug("Pem file name:", req.files.azurepem.originalFilename);
-        logger.debug("Key file name:", req.files.azurekey.originalFilename);
-
-        var pemFileName = req.files.azurepem.originalFilename;
-        var keyFileName = req.files.azurekey.originalFilename;
-
         var orgId = req.body.orgId;
 
         if (typeof azureSubscriptionId === 'undefined' || azureSubscriptionId.length === 0) {
             res.status(400).send("Please Enter Subscription Id.");
-            return;
-        }
-
-        if (typeof pemFileName === 'undefined' || orgId.length === 0) {
-            res.status(400);
-            res.send("Please upload azure subscription pem file");
-            return;
-        }
-        if (typeof keyFileName === 'undefined' || orgId.length === 0) {
-            res.status(400);
-            res.send("Please upload azure subscription key file");
             return;
         }
 
@@ -1350,8 +1332,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             id: 9,
             azureSubscriptionId: azureSubscriptionId,
             providerName: providerName,
-            pemFileName: pemFileName,
-            keyFileName: keyFileName,
             orgId: orgId
         };
 
@@ -1393,8 +1373,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                     id: 9,
                                     subscriptionId: azureSubscriptionId,
                                     providerName: providerData.providerName,
-                                    pemFileName: pemFileName,
-                                    keyFileName: keyFileName,
                                     orgId: orgs[0].rowid,
                                     orgName: orgs[0].orgname
                                 };
@@ -1488,6 +1466,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         var providerName = req.body.providerName;
         var providerType = req.body.providerType;
         var openstackkeyname = req.body.openstackkeyname;
+        var pemFileName = req.files.openstackinstancepem.originalFilename;
         var orgId = req.body.orgId;
 
         var serviceendpoints = {
@@ -1516,6 +1495,11 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
         }
         if (typeof providerName === 'undefined' || providerName.length === 0) {
             res.status(400).send("Please Enter Name.");
+            return;
+        }
+        if (typeof pemFileName === 'undefined' || orgId.length === 0) {
+            res.status(400);
+            res.send("Please upload openstack subscription pem file");
             return;
         }
         if (typeof providerType === 'undefined' || providerType.length === 0) {
@@ -1577,6 +1561,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                         projectname: openstackprojectname,
                         serviceendpoints: serviceendpoints,
                         keyname: openstackkeyname,
+                        pemFileName: pemFileName,
                         orgId: orgId
                     };
                     openstackProvider.getopenstackProviderByName(providerData.providerName, providerData.orgId, function(err, prov) {
@@ -1611,6 +1596,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
                                         providerType: provider.providerType,
                                         orgId: orgs[0].rowid,
                                         orgName: orgs[0].orgname,
+                                        pemFileName: pemFileName,
                                         tenantid: openstacktenantid,
                                         __v: provider.__v,
 

@@ -371,7 +371,6 @@ $(document).ready(function() {
 
         //to get the name of the chef server that is associated with the organisation...
         $.get('/organizations/' + urlParams.org + '/chefserver', function(data) {
-            console.log('chef logs ==> ', data);
             if (data && data.configname) {
                 $('table').find('.chefServerName').html('Chef Server Details for -&nbsp;' + data.configname);
             }
@@ -384,7 +383,6 @@ $(document).ready(function() {
 
         $.get('/jenkins/', function(jenkinsList) {
             jenkinsList = JSON.parse(jenkinsList);
-            console.log("ffffffffffffffffff" + jenkinsList);
             var $jenkinsServerListDropdown = $('#jenkinsServerList');
             for (var i = 0; i < jenkinsList.length; i++) {
                 var keys = Object.keys(jenkinsList[i]);
@@ -450,7 +448,7 @@ $(document).ready(function() {
                 $spinnerJobForUrl.removeClass('hidden');
                 for (var i = 0; i < jenkinsList.length; i++) {
                     var keys = Object.keys(jenkinsList[i]);
-                   
+
                     jenkinsServerId = jenkinsList[i][keys[0]];
                 }
                 //alert(JSON.stringify($option));
@@ -748,7 +746,7 @@ $(document).ready(function() {
                 var $this = $(this);
                 assignTasks.push($this.attr('id'));
             });
-            if(!$orderoptions.length){
+            if (!$orderoptions.length) {
                 bootbox.alert({
                     message: 'Please Select a Task',
                     title: 'Error'
@@ -1316,7 +1314,7 @@ $(document).ready(function() {
                     var $tdAttribEditor = $('<td/>').append($attributeInput);
                     var desc = attributesList[i].attributes[attributesNamesList[j]]['description'];
                     if (desc) {
-                        var $tooltipAnchor = $('<a href="#" data-toggle="tooltip" title="' + desc + '!" style="margin-left:15px"><i class="fa fa-info"></i></a>');
+                        var $tooltipAnchor = $('<a data-toggle="tooltip" title="' + desc + '!" style="margin-left:15px"><img src="img/help.png"/></a>');
                         $tooltipAnchor.tooltip();
                         $tdAttribEditor.append($tooltipAnchor);
                     }
@@ -1357,7 +1355,7 @@ $(document).ready(function() {
                             'data-attributeKey': keyString,
                             'data-attributeValue': obj[keys[i]],
                             'data-attributeName': attributes[j].name
-                        }).data('jsonObj', attributes[j].jsonObj);;
+                        }).data('jsonObj', attributes[j].jsonObj).css('word-break','break-all');
 
                         var passwordField = false;
                         var passwordField = false;

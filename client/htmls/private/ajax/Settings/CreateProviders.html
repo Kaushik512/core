@@ -531,8 +531,7 @@ function setValuesopenstack(data) {
     $('#openstackendpointimage').val(data.serviceendpoints.image);
     bindChange_importPemFile();
     var $pemFileLocation = $('.foropenstack');
-    $pemFileLocation.find('input.fileOPPem').val(data.pemfile);
-    alert(data.pemfile);
+    $pemFileLocation.find('input.fileOPPem').val(data.pemFileName);
     $('#openstackendpointnetwork').val(data.serviceendpoints.network);
 
 
@@ -679,10 +678,12 @@ $(document).ready(function() {
         $('#openstackinstancepem').attr('cat-validation-openstack','required');
     } else {
         $('.widget-header').find('h4.widget-margin').html('Edit Provider');
-        //$('#providertype').attr('disabled','disabled');
         $('#openstackinstancepem').removeAttr('cat-validation-openstack','required');
         $('#myForm54').attr('action', '/aws/providers/' + UtilityMethods.getIdFromURL() + '/update');
         $('#providertype').attr('disabled','disabled');
+        $('#openstackinstancepem').attr('disabled','disabled');
+        $('#azurepem').attr('disabled','disabled');
+        $('#azurekey').attr('disabled','disabled');
         $.ajax({
             method: "GET",
             url: "/aws/providers/" + UtilityMethods.getIdFromURL(),

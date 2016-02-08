@@ -39,7 +39,7 @@
                                        </div>
                                        <div class="col-lg-6 col-md-6" style="margin-top:25px">
                                           <label for="">Password <span class="control-label redSpan">&nbsp;*</span></label>
-                                          <input name="ctl00$MainContent$orgname" value="" id="jenkinspassword" class="form-control" type="password"  cdata="catalyst" cat-validation="required" value="*********">
+                                          <input name="ctl00$MainContent$orgname" value="" id="jenkinspassword" class="form-control" type="text"  cdata="catalyst" cat-validation="required" value="*********">
                                        </div>
                                     </div>
                                     <!-- end widget content -->
@@ -139,6 +139,13 @@ inLineReady();
 
  $(document).ready(function() {
    $('select').select2();
+   var isEditActivate = location.href.toString().split('?')[1] === "new" ? false : true;
+
+    if (isEditActivate) {
+      $('#orgname').attr('disabled',true);
+      $('input#jenkinspassword').removeAttr('type');
+      $('input#jenkinspassword').attr('type', 'password');
+    }
    $('#myForm50').submit(function() {
      $(this).validate();
 

@@ -1,15 +1,20 @@
 <style>
 #selectOrgName{
-	float:right;
-	width:25%;
+	width:56%;
+}
+.spanName{
+	width:28%;
 }
 </style>
 <div class="row">
    <article class="col-sm-12 col-md-12 col-lg-12">
 	  <div class="widget-body font-size-12">
-          <select id="selectOrgName" class="form-control">
-          	<!-- <option>Choose Org</option> -->
+	  	<span class="spanName pull-right">
+	  	<label><b>Choose Organisation</b>:</label>
+          <select id="selectOrgName" class="form-controlSelect">
           </select>
+        </span>
+        <input type="hidden" id="orgIDCheck"/>
 		 <ul id="myTab3" class="nav nav-tabs tabs-pull-left">
 			<li class="pull-left active">
 			   <a href="#l2" id="tabheader" data-toggle="tab">Choose Template Type</a>

@@ -58,7 +58,7 @@
                                        <!--for password-->
                                        <div class="col-lg-6 col-md-6" id="passwordShow" style="margin-top:25px">
                                           <label for="name">Password:<span class="control-label redSpan">&nbsp;*</span></label>
-                                          <input value="" id="puppetpassword" class="form-control" type="password"  cdata="catalyst" cat-validation="required">
+                                          <input value="" id="puppetpassword" class="form-control" type="text"  cdata="catalyst" cat-validation="required">
                                        </div>
                                        <!--password ends here-->
                                     </div>
@@ -172,21 +172,11 @@
 
      $("#puppetservername").focus();
      var isEditActivate = location.href.toString().split('?')[1] === "new" ? false : true;
-
      if(isEditActivate){
-        var rowid = location.href.toString().split('?')[1];
-             
-        $.get('../d4dMasters/readmasterjsonrecord/25/' + rowid, function(data){
-            $('#puppetpassword').val(data.puppetpassword).attr('type','password');
-            $('#puppetpassword').attr('disabled','disabled');
-            if(data.userpemfile_filename){
-              var authType = $('#authType').val();
-              //$('#authType').trigger('change','pemfile');
-              $('#passwordShow').hide();
-              $('#frmconfigmanagement').show();
-            }
-        })
+      $('input#puppetpassword').removeAttr('type');
+      $('input#puppetpassword').attr('type', 'password');
      }
+     
      $('#myForm25').submit(function() {
 
        if (isEditActivate) {

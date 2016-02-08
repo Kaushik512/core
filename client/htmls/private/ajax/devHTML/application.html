@@ -593,6 +593,42 @@ $(document).ready(function() {
 		$('.createTaskLinkUpgrade').removeAttr('disabled');
 	}
 
+	//for breadcrumb
+	$('.Applications').click(function(e) {
+
+		//alert("Hello");
+		var getbreadcrumbul = $('#ribbon').find('.breadcrumb').find('li:lt(5)');
+		var getbreadcrumbullength = getbreadcrumbul.length;
+		var DummyBreadCrumb;
+		if (getbreadcrumbullength > 0) {
+			//alert(getbreadcrumbullength);
+			for (var counter = 0; counter < getbreadcrumbullength; counter++) {
+				var getbreadcrumbulname = getbreadcrumbul[counter].innerHTML;
+				//alert(getbreadcrumbulname);
+				if (DummyBreadCrumb != null && DummyBreadCrumb != "" && DummyBreadCrumb != "undefined") {
+					DummyBreadCrumb += '>' + getbreadcrumbulname;
+				} else {
+					DummyBreadCrumb = getbreadcrumbulname;
+				}
+			}
+			DummyBreadCrumb += '>' + 'Applications';
+
+			if (DummyBreadCrumb != null && DummyBreadCrumb != 'undefined') {
+				localStorage.removeItem("breadcrumb");
+				splitBread = DummyBreadCrumb.split('>');
+				if (splitBread.length > 0) {
+					$('#ribbon').find('.breadcrumb').find('li').detach();
+					for (var arraycount = 0; arraycount < splitBread.length; arraycount++) {
+						var liNew = document.createElement('li');
+						liNew.innerHTML = splitBread[arraycount];
+						$('#ribbon').find('.breadcrumb').append(liNew);
+					}
+				}
+			}
+		}
+
+	});
+
 	function newAppDeployClickHandler(e) {
 		$('#containerIdDiv').removeAttr('disabled');
 		$('#upgradeValue').val("");

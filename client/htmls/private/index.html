@@ -188,9 +188,6 @@
                 <a href="#ajax/Aws-Production.html">DESIGN</a>
             </li>
             <li>
-                <!-- <a href="#ajax/Dashboard.html"><span>TRACK</span></a> -->
-            </li>
-            <li>
                 <a href="#ajax/Settings/OrgList.html"><span>SETTINGS</span></a>
             </li>
         </ul>
@@ -654,6 +651,7 @@ function setleftnavigation(toplink, breadcrumbHeader) {
         $('#trackShow').hide();
 
     } else if (TabID === "designNew") {
+        $('#selectOrgName').trigger('click');
         $('#Workspace1').hide();
         $('#Settings_nav').hide();
         $('#trackShow').hide();
@@ -760,6 +758,24 @@ var SettingTreeJson = [{
             "selectable": true,
             "icon": "fa fa-lg fa-fw fa-tags"
 
+        }, {
+                "name": "organizations",
+                "text": "Chef Server",
+                "borderColor": "#000",
+                "href": "#ajax/Settings/ConfigManagementList.html",
+                "selectable": true,
+                "icon": "fa fa-lg fa-fw fa-random"
+
+        },  {
+                "name": "organizations",
+                "text": "Environments",
+                "borderColor": "#000",
+                "href": "#ajax/Settings/EnvironmentConceptList.html",
+                "selectable": true,
+                "icon": "fa fa-lg fa-fw fa-tint",
+                "parent": "devops",
+                "nodetype": "EnvironmentConceptList"
+
         }],
         "borderColor": "#000",
         "selectable": false,
@@ -772,14 +788,6 @@ var SettingTreeJson = [{
         "icon": "fa fa-lg fa-fw fa-qrcode",
         "nodetype": "devops",
         "nodes": [{
-                "name": "organizations",
-                "text": "Chef Server",
-                "borderColor": "#000",
-                "href": "#ajax/Settings/ConfigManagementList.html",
-                "selectable": true,
-                "icon": "fa fa-lg fa-fw fa-random"
-
-            }, {
                 "name": "organizations",
                 "text": "Puppet Server",
                 "borderColor": "#000",
@@ -794,16 +802,6 @@ var SettingTreeJson = [{
                 "href": "#ajax/Settings/NexusServerList.html",
                 "selectable": true,
                 "icon": "fa fa-lg fa-fw fa-random"
-
-            }, {
-                "name": "organizations",
-                "text": "Environments",
-                "borderColor": "#000",
-                "href": "#ajax/Settings/EnvironmentConceptList.html",
-                "selectable": true,
-                "icon": "fa fa-lg fa-fw fa-tint",
-                "parent": "devops",
-                "nodetype": "EnvironmentConceptList"
 
             }, {
                 "name": "organizations",
@@ -921,13 +919,6 @@ var SettingTreeJson = [{
         "text": "Track Setup",
         "nodes": [{
             "name": "templates",
-            "text": "Dashboard Types",
-            "borderColor": "#000",
-            "href": "#ajax/Settings/trackType.html",
-            "selectable": true,
-            "icon": "fa fa-lg fa-fw fa-files-o"
-        },{
-            "name": "templates",
             "text": "Dashboards",
             "borderColor": "#000",
             "href": "#ajax/Settings/DashboardSettings.html",
@@ -935,7 +926,7 @@ var SettingTreeJson = [{
             "icon": "fa fa-lg fa-fw fa-files-o"
         },{
             "name": "templates",
-            "text": "Dashboard landing",
+            "text": "Dashboard Landing",
             "borderColor": "#000",
             "href": "#ajax/Settings/DashboardLandings.html",
             "selectable": true,

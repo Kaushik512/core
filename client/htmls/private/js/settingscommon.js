@@ -3122,7 +3122,7 @@ function isFormValidAzure(formid, option) {
 				case "required":
 					if (currCtrl.val() == '') {
 						isValid = false;
-						errormessageforInput(currCtrl.attr('id'), "Required");
+						errormessageforInput(currCtrl.attr('id'), "&nbsp;<i>Required.</i>");
 						currCtrl.focus();
 					}
 					break;
@@ -3206,7 +3206,7 @@ function isFormValidOpenStack(formid, option) {
 				case "required":
 					if (currCtrl.val() == '') {
 						isValid = false;
-						errormessageforInput(currCtrl.attr('id'), "Required");
+						errormessageforInput(currCtrl.attr('id'), "&nbsp;<i>Required.</i>");
 						currCtrl.focus();
 					}
 					break;
@@ -3230,7 +3230,7 @@ function isFormValidOpenStack(formid, option) {
 					//regex from stackoverflow(check-if-url-is-valid-or-not)
 					if (/(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(str) == false) {
 						isValid = false;
-						errormessageforInput(currCtrl.attr('id'), "Please enter a valid Url");
+						errormessageforInput(currCtrl.attr('id'), "&nbsp;<i>Please enter a valid URL.<i>");
 						currCtrl.focus();
 					}
 					break;
@@ -3332,7 +3332,7 @@ function isFormValid(formid) {
 				case "required":
 					if (currCtrl.val() == '') {
 						isValid = false;
-						errormessageforInput(currCtrl.attr('id'), "Required");
+						errormessageforInput(currCtrl.attr('id'), "&nbsp;<i>Required.</i>");
 						currCtrl.focus();
 					}
 					break;
@@ -3356,7 +3356,7 @@ function isFormValid(formid) {
 					//regex from stackoverflow(check-if-url-is-valid-or-not)
 					if (/(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(str) == false) {
 						isValid = false;
-						errormessageforInput(currCtrl.attr('id'), "Please enter a valid Url");
+						errormessageforInput(currCtrl.attr('id'), "&nbsp;<i>Please enter a valid URL.<i>");
 						currCtrl.focus();
 					}
 					break;

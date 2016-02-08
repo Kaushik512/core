@@ -33,7 +33,7 @@
                                        <div class="col-lg-6 col-md-6 appNameLabel">
                                           <label for="name">Password:<span class="control-label redSpan">&nbsp;*</span></label>
                                           <div class="input-groups">
-                                             <input autocomplete="false" name="nexuspassword" id="nexuspassword" class="required form-control" type="text" autocomplete="nope"  cdata="catalyst"  cat-validation="required,max15">
+                                             <input name="nexuspassword" id="nexuspassword" class="required form-control" type="text" cdata="catalyst"  cat-validation="required,max15">
                                           </div>
                                        </div>
                                        <div class="col-lg-6 col-md-6 appNameLabel">
@@ -44,10 +44,12 @@
                                        </div>
                                        <div class="col-lg-6 col-md-6 appNameLabel">
                                           <label for="name">Organization:<span class="control-label redSpan">&nbsp;*</span></label>
-                                          <select id="orgname" unique="true" class="required chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst"  cat-validation="required">
+                                          <div class="input-groups">
+                                          <select id="orgname" name="orgname" unique="true" class="required chooseOrganization width-100" sourcepath="1" datapath="masterjson.rows.row" valuelinkfield="costcode" style="vertical-align:central"  cdata="catalyst">
                                              <option value="">Select an Organization</option>
                                           </select>
-                                       </div>
+                                        </div>
+                                     </div>
                                        <div class="col-lg-6 col-md-6 appNameLabel">
                                           <label for="name">Nexus Group ID:<span class="control-label redSpan">&nbsp;*</span></label>
                                           <div class="input-groups">
@@ -146,7 +148,6 @@ inLineReady();
 $(document).ready(function() {
   $("#nexusservername").focus();
   var isEditActivate = location.href.toString().split('?')[1] === "new" ? false : true;
-
   if (isEditActivate) {
     $('#orgname').attr('disabled', 'disabled');    
     $('input#nexuspassword').removeAttr('type');
@@ -210,9 +211,6 @@ $(document).ready(function() {
       }
     }
   });
-  /*$('a.addDashboardItem[type="reset"]').on('click', function(e) {
-    validator.resetForm();
-  });*/
   $(document).on('change', '.select2-offscreen', function() {
     if (!$.isEmptyObject(validator.submitted)) {
       validator.form();

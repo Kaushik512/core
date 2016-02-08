@@ -53,7 +53,6 @@ $('#saveRunlist').click(function(e) {
 
 function updatecompositedockertableemptymessage() {
 	if ($('#compositedockertable').find('tr').length <= 1) {
-		//no rows found add empty message
 		$('#compositedockertable').append('<tr id="dockerimageemptytr"><td colspan="6" align="center">No images added</td></tr>');
 	}
 }
@@ -686,8 +685,8 @@ function getSubnet() {
 }
 
 function resetForm() {
-	$('input').val('');
-	$('select').val('');
+	//$('input').val('');
+	//$('select').val('');
 	$('[multiselect]').empty();
 }
 $(document).ready(function() {
@@ -754,6 +753,7 @@ $(document).ready(function() {
 			data.sort(sortbyid);
 
 			var selectCheck = $('#selectOrgName').val();
+			$('#orgIDCheck').val(selectCheck);
 			for (var i = 0; i < rowLength; i += 1) {
 				$("#templateContent").empty();
 				if (data[i]['templatetype'] && data[i]['templatetype'] == 'arm') continue;
@@ -949,11 +949,12 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 			var $selectedItem = $('.role-Selected');
 			// alert('in ' + $selectedItem.length);
 			if (!$selectedItem.length) {
-				alert('please choose a blueprint design');
+				bootbox.alert('please choose a blueprint design');
 				return false;
 			}
 			//Selection of Orgname from localstorage 
-			$('#orgnameSelect').val(localStorage.getItem('selectedOrgId'));
+			$('#orgnameSelect').val($('#orgIDCheck').val());
+			$('#orgnameSelect').attr('disabled', true);
 			console.log('role-Selected before ==> ', $('#tab2 .role-Selected').length);
 			//console.log("======================= "+$('.productdiv2.role-Selected').first().attr('templatetype'));
 			if ($('.productdiv2.role-Selected').length > 0) {
@@ -1098,7 +1099,7 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 											$inputContainer.find('.cftParameterLabel').append(keys[i]);
 											if (parameter.Description) {
 												var $desc = $('<span></span>').attr('title', parameter.Description).append(
-													'&nbsp;&nbsp;<i class="fa fa-question"/>');
+													'&nbsp;&nbsp;<img src="img/help.png"/>');
 												$inputContainer.find('.cftParameterLabelContainer').append($desc);
 											}
 											$panelBody.append($inputContainer);
@@ -1605,14 +1606,14 @@ $.ajax({
 	url: "../organizations/getTreeForbtv",
 	success: function(data) {
 		console.log(data);
+		$('#selectOrgName').trigger('change');
 		data = JSON.parse(JSON.stringify(data));
 		var $orgListInput = $('#orgnameSelect');
 		$bgList = $('#bgListInput');
 		var $envList = $('#envList');
 		for (var i = 0; i < data.length; i++) {
-			/*var str = '<option>' + data[i].name + '</option>';
-			$('#selectOrgName').val(data[i].rowid).append(str);*/
 			$('#selectOrgName').append($('<option></option>').val(data[i].rowid).html(data[i].name));
+			var selectOrgID = $('#orgIDCheck').val();
 			$orgListInput.append($('<option></option>').val(data[i].rowid).html(data[i].name).data('bglist', data[i].nodes).data('project', data[i].nodes[0].nodes).data('envList', data[i]
 				.nodes[0].nodes));
 		}
@@ -2108,6 +2109,9 @@ function removeSelectedBlueprint() {
 			}
 		});
 	} else {
-		alert('Please select a blueprint to remove.');
+		bootbox.alert({
+			message: 'Please select a blueprint to remove.',
+			title: 'Warning'
+		});
 	}
 }
