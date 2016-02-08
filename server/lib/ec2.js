@@ -18,7 +18,6 @@ limitations under the License.
 var aws = require('aws-sdk');
 var logger = require('_pr/logger')(module);
 
-
 if (process.env.http_proxy) {
     aws.config.update({
         httpOptions: {
@@ -392,8 +391,7 @@ var EC2 = function(awsSettings) {
             }
         });
     };
-
-
+   
 }
 
 module.exports = EC2;

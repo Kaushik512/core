@@ -19,6 +19,7 @@ limitations under the License.
 
 var logger = require('_pr/logger')(module);
 var EC2 = require('../lib/ec2.js');
+var cost = require('../lib/dashboard.js');
 var d4dModelNew = require('../model/d4dmasters/d4dmastersmodelnew.js');
 var AWSProvider = require('../model/classes/masters/cloudprovider/awsCloudProvider.js');
 var openstackProvider = require('../model/classes/masters/cloudprovider/openstackCloudProvider.js');
@@ -33,6 +34,7 @@ var masterUtil = require('../lib/utils/masterUtil.js');
 var usersDao = require('../model/users.js');
 var configmgmtDao = require('../model/d4dmasters/configmgmt.js');
 var Cryptography = require('../lib/utils/cryptography');
+var rc = require('node-rest-client').Client;
 var appConfig = require('_pr/config');
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
     // Return AWS Provider respect to id.
@@ -2916,4 +2918,24 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
             res.send(nodeList);
         });
     });
+   
+      app.get('/aws/dashboard/providers/:id',function(req,res){
+              var client = new rc();
+              var id = req.params.id;
+               console.log(id);
+              client.get('http://localhost:3001/aws/providers/'+id,
+                       function(body,response)
+                       {
+                          var json = JSON.parse(body);
+                          var  access = json.accessKey;
+                          var secret = json.secretKey;
+                 
+                          cost.getcost(access,secret,function(err,cost){
+                                           res.send(cost);
+                                        });
+                              });
+                });
+
+
+    
 }
