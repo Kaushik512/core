@@ -481,6 +481,7 @@ function CreateTableFromJson__(formID, idFieldName, createFileName) {
 
 function CreateTableFromJson(formID, idFieldName, createFileName) {
 
+
 	//To Do SAve...
 	// var d4djson = $.parseJSON(d4ddata);
 	// alert(d4ddata.sections.section[0].name);
@@ -602,7 +603,7 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
 		if (idFieldValue) {
 			if (imageTD) {
 				if (imageTD.length > 0) {
-					var imgpath = 'img/logo.png';
+					var imgpath = '';
 					if (imageTD.html().indexOf('<img') >= 0 || imageTD.html().length === 0) {
 						imageTD.html(''); //fix for image tag gettnig embedded. - Vinod
 						imageTD.append($('<img src="' + imgpath + '" style="height:28px;width:auto"/>'));
@@ -611,28 +612,39 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
 						imgpath = '/d4dMasters/image/' + idFieldValue + '__' + imageTD.attr('datafieldoriginal') + '__' + imageTD.html();
 					}
 
-					if (item.id === "16") {
-						switch (item.templatetypename) {
-							case "AppFactory":
-								imgpath = '/d4dMasters/image/16ae9c94-19f6-485a-8c17-9af7a0f5f23d__designtemplateicon__Appfactory.png';
-								break;
-							case "DevOpsRoles":
-								imgpath = '/d4dMasters/image/9d14d362-493e-4d62-b029-a6761610b017__designtemplateicon__DevopsRoles.png';
-								break;
-							case "Docker":
-								imgpath = '/d4dMasters/image/b02de7dd-6101-4f0e-a95e-68d74cec86c0__designtemplateicon__Docker.png';
-								break;
-							case "Desktop":
-								imgpath = '/d4dMasters/image/02fcfdaf-0d35-42c7-aef4-ac0019911e21__designtemplateicon__Desktop Provisining.png';
-								break;
-							case "Environment":
-								imgpath = '/d4dMasters/image/71e62952-b464-4980-b76b-482a129f5627__designtemplateicon__Environment.png';
-								break;
-							case "CloudFormation":
-								imgpath = '/d4dMasters/image/4fdda07b-c1bd-4bad-b1f4-aca3a3d7ebd9__designtemplateicon__Cloudformation.png';
-								break;
-						}
-					}
+					if (item.id === "16" || item.id ==="17") {
+                       
+                        switch (item.templatetypename) {
+
+                            case "AppFactory":
+                                imgpath = '/d4dMasters/image/16ae9c94-19f6-485a-8c17-9af7a0f5f23d__designtemplateicon__Appfactory.png';
+                                break;
+                            case "ARMTemplate":
+                                imgpath = '/d4dMasters/image/56yhf52e-932f-4190-aafb-79bc04d6a88h__designtemplateicon__Cloudformation.png';
+                                break;
+                            case "OSImages":
+                                imgpath = '/d4dMasters/image/bf3ea280-b2cc-4020-b6a4-c6cbcfb5bd0f__designtemplateicon__Desktop Provisining.png';
+                                break;
+                            case "SoftwareStack":
+                                imgpath = '/d4dMasters/image/be808abb-932f-4190-aafb-79bc04d6a5ee__designtemplateicon__Appfactory.png';
+                                break;
+                            case "DevOpsRoles":
+                                imgpath = '/d4dMasters/image/9d14d362-493e-4d62-b029-a6761610b017__designtemplateicon__DevopsRoles.png';
+                                break;
+                            case "Docker":
+                                imgpath = '/d4dMasters/image/b02de7dd-6101-4f0e-a95e-68d74cec86c0__designtemplateicon__Docker.png';
+                                break;
+                            case "Desktop":
+                                imgpath = '/d4dMasters/image/02fcfdaf-0d35-42c7-aef4-ac0019911e21__designtemplateicon__Desktop Provisining.png';
+                                break;
+                            case "Environment":
+                                imgpath = '/d4dMasters/image/71e62952-b464-4980-b76b-482a129f5627__designtemplateicon__Environment.png';
+                                break;
+                            case "CloudFormation":
+                                imgpath = '/d4dMasters/image/4fdda07b-c1bd-4bad-b1f4-aca3a3d7ebd9__designtemplateicon__Cloudformation.png';
+                                break;
+                        }
+                    }
 
 					imageTD.html('');
 					imageTD.append($('<img src="' + imgpath + '" style="height:28px;width:auto"/>'));
@@ -862,7 +874,6 @@ function CreateTableFromJson(formID, idFieldName, createFileName) {
 	setPopOverForTableFields();
 
 	$(".savespinner").hide();
-
 }
 // function CreateTableFromJson(formID, idFieldName, createFileName) {
 //     CreateTableFromJsonNew(formID, idFieldName, createFileName);
@@ -2679,7 +2690,10 @@ function addToTargetList(inputctrl, inputctrl1) {
 	if (inputctrl && inputctrl1) {
 		if (inputctrl.val() == '' || inputctrl1.val() == '') //validating if both the controls have values
 		{
-			alert('Ensure you have a title and valid path before adding.');
+			bootbox.alert({
+                message:'Ensure you have a Valid Docker Path before adding',
+                title:'Warning'
+            });
 			inputctrl.focus();
 			return;
 		}
@@ -3108,7 +3122,7 @@ function isFormValidAzure(formid, option) {
 				case "required":
 					if (currCtrl.val() == '') {
 						isValid = false;
-						errormessageforInput(currCtrl.attr('id'), "Required");
+						errormessageforInput(currCtrl.attr('id'), "&nbsp;<i>Required.</i>");
 						currCtrl.focus();
 					}
 					break;
@@ -3192,7 +3206,7 @@ function isFormValidOpenStack(formid, option) {
 				case "required":
 					if (currCtrl.val() == '') {
 						isValid = false;
-						errormessageforInput(currCtrl.attr('id'), "Required");
+						errormessageforInput(currCtrl.attr('id'), "&nbsp;<i>Required.</i>");
 						currCtrl.focus();
 					}
 					break;
@@ -3216,7 +3230,7 @@ function isFormValidOpenStack(formid, option) {
 					//regex from stackoverflow(check-if-url-is-valid-or-not)
 					if (/(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(str) == false) {
 						isValid = false;
-						errormessageforInput(currCtrl.attr('id'), "Please enter a valid Url");
+						errormessageforInput(currCtrl.attr('id'), "&nbsp;<i>Please enter a valid URL.<i>");
 						currCtrl.focus();
 					}
 					break;
@@ -3318,7 +3332,7 @@ function isFormValid(formid) {
 				case "required":
 					if (currCtrl.val() == '') {
 						isValid = false;
-						errormessageforInput(currCtrl.attr('id'), "Required");
+						errormessageforInput(currCtrl.attr('id'), "&nbsp;<i>Required.</i>");
 						currCtrl.focus();
 					}
 					break;
@@ -3342,7 +3356,7 @@ function isFormValid(formid) {
 					//regex from stackoverflow(check-if-url-is-valid-or-not)
 					if (/(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(str) == false) {
 						isValid = false;
-						errormessageforInput(currCtrl.attr('id'), "Please enter a valid Url");
+						errormessageforInput(currCtrl.attr('id'), "&nbsp;<i>Please enter a valid URL.<i>");
 						currCtrl.focus();
 					}
 					break;

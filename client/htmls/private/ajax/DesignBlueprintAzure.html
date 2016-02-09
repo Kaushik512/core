@@ -2531,17 +2531,17 @@
                 }
                 var $providerInput = $('<select id="cftProviderInput" class="form-control"></select>').append(providerStr);
                 var $providerInputContainer = $(
-                  '<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftParameterLabelContainer" for=""><span class="cftParameterLabel">Choose Provider</span></label><div class="input-groups"></div></div>');
+                  '<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftParameterLabelContainer" for=""><span class="cftParameterLabel">Choose Provider</span><span class="control-label redSpan">&nbsp;*</span></label><div class="input-groups"></div></div>');
                 $providerInputContainer.find('.input-groups').append($providerInput);
 
                 var $regionInput = $('<select id="cftRegionInput" class="form-control"></select>');
                 var $regionInputContainer = $(
-                  '<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftParameterLabelContainer" for=""><span class="cftParameterLabel required">Choose Region</span></label><div class="input-groups"></div></div>');
+                  '<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftParameterLabelContainer" for=""><span class="cftParameterLabel required">Choose Region</span><span class="control-label redSpan">&nbsp;*</span></label><div class="input-groups"></div></div>');
                 $regionInputContainer.find('.input-groups').append($regionInput);
 
                 var $resourceInput = $('<select id="cftResourceGroupInput" class="form-control"></select>');
                 var $resourceInputContainer = $(
-                  '<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftParameterLabelContainer" for=""><span class="cftParameterLabel required">Choose Resource Group</span></label><div class="input-groups"></div></div>'
+                  '<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftParameterLabelContainer" for=""><span class="cftParameterLabel required">Choose Resource Group</span><span class="control-label redSpan">&nbsp;*</span></label><div class="input-groups"></div></div>'
                 );
                 $resourceInputContainer.find('.input-groups').append($resourceInput);
 
@@ -2634,7 +2634,7 @@
                       $parameterInput.attr('data-cftParameter-name', keys[i]);
 
                       var $inputContainer = $(
-                        '<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftParameterLabelContainer" for=""><span class="cftParameterLabel"></span></label><div class="input-groups"></div></div>');
+                        '<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftParameterLabelContainer" for=""><span class="cftParameterLabel"></span><span class="control-label redSpan">&nbsp;*</span></label><div class="input-groups"></div></div>');
                       $inputContainer.find('.input-groups').append($parameterInput);
                       $inputContainer.find('.cftParameterLabel').append(keys[i]);
 
