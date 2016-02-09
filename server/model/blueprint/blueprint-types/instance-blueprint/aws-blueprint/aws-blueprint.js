@@ -155,6 +155,10 @@ AWSInstanceBlueprintSchema.methods.launch = function(launchParams, callback) {
                     if (!self.instanceCount) {
                         self.instanceCount = "1";
                     }
+                    var paramRunList = [];
+                    if(launchParams && launchParams.version){
+                        paramRunList = launchParams.version.runlist;
+                    }
                     ec2.launchInstance(anImage.imageIdentifier, self.instanceType, securityGroupIds, self.subnetId, 'D4D-' + launchParams.blueprintName, aKeyPair.keyPairName, self.instanceCount, function(err, instanceDataAll) {
                         if (err) {
                             logger.error("launchInstance Failed >> ", err);
@@ -166,7 +170,6 @@ AWSInstanceBlueprintSchema.methods.launch = function(launchParams, callback) {
 
 
                         var newinstanceIDs = [];
-
                         function addinstancewrapper(instanceData, instancesLength) {
                             logger.debug('Entered addinstancewrapper ++++++' + instancesLength);
                             var instance = {
@@ -179,7 +182,7 @@ AWSInstanceBlueprintSchema.methods.launch = function(launchParams, callback) {
                                 providerType: launchParams.cloudProviderType,
                                 keyPairId: self.keyPairId,
                                 chefNodeName: instanceData.InstanceId,
-                                runlist: launchParams.version.runlist,
+                                runlist: paramRunList,
                                 platformId: instanceData.InstanceId,
                                 appUrls: launchParams.appUrls,
                                 instanceIP: instanceData.PublicIpAddress || instanceData.PrivateIpAddress,

@@ -233,6 +233,10 @@ azureInstanceBlueprintSchema.methods.launch = function(launchParams, callback) {
                                     username: launchparamsazure.username,
                                     password: launchparamsazure.password
                                 };
+                                var paramRunList = [];
+                                if (launchParams && launchParams.version) {
+                                    paramRunList = launchParams.version.runlist;
+                                }
 
                                 credentialcryptography.encryptCredential(credentials, function(err, encryptedCredentials) {
                                     if (err) {
@@ -258,7 +262,7 @@ azureInstanceBlueprintSchema.methods.launch = function(launchParams, callback) {
                                         providerType: self.cloudProviderType,
                                         keyPairId: 'azure',
                                         chefNodeName: launchparamsazure.VMName,
-                                        runlist: launchParams.version.runlist,
+                                        runlist: paramRunList,
                                         platformId: launchparamsazure.VMName,
                                         appUrls: launchParams.appUrls,
                                         instanceIP: 'pending',
