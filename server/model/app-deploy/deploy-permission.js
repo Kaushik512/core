@@ -28,6 +28,7 @@ var Schema = mongoose.Schema;
 var DeployPermissionSchema = new Schema({
     projectId: String,
     envId: String,
+    version: String,
     isApproved: String
 });
 
@@ -36,7 +37,8 @@ var DeployPermissionSchema = new Schema({
 DeployPermissionSchema.statics.createNewOrUpdate = function(permission, callback) {
     this.find({
         projectId: permission.projectId,
-        envId: permission.envId
+        envId: permission.envId,
+        version: permission.version
     }, function(err, aPermission) {
         if (err) {
             logger.debug("Error fetching record.", err);
@@ -51,7 +53,8 @@ DeployPermissionSchema.statics.createNewOrUpdate = function(permission, callback
             var that = this;
             that.update({
                 projectId: permission.projectId,
-                envId: permission.envId
+                envId: permission.envId,
+                version: permission.version
             }, {
                 $set: setData
             }, {
@@ -77,10 +80,11 @@ DeployPermissionSchema.statics.createNewOrUpdate = function(permission, callback
 };
 
 // Get AppData by ip,project,env.
-DeployPermissionSchema.statics.getDeployPermissionByProjectAndEnv = function(projectId, envId, callback) {
+DeployPermissionSchema.statics.getDeployPermissionByProjectAndEnv = function(projectId, envId, version, callback) {
     this.find({
         projectId: projectId,
-        envId: envId
+        envId: envId,
+        version: version
     }, function(err, permission) {
         if (err) {
             logger.debug("Got error while fetching permission: ", err);

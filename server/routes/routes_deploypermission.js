@@ -25,8 +25,8 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.all('/deploy/permission/*', sessionVerificationFunc);
 
     // Get  DeployPermission by Project and Env
-    app.get('/deploy/permission/project/:projectId/env/:envId', function(req, res) {
-        DeployPermission.getDeployPermissionByProjectAndEnv(req.params.projectId, req.params.envId, function(err, permission) {
+    app.get('/deploy/permission/project/:projectId/env/:envId/version/:version', function(req, res) {
+        DeployPermission.getDeployPermissionByProjectAndEnv(req.params.projectId, req.params.envId, req.params.version, function(err, permission) {
             if (err) {
                 res.status(500).send(errorResponses.db.error);
                 return;

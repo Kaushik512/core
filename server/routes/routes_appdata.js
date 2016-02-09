@@ -24,7 +24,7 @@ var AppData = require('_pr/model/app-deploy/app-data');
 module.exports.setRoutes = function(app, sessionVerificationFunc) {
     app.all('/app/data/*', sessionVerificationFunc);
 
-    // Get  AppData by IP,Project and Env
+    // Get  AppData by Project and Env
     app.get('/app/data/project/:projectId/env/:envId', function(req, res) {
         AppData.getAppDataByProjectAndEnv(req.params.projectId, req.params.envId, function(err, appDatas) {
             if (err) {
