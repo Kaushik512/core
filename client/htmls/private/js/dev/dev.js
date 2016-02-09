@@ -2429,8 +2429,8 @@ function devCall() {
                             var $selecteditBtnContainer = $('<div style="position:absolute;padding-left:45px;bottom:11px;"></div>');
                             // if (data[i].blueprintConfig.infraManagerData && data[i].blueprintConfig.infraManagerData.versionsList) {
 
-                           // var $selectVerEdit = $('<a style="padding:0px 4px;margin-left:3px;border-radius:5px;visibility:hidden" class="bpEditBtn"><i class="ace-icon fa fa-pencil"></i></a>').addClass('btn btn-primary').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Edit');
-                           // var $selectVer = null;
+                            var $selectVerEdit = $('<a style="padding:0px 4px;margin-left:3px;border-radius:5px;visibility:hidden" class="bpEditBtn"><i class="ace-icon fa fa-pencil"></i></a>').addClass('btn btn-primary').attr('rel', 'tooltip').attr('data-placement', 'top').attr('data-original-title', 'Edit');
+                            var $selectVer = null;
                             var tagLabel = '';
                             //Docker Check
 
@@ -2439,7 +2439,7 @@ function devCall() {
                                 console.log("docker", data[i].blueprintConfig);
                                 //$selectVer = $('<select style="padding:1px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId', data[i]._id);
                                 $img.attr('src', 'img/galleryIcons/Docker.png');
-                                
+                                $selectVer = $('<select style="padding:1px;margin-right:5px;"></select>').addClass('dockerrepotagselect').attr('data-blueprintId', data[i]._id);
                                 $itemBody.attr('dockerreponame', data[i].blueprintConfig.dockerRepoName);
                                 $itemBody.attr('dockerrepotags', data[i].blueprintConfig.dockerRepoTags);
                                 $itemBody.attr('dockercontainerpaths', data[i].blueprintConfig.dockerContainerPaths);
@@ -2465,6 +2465,9 @@ function devCall() {
                                 //         $selectVer.append('<option value="' + dockerrepostags[k] + '">' + dockerrepostags[k] + '</option>');
                                 //     });
                                 // }
+
+                                $selectVer.hide();
+                                $selectVerEdit.hide();
                                 
                                 //Commented below to accomodate docker compose
                                 // tagLabel = '<span>Tags&nbsp;</span';
@@ -2553,7 +2556,7 @@ function devCall() {
                                 })(data[i]);
                                 //alert(JSON.stringify(data[i]));
                             } else if (data[i].templateType == "cft" || data[i].templateType == 'arm') {
-                                
+                                $selectVerEdit.hide();
                                 (function(blueprint) {
                                     // alert(JSON.stringify(blueprint));
                                     $liRead.click(function(e) {
@@ -2580,13 +2583,12 @@ function devCall() {
 
 
                             } else {
-                               
+                                $selectVer = $('<select style="padding:1px;padding-left:5px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId', data[i]._id);
                                 if (data[i].templateType === 'chef' || data[i].templateType === 'ami') {
                                     
-
+                                    $selectVer.hide();
                                     //code for info about blueprints
                                     (function(blueprint) {
-                                        // alert(JSON.stringify(blueprint));
                                         $liRead.click(function(e) {
 
                                             var $blueprintReadContainer = $('#modalForRead');
@@ -2728,16 +2730,56 @@ function devCall() {
                                     })(data[i]);
 
                                 }
+                                $selectVerEdit.click(function(e) {
+ 
+                                    var $parent = $(this).parents('.cardimage');
+                                     var $blueprintEditResultContainer = $('#blueprintEditResultContainer');
+ 
+ 
+                                     $blueprintEditResultContainer.modal('show');
+ 
+                                     var projectId = $parent.attr('data-projectId');
+                                     var envId = $parent.attr('data-envId');
+                                     var blueprintId = $parent.attr('data-blueprintId');
+                                     var chefServerId = $parent.attr('data-chefServerId');
+                                     var version = $parent.find('.blueprintVersionDropDown').val();
+                                     $.get('../blueprints/' + blueprintId + '/versions/' + version, function(versionData) {
+                                         console.log('blueprint data', versionData);
+                                         var $ccrs = $chefCookbookRoleSelector(urlParams.org, function(data) {
+ 
+                                         }, versionData.runlist);
+                                         $ccrs.find('#cookbooksrecipesselectedList').attr('data-blueprintId', blueprintId);
+                                         $blueprintEditResultContainer.find('.modal-body').empty().append($ccrs).data('$ccrs', $ccrs);
+ 
+ 
+ 
+                                     }).error(function() {
+                                         $blueprintEditResultContainer.find('.modal-body').empty();
+                                         $blueprintEditResultContainer.find('.modal-body').append('<span>Oops! Something went wrong. Please try again later</span>');
+                                     });
+ 
+                                 });
+                                 if ($selectVer.attr('class').indexOf('dockerrepotagselect') < 0) {
+                                     if (data[i].blueprintConfig.infraManagerData) {
+                                         for (var j = 0; j < data[i].blueprintConfig.infraManagerData.versionsList.length; j++) {
+                                             var $options = $('<option></option>').append(data[i].blueprintConfig.infraManagerData.versionsList[j].ver).val(data[i].blueprintConfig.infraManagerData.versionsList[j].ver);
+                                             $selectVer.append($options);
+                                         }
+ 
+                                     }
+ 
+                                 }
+ 
                             }
                             if (localStorage.getItem('userRole') !== '[Consumer]') {
                                 var $li = $('<li></li>').css({
                                     "font-size": '10px'
-                                }).append(tagLabel);
+                                }).append(tagLabel, $selectVer, $selectVerEdit);
 
                             } else {
                                 var $li = $('<li></li>').css({
                                     "font-size": '10px'
-                                }).append(tagLabel);
+                                }).append(tagLabel, $selectVer);
 
                             }
 
