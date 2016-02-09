@@ -193,6 +193,11 @@ openstackInstanceBlueprintSchema.methods.launch = function(launchParams, callbac
         } else {
             Provider = Hppubliccloud;
         }
+
+        var paramRunList = [];
+        if (launchParams && launchParams.version) {
+            paramRunList = launchParams.version.runlist;
+        }
         var openstack = new Provider(openstackconfig);
         openstack.createServer(openstackconfig.tenantId, launchparamsOpenstack, function(err, instanceData) {
             if (err) {
@@ -215,7 +220,7 @@ openstackInstanceBlueprintSchema.methods.launch = function(launchParams, callbac
                 providerType: self.cloudProviderType,
                 keyPairId: 'unknown',
                 chefNodeName: instanceData.server.id,
-                runlist: launchParams.version.runlist,
+                runlist: paramRunList,
                 platformId: instanceData.server.id,
                 appUrls: launchParams.appUrls,
                 instanceIP: 'pending',

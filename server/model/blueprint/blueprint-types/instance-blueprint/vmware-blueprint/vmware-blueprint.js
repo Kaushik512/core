@@ -176,6 +176,11 @@ vmwareInstanceBlueprintSchema.methods.launch = function(launchParams, callback) 
                             password: anImage.instancePassword
                         };
 
+                        var paramRunList = [];
+                        if (launchParams && launchParams.version) {
+                            paramRunList = launchParams.version.runlist;
+                        }
+
                         credentialcryptography.encryptCredential(credentials, function(err, encryptedCredentials) {
                             if (err) {
                                 logger.error('vmware encryptCredential error', err);
@@ -201,7 +206,7 @@ vmwareInstanceBlueprintSchema.methods.launch = function(launchParams, callback) 
                                 providerType: self.cloudProviderType,
                                 keyPairId: 'unknown',
                                 chefNodeName: createserverdata["vm_name"],
-                                runlist: launchParams.version.runlist,
+                                runlist: paramRunList,
                                 platformId: createserverdata["vm_name"],
                                 appUrls: launchParams.appUrls,
                                 instanceIP: 'unknown',
