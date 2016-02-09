@@ -189,8 +189,7 @@ awsProviderSchema.statics.updateAWSProviderById = function(providerId, providerD
 			id: providerData.id,
 			providerName: providerData.providerName,
 			accessKey: providerData.accessKey,
-			secretKey: providerData.secretKey,
-			providerType: providerData.providerType
+			secretKey: providerData.secretKey
 		}
 	}, {
 		upsert: false
