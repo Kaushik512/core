@@ -275,6 +275,12 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 			});
 			return;
 		}
+		if (!req.query.envId) {
+			res.send(400, {
+				"message": "Invalid Environment Id"
+			});
+			return;
+		}
 		var user = req.session.user;
 		var category = 'blueprints';
 		var permissionto = 'execute';
@@ -312,7 +318,6 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 							}
 						}
 
-						
 						blueprint.launch({
 							envId: req.query.envId,
 							ver: req.query.version,
