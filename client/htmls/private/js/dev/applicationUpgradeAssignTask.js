@@ -216,7 +216,7 @@ $(document).ready(function() {
 
     function loadUIData(taskData) {
         console.log("I am in loadUIData");
-        var $ccrs = $chefCookbookRoleSelector(urlParams.org, function(data) {
+        var $ccr = $chefCookbookRoleSelector(urlParams.org, function(data) {
 
         }, runlist, false, {
             deploy: true,
@@ -243,7 +243,7 @@ $(document).ready(function() {
                 // alert(taskData.taskConfig.runlist);
                 if (taskData.taskConfig.runlist.length > 0) {
                     // alert(taskData.taskConfig.runlist.length);
-                    createRunlistTable($ccrs.getRunlistNames(taskData.taskConfig.runlist));
+                    createRunlistTable($ccr.getRunlistNames(taskData.taskConfig.runlist));
                 }
             }
             if (taskData && taskData.taskType === 'composite') {
@@ -382,7 +382,30 @@ $(document).ready(function() {
         var runlist = null;
         if (taskData && taskData.taskType === 'chef') {
             runlist = taskData.taskConfig.runlist;
+            /*//alert("Runlists are  : "+runlist);
+            var $chefRunlistModal = $('#chefRunlistModal');
+            $chefRunlistModal.modal('show');
+            alert($chefRunlistModal.length);
+            var $cookbooksrecipesselectedList = $chefRunlistModal.find('#cookbooksrecipesselectedList');
+            //alert($cookbooksrecipesselectedList.length);
+            //$('.runlistContainer').data('$ccrs');
+            //var $runlistContainer = $('.runlistContainer').data('$ccrs');
+            // alert("KKKK");
+            //console.log($runlistContainer);
+            //alert(runlist);
+            //debugger;
+            for (i = 0; i < runlist.length; i++) {
+                $cookbooksrecipesselectedList.append('<option class="cookbook" style="display:block" value="'+runlist[i]+'">'+runlist[i]+'</option>');
+            }*/
         }
+        var $ccrs = $chefCookbookRoleSelector(urlParams.org, function(data) {
+
+        }, runlist, false, {
+            deploy: true,
+            all: true,
+            roles: false,
+            cookbooks: false
+        });
 
 
 
@@ -1194,13 +1217,21 @@ $(document).ready(function() {
         //$('#tableRunlist').removeClass('hidden');
         $tasksRunlist.clear().draw();
         // alert(runlist.length);
+        //var $chefRunlistModal = $('#chefRunlistModal');
+        //alert($chefRunlistModal.length);
+        //var $cookbooksrecipesselectedList = $chefRunlistModal.find('#cookbooksrecipesselectedList');
+        //alert($cookbooksrecipesselectedList.length);
+        //alert(runlist);
+        //debugger;
         for (i = 0; i < runlist.length; i++) {
-            var $runlistList = $('#tableRunlistForBlueprint');
+            //$cookbooksrecipesselectedList.append('<option class="cookbook" style="display:block" value="'+runlist[i]+'">'+runlist[i]+'</option>');
+            var $runlistList = $('#tableRunlist');
             var $tr = $('<tr class="runlistRow"></tr>');
             var $tdName = $('<td class="runlistDescription">' + runlist[i] + '</td>');
             $tr.append($tdName);
             $runlistList.append($tr);
             $tasksRunlist.row.add($tr).draw();
+            //alert($cookbooksrecipesselectedList.find('option').length);
         }
     }
 

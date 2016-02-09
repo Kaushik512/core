@@ -39,9 +39,9 @@
               <div class="icon">
                 <i class="fa fa-th"></i>
               </div>
-              <a class="small-box-footer providerSpecificMoreInfo" href="#">
-                More info <i class="fa fa-arrow-circle-right"></i>
-              </a>
+              <span class="small-box-footer providerSpecificMoreInfo footer-box-css">
+                <!-- More info <i class="fa fa-arrow-circle-right"></i> -->
+              </span>
             </div>
           </div>
 
@@ -54,8 +54,8 @@
               <div class="icon">
                 <i class="fa fa-laptop"></i>
               </div>
-              <a class="small-box-footer managedUnmanagedCSS" href="#">
-              </a>
+              <span class="small-box-footer managedUnmanagedCSS">
+              </span>
             </div>
           </div>
 
@@ -68,8 +68,8 @@
               <div class="icon">
                 <i class="fa fa-cube"></i>
               </div>
-              <a class="small-box-footer managedUnmanagedCSS" href="#">
-              </a>
+              <span class="small-box-footer managedUnmanagedCSS">
+              </span>
             </div>
           </div>
 
@@ -82,9 +82,9 @@
               <div class="icon">
                 <i class="fa fa-external-link"></i>
               </div>
-              <a class="small-box-footer convertUnmanagedtoManaged" target="_parent">
-               Convert <i class="fa fa-arrow-circle-right"></i>
-              </a>
+              <span class="small-box-footer convertUnmanagedtoManaged footer-box-css">
+               <!-- Convert <i class="fa fa-arrow-circle-right"></i> -->
+              </span>
             </div>
           </div>
 
@@ -101,9 +101,9 @@
                       <div class="icon">
                         <i class="fa fa-th"></i>
                       </div>
-                      <a id="providerMoreInfo" class="small-box-footer" href="#">
-                        More info <i class="fa fa-arrow-circle-right"></i>
-                      </a>
+                      <span id="providerMoreInfo" class="small-box-footer footer-box-css">
+                        <!-- More info <i class="fa fa-arrow-circle-right"></i> -->
+                      </span>
                     </div>
                   </div>
                   <div class="col-lg-3 col-md-3 col-xs-6 infrastructureClass" data-text="Total Instances">
@@ -115,8 +115,8 @@
                       <div class="icon">
                         <i class="fa fa-laptop"></i>
                       </div>
-                      <a id="" class="small-box-footer managedUnmanagedCSS" href="#">
-                      </a>
+                      <span class="small-box-footer managedUnmanagedCSS">
+                      </span>
                     </div>
                   </div>
                   <div class="col-lg-3 col-md-3 col-xs-6 infrastructureClass" data-text="Total Managed Instances">
@@ -128,8 +128,8 @@
                       <div class="icon">
                         <i class="fa fa-cube"></i>
                       </div>
-                      <a id="" class="small-box-footer managedUnmanagedCSS" href="#">
-                      </a>
+                      <span class="small-box-footer managedUnmanagedCSS">
+                      </span>
                     </div>
                   </div>
                   
@@ -142,62 +142,16 @@
                       <div class="icon">
                         <i class="fa fa-external-link"></i>
                       </div>
-                      <a id="" class="small-box-footer managedUnmanagedCSS" href="#">
-                      </a>
+                      <span class="small-box-footer managedUnmanagedCSS">
+                      </span>
                     </div>
                   </div>
 
                 </div>
                 <div class="row noProviderView" style="display:none">
-                  <div class="col-lg-3 col-md-3 col-xs-6">
-                    <div class="small-box bg-aqua noProviderCardHeight">
-                      <div class="addProviderDetails"><b>Add Provider Details</b></div>
-                      <span id="noProviderCard" class="noProviderCardCSS" style="">
-                        <i class="fa fa-plus noProviderFaIconCSS"></i>
-                      </span>
-                      <span class="small-box-footer managedUnmanagedCSS noProviderFooter">
-                      </span>
-                    </div>
-                  </div>
-                  <div class="col-lg-3 col-md-3 col-xs-6">
-                    <div class="small-box bg-aqua">
-                      <div class="inner">
-                        <h3 id="">0</h3>
-                        <p>Total <br>No. of Instances</p>
-                      </div>
-                      <div class="icon">
-                        <i class="fa fa-laptop"></i>
-                      </div>
-                      <a class="small-box-footer managedUnmanagedCSS" href="#">
-                        
-                      </a>
-                    </div>
-                  </div>
-                  <div class="col-lg-3 col-md-3 col-xs-6">
-                    <div class="small-box bg-aqua">
-                      <div class="inner">
-                        <h3 id="">0</h3>
-                        <p>Total <br>No. of Managed Instances</p>
-                      </div>
-                      <div class="icon">
-                        <i class="fa fa-cube"></i>
-                      </div>
-                      <a id="" class="small-box-footer managedUnmanagedCSS" href="#">
-                      </a>
-                    </div>
-                  </div>
-                  <div class="col-lg-3 col-md-3 col-xs-6">
-                    <div class="small-box bg-aqua">
-                      <div class="inner">
-                        <h3 id="">0</h3>
-                        <p>Total <br>No. of Unmanaged Instances</p>
-                      </div>
-                      <div class="icon">
-                        <i class="fa fa-external-link"></i>
-                      </div>
-                      <a id="" class="small-box-footer managedUnmanagedCSS" href="#">
-                      </a>
-                    </div>
+                  <div id="noenvwarning" class="alert alert-warning noEnvWarning text-center">
+                      <span>Please add the provider details </span>
+                      <span>in settings to get the complete dashboard.</span>
                   </div>
                 </div>
                 <div id="awsProviderView">
