@@ -218,7 +218,7 @@
   pointer-events:none;
 }
 .footer-box-css{
-  height:27px;
+  height:26px;
   pointer-events:none;
 }
 .noProviderCardCSS{
@@ -271,4 +271,52 @@
   .noProviderFooter{
     margin-top: 86px;
   }  
+}
+.legendCustomDashboard {
+    border: 0 none !important;
+    padding: 0 !important;
+    width: auto !important;
+    margin-bottom: 0 !important;
+    font-size: 15px !important;
+    color: #666 !important;
+}
+.fieldsetCustomDashboard {
+    border: 1px solid #dddddd !important;
+    float: right !important;
+    margin-top: -10px !important;
+    padding: 0.01em 0.25em 0.20em 0.35em !important;
+}
+.legendCustomImp{
+  font-size:11px !important;
+}
+.font-size11{
+  font-size: 11px !important;
+}
+.totalProviderLegendCSS{
+  background: #40baf1 none repeat scroll 0% 0%; 
+  font-size: 12px;
+  border-radius: 4px;
+}
+.totalAwsLegendCSS{
+  background: #00a65a none repeat scroll 0% 0%; 
+  font-size: 12px;
+  border-radius: 4px;
+}
+.totalAzureLegendCSS{
+  background: #f39c12 none repeat scroll 0% 0%; 
+  font-size: 12px;
+  border-radius: 4px;
+}
+.totalVmwareLegendCSS{
+  background: #0073b7 none repeat scroll 0% 0%; 
+  font-size: 12px;
+  border-radius: 4px;
+}
+.totalOpenstackCSS{
+  background: #dd4b39 none repeat scroll 0% 0%; 
+  font-size: 12px;
+  border-radius: 4px;
+}
+.marginright15{
+  margin-right: 15px !important;
 }
