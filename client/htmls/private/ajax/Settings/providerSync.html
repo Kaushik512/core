@@ -447,6 +447,7 @@ if (!$.fn.dataTable.isDataTable('#unmanagedinstanceListTable')) {
 
 
   function loadManagedInstances(managnedData) {
+    $instanceManagedDatatable.clear().draw();
     var $tbody = $('#managedInstance tbody').empty();
     for (var i = 0; i < managnedData.length; i++) {
       var $tr = $('<tr></tr>');
@@ -496,6 +497,7 @@ if (!$.fn.dataTable.isDataTable('#unmanagedinstanceListTable')) {
 
 
   function loadUnmanagedInstances(unManagnedData) {
+    $instanceUnManagedDatatable.clear().draw();
     var $tbody = $('#unManagedInstance tbody').empty();
     for (var i = 0; i < unManagnedData.length; i++) {
       var $tr = $('<tr></tr>').attr('instanceId', unManagnedData[i]._id);
@@ -539,8 +541,7 @@ if (!$.fn.dataTable.isDataTable('#unmanagedinstanceListTable')) {
   $('.syncClick').click(function() {
     $('#instanceRefreshSpinner').addClass('fa-spin');
     $('a.syncClick').attr('href', 'index.html#ajax/Settings/providerSync.html?' + urlParams.providerId);
-    $instanceManagedDatatable.clear().draw();
-    $instanceUnManagedDatatable.clear().draw();
+    
     getManagedInstances();
     getUnmanagedInstances();
     setTimeout(function() {
