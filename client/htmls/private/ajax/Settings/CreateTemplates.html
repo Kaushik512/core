@@ -608,12 +608,26 @@
                   
                    var templateType = $('#templatetypename').val();
                    if(templateType === 'Docker'){
-                        addToTargetList($('#dockercontainers'),$('#templatename'));
+                        if($('#dockercontainers').val() != '')
+                        {
+                           $('#dockercontainerpaths').html('');
+                           addToTargetList($('#dockercontainers'),$('#templatename'));
+                        }
                      }
                    $(this).validate();
                    if (templateType === 'Docker' || templateType === 'SoftwareStack' || location.toString().indexOf('?new') === -1) {
 
                        $('#template').removeAttr('cat-validation', 'required');
+                       //Explicitly adding validation for repo path
+                       if(templateType === 'Docker' && $('#dockercontainerpaths').text() == "")
+                         $('#dockercontainers').attr('cat-validation','required');
+                       else
+                           {  
+                              $('#dockercontainers').removeAttr('cat-validation');
+                              
+                           }
+                         
+
                        if ($(this).valid) {
                            /*alert('valid form submitted'); // for demo*/
                            if (validateForm()) {
@@ -621,11 +635,13 @@
                                saveform('17');
                            };
                        } else {
-                           alert('invalid valid form submitted'); // for demo
+                           alert('invalid form submitted'); // for demo
                        }
                    } else if (templateType === 'CloudFormation' || templateType === 'ARMTemplate' ){
                      
                            $('#template').attr('cat-validation', 'required');
+                           //explicity removing validation for repo path
+                           $('#dockercontainers').removeAttr('cat-validation');
                            if ($(this).valid) {
                                /*alert('valid form submitted'); // for demo*/
                                if (validateForm()) {

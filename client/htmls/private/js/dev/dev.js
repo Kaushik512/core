@@ -5509,6 +5509,9 @@ function devCall() {
                     if (amoreinfo)
                         amoreinfo.trigger('click');
 
+                    if(repopath == "")
+                        repopath = "null";
+
                     $.get('../instances/dockercompositeimagepull/' + instid + '/' + repopath + '/' + encodeURIComponent(compositedockerimage), function(data) {
                         //alert(JSON.stringify(data));
                         if (data == "OK") {
