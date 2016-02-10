@@ -46,7 +46,8 @@ var AppDataSchema = new Schema({
 AppDataSchema.statics.createNewOrUpdate = function(appData, callback) {
     this.find({
         projectId: appData.projectId,
-        envId: appData.envId
+        envId: appData.envId,
+        version: appData.version
     }, function(err, aData) {
         if (err) {
             logger.debug("Error fetching record.", err);
@@ -61,7 +62,8 @@ AppDataSchema.statics.createNewOrUpdate = function(appData, callback) {
             var that = this;
             that.update({
                 projectId: appData.projectId,
-                envId: appData.envId
+                envId: appData.envId,
+                version: appData.version
             }, {
                 $set: setData
             }, {
@@ -86,11 +88,12 @@ AppDataSchema.statics.createNewOrUpdate = function(appData, callback) {
     });
 };
 
-// Get AppData by project,env.
-AppDataSchema.statics.getAppDataByProjectAndEnv = function(projectId, envId, callback) {
+// Get AppData by project,env,version.
+AppDataSchema.statics.getAppDataByProjectAndEnv = function(projectId, envId, version, callback) {
     this.find({
         projectId: projectId,
-        envId: envId
+        envId: envId,
+        version: version
     }, function(err, anAppData) {
         if (err) {
             logger.debug("Got error while fetching appData: ", err);

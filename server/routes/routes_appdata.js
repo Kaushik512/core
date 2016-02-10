@@ -26,7 +26,7 @@ module.exports.setRoutes = function(app, sessionVerificationFunc) {
 
     // Get  AppData by Project and Env
     app.get('/app/data/project/:projectId/env/:envId', function(req, res) {
-        AppData.getAppDataByProjectAndEnv(req.params.projectId, req.params.envId, function(err, appDatas) {
+        AppData.getAppDataByProjectAndEnv(req.params.projectId, req.params.envId, req.query.version, function(err, appDatas) {
             if (err) {
                 res.status(500).send(errorResponses.db.error);
                 return;
