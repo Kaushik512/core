@@ -450,7 +450,7 @@ if (!$.fn.dataTable.isDataTable('#unmanagedinstanceListTable')) {
     $instanceManagedDatatable.clear().draw();
     var $tbody = $('#managedInstance tbody').empty();
     for (var i = 0; i < managnedData.length; i++) {
-      var $tr = $('<tr class="managedInstance"></tr>').attr('data-Id', managnedData[i]._id);
+      var $tr = $('<tr class="managedInstance"></tr>').attr('data-id',managnedData[i]._id);
       var $tdId = $('<td></td>').append(managnedData[i].platformId);
       $tr.append($tdId);
 
@@ -469,21 +469,18 @@ if (!$.fn.dataTable.isDataTable('#unmanagedinstanceListTable')) {
       var $tdStatus = $('<td></td>').append(managnedData[i].instanceState);
       $tr.append($tdStatus);
 
-      
-      var $tdAction = $('<td/>');
-      if (managnedData[i].instanceState === 'terminated') {
-        
+      var $button = '';
 
-        $tdAction.append('<div style="margin-left:14px;" class="btn-group"><button class="btn btn-danger pull-left btn-sg tableactionbutton managedInstanceRemoval" data-placement="top" value="Remove" title="Delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
-        
+      if (managnedData[i].instanceState === 'terminated') {
+
+        $button = $('<div style="margin-left:14px;" class="btn-group"><button class="btn btn-danger pull-left btn-sg tableactionbutton globalTrackUrlRemove" data-placement="top" value="Remove" title="Delete"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></div>');
         $button.click(function() {
           var $this = $(this);
           var $tr = $this.parents('tr.managedInstance');
-          var id = managnedData[i]._id;
-          var instanceName = managnedData[i].instanceIP;
+          var id = $this.parents('tr').attr('data-id');
           bootbox.confirm({
-            message: 'Are you sure you want to Delete Managed Instance -&nbsp;' + instanceName,
-              title: "Warning",
+            message: 'Are you sure you want to Delete Managed Instance -&nbsp;',
+            title: "Warning",
             callback: function(result) {
               if (result) {
                 $.ajax({
@@ -494,7 +491,7 @@ if (!$.fn.dataTable.isDataTable('#unmanagedinstanceListTable')) {
                   },
                   error: function(jxhr) {
                     bootbox.alert(result);
-                    var msg = "Unable to Delete Managed Instance please try again later";
+                    var msg = "Unable to Delete Managed Instances please try again later";
                     if (jxhr.responseJSON && jxhr.responseJSON.message) {
                       msg = jxhr.responseJSON.message;
                     } else if (jxhr.responseText) {
@@ -511,6 +508,7 @@ if (!$.fn.dataTable.isDataTable('#unmanagedinstanceListTable')) {
           return false;
         });
       }
+      var $tdAction = $('<td></td>').append($button);
       $tr.append($tdAction);
       $tbody.append($tr);
       $instanceManagedDatatable.row.add($tr).draw();
@@ -615,7 +613,7 @@ if (!$.fn.dataTable.isDataTable('#unmanagedinstanceListTable')) {
 
 
     if (!((reqBody.bgId && reqBody.bgId.length) && (reqBody.projectId && reqBody.projectId.length) && reqBody.projectId !== 'choose' && reqBody.bgId !== 'choose')) {
-      bootbox.alert('Please Select a Business Group & Project');
+      alert('Please Select a Business Group & Project');
       return;
     }
 
@@ -631,22 +629,22 @@ if (!$.fn.dataTable.isDataTable('#unmanagedinstanceListTable')) {
     if (!($dropdown.val() === 'pemFile')) {
       reqBody.credentials.password = $('#importPasswordInput').val();
       if (!reqBody.credentials.username) {
-        bootbox.alert('Please Enter Username');
+        alert('Please Enter Username');
         return;
       }
       if (!reqBody.credentials.password) {
-        bootbox.alert('Please Enter Password or Choose a Pem file');
+        alert('Please Enter Password or Choose a Pem file');
         return;
       }
       makeRequest();
     } else {
       var pemFileInput = $('#importPemfileInput').get(0);
       if (!reqBody.credentials.username) {
-        bootbox.alert('Please Enter Username');
+        alert('Please Enter Username');
         return;
       }
       if (!pemFileInput.files.length) {
-        bootbox.alert('Please Choose a Pem file');
+        alert('Please Choose a Pem file');
         return;
       }
       var reader = new FileReader();
