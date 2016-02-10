@@ -112,6 +112,7 @@ function getAllPipelineViewData() {
 
     $.get('/app/deploy/pipeline/project/' + projectId, function(dataPipeline) {
         if (dataPipeline.length) {
+            //alert("Hello");
             var arrEnv = [];
             var arrPresentEnvSeq = [];
             var arrSequence = [];
@@ -138,6 +139,7 @@ function getAllPipelineViewData() {
 
         } else {
             $.get('/d4dMasters/project/' + projectId, function(dataforenvName) {
+                //alert("Hi");
                 var individualenvName = dataforenvName[0].environmentname;
                 individualenvName = individualenvName.split(",");
                 var arrEnv = [];
@@ -172,259 +174,274 @@ function getAllPipelineViewData() {
 
 function creationPipelineTableView(projectId, arrEnv, arrSequence) {
     //alert("I am in pipeline Tableview");
-    console.log(arrEnv);
-    var $tableClone = $('.tableClone').clone();
-    $tableClone.removeClass('tableClone');
-    $('#tableContainer').empty().append($tableClone);
-    $tableClone.DataTable({
-        columns: arrEnv,
-        "bSort": false,
-        "aoColumnDefs": [{
-            'bSortable': true,
-            'aTargets': [1]
-        }],
-        "bAutoWidth": false,
-        "bProcessing": true,
-        "bDeferRender": true,
-        "bFilter": true,
-        "bLengthChange": true
-    });
-    $tableClone.addClass('margintop40');
-    $tableClone.find('thead th').addClass('padding-left5per theadcolor');
-    var $tableapplicationTest = $tableClone;
-    var $tableapplicationTbody = $tableClone.find('tbody');
-    $.get('/app/deploy/project/' + projectId + '/list', function(deployData) {
-
-        var sorteddeployData = deployData;
-        cmp = function(x, y) {
-            return x > y ? 1 : x < y ? -1 : 0;
-        };
-
-        //sort name ascending then id descending
-        deployData.sort(function(a, b) {
-            //note the minus before -cmp, for descending order
-            return cmp(
-                [cmp(a.applicationName, b.applicationName), -cmp(a.applicationVersion, b.applicationVersion)], [cmp(b.applicationName, a.applicationName), -cmp(b.applicationVersion, a.applicationVersion)]
-            );
+    console.log(arrSequence);
+    if(arrEnv.length > 1){
+        $('.noAppEnvironment').hide();
+        $('.noAppEnvironmentSelected').hide();
+        $('#tableContainer').show();
+        var $tableClone = $('.tableClone').clone();
+        $tableClone.removeClass('tableClone');
+        $('#tableContainer').empty().append($tableClone);
+        $tableClone.DataTable({
+            columns: arrEnv,
+            "bSort": false,
+            "aoColumnDefs": [{
+                'bSortable': true,
+                'aTargets': [1]
+            }],
+            "bAutoWidth": false,
+            "bProcessing": true,
+            "bDeferRender": true,
+            "bFilter": true,
+            "bLengthChange": true
         });
-        sorteddeployData.forEach(function(appDeployDataObj) {
-            function createMainCard(applicationName, versionNumber) {
-                var tempStr = '';
+        $tableClone.addClass('margintop40');
+        $tableClone.find('thead th').addClass('padding-left5per theadcolor');
+        var $tableapplicationTest = $tableClone;
+        var $tableapplicationTbody = $tableClone.find('tbody');
+        $.get('/app/deploy/project/' + projectId + '/list', function(deployData) {
 
-                var $mainCardTemplate = $('.mainCardTemplate');
-
-                var $mainCard = $mainCardTemplate.clone(true);
-                $mainCard.css({
-                    display: 'inline-flex'
-                });
-
-                $mainCard.find('.applicationMainIP').html(applicationName);
-                $mainCard.find('.versionMain').html(versionNumber);
-
-                if (applicationName === "catalyst" || applicationName === "Catalyst") {
-                    $mainCard.find('.mainImageHeight').attr("src", "img/rsz_logo.png");
-                } else {
-                    $mainCard.find('.mainImageHeight').attr("src", "img/petclinic.png");
-                }
-
-                var $mainCardtemplateStr = $mainCard.prop('outerHTML');
-                tempStr = tempStr + $mainCardtemplateStr;
-                return tempStr;
-            }
-
-            function createStatusPresentCard(appDeployDataObj, indexofData) {
-                var tempStr = '';
-                var $childCardTemplate = $('.childCardTemplate');
-                var $childPresentCard = $childCardTemplate.clone(true);
-                $childPresentCard.css({
-                    display: 'inline-flex'
-                });
-                //alert(appDeployDataObj.applicationNodeIP[indexofData]);
-                //var count =0;
-                $childPresentCard.find('.applicationChildIP').html(appDeployDataObj.applicationNodeIP[indexofData]);
-                $childPresentCard.find('.lastapplicationDeploy').html(appDeployDataObj.applicationLastDeploy[indexofData]);
-                var appStatusCard = appDeployDataObj.applicationStatus[indexofData].toUpperCase();
-                //alert(appStatusCard);
-                if (appStatusCard === "SUCCESSFUL" || appStatusCard === "SUCCESSFULL" || appStatusCard === "SUCCESS") {
-                    $childPresentCard.find('.imgHeight').attr("src", "img/aws_logo_started.png");
-                    $childPresentCard.find('.applicationChildDetails').removeClass('btn-primary btn-danger').addClass('btn-success');
-
-                } else {
-                    $childPresentCard.find('.imgHeight').attr("src", "img/aws_logo_stopped.png");
-                    $childPresentCard.find('.applicationChildDetails').removeClass('btn-primary btn-success').addClass('btn-danger');
-                }
-                $childPresentCard.find('.applicationEnvNamePipelineView').html(appDeployDataObj.envId[indexofData]);
-                var $childCardtemplateStr = $childPresentCard.prop('outerHTML');
-                tempStr = tempStr + $childCardtemplateStr;
-                finalArray.push(tempStr);
-                //finalArray.push($childPresentCard);
+            var sorteddeployData = deployData;
+            cmp = function(x, y) {
+                return x > y ? 1 : x < y ? -1 : 0;
             };
 
+            //sort name ascending then id descending
+            deployData.sort(function(a, b) {
+                //note the minus before -cmp, for descending order
+                return cmp(
+                    [cmp(a.applicationName, b.applicationName), -cmp(a.applicationVersion, b.applicationVersion)], [cmp(b.applicationName, a.applicationName), -cmp(b.applicationVersion, a.applicationVersion)]
+                );
+            });
+            sorteddeployData.forEach(function(appDeployDataObj) {
+                function createMainCard(applicationName, versionNumber) {
+                    var tempStr = '';
 
-            function sortAscending(data_A, data_B) {
-                data_A = convertToDateObj(data_A);
-                data_B = convertToDateObj(data_B);
-                return (data_B - data_A);
-            }
-            var finalArray = [];
-            var applicationName = appDeployDataObj.applicationName;
-            var versionNumber = appDeployDataObj.applicationVersion;
-            var applicationEnvList = appDeployDataObj.envId;
+                    var $mainCardTemplate = $('.mainCardTemplate');
 
+                    var $mainCard = $mainCardTemplate.clone(true);
+                    $mainCard.css({
+                        display: 'inline-flex'
+                    });
 
-            var sortedappdataList = [];
-            var unsortedappdataList = [];
-            var indexedList = [];
+                    $mainCard.find('.applicationMainIP').html(applicationName);
+                    $mainCard.find('.versionMain').html(versionNumber);
 
-            for (var j = 0; j < applicationEnvList.length; j++) {
-                sortedappdataList.push(appDeployDataObj.applicationLastDeploy[j]);
-                unsortedappdataList.push(appDeployDataObj.applicationLastDeploy[j]);
-            }
-            sortedappdataList.sort(sortAscending);
+                    if (applicationName === "catalyst" || applicationName === "Catalyst") {
+                        $mainCard.find('.mainImageHeight').attr("src", "img/rsz_logo.png");
+                    } else {
+                        $mainCard.find('.mainImageHeight').attr("src", "img/petclinic.png");
+                    }
 
-            for (var m = 0; m < unsortedappdataList.length; m++) {
-                indexedList.push(jQuery.inArray(unsortedappdataList[m], sortedappdataList));
-            }
+                    var $mainCardtemplateStr = $mainCard.prop('outerHTML');
+                    tempStr = tempStr + $mainCardtemplateStr;
+                    return tempStr;
+                }
 
-            var applicationInstanceName = [];
-            var applicationNodeIP = [];
-            var applicationLastDeploy = [];
-            var applicationStatus = [];
-            var containerId = [];
-            var hostName = [];
-            var envId = [];
-            var appLogs = [];
-            for (var n = 0; n < indexedList.length; n++) {
-                var appLastDeployObj = convertToDateObj(appDeployDataObj.applicationLastDeploy[n]);
-                var appDeployLastTime = convertToDateCustom(appLastDeployObj);
-
-                applicationInstanceName[indexedList[n]] = appDeployDataObj.applicationInstanceName[n];
-                applicationNodeIP[indexedList[n]] = appDeployDataObj.applicationNodeIP[n];
-                applicationLastDeploy[indexedList[n]] = appDeployLastTime;
-                applicationStatus[indexedList[n]] = appDeployDataObj.applicationStatus[n];
-                containerId[indexedList[n]] = appDeployDataObj.containerId[n];
-                hostName[indexedList[n]] = appDeployDataObj.hostName[n];
-                envId[indexedList[n]] = appDeployDataObj.envId[n];
-                appLogs[indexedList[n]] = appDeployDataObj.appLogs[n];
-            }
-            console.log(applicationLastDeploy);
-            var sortedappDeployDataObj = {
-                "applicationName": applicationName,
-                "applicationVersion": versionNumber,
-                "projectId": projectId,
-                "applicationInstanceName": applicationInstanceName,
-                "applicationNodeIP": applicationNodeIP,
-                "applicationLastDeploy": applicationLastDeploy,
-                "applicationStatus": applicationStatus,
-                "containerId": containerId,
-                "hostName": hostName,
-                "envId": envId,
-                "appLogs": appLogs
-            };
-
-            var presentDataDetailsObj = {};
-
-            var appSortedEnvList = sortedappDeployDataObj.envId;
-            for (var j = 0; j < arrSequence.length; j++) {
-                //application main card
-
-                if (j == 0 && arrSequence[0] == "") {
-                    finalArray.push(createMainCard(applicationName, versionNumber));
-                } else if ($.inArray(arrSequence[j], appSortedEnvList) != -1) {
-                    var index = $.inArray(arrSequence[j], appSortedEnvList);
-                    createStatusPresentCard(sortedappDeployDataObj, index);
-                    var specificEnvArr = [];
-                    var specificEnvobj = {
-                        "applicationInstanceName": sortedappDeployDataObj.applicationInstanceName[index],
-                        "applicationNodeIP": sortedappDeployDataObj.applicationNodeIP[index],
-                        "applicationLastDeploy": sortedappDeployDataObj.applicationLastDeploy[index],
-                        "applicationStatus": sortedappDeployDataObj.applicationStatus[index],
-                        "containerId": sortedappDeployDataObj.containerId[index],
-                        "hostName": sortedappDeployDataObj.hostName[index],
-                        "envId": sortedappDeployDataObj.envId[index],
-                        "appLogs": sortedappDeployDataObj.appLogs[index]
-                    };
-                    specificEnvArr.push(specificEnvobj);
-
-                    presentDataDetailsObj[arrSequence[j]] = specificEnvArr;
-
-
-                    sortedappDeployDataObj.applicationInstanceName.splice(index, 1);
-                    sortedappDeployDataObj.applicationNodeIP.splice(index, 1);
-                    sortedappDeployDataObj.applicationLastDeploy.splice(index, 1);
-                    sortedappDeployDataObj.applicationStatus.splice(index, 1);
-                    sortedappDeployDataObj.containerId.splice(index, 1);
-                    sortedappDeployDataObj.hostName.splice(index, 1);
-                    sortedappDeployDataObj.envId.splice(index, 1);
-                    sortedappDeployDataObj.appLogs.splice(index, 1);
-                } else {
-                    //application status absent card
+                function createStatusPresentCard(appDeployDataObj, indexofData) {
                     var tempStr = '';
                     var $childCardTemplate = $('.childCardTemplate');
                     var $childPresentCard = $childCardTemplate.clone(true);
                     $childPresentCard.css({
                         display: 'inline-flex'
                     });
-                    $childPresentCard.find('.applicationChildIP').html('');
-                    $childPresentCard.find('.lastDeploySpan').html('');
-                    $childPresentCard.find('.imgHeight').attr("src", "img/rsz_inactive.png");
-                    $childPresentCard.find('.applicationChildDetails').removeClass('btn-primary').addClass('btn-grey');
-                    $childPresentCard.find('.lastapplicationDeploy').html('');
-                    $childPresentCard.children().css({
-                        'opacity': '0.5',
-                        'pointer-events': 'none'
-                    });
+                    //alert(appDeployDataObj.applicationNodeIP[indexofData]);
+                    //var count =0;
+                    $childPresentCard.find('.applicationChildIP').html(appDeployDataObj.applicationNodeIP[indexofData]);
+                    $childPresentCard.find('.lastapplicationDeploy').html(appDeployDataObj.applicationLastDeploy[indexofData]);
+                    var appStatusCard = appDeployDataObj.applicationStatus[indexofData].toUpperCase();
+                    //alert(appStatusCard);
+                    if (appStatusCard === "SUCCESSFUL" || appStatusCard === "SUCCESSFULL" || appStatusCard === "SUCCESS") {
+                        $childPresentCard.find('.imgHeight').attr("src", "img/aws_logo_started.png");
+                        $childPresentCard.find('.applicationChildDetails').removeClass('btn-primary btn-danger').addClass('btn-success');
 
+                    } else {
+                        $childPresentCard.find('.imgHeight').attr("src", "img/aws_logo_stopped.png");
+                        $childPresentCard.find('.applicationChildDetails').removeClass('btn-primary btn-success').addClass('btn-danger');
+                    }
+                    $childPresentCard.find('.applicationEnvNamePipelineView').html(appDeployDataObj.envId[indexofData]);
                     var $childCardtemplateStr = $childPresentCard.prop('outerHTML');
                     tempStr = tempStr + $childCardtemplateStr;
                     finalArray.push(tempStr);
+                    //finalArray.push($childPresentCard);
+                };
+
+
+                function sortAscending(data_A, data_B) {
+                    data_A = convertToDateObj(data_A);
+                    data_B = convertToDateObj(data_B);
+                    return (data_B - data_A);
                 }
-            }
-            var appLastDeployArr = sortedappDeployDataObj.applicationLastDeploy;
+                var finalArray = [];
+                var applicationName = appDeployDataObj.applicationName;
+                var versionNumber = appDeployDataObj.applicationVersion;
+                var applicationEnvList = appDeployDataObj.envId;
 
-            for (var key in presentDataDetailsObj) {
-                if (presentDataDetailsObj.hasOwnProperty(key)) {
-                    for (var p = 0; p < appLastDeployArr.length; p++) {
-                        if (key == sortedappDeployDataObj.envId[p]) {
 
-                            var specificEnvPresentobj = {
-                                "applicationInstanceName": sortedappDeployDataObj.applicationInstanceName[p],
-                                "applicationNodeIP": sortedappDeployDataObj.applicationNodeIP[p],
-                                "applicationLastDeploy": sortedappDeployDataObj.applicationLastDeploy[p],
-                                "applicationStatus": sortedappDeployDataObj.applicationStatus[p],
-                                "containerId": sortedappDeployDataObj.containerId[p],
-                                "hostName": sortedappDeployDataObj.hostName[p],
-                                "envId": sortedappDeployDataObj.envId[p],
-                                "appLogs": sortedappDeployDataObj.appLogs[p]
-                            };
-                            presentDataDetailsObj[key].push(specificEnvPresentobj);
+                var sortedappdataList = [];
+                var unsortedappdataList = [];
+                var indexedList = [];
+
+                for (var j = 0; j < applicationEnvList.length; j++) {
+                    sortedappdataList.push(appDeployDataObj.applicationLastDeploy[j]);
+                    unsortedappdataList.push(appDeployDataObj.applicationLastDeploy[j]);
+                }
+                sortedappdataList.sort(sortAscending);
+
+                for (var m = 0; m < unsortedappdataList.length; m++) {
+                    indexedList.push(jQuery.inArray(unsortedappdataList[m], sortedappdataList));
+                }
+
+                var applicationInstanceName = [];
+                var applicationNodeIP = [];
+                var applicationLastDeploy = [];
+                var applicationStatus = [];
+                var containerId = [];
+                var hostName = [];
+                var envId = [];
+                var appLogs = [];
+                for (var n = 0; n < indexedList.length; n++) {
+                    var appLastDeployObj = convertToDateObj(appDeployDataObj.applicationLastDeploy[n]);
+                    var appDeployLastTime = convertToDateCustom(appLastDeployObj);
+
+                    applicationInstanceName[indexedList[n]] = appDeployDataObj.applicationInstanceName[n];
+                    applicationNodeIP[indexedList[n]] = appDeployDataObj.applicationNodeIP[n];
+                    applicationLastDeploy[indexedList[n]] = appDeployLastTime;
+                    applicationStatus[indexedList[n]] = appDeployDataObj.applicationStatus[n];
+                    containerId[indexedList[n]] = appDeployDataObj.containerId[n];
+                    hostName[indexedList[n]] = appDeployDataObj.hostName[n];
+                    envId[indexedList[n]] = appDeployDataObj.envId[n];
+                    appLogs[indexedList[n]] = appDeployDataObj.appLogs[n];
+                }
+                console.log(applicationLastDeploy);
+                var sortedappDeployDataObj = {
+                    "applicationName": applicationName,
+                    "applicationVersion": versionNumber,
+                    "projectId": projectId,
+                    "applicationInstanceName": applicationInstanceName,
+                    "applicationNodeIP": applicationNodeIP,
+                    "applicationLastDeploy": applicationLastDeploy,
+                    "applicationStatus": applicationStatus,
+                    "containerId": containerId,
+                    "hostName": hostName,
+                    "envId": envId,
+                    "appLogs": appLogs
+                };
+
+                var presentDataDetailsObj = {};
+
+                var appSortedEnvList = sortedappDeployDataObj.envId;
+                for (var j = 0; j < arrSequence.length; j++) {
+                    //application main card
+
+                    if (j == 0 && arrSequence[0] == "") {
+                        finalArray.push(createMainCard(applicationName, versionNumber));
+                    } else if ($.inArray(arrSequence[j], appSortedEnvList) != -1) {
+                        var index = $.inArray(arrSequence[j], appSortedEnvList);
+                        createStatusPresentCard(sortedappDeployDataObj, index);
+                        var specificEnvArr = [];
+                        var specificEnvobj = {
+                            "applicationInstanceName": sortedappDeployDataObj.applicationInstanceName[index],
+                            "applicationNodeIP": sortedappDeployDataObj.applicationNodeIP[index],
+                            "applicationLastDeploy": sortedappDeployDataObj.applicationLastDeploy[index],
+                            "applicationStatus": sortedappDeployDataObj.applicationStatus[index],
+                            "containerId": sortedappDeployDataObj.containerId[index],
+                            "hostName": sortedappDeployDataObj.hostName[index],
+                            "envId": sortedappDeployDataObj.envId[index],
+                            "appLogs": sortedappDeployDataObj.appLogs[index]
+                        };
+                        specificEnvArr.push(specificEnvobj);
+
+                        presentDataDetailsObj[arrSequence[j]] = specificEnvArr;
+
+
+                        sortedappDeployDataObj.applicationInstanceName.splice(index, 1);
+                        sortedappDeployDataObj.applicationNodeIP.splice(index, 1);
+                        sortedappDeployDataObj.applicationLastDeploy.splice(index, 1);
+                        sortedappDeployDataObj.applicationStatus.splice(index, 1);
+                        sortedappDeployDataObj.containerId.splice(index, 1);
+                        sortedappDeployDataObj.hostName.splice(index, 1);
+                        sortedappDeployDataObj.envId.splice(index, 1);
+                        sortedappDeployDataObj.appLogs.splice(index, 1);
+                    } else {
+                        //application status absent card
+                        var tempStr = '';
+                        var $childCardTemplate = $('.childCardTemplate');
+                        var $childPresentCard = $childCardTemplate.clone(true);
+                        $childPresentCard.css({
+                            display: 'inline-flex'
+                        });
+                        $childPresentCard.find('.applicationChildIP').html('');
+                        $childPresentCard.find('.lastDeploySpan').html('');
+                        $childPresentCard.find('.imgHeight').attr("src", "img/rsz_inactive.png");
+                        $childPresentCard.find('.applicationChildDetails').removeClass('btn-primary').addClass('btn-grey');
+                        $childPresentCard.find('.lastapplicationDeploy').html('');
+                        $childPresentCard.children().css({
+                            'opacity': '0.5',
+                            'pointer-events': 'none'
+                        });
+
+                        var $childCardtemplateStr = $childPresentCard.prop('outerHTML');
+                        tempStr = tempStr + $childCardtemplateStr;
+                        finalArray.push(tempStr);
+                    }
+                }
+                var appLastDeployArr = sortedappDeployDataObj.applicationLastDeploy;
+
+                for (var key in presentDataDetailsObj) {
+                    if (presentDataDetailsObj.hasOwnProperty(key)) {
+                        for (var p = 0; p < appLastDeployArr.length; p++) {
+                            if (key == sortedappDeployDataObj.envId[p]) {
+
+                                var specificEnvPresentobj = {
+                                    "applicationInstanceName": sortedappDeployDataObj.applicationInstanceName[p],
+                                    "applicationNodeIP": sortedappDeployDataObj.applicationNodeIP[p],
+                                    "applicationLastDeploy": sortedappDeployDataObj.applicationLastDeploy[p],
+                                    "applicationStatus": sortedappDeployDataObj.applicationStatus[p],
+                                    "containerId": sortedappDeployDataObj.containerId[p],
+                                    "hostName": sortedappDeployDataObj.hostName[p],
+                                    "envId": sortedappDeployDataObj.envId[p],
+                                    "appLogs": sortedappDeployDataObj.appLogs[p]
+                                };
+                                presentDataDetailsObj[key].push(specificEnvPresentobj);
+                            }
                         }
                     }
                 }
-            }
-            for (var j = 0; j < arrEnv.length; j++) {
-                var finalString = $(finalArray).get(-1);
-                finalArray.pop();
-                var firstSubStr = finalString.lastIndexOf('<span');
-                var lastSubStr = finalString.lastIndexOf('</span>');
+                for (var j = 0; j < arrEnv.length; j++) {
+                    var finalString = $(finalArray).get(-1);
+                    finalArray.pop();
+                    var firstSubStr = finalString.lastIndexOf('<span');
+                    var lastSubStr = finalString.lastIndexOf('</span>');
 
-                var finalstr = finalString.substring(0, firstSubStr);
-                var superFinalString = finalstr + "</div>";
-                finalArray.push(superFinalString);
-            }
-            var rowIndex = $tableapplicationTest.dataTable().fnAddData(finalArray);
-            var row = $tableapplicationTest.dataTable().fnGetNodes(rowIndex);
-            $(row).data('appNameVer', presentDataDetailsObj);
+                    var finalstr = finalString.substring(0, firstSubStr);
+                    var superFinalString = finalstr + "</div>";
+                    finalArray.push(superFinalString);
+                }
+                var rowIndex = $tableapplicationTest.dataTable().fnAddData(finalArray);
+                var row = $tableapplicationTest.dataTable().fnGetNodes(rowIndex);
+                $(row).data('appNameVer', presentDataDetailsObj);
+            });
         });
-    });
-    /*setTimeout(function(){
-        var childCardTemplWidth = $('#tableContainer .childCardTemplate').outerWidth();
-        var firstChildSpanTemplWidth = $('#tableContainer .firstChildSpanTemplate').outerWidth();
-        var diff = childCardTemplWidth - firstChildSpanTemplWidth;
-        var actualSetDiff = diff/2;
-        $('#tableContainer .childCardTemplate .secondChildSpanTemplate').css('padding-left',actualSetDiff);
-    },10000);*/
-    $tableapplicationTbody.on('click', '.applicationChildDetails', moreinfoDetailsPipelineViewClickHandler);
+        /*setTimeout(function(){
+            var childCardTemplWidth = $('#tableContainer .childCardTemplate').outerWidth();
+            var firstChildSpanTemplWidth = $('#tableContainer .firstChildSpanTemplate').outerWidth();
+            var diff = childCardTemplWidth - firstChildSpanTemplWidth;
+            var actualSetDiff = diff/2;
+            $('#tableContainer .childCardTemplate .secondChildSpanTemplate').css('padding-left',actualSetDiff);
+        },10000);*/
+        $tableapplicationTbody.on('click', '.applicationChildDetails', moreinfoDetailsPipelineViewClickHandler);
+    }else{
+        var $noAppEnvironment = $('.noAppEnvironment').clone();
+        if($('.noAppEnvironmentSelected').length){
+            $('.noAppEnvironment').hide();
+            $('.noAppEnvironmentSelected').remove();
+        }
+        $('.noAppEnvironment').removeClass('noAppEnvironment').addClass('noAppEnvironmentSelected');
+        $noAppEnvironment.css("display","block");
+        $('#tableContainer').hide();
+        $('#divapplicationcardview').append($noAppEnvironment);
+    }
 }
 
 function moreinfoDetailsPipelineViewClickHandler(e) {
@@ -559,7 +576,7 @@ $('.createAppConfigure').click(function() {
                     individualenvName = individualenvName.split(",");
                     for (var i = 0; i < individualenvName.length; i++) {
                         var checked = "";
-                        if ($.inArray(individualenvName[i], individualenvName) > -1) {
+                        if ($.inArray(individualenvName[i], selectedEnvironments) > -1) {
                             checked = "checked";
                         }
                         var $tr = $('<tr/>').attr({
