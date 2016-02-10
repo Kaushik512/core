@@ -1008,7 +1008,7 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 								}
 							}
 							var $providerInput = $('<select id="cftProviderInput" class="form-control"></select>').append(providerStr);
-							var $providerInputContainer = $('<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftParameterLabelContainer" for=""><span class="cftParameterLabel">Choose Provider</span></label><div class="input-groups"></div></div>');
+							var $providerInputContainer = $('<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftParameterLabelContainer" for=""><span class="cftParameterLabel">Choose Provider</span><span class="control-label redSpan">&nbsp;*</span></label><div class="input-groups"></div></div>');
 							$providerInputContainer.find('.input-groups').append($providerInput);
 							$.get('/vmimages/regions/list', function(regionList) {
 								regionList = typeof regionList == "string" ? JSON.parse(regionList) : regionList;
@@ -1017,7 +1017,7 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 									regionOptStr = regionOptStr + '<option value="' + regionList[i].region + '">' + regionList[i].region_name + '</option>';
 								}
 								var $regionInput = $('<select id="cftRegionInput" class="form-control"></select>').append(regionOptStr);
-								var $regionInputContainer = $('<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftParameterLabelContainer" for=""><span class="cftParameterLabel required">Choose Region</span></label><div class="input-groups"></div></div>');
+								var $regionInputContainer = $('<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftParameterLabelContainer" for=""><span class="cftParameterLabel required">Choose Region</span><span class="control-label redSpan">&nbsp;*</span></label><div class="input-groups"></div></div>');
 								$regionInputContainer.find('.input-groups').append($regionInput);
 								$.get('/d4dMasters/cftTemplate?templateFile=' + cftTemplateFileName, function(data) {
 									var templateData = {};
@@ -1050,11 +1050,11 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 											}
 											$parameterInput.attr('data-cftParameter-type', parameter.type);
 											$parameterInput.attr('data-cftParameter-name', keys[i]);
-											var $inputContainer = $('<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftParameterLabelContainer" for=""><span class="cftParameterLabel"></span></label><div class="input-groups"></div></div>');
+											var $inputContainer = $('<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftParameterLabelContainer" for=""><span class="cftParameterLabel"></span><span class="control-label redSpan">&nbsp;*</span></label><div class="input-groups"></div></div>');
 											$inputContainer.find('.input-groups').append($parameterInput);
 											$inputContainer.find('.cftParameterLabel').append(keys[i]);
 											if (parameter.Description) {
-												var $desc = $('<span></span>').attr('title', parameter.Description).append('&nbsp;&nbsp;<i class="fa fa-question"/>');
+												var $desc = $('<span></span>').attr('title', parameter.Description).append('&nbsp;&nbsp;<img src="img/help.png"/>');
 												$inputContainer.find('.cftParameterLabelContainer').append($desc);
 											}
 											$panelBody.append($inputContainer);
@@ -1064,7 +1064,7 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 									var resourceKeys = Object.keys(resources);
 									var $panelGroup = $('<div class="panel-group smart-accordion-default col-lg-12 col-md-12" id="cft-resource-editArea" style="margin-top:5px"></div>');
 									var $panel = $('<div class="panel panel-default cft-resource-editPanel"><div class="panel-heading"><h4 class="panel-title"><a class="panel-toggle" data-toggle="collapse" data-parent="#cft-resource-editArea" href="#" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i><span class="heading-text"></span></a></h4></div><div id="CollapseEditorgParam" class="panel-collapse collapse" style="height: auto;"><div class="panel-body" style="padding-left: 8px;"></div></div></div>');
-									var $inputContainerTemplate = $('<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftResourceLabelContainer" for=""><span class="cftResourceLabel"></span></label><div class="input-groups"></div></div>');
+									var $inputContainerTemplate = $('<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label class="cftResourceLabelContainer" for=""><span class="cftResourceLabel"></span><span class="control-label redSpan">&nbsp;*</span></label><div class="input-groups"></div></div>');
 									var $resourceInputTemplate = $('<input class="cftResourceInput form-control" type="text" autofocus="autofocus">');
 									var hasResource = false;
 									// for runlist input
@@ -1658,15 +1658,6 @@ $.ajax({
 				$projectList.append($('<option></option>').val(getProjs[i].rowid).html(getProjs[i].name));
 			}
 		});
-		//Arab Code for Application Setup. 
-		/*var projectListValue = $projectList.val();
-		var $nexusServer = $('#chooseNexusServer');
-		$nexusServer.click(function(e) {
-			alert(projectListValue);
-			if(!projectListValue){
-				alert("Please Choose Project Before Proceeding....");
-			}
-		});*/
 		$('#chooseNexusServer').click(function(e) {
 			var projectSelName = $('#projectListInput option:selected').val();
 			if (!projectSelName || projectSelName == 'choose') {
@@ -1682,9 +1673,7 @@ $.ajax({
 			var projectId = $(this).val();
 			if ($('.checkConfigApp').prop("checked")) {
 				getNexusServer();
-				//getDockerServer();
 			} else {
-				//var $nexusServer = $('#chooseNexusServer');
 				$nexusServer.empty();
 				$nexusServer.append('<option value="">Choose Server</option>');
 				resetAllFields();
@@ -1692,9 +1681,7 @@ $.ajax({
 			$('.checkConfigApp').click(function() {
 				if ($(this).prop("checked")) {
 					getNexusServer();
-					//getDockerServer();
 				} else {
-					//var $nexusServer = $('#chooseNexusServer');
 					$nexusServer.empty();
 					$nexusServer.append('<option value="">Choose Server</option>');
 					resetAllFields();
@@ -1702,16 +1689,12 @@ $.ajax({
 			});
 
 			function resetAllFields() {
-				//var $chooseRepository = $('#chooseRepository');
 				$chooseRepository.empty();
 				$chooseRepository.append('<option value="">Choose Repositories</option>');
-				// var $chooseGroupId = $('#chooseGroupId');
 				$chooseGroupId.empty();
 				$('#chooseGroupId').append('<option value="">Choose Group ID</option>');
-				//var $chooseArtifacts = $('#chooseArtifacts');
 				$chooseArtifacts.empty();
 				$chooseArtifacts.append('<option value="">Choose Artifacts</option>');
-				// var $chooseVersions = $('#chooseVersions');
 				$chooseVersions.empty();
 				$chooseVersions.append('<option value="">Choose Versions</option>');
 				var $repositoryUrl = $('#repositoryUrl');
@@ -1733,7 +1716,6 @@ $.ajax({
 
 			function getNexusServer() {
 				resetAllFields();
-				//var $nexusServer = $('#chooseNexusServer');
 				$nexusServer.empty();
 				$nexusServer.append('<option value="">Choose Server</option>');
 				var $chooseJobType = $('#chooseJobType');
@@ -1745,7 +1727,6 @@ $.ajax({
 					if (nexus.length) {
 						for (var i = 0; i < nexus.length; i++) {
 							$('#chooseNexusServer').append('<option data-groupId = "' + nexus[i].groupid + '" data-nexusUrl = "' + nexus[i].hostname + '" value=' + nexus[i].rowid + ' data-serverType = "' + nexus[i].configType + '">' + nexus[i].nexusservername + '</option>');
-							//$nexusServer.append('<option data-nexusUrl = "' + nexus[i].hostname + '" value=' + nexus[i].rowid + ' data-serverType = "' + nexus[i].configType + '">' + nexus[i].nexusservername + '</option>');
 						}
 					}
 					$.get('/d4dMasters/readmasterjsonnew/18', function(dockerData) {
@@ -1778,19 +1759,8 @@ $.ajax({
 					});
 				});
 			}
-
-			/*function getDockerServer() {
-			    $.get('/d4dMasters/readmasterjsonnew/18', function(dockerData) {
-			        if (dockerData.length) {
-			            for (var i = 0; i < dockerData.length; i++) {
-			                $nexusServer.append('<option value=' + dockerData[i].rowid + ' data-serverType = "' + dockerData[i].configType + '">' + dockerData[i].dockerreponame + '</option>');
-			            }
-			        }
-			    });
-			}*/
-			// var $nexusServer = $('#chooseNexusServer');
 			$nexusServer.change(function(e) {
-				// var nexusServerType = $('#chooseNexusServer :selected').attr('data-serverType');
+
 				var nexusServerType = $nexusServer.find('option:selected').attr('data-serverType');
 				if ($nexusServer.find('option:selected').text() == 'Choose Server') {
 					$('.groupClass').hide();
@@ -1803,8 +1773,6 @@ $.ajax({
 					// Reset all values
 					resetAllFields();
 				} else if (nexusServerType == 'nexus') {
-					//$('.containerUpgradeDeploy').hide();
-					//$('.createTaskLinkUpgrade').removeAttr('disabled');
 					$('.groupClass').show();
 					$('.repoUrlClass').show();
 					$('.artifactClass').show();
@@ -1812,16 +1780,11 @@ $.ajax({
 					$('.containerIdClass').hide();
 					$('.containerPortClass').hide();
 					resetAllFields();
-					/*var groupId = $('#chooseNexusServer :selected').attr('data-groupId').split(",");
-						for(var g=0; g< groupId.length; g++){
-							$('#chooseGroupId').append('<option value="' + groupId[g] + '">' + groupId[g] + '</option>');
-						}*/
+
 					getNexusServerGroupId();
 					getNexusServerRepo($(this).val());
 				} else { // It's Docker
 					resetAllFields();
-					//$('.containerUpgradeDeploy').show();
-					//$('.createTaskLinkUpgrade').removeAttr('disabled');
 					$('.groupClass').hide();
 					$('.repoUrlClass').hide();
 					$('.artifactClass').hide();
@@ -1829,19 +1792,12 @@ $.ajax({
 					$('.containerIdClass').show();
 					$('.containerPortClass').show();
 					var containerId = $('#containerIdInput').val();
-					//var upgrade = $('#upgradeValue').val();
-					// if (containerId != "NA" && upgrade == "true") {
-					// 	$('#containerIdDiv').val(containerId);
-					// 	$('#containerIdDiv').attr('disabled', 'disabled');
-					// }
 					getDockerRepoes();
 				}
 			});
 
 			function getDockerRepoes() {
 				$('.repospinner').css('display', 'inline-block');
-				//var $chooseRepository = $('#chooseRepository');
-				//var projectId = urlParams.projid;
 				if (projectId) {
 					$.get('/d4dMasters/project/' + projectId, function(anProject) {
 						$('.repospinner').css('display', 'none');
@@ -1864,8 +1820,6 @@ $.ajax({
 
 			function getNexusServerRepo(nexusId) {
 				$('.repospinner').css('display', 'inline-block');
-				//var $chooseRepository = $('#chooseRepository');
-				//var projectId = urlParams.projid;
 				if (nexusId) {
 					$.get('/nexus/' + nexusId + '/repositories', function(nexusRepos) {
 						$('.repospinner').css('display', 'none');
@@ -1885,7 +1839,7 @@ $.ajax({
 													}
 												})(x);
 											}
-											//$chooseRepository.find('option:selected').attr('selected', true).change();
+
 											$('#chooseRepository > option:eq(1)').attr('selected', true).change();
 										}
 									}
@@ -1897,10 +1851,10 @@ $.ajax({
 					$('.repospinner').css('display', 'none');
 				}
 			}
-			//var $chooseRepository = $('#chooseRepository');
+
 			$chooseRepository.change(function(e) {
 				var nexusServerType = $nexusServer.find('option:selected').attr('data-serverType');
-				// var nexusServerType = $('#chooseNexusServer :selected').attr('data-serverType');
+
 				if (nexusServerType === 'nexus') {
 					$('.containerIdClass').hide();
 					$('.containerPortClass').hide();
@@ -1910,10 +1864,10 @@ $.ajax({
 					var $repositoryUrl = $('#repositoryUrl');
 					$repositoryUrl.val("");
 
-					//var $chooseArtifacts = $('#chooseArtifacts');
+
 					$chooseArtifacts.empty();
 					$chooseArtifacts.append('<option value="">Choose Artifacts</option>');
-					//var $chooseVersions = $('#chooseVersions');
+
 					$chooseVersions.empty();
 					$chooseVersions.append('<option value="">Choose Versions</option>');
 					$('#repositoryUrl').val($(this).find('option:selected').attr('data-repoUrl'));
@@ -1950,7 +1904,7 @@ $.ajax({
 				}
 				$('#chooseGroupId > option:eq(1)').attr('selected', true).change();
 			}
-			//var $chooseGroupId = $('#chooseGroupId');
+
 			$chooseGroupId.change(function(e) {
 				var repoName = $('#chooseRepository').find('option:selected').attr('data-repoName');
 				var nexusId = $('#chooseNexusServer').val();
@@ -1960,7 +1914,7 @@ $.ajax({
 
 			function getNexusServerRepoArtifact(nexusId, repoName, groupId) {
 				$('.artifactsspinner').css('display', 'inline-block');
-				//var $chooseArtifacts = $('#chooseArtifacts');
+
 				$chooseArtifacts.empty();
 				$chooseArtifacts.append('<option value="">Choose Artifacts</option>');
 				if (nexusId && repoName) {
@@ -1992,19 +1946,14 @@ $.ajax({
 					$('.artifactsspinner').css('display', 'none');
 				}
 			}
-			//var $chooseArtifacts = $('#chooseArtifacts');
+
 			$chooseArtifacts.change(function(e) {
-				//var $chooseVersions = $('#chooseVersions');
 				$chooseVersions.empty();
 				$chooseVersions.append('<option value="">Choose Versions</option>');
 				var repoName = $chooseRepository.find('option:selected').attr('data-repoName');
 				var nexusId = $nexusServer.val();
 				var groupId = $(this).find('option:selected').attr('data-groupId');
 				var artifactId = $(this).val();
-				/*var reqBody = {
-				    "groupId": groupId,
-				    "artifactId": $(this).val()
-				};*/
 				getNexusServerRepoArtifactVersions(nexusId, repoName, groupId, artifactId);
 			});
 			var comparer = function compareObject(a, b) {
@@ -2032,43 +1981,11 @@ $.ajax({
 						} else {
 							$('.versionspinner').css('display', 'none');
 						}
-
 					});
 				} else {
 					$('.versionspinner').css('display', 'none');
 				}
 			}
-			/*function getNexusServerRepoArtifactVersions(nexusId, repoName, reqBody) {
-			    $('.versionspinner').css('display', 'inline-block');
-			    //var $chooseVersions = $('#chooseVersions');
-			    $chooseVersions.empty();
-			    $chooseVersions.append('<option value="">Choose Versions</option>');
-			    if (nexusId && repoName && reqBody.groupId && reqBody.artifactId) {
-			        $.ajax({
-			            url: '/nexus/' + nexusId + '/repositories/' + repoName + '/artifact/versions',
-			            data: JSON.stringify(reqBody),
-			            type: 'POST',
-			            contentType: "application/json",
-			            success: function(data) {
-			                $('.versionspinner').css('display', 'none');
-			                if (data) {
-			                    var versions = data.metadata.versioning[0].versions[0].version;
-			                    for (var i = 0; i < versions.length; i++) {
-			                        $chooseVersions.append('<option value=' + versions[i] + '>' + versions[i] + '</option>');
-			                    }
-			                    $chooseVersions.find('option:last-child').attr('selected', true).change();
-			                    //$('#chooseVersions > option:last-child').attr('selected', true).change();
-			                }
-			            },
-			            error: function(jqxhr) {
-			                $('.versionspinner').css('display', 'none');
-			                alert(jqxhr.responseText);
-			            }
-			        });
-			    } else {
-			        $('.versionspinner').css('display', 'none');
-			    }
-			}*/
 		});
 	}
 });
@@ -2210,15 +2127,15 @@ function initializeBlueprintAreaNew(data) {
 					break;
 			}
 			console.log(tdata);
-			$containerTempNew = '<div class="panel panel-default blueprintContainer hidden">' + '<div class="panel-heading">' + '<h4 class="panel-title">' + '<a href="#collapse' + i + '" data-parent="#accordion-2" data-toggle="collapse" class="collapsed"> ' + '<i class="fa fa-fw fa-plus-circle txt-color-blue"></i> ' + '<i class="fa fa-fw fa-minus-circle txt-color-red"></i>' + getDesignTypeName + '</a>' + '</h4></div><div class="panel-collapse collapse" id="collapse' + i + '">' + '<div class="panel-body ' + getDesignType + '"></div>' + '</div>';
-			$('#accordion-2').append($containerTempNew);
+			if ($("div." + tdata[i]['templatetype']).length === 0) {
+				$containerTempNew = '<div class="panel panel-default blueprintContainer hidden">' + '<div class="panel-heading">' + '<h4 class="panel-title">' + '<a href="#collapse' + i + '" data-parent="#accordion-2" data-toggle="collapse" class="collapsed"> ' + '<i class="fa fa-fw fa-plus-circle txt-color-blue"></i> ' + '<i class="fa fa-fw fa-minus-circle txt-color-red"></i>' + getDesignTypeName + '</a>' + '</h4></div><div class="panel-collapse collapse" id="collapse' + i + '">' + '<div class="panel-body ' + getDesignType + '"></div>' + '</div>';
+				$('#accordion-2').append($containerTempNew);
+			}
 		}
 		for (var i = 0; i < data.length; i++) {
-			console.log("data>>>>>>>>>>>" + JSON.stringify(data[i]));
 			(function(i) {
 				//Find a panel-body with the template type class
 				var $currRolePanel = $('#accordion-2').find('.' + data[i].templateType);
-				//   alert($currRolePanel.length);
 				if ($currRolePanel.length > 0) {
 					var $itemContainer = $('<div></div>').addClass("productdiv4");
 					var $itemBody = $('<div></div>').addClass('productdiv1 cardimage').attr('data-blueprintId', data[i]._id).attr('data-projectId', data[i].projectId).attr('data-envId', data[i].envId).attr('data-chefServerId', data[i].chefServerId).attr('data-templateType', data[i].templateType);
@@ -2238,7 +2155,6 @@ function initializeBlueprintAreaNew(data) {
 					var $liCardName = $('<li title="' + data[i].name + '"></li>').addClass('Cardtextoverflow').html('<u><b>' + data[i].name + '</b></u>');
 					$ul.append($liCardName);
 					var $selecteditBtnContainer = $('<div style="position:absolute;padding-left:27px;bottom:11px;"></div>');
-					//      if (data[i].versionsList) {
 					var $selectVerEdit = $('<a style="padding:0px 4px;margin-left:3px;border-radius:5px;" class="bpEditBtn"><i class="ace-icon fa fa-pencil"></i></a>').addClass('btn btn-primary').attr('data-toggle', 'tooltip').attr('data-placement', 'top').attr('title', 'Edit');
 					var $selectVer = null;
 					var tagLabel = '';
