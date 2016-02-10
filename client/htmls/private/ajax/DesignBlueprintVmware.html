@@ -1,924 +1,700 @@
 <div class="row">
-    <article class="col-sm-12 col-md-12 col-lg-12">
-        <div class="widget-body" style="font-size:12px;">
-            <ul id="myTab3" class="nav nav-tabs tabs-pull-left">
-                <!--<li class="active">
- <a href="#l1" data-toggle="tab">Domains</a>
- </li>-->
-                <li class="pull-left active">
-                    <a href="#l2" id="tabheader" data-toggle="tab">Choose Template Type</a>
-                </li>
-                <!--new tab for CRUD operations for Blueprint-->
-                <li class="pull-left View">
-                    <a href="#viewCreate" id="viewCreateNew" data-toggle="tab">Existing Blueprints</a>
-                </li>
-            </ul>
-            <div id="myTabContent3" class="nav tab-content">
-                <div class="tab-pane fade in active" id="l2">
-                    <section id="widget-grid" class="">
-                        <div class="row">
-                            <article class="col-sm-12 col-md-12 col-lg-12">
-                                <div class="jarviswidget jarviswidget-color-darken" id="wid-id-1" data-widget-editbutton="false" data-widget-deletebutton="false">
-                                    <div role="content">
-                                        <div class="jarviswidget-editbox">
-                                        </div>
-                                        <div class="widget-body">
-                                            <div class="row">
-                                                <form id="wizard-1" novalidate="novalidate">
-                                                    <div id="bootstrap-wizard-1" class="col-sm-12">
-                                                        <div class="form-bootstrapWizard">
-                                                            <ul class="bootstrapWizard form-wizard" style="margin-left:13%;display:none">
-                                                                <li class="active" data-target="#step1">
-                                                                    <a href="#tab1" data-toggle="tab"> <span class="step">1</span>
-                                                                        <span class="title"><b></b></span>
-                                                                    </a>
-                                                                </li>
-                                                                <li data-target="#step2">
-                                                                    <a id="addlink" data-target='#tab2' data-toggle="tab" onclick="">
-                                                                        <span class="step">2</span>
-                                                                        <span class="title"><b></b></span>
-                                                                    </a>
-                                                                </li>
-                                                                <li data-target="#step3">
-                                                                    <a href="#tab3" data-toggle="tab">
-                                                                        <span class="step">3</span> <span class="title"><b></b></span>
-                                                                    </a>
-                                                                </li>
-                                                                <li data-target="#step4">
-                                                                    <a href="#tab4" data-toggle="tab">
-                                                                        <span class="step">4</span> <span class="title"><b></b></span>
-                                                                    </a>
-                                                                </li>
-                                                                <!-- <li data-target="#step5">
- <a href="#tab5" data-toggle="tab">
- <span class="step">4</span>  <span class="title"><b></b></span> 
- </a>
- </li> -->
-                                                            </ul>
-                                                            <div class="clearfix"></div>
-                                                        </div>
-                                                        <div class="tab-content">
-                                                            <div class="tab-pane active" id="tab1" style="padding-bottom:20px;overflow-y: auto;">
-                                                                <div id="templateContent" class="row " style="margin:0px;min-height:200px;">
-                                                                </div>
-                                                            </div>
-                                                            <div class="tab-pane" id="tab2" style="padding-bottom:20px;overflow-y: auto;">
-                                                                <div class="row " style="margin:0px">
-                                                                    <div id="individualTemplateNameGrid" class="templatesAppfactory templates">
-                                                                    </div>
-                                                                    <div id="templatesDevopsRole" class="templatesdevopsrole templates" style="display:none">
-                                                                    </div>
-                                                                    <div class="templatesCloudformation templates hidden" style="display:none">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="tab-pane" id="tab3" style="padding-bottom:20px;">
-                                                                <div class="row">
-                                                                    <div class="col-lg-12">
-                                                                        <div class="col-lg-2">
-                                                                            <div class="row  selectedTemplateArea" style="margin-bottom:10px;padding-left:10px;margin-left:0px;margin-right:0px;"> Test
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-lg-10">
-                                                                            <div class="panel-group smart-accordion-default" id="accordion-Design">
-                                                                                <div class="panel panel-default divconfigureparameterrunlist">
-                                                                                    <div class="panel-heading">
-                                                                                        <h4 class="panel-title">
- <a data-toggle="collapse" data-parent="#accordion-Design" href="#CollapseConfigureproviderParameter"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Configure Provider Parameters</a>
- </h4>
-                                                                                    </div>
-                                                                                    <div id="CollapseConfigureproviderParameter" class="panel-collapse collapse in">
-                                                                                        <div class="panel-body" style="padding-left: 20px;">
-                                                                                            <div class="col-lg-6 col-md-6">
-                                                                                                <label for="instanceOS">Choose Operating System:<span style="color:red">*</span></label>
-                                                                                                <div class="input-groups">
-                                                                                                    <select id="instanceOS" name="instanceOS" class="required chooseOS width-100">
-                                                                                                    </select>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="col-lg-6 col-md-6">
-                                                                                                <label for="providerId">Choose Provider:<span style="color:red">*</span></label>
-                                                                                                <div class="input-groups">
-                                                                                                    <select id="providerId" name="providerId" class="required chooseOSProvider width-100">
-                                                                                                    </select>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="col-lg-6 col-md-6" style="margin-top:15px;">
-                                                                                                <label for="imageId">Choose Available Images:<span style="color:red">*</span></label>
-                                                                                                <div class="input-groups">
-                                                                                                    <select id="imageId" name="imageId" class="required chooseSecurity width-100">
-                                                                                                    </select>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                         
-                                                                                            <div class="col-lg-6 col-md-6 forvmware" style="margin-top:15px;">
-                                                                                                <label for="region">Choose Data Store:<span style="color:red">*</span></label>
-                                                                                                <div class="input-groups">
-                                                                                                    <select id="vmwareds" name="vmwareds" class="required choosevmwareds width-100">
-                                                                                                        <option value="">Select Data Store</option>
-                                                                                                    </select>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            
-                                                                                           
-                                                                                            <div class="col-lg-6 col-md-6" style="margin-top:15px; display:none">
-                                                                                                <label for="instanceCount">Instances to Launch:<span class="control-label redSpan">&nbsp;*</span></label>
-                                                                                                <div class="input-groups">
-                                                                                                    <select id="instanceCount" name="instanceCount" class="required chooseOrganization width-100 chooseSelect" style="vertical-align:central">
-                                                                                                        <option value="1">1</option>
-                                                                                                        <option value="2">2</option>
-                                                                                                        <option value="3">3</option>
-                                                                                                        <option value="4">4</option>
-                                                                                                        <option value="5">5</option>
-                                                                                                    </select>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                           
-                                                                                            <!--To add the Swipe Functionality-->
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <!--adding organisation parameters starts here-->
-                                                                                <div class="panel panel-default divOrganizationParameter">
-                                                                                    <div class="panel-heading">
-                                                                                        <h4 class="panel-title">
- <a data-toggle="collapse" data-parent="#accordion-Design" href="#CollapseEditorgParam" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Configure Organization Parameters</a>
- </h4>
-                                                                                    </div>
-                                                                                    <div id="CollapseEditorgParam" class="panel-collapse collapse">
-                                                                                        <div class="panel-body" style="padding-left: 8px;">
-                                                                                            <div class="col-lg-6 col-md-6">
-                                                                                                <label for="orgnameSelect">Choose Organization <span style="color:red">*</span></label>
-                                                                                                <div class="input-groups">
-                                                                                                    <select id="orgnameSelect" name="orgnameSelect" class="required chooseOrgselect2 width-100">
-                                                                                                    </select>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="col-lg-6 col-md-6">
-                                                                                                <label for="blueprintNameInput">Enter Blueprint Name:
-                                                                                                    <span class="control-label redSpan">&nbsp;*</span></label>
-                                                                                                <div class="input-groups">
-                                                                                                    <input id="blueprintNameInput" name="blueprintNameInput" class="required form-control" type="text" autofocus="autofocus">
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="col-lg-6 col-md-6" style="margin-top:15px;">
-                                                                                                <label for="bgListInput">Choose Business Group <span style="color:red">*</span>
-                                                                                                </label>
-                                                                                                <div class="input-groups">
-                                                                                                    <select id="bgListInput" name="bgListInput" class="required chooseBG width-100">
-                                                                                                    </select>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="col-lg-6 col-md-6" style="margin-top:15px;">
-                                                                                                <label for="projectListInput">Choose Project <span style="color:red">*</span>
-                                                                                                </label>
-                                                                                                <div class="input-groups">
-                                                                                                    <select id="projectListInput" name="projectListInput" class="required chooseProject width-100">
-                                                                                                    </select>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <!-- <div class="col-lg-12 notForDocker notforCFT" style="margin-top:10px;padding-left:8px;overflow:hidden">
- <div class="cookbookShow">
-
- </div>
- </div> -->
-                                                                                            <!-- <div class="col-lg-6 col-md-6 notForDocker notforCFT" style="margin-top:19px">
-    <label>
-     <i style="color:#40baf1;font-size:16px;" class="ace-icon fa fa-list-ul"></i>   
-     Edit Runlist <span style="color:red">*</span>
-     </label>
-     <a href="#chefRunlistModal" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;margin-top:6px;" class="addList" rel="tooltip" data-placement="top" title="Edit Runlist" /></a>
-     <div style="height:146px;overflow-y:auto;" id="dbNameTable_wrapper" class="dataTables_wrapper no-footer">
-        <table id="tableRunlistForBlueprint" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center";>
-           <thead>
-              <tr class="rowCustomStyle">
-                 <th style="text-align:center">View Runlist</th>
-              </tr>
-           </thead>
-           <tbody>
-           </tbody>
-        </table>
-     </div>
-</div>
-
-
- <div class="col-lg-4 col-md-4 notForDocker notforCFT" style="margin-top:25px;margin-left:2px;"><a style="font-size:14px!important" href="#modalForHelp" data-toggle="modal" id="dokuNew"><i class="fa fa-question"></i>&nbsp;Help</a>
- </div> -->
-                                                                                            <div class="col-lg-6 hidden" style="margin-top:5px;">
-                                                                                                <label for="">Assign Users<span style="color:red">*</span></label>
-                                                                                                <div class="userListLoadingContainer">
-                                                                                                </div>
-                                                                                                <select class="custom-scroll width-100" multiple="" id="userListSelect" style="display:none">
-                                                                                                </select>
-                                                                                            </div>
-                                                                                            <!-- <div class="col-lg-6 col-md-6">
- <label for="category">Environment <span style="color:red">*</span>
- </label>
-
- <select  id="envList" class="chooseEnv width-100">
-
- </select>
-
-
- </div>                 -->
-                                                                                            <div class="col-lg-6 col-md-6 forDocker dockerProjPort hidden notforCFT">
-                                                                                                <label for="category">Select Docker Image <span style="color:red">*</span>
-                                                                                                </label>
-                                                                                                <select id="dockerrepoListInput" class="chooseDockerContainer width-100">
-                                                                                                </select>
-                                                                                            </div>
-                                                                                            <div class="col-lg-6 col-md-6 forDocker dockerProjPort hidden notforCFT">
-                                                                                                <label for="category">Available Repo Tags <span style="color:red">*</span>
-                                                                                                </label>
-                                                                                                <div id="dockerrepotagsdiv">
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="col-lg-12 col-md-12 hidden">
-                                                                                                <div class="col-lg-6 col-md-6 forDocker dockerProjPort dockerLEFT notforCFT">
-                                                                                                    <label for="category" class="pull-left">Launch Parameters<a id="launchParamDocker" href="javascript:void(0);" onclick=""><i title="Add" class="icon-append fa fa-plus" ></i></a>
-                                                                                                    </label>
-                                                                                                    <div class="btn-group pull-left">
-                                                                                                    </div>
-                                                                                                    <input type="text" id="dockerlaunchparameters" class="form-control" disabled="disabled" title="To edit click add" />
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <!-- Docker Image selection table -->
-                                                                                            <div class="col-lg-12 col-md-12 forDocker notforCFT" style="margin-top:5px;">
-                                                                                                <label for="category">Docker Images<span style="color:red">*</span>
-                                                                                                </label>
-                                                                                                <a class="btn btn-primary adddockertemplate pull-right" onclick="showdockertemplateadder();">Add</a>
-                                                                                                <table class="table table-striped table-bordered table-hover dataTable no-footer" id="compositedockertable" cellpadding="5px" width="100%" style="text-align:center">
-                                                                                                    <tr>
-                                                                                                        <th>Order</th>
-                                                                                                        <th>Name</th>
-                                                                                                        <th>Image Path</th>
-                                                                                                        <th>Tag</th>
-                                                                                                        <th>Launch Params</th>
-                                                                                                        <th>Action</th>
-                                                                                                    </tr>
-                                                                                                </table>
-                                                                                            </div>
-                                                                                            <!-- End Docker Image selection table -->
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <!--configure runlist collapse starts here-->
-                                                                                <div class="panel panel-default divRunlistParameter notforCFT notForDocker">
-                                                                                    <div class="panel-heading">
-                                                                                        <h4 class="panel-title">
- <a data-toggle="collapse" data-parent="#accordion-Design" href="#CollapseEditRunlistParam" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Configure Runlist Parameters</a>
- </h4>
-                                                                                    </div>
-                                                                                    <div id="CollapseEditRunlistParam" class="panel-collapse collapse">
-                                                                                        <div class="panel-body" style="padding-left: 8px;">
-                                                                                            <!-- <div class="col-lg-12 notForDocker notforCFT" style="margin-top:10px;padding-left:8px;overflow:hidden">
- <div class="cookbookShow">
-
- </div>
- </div> -->
-                                                                                            <div class="col-lg-6 col-md-6 notForDocker notforCFT" style="margin-top:19px">
-                                                                                                <label>
-                                                                                                    <i style="color:#40baf1;font-size:16px;" class="ace-icon fa fa-list-ul"></i> Edit Runlist
-                                                                                                </label>
-                                                                                                <a href="#chefRunlistModal" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;margin-top:6px;" class="addList" rel="tooltip" data-placement="top" title="Edit Runlist" /></a>
-                                                                                                <div style="height:146px;overflow-y:auto;" id="dbNameTable_wrapper" class="dataTables_wrapper no-footer">
-                                                                                                    <table id="tableRunlistForBlueprint" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center" ;>
-                                                                                                        <thead>
-                                                                                                            <tr class="rowCustomStyle">
-                                                                                                                <th style="text-align:center">View Runlist</th>
-                                                                                                            </tr>
-                                                                                                        </thead>
-                                                                                                        <tbody>
-                                                                                                        </tbody>
-                                                                                                    </table>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="col-lg-4 col-md-4 notForDocker notforCFT" style="margin-top:25px;margin-left:2px;"><a style="font-size:14px!important" href="#modalForHelp" data-toggle="modal" id="dokuNew"><i class="fa fa-question"></i>&nbsp;Help</a>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <!--configure runlist collapse ends here-->
-                                                                                <!--assign runlist modal-->
-                                                                                <div class="modal fade" id="chefRunlistModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-                                                                                    <div class="modal-dialog">
-                                                                                        <div class="modal-content" style="width:800px">
-                                                                                            <form role="form" class="cmxform" id="chefTaskRunlist" autocomplete="off">
-                                                                                                <div class="modal-header">
-                                                                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                                                                                                        &times;
-                                                                                                    </button>
-                                                                                                    <h4 class="modal-title">
-         <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Edit Runlist
-         </h4>
-                                                                                                </div>
-                                                                                                <div class="modal-body modal-height">
-                                                                                                    <div class="cookbookShow">
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                                <div class="modal-footer">
-                                                                                                    <a type="button" class="btn btn-default" data-dismiss="modal">Close</a>
-                                                                                                    <button type="submit" class="btn btn-primary" id="saveRunlist">Update Runlist</button>
-                                                                                                </div>
-                                                                                            </form>
-                                                                                        </div>
-                                                                                        <!-- /.modal-content -->
-                                                                                    </div>
-                                                                                    <!-- /.modal-dialog -->
-                                                                                </div>
-                                                                                <!--modal for runlist ends here-->
-                                                                           
-                                                                                <!--adding new collapse-->
-                                                                                <div class="panel panel-default appSeriesNameURL notForDocker notforCFT">
-                                                                                    <div class="panel-heading">
-                                                                                        <h4 class="panel-title">
- <a data-toggle="collapse" data-parent="#accordion-Design" href="#CollapseApp" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Configure Application URL</a>
- </h4>
-                                                                                    </div>
-                                                                                    <div id="CollapseApp" class="panel-collapse collapse">
-                                                                                        <div class="row">
-                                                                                            <div class="col-md-12">
-                                                                                                <div class="col-md-12">
-                                                                                                    <div class="widget-box">
-                                                                                                        <div class="widget-header">
-                                                                                                            <h5 class="widget-title" style="color:#4e5964;">
- <strong>Application URL</strong>
- </h5>
-                                                                                                            <div class="widget-toolbar no-border">
-                                                                                                                <a id="newAppSeries" class="btn btn-minier btn-primary" href="#modalAppNameURL" data-toggle="modal">
-                                                                                                                    <i class="ace-icon ace-icon fa fa-plus bigger-110"></i> New
-                                                                                                                </a>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                        <div class="widget-body">
-                                                                                                            <div class="widget-main" style="min-height:100px">
-                                                                                                                <div class="col-md-12 table-responsive" style="padding-left:0px; padding-right:0px;">
-                                                                                                                    <table id="appTable" class="hidden" cellpadding="5px" width="100%">
-                                                                                                                        <thead>
-                                                                                                                            <tr class="rowCustomStyle">
-                                                                                                                                <td>Name</td>
-                                                                                                                                <td>URL</td>
-                                                                                                                                <td>Action</td>
-                                                                                                                            </tr>
-                                                                                                                        </thead>
-                                                                                                                        <tbody>
-                                                                                                                            <tr class="hidden rowtemplate">
-                                                                                                                                <td datafield="appName"></td>
-                                                                                                                                <td datafield="appURL"></td>
-                                                                                                                                <td>
-                                                                                                                                    <div class="btn-group tableactionWidth">
-                                                                                                                                        <button class="btn btn-xs btn-danger pull-left" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button>
-                                                                                                                                        <a class="btn btn-xs btn-info pull-left" title="Update">
-                                                                                                                                            <i class="ace-icon fa fa-pencil bigger-120"></i>
-                                                                                                                                        </a>
-                                                                                                                                    </div>
-                                                                                                                                </td>
-                                                                                                                            </tr>
-                                                                                                                        </tbody>
-                                                                                                                    </table>
-                                                                                                                    <table id="appUrlTable" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center" ;>
-                                                                                                                        <thead>
-                                                                                                                            <tr class="rowCustomStyle">
-                                                                                                                                <td style="width:20%">Name</td>
-                                                                                                                                <td style="width:40%">URL</td>
-                                                                                                                                <td style="width:20%" class="">Action</td>
-                                                                                                                            </tr>
-                                                                                                                        </thead>
-                                                                                                                        <tbody>
-                                                                                                                            <tr>
-                                                                                                                                <td colspan=3 id="appEntry">No Data Available</td>
-                                                                                                                            </tr>
-                                                                                                                        </tbody>
-                                                                                                                    </table>
-                                                                                                                    <div id="envtable_tools1"></div>
-                                                                                                                    <div class="col-md-5">
-                                                                                                                    </div>
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                            <div class="widget-toolbox padding-8 clearfix dataTables_wrapper">
-                                                                                                                <div id="tableFooterLeft" class="pull-left"></div>
-                                                                                                                <div id="tableFooterRight" class="pull-right"></div>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <!--collapseapp ends here-->
-                                                                                </div>
-                                                                                <!--adding new collapse-->
-                                                                                <div class="panel panel-default notForDocker forCFT cftStackParameterArea" style="display:none">
-                                                                                    <div class="panel-heading">
-                                                                                        <h4 class="panel-title">
- <a data-toggle="collapse" data-parent="#accordion-Design" href="#CollapseStackParameters" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Configure Stack Parameters</a>
- </h4>
-                                                                                    </div>
-                                                                                    <div id="CollapseStackParameters" class="panel-collapse collapse">
-                                                                                        <div class="panel-body" style="padding-left: 20px;">
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <!--tab pane ends here-->
-                                                            <div class="tab-pane" id="tab4" style="padding-bottom:20px;overflow-y: auto;">
-                                                                <div class="blueprintSaveSuccess blueprintMsgContainer">
-                                                                    <div class="alert alert-success bootstrapSuccess"><img style="width:50px;height:40px" src="img/correct.png" alt="success" />
-                                                                        <span class="blueprintNameSuccess" style="margin-left:20px;"></span>
-                                                                        <div style="margin-top:24px;text-align:center;">
-                                                                            <button class="btn btn-primary"><a style="color:white;text-decoration:none" href="#ajax/DesignBlueprintAzure.html?addnew" id="addanotherlink">&nbsp;&nbsp;Add New Blueprint</a></button>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="blueprintSaveFail blueprintMsgContainer">
-                                                                    <div class="alert alert-warning bootstrapFailure"><img style="width:50px;height:40px" src="img/warning.png" alt="warning" />
-                                                                        <span style="margin-left:20px;">Unable to save blueprint. Please try again later.</span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <footer class="footer">
-                                                                <div style="text-align:center;" class="clearfix form-actions no-padding">
-                                                                    <div class="btn-group">
-                                                                        <ul class="pager wizard no-margin" style="margin-left:200px">
-                                                                            <li class="previous disabled">
-                                                                                <a style="border-radius:0px" class="btn btn-primary" href="javascript:void(0);"> Previous </a>
-                                                                            </li>
-                                                                            <li class="next" id="nextSpecificValue">
-                                                                                <a style="border-radius:0px;margin-left:5px;" class="btn btn-primary" href="javascript:void(0);"> Next </a>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                            </footer>
-                                                        </div>
-                                                    </div>
-                                                </form>
+  <article class="col-sm-12 col-md-12 col-lg-12">
+    <div class="widget-body" style="font-size:12px;">
+      <ul id="myTab3" class="nav nav-tabs tabs-pull-left">
+        <li class="pull-left active">
+          <a href="#l2" id="tabheader" data-toggle="tab">Choose Template Type</a>
+        </li>
+        <!--new tab for CRUD operations for Blueprint-->
+        <li class="pull-left View">
+          <a href="#viewCreate" id="viewCreateNew" data-toggle="tab">Existing Blueprints</a>
+        </li>
+      </ul>
+      <div id="myTabContent3" class="nav tab-content">
+        <div class="tab-pane fade in active" id="l2">
+          <section id="widget-grid" class="">
+            <div class="row">
+              <article class="col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-darken" id="wid-id-1" data-widget-editbutton="false" data-widget-deletebutton="false">
+                  <div role="content">
+                    <div class="jarviswidget-editbox">
+                    </div>
+                    <div class="widget-body">
+                      <div class="row">
+                        <form id="wizard-1" novalidate="novalidate">
+                          <div id="bootstrap-wizard-1" class="col-sm-12">
+                            <div class="form-bootstrapWizard">
+                              <ul class="bootstrapWizard form-wizard" style="margin-left:13%;display:none">
+                                <li class="active" data-target="#step1">
+                                  <a href="#tab1" data-toggle="tab"> <span class="step">1</span>
+                                  <span class="title"><b></b></span>
+                                  </a>
+                                </li>
+                                <li data-target="#step2">
+                                  <a id="addlink" data-target='#tab2' data-toggle="tab" onclick="">
+                                  <span class="step">2</span>
+                                  <span class="title"><b></b></span>
+                                  </a>
+                                </li>
+                                <li data-target="#step3">
+                                  <a href="#tab3" data-toggle="tab">
+                                  <span class="step">3</span> <span class="title"><b></b></span>
+                                  </a>
+                                </li>
+                                <li data-target="#step4">
+                                  <a href="#tab4" data-toggle="tab">
+                                  <span class="step">4</span> <span class="title"><b></b></span>
+                                  </a>
+                                </li>
+                              </ul>
+                              <div class="clearfix"></div>
+                            </div>
+                            <div class="tab-content">
+                              <div class="tab-pane active" id="tab1" style="padding-bottom:20px;overflow-y: auto;">
+                                <div id="templateContent" class="row " style="margin:0px;min-height:200px;">
+                                </div>
+                              </div>
+                              <div class="tab-pane" id="tab2" style="padding-bottom:20px;overflow-y: auto;">
+                                <div class="row " style="margin:0px">
+                                  <div id="individualTemplateNameGrid" class="templatesAppfactory templates">
+                                  </div>
+                                  <div id="templatesDevopsRole" class="templatesdevopsrole templates" style="display:none">
+                                  </div>
+                                  <div class="templatesCloudformation templates hidden" style="display:none">
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="tab-pane" id="tab3" style="padding-bottom:20px;">
+                                <div class="row">
+                                  <div class="col-lg-12">
+                                    <div class="col-lg-2">
+                                      <div class="row  selectedTemplateArea" style="margin-bottom:10px;padding-left:10px;margin-left:0px;margin-right:0px;"> Test
+                                      </div>
+                                    </div>
+                                    <div class="col-lg-10">
+                                      <div class="panel-group smart-accordion-default" id="accordion-Design">
+                                        <div class="panel panel-default divconfigureparameterrunlist">
+                                          <div class="panel-heading">
+                                            <h4 class="panel-title">
+                                              <a data-toggle="collapse" data-parent="#accordion-Design" href="#CollapseConfigureproviderParameter"> <i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Configure Provider Parameters</a>
+                                            </h4>
+                                          </div>
+                                          <div id="CollapseConfigureproviderParameter" class="panel-collapse collapse in">
+                                            <div class="panel-body" style="padding-left: 20px;">
+                                              <div class="col-lg-6 col-md-6">
+                                                <label for="instanceOS">Choose Operating System:<span style="color:red">*</span></label>
+                                                <div class="input-groups">
+                                                  <select id="instanceOS" name="instanceOS" class="required chooseOS width-100">
+                                                  </select>
+                                                </div>
+                                              </div>
+                                              <div class="col-lg-6 col-md-6">
+                                                <label for="providerId">Choose Provider:<span style="color:red">*</span></label>
+                                                <div class="input-groups">
+                                                  <select id="providerId" name="providerId" class="required chooseOSProvider width-100">
+                                                  </select>
+                                                </div>
+                                              </div>
+                                              <div class="col-lg-6 col-md-6" style="margin-top:15px;">
+                                                <label for="imageId">Choose Available Images:<span style="color:red">*</span></label>
+                                                <div class="input-groups">
+                                                  <select id="imageId" name="imageId" class="required chooseSecurity width-100">
+                                                  </select>
+                                                </div>
+                                              </div>
+                                              <div class="col-lg-6 col-md-6 forvmware" style="margin-top:15px;">
+                                                <label for="region">Choose Data Store:<span style="color:red">*</span></label>
+                                                <div class="input-groups">
+                                                  <select id="vmwareds" name="vmwareds" class="required choosevmwareds width-100">
+                                                    <option value="">Select Data Store</option>
+                                                  </select>
+                                                </div>
+                                              </div>
+                                              <div class="col-lg-6 col-md-6" style="margin-top:15px; display:none">
+                                                <label for="instanceCount">Instances to Launch:<span class="control-label redSpan">&nbsp;*</span></label>
+                                                <div class="input-groups">
+                                                  <select id="instanceCount" name="instanceCount" class="required chooseOrganization width-100 chooseSelect" style="vertical-align:central">
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                  </select>
+                                                </div>
+                                              </div>
+                                              <!--To add the Swipe Functionality-->
                                             </div>
+                                          </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </article>
-                        </div>
-                    </section>
-                </div>
-                <!--view for blueprints-->
-                <!--blueprint tab-->
-                <div class="tab-pane" id="viewCreate">
-                    <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-10" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
-                        <div>
-                            <div class="widget-body no-padding">
-                                <form action="">
-                                    <div class="col-lg-12 awsExisting">
-                                        <div class="col-lg-3 col-md-3">
-                                            <label for="">Choose Organization <span style="color:red">*</span></label>
-                                            <select id="orgnameSelectExisting" class="chooseOrgSelectExisting width-100">
-                                            </select>
+                                        <!--adding organisation parameters starts here-->
+                                        <div class="panel panel-default divOrganizationParameter">
+                                          <div class="panel-heading">
+                                            <h4 class="panel-title">
+                                              <a data-toggle="collapse" data-parent="#accordion-Design" href="#CollapseEditorgParam" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Configure Organization Parameters</a>
+                                            </h4>
+                                          </div>
+                                          <div id="CollapseEditorgParam" class="panel-collapse collapse">
+                                            <div class="panel-body" style="padding-left: 8px;">
+                                              <div class="col-lg-6 col-md-6">
+                                                <label for="orgnameSelect">Choose Organization <span style="color:red">*</span></label>
+                                                <div class="input-groups">
+                                                  <select id="orgnameSelect" name="orgnameSelect" class="required chooseOrgselect2 width-100">
+                                                  </select>
+                                                </div>
+                                              </div>
+                                              <div class="col-lg-6 col-md-6">
+                                                <label for="blueprintNameInput">Enter Blueprint Name:
+                                                <span class="control-label redSpan">&nbsp;*</span></label>
+                                                <div class="input-groups">
+                                                  <input id="blueprintNameInput" name="blueprintNameInput" class="required form-control" type="text" autofocus="autofocus">
+                                                </div>
+                                              </div>
+                                              <div class="col-lg-6 col-md-6" style="margin-top:15px;">
+                                                <label for="bgListInput">Choose Business Group <span style="color:red">*</span>
+                                                </label>
+                                                <div class="input-groups">
+                                                  <select id="bgListInput" name="bgListInput" class="required chooseBG width-100">
+                                                  </select>
+                                                </div>
+                                              </div>
+                                              <div class="col-lg-6 col-md-6" style="margin-top:15px;">
+                                                <label for="projectListInput">Choose Project <span style="color:red">*</span>
+                                                </label>
+                                                <div class="input-groups">
+                                                  <select id="projectListInput" name="projectListInput" class="required chooseProject width-100">
+                                                  </select>
+                                                </div>
+                                              </div>
+                                              <div class="col-lg-6 hidden" style="margin-top:5px;">
+                                                <label for="">Assign Users<span style="color:red">*</span></label>
+                                                <div class="userListLoadingContainer">
+                                                </div>
+                                                <select class="custom-scroll width-100" multiple="" id="userListSelect" style="display:none">
+                                                </select>
+                                              </div>
+                                              <div class="col-lg-6 col-md-6 forDocker dockerProjPort hidden notforCFT">
+                                                <label for="category">Select Docker Image <span style="color:red">*</span>
+                                                </label>
+                                                <select id="dockerrepoListInput" class="chooseDockerContainer width-100">
+                                                </select>
+                                              </div>
+                                              <div class="col-lg-6 col-md-6 forDocker dockerProjPort hidden notforCFT">
+                                                <label for="category">Available Repo Tags <span style="color:red">*</span>
+                                                </label>
+                                                <div id="dockerrepotagsdiv">
+                                                </div>
+                                              </div>
+                                              <div class="col-lg-12 col-md-12 hidden">
+                                                <div class="col-lg-6 col-md-6 forDocker dockerProjPort dockerLEFT notforCFT">
+                                                  <label for="category" class="pull-left">Launch Parameters<a id="launchParamDocker" href="javascript:void(0);" onclick=""><i title="Add" class="icon-append fa fa-plus" ></i></a>
+                                                  </label>
+                                                  <div class="btn-group pull-left">
+                                                  </div>
+                                                  <input type="text" id="dockerlaunchparameters" class="form-control" disabled="disabled" title="To edit click add" />
+                                                </div>
+                                              </div>
+                                              <!-- Docker Image selection table -->
+                                              <div class="col-lg-12 col-md-12 forDocker notforCFT" style="margin-top:5px;">
+                                                <label for="category">Docker Images<span style="color:red">*</span>
+                                                </label>
+                                                <a class="btn btn-primary adddockertemplate pull-right" onclick="showdockertemplateadder();">Add</a>
+                                                <table class="table table-striped table-bordered table-hover dataTable no-footer" id="compositedockertable" cellpadding="5px" width="100%" style="text-align:center">
+                                                  <tr>
+                                                    <th>Order</th>
+                                                    <th>Name</th>
+                                                    <th>Image Path</th>
+                                                    <th>Tag</th>
+                                                    <th>Launch Params</th>
+                                                    <th>Action</th>
+                                                  </tr>
+                                                </table>
+                                              </div>
+                                              <!-- End Docker Image selection table -->
+                                            </div>
+                                          </div>
                                         </div>
-                                        <div class="col-lg-3 col-md-3">
-                                            <label for="">Business Group</label>
-                                            <select id="bgListInputExisting" class="chooseBGExisting width-100">
-                                            </select>
+                                        <!--configure runlist collapse starts here-->
+                                        <div class="panel panel-default divRunlistParameter notforCFT notForDocker">
+                                          <div class="panel-heading">
+                                            <h4 class="panel-title">
+                                              <a data-toggle="collapse" data-parent="#accordion-Design" href="#CollapseEditRunlistParam" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Configure Runlist Parameters</a>
+                                            </h4>
+                                          </div>
+                                          <div id="CollapseEditRunlistParam" class="panel-collapse collapse">
+                                            <div class="panel-body" style="padding-left: 8px;">
+                                              <div class="col-lg-6 col-md-6 notForDocker notforCFT" style="margin-top:19px">
+                                                <label>
+                                                <i style="color:#40baf1;font-size:16px;" class="ace-icon fa fa-list-ul"></i> Edit Runlist
+                                                </label>
+                                                <a href="#chefRunlistModal" data-backdrop="false" data-toggle="modal" style="cursor:pointer;"> <img src="img/add.png" style="float:right;margin-top:6px;" class="addList" rel="tooltip" data-placement="top" title="Edit Runlist" /></a>
+                                                <div style="height:146px;overflow-y:auto;" id="dbNameTable_wrapper" class="dataTables_wrapper no-footer">
+                                                  <table id="tableRunlistForBlueprint" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center" ;>
+                                                    <thead>
+                                                      <tr class="rowCustomStyle">
+                                                        <th style="text-align:center">View Runlist</th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                  </table>
+                                                </div>
+                                              </div>
+                                              <div class="col-lg-4 col-md-4 notForDocker notforCFT" style="margin-top:25px;margin-left:2px;"><a style="font-size:14px!important" href="#modalForHelp" data-toggle="modal" id="dokuNew"><i class="fa fa-question"></i>&nbsp;Help</a>
+                                              </div>
+                                            </div>
+                                          </div>
                                         </div>
-                                        <div class="col-lg-3 col-md-3">
-                                            <label for="category">Project
-                                            </label>
-                                            <select id="projectListInputExisting" class="chooseProjectExisting width-100">
-                                            </select>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3">
-                                            <label for="category">Environment</label>
-                                            <select id="envListExisting" class="chooseEnvExisting width-100">
-                                            </select>
-                                        </div>
-                                    </div>
-                                </form>
-                                <div class="col-lg-12">
-                                    <div class="panel-group smart-accordion-default hidden" id="accordion-2" style="height:444px;overflow-y: auto;">
-                                    </div>
-                                </div>
-                            </div>
+                                        <!--configure runlist collapse ends here-->
+                                        <!--assign runlist modal-->
+                                        <div class="modal fade" id="chefRunlistModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+                                          <div class="modal-dialog">
+                                            <div class="modal-content" style="width:800px">
+                        <form role="form" class="cmxform" id="chefTaskRunlist" autocomplete="off">
+                        <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                        </button>
+                        <h4 class="modal-title">
+                        <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Edit Runlist
+                        </h4>
                         </div>
+                        <div class="modal-body modal-height">
+                        <div class="cookbookShow">
+                        </div>
+                        </div>
+                        <div class="modal-footer">
+                        <a type="button" class="btn btn-default" data-dismiss="modal">Close</a>
+                        <button type="submit" class="btn btn-primary" id="saveRunlist">Update Runlist</button>
+                        </div>
+                        </form>
+                        </div>
+                        <!-- /.modal-content -->
+                        </div>
+                        <!-- /.modal-dialog -->
+                        </div>
+                        <!--modal for runlist ends here-->
+                        <!--adding new collapse-->
+                        <div class="panel panel-default appSeriesNameURL notForDocker notforCFT">
+                        <div class="panel-heading">
+                        <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion-Design" href="#CollapseApp" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Configure Application URL</a>
+                        </h4>
+                        </div>
+                        <div id="CollapseApp" class="panel-collapse collapse">
+                        <div class="row">
+                        <div class="col-md-12">
+                        <div class="col-md-12">
+                        <div class="widget-box">
+                        <div class="widget-header">
+                        <h5 class="widget-title" style="color:#4e5964;">
+                        <strong>Application URL</strong>
+                        </h5>
+                        <div class="widget-toolbar no-border">
+                        <a id="newAppSeries" class="btn btn-minier btn-primary" href="#modalAppNameURL" data-toggle="modal">
+                        <i class="ace-icon ace-icon fa fa-plus bigger-110"></i> New
+                        </a>
+                        </div>
+                        </div>
+                        <div class="widget-body">
+                        <div class="widget-main" style="min-height:100px">
+                        <div class="col-md-12 table-responsive" style="padding-left:0px; padding-right:0px;">
+                        <table id="appTable" class="hidden" cellpadding="5px" width="100%">
+                        <thead>
+                        <tr class="rowCustomStyle">
+                        <td>Name</td>
+                        <td>URL</td>
+                        <td>Action</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="hidden rowtemplate">
+                        <td datafield="appName"></td>
+                        <td datafield="appURL"></td>
+                        <td>
+                        <div class="btn-group tableactionWidth">
+                        <button class="btn btn-xs btn-danger pull-left" value="Remove" title="Remove"><i class="ace-icon fa fa-trash-o bigger-120"></i></button>
+                        <a class="btn btn-xs btn-info pull-left" title="Update">
+                        <i class="ace-icon fa fa-pencil bigger-120"></i>
+                        </a>
+                        </div>
+                        </td>
+                        </tr>
+                        </tbody>
+                        </table>
+                        <table id="appUrlTable" class="table table-striped table-bordered table-hover dataTable no-footer" cellpadding="5px" width="100%" style="text-align:center" ;>
+                        <thead>
+                        <tr class="rowCustomStyle">
+                        <td style="width:20%">Name</td>
+                        <td style="width:40%">URL</td>
+                        <td style="width:20%" class="">Action</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                        <td colspan=3 id="appEntry">No Data Available</td>
+                        </tr>
+                        </tbody>
+                        </table>
+                        <div id="envtable_tools1"></div>
+                        <div class="col-md-5">
+                        </div>
+                        </div>
+                        </div>
+                        <div class="widget-toolbox padding-8 clearfix dataTables_wrapper">
+                        <div id="tableFooterLeft" class="pull-left"></div>
+                        <div id="tableFooterRight" class="pull-right"></div>
+                        </div>
+                        </div>
+                        </div>
+                        </div>
+                        </div>
+                        </div>
+                        </div>
+                        <!--collapseapp ends here-->
+                        </div>
+                        <!--adding new collapse-->
+                        <div class="panel panel-default notForDocker forCFT cftStackParameterArea" style="display:none">
+                        <div class="panel-heading">
+                        <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion-Design" href="#CollapseStackParameters" class="collapsed"><i class="fa fa-fw fa-plus-circle txt-color-blue"></i> <i class="fa fa-fw fa-minus-circle txt-color-red"></i>Configure Stack Parameters</a>
+                        </h4>
+                        </div>
+                        <div id="CollapseStackParameters" class="panel-collapse collapse">
+                        <div class="panel-body" style="padding-left: 20px;">
+                        </div>
+                        </div>
+                        </div>
+                        </div>
+                        </div>
+                        </div>
+                        </div>
+                        </div>
+                        <!--tab pane ends here-->
+                        <div class="tab-pane" id="tab4" style="padding-bottom:20px;overflow-y: auto;">
+                        <div class="blueprintSaveSuccess blueprintMsgContainer">
+                        <div class="alert alert-success bootstrapSuccess"><img style="width:50px;height:40px" src="img/correct.png" alt="success" />
+                        <span class="blueprintNameSuccess" style="margin-left:20px;"></span>
+                        <div style="margin-top:24px;text-align:center;">
+                        <button class="btn btn-primary"><a style="color:white;text-decoration:none" href="#ajax/DesignBlueprintAzure.html?addnew" id="addanotherlink">&nbsp;&nbsp;Add New Blueprint</a></button>
+                        </div>
+                        </div>
+                        </div>
+                        <div class="blueprintSaveFail blueprintMsgContainer">
+                        <div class="alert alert-warning bootstrapFailure"><img style="width:50px;height:40px" src="img/warning.png" alt="warning" />
+                        <span style="margin-left:20px;">Unable to save blueprint. Please try again later.</span>
+                        </div>
+                        </div>
+                        </div>
+                        <footer class="footer">
+                        <div style="text-align:center;" class="clearfix form-actions no-padding">
+                        <div class="btn-group">
+                        <ul class="pager wizard no-margin" style="margin-left:200px">
+                        <li class="previous disabled">
+                        <a style="border-radius:0px" class="btn btn-primary" href="javascript:void(0);"> Previous </a>
+                        </li>
+                        <li class="next" id="nextSpecificValue">
+                        <a style="border-radius:0px;margin-left:5px;" class="btn btn-primary" href="javascript:void(0);"> Next </a>
+                        </li>
+                        </ul>
+                        </div>
+                        </div>
+                        </footer>
+                        </div>
+                        </div>
+                        </form>
+                      </div>
                     </div>
-                    <footer class="footer">
-                        <div class="clearfix form-actions" style="text-align:center">
-                            <!-- <div class="btn-group">
-
-                                <button class="btn pull-left btn-primary launchBtn" style="margin-left:200px;">
-                                    <i class="ace-icon fa  fa-location-arrow bigger-110"></i>
-                                    Launch
-                                </button>
-                            </div> -->
-                            <button class="btn pull-right btn-danger right-button" title="Remove Blueprint" onClick="removeSelectedBlueprint()"> <i class="fa fa-trash-o"></i></button>
-                        </div>
-                    </footer>
-                    <!--Launch div ends here-->
+                  </div>
                 </div>
-                <!--tab-pane l2 gets over -->
-                <!--modal for blueprint read-->
-                <div class="modal fade bs-example-modal-lg" id="modalForRead" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                <h4 class="modal-title" id="myModalLabel">Blueprint Information</h4>
-                            </div>
-                            <div class="modal-body" style="height:480px;overflow-y:auto;">
-                                <!--os and the 1st tier-->
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <th style="width:11%;text-align:center">Parameters</th>
-                                        <th style="width:27%;text-align:center">Values</th>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td style="padding-left: 18px;padding-top:16px;">Blueprint Name:</td>
-                                            <td>
-                                                <input id="blueprintNameInputNew" disabled="disabled" class="form-control">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="padding-left: 18px;padding-top:16px;">Operating System:</td>
-                                            <td>
-                                                <input id="instanceOSNew" class="form-control" disabled="disabled">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="padding-left: 18px;padding-top:16px;">Instance Size:</td>
-                                            <td>
-                                                <input id="instancesizeNew" disabled="disabled" class="form-control">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="padding-left: 18px;padding-top:16px;">Provider Type:</td>
-                                            <td>
-                                                <input id="instanceProviderType" disabled="disabled" class="form-control">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="padding-left: 18px;padding-top:16px;">Provider Name:</td>
-                                            <td>
-                                                <input id="instanceProviderName" disabled="disabled" class="form-control">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="padding-left: 18px;padding-top:16px;">Region:</td>
-                                            <td>
-                                                <input id="instanceRegion" disabled="disabled" class="form-control">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="padding-left: 18px;padding-top:16px;">Image:</td>
-                                            <td>
-                                                <input id="instanceImage" disabled="disabled" class="form-control">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="padding-left: 18px;padding-top:16px;">Keypair:</td>
-                                            <td>
-                                                <input id="instancekeyPair" disabled="disabled" class="form-control">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="padding-left: 18px;padding-top:16px;">VPC ID:</td>
-                                            <td>
-                                                <input id="instanceVPC" class="form-control" disabled="disabled">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="padding-left: 18px;padding-top:16px;">Subnet:</td>
-                                            <td>
-                                                <input id="instanceSubnetId" class="form-control" disabled="disabled">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="padding-left: 18px;padding-top:16px;">Security Group:</td>
-                                            <td>
-                                                <input id="instanceSecurityGroupId" class="form-control" disabled="disabled">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="padding-left: 18px;padding-top:16px;">Version:</td>
-                                            <td>
-                                                <input id="instanceVersion" class="form-control" disabled="disabled">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="padding-left: 18px;padding-top:16px;">Runlist:</td>
-                                            <td>
-                                                <input id="instanceRunlist" class="form-control" disabled="disabled">
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--modal for blueprint edit read-->
-                <!--modal for blueprint read-->
-                <div class="modal fade bs-example-modal-lg" id="modalForReadCFT" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                <h4 class="modal-title" id="myModalLabel">Blueprint Information-CFT</h4>
-                            </div>
-                            <div class="modal-body" style="height:360px;overflow-y:auto;">
-                                <!--os and the 1st tier-->
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <th style="width:11%;text-align:center">Parameters</th>
-                                        <th style="width:27%;text-align:center">Values</th>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td style="padding-left: 18px;padding-top:16px;">Blueprint Name:</td>
-                                            <td>
-                                                <input id="blueprintNameCFT" disabled="disabled" class="form-control">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="padding-left:18px;padding-top:16px">Organisation Name:</td>
-                                            <td>
-                                                <input id="blueprintORG" disabled="disabled" class="form-control">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="padding-left:18px;padding-top:16px">Template Type:</td>
-                                            <td>
-                                                <input id="blueprintTemplateTypeCFT" disabled="disabled" class="form-control">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="padding-left:18px;padding-top:16px">Business Group:</td>
-                                            <td>
-                                                <input id="blueprintBU" disabled="disabled" class="form-control">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="padding-left:18px;padding-top:16px">Project Name:</td>
-                                            <td>
-                                                <input id="blueprintProject" disabled="disabled" class="form-control">
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--modal for blueprint edit read-->
-                <!--modal for blueprint edit-->
-                <div class="modal fade bs-example-modal-lg" id="blueprintEditResultContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-                    <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                <h4 class="modal-title" id="myModalLabel">Blueprint Edit</h4>
-                            </div>
-                            <div class="modal-body" style="padding:0px !important">
-                            </div>
-                            <div class="modal-footer" style="margin-top:0px !important;">
-                                <button type="button" class="btn btn-default btn-primary blueprintUpdateBtn" data-dismiss="modal">Save Version</button>
-                                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--modal for blueprint edit ends-->
-                <!--updating the runlist while blueprint edit-->
-                <div class="modal fade bs-example-modal-lg" id="chefRunModalContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-                    <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                <h4 class="modal-title" id="myModalLabel"><i class="fa fa-pencil-square-o txt-color-blue"></i>Update Runlist</h4>
-                            </div>
-                            <div class="modal-body" style="padding:0px !important">
-                                <div class="chefRunlistContainer">
-                                </div>
-                            </div>
-                            <div class="modal-footer" style="margin-top:0px !important;">
-                                <button type="button" class="btn btn-default btn-primary btnUpdateInstanceRunlist">Update</button>
-                                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--view ends here-->
+              </article>
             </div>
+          </section>
         </div>
-    </article>
+        <!--view for blueprints-->
+        <!--blueprint tab-->
+        <div class="tab-pane" id="viewCreate">
+          <div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-10" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+            <div>
+              <div class="widget-body no-padding">
+                <form action="">
+                  <div class="col-lg-12 awsExisting">
+                    <div class="col-lg-4 col-md-4">
+                      <label for="">Choose Organization <span style="color:red">*</span></label>
+                      <select id="orgnameSelectExisting" class="chooseOrgSelectExisting width-100">
+                      </select>
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                      <label for="">Business Group</label>
+                      <select id="bgListInputExisting" class="chooseBGExisting width-100">
+                      </select>
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                      <label for="category">Project
+                      </label>
+                      <select id="projectListInputExisting" class="chooseProjectExisting width-100">
+                      </select>
+                    </div>
+                    <div class="col-lg-3 col-md-3 hidden">
+                      <label for="category">Environment</label>
+                      <select id="envListExisting" class="chooseEnvExisting width-100">
+                      </select>
+                    </div>
+                  </div>
+                </form>
+                <div class="col-lg-12">
+                  <div class="panel-group smart-accordion-default hidden" id="accordion-2" style="height:444px;overflow-y: auto;">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <footer class="footer">
+            <div class="clearfix form-actions" style="text-align:center">
+              <button class="btn pull-right btn-danger right-button" title="Remove Blueprint" onClick="removeSelectedBlueprint()"> <i class="fa fa-trash-o"></i></button>
+            </div>
+          </footer>
+          <!--Launch div ends here-->
+        </div>
+        <!--tab-pane l2 gets over -->
+    
+        <!--modal for blueprint edit-->
+        <div class="modal fade bs-example-modal-lg" id="blueprintEditResultContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Blueprint Edit</h4>
+              </div>
+              <div class="modal-body" style="padding:0px !important">
+              </div>
+              <div class="modal-footer" style="margin-top:0px !important;">
+                <button type="button" class="btn btn-default btn-primary blueprintUpdateBtn" data-dismiss="modal">Save Version</button>
+                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--modal for blueprint edit ends-->
+        <!--updating the runlist while blueprint edit-->
+        <div class="modal fade bs-example-modal-lg" id="chefRunModalContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel"><i class="fa fa-pencil-square-o txt-color-blue"></i>Update Runlist</h4>
+              </div>
+              <div class="modal-body" style="padding:0px !important">
+                <div class="chefRunlistContainer">
+                </div>
+              </div>
+              <div class="modal-footer" style="margin-top:0px !important;">
+                <button type="button" class="btn btn-default btn-primary btnUpdateInstanceRunlist">Update</button>
+                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--view ends here-->
+      </div>
+    </div>
+  </article>
 </div>
 <!--app series-->
 <div class="modal fade" id="modalAppNameURL" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form role="form" id="appURLForm" autocomplete="off">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                        &times;
-                    </button>
-                    <h4 class="modal-title">
- <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Add Application URL
- </h4>
-                </div>
-                <div class="modal-body appSeriesHeight">
-                    <!--app series-->
-                    <div class="applicationURLContainer" id="appSeries">
-                        <div class="col-lg-6 col-md-6 projectRepo">
-                            <label for="">Name:</label>
-                            <input placeholder="AppName" type="text" maxlength="8" name="appNameInput" class="form-control appName">
-                            <b class="tooltip tooltip-top-right">
- <i class="fa fa-user txt-color-teal"></i> Please enter Application</b>
-                        </div>
-                        <div class="col-lg-6 col-md-6 projectRepo">
-                            <label for="">URL:</label>
-                            <input placeholder="http://$host[:port]/appname" name="appNameURL" class="form-control appURL" type="text">
-                            <b class="tooltip tooltip-top-right">
- <i class="fa fa-user txt-color-teal"></i> Please enter URL</b>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <label id="nodeAppspinner" class=" hidden"><img style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
-                    <div class="marginForButtons">
-                        <button id="addAppBtn" class="btn btn-primary" type="submit">
-                            <i class="fa fa-upload fa-1x"></i>&nbsp;Add
-                        </button>
-                        <a class="btn btn-primary" type="submit" data-dismiss="modal">
-                            <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
-                        </a>
-                    </div>
-                </div>
-            </form>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form role="form" id="appURLForm" autocomplete="off">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+          </button>
+          <h4 class="modal-title">
+            <i class="fa fa-th-list txt-color-blue"></i>&nbsp;&nbsp;Add Application URL
+          </h4>
         </div>
-        <!-- /.modal-content -->
+        <div class="modal-body appSeriesHeight">
+          <!--app series-->
+          <div class="applicationURLContainer" id="appSeries">
+            <div class="col-lg-6 col-md-6 projectRepo">
+              <label for="">Name:</label>
+              <input placeholder="AppName" type="text" maxlength="8" name="appNameInput" class="form-control appName">
+              <b class="tooltip tooltip-top-right">
+              <i class="fa fa-user txt-color-teal"></i> Please enter Application</b>
+            </div>
+            <div class="col-lg-6 col-md-6 projectRepo">
+              <label for="">URL:</label>
+              <input placeholder="http://$host[:port]/appname" name="appNameURL" class="form-control appURL" type="text">
+              <b class="tooltip tooltip-top-right">
+              <i class="fa fa-user txt-color-teal"></i> Please enter URL</b>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <label id="nodeAppspinner" class=" hidden"><img style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
+          <div class="marginForButtons">
+            <button id="addAppBtn" class="btn btn-primary" type="submit">
+            <i class="fa fa-upload fa-1x"></i>&nbsp;Add
+            </button>
+            <a class="btn btn-primary" type="submit" data-dismiss="modal">
+            <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel
+            </a>
+          </div>
+        </div>
+      </form>
     </div>
-    <!-- /.modal-dialog -->
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
 </div>
 <!-- /.modal for appSeries ends-->
 <!--app series ends here-->
 <!--launch docker-->
 <!--launch docker-->
 <div class="modal fade bs-example-modal-lg" id="myModalDockerTemplateContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-    <div class="modal-dialog modal-lg" style="width:580px">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="DockerLaunch">Add a Docker Template</h4>
+  <div class="modal-dialog modal-lg" style="width:580px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="DockerLaunch">Add a Docker Template</h4>
+      </div>
+      <div class="modal-body " style="height:117px">
+        <section>
+          <form id="dockerparamsform" action="">
+            <div class="col-lg-6 col-md-6">
+              <label for="category">Select Template<span style="color:red">*</span><span class="dockerparamrequired hidden" style="color:red">&nbsp;Required</span>
+              </label>
+              <select class="chooseSelect width-100" id="dockertemplateselector" onchange="imagechanged();">
+              </select>
             </div>
-            <div class="modal-body " style="height:117px">
-                <section>
-                    <form id="dockerparamsform" action="">
-                        <div class="col-lg-6 col-md-6">
-                            <label for="category">Select Template<span style="color:red">*</span><span class="dockerparamrequired hidden" style="color:red">&nbsp;Required</span>
-                            </label>
-                            <select class="chooseSelect width-100" id="dockertemplateselector" onchange="imagechanged();">
-                            </select>
-                        </div>
-                        <div class="col-lg-6 col-md-6">
-                            <label for="category">Select Tag<span style="color:red">*</span><span class="dockerparamrequired hidden" style="color:red">&nbsp;Required</span>
-                            </label>
-                            <label id="dockertemplateSpinner" class="hidden"><img style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
-                            <select class="chooseSelect width-100" id="dockertemplatetagselector">
-                            </select>
-                        </div>
-                    </form>
-                </section>
+            <div class="col-lg-6 col-md-6">
+              <label for="category">Select Tag<span style="color:red">*</span><span class="dockerparamrequired hidden" style="color:red">&nbsp;Required</span>
+              </label>
+              <label id="dockertemplateSpinner" class="hidden"><img style="margin-left:5px;margin-right:25px;" src="img/select2-spinner.gif"></label>
+              <select class="chooseSelect width-100" id="dockertemplatetagselector">
+              </select>
             </div>
-            <div class="modal-footer">
-                <button type="button" id="btnaddDockerTemplateToTable" class="btn btn-default btn-primary" onclick="addDockerTemplateToTable($('#dockertemplateselector option:selected').text(),$('#dockertemplateselector').val(),$('#dockertemplatetagselector').val(),$('#dockertemplateselector option:selected').attr('reponame'));$('#myModalDockerTemplateContainer').modal('hide');">
-                    <i class="fa fa-save fa-1x"></i>&nbsp;Add</button>
-                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">
-                    <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel</button>
-            </div>
-        </div>
+          </form>
+        </section>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="btnaddDockerTemplateToTable" class="btn btn-default btn-primary" onclick="addDockerTemplateToTable($('#dockertemplateselector option:selected').text(),$('#dockertemplateselector').val(),$('#dockertemplatetagselector').val(),$('#dockertemplateselector option:selected').attr('reponame'));$('#myModalDockerTemplateContainer').modal('hide');">
+        <i class="fa fa-save fa-1x"></i>&nbsp;Add</button>
+        <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">
+        <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel</button>
+      </div>
     </div>
+  </div>
 </div>
 <div class="modal fade bs-example-modal-lg" id="myModalLabelDockerContainer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="DockerLaunch">Launch Parameters-Docker Blueprints</h4>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="DockerLaunch">Launch Parameters-Docker Blueprints</h4>
+      </div>
+      <div class="modal-body dockerModalHeight">
+        <section>
+          <form id="dockerparamsform" action="">
+            <div style="margin:0px;">
+              <div class="col-lg-6 col-md-6">
+                <label for="category">Container Name<span style="color:red">*</span><span class="dockerparamrequired hidden" style="color:red">&nbsp;Required</span>
+                </label>
+                <input type="text" id="Containernamefield" name="namefield" class="required form-control" placeholder="" dockerparamkey="--name" onclick="$('.dockerparamrequired').addClass('hidden')">
+              </div>
+              <div class="col-lg-6 col-md-6">
+                <label for="category">Port Mappings
+                </label>
+                <input type="text" id="Portmappingfield" name="Portmappingfield" class=" form-control" placeholder="Map host ports to container ports" dockerparamkey="-p">
+              </div>
+              <div class="col-lg-6 col-md-6 dockerModal">
+                <label for="category">Volumes
+                </label>
+                <input type="text" id="Volumesfield" name="Volumesfield" class=" form-control" placeholder="Map host folders to container folders" dockerparamkey="-v">
+              </div>
+              <div class="col-lg-6 col-md-6 dockerModal">
+                <label for="category">Volumes-from
+                </label>
+                <input type="text" id="Volumes-fromfield" name="Volumes-fromfield" class=" form-control" placeholder="Comma separated container names" dockerparamkey="--volumes-from">
+              </div>
+              <div class="col-lg-6 col-md-6 dockerModal">
+                <label for="category">Linked Container
+                </label>
+                <input type="text" id="Linkedcontainerfield" name="Linkedcontainerfield" class=" form-control" placeholder="The name of a container this one links to" dockerparamkey="--link">
+              </div>
+              <div class="col-lg-6 col-md-6 dockerModal">
+                <label for="category">Environment Variables
+                </label>
+                <input type="text" id="Environmentvariablesfield" name="Environmentvariablesfield" class=" form-control" placeholder="" dockerparamkey="-e">
+              </div>
+              <div class="col-lg-6 col-md-6 dockerModal">
+                <label for="category">Startup Command
+                </label>
+                <input type="text" id="Startupcommandfield" name="Startupcommandfield" class=" form-control" placeholder="Optional startup command for the container" dockerparamkey="-c">
+              </div>
+              <div class="col-lg-6 col-md-6 dockerModal">
+                <label for="category">Additional Startup
+                </label>
+                <input type="text" id="additionalStartupcommandfield" name="additionalStartupcommandfield" class=" form-control" placeholder="Additional startup command for the container" dockerparamkey="-exec">
+              </div>
+              <div class="col-lg-6 hidden">
+                <label for="category">Removed Linked Containers on Exit
+                </label>
+                <select class="chooseSelect width-100" id="Removelinkedcontainersonexitfield" placeholder="Should this & linked containers be removed on exit">
+                  <option>False</option>
+                  <option>True</option>
+                </select>
+              </div>
+              <div class="col-lg-6 dockerModal hidden">
+                <label for="category">Remove on Exit
+                </label>
+                <select class="chooseSelectExit width-100 " id="Removeonexitfield" placeholder="Should this container be removed when it exits">
+                  <option>False</option>
+                  <option>True</option>
+                </select>
+              </div>
+              <div class="col-lg-6 hidden">
+                <label for="">Startup Script</label>
+                <label class="input input-file" for="file">
+                  <div class="button">
+                    <input type="file" id="Startupscriptfield" name="Startupscriptfield">Browse
+                  </div>
+                  <input type="text" readonly="">
+                </label>
+              </div>
             </div>
-            <div class="modal-body dockerModalHeight">
-                <section>
-                    <form id="dockerparamsform" action="">
-                        <div style="margin:0px;">
-                            <div class="col-lg-6 col-md-6">
-                                <label for="category">Container Name<span style="color:red">*</span><span class="dockerparamrequired hidden" style="color:red">&nbsp;Required</span>
-                                </label>
-                                <input type="text" id="Containernamefield" name="namefield" class="required form-control" placeholder="" dockerparamkey="--name" onclick="$('.dockerparamrequired').addClass('hidden')">
-                            </div>
-                            <div class="col-lg-6 col-md-6">
-                                <label for="category">Port Mappings
-                                </label>
-                                <input type="text" id="Portmappingfield" name="Portmappingfield" class=" form-control" placeholder="Map host ports to container ports" dockerparamkey="-p">
-                            </div>
-                            <div class="col-lg-6 col-md-6 dockerModal">
-                                <label for="category">Volumes
-                                </label>
-                                <input type="text" id="Volumesfield" name="Volumesfield" class=" form-control" placeholder="Map host folders to container folders" dockerparamkey="-v">
-                            </div>
-                            <div class="col-lg-6 col-md-6 dockerModal">
-                                <label for="category">Volumes-from
-                                </label>
-                                <input type="text" id="Volumes-fromfield" name="Volumes-fromfield" class=" form-control" placeholder="Comma separated container names" dockerparamkey="--volumes-from">
-                            </div>
-                            <div class="col-lg-6 col-md-6 dockerModal">
-                                <label for="category">Linked Container
-                                </label>
-                                <input type="text" id="Linkedcontainerfield" name="Linkedcontainerfield" class=" form-control" placeholder="The name of a container this one links to" dockerparamkey="--link">
-                            </div>
-                            <div class="col-lg-6 col-md-6 dockerModal">
-                                <label for="category">Environment Variables
-                                </label>
-                                <input type="text" id="Environmentvariablesfield" name="Environmentvariablesfield" class=" form-control" placeholder="" dockerparamkey="-e">
-                            </div>
-                            <div class="col-lg-6 col-md-6 dockerModal">
-                                <label for="category">Startup Command
-                                </label>
-                                <input type="text" id="Startupcommandfield" name="Startupcommandfield" class=" form-control" placeholder="Optional startup command for the container" dockerparamkey="-c">
-                            </div>
-                            <div class="col-lg-6 col-md-6 dockerModal">
-                                <label for="category">Additional Startup
-                                </label>
-                                <input type="text" id="additionalStartupcommandfield" name="additionalStartupcommandfield" class=" form-control" placeholder="Additional startup command for the container" dockerparamkey="-exec">
-                            </div>
-                            <div class="col-lg-6 hidden">
-                                <label for="category">Removed Linked Containers on Exit
-                                </label>
-                                <select class="chooseSelect width-100" id="Removelinkedcontainersonexitfield" placeholder="Should this & linked containers be removed on exit">
-                                    <option>False</option>
-                                    <option>True</option>
-                                </select>
-                            </div>
-                            <div class="col-lg-6 dockerModal hidden">
-                                <label for="category">Remove on Exit
-                                </label>
-                                <select class="chooseSelectExit width-100 " id="Removeonexitfield" placeholder="Should this container be removed when it exits">
-                                    <option>False</option>
-                                    <option>True</option>
-                                </select>
-                            </div>
-                            <div class="col-lg-6 hidden">
-                                <label for="">Startup Script</label>
-                                <label class="input input-file" for="file">
-                                    <div class="button">
-                                        <input type="file" id="Startupscriptfield" name="Startupscriptfield">Browse</div>
-                                    <input type="text" readonly="">
-                                </label>
-                            </div>
-                        </div>
-                    </form>
-                </section>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-primary" onclick="if(generateDockerLaunchParams()!=''){$('#myModalLabelDockerContainer').modal('hide');}else{return(false);}">
-                    <i class="fa fa-save fa-1x"></i>&nbsp;Add</button>
-                <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">
-                    <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel</button>
-            </div>
-        </div>
+          </form>
+        </section>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-primary" onclick="if(generateDockerLaunchParams()!=''){$('#myModalLabelDockerContainer').modal('hide');}else{return(false);}">
+        <i class="fa fa-save fa-1x"></i>&nbsp;Add</button>
+        <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">
+        <i class="fa fa-undo fa-1x"></i>&nbsp;Cancel</button>
+      </div>
     </div>
+  </div>
 </div>
-<script type="text/javascript">
-if (!$.fn.dataTable.isDataTable('#tableRunlistForBlueprint')) {
-    //var $taskListArea = $('.taskListArea').empty();
-    $tasksRunlist = $('#tableRunlistForBlueprint').DataTable({
-        "pagingType": "full_numbers",
-        "bInfo": false,
-        "bLengthChange": false,
-        "paging": false,
-        "bFilter": false,
-        "aoColumns": [{
-            "bSortable": false
-        }]
-    });
-}
+<script type = "text/javascript">
+    if (!$.fn.dataTable.isDataTable('#tableRunlistForBlueprint')) {
+        $tasksRunlist = $('#tableRunlistForBlueprint').DataTable({
+            "pagingType": "full_numbers",
+            "bInfo": false,
+            "bLengthChange": false,
+            "paging": false,
+            "bFilter": false,
+            "aoColumns": [{
+                "bSortable": false
+            }]
+        });
+    }
 
 function createRunlistTable(runlist) {
-    //alert(runlist.length);
-    //$('#tableRunlist').removeClass('hidden');
-
-   $tasksRunlist.clear().draw();
+    $tasksRunlist.clear().draw();
     // alert(runlist.length);
     for (i = 0; i < runlist.length; i++) {
         var $runlistList = $('#tableRunlistForBlueprint');
         var $tr = $('<tr class="runlistRow"></tr>');
-        var $tdName = $('<td class="runlistDescription">'+runlist[i]+'</td>');
+        var $tdName = $('<td class="runlistDescription">' + runlist[i] + '</td>');
         $tr.append($tdName);
         $runlistList.append($tr);
         $tasksRunlist.row.add($tr).draw();
@@ -927,13 +703,9 @@ function createRunlistTable(runlist) {
 
 $('#saveRunlist').click(function(e) {
     var $ccrs = $('.cookbookShow').data('$ccrs');
-    // alert($ccrs);
     console.log($ccrs);
     console.log($ccrs.getSelectedRunlist());
     var runlist = $ccrs.getSelectedRunlist();
-    // alert(runlist);
-
-    // alert('here');
     createRunlistTable($ccrs.getRunlistNames());
     $('#chefRunlistModal').modal('hide');
     return false;
@@ -953,9 +725,6 @@ var providerselected = $('#blueprints').attr('providerselected');
 
 $(document).ready(function() {
 
-
-    //select2 call 
-    //$('#orgnameSelectExisting').val(localStorage.getItem('selectedOrgId'));
     $(".chooseOrgSelectExisting").select2();
     $(".chooseBGExisting").select2();
     $(".chooseProjectExisting").select2();
@@ -966,68 +735,19 @@ $(document).ready(function() {
     else
         $addal.attr('href', '#ajax/DesignBlueprintAzure.html?addnew');
 
-
-
     $.ajax({
         type: "get",
         dataType: "json",
-
         async: false,
         url: "../organizations/getTreeNew",
         success: function(data) {
-
             console.log(data);
             data = JSON.parse(JSON.stringify(data));
             var $orgListInput = $('#orgnameSelectExisting');
-            $orgListInput.append($('<option></option>').val('choose').html('Choose'));
             var $bgList = $('#bgListInputExisting');
-            //$bgList.append($('<option></option>').val('choose').html('Choose'));
-
-            var $envList = $('#envListExisting');
-
-            for (var i = 0; i < data.length; i++) {
-
-                console.log(data[i].businessGroups);
-                $orgListInput.append($('<option></option>').val(data[i].rowid).html(data[i].name).data('bglist', data[i].businessGroups).data('envList', data[i].environments));
-            }
-
-            //on change of org
-            $orgListInput.change(function(e) {
-                $('#accordionAttr').addClass('hidden');
-                var orgName = $(this).val();
-
-                if (orgName == 'choose') {
-                    return;
-                }
-                var $selectedOrgOption = $(this).find(":selected");
-                $bgList.empty();
-                //$bgList.append($('<option></option>').val('choose').html('Choose'));
-
-                var getBGs = $selectedOrgOption.data('bglist');
-                if (getBGs != null) {
-                    for (var i = 0; i < getBGs.length; i++) {
-                        $bgList.append($('<option></option>').val(getBGs[i].rowid).html(getBGs[i].name).data('projList', getBGs[i].projects));
-                    }
-                }
-
-
-                $envList.empty();
-                var getEnv = $selectedOrgOption.data('envList');
-                if (getEnv != null) {
-                    //alert(JSON.stringify(getEnv));
-                    $envList.append($('<option></option>').val('choose').html('Choose'));
-                    for (var i = 0; i < getEnv.length; i++) {
-                        $envList.append($('<option></option>').val(getEnv[i].rowid).html(getEnv[i].name));
-                    }
-                }
-
-
-            });
-
-
-            //project List
             var $projectList = $('#projectListInputExisting');
-            //$projectList.append($('<option></option>').val('choose').html('Choose'));
+            var $envList = $('#envListExisting');
+            var $projectList = $('#projectListInputExisting');
             $bgList.change(function(e) {
                 var bgName = $(this).val();
                 if (bgName == 'choose') {
@@ -1035,51 +755,56 @@ $(document).ready(function() {
                 }
                 var $selectedOrgOption = $(this).find(":selected");
                 $projectList.empty();
-                //$projectList.append($('<option></option>').val('choose').html('Choose'));
-                var getProjs = $selectedOrgOption.data('projList');
+                var getProjs = bgProjects[bgName];
                 for (var i = 0; i < getProjs.length; i++) {
-
-                    $projectList.append($('<option></option>').val(getProjs[i].rowid).html(getProjs[i].name));
+                    var $option = $('<option></option>').val(getProjs[i].rowid).html(getProjs[i].name);
+                    $projectList.append($option);
                 }
-
+                $projectList.trigger('change');
             });
-            //on click of environment
-            $('.chooseEnvExisting').change(function(e) {
+            var $spinnerProject = $('#spinnerProjectChange').addClass('hidden');
+            $('#projectListInputExisting').change(function(e) {
                 var reqBodyNew = {};
-
-
+                $spinnerProject.removeClass('hidden');
                 reqBodyNew.orgId = $orgListInput.val();
                 reqBodyNew.bgId = $bgList.val();
                 reqBodyNew.projectId = $projectList.val();
                 reqBodyNew.envId = $envList.val();
-
                 $.get('../organizations/' + reqBodyNew.orgId + '/businessgroups/' + reqBodyNew.bgId + '/projects/' + reqBodyNew.projectId + '/environments/' + reqBodyNew.envId + '/', function(data) {
                     console.log('success---3---4');
-                    //alert(JSON.stringify(data));
-
                     //Syncing up the tree view based on url
                     initializeBlueprintAreaNew(data.blueprints);
+                    $spinnerProject.addClass('hidden');
                     if (data.blueprints.length > 0) {
                         $('#accordion-2').removeClass('hidden');
+                        $spinnerProject.addClass('hidden');
                     } else {
-                        bootbox.alert('No Blueprints Available. Please Create a New Blueprint');
+                        $spinnerProject.addClass('hidden');
                     }
                 });
-
             }); //choose env gets over
-
+            var bgProjects = {};
+            for (var i = 0; i < data.length; i++) {
+                console.log(data[i].businessGroups);
+                $orgListInput.append($('<option></option>').val(data[i].rowid).html(data[i].name).data('bglist', data[i].businessGroups).data('envList', data[i].environments));
+                for (var j = 0; j < data[i].businessGroups.length; j++) {
+                    var rowid = data[i].businessGroups[j].rowid;
+                    $bgList.append($('<option></option').val(rowid).html(data[i].businessGroups[j].name));
+                    bgProjects[rowid] = data[i].businessGroups[j].projects;
+                }
+                for (var k = 0; k < data[i].environments.length; k++) {
+                    $envList.append($('<option></option').val(data[i].environments[k].rowid).html(data[i].environments[k].name))
+                }
+            }
+            $bgList.trigger('change');
             $('.chooseOrgSelectExisting').change(function(e) {
-                //$('chooseBGExisting').select2('data',null);   
+                if ($(this).val() == 'choose') {
+                    $('#accordion-2').addClass('hidden');
+                }
                 $('.chooseBGExisting').change();
-                $('.chooseProjectExisting').select2('data', null);
                 $('.chooseProjectExisting').change();
-                $('.chooseEnvExisting').select2('data', null);
-                //$('chooseEnvExisting').change();
-
             });
         }
-
-
     }); //getTreeNew gets over here
 
     //form validation for blueprint save
@@ -1152,10 +877,6 @@ $(document).ready(function() {
     $('a#addanotherlink').click(function(e) {
         validator.resetForm();
     });
-    /*$('a#workZoneNew').click(function(e){
-        alert('click');
-        validator.resetForm();
-    })*/
     $(document).on('change', '.select2-offscreen', function() {
         if (!$.isEmptyObject(validator.submitted)) {
             validator.form();
@@ -1177,7 +898,6 @@ $(document).ready(function() {
 
 $('#launchParamDocker').click(function() {
     $('#dockerparamsform')[0].reset();
-    // loadLaunchParams(); //removed for compose
     $('.chooseSelectExit').change();
 });
 
@@ -1196,8 +916,6 @@ function generateDockerLaunchParams() {
                 launchparams += ' ' + $(this).attr('dockerparamkey') + ' ' + itms[itm];
         }
     });
-    //$('#dockerlaunchparameters').val(launchparams); //removed for compose
-    //alert(launchparams)
     $('#' + $('#myModalLabelDockerContainer').attr('saveto')).val(launchparams);
 
     return (launchparams);
@@ -1229,23 +947,16 @@ function addrows() { //only for testing to be removed
 }
 
 function imagechanged() {
-    //tutum/centos //dockertemplatetagselector
-    //alert('Docker Query -> ' +  '/d4dmasters/getdockertags/' + encodeURIComponent($(this).find('option:selected').attr('repopath')) + '/' + $dockerreponame);
-    //alert('changed');
     $('#btnaddDockerTemplateToTable').attr('disabled', 'disabled');
     $('#dockertemplateSpinner').removeClass('hidden');
     $('#dockertemplatetagselector').empty().select2('val', '');
     $.get('/d4dmasters/getdockertags/' + encodeURIComponent($('#dockertemplateselector').val().replace(/\//g, "$$$")) + '/' + $('#dockertemplateselector option:selected').attr('reponame'), function(data) {
-        //Sample json given below
-        //[{"layer": "cddde0cd", "name": "latest"}, {"layer": "3baf8932", "name": "6.4"}, {"layer": "d1c0a07f", "name": "6.5"}, {"layer": "a9dd9e89", "name": "centos5"}, {"layer": "02398e09", "name": "centos6"}, {"layer": "4e5b3b2f", "name": "centos7"}]
         $('#dockertemplateSpinner').addClass('hidden');
         if (data) {
             var tagJson = JSON.parse(data);
             var $dockertemplatetagselector = $('#dockertemplatetagselector');
             $dockertemplatetagselector.empty();
             tagJson.forEach(function(k, v) {
-                //console.log('k:' + k + ' , v:' + v);
-                //<p class="bg-success"><i style="padding-left:10px;padding-right:10px" class="ace-icon fa fa-check"></i>CentOS</p>
                 $dockertemplatetagselector.append('<option value="' + tagJson[v].name + '">' + tagJson[v].name + '</option>');
                 if (v >= tagJson.length - 1) {
                     $('#btnaddDockerTemplateToTable').removeAttr('disabled');
@@ -1280,14 +991,7 @@ function renumberDockerImageTable() {
 }
 
 function movetablerow(what, index) {
-    // alert('hit ' + what + index);
     var $lnk = $('#' + what + index);
-    // var $row = $lnk.parent().parent().parent(); //current row
-    // if (what === "dockerimageselectorup") {
-    //     $row.insertBefore($row.prev());
-    // } else if (what === "dockerimageselectordown") {
-    //     $row.insertAfter($row.next());
-    // } 
     var row = $lnk.closest('.dockerimagesrow');
     if (what === "dockerimageselectorup") {
         var prev = row.prev();
@@ -1403,34 +1107,6 @@ function getProviderList() {
                 len = data.length;
             str += helperConstructOption(data, ['username', 'password', 'providerType'], 'providerName', '_id');
             $('#providerId').html(str);
-            //getting openstack provider list
-            //alert('in');
-            // $.ajax({
-            //        type: "GET",
-            //        url: "/openstack/providers",
-            //        success: function(data) {
-            //            data = typeof data == "string" ? JSON.parse(data) : data;
-            //            console.log(data);
-            //          // alert(JSON.stringify(data));
-            //                len = data.length;
-            //            str += helperConstructOption(data, ['username', 'password', 'providerType'], 'providerName', '_id');
-
-            //            $('#providerId').html(str);
-            //             $("#providerId > option").each(function() {
-            //                 if($(this).attr('providertype')){
-            //                   if($(this).attr('providertype') != providerselected.toUpperCase()){
-            //                      $(this).detach();
-            //                   }
-            //                 }
-            //             });
-            //        },
-            //        failure: function(data) {
-            //            alert(data.toString());
-            //        }
-            //    });
-
-            //end of openstack 
-
         },
         failure: function(data) {
             alert(data.toString());
@@ -1467,31 +1143,22 @@ function getImagesWithOSFilter() {
                     len = data.length;
                 str = str + helperConstructOption(data, ['providerId', 'vType', 'osType', '_id'], 'name', 'imageIdentifier');
                 $('#imageId').html(str).select2().trigger('change');
-                //alert()
-
-                //setting image value for ami type and disabling it- vn
-/*                if ($('.productdiv2.role-Selected').first().attr('templatetype') == 'ami') {
-                    var vmimage = JSON.parse($('.productdiv2.role-Selected').first().attr('imagedata'));
-                    $('#imageId').val(vmimage.imageIdentifier).attr('disabled', 'disabled');
-                }
-                //setting the selection
-                $('#imageId').select2().trigger('change');*/
             });
         } else {
             $('#imageId').html('<option value="">Select Image</option>').select2().trigger('change');
         }
-       // alert(providerselected);
+        // alert(providerselected);
         if (providerselected == 'vmware') {
-          //  alert('in hp');
+            //  alert('in hp');
             $('.forvmware').show();
-          
+
             $.get('/vmware/' + providerVal + '/datastores', function(data) {
-                console.log("datastores:",data);
+                console.log("datastores:", data);
                 if (data) {
                     var str = ' <option value="">Select Data Store</option>';
                     var data = JSON.parse(JSON.stringify(data));
                     //alert(data.datastores.length);
-                    if(data.datastores){
+                    if (data.datastores) {
                         for (var i = 0; i < data.datastores.length; i++) {
 
                             str += '<option value="' + data.datastores[i].name + '">' + data.datastores[i].name + '</option>';
@@ -1501,11 +1168,10 @@ function getImagesWithOSFilter() {
                     $('#vmwareds').html(str);
                     $('#vmwareds').select2().trigger('change');
 
-                   
+
                 }
             });
-        }
-        else if (providerselected == 'openstack') {
+        } else if (providerselected == 'openstack') {
             $('.foraws').hide();
             $('.foropenstack').show();
             $('.foraws select').removeClass('required'); //removing all aws required fields. when openstatck
@@ -1929,9 +1595,9 @@ var blueprintstartup = function() {
                 if (providerselected && (providerselected == 'vmware' || providerselected == 'openstack' || providerselected == 'hppubliccloud') && data[i]['templatetype'] && data[i]['templatetype'] == 'cft' || data[i]['templatetype'] == 'arm')
                     continue;
 
-                getDesignTypeImg = data[i]['designtemplateicon_filename'];
+                getDesignTypeImg = data[i]['templatetype'];
 
-                switch (data[i].templatetypename) {
+                switch (data[i].templatetype) {
                     case "chef":
                         getDesignTypeImg = '/d4dMasters/image/16ae9c94-19f6-485a-8c17-9af7a0f5f23d__designtemplateicon__Appfactory.png';
                         break;
@@ -1941,9 +1607,6 @@ var blueprintstartup = function() {
                     case "docker":
                         getDesignTypeImg = '/d4dMasters/image/b02de7dd-6101-4f0e-a95e-68d74cec86c0__designtemplateicon__Docker.png';
                         break;
-                 /*   case "cft":
-                        getDesignTypeImg = '/d4dMasters/image/71e62952-b464-4980-b76b-482a129f5627__designtemplateicon__Cloudformation.png';
-                        break;*/
                 }
 
                 //getDesignTypeImg= data[i]['designtemplateicon_filename'];
@@ -2157,28 +1820,11 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 
 
             });
-            //console.log('in here')
-            //alert('here');
-            // var $selectedItem = $('.role-Selected');
-            // if (!$selectedItem.length) {
-            //     alert('please choose a blueprint design')
-            //     return false;
-            // }
-            // var $clone = $selectedItem.clone().removeClass('role-Selected');
             $('#tab' + (index + 1)).find('.temp').empty().append($clone);
             $('.' + $selectedItem.attr('data-templateType')).find('.productdiv2:first').trigger('click');
 
         } else if (index == 2) {
             $("#tabheader").html('Choose Template');
-            //   var $selectedTemplateArea = $('.selectedTemplateArea')
-            //   var $selectedItem = $selectedTemplateArea.find('.productdiv2');
-            //   console.log($selectedItem.length);
-            //   if(!$selectedItem.length) {
-            //     alert('please choose a template');
-            //     return false;
-
-            // }
-            //alert('kickin 2');
             getProviderList();
             //If a docker type of template selected then select the Org 
             var $selectedItem = $('.role-Selected');
@@ -2328,11 +1974,8 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                                         // wizard.disableNextBtn();
                                         return;
                                     }
-                                    // var formHtmlDivHtml = '<div class="col-lg-6 col-md-6" style="margin-top: 10px;"><label for="">Instance Username: <span class="control-label redSpan">&nbsp;*</span></label><div class="input-groups"><input id="cftStackInstanceUsernameInput" class="form-control" type="text" autofocus="autofocus" aria-required="true"></div></div>';
+                                    
                                     var formHtmlDivHtml = '';
-
-
-                                    //                                $panelBody.empty().append(formHtmlDivHtml).append($providerInputContainer).append('<input type="hidden" id="cftTemplateFileInput" value="'+cftTemplateFileName+'"/>');
                                     $panelBody.empty().append($regionInputContainer).append($providerInputContainer).append(formHtmlDivHtml).append('<input type="hidden" id="cftTemplateFileInput" value="' + cftTemplateFileName + '"/>');
 
 
@@ -2438,8 +2081,6 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 
 
 
-
-
                                             $panelGroup.append($clone);
                                             hasResource = true;
                                         }
@@ -2459,9 +2100,6 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                             alert(data.toString());
                         }
                     });
-
-
-
 
 
 
@@ -2551,7 +2189,7 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                                 return false;
                             }
 
-                            if($('#vmwareds').val().indexOf('Choose') >= 0){
+                            if ($('#vmwareds').val().indexOf('Choose') >= 0) {
                                 alert('Please choose a Data Store');
                                 return false;
                             }
@@ -2565,7 +2203,6 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                             reqBody.dockercontainerpaths = $selectedItem.attr('dockercontainerpaths');
                             reqBody.dockerlaunchparameters = $('#dockerlaunchparameters').val();
                             reqBody.dockerreponame = $('.productdiv2.role-Selected').attr('dockerreponame');
-
 
 
 
@@ -2663,12 +2300,10 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                             reqBody.region = region;
                             //alert(reqBody.providerId);
                             reqBody.name = $('#blueprintNameInput').val();
-                            /*if (($('.role-Selected').data('templatetype')).toLowerCase() != "docker") {
-                           // return false;
-                        }*/
+                            
                             //Openstack variables.
                             reqBody.imageIdentifier = imageId;
-                            
+
                             reqBody.instanceCount = 1;
                             reqBody.instanceImageName = imageIdentifier;
                             //for vmware
@@ -2746,13 +2381,13 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                                 if ($('#providerId').find("option:selected").attr('providertype').toLowerCase() == 'azure') {
                                     reqBody.blueprintType = 'azure_launch';
                                 }
-                                 if ($('#providerId').find("option:selected").attr('providertype').toLowerCase() == 'vmware') {
+                                if ($('#providerId').find("option:selected").attr('providertype').toLowerCase() == 'vmware') {
                                     reqBody.blueprintType = 'vmware_launch';
                                 }
-                                
 
 
-                                console.log("Blueprint post:",reqBody);
+
+                                console.log("Blueprint post:", reqBody);
 
                                 $.post('/organizations/' + reqBody.orgId + '/businessgroups/' + reqBody.bgId + '/projects/' + reqBody.projectId + '/blueprints', {
                                     blueprintData: reqBody
@@ -2884,7 +2519,6 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 
 
 
-
                                                 }
                                             });
                                         });
@@ -2960,10 +2594,6 @@ $('.blueprintdiv').on("click", function() {
     } else {
         $(this).addClass('role-Selected');
     }
-    // $('.templates').hide();
-    // console.log($(this).attr('data-templateType'));
-    // $('.'+$(this).attr('data-templateType')).show();
-    //$('.next a').attr('disabled',false);
 });
 
 var $selectedTemplate = $('.productdiv2').click(function(e) {
@@ -2980,57 +2610,34 @@ var $selectedTemplate = $('.productdiv2').click(function(e) {
 $.ajax({
     type: "get",
     dataType: "json",
-
     async: false,
-    url: "../organizations/getTreeNew",
+    url: "../organizations/getTreeForbtv",
     success: function(data) {
-
         console.log(data);
         data = JSON.parse(JSON.stringify(data));
         var $orgListInput = $('#orgnameSelect');
-        //$orgListInput.append($('<option></option>').val('choose').html('Choose'));
         $bgList = $('#bgListInput');
         var $envList = $('#envList');
-
         for (var i = 0; i < data.length; i++) {
-
-            console.log(data[i].businessGroups);
-            $orgListInput.append($('<option></option>').val(data[i].rowid).html(data[i].name).data('bglist', data[i].businessGroups).data('envList', data[i].environments));
+            $orgListInput.append($('<option></option>').val(data[i].rowid).html(data[i].name).data('bglist', data[i].nodes).data('project', data[i].nodes[0].nodes).data('envList', data[i]
+                .nodes[0].nodes));
         }
         $orgListInput.change(function(e) {
-
             var orgName = $(this).val();
-
             if (orgName == 'choose') {
                 return;
             }
             var $selectedOrgOption = $(this).find(":selected");
             $bgList.empty();
             $bgList.append($('<option></option>').val('choose').html('Choose'));
-            //alert('in' + JSON.stringify($selectedOrgOption.data('bglist')));
-
             var getBGs = $selectedOrgOption.data('bglist');
             if (getBGs != null) {
                 for (var i = 0; i < getBGs.length; i++) {
-                    $bgList.append($('<option></option>').val(getBGs[i].rowid).html(getBGs[i].name).data('projList', getBGs[i].projects));
+                    $bgList.append($('<option></option>').val(getBGs[i].rowid).html(getBGs[i].name).data('projList', getBGs[i].nodes));
                 }
             }
-
-
-            //     $envList.empty();
-            //     var getEnv = $selectedOrgOption.data('envList');
-            //     if(getEnv != null){
-            //     //alert(JSON.stringify(getEnv));
-            //     $envList.append($('<option></option>').val('choose').html('Choose'));
-            //     //alert(getEnv.length);
-            //     for (var i = 0; i < getEnv.length; i++) {
-            //    $envList.append($('<option></option>').val(getEnv[i].rowid).html(getEnv[i].name));
-            //  }
-            // }
-
             var $cookbookShow = $('.cookbookShow').empty();
             $cookbookShow.append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
-            //alert('here');
             var tcb = [];
             var $card = $('#tab3').find('div[class*="productdiv2"]').first();
             if ($card.length) {
@@ -3039,41 +2646,24 @@ $.ajax({
                     tcb = templatescookbooks.split(',');
                 }
             }
-            /*var tcb = $('#tab3').find('div[class*="productdiv2"]').first().attr('templatescookbooks').split(',');*/
-
             console.log(tcb);
             console.log('tcbdhd == >', tcb);
-            var $ccrs = $chefCookbookRoleSelector(orgName, function(data) {
-
-            }, tcb);
+            var $ccrs = $chefCookbookRoleSelector(orgName, function(data) {}, tcb);
             console.log("Variables>>>>>" + $ccrs);
             $cookbookShow.empty();
             $cookbookShow.append($ccrs);
-            // console.log($ccrs.substring($ccrs.lastIndexOf("[") + 1, $ccrs.lastIndexOf("]")));
-            /*var $runlistList = $('#tableRunlistForBlueprint');
-            var $tr = $('<tr class="runlistRow"></tr>');
-            var $tdName = $('<td class="runlistDescription"></td>');
-
-            $tdName.append($ccrs);*/
-            // alert($ccrs);
-            // createRunlistTable($ccrs);
             var currentRunlistNames = $ccrs.getRunlistNames(tcb);
             $tasksRunlist.clear().draw();
             for (var i = 0; i < currentRunlistNames.length; i++) {
                 var $runlistList = $('#tableRunlistForBlueprint');
                 var $tr = $('<tr class="runlistRow"></tr>');
-                var $tdName = $('<td class="runlistDescription">'+currentRunlistNames[i]+'</td>');
+                var $tdName = $('<td class="runlistDescription">' + currentRunlistNames[i] + '</td>');
                 $tr.append($tdName);
                 $runlistList.append($tr);
                 $tasksRunlist.row.add($tr).draw();
             }
-
             $cookbookShow.data('$ccrs', $ccrs)
-
-
-
         });
-
         var $projectList = $('#projectListInput');
         $bgList.change(function(e) {
             var bgName = $(this).val();
@@ -3084,13 +2674,10 @@ $.ajax({
             $projectList.empty();
             $projectList.append($('<option></option>').val('choose').html('Choose'));
             var getProjs = $selectedOrgOption.data('projList');
-            // alert(getProjs.length);
             for (var i = 0; i < getProjs.length; i++) {
-
                 $projectList.append($('<option></option>').val(getProjs[i].rowid).html(getProjs[i].name));
             }
         });
-
     }
 });
 
@@ -3195,25 +2782,6 @@ $('#appURLForm').submit(function(e) {
 
 });
 
-
-
-
-
-
-
-
-
-/**************************************Blueprint.js*************************************/
-
-/*Binding Click events to Blueprints*/
-
-/*function initializeBluePrints() {
-                   // bindClick_bluePrintUpdateNew();
-                   // bindClick_updateInstanceRunListNew();
-                }*/
-
-
-
 //Initializing the blueprint area according to the Template-Type and showing
 //the differnt template types whenever a blueprint is added
 function initializeBlueprintAreaNew(data) {
@@ -3287,19 +2855,19 @@ function initializeBlueprintAreaNew(data) {
 
             }
             console.log(tdata);
-            $containerTempNew = '<div class="panel panel-default blueprintContainer hidden">' +
-                '<div class="panel-heading">' +
+            if ($("div." + tdata[i]['templatetype']).length === 0) {
+                $containerTempNew = '<div class="panel panel-default blueprintContainer hidden">' +
+                    '<div class="panel-heading">' +
 
-                '<h4 class="panel-title">' +
-                '<a href="#collapse' + i + '" data-parent="#accordion-2" data-toggle="collapse" class="collapsed"> ' +
-                '<i class="fa fa-fw fa-plus-circle txt-color-blue"></i> ' +
-                '<i class="fa fa-fw fa-minus-circle txt-color-red"></i>' + getDesignTypeName + '</a>' +
-                '</h4></div><div class="panel-collapse collapse" id="collapse' + i + '">' +
-                '<div class="panel-body ' + getDesignType + '"></div>' +
-                '</div>';
-            $('#accordion-2').append($containerTempNew);
-
-
+                    '<h4 class="panel-title">' +
+                    '<a href="#collapse' + i + '" data-parent="#accordion-2" data-toggle="collapse" class="collapsed"> ' +
+                    '<i class="fa fa-fw fa-plus-circle txt-color-blue"></i> ' +
+                    '<i class="fa fa-fw fa-minus-circle txt-color-red"></i>' + getDesignTypeName + '</a>' +
+                    '</h4></div><div class="panel-collapse collapse" id="collapse' + i + '">' +
+                    '<div class="panel-body ' + getDesignType + '"></div>' +
+                    '</div>';
+                $('#accordion-2').append($containerTempNew);
+            }
         }
         //To fix template id and template type
         // alert('in' + data.length);
@@ -3363,13 +2931,10 @@ function initializeBlueprintAreaNew(data) {
                                 $selectVer.append('<option value="' + dockerrepostags[k] + '">' + dockerrepostags[k] + '</option>');
                             });
                         }
-
+                        $selectVer.hide();
                         $selectVerEdit.hide();
-                        tagLabel = '<span>Tags&nbsp;</span';
-                        //alert(JSON.stringify(data[i]));
                     } else {
                         $selectVer = $('<select style="padding:1px;padding-left:5px;"></select>').addClass('blueprintVersionDropDown').attr('data-blueprintId', data[i]._id);
-
 
 
 
@@ -3498,9 +3063,6 @@ function initializeBlueprintAreaNew(data) {
                     }
 
                     if ($selectVer.attr('class').indexOf('dockerrepotagselect') < 0) {
-                        //    alert(data[i].blueprintConfig.infraManagerData.versionsList.length);
-                        // console.log("+++++++++++++++ "+i);
-                        //   console.log("sdasadsds" + JSON.stringify(data[i].blueprintConfig.infraManagerData.versionsList));
 
                         if (typeof data[i].blueprintConfig.infraManagerData !== 'undefined') {
                             for (var j = 0; j < data[i].blueprintConfig.infraManagerData.versionsList.length; j++) {
@@ -3565,99 +3127,15 @@ function initializeBlueprintAreaNew(data) {
 
 };
 
-//Updating blueprints
-/* function bindClick_bluePrintUpdateNew() {
-                    $('.blueprintUpdateBtn').click(function(e) {
-
-                        var $blueprintEditResultContainer = $('#blueprintEditResultContainer');
-                        var $ccrs = $blueprintEditResultContainer.find('.modal-body').data('$ccrs');
-
-                        var $selectedRunlist = $ccrs.find('#cookbooksrecipesselectedList');
-                        var blueprintId = $ccrs.find('#cookbooksrecipesselectedList').attr('data-blueprintId');
-                        if (blueprintId) {
-                            var runlist = $ccrs.getSelectedRunlist();
-                            
-
-                            var blueprintData = {
-                                runlist: runlist,
-                                expirationDays: 0,
-                            };
-
-                            $.post('../blueprints/' + blueprintId + '/update', {
-                                blueprintUpdateData: blueprintData
-                            }, function(data) {
-                                $('.blueprintVersionDropDown[data-blueprintId="' + blueprintId + '"]').append($('<option value="' + data.version + '">' + data.version + '</option>').attr('selected', true));
-                                console.log(data);
-                                $blueprintEditResultContainer.modal('hide');
-                            });
-
-                        }
-                    });
-                }*/
-
-//Updating the blueprint Runlist
-/* function bindClick_updateInstanceRunListNew() {
-                    // Blueprint runtlist updation
-                    $('.btnUpdateInstanceRunlist').click(function(e) {
-                        bootbox.confirm("Update runlist?", function(result) {
-                            if (!result) {
-                                return;
-                            }
-                            $chefRunModalContainer = $('#chefRunModalContainer');
-                            var $ccrs = $chefRunModalContainer.find('.chefRunlistContainer').data('$ccrs');
-                    
-                            
-                            var instanceId = $ccrs.find('#cookbooksrecipesselectedList').attr('data-instanceId');
-
-                            var runlist = $ccrs.getSelectedRunlist();
-                            
-                            if (!runlist.length) {
-                                bootbox.alert('Runlist is empty');
-                                return;
-                            }
-
-
-                            console.log(runlist);
-                            $.post('../instances/' + instanceId + '/updateRunlist', {
-                                runlist: runlist
-                            }, function(data) {
-                                $chefRunModalContainer.modal('hide');
-                                var $parent = $('.domain-roles-caption[data-instanceId="' + instanceId + '"]');
-                                var $parentTr = $('#tableinstanceview tr[data-instanceId="' + instanceId + '"]');
-                                //console.log($('.domain-roles-caption[data-instanceId="' + instanceId + '"]'), $parent.find('.instance-bootstrap-list-image'));
-                                $parent.find('.instance-bootstrap-list-image').data('runlist', runlist);
-                                var $backRunlistContainer = $parent.parents('.card').find('.cardBackRunlistContaner').empty();
-                                for (var j = 0; j < runlist.length; j++) {
-                                    var $divComponentItem;
-
-                                    $divComponentItem = $('<span title="' + runlist[j] + '" style="margin-top:8px;overflow:hidden;text-overflow:ellipsis;width:130px;color:#3a87ad"></span>').addClass('instance-details-item').append(runlist[j]);
-                                    $backRunlistContainer.append($divComponentItem);
-                                }
-
-                                $parentTr.find('.instance-bootstrap-list-image').data('runlist', runlist);
-                                $parent.find('.moreInfo').trigger('click');
-                                console.log(data);
-                            }).fail(function(jxObj) {
-                                if (jxObj.status == '401')
-                                    bootbox.alert('Inssuficient permission to perform operation.');
-                            });
-                        });
-
-
-                    });
-                }*/
-
 //for removing the selected blueprint in the Existing Blueprints tab
 function removeSelectedBlueprint() {
     var blueprintId = $('.productdiv1.role-Selected1').attr('data-blueprintid');
     if (blueprintId) {
         //found now delete
         bootbox.confirm("Are you sure you would like to remove this blueprint?", function(result) {
-            //  alert(result);
             if (!result) {
                 return;
             } else {
-                //alert(result);
                 $.ajax({
                     url: '/blueprints/' + blueprintId,
                     type: 'DELETE',
@@ -3665,8 +3143,6 @@ function removeSelectedBlueprint() {
                         if (data) {
                             var $bcc = $('.productdiv1.role-Selected1').closest('.blueprintContainer');
                             $('.productdiv1.role-Selected1').parent().detach();
-                            //Check if the closest bluprintcontainer is empty, if empty then hide it.
-                            // alert($bcc.find('.panel-body').children().length);
                             if ($bcc.find('.panel-body').children().length <= 0) {
                                 $bcc.addClass('hidden');
                             }
@@ -3677,198 +3153,12 @@ function removeSelectedBlueprint() {
             }
         });
     } else {
-        alert('Please select a blueprint to remove.');
+        bootbox.alert({
+            message: 'Please select a blueprint to remove.',
+            title: 'Warning'
+        });
     }
 }
 
-
-//Launching Blueprints when the user clicks on the launch button in blueprints tab
-/*function bindClick_LaunchBtn() {
-
-                    $('.launchBtn').click(function(e) {
-                        $('#commentForm')[0].reset();
-                        $('#Removeonexitfield').change();
-                        var $selectedItems = $('.role-Selected1');
-                        if (!$selectedItems.length) {
-                            return;
-                        }
-                        if ($selectedItems.attr('data-templateType') === 'desktopProvisioning') {
-                            var $modalDesktopProvisioning = $('#modalDesktopProvisioningLaunch');
-                            var blueprintId = $selectedItems.attr('data-blueprintId');
-                            var version = $selectedItems.find('.blueprintVersionDropDown').val();
-                            $modalDesktopProvisioning.data('blueprintId', blueprintId);
-                            $modalDesktopProvisioning.data('blueprintVersion', version);
-                            $modalDesktopProvisioning.modal('show');
-                            return;
-                        }
-                        if ($selectedItems.attr('data-templateType') === 'Docker') {
-                            var cardCount = $('.instancesList').find('.componentlistContainer:not(.stopped)').length;
-
-                            if (cardCount === 0) {
-                                bootbox.alert('No instances available.Kindly Launch one instance');
-                                return;
-                            }
-                            loadLaunchParams();
-                            var $launchDockerInstanceSelector = $('#launchDockerInstanceSelector');
-                            var blueprintId = $selectedItems.attr('data-blueprintId');
-                            var dockerreponame = $selectedItems.attr('dockerreponame');
-                            $launchDockerInstanceSelector.data('blueprintId', blueprintId);
-                            //  $launchDockerInstanceSelector.data('blueprintId',blueprintId);
-
-
-
-                            $('#dockerinstancesselctorview').empty().append('<span><div class=\"modal-body\"><div><div class=\"row\"><div style=\"color:;\" class=\"col-lg-12 col-sm-12\ dockerinstances"></div></div></div></div></div></span>');
-                            var $newinstancetable = $("<table></table>").append("<thead><tr><td>Instance Name</td><td>IP Address</td><td>Log Info</td><td class='hidden'>Add Docker Engine</td></tr></thead>");
-                            var $newinstancetbody = $('<tbody></tbody>');
-                            $newinstancetable.append($newinstancetbody);
-                            var $instancetable = $('#tableinstanceview').clone();
-                            $instancetable.find('tbody tr').each(function() {
-                                var $newinstancetr = $("<tr><tr>");
-                                $(this).find('td').each(function(k, v) {
-                                    $newinstancetr.append('<td>' + v + $(this).html() + '</td>');
-                                });
-                                $newinstancetbody.append($newinstancetr);
-                            });
-
-                            $instancetable.attr('id', 'dockerintsancestab');
-                            $('.dockerinstances').first().append($instancetable);
-
-                            $('#dockerintsancestab thead td').each(function(k, v) {
-                                if (k > 3)
-                                    $(this).detach();
-                            });
-                            $('#dockerintsancestab thead').append('<td>Log Info</td>');
-                            $('#dockerintsancestab thead tr').append('<td class="hidden" title="Select to add a docker engine">Add Engine</td>');
-                            $('#dockerintsancestab tbody tr').each(function(k, v) {
-
-                                $(this).removeClass('rowcustomselected');
-                                $(this).click(function() {
-                                    $('#dockerintsancestab tbody tr').removeClass('rowcustomselected');
-                                    $(this).addClass('rowcustomselected');
-                                });
-                                $(this).find('td').each(function(k1, v1) {
-                                    if (k1 > 3)
-                                        $(this).detach();
-                                    //inserting a checkbox to select instance
-                                    if (k1 == 0) {
-                                        $(this).prepend('<input type="checkbox" class="instanceselectedforDocker">&nbsp;');
-                                    }
-                                });
-                                $(this).append('<td  class=""><a data-original-title="MoreInfo" data-placement="top" rel="tooltip" href="javascript:void(0)" data-instanceid="' + $(this).attr('data-instanceid') + '" class="tableMoreInfo moreInfo dockerLeft" stlye=></a></td>');
-                                $(this).append('<td  class="hidden"><input type="checkbox"></td>');
-                                $(this).find('.moreInfo').click(instanceLogsHandler);
-                            });
-                            $('.launchdockerinstance').click(function() {
-                                $launchResultContainer.find('.modal-body').empty().append('<span><div class=\"modal-body\"><div><h3 class=\"alert alert-success\"><b>Congratulations!</b> Blueprint Launched Successfully !!!</h3>Instance Id : 5460690c6e5c99913e37d0e4<br>Instance Logs :- </div><div class=\"logsAreaBootstrap\"><div><div class=\"row\"><div style=\"color:white;\" class=\"col-lg-12 col-sm-12\"><span>Starting instance</span></div></div></div></div></div></span>');
-                                $('#myModalLabel').first().html('Launching Blueprint');
-
-                            });
-                            $('#dockerInstanceSelectionTitle').empty().append('Select Instances to pull  "' + dockerreponame + '" into');
-                            $launchDockerInstanceSelector.modal('show');
-                            $('#rootwizard').find("a[href*='tab1']").trigger('click'); //showing first tab.
-                            $('#dockerintsancestab thead').empty().append('<tr><td>Select Instance</td><td>Logo</td><td>Instance Name</td><td>IP Address</td><td>Log</td><td  class="hidden">Add Docker Engine</td></tr>');
-                            $('#dockerintsancestab').dataTable({
-                                "bPaginate": false
-                            });
-                            return;
-                        }
-
-
-                        var $launchResultContainer = $('#launchResultContainer');
-                        $launchResultContainer.find('.modal-body').empty().append('<img class="center-block" style="height:50px;width:50px;margin-top: 10%;margin-bottom: 10%;" src="img/loading.gif" />');
-                        $launchResultContainer.find('.modal-title').html('Launching Blueprint');
-                        $launchResultContainer.modal('show');
-                        if ($selectedItems.length) {
-                            var projectId = $($selectedItems.get(0)).attr('data-projectId');
-                            var envId = $($selectedItems.get(0)).attr('data-envId');
-                            var blueprintId = $($selectedItems.get(0)).attr('data-blueprintId');
-                            var version = $($selectedItems.get(0)).find('.blueprintVersionDropDown').val();
-                            // alert('launching -> ' +'../blueprints/' + blueprintId + '/launch?version=' + version);
-                            $.get('/blueprints/' + blueprintId + '/launch?version=' + version, function(data) {
-
-                                var $msg = $('<div></div>').append('<h3 class=\"alert alert-success\"><b>Congratulations!</b> Blueprint Launched Successfully</h3>').append('Instance Id : ' + data.id).append('<br/>Instance Logs :- ');
-
-                                $launchResultContainer.find('.modal-body').empty();
-                                $launchResultContainer.find('.modal-body').append($msg);
-
-                                var instanceId = data.id;
-                                var timeout;
-
-                                $launchResultContainer.on('hidden.bs.modal', function(e) {
-                                    $launchResultContainer.off('hidden.bs.modal');
-                                    if (timeout) {
-                                        clearTimeout(timeout);
-                                    }
-                                });
-                                $divBootstrapLogArea = $('<div></div>').addClass('logsAreaBootstrap');
-
-                                $launchResultContainer.find('.modal-body').append($divBootstrapLogArea);
-
-                                var lastTimestamp;
-
-                                function pollLogs(timestamp, delay, clearData) {
-                                    var url = '../instances/' + instanceId + '/logs';
-                                    if (timestamp) {
-                                        url = url + '?timestamp=' + timestamp;
-                                    }
-
-                                    timeout = setTimeout(function() {
-                                        $.get(url, function(data) {
-                                            var $modalBody = $divBootstrapLogArea;
-                                            if (clearData) {
-                                                $modalBody.empty();
-                                            }
-                                            var $table = $('<div></div>');
-
-                                            for (var i = 0; i < data.length; i++) {
-                                                var $rowDiv = $('<div class="row"></div>');
-                                                var timeString = new Date().setTime(data[i].timestamp);
-                                                var date = new Date(timeString).toLocaleString(); //converts to human readable strings
-                                                //$rowDiv.append($('<div class="col-lg-4 col-sm-4"></div>').append('<div>' + date + '</div>'));
-
-                                                if (data[i].err) {
-                                                    $rowDiv.append($('<div class="col-lg-12 col-sm-12" style="color:red;"></div>').append('<span>' + data[i].log + '</span>'));
-                                                } else {
-                                                    $rowDiv.append($('<div class="col-lg-12 col-sm-12 " style="color:white;"></div>').append('<span>' + data[i].log + '</span>'));
-                                                }
-
-                                                $table.append($rowDiv);
-                                            }
-
-
-                                            if (data.length) {
-                                                lastTimestamp = data[data.length - 1].timestamp;
-                                                console.log(lastTimestamp);
-                                                $modalBody.append($table);
-                                                $modalBody.scrollTop($modalBody[0].scrollHeight + 100);
-                                            }
-
-
-                                            console.log('polling again');
-                                            if ($launchResultContainer.data()['bs.modal'].isShown) {
-                                                pollLogs(lastTimestamp, 1000, false);
-                                            } else {
-                                                console.log('not polling again');
-                                            }
-                                        });
-                                    }, delay);
-                                }
-                                pollLogs(lastTimestamp, 0, true);
-
-                                $.get('../instances/' + data.id, function(data) {
-                                    $('#tabInstanceStatus').hide();
-                                    addInstanceToDOM(data);
-                                    // serachBoxInInstance.updateData(data,"add",undefined);
-
-                                });
-
-
-                            }).error(function() {
-                                $launchResultContainer.find('.modal-body').empty().append('<span>Oops!!! Something went wrong. Please try again later</span>');
-                            });
-                        }
-                    });
-
-                }*/
-blueprintstartup();
+blueprintstartup(); 
 </script>
