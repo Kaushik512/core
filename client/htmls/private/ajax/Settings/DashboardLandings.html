@@ -1,0 +1,246 @@
+<div class="row">
+   <div class="col-md-12">
+      <div class="col-md-12">
+         <form action="" id="">
+            <div class="widget-box">
+               <div class="widget-header">
+                  <h4 class="widget-margin" style="color:black;">Dashboard Landing Settings
+                    <span id="spnlandingDashboard"></span>
+                  </h4>
+               </div>
+               <div class="widget-body">
+                  <div class="widget-main widgetHeight">
+                     <div>
+                        <section id="widget-grid" class="">
+                           <div class="row">
+                              <article class="col-sm-12 col-md-12 col-lg-12">
+                                 <div class="jarviswidget" id="wid-id-3" data-widget-editbutton="false" data-widget-custombutton="false">
+                                    <div>
+                                       <div class="widget-body no-padding">
+                                            <div class="col-lg-6 col-md-6">
+                                              <label for="chooseJenkinsReference">Jenkin's Reference Name:
+                                                <span style="color:red">*</span>
+                                              </label>
+                                              <div class="input-groups">
+                                                  <select id="chooseJenkinsReference" name="" class="required width-100 form-control">
+
+                                                  </select>
+                                              </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6">
+                                              <label for="chooseJenkinsJob">Jenkin's Job Name:
+                                                <span style="color:red">*</span>
+                                                <span>
+                                                      <img id="jenkinsjobSpinner" src="img/select2-spinner.gif">
+                                                </span>
+                                              </label>
+                                              <div class="input-groups">
+                                                  <select id="jobListJenkins" name="chooseJenkinsJob" class="required form-control width-100">
+
+                                                  </select>
+                                              </div>
+                                            </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </article>
+                           </div>
+                        </section>
+                     </div>
+                  </div>
+               </div>
+               <div class="widget-toolbox clearfix">
+                  <div class="btn-group pull-right">
+                    <span id="msgdashboardSave" class="pull-left" style="margin:8px 11px 0px 0px;color:green;font-size:12px;"></span>
+                    <a class="btn btn-default" onclick="window.history.back();" style="margin-right:11px;" id="btncancel">
+                      <i class="ace-icon fa fa-times bigger-110"></i>Cancel
+                    </a>
+
+                    <button class="btn btn-primary btn-mini" id="btnSaveLanding">
+                      <i class="ace-icon fa fa-check bigger-110"></i>Save
+                    </button>
+
+                  </div>
+               </div>
+            </div>
+         </form>
+      </div>
+   </div>
+</div>
+<script type="text/javascript">
+    $(function() {
+      $.get('/dashboard/providers/dashboardlanding', function(dashboardData) {
+        if (dashboardData && dashboardData.length > 0) {
+          $.get('/jenkins/', function(jenkinsList) {
+            jenkinsList = JSON.parse(jenkinsList);
+            $jenkinsServerListDropdown = $('#chooseJenkinsReference');
+            $jenkinsServerListDropdown.empty();
+            $jenkinsServerListDropdown.append('<option value="">Choose Jenkins Server</option>');
+            var landingDetails = function(jenkinsList, number) {
+              if (number < jenkinsList.length) {
+                var keys = Object.keys(jenkinsList[number]);
+                var $option = $('<option></option>').val(jenkinsList[number][keys[0]]).html(keys[0]);
+
+                if (jenkinsList[number][keys[0]] == dashboardData[0].jenkinsReferenceValue) {
+                  $option.attr('selected', 'selected');
+                }
+                $jenkinsServerListDropdown.append($option);
+                landingDetails(jenkinsList, number + 1);
+              } else {
+                var $spinnerJob = $('#jenkinsjobSpinner').addClass('hidden');
+                var $jobsList = $('#jobListJenkins');
+                $jobsList.prop("disabled", true);
+                var jenkinsServerId = $jenkinsServerListDropdown.val();
+                //this is a condition for getting the list of jenkins job for a particular jenkins server..
+                if(jenkinsServerId){
+                  $.get('/jenkins/' + jenkinsServerId + '/jobs', function(jobsList) {
+                    if (jobsList) {
+                      $jobsList.append('<option value="">Select Job</option>');
+                      for (var i = 0; i < jobsList.length; i++) {
+                        var $option = $('<option></option>').val(jobsList[i].name).html(jobsList[i].name);
+                        if (jobsList[i].name == dashboardData[0].jobsListValue) {
+                          $option.attr('selected', 'selected');
+                        }
+                        $jobsList.append($option);
+                      }
+                      $jobsList.prop("disabled", false);
+                      $spinnerJob.addClass('hidden');
+                    }
+                  }).fail(function(jxhr) {
+                    $spinnerJob.addClass('hidden');
+                    var msg = "Jenkins Job Behaved Unexpectedly.";
+                    if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                      msg = jxhr.responseJSON.message;
+                    } else if (jxhr.responseText) {
+                      msg = jxhr.responseText;
+                    }
+                    bootbox.alert(msg);
+                  });
+                }
+                $jobsList.change(function(e) {
+                  $('#msgdashboardSave').html(" ");
+                });
+              }
+            };
+            landingDetails(jenkinsList, 0);
+
+            $jenkinsServerListDropdown.change(function(e) {
+              if ($(this).val() == 'choose') {
+                $spinnerJob.addClass('hidden');
+                $jobsList.prop("disabled", true);
+              } else {
+                var jenkinsServerId = $(this).val();
+
+                console.log(jenkinsServerId);
+
+                $spinnerJob.removeClass('hidden');
+                $jobsList.prop("disabled", true);
+
+                //this is a condition for getting the list of jenkins job for a particular jenkins server..
+                $.get('/jenkins/' + jenkinsServerId + '/jobs', function(jobsList) {
+                  if (jobsList) {
+                    $jobsList.append('<option value="">Select Job</option>');
+                    for (var i = 0; i < jobsList.length; i++) {
+                      var $option = $('<option></option>').val(jobsList[i].name).html(jobsList[i].name);
+                      $jobsList.append($option);
+                    }
+                    $jobsList.prop("disabled", false);
+                    $spinnerJob.addClass('hidden');
+                  }
+                }).fail(function(jxhr) {
+                  $spinnerJob.addClass('hidden');
+                  var msg = "Jenkins Job Behaved Unexpectedly.";
+                  if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                    msg = jxhr.responseJSON.message;
+                  } else if (jxhr.responseText) {
+                    msg = jxhr.responseText;
+                  }
+                  bootbox.alert(msg);
+                });
+              }
+            });  
+          });
+        } else {
+          $.get('/jenkins/', function(jenkinsList) {
+            jenkinsList = JSON.parse(jenkinsList);
+            //console.log("ffffffffffffffffff" + jenkinsList);
+            $jenkinsServerListDropdown = $('#chooseJenkinsReference');
+            $jenkinsServerListDropdown.empty();
+            $jenkinsServerListDropdown.append('<option value="">Choose Jenkins Server</option>');
+            for (var i = 0; i < jenkinsList.length; i++) {
+              var keys = Object.keys(jenkinsList[i]);
+              var $option = $('<option></option>').val(jenkinsList[i][keys[0]]).html(keys[0]);
+              $jenkinsServerListDropdown.append($option);
+            }
+            var $spinnerJob = $('#jenkinsjobSpinner').addClass('hidden');
+
+            var $jobsList = $('#jobListJenkins');
+            $jobsList.prop("disabled", true);
+            $jenkinsServerListDropdown.change(function(e) {
+              if ($(this).val() == 'choose') {
+                $spinnerJob.addClass('hidden');
+                $jobsList.prop("disabled", true);
+              } else {
+                var jenkinsServerId = $(this).val();
+
+                console.log(jenkinsServerId);
+
+                $spinnerJob.removeClass('hidden');
+                $jobsList.prop("disabled", true);
+
+                //this is a condition for getting the list of jenkins job for a particular jenkins server..
+                $.get('/jenkins/' + jenkinsServerId + '/jobs', function(jobsList) {
+                  if (jobsList) {
+                    $jobsList.append('<option value="">Select Job</option>');
+                    for (var i = 0; i < jobsList.length; i++) {
+                      var $option = $('<option></option>').val(jobsList[i].name).html(jobsList[i].name);
+                      $jobsList.append($option);
+                    }
+                    $jobsList.prop("disabled", false);
+                    $spinnerJob.addClass('hidden');
+                  }
+                }).fail(function(jxhr) {
+                  $spinnerJob.addClass('hidden');
+                  var msg = "Jenkins Job Behaved Unexpectedly.";
+                  if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                    msg = jxhr.responseJSON.message;
+                  } else if (jxhr.responseText) {
+                    msg = jxhr.responseText;
+                  }
+                  bootbox.alert(msg);
+                });
+              }
+            });
+          });
+        }
+      });
+      $('#btnSaveLanding').on('click', function(event) {
+        event.preventDefault();
+        var jenkinsReferenceValue = $("#chooseJenkinsReference option:selected").val();
+        var jobsListValue = $("#jobListJenkins option:selected").val();
+        if (jenkinsReferenceValue && jobsListValue) {
+          dashboardLandingEntry();
+        }
+
+        function dashboardLandingEntry() {
+          var dataDashboard = {};
+          dataDashboard.jenkinsReferenceValue = jenkinsReferenceValue;
+          dataDashboard.jobsListValue = jobsListValue;
+          $.ajax({
+              url: '/dashboard/providers/dashboardlanding',
+              data: JSON.stringify(dataDashboard),
+              type: 'POST',
+              contentType: "application/json",
+              success: function(dashboardLandingData) {
+                  console.log("dataDashboard saved to mongo ########" + JSON.stringify(dashboardLandingData));
+                  $('#msgdashboardSave').html(" ");
+                  $('#msgdashboardSave').html("Saved Successfully");
+              },
+              error: function(jqxhr) {
+                  console.log("Error occured in dashboardlandingmongopush");
+              }
+          });
+        }
+      });
+    });
+</script>

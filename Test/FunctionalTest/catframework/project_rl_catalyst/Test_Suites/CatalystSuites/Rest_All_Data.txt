@@ -1,0 +1,19 @@
+*** Settings ***
+Documentation     Organization_setup_Flow.txt
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${CATALYST ACTION}/Reset_Actions_Steps.txt
+Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
+
+
+*** Test Cases ***
+Catalyst new Config management setup
+    [Tags]       Reset
+    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Clear the Data
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+

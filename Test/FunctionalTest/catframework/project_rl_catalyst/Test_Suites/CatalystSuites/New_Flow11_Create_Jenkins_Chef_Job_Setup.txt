@@ -1,0 +1,70 @@
+*** Settings ***
+Documentation     Inport_IP_setup_Flow.txt
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
+Resource           ${CATALYST ACTION}/Import_By_IP_and_Chef_Sync.txt
+Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
+Resource           ${CATALYST ACTION}/Gallery_setup_TempService_Steps.txt
+
+
+*** Test Cases ***
+Catalyst Validation of Jenkins Configuration setup
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Validate the Jenkins Configuration Setup      
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+Catalyst new Jenkins Configuration setup
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Create New Jenkins Configuration Setup       
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst Creation of Jenkins Task in the Environment 
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Creation of Jenkins Task in Environment       
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+Catalyst Creation of Chef Task in the Environment 
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catlayst Creation of Chef Task in the Environment       
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst Execution of Jenkins Task in Environment 
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Execution of the Jenkins Job
+    Catalyst Logout                    
+    [Teardown]     Close Browser
+
+
+Catalyst Execution of Chef Task in Environment 
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Execution of the Chef Job
+    Catalyst Logout                    
+    [Teardown]     Close Browser
+
+
+
+#Creation of New Application for your Project and Executing Tasks

@@ -1,0 +1,1357 @@
+*** Settings ***
+Documentation      A resource file with reusable keywords and variables.
+...
+...                This file is part of a prototype automated test suite designed to
+...                test web application products built on top of the SLZ platform.
+...
+
+Library            Selenium2Library
+Library            String
+Library            Collections
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
+Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
+Resource           ${CATALYST ACTION}/DevOps_Setup_Action_Steps.txt
+Resource           ${CATALYST ACTION}/Design_Create_Launch_Providers_Template.txt
+Resource           ${CATALYST ACTION}/Gallery_setup_TempService_Steps.txt
+
+*** Variables ***
+
+
+*** Keywords ***
+Catalyst Import an CentOS Instance By IP
+    Clicks on Settings
+    Clicks on Workzone Button
+    #Clicks on User Created Organization
+    #Clicks on User Created BusinessGroup
+    Clicks on Button to your > Environment
+    Sleep    1s
+    Clicks on Inport By IP Button
+    Enters the IP Address of CentOS Box
+    Select the Operating System of the Box
+    Input the User Name for IP
+    Choose The Authentication Type as Pem File
+    Upload the PEM File for Import By IP
+    Clicks on Import Button to Import an Instance
+    Clicks on Import Close Button
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Verify the Operation as BootStrap
+    Verfify the Status of the CentOAS Instance
+    Clicks on Back To Instances
+
+Catalyst Import an Ubuntu Instance By IP
+    Clicks on Settings
+    Clicks on Workzone Button
+    #Clicks on User Created Organization
+    #Clicks on User Created BusinessGroup
+    Clicks on Button to your > Environment
+    Sleep    1s
+    Clicks on Inport By IP Button
+    Enters the IP Address of Ubuntu Box
+    Select the Operating System as Ubuntu
+    Input the Ubuntu User Name for IP
+    Choose The Authentication Type as Pem File
+    Upload the PEM File for Import By IP
+    Clicks on Import Button to Import an Instance
+    Clicks on Import Close Button
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Verify the Operation as BootStrap
+    Verfify the Status of the UbuntuOS Instance
+    Clicks on Back To Instances
+
+
+Catalyst Verfication of Duplicate Node
+    Clicks on Inport By IP Button
+    Enters the IP Address of CentOS Box
+    Select the Operating System of the Box
+    Input the User Name for IP
+    Choose The Authentication Type as Pem File
+    Upload the PEM File for Import By IP
+    Clicks on Import Button to Import an Instance
+    Verify the Message Displayed
+    Clicks on Cancel Bbutoon
+
+Catalyst Verfication Ubuntu Duplicate Node
+    Clicks on Inport By IP Button
+    Enters the IP Address of Ubuntu Box
+    Select the Operating System as Ubuntu
+    Input the Ubuntu User Name for IP
+    Choose The Authentication Type as Pem File
+    Upload the PEM File for Import By IP
+    Clicks on Import Button to Import an Instance
+    Verify the Message Displayed
+    Clicks on Cancel Bbutoon
+
+    
+
+
+
+
+
+Catalyst Import By IP Chef Client run,SSH,Stop,Start
+    Clicks on Settings
+    Clicks on Workzone Button
+    Sleep    2s
+    Clicks on Button to your > Environment
+    Sleep    5s
+    Click on Chef ClientRun    
+    Clicks on CoookBooks
+    Select the Apache2 CookBook
+    Clicks on ADD To RunList
+    Clicks on Update Button Of the a Runlist
+    Clicks on Cloose of Update Button
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Verify the Operation as Chef-Client-Run
+    Verfiy the Chef Client Status after update
+    Clicks on Back To Instances
+    Sleep    2s
+    Clicks on SSH for instance
+    Sleep    3s
+    Input the Usrname in Terminal
+    Select Authenticationtype as PEM
+    Upload the PemFile to ssh
+    Clicking on the SubmitButton
+    Sleep    5s
+    Clicks on Close the Terminal
+    Sleep    2s 
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Verfiy the operation as SSH
+    Verfiy the SSH-Status after update
+    Clicks on Back To Instances
+
+Catalyst Verfication of IP,Status,Chef,SSH,MoreInfo and frm Ctrlpanel
+    Verfication of IP Address from card view
+    Verfication of status from card view
+    Verfication of chefclient run from card view
+    Verfication of SSH from card view
+    Verification of Stop toggler disabled
+    Verfication of MoreInfo from card view
+    Clicks on Contreol Panel
+    Sleep    4s
+    Verfication of Machine status from control panel
+    Getting the Total Memory of the Machine from control panel
+    Getting the Free Memory of the Machine from control panel
+    Verfiying the OS the Machine from control panel
+    Getting the Version of the Machine from control panel
+    Verfiying Bootstrap status from control panel
+    Verfiying the Runlist from control panel
+    Clicks on Back To Instances
+
+
+Catalyst Import By IP Chef Client run,SSH,Stop,Start on Ubuntu Instance
+    Clicks on Settings
+    Clicks on Workzone Button
+    Sleep    2s
+    Clicks on Button to your > Environment
+    Sleep    5s
+    Click on Chef ClientRun of Ubuntu Instance   
+    Clicks on CoookBooks
+    Select the tomcatall CookBook
+    Clicks on ADD To RunList
+    Clicks on Update Button Of the a Runlist
+    Clicks on Cloose of Update Button
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Verify the Operation as Chef-Client-Run
+    Verfiy the Chef Client Status after update
+    Clicks on Back To Instances
+    Sleep    2s
+    Clicks on SSH for ubuntu instance
+    Sleep    3s
+    Input the Ubuntu Usrname in Terminal
+    Select Authenticationtype as PEM
+    Upload the PemFile to ssh
+    Clicking on the SubmitButton
+    Sleep    5s
+    Clicks on Close the Terminal
+    Sleep    2s 
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Verfiy the operation as SSH
+    Verfiy the SSH-Status after update
+    Clicks on Back To Instances
+
+
+Catalyst Verfication of IP,Status,Chef,SSH,MoreInfo on UbuntuIns frm Ctrlpanel
+    Verfication of IP Adres ubuntu from card view
+    Verfication of status from card view
+    Verfication of chefclient run from card view
+    Verfication of SSH from card view
+    Verification of Stop toggler disabled
+    Verfication of MoreInfo from card view
+    Clicks on Contreol Panel
+    Sleep    4s
+    Verfication of Machine status from control panel
+    Getting the Total Memory of the Machine from control panel
+    Getting the Free Memory of the Machine from control panel
+    Verfiying the UbuntuOS the Machine from control panel
+    Getting the Version of the Machine from control panel
+    Verfiying Bootstrap status from control panel
+    Verfiying the ubuntu Runlist from control panel
+    Clicks on Back To Instances
+
+
+
+
+    
+Catalyst Verify the Chef BootStrap,SSH,Status,Start,Stop
+    Sleep    4s
+    Clicks on Button to your > Environment
+    Sleep    5s
+    Verify the Chef Client Run is Enabled for Imported Node
+    Verfiy the SSH is Enabled for Imported Node
+    Verify the Stop Button is Diabled for Inported Node
+    Verfiy the More Info Button is Enabled for Imported Node
+    #Verify the IP Address of the Instance Inported
+    #Verify the Status of the Imported Node
+
+
+Catalyst Check and Edit the Instance Name
+    Sleep    4s
+    Clicks on Workzone Button
+    Clicks on Button to your > Environment
+    Sleep    4s
+    Clicks on Edit Button of the Instance Imported
+    Enters the Empty Edit name
+    Clicks on Edit Save Button of the instance
+    Verfiy the Message Displayed of the Instance
+    Sleep    2s
+    Enters the New Edit Instance Name
+    Clicks on Edit Save Button of the instance
+
+
+
+Catalyst Check and Edit the Ubuntu Instance Name
+    Sleep    4s
+    Clicks on Workzone Button
+    Clicks on Button to your > Environment
+    Sleep    4s
+    Clicks on Edit Button of the UbuntuIns Imported
+    Enters the Empty Edit name
+    Clicks on Edit Save Button of the instance
+    Verfiy the Message Displayed of the Instance
+    Sleep    2s
+    Enters the New Edit Ubuntu Instance Name
+    Clicks on Edit Save Button of the instance
+    
+
+
+
+
+Catalyst Instance Deleted From Chef Environment
+    Sleep    6s
+    Clicks on Workzone Button
+    Clicks on Button to your > Environment
+    Sleep    4s
+    Click on the Instance To Be Deleted 
+    Clicks on the Dlt Button to Delete the Instance
+    Verify the IP Address
+    Select the CheckBox to Delete
+    Clicks on the Delete Button to Delete the Instance
+    Clicks on Settings
+    Sleep    5s
+    Clicks on DevOps Setupp 
+    Clicks on Config Managementt
+    Clicks on Import Nodes Button of Chef Server
+
+
+Catalyst Ubuntu Instance Deleted From Chef Environment
+    Sleep    6s
+    Clicks on Workzone Button
+    Clicks on Button to your > Environment
+    Sleep    4s
+    Click on the Ubuntu Instance To Be Deleted 
+    Clicks on the Dlt Button to Delete the Instance
+    Verify the Ubuntu IP Address
+    Select the CheckBox to Delete
+    Clicks on the Delete Button to Delete the Instance
+    Clicks on Settings
+    Sleep    5s
+    Clicks on DevOps Setupp 
+    Clicks on Config Managementt
+    Clicks on Import Nodes Button and verify Ubuntu instance deleted
+
+
+Catalyst Delete the Node only From Catalyst
+    Sleep    5s
+    Catalyst Steps for Inmporting
+    Sleep    15s
+    Clicks on the Dlt Button to Delete the Instance
+    Verify the Name of the Instance as IP Address
+    Clicks on the Delete Button to Delete the Instance
+    Clicks on Settings
+    Sleep    5s
+    Clicks on DevOps Setupp 
+    Clicks on Config Managementt
+    Clicks on Import Button Server
+
+Catalyst Delete the Ubuntu Node only From Catalyst
+    Sleep    5s
+    Catalyst Steps for Inport by IP Ubuntu
+    Sleep    15s
+    Clicks on the Dlt Button to Delete the Instance
+    Verify the Name of the Ubuntu Instance as IP Address
+    Clicks on the Delete Button to Delete the Instance
+    Clicks on Settings
+    Sleep    5s
+    Clicks on DevOps Setupp 
+    Clicks on Config Managementt
+    Clicks on Import Button Server and Verfiy the Ubuntu Instance
+
+
+
+Catalyst Steps for Inport by IP Ubuntu
+    Clicks on Workzone Button
+    Clicks on Button to your > Environment
+    Sleep    4s
+    Clicks on Inport By IP Button
+    Enters the IP Address of Ubuntu Box
+    Select the Operating System as Ubuntu
+    Input the Ubuntu User Name for IP
+    Choose The Authentication Type as Pem File
+    Upload the PEM File for Import By IP
+    Clicks on Import Button to Import an Instance
+    Clicks on Import Close Button
+
+
+
+Catalyst Steps for Inmporting
+    Clicks on Workzone Button
+    Clicks on Button to your > Environment
+    Sleep    4s
+    Clicks on Inport By IP Button
+    Enters the IP Address of CentOS Box
+    Select the Operating System of the Box
+    Input the User Name for IP
+    Choose The Authentication Type as Pem File
+    Upload the PEM File for Import By IP
+    Clicks on Import Button to Import an Instance
+    Clicks on Import Close Button
+
+
+Catlayst Importing the Instance Chef Sync
+    Clicks on Settings
+    Sleep    5s
+    Clicks on DevOps Setupp 
+    Clicks on Config Managementt
+    Clicks on Import Nodes Button of Server for Sync
+    Find the Instance and Impoert to the Environment
+    Clicking on the Import Nodes Button in Config Mgmt Page 
+    Verfiy the Organization is Disabled
+    Select the Business Grp in Inport Nodes
+    Select the Project in Inport Nodes
+    Enters the UserName in Inport Nodes
+    Choose the Authentication as Pem in Inportnodes
+    Upload the PEM file in Inport Nodes
+    Clicks on Import Button in Import Nodes
+    Sleep    5s
+    Verify the Node Importedd
+    Clicks on Workzone
+    Sleep    10s
+    Node is Inported in the  Environment
+
+
+
+   #.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[3]
+    #//div[@class='domain-roles-heading'][//span[text()='52.24.73.49']]/a
+#//div[@class='domain-roles-heading']/span[@data-originaL-title='apache']
+#//div[@class='domain-roles']/div[@data-blueprintname='52.24.73.49']
+#//div[@class='messageDiv']/div
+
+
+Verfication of IP Address from card view
+    Sleep    4s
+    ${IP VALUE}=    Get Text    xpath=//strong[@class='instanceip']
+    Log    ${IP VALUE} is the IP Address of the Centos Machine
+
+Verfication of IP Adres ubuntu from card view
+    Sleep    4s
+    ${IP VALUE}=    Get Text    xpath=//strong[@class='instanceip']
+    Log    ${IP VALUE} is the IP Address of the ubuntu Machine    
+
+Verfication of status from card view
+    Element Should Contain    xpath=//*[@class='instance-state instance-state-text-started']    ${RUN}
+
+Verfication of chefclient run from card view
+    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li/div/div/div[1]/div/div/div[4]/div[1]/a[@class='chefClientRunlistImage actionbuttonChefClientRun instance-bootstrap-list-image']
+
+Verfication of SSH from card view
+    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li/div/div/div[1]/div/div/div[4]/div[2]/a[@class='sshIcon devTOP']
+
+Verification of Stop toggler disabled
+    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li/div/div/div/div/div/div[4]/div[@class='startstoptoggler shutdown']    
+
+Verfication of MoreInfo from card view
+    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li/div/div/div/div/div/div[4]/span/a[@class='moreInfo']
+
+Verfication of Machine status from control panel
+    ${MACHINE STATUS}=    Get Text    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[1]/td[3]
+    Log    ${MACHINE STATUS}
+
+Getting the Total Memory of the Machine from control panel
+    ${TOTAL MEM}=    Get Text    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[2]/td[3]
+    Log    ${TOTAL MEM}    
+
+Getting the Free Memory of the Machine from control panel
+    ${FREE MEM}=    Get Text    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[3]/td[3]
+    Log    ${FREE MEM}        
+
+Verfiying the OS the Machine from control panel
+    Element Should Contain    xpath=.//*[@id='collapseSoftware']/div/table/tbody/tr[1]/td[3]    ${MAT OS}
+
+Verfiying the UbuntuOS the Machine from control panel
+    Element Should Contain    xpath=.//*[@id='collapseSoftware']/div/table/tbody/tr[1]/td[3]    ${MAT OS1}
+
+
+
+Getting the Version of the Machine from control panel
+    ${VERSION}=    Get Text    xpath=.//*[@id='collapseSoftware']/div/table/tbody/tr[2]/td[3]
+    Log    ${VERSION}
+
+Verfiying Bootstrap status from control panel
+    Element Should Contain    xpath=.//*[@id='collapseConfigmgmt']/div/table/tbody/tr[1]/td[3]    ${SATSS}
+
+Verfiying the Runlist from control panel
+    Element Should Contain    xpath=.//*[@id='collapseConfigmgmt']/div/table/tbody/tr[2]/td[3]    ${RUNLIST}
+
+Verfiying the ubuntu Runlist from control panel
+    Element Should Contain    xpath=.//*[@id='collapseConfigmgmt']/div/table/tbody/tr[2]/td[3]    ${RUNLIST1}
+
+
+Clicks on Close the Terminal
+    Sleep    2s
+    Click Element    xpath=.//*[@id='modalSSHShellContainer']/div/div/div[1]/button
+
+
+Input the Usrname in Terminal
+    Input Text    id=ssh-username    ${UserName}
+
+Input the Ubuntu Usrname in Terminal
+    Input Text    id=ssh-username    ${UbuntuUser}    
+
+Select Authenticationtype as PEM
+    Click Element    xpath=.//*[@id='s2id_ssh-pemFileCheckbox']/a/span[1]   
+    Sleep    1s
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div
+
+Upload the PemFile to ssh
+    Choose File    xpath=.//*[@id='ssh-pemfileInput']    ${CAT_INSTANCES}
+
+Clicking on the SubmitButton
+    Click Element    xpath=.//*[@id='ssh-login-form']/div[7]/button[1]
+
+Verify the Node Importedd
+    Element Should Contain    xpath=//div[@class='messageDiv']/div    Node Imported : ${IP Centos}
+    Sleep    4s
+    Click Element    xpath=//*[text()='Close']
+
+Node is Inported in the  Environment
+    Sleep    4s
+    Element Should Contain    xpath=//div[@class='domain-roles-heading']//span[text()='{IP Centos}']
+
+Verify the IP Address
+    Element Should Contain    xpath=.//*[@id='deleteInstanceForm']/div[2]/strong/span    ${CENTOS NAME}
+
+Verify the Ubuntu IP Address
+    Element Should Contain    xpath=.//*[@id='deleteInstanceForm']/div[2]/strong/span    ${UBUNTU NAME}
+
+Verfiy the Organization is Disabled
+    Element Should Be Disabled     xpath=.//*[@id='s2id_chefImportOrgSelect']/a
+
+Select the Business Grp in Inport Nodes
+    Click Element    xpath=.//*[@id='s2id_chefImportBgSelect']/a
+    #Input Text    xpath=.//*[@id='select2-drop']/div/input    ${BUSINESS GROUP NAME}
+    Click Element    xpath=//div[text()='Devops'] 
+
+Select the Project in Inport Nodes
+    Click Element    xpath=.//*[@id='s2id_chefImportProjectSelect']/a
+    Click Element    xpath=//div[text()='Catalyst']
+
+Enters the UserName in Inport Nodes
+    Input Text    id=importUsernameInput    ${IP USERNAME}
+
+Choose the Authentication as Pem in Inportnodes
+    Click Element    xpath=.//*[@id='s2id_pemFileDropdown2']/a
+    Click Element    xpath=//div[text()='Pem File']
+
+Upload the PEM file in Inport Nodes
+    Choose File    id=importPemfileInput    ${CAT_INSTANCES}
+    #C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\cat_instances.pem
+
+Clicks on Import Button in Import Nodes
+    Click Element    xpath=//*[text()='Import']
+
+Find the Instance and Impoert to the Environment
+    Sleep    3 minutes
+          ${maxloop} =        Set Variable     200
+    :FOR    ${INDEX}    IN RANGE    1    ${maxloop}
+\       Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Be Visible       xpath=.//*[@id='organiz']/table/tbody/tr[${INDEX}]
+\       ${VALUE}          Get Text       xpath=.//*[@id='organiz']/table/tbody/tr[${INDEX}]/td[1]
+\       Run Keyword If    '${VALUE}' == '${IP Centos}'       Click Element        xpath=.//*[@id='organiz']/table/tbody/tr[${INDEX}]/   
+
+    #Click Element    xpath=//tr[@class="show-settings"][td[text()='52.24.73.49']]/td[7]/label
+    #//tr[@class="show-settings"]/td[text()='52.24.73.49']/../td[@class='chef-checkbox smart-form']/label[@class='checkbox']
+    #.//*[@id='organiz']/table/tbody/tr/td[text()='52.24.73.49']/../td[@class='chef-checkbox smart-form']
+
+Clicking on the Import Nodes Button in Config Mgmt Page
+    Click Element    id=buttonForIP
+    Sleep    2s
+
+Clicks on SSH for instance
+    Click Element    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${IP Centos}']]]/div[4]/div[2]/a
+
+Clicks on SSH for ubuntu instance
+    Click Element    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${IP Ubuntu}']]]/div[4]/div[2]/a
+
+
+
+Click on the Instance To Be Deleted
+    Sleep    2s
+    Click Element    xpath=//div[@class='domain-roles']/div[@data-blueprintname='${IP Centos}']
+
+Click on the Ubuntu Instance To Be Deleted 
+    Sleep    2s
+    Click Element    xpath=//div[@class='domain-roles']/div[@data-blueprintname='${IP Ubuntu}']   
+
+
+
+Clicks on the Dlt Button to Delete the Instance
+    Sleep    3s
+    Click Element    id=removeInstance
+
+Verify the Name of the Instance as IP Address   
+    Element Should Contain    xpath=.//*[@id='deleteInstanceForm']/div[2]/strong/span    ${IP ADD CENTOS}
+
+Verify the Name of the Ubuntu Instance as IP Address
+    Element Should Contain    xpath=.//*[@id='deleteInstanceForm']/div[2]/strong/span    ${IP ADD UBUNTU}    
+
+Select the CheckBox to Delete
+    Sleep    1s
+    Click Element    id=ckbChefDelete
+
+Clicks on the Delete Button to Delete the Instance
+    Sleep    1s
+    Click Element    xpath=//*[text()='Delete']
+    Sleep    4s
+
+Clicks on DevOps Setupp 
+    Click Element    xpath=//*[text()='DevOps Setup']
+
+Clicks on Config Managementt
+    Click Element    xpath=//*[text()='Config Management']
+
+
+Clicks on Import Nodes Button of Chef Server
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[3]
+    Sleep    50s
+    Page Should Not Contain    ${IP Centos}
+
+
+Clicks on Import Nodes Button and verify Ubuntu instance deleted
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[3]
+    Sleep    50s
+    Page Should Not Contain    ${IP Ubuntu}    
+
+Clicks on Import Nodes Button of Server for Sync
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[3]
+    Sleep    1 minutes
+
+Clicks on Import Button Server
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[3]
+    Sleep    50s
+    Page Should Contain    ${IP Centos} 
+
+Clicks on Import Button Server and Verfiy the Ubuntu Instance
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='RLChefServer']/../td[5]/div/a[3]
+    Sleep    50s
+    Page Should Contain    ${IP Ubuntu}    
+
+
+
+
+
+Verify the Instance Logs Pop up is Displayed
+    Element Should Contain    xpath=.//*[@id='myModalLabel']    ${MORE INFO}
+
+
+Clicks on More Info Button of the Imported Node
+    Sleep    5s
+    Click Element    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${EDIT_INSTANCE_NAME}']]]/div[4]/span
+    Sleep    5s
+    Click Element    xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button
+
+Clicks on OK Button after the Validation of Message
+    Click Element    xpath=//*[text()="OK"]
+    Sleep    1s
+
+Clicks on Close Button after Validation
+    Click Element    xpath=.//*[@id='instanceEditNew']/div[3]/button
+
+Enters the Empty Edit name
+    Input Text    id=instanceEditName    ${Empty}
+
+Verfiy the Message Displayed of the Instance
+    Sleep    1s
+    Element Should Contain    xpath=.//*[@id='instanceEditName-error']    ${ERRORMESSAGE}
+
+Clicks on Edit Button of the Instance Imported
+    Sleep    3s
+    Click Element    xpath=//div[@class='domain-roles-heading'][//span[text()='${IP Centos}']]/a
+
+Clicks on Edit Button of the UbuntuIns Imported
+    Sleep    3s
+    Click Element    xpath=//div[@class='domain-roles-heading'][//span[text()='${IP Ubuntu}']]/a
+
+
+Enters the New Edit Instance Name
+    Input Text    id=instanceEditName    ${EDIT_INSTANCE_NAME}
+
+Enters the New Edit Ubuntu Instance Name
+    Input Text    id=instanceEditName    ${EDIT_UBUNTU_INSTANCE_NAME}
+
+
+
+Clicks on Edit Save Button of the instance
+    Click Element    id=editSaveBTN
+
+Verify Edited Name of the Instance
+    Element Should Contain    xpath=//div[@class='domain-roles-heading']/span[@data-originaL-title='${EDIT_INSTANCE_NAME}']
+    #Page Should Contain    EDIT_INSTANCE_NAME
+
+
+
+
+Verify the Chef Client Run is Enabled for Imported Node
+    Element Should Be Visible    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${IP Centos}']]]/div[4]/div[1]/a
+
+Verfiy the SSH is Enabled for Imported Node
+    Element Should Be Visible    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${IP Centos}']]]/div[4]/div[2]/a
+
+Verify the Stop Button is Diabled for Inported Node
+    Element Should Be Visible    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${IP Centos}']]]/div[4]/div[5]
+
+Verfiy the More Info Button is Enabled for Imported Node
+    Element Should Be Visible    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${IP Centos}']]]/div[4]/span
+
+Verify the Operation as Chef-Client-Run
+    Sleep    1s
+    Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody/tr[2]/td[1]    ${NAME1}
+
+Verfiy the Chef Client Status after update
+    Sleep    1 minute
+    ${STAGE}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[2]/td[2]/img@title
+    Log    ${STAGE}
+    Log    ${ACTBOOT2}
+    Should Be Equal    ${STAGE}     ${ACTBOOT2} 
+
+Verfiy the operation as SSH
+    Sleep    1s
+    Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody/tr[3]/td[1]    ${NAME2}
+
+Verfiy the SSH-Status after update
+    Sleep    1 minute
+    ${STAGE}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[3]/td[2]/img@title
+    Log    ${STAGE}
+    Log    ${ACTBOOT2}
+    Should Be Equal    ${STAGE}     ${ACTBOOT2} 
+
+
+
+Clicks on Button to your > Environment
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//li[contains(., "Catalyst")]/./span[3]              #Catalyst project
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='tree']/ul/li[contains(., "Catalyst")]/./span[3]
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//*[normalize-space(text())="QA"]
+    Sleep    5 seconds    
+
+
+
+Click on Chef ClientRun
+    Click Element    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${IP Centos}']]]/div[4]/div[1]
+
+Click on Chef ClientRun of Ubuntu Instance   
+    Click Element    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${IP Ubuntu}']]]/div[4]/div[1]
+
+
+
+
+
+Clicks on CoookBooks
+    Sleep    5s
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='chefRunAccordionRunlistArea']/div/div/div/div[1]/div[1]/label[3]
+
+Select the Apache2 CookBook
+    Sleep    5s
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='apache2']
+
+Select the tomcatall CookBook
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='tomcat-all']
+
+
+Clicks on ADD To RunList
+    Click Element    id=btnaddToRunlist
+
+
+
+Clicks on Update Button Of the a Runlist
+    Click Element    xpath=.//*[@id='chefRunModalContainer']/div/div/div[3]/button[1]
+    Sleep    1s
+    Click Element    xpath=//*[text()='OK']
+
+Clicks on Cancel Bbutoon
+    Click Element    xpath=.//*[@id='addInstanceForm']/div[3]/div/a
+
+Clicks on Cloose of Update Button
+    Sleep    5s
+    Click Element    xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button
+
+
+
+
+
+Verify the Message Displayed
+    Sleep    1s
+    Element Should Contain    xpath=.//*[@id='nodeimportipresultmsg']    ${DUP MSG}  
+
+
+Verify the Operation as BootStrap
+    Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[1]     ${NAME}
+
+Verfify the Status of the CentOAS Instance
+    Sleep    50s
+    ${STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[1]/td[2]/img@title
+    Log    ${STATUSS}
+    Log    ${ACTBOOT2}
+    Should Be Equal    ${STATUSS}     ${ACTBOOT2}
+
+Verfify the Status of the UbuntuOS Instance 
+    Sleep    50s
+    ${STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[1]/td[2]/img@title
+    Log    ${STATUSS}
+    Log    ${ACTBOOT2}
+    Should Be Equal    ${STATUSS}     ${ACTBOOT2}
+    
+
+Clicks on Inport By IP Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=ipaddressimport
+
+Enters the IP Address of CentOS Box
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=instanceFQDN    ${IP Centos}
+
+Enters the IP Address of Ubuntu Box
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=instanceFQDN    ${IP Ubuntu}
+    
+
+
+
+Select the Operating System of the Box
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_importinstanceOS']/a/span[1]
+    #-Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    xpath=.//*[@id='select2-drop']/div/input    ${OPERATING SYSTEM1}
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div
+
+Select the Operating System as Ubuntu
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_importinstanceOS']/a/span[1]
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li[4]/div
+
+
+
+Input the User Name for IP
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=instanceUsername    ${IP USERNAME}
+
+Input the Ubuntu User Name for IP
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=instanceUsername    ${IP UBUNTUSERNAME}
+
+
+
+
+Choose The Authentication Type as Pem File
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_pemFileDropdown']/a/span[1]
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${AUTHN}
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+
+
+Upload the PEM File for Import By IP
+    Choose File    xpath=.//*[@id='importPemfileInput']    ${CAT_INSTANCES}
+    #C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\cat_instances.pem
+
+Clicks on Import Button to Import an Instance
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=addInstanceBtn
+    Sleep    30s
+
+Clicks on Import Close Button
+    Sleep    1 minute
+    Click Element    xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button
+
+
+
+
+
+
+Catalyst Creation of CentOS Template
+    Clicks on Settings
+    Clicks on Gallery Setup
+    Clicks on Templates
+    Clicks on New Button
+    Enters New Cent Operating System Template Name
+    Chooses CentOS Icon
+    Chooses Template Type
+    Select Created organization
+    Clicks on Save Button
+
+Catalyst Creation of UBuntuOS Template
+    Clicks on Settings
+    Clicks on Gallery Setup
+    Clicks on Templates
+    Clicks on New Button
+    Enters New Ubun Operating System Template Name
+    Chooses UbuntuOS Icon
+    Chooses Template Type
+    Select Created organization
+    Clicks on Save Button
+
+
+
+
+
+Creation of CentOS Blueprint
+    Clicks on Settings
+    Clicks on Design
+    Clicks on Next Button
+    Chooses the CentTemplate User Created
+    Clicks on Next Button
+    Chooses the Operating System
+    Choose the Provider
+    Choose the Available Images
+    Choose the Region
+    Select the Subnet
+    Select the Key Pair
+    Choose Instance Size
+    Select the Security Group
+    Clicks on Configure Provider Parameters 
+    Clicks on Configure Chef Runlist
+    Chooses Organization
+    #Select WorkCookBooks
+    #Clicks on >>T Button
+    Clicks on Configure Chef Runlist
+    Clicks on Edit Organization Parameters    
+    Enters The CENT Blueprint Name
+    Chooses The Business Group
+    Chooses The Project
+    Chooses The Environment
+    Clicks on Next Button
+
+Catalyst Launch of CentOS Blueprint
+    Clicks on Workzone Button
+    Clicks on User Created Organization
+    Clicks on User Created BusinessGroup
+    Clicks on > Button to your Environment
+    Clicks on Blueprint Section
+    Select the Blueprint for CentOS
+    Clicks on Launch Button
+    Clicks on Instance Close Button
+    Clicks on Instances Button
+    Sleep    45s
+
+Creation of UbuntuOS Blueprint
+    Clicks on Settings
+    Clicks on Design
+    Clicks on Next Button
+    Chooses the UbunTemplate User Created
+    Clicks on Next Button
+    Chooses the Operating System as Ubuntu
+    Choose the Provider
+    Choose the Available Images
+    Choose the Region
+    Select the Subnet
+    Select the Key Pair
+    Choose Instance Size
+    Select the Security Group
+    Clicks on Configure Provider Parameters 
+    Clicks on Configure Chef Runlist
+    Chooses Organization
+    #Select WorkCookBooks
+    #Clicks on >>T Button
+    Clicks on Configure Chef Runlist
+    Clicks on Edit Organization Parameters
+    Enters The UBUN Blueprint Name
+    Chooses The Business Group
+    Chooses The Project
+    Chooses The Environment
+    Clicks on Next Button
+
+Catalyst Launch of UbuntuOS Blueprint
+    Clicks on Workzone Button
+    Clicks on User Created Organization
+    Clicks on User Created BusinessGroup
+    Clicks on > Button to your Environment
+    Clicks on Blueprint Section
+    Select the Blueprint for UbuntuOS
+    Clicks on Launch Button
+    Clicks on Instance Close Button
+    Clicks on Instances Button
+    Sleep    45s
+
+
+
+Validate the Jenkins Configuration Setup
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Jenkins Link
+    Clicks on Jenkins New Button
+    Vaildate the Empty Reference Name  ${VaildEmptyRefName}
+    Reference Name left Empty  ${VaildEmptyRefNameErrMsg}
+    Vaildate the 15Character Reference Name  ${Vaild15ChrRefName}
+    Reference Name with 15Chars  ${Vaild15ChrRefNameErrMsg}
+    Vaildate the Empty Jenkins URL  ${VaildEmptyJenkinsURL}
+    Jenkins URL Name left Empty  ${VaildEmptyJenkinsURLErrMsg}
+    Vaildate the Empty User ID  ${VaildEmptyUserID}
+    User ID Name left Empty  ${VaildEmptyUserIDErrMsg}
+    Vaildate the Empty Password  ${VaildEmptyPassword}
+    Password Field left Empty  ${VaildEmptyPasswordErrMsg}
+    Validate the Empty Organizartion
+    Organization not Selected  ${VaildNotSelectOrg}
+
+Catalyst Create New Jenkins Configuration Setup
+    Clicks on Jenkins New Button
+    Select your Orgg Created
+    Enters the Reference Name
+    Enters the Jenkins URL
+    Enters the User ID Name
+    Enters the Password
+    Clicks on JeSave Button
+    Vaildate the Editof Created Jenkins Reference Name
+
+Vaildate the Editof Created Jenkins Reference Name
+    Clicks on Edit Button of Reference name
+    Enters the new Edit Reference Name
+    Enters the Password
+    Clicks on JeSave Button
+
+Clicks on Edit Button of Reference name
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()="JenkinsTAT"]/../td[5]/div/a
+
+Enters the new Edit Reference Name
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=jenkinsname    ${JENKINS EDIT}
+
+Enters The CENT Blueprint Name
+    Input Text    id=blueprintNameInput    ${CENTBLUEPRINT NAME}
+
+Enters The UBUN Blueprint Name
+    Input Text    id=blueprintNameInput    ${UBUNBLUEPRINT NAME}        
+
+Select the Blueprint for CentOS
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='collapse0']/div/div/div/ul/li/u/b[text()="CentOS"]
+
+Select the Blueprint for UbuntuOS
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='collapse0']/div/div/div/ul/li/u/b[text()="UbuntuOS"]
+
+
+Enters New Cent Operating System Template Name
+    Input Text    id=templatename    ${TEMP NAMECENT}
+
+Chooses CentOS Icon
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Choose File     xpath=.//*[@id='templatesicon']     ${CENTOSIMG}
+    #C:\\Users\\adarsh.RLINDIA\\Desktop\\centos.jpg
+
+Chooses UbuntuOS Icon
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Choose File     xpath=.//*[@id='templatesicon']    ${UBUNTUIMG} 
+    #C:\\Users\\adarsh.RLINDIA\\Desktop\\ubuntuu.jpg
+
+
+Chooses the CentTemplate User Created
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='individualTemplateNameGrid']/div/div/ul/li/u/b[text()="${TEMP NAMECENT}"]
+
+Chooses the UbunTemplate User Created
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='individualTemplateNameGrid']/div/div/ul/li/u/b[text()="${TEMP NAMEUBUN}"]
+    
+
+
+Enters New Ubun Operating System Template Name
+    Input Text    id=templatename    ${TEMP NAMEUBUN}        
+
+Catalyst Creation of Jenkins Task in Environment
+    Clicks on Workzone
+    Clicks on User Created Organization
+    Clicks on User Created BusinessGroup
+    Clicks on > Button to your Environment
+    #Clicks on Orchestration Tab
+    Clicks on New Button of Jenkins
+    Clicks on Choose Task Type of Jenkins
+    Enter the Task Name of Jenkins
+    #-Select Nodes
+    #-Assign Runlist
+    #-Clicks on >>T Button
+    Select the Jenkins Server
+    Select the Job to Run
+    #Assign Users to Run
+    Clicks on Save Task Button
+
+Catlayst Creation of Chef Task in the Environment
+    Clicks on New Button of Jenkins
+    Clicks on Choose Task Type of Chef
+    Enter the Task Name of Chef
+    Check the Chef Serve is Disabled 
+    Select the ChefNodes
+    Selection of CookBooks
+    Clicks on CookBook Attributes
+    Clicks on Edit Button for Attributes
+    Clicks on Save Button of Attributes and Values
+    Clicks on Save Task Button
+
+Creation of New Application for your Project and Executing Tasks  
+    Clicks on Workzone
+    Clicks on User Created Organization
+    Clicks on User Created BusinessGroup
+    Clicks on > Button
+    Clicks on ADD APP Button
+    Enters the Application Name
+    Upload the Application Icon
+    Enters the Repo URL
+    Enters the Repo UserName
+    Enters the Repo Password
+    Clicks on Jenkins Configure Build Parameters
+    Clicks on Choose Environment
+    Choose Your Task
+    Clicks on Build Health Parameters
+    Enters the Functional Test Result
+    Enters the Performanc Test Result
+    Enters the Non Functional Test Result
+    Enters the Security Test Result
+    Enters the Unit Result Result
+    Enters the Code Coverage
+    Enters the Code Analysis
+    Enters the UI Performance Analysis
+    Clicks on Jenkins Save Button
+
+
+Check the Chef Serve is Disabled
+    Element Should Be Disabled     id=configname    
+
+Clicks on Save Button of Attributes and Values
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='editAttributesModalContainer']/div/div/div[3]/button[2]
+
+Organization not Selected
+    [Arguments]    ${ErrMsg}
+    Element Should Contain    id=errmsg_orgname    ${ErrMsg}
+    Clicks on Jenkins Cancel Button
+
+Clicks on Edit Button for Attributes
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='editAttributesBtn']/i
+
+
+Clicks on CookBook Attributes
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-assigntask']/div[2]/div[1]/h4/a
+
+Select the ChefNodes
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='selectedNodesChefTask']/li[contains(.,'${TEMPLATE NAME}')]/label
+
+Selection of CookBooks
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='deploy_nodejs']
+    Click Element    id=btnaddToRunlist
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='deploy_mongodb']
+    Click Element    id=btnaddToRunlist
+
+Clicks on New Button of Jenkins
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='l3']/div/div/div/div/div[1]/div/div/button   
+
+Clicks on ADD APP Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='l2']/div/div/div/div[1]/div/div/a
+
+Enters the Application Name
+    Input Text    id=applicationNameInput     RelevanceApp
+
+Upload the Application Icon
+    Choose File     xpath=applicationiconInput     ${APPICON}
+    #C:\\Users\\adarsh.RLINDIA\\Desktop\\rel.jpg
+
+Enters the Repo URL
+    Input Text    id=gitURLInputaddApp     ${REPO URL}
+
+Enters the Repo Password
+    Input Text    id=gitusernameaddApp     ${REPO USER}
+
+Enters the Repo Password
+    Input Text    id=gitpasswordaddApp     ${REPO PASSWORD}
+
+Clicks on Jenkins Configure Build Parameters
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-DesignaddApp']/div[2]/div[1]/h4/a
+
+Clicks on Choose Environment
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_environmentList']/a
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div      #Dev
+    #Click Element    xpath=.//*[@id='select2-drop']/ul/li[3]/div      #QA
+
+Choose Your Task
+    Wait Until Keyword Succeeds    1 minute     1 seconds     Click Element    xpath=.//*[@id='s2id_taskList']/a/span[1]
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li[1]/div
+
+Clicks on Build Health Parameters
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-DesignaddApp']/div[3]/div[1]/h4/a
+
+Enters the Functional Test Result
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=appFunctionalTest    ${FUNCTIONAL}   
+    
+Enters the Performanc Test Result
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=appPerformanceTest    ${PERFORMANCE}
+
+Enters the Non Functional Test Result
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=appFunctionalTest    ${NONFUNCTIONAL}
+
+Enters the Security Test Result
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=appSecurityTest    ${SECURITY}
+
+Enters the Unit Result Result
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=appUnitTest    ${UNIT}
+
+Enters the Code Coverage
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=appCodeCoverage    ${CODE}
+
+Enters the Code Analysis
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=appCodeAnalysis    ${CODEANALYZE}
+
+Enters the UI Performance Analysis
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=UIPerfAnalysis    ${UI PERFORMANCE}
+
+Clicks on Jenkins Save Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='modaladdAppCard']/div/div/div/div/a[1]    
+
+
+
+
+
+Clicks on Jenknis New Button
+    Click  Element    xpath=.//*[@id='content']/div/div/div/div/div[1]/div/div/a[2]
+
+#Clicks on Orchestration Tab
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='myTab3']/li[3]/a
+
+
+Clicks on Choose Task Type of Jenkins
+    Click Element    xpath=.//*[@id='s2id_taskType']/a
+    Input Text    xpath=.//*[@id='select2-drop']/div/input     ${TASK TYPE}
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+
+Clicks on Choose Task Type of Chef
+    Click Element    xpath=.//*[@id='s2id_taskType']/a
+    Input Text    xpath=.//*[@id='select2-drop']/div/input     ${TASK TYPE1}
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+
+
+Enter the Task Name of Jenkins
+    Input Text    id=jenkinsTaskName    JenkinsTask
+
+Enter the Task Name of Chef
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=chefTaskName    ${CHEF TASKNAME}
+
+
+Select the Job to Run
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_jobListJenkins']/a/span[1]
+    Input Text     xpath=.//*[@id='select2-drop']/div/input     ${JOB NAME}
+    #Input Text    xpath=.//*[@id='select2-drop']/div/input     Catalyst_Build_Demo
+    #Input Text    xpath=.//*[@id='select2-drop']/div/input     Catalyst_Get
+    #Input Text    xpath=.//*[@id='select2-drop']/div/input     LR-AngularPorlet
+
+Assign Users to Run
+    Click Element    xpath=.//*[@id='jenkinsUserList']/option[text()="Admin"]
+    Click Element    xpath=.//*[@id='jenkinsUserList']/option[text()="Designer"]
+    Click Element    xpath=.//*[@id='jenkinsUserList']/option[text()="superadmin"]
+    Click Element    xpath=.//*[@id='jenkinsUserList']/option[text()="Consumer"]
+
+Clicks on  Save Task Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element   xpath=.//*[@id='content']/div[3]/div/div/div/a[1]
+
+
+Clicks on > Button
+    Click Element    xpath=//*[normalize-space(text())="Catalyst"]
+
+Clicks on Workzone
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=.//*[@id='workZoneNew']
+
+
+Clicks on Orchestration
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='myTab3']/li[3]/a    
+
+Clicks on Task New Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='content']/div/div/div/div/div[1]/div/div/a[2]
+
+
+Select the Task Type
+    Click Element    xpath=.//*[@id='s2id_taskType']/a/span[1]
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    Jenkins
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+
+Enters the Task Name
+    Input Text    id=jenkinsTaskName     ${TASK NAME}
+
+Select the Jenkins Server
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_jenkinsServerList']/a/span[1]
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${JENKINS SERVER}
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+
+Select Job
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${JOB}
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li[1]/div
+
+Assign Users
+    Click Element    xpath=.//*[@id='jenkinsUserList']/option[1]       #Superadmin
+    Click Element    xpath=.//*[@id='jenkinsUserList']/option[2]       #Admin
+    Click Element    xpath=.//*[@id='jenkinsUserList']/option[3]       #User
+
+Clicks on Save Task Button
+    Click Element    xpath=.//*[@id='content']/div[3]/div/div/div/a[1]
+
+Clicks on Execute Button
+    Click Element    xpath=.//*[@id='tableOrchestration']/tbody/tr/td[4]/a
+   
+Vaildate the Empty Password
+    [Arguments]    ${Jenkinspassword}
+    Clicks on Jenkins New Button
+    Select your Orgg Created
+    Enters the Reference Name
+    Enters the Jenkins URL
+    Enters the User ID Name
+    Enters the Empty Password
+    Clicks on JeSave Button 
+
+Password Field left Empty    
+    [Arguments]    ${VaildEmptyPasswordErrMsg}
+    Validate the password field    ${VaildEmptyPasswordErrMsg}
+
+Validate the password field
+    [Arguments]    ${ErrMsg}
+    Element Should Contain    id=errmsg_jenkinspassword    ${ErrMsg}
+    Clicks on Jenkins Cancel Button
+ 
+Vaildate the Empty User ID
+    [Arguments]    ${Jenkinsusername}
+    Clicks on Jenkins New Button
+    Select your Orgg Created
+    Enters the Reference Name
+    Enters the Jenkins URL
+    Enters the Empty User ID 
+    Enters the Password
+    Clicks on JeSave Button 
+
+User ID Name left Empty  
+    [Arguments]    ${VaildEmptyUserIDErrMsg}
+    Validate the User id    ${VaildEmptyUserIDErrMsg}
+
+ Validate the User id
+     [Arguments]    ${ErrMsg}
+     Element Should Contain    id=errmsg_jenkinsusername     ${ErrMsg}
+     Clicks on Jenkins Cancel Button
+
+Clicks on JeSave Button 
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='myForm50']/div/div[3]/div/button
+
+
+
+Vaildate the Empty Jenkins URL  
+    [Arguments]    ${Jenkinsurl}
+    Clicks on Jenkins New Button
+    Select your Orgg Created
+    Enters the Reference Name
+    Enters the Empty Jenkins URL
+    Enters the User ID Name
+    Enters the Password
+    #Upload the Certificate Key File 
+    Clicks on JeSave Button 
+
+Validate the Empty Organizartion
+    Clicks on Jenkins New Button
+    Enters the Reference Name
+    Enters the Jenkins URL
+    Enters the User ID Name
+    Enters the Password
+    #Upload the Certificate Key File 
+    Clicks on JeSave Button 
+
+
+Jenkins URL Name left Empty  
+    [Arguments]    ${VaildEmptyJenkinsURLErrMsg}
+    Validate the Jenkins URL Name    ${VaildEmptyJenkinsURLErrMsg}
+
+
+Validate the Jenkins URL Name
+    [Arguments]    ${ErrMsg}
+    Element Should Contain     id=errmsg_jenkinsurl     ${ErrMsg}
+    Clicks on Jenkins Cancel Button
+
+
+Vaildate the Empty Reference Name
+    [Arguments]    ${Jenkinsname}
+    Select your Orgg Created
+    Enters the Jenkins URL
+    Enters the User ID Name
+    Enters the Password
+    #Upload the Certificate Key File 
+    Clicks on JeSave Button 
+
+Reference Name left Empty
+    [Arguments]    ${VaildEmptyRefNameErrMsg}
+    Validate the Reference Name  ${VaildEmptyRefNameErrMsg}  
+
+Validate the Reference Name
+    [Arguments]    ${ErrMsg}
+    Element Should Contain    id=errmsg_jenkinsname     ${ErrMsg}
+    Clicks on Jenkins Cancel Button
+
+Vaildate the 15Character Reference Name  
+    [Arguments]    ${Jenkinsname}
+    Clicks on Jenkins New Button
+    Select your Orgg Created
+    Enters the Jenkins URL
+    Enters the User ID Name
+    Enters the Password
+    Clicks on JeSave Button 
+
+Reference Name with 15Chars
+    [Arguments]    ${Vaild15ChrRefNameErrMsg}
+    Validadate 15chr Reference name Message  ${Vaild15ChrRefNameErrMsg}
+
+
+Validadate 15chr Reference name Message
+    [Arguments]     ${ErrMsg}
+    Element Should Contain     id=errmsg_jenkinsname     ${ErrMsg}
+    Clicks on Jenkins Cancel Button
+
+
+Enters the Reference Name
+    Input Text    id=jenkinsname    ${JENKINSNAME}
+
+Enters the Jenkins URL
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=jenkinsurl     ${JENKINS URL}
+
+Enters the User ID Name
+    Input Text    id=jenkinsusername     ${JENKINS USERID}
+
+Enters the Password
+    Input Text    id=jenkinspassword     ${JENKINS PASSWORD}
+
+
+Enters the Empty Jenkins URL
+    Input Text    id=jenkinsurl    ${VaildEmptyJenkinsURL}
+
+Enters the Empty User ID
+    Input Text    id=jenkinsusername    ${VaildEmptyUserID}
+
+
+Enters the Empty Password
+    Input Text    id=jenkinspassword    ${VaildEmptyPassword}
+
+Clicks on Jenkins Link
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='setting_tree']/ul/li[6]/a
+
+Select your Orgg Created
+    Select From List   id=orgname    ${ORGANIZATION NAME}
+
+Clicks on Jenkins New Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element     xpath=.//*[@id='content']/div/div/div/div/div[1]/div/div/a[2]
+
+Clicks on Jenkins Cancel Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='btncancel']

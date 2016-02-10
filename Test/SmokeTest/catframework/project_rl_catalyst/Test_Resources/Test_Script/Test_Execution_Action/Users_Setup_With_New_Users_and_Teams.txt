@@ -1,0 +1,96 @@
+*** Settings ***
+Documentation     Organization_setup_Flow.txt
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${CATALYST ACTION}/DevOps_Setup_Action_Steps.txt
+Resource           ${CATALYST ACTION}/New_Blueprint_Creation_Action_Steps.txt
+Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
+Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
+
+
+*** Keywords ***
+Catalyst Creates New Teams
+    Clicks on Settings
+    Clicks on Users Setup
+    Clicks on Teams
+    Clicks on New Team Button
+    Enters the Team Name
+    Enters the Team Description
+    Select particular User Created organization
+    Assign Users
+    Assign Projects
+    Clicks on Save button in Teams Page
+   
+
+
+Clicks on Users Setup
+    Wait Until keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    xpath=//a[contains(text(),'Users Setup')]
+    Click Element    xpath=//a[contains(text(),'Users Setup')]
+
+Clicks on Users
+    Wait Until keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    xpath=//a[contains('Users',.)]
+    Click Element    xpath=//a[contains('Users',.)]
+    
+Clicks on New Button
+    Wait Until keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    xpath=.//*[@id='newUser']
+    Click Element    xpath=.//*[@id='newUser']
+
+Enters new orgadmin login name
+    Input Text    id=loginname    ${Org_Admin1} 
+
+Enters new orgadmin email address
+    Input Text    id=email    ${Org_ Admin1_EMAIL_ID}
+
+Enters new orgadmin password
+    Input Text    id=password    ${Orgadmin1_PASSWD}
+
+Enters new orgadmin confirm password
+    Input Text    id=cnfPassword    ${Orgadmin1_CONFPASSWD}
+
+Select the Organization the Admin Created
+    Select From List     id=orgname      ${ORGANIZATION NAME}
+     
+Add User to LDAP
+    Click Element    id=chkadduserldap
+
+Enters LDAP Password for new org admin
+    Input Text    id=userpassword    ${Orgadmin1_PASSWD}
+
+Enters Confirm LDAP Password for new org admin
+    Input Text    id=userpassword1    ${Orgadmin1_CONFPASSWD}
+
+Assign Roles for org admin
+    Click Element    xpath=.//*[@id='userrolename']/label[text()='Admin']
+
+Assign Teams for organization admin
+    Click Element    xpath=.//*[@id='teamname']/label[text()='${ORGANIZATION NAME}_Admins']
+
+Clicks on Save button in Users Page
+    Click Element    css=div.btn-group.pull-right > button
+
+Clicks on Teams
+    Click Element    xpath=//a[contains(text(),'Teams')] 
+
+Clicks on New Team Button
+    Wait Until keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    css=#newTeam
+    Click Element    css=#newTeam
+
+Enters the Team Name
+    Wait Until keyword Succeeds    1 minute     1 seconds    Input Text    id=teamname    ${TEAMNAME1}
+
+Enters the Team Description
+    Wait Until keyword Succeeds    1 minute     1 seconds    Input Text    id=description     ${TEAMDESCRIPTION}
+
+Select particular User Created organization
+    Wait Until Keyword Succeeds    1 minute     1 seconds     Select From List     id=orgname    ${ORGANIZATION NAME}
+
+Assign Users
+    Click Element    xpath=.//*[@id='loginname']/label[text()="${ORG ADMIN USER}"]/i
+
+Assign Projects
+    Click Element    xpath=.//*[@id='projectname']/label[text()="${PROJECT NAME1}"]/i
+
+
+Clicks on Save button in Teams Page
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    css=div.btn-group.pull-right > button

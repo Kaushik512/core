@@ -1,0 +1,618 @@
+*** Settings ***
+Documentation      A resource file with reusable keywords and variables.
+...
+...                This file is part of a prototype automated test suite designed to
+...                test web application products built on top of the SLZ platform.
+...
+
+Library            Selenium2Library
+Library            String
+Library            Collections
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
+Resource           ${CATALYST ACTION}/Gallery_setup_TempService_Steps.txt
+Resource           ${CATALYST ACTION}/DevOps_Setup_Action_Steps.txt
+
+*** Keywords ***
+Catalyst Creation of New Docker Setup
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Docker Setup
+    Sleep    2s
+    Clicks on New Button of Docker
+    Select organization for config management
+    Enters the Reference Name
+    Enters the Docker Registry
+    Enters the UserID for Docker
+    Enters the Email ID for Docker
+    Enters the Password for Docker
+    Clicks on Save Button of Docker Setup
+
+
+
+
+
+Catalyst Validation of New Cloud Formation Template
+    Validation of Empty Cloud template name and no Organization
+    Verfiy the error message displayed for empty template name and Organization
+    Validation of 15 character template name
+    Verify the error message dispalyed for 15chr tenmplate name
+
+
+
+Validation of Empty Cloud template name and no Organization
+    Clicks on Settings
+    Clicks on Gallery Setup
+    Clicks on Templates
+    Clicks on New Button
+    Sleep    3s
+    Chooses Icon
+    Chooses Cloud Formation Template Type
+    Upload the Cloud Template File
+    Clicks on Save Button
+    Sleep    3s
+
+Validation of 15 character template name
+    Clicks on New Button
+    Sleep    3s
+    Enters the 15 character cloud template name
+    Clicks on Save Button
+    Sleep    3s    
+
+Verify the error message dispalyed for 15chr tenmplate name
+    Element Should Contain    id=errmsg_templatename    ${Vaild15ChrTemplateNameErrMsg}
+    Clicks on Cancel button of cloud template creation
+
+
+Enters the 15 character cloud template name
+    Input Text    id=templatename    ${15Chr Templatename}
+
+    
+Verfiy the error message displayed for empty template name and Organization
+    Element Should Contain    id=errmsg_templatename    ${ERRROR MESSAGE1}
+    Element Should Contain    id=errmsg_orgname    ${ERRROR MESSAGE1}
+    Clicks on Cancel button of cloud template creation
+
+Clicks on Cancel button of cloud template creation
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    id=btncancel
+
+
+
+Catalyst Creation of New Cloud Formation Template
+    Clicks on Settings
+    Clicks on Gallery Setup
+    Clicks on Templates
+    Clicks on New Button
+    Sleep    3s
+    Enters the Cloud Template Name
+    Chooses Icon
+    Chooses Cloud Formation Template Type
+    Select Created organization
+    Upload the Cloud Template File
+    Clicks on Save Button
+    Sleep    3s
+    Verify the Cloud Formation Template is created
+
+
+Catalyst Editing the cloud formation template
+    Clicks on Settings
+    Clicks on Gallery Setup
+    Clicks on Templates
+    Clicks on Edit button of the cloud template created
+    Enters the new edit template name
+    Clicks on Save Button
+    Verify the Edited Cloud temp is created
+
+
+Catalyst Unique cloud formation template
+    Clicks on Settings
+    Clicks on Gallery Setup
+    Clicks on Templates
+    Clicks on New Button
+    Sleep    3s
+    Enters the new edit template name
+    Chooses Cloud Formation Template Type
+    Clicks on Save Button
+    Verfiy the error message displayed for duplication cloud template
+
+Verfiy the error message displayed for duplication cloud template
+    Element Should Contain    id=unique_templatename    ${Unique ErrMsg}    
+
+Verify the Edited Cloud temp is created
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${EDIT CLOUD TEMP NAME}']    ${EDIT CLOUD TEMP NAME}
+
+Enters the new edit template name
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Input Text    id=templatename    ${EDIT CLOUD TEMP NAME}
+
+Clicks on Edit button of the cloud template created
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${CLOUD TEMP NAME}']/../td[6]/div/a
+
+
+Catalyst Validation of CloudFormation BlueprintPage
+    Sleep    3s
+    Clicks on CFT Design
+    Sleep    5s
+    Chooses the Template Type as Cloud Formation
+    Clicks on Next Button of CloudFormation
+    Sleep    2s
+    Select the Cloud template
+    Clicks on Next Button of CloudFormation
+    Sleep    3s
+    Clicks on Next Button of CloudFormation
+    Sleep    2s
+    Clicks on Confirm Button of Cloud Formation
+    Sleep    1s
+    Verify the Validation of Error Message dispalyed for No Organization
+    Verify the Validation of Error Message dispalyed for No BlueprintName
+    Verify the Validation of Error Message dispalyed for No BusinessGroup
+    Verify the Validation of Error Message dispalyed for No Project
+    
+
+Select the Cloud template
+    Click Element    xpath=//b[text()='${EDIT CLOUD TEMP NAME}']
+
+Verify the Validation of Error Message dispalyed for No BlueprintName
+    Element Should Contain    id=blueprintNameInput-error    ${ERRROR MESSAGE}
+
+Verify the Validation of Error Message dispalyed for No Organization
+    Element Should Contain    id=orgnameSelect-error    ${ERRROR MESSAGE}    
+
+Verify the Validation of Error Message dispalyed for No BusinessGroup
+    Element Should Contain    id=bgListInput-error    ${ERRROR MESSAGE}
+
+Verify the Validation of Error Message dispalyed for No Project
+    Element Should Contain    id=projectListInput-error    ${ERRROR MESSAGE}
+
+
+Catalyst Creation of New Cloud Formation Blueprint and Save
+    Sleep    3s
+    Clicks on CFT Design
+    Sleep    5s
+    Chooses the Template Type as Cloud Formation
+    Sleep    2s
+    Clicks on Next Button of CloudFormation
+    Sleep    3s
+    Clicks on Next Button of CloudFormation
+    Sleep    2s
+    Enters the Cloud Foramtion Blueprint Name
+    Chooses the CFT Organization
+    Chooses The CFT Business Group
+    Chooses The CFT Project
+    Scroll up the Configure Organization Parameters
+    Clicks on Configure Stack Parameters Accordion
+    Selects the Region for CFT
+    Select the Provider for CFT
+    #Clicks on Configure Resource Node for CFT
+    #Enters the Node Instance UserName
+    #Clicks on Configure Resource Node for CFT
+    Clicks on Next Button of CloudFormation
+    Clicks on Confirm Button of Cloud Formation
+    Sleep    1s
+
+
+Catalyst Launch Cloud Formation Blueprint
+    Sleep    3s
+    Clicks on RL_QA Environment    
+    Sleep    2s
+    Clicks on Blueprint Section of CFT
+    Clicks on Cloud Formation Blueprint Accordion
+    Select the User Created Cloud Formation Blueprint
+    Clicks on Launch Button of Blueprint Created
+    Sleep    1s
+    Enters the Unique Stack Name
+    Clicks on Submit Button of the Stack
+    Sleep    10s
+    Clicks on Close Button of the Stack
+    Sleep   2 minute
+    Clicks on Infrastructure Tab
+    Clicks on Instances Tab
+    Sleep    2s
+    Capture Screen Shot of the page
+    Verfiy the Stack Name in instances section of QA Environment
+    Clicks on Infrastructure Tab
+    Clicks on CloudFormation Tab
+    Verify the stack name in the cloudformation
+
+
+Catalyst Edit the Cloud Formation instance name
+    Sleep    3s
+    Clicks on RL_QA Environment    
+    Sleep    2s
+    Clicks on Edit button of Java Stack
+    Enters the new name for the stack
+    Verfiy page contains the Edited stack name for the instance
+
+
+Catalyst Verify the Bootstrap of the Instance
+    Sleep    5s
+    Clicks on RL_QA Environment    
+    Sleep    2s
+    #Select the Java Stack Instance
+    Clicks on ControlPanel
+    Clicks on Action History Tab
+    Verify the Java Bootstrap text and Status in the Table
+
+
+Catalyst chef client run on the Instance
+    Sleep    3s
+    Clicks on RL_QA Environment    
+    Sleep    2s
+    Clicks on Chef Client Run of Java instance
+    Sleep    5s
+    #Update the Run List with Cookbook
+    Select the RLCatalyst Cookbook
+    Clicks on Update Button
+    #Select the Java Stack Instance to verify Bootstrap
+    Sleep    3s
+    Clicks on ControlPanel
+    Sleep    2s
+    Clicks on Action History Tab
+    Sleep    1s
+    Verfiy the Chefclient Text and Success Status
+    Clicks on Back To Instances
+    Sleep    1s
+
+
+Catalyst SSH on the Instance
+    Sleep    3s
+    Clicks on RL_QA Environment    
+    Sleep    2s
+    Click on Verified SSH Instance
+    Enters the Username in the Terminal
+    Select Authentication Type
+    Upload the Catalyst PEM File
+    Clicks on Terminlal Submit Button
+    Close the SSH Terminal
+    Sleep    4s
+    Clicks on ControlPanel
+    Sleep    2s
+    Clicks on Action History Tab
+    Sleep    1s
+    Sleep    7s
+    Verfify the status of SSH Shell
+    Sleep    1s
+    Clicks on Back To Instances
+    Sleep    3s
+
+
+Verfify the status of SSH Shell
+    Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody/tr[3]/td[1]    ${SSH}
+    ${SSH STATUS}=    Get Element Attribute   xpath=//*[@id='tableactionHistory']/tbody/tr[3]/td[2]/img@title
+    Log    ${SSH STATUS}
+    Should Be Equal    ${ACTBOOT2}     ${SSH STATUS}           
+    Sleep    2s
+
+
+Close the SSH Terminal
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='modalSSHShellContainer']/div/div/div[1]/button
+
+
+Clicks on Terminlal Submit Button
+    Wait Until Keyword Succeeds    2 minute     1 seconds      Click Element    xpath=.//*[@id='ssh-login-form']/div[7]/button[1]
+    Sleep      4s  
+
+
+Upload the Catalyst PEM File
+    Choose File     xpath=.//*[@id='ssh-pemfileInput']    ${CAT_INSTANCES}
+
+Select Authentication Type
+    Click Element    xpath=.//*[@id='s2id_ssh-pemFileCheckbox']/a/span[1]   
+    Sleep    1s
+    #Input Text    xpath=.//*[@id='select2-drop']/div/input    Pem File
+    Sleep    1s
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div
+
+
+Enters the Username in the Terminal
+    Sleep    10s
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=ssh-username    ${IP UBUNTUSERNAME}
+
+
+Click on Verified SSH Instance
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div//ul/li[contains(.,"${EDIT STACK INSTANCE NAME}")]/div/div/div/div[4]/div[2]/a
+
+
+Clicks on Back To Instances
+    Click Element    xpath=.//*[@id='getViewAttr']
+
+Verfiy the Chefclient Text and Success Status
+    Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody/tr[2]/td[1]    ${CHEF CLIENT}
+    ${CHEFSUCCESS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[2]/td[2]/img@title
+    Log    ${CHEFSUCCESS}
+    Should Be Equal    ${CHEFSUCCESS}     ${SATSSYY}
+
+
+Clicks on Chef Client Run of Java instance
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${EDIT STACK INSTANCE NAME}")]/div/div/div/div[4]/div[1]/a
+
+Update the Run List with Cookbook
+    Click Element    xpath=//input[@value='All']
+    #css=div.row > div:first-child > label:nth-of-type(2) > i
+
+Select the RLCatalyst Cookbook
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='${ROLE NAME}']
+    Click Element    id=btnaddToRunlist
+
+
+Clicks on Update Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[text()='Update']
+    Wait Until Keyword Succeeds    1 minute     4 seconds      Click Element    xpath=//*[text()='OK']
+    Sleep    5 minutes
+    Wait Until Keyword Succeeds    1 minute     5 seconds      Click Element    css=#instanceLogModalContainer > div.modal-dialog > div.modal-content > div.modal-footer > button.btn.btn-default.btn-primary
+
+
+
+
+
+
+
+
+Verify the Java Bootstrap text and Status in the Table
+    Sleep    5 minutes
+    Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[text()='${BOOTSTRAP}']    ${BOOTSTRAP}
+    Sleep    1s
+    ${BOOTSTRAP STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[2]/img@title
+    Log    ${BOOTSTRAP STATUSS}
+    Should Be Equal    ${BOOTSTRAP STATUSS}     ${ACTBOOT2}
+
+
+
+Clicks on Action History Tab
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='myTab3']/li[3]/a
+
+
+Clicks on ControlPanel
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    css=.btn.btn-primary.actionControlPanel
+
+
+Select the Java Stack Instance 
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=//span[text()='${EDIT STACK INSTANCE NAME}']
+
+Verfiy page contains the Edited stack name for the instance
+    Page Should Contain    ${EDIT STACK INSTANCE NAME}
+    
+Enters the new name for the stack
+    Input Text    id=instanceEditName    ${EDIT STACK INSTANCE NAME}
+    Click Element    id=editSaveBTN
+
+
+Clicks on Edit button of Java Stack
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']//span[@data-original-title='${JAVA}']/../a[@class='glyphicon glyphicon-pencil editInstanceNameBtn glyphiconNew']
+
+Clicks on CloudFormation Tab
+    Click Element    css=.CloudFormation>a
+
+
+Verify the stack name in the cloudformation
+    #Element Should Contain    xpath=//b[text()='${STACK STORE}']    ${STACK STORE}
+    Page Should Contain    CREATE_COMPLETE
+    ${STACK NAME VERIFY}=    Get Text    xpath=//b[@class='stackNameContainer']
+    Log    ${STACK NAME VERIFY}
+    Should Be Equal    ${STACK NAME VERIFY}    ${STACK STORE}
+
+
+
+
+
+
+
+Verfiy the Stack Name in instances section of QA Environment
+    Page Should Contain    Java
+    Element Text Should Be    xpath=.//span[@data-original-title='${JAVA}']    ${JAVA}
+
+    #Clicks on CloudFormation Tab
+    #Verify the Stack
+    #Verfiy the Status of the Stack
+    #Click on Stack Info Button
+    #Clicks on Close of Stack Info Button
+    #Sleep    1s
+    #Clicks on Instances Button
+    #Verify the Instance Name as Node 
+    #erfiy the Status of the Stack as running
+    #Sleep    2s
+    #Deleting the Stack from the Environment
+
+
+
+Clicks on RL_QA Environment    
+    Click Element    xpath=//*[normalize-space(text())="QA"]
+
+
+Capture Screen Shot of the page
+    Capture Page Screenshot
+
+Clicks on Infrastructure Tab
+    Click Element    css=.caret
+
+
+Clicks on Instances Tab
+    Click Element    css=.Instances>a
+
+Clicks on Docker Setup
+    Click Element    xpath=.//*[text()='Docker']
+
+Enters the UserID for Docker
+    Input Text    id=dockeruserid    ${DOCKER USERID}
+
+Enters the Email ID for Docker
+    Input Text    id=dockeremailid    ${DOCKER EMAILID}
+
+Enters the Password for Docker
+    Input Text    id=dockerpassword    ${DOCKER PASSWD}
+
+Clicks on Save Button of Docker Setup
+    Click Element    css=.btn.btn-primary.btn-mini
+
+Clicks on New Button of Docker
+    Click Element    id=newDoc
+
+Enters the Reference Name
+    Sleep    1s
+    Input Text    id=dockerreponame    ${DOCKER NAME}
+
+Enters the Docker Registry
+    Input Text    id=dockerrepopath    ${DOCKER REGISTRY}
+
+
+Deleting the Stack from the Environment
+    Click Element    css=#removeInstance
+    Sleep    1s
+    Click Element    xpath=//*[text()='OK']
+
+
+Verify the Instance Name as Node
+    Element Text Should Be    xpath=//*[@id="divinstancescardview"]/div/div/ul/li[contains(.,"${STACK INSTANCE NAME}")]/div/div/div/div[1]/span[2]    ${STACK INSTANCE NAME}
+
+Verfiy the Status of the Stack as running
+    Element Text Should Be    xpath=//*[@id="divinstancescardview"]/div/div/ul/li[contains(.,"${STACK INSTANCE NAME}")]/div/div/div/div[3]/div/span[2]/span    ${RUN}
+
+
+
+Clicks on Instances Button
+    Click Element    xpath=//*[@id="myTab3"]/li[1]/a
+
+
+Click on Stack Info Button
+    Execute Javascript    $('#cftStackContainer > div > div > ul > li:nth-child(1) > span > a').click()
+    Sleep    1s
+
+Clicks on Close of Stack Info Button
+    Click Element    css=#cftEventModalContainer > div > div > div.modal-footer > button
+
+
+Verfiy the Status of the Stack
+    Sleep    3s
+    Element Text Should Be    xpath=//*[@id="cftStackContainer"]/div/div/div/span[2]/span    CREATE_COMPLETE
+
+
+Verify the Stack
+    Page Should Contain    ${STACK NAME}
+
+#Clicks on CloudFormation Tab
+    #Click Element    xpath=.//*[@id='myTab3']/li[4]/a
+
+Clicks on Submit Button of the Stack
+    Click Element    css=#cftForm > div.modal-footer > input
+
+Clicks on Close Button of the Stack
+    Click Element    css=#launchResultContainer > div > div > div.modal-footer > button    
+
+Enters the Unique Stack Name
+    ${STACK UNIQUE}=    Generate Random String    3    [NUMBERS]
+    ${STACK STORE}=    Catenate  SEPARATOR=    ${STACK NAME}${STACK UNIQUE}
+    Log     ${STACK STORE}
+    Set Global Variable    ${STACK STORE}
+    Input Text    id=cftInput    ${STACK STORE}
+    
+
+Verify the Cloud Formation Template is created
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${CLOUD TEMP NAME}']    ${CLOUD TEMP NAME}
+
+Clicks on CFT Design
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='designNew']
+    Click Element    xpath=.//*[@id='designNew']
+
+
+
+
+ 
+Clicks on Launch Button of Blueprint Created
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    css=.btn.pull-left.btn-primary.launchBtn
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[text()='OK']
+
+
+Select the User Created Cloud Formation Blueprint
+    Click Element    xpath=.//*[text()='${CFT BLUPRNT NAME}']
+
+
+Clicks on Blueprint Section of CFT
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='myTab3']/li[1]/a/b
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='myTab3']/li[1]/ul/li[2]/a
+    Sleep    1s
+
+Clicks on Cloud Formation Blueprint Accordion
+    Click Element    xpath=.//*[@id='accordion-2']/div[3]/div[1]/h4/a/i[1]
+
+Clicks on Confirm Button of Cloud Formation
+    Sleep    2s
+    Click Element    xpath=.//*[text()='OK']
+    
+
+Enters the Node Instance UserName
+    Input Text    css=input.cftResourceInput.form-control.cftResourceUsernameInput    ${NODE USERNAME}
+
+Clicks on Configure Resource Node for CFT
+    Click Element    xpath=.//*[@id='cft-resource-editArea']/div/div[1]/h4/a/i[2]
+
+
+
+
+Select the Provider for CFT
+    Sleep    2s
+    Click Element    css=#cftProviderInput > option:nth-child(2)
+
+Selects the Region for CFT
+    Sleep    2s
+    Click Element    css=#cftRegionInput > option:nth-child(3)
+
+
+Clicks on Configure Stack Parameters Accordion
+    Click Element    xpath=.//*[@id='accordion-Design']/div[7]/div[1]/h4/a/i[1]
+
+
+
+Scroll up the Configure Organization Parameters
+    Click Element    xpath=.//*[@id='accordion-Design']/div[2]/div[1]/h4/a/i[2]
+
+
+Chooses the CFT Organization
+    Click Element    xpath=.//*[@id='orgnameSelect']/option[text()='${ORGANIZATION NAME}']
+
+
+Chooses The CFT Business Group
+    Sleep    3s
+    Click Element    xpath=.//*[@id='bgListInput']/option[text()='${BUSINESS GROUP NAME}']
+
+    
+Chooses The CFT Project
+    Sleep    3s
+    Click Element    xpath=.//*[@id='projectListInput']/option[text()='${PROJECT NAME}']
+
+
+
+
+Enters the Cloud Foramtion Blueprint Name
+    Input Text    id=blueprintNameInput    ${CFT BLUPRNT NAME}
+
+
+
+Clicks on Next Button of CloudFormation
+    Sleep    3s
+    Click Element    xpath=.//*[@id='nextSpecificValue']/a
+
+
+
+Chooses the Template Type as Cloud Formation
+    Sleep    2s
+    Click Element    xpath=//div[@data-templatetype='${CLOUD TEMPLATETYPE}']
+
+
+
+
+
+Upload the Cloud Template File
+    Choose File     id=template     ${CATALYST STACKFILE}
+
+
+Enters the Cloud Template Name
+    Input Text    id=templatename    ${CLOUD TEMP NAME}
+
+
+Chooses Cloud Formation Template Type
+    Click Element    css=#s2id_templatetypename > a > span.select2-chosen
+    Sleep    2s
+    Input Text    css=#select2-drop > div > input    ${CLOUD TEMPLATETYPE}
+    Sleep    2s
+    Click Element    css=ul > li:first-child > div

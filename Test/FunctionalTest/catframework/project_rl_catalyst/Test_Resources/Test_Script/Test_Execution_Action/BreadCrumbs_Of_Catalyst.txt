@@ -1,0 +1,179 @@
+    *** Settings ***
+Documentation      A resource file with reusable keywords and variables.
+...
+...                This file is part of a prototype automated test suite designed to
+...                test web application products built on top of the SLZ platform.
+...
+
+Library            Selenium2Library
+Library            String
+Library            Collections
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+
+
+*** Keywords ***
+Catalyst Validation of SETTINGS Setup BreadCrumbs
+    Clicks on Settings
+    Clicks on Organization image
+    Verification of the Breadcrumb
+    Clicks on Business Groups menu
+    Verification of the Breadcrumb
+    Clicks on projects menu
+    Verification of the Breadcrumb
+    Clicks on DevOps Setup menu
+    Verification of the Breadcrumb
+    Clicks on Config Management menu
+    Verification of the Breadcrumb
+    Clicks On Environments 
+    Verification of the Breadcrumb
+    Clicks on Puppet Server
+    Verification of the Breadcrumb
+    Clicks on Docker menu
+    Verification of the Breadcrumb
+    Clicks on Jenkins menu
+    Verification of the Breadcrumb
+    Clicks on Provideers menu
+    Verification of the Breadcrumb
+    Clicks on DevOps Setup menu
+    Sleep    1s
+    Clicks on Users Setup
+    Verification of the Breadcrumb
+    Clicks on User Roles menu
+    Verification of the Breadcrumb
+    Clicks on Users
+    Verification of the Breadcrumb
+    Clicks on Teams
+    Verification of the Breadcrumb
+    Clicks on Users Setup
+    Sleep    1s
+    Clicks on Gallery Setup
+    Verification of the Breadcrumb
+    Clicks on Template Type
+    Verification of the Breadcrumb
+    Clicks on Templates
+    Verification of the Breadcrumb
+    Clicks on Service Command
+    Verification of the Breadcrumb
+    Clicks on VMImage
+    Verification of the Breadcrumb
+    Sleep    1s
+    Clicks on Gallery Setup
+
+
+
+Catalyst Validation of Design Breadcrumb
+    Sleep    2s
+    Clicks on Design Link
+    #Get the Text from the Header and Compare
+    Verify the AWS Breadcrumb
+
+    Clicks on Azure Link
+    #Get the Text from the Header and Compare
+    Verfiy the Azure Breadcrumb
+
+    Clicks on DataCentre Link
+    Get the Text from the Header and Compare
+    Verfiy the DataCentre Breadcrumb
+
+    Clicks on openStack Link
+    Get the Text from the Header and Compare
+    Verfiy the Open Stack Breadcrumb
+
+    Clicks on Cloud Stack Link
+    Get the Text from the Header and Compare
+    Verfiy the Cloud Stack Breadcrumb
+
+    Clicks on Docker Link
+    Get the Text from the Header and Compare
+    Verfiy the Docker Breadcrumb
+
+
+
+
+
+Clicks on Azure Link
+    Execute Javascript    $('#blueprints > li > ul > li:nth-child(2) > a > div > span').click();
+
+Clicks on DataCentre Link
+    Execute Javascript    $('#blueprints > li > ul > li:nth-child(3) > a > div > span').click();    
+
+Clicks on openStack Link
+    Execute Javascript    $('#blueprints > li > ul > li:nth-child(4) > a > div > span').click();
+
+Clicks on Cloud Stack Link
+    Execute Javascript    $('#blueprints > li > ul > li:nth-child(5) > a > div > span').click();
+
+Clicks on Docker Link
+    Execute Javascript    $('#blueprints > li > ul > li:nth-child(6) > a > div > span').click();    
+
+
+
+
+Clicks on Design Link
+    Click Element    id=designNew
+
+
+
+
+
+Get the Text from the Header and Compare
+    ${Header}=    Get Text    xpath=.//*[@id='ribbon']/ol
+
+Verify the AWS Breadcrumb
+    ${Header}=    Get Text    xpath=.//*[@id='ribbon']/ol
+    Should Be Equal    ${Header}    ${DESIGN BREADCRUMB}
+
+Verfiy the Azure Breadcrumb
+    ${Header}=    Get Text    xpath=.//*[@id='ribbon']/ol
+    Should Be Equal    ${Header}    ${AZURE BREADCRUMB}
+
+Verfiy the DataCentre Breadcrumb
+    ${Header}=    Get Text    xpath=.//*[@id='ribbon']/ol
+    Should Be Equal    ${Header}    ${DATACENTRE BREADCRUMB}
+
+Verfiy the Open Stack Breadcrumb
+    ${Header}=    Get Text    xpath=.//*[@id='ribbon']/ol
+    Should Be Equal    ${Header}    ${OPENSTACK BREADCRUMB}    
+
+Verfiy the Cloud Stack Breadcrumb
+    ${Header}=    Get Text    xpath=.//*[@id='ribbon']/ol
+    Should Be Equal    ${Header}    ${CLOUDSTACK BREADCRUMB}
+
+
+Verfiy the Docker Breadcrumb
+    ${Header}=    Get Text    xpath=.//*[@id='ribbon']/ol
+    Should Be Equal    ${Header}    ${DOCKER BREADCRUMB}
+
+
+
+Clicks On Environments
+    Click Element    xpath=.//*[text()='Environments']
+
+Clicks on User Roles menu
+    Click Element   xpath=.//*[text()='User Roles']
+
+Clicks on VMImage
+    Click Element    xpath=.//*[text()='VMImage']
+
+
+Clicks on Provideers menu
+    Click Element    xpath=.//*[text()='Providers']
+
+
+Clicks on Jenkins menu
+    Click Element    xpath=.//*[text()='Jenkins']
+
+
+Clicks on Docker menu
+    Click Element    xpath=.//*[text()='Docker']
+
+
+Clicks on Puppet Server 
+    Click Element    xpath=.//*[text()='Puppet Server']
+
+
+Verification of the Breadcrumb
+    Element Should Contain    xpath=.//*[@id='ribbon']/ol/li    ${SETTING}
+

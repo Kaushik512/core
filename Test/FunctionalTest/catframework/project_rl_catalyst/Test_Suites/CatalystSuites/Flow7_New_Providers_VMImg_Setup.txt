@@ -1,0 +1,183 @@
+*** Settings ***
+Documentation     Providers_VMImage_Launch_Verfiy_Blueprint_setup_Flow.txt
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
+Resource           ${CATALYST ACTION}/Design_Create_Launch_Providers_Template.txt
+Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
+
+
+
+*** Test Cases ***
+Catalyst Validation and Creation of AWS PROVIDERS setup        #AWS PROVIDERS SETUP
+    [Tags]       Sanity            Smoke 
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Creation of Providers Setup 
+    Validation of Adding New Providers
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst Edit AWS Provider Name
+    [Tags]       Sanity             Smoke  
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Editing the ProviderName
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst Unique AWS PROVIDERS validation setup
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Unique Provider Creation Setup 
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+#Catalyst checking the Region and Key pair disabled
+    #[Tags]       Sanity               Smoke
+#    Catalyst Login
+    #Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    #Catalyst Region & Keypair disabled
+    #Catalyst Logout                      
+    #[Teardown]     Close Browser
+
+
+
+#OPENSTACK PROVIDERS SETUP
+Catalyst Validation of OpenStack Providers Setup
+    [Tags]       Sanity               Settings
+#    Catalyst Login 
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Validation of OpenStack page
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+#HP PUBLIC CLOUD PROVIDERS SETUP
+Catalyst Validation of HP Public Cloud Providers Setup
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Validation of Public Cloud page
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+
+
+#AZURE PROVIDERS SETUP
+Catalyst Validation of Azure Providers Setup
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Validation of Azure page
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+Catalyst Creation of New Azure Provider Setup
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst creation of Azure provider
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst Editing the Azure provider created
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Editing of Azure provider
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst Unique Azure provider validation setup
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Unique Azure provider
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+
+
+
+
+
+
+#AWS VM IMAGE  SETUP
+Catalyst Validation and Creation of AWS VM IMAGE setup 
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Validation of Creation of AWS New Image
+    Catalyst Creation of VM Image Process for CentOS
+    Catalyst Creation of VM Image Process for Ubutnu
+    Catalyst Creation of VM Image Process for Windows      
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst Editing the AWS VM Image Setup
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst VM Image Edit Setup
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+Catalyst Unique AWS VM IMAGE setup
+    [Tags]       Sanity               VMImage
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Unique VM Image Validation Setup      
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+#AZURE VM IMAGE SETUP
+Catalyst Validation and Creation of AZURE VM IMAGE setup
+    [Tags]       Sanity               VMImage
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Validation of Creation of AZURE New Image
+    Catalyst Creation of Azure VM Image Process for Ubuntu
+    Catalyst Creation of Azure VM Image Process for Windows      
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+Catalyst Editing the AZURE VM Image Setup
+    [Tags]       Sanity               VMImage
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Azure VM Image Edit Setup
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+Catalyst Unique AZURE VM IMAGE setup
+    [Tags]       Sanity               VMImage
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Unique Azure VM Image Validation Setup      
+    Catalyst Logout                      
+    [Teardown]     Close Browser

@@ -1,0 +1,239 @@
+*** Settings ***
+Documentation      A resource file with reusable keywords and variables.
+...
+...                This file is part of a prototype automated test suite designed to
+...                test web application products built on top of the SLZ platform.
+...
+
+Library            Selenium2Library
+Library            String
+Library            Collections
+
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
+Resource           ${CATALYST ACTION}/Users_Setup_With_New_Users_and_Teams.txt
+
+
+*** Variables ***
+
+*** Keywords ***
+Version Number and the Jenkins Buildnumber
+    Browser is opened to login catalyst
+    #Open Browser    ${ENVIRONMENT SERVER}     ${BROWSER TYPE}
+    Sleep    5s   
+    Store the Buildnumber
+
+Store the Buildnumber
+    Sleep    5s
+    ${JEN BUILDNUM}=    Get Text    xpath=.//*[@id='login']/footer/div[2]/p/span
+    Log    ${JEN BUILDNUM}
+
+
+Catalyst Login
+    Browser is opened to login catalyst
+    Enters catalyst User Name
+    Enters catalyst password
+    Clicks on Login button
+
+
+Creates New Org Admin 
+    Clicks on Users Setup
+    Clicks on Users
+    Clicks on New Button
+    Enters the Org Admin Login Name
+    Enters the Org Admin Email Address
+    Enters password for Org Admin
+    Enters confirm password for Org Admin
+    Select The Organization of the OrgAdmin created
+    Assign the Roles as Admin
+    Assign Teams for OrgAdmin
+    Clicks on Save button in Users Page
+
+
+Creates New Organization
+      Vaildate the Organization feilds
+
+
+Enters the Org Admin Login Name
+    Sleep    1s
+    Input Text    id=loginname    ${ORG ADMIN USER}
+    Log    ${ORG ADMIN USER}
+
+Enters the Org Admin Email Address
+    Input Text    id=email    ${ORGADMN EMAILADD}
+
+Enters password for Org Admin
+    Input Text    id=password    ${ORG ADMIN PASSWORD}
+
+Enters confirm password for Org Admin
+    Input Text    id=cnfPassword    ${ORG ADMIN PASSWORD}
+
+    
+Select The Organization of the OrgAdmin created
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='s2id_orgname']/a/span[1]
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${ORGANIZATION NAME}
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    
+Enters the LDAP Org Admin Password
+    Input Text    id=userpassword    ${ORG ADMIN PASSWORD}
+
+Enters the Confirm LDAP Password
+    Input Text    id=userpassword1    ${ORG ADMIN PASSWORD}
+
+Assign the Roles as Admin
+    Click Element    xpath=.//*[@id='userrolename']/label[text()='Admin']
+
+Assign Teams for OrgAdmin
+    Click Element    xpath=.//*[@id='teamname']/label[text()='${ORGANIZATION NAME}_Admins']
+
+
+Vaildate the Organization feilds
+    Clicks on Settings
+    Clicks on Organization image
+    Validate Org same path
+
+Validate Org same path
+    Clicks on New button to Create New Organization
+    Enters organization name
+    Enters organization domain name    
+    Clicks on Save button to save the Organization details 
+
+Clicks on Settings      
+    Wait Until Element Is Visible      css=#settingsNew      1 seconds
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible    css=#settingsNew
+    Click Element    css=#settingsNew
+
+Clicks on Organization image
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    css=ul.list-group > li:first-child > a
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click element    css=ul.list-group > li:nth-of-type(2) > a
+    
+Clicks on New button to Create New Organization
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       css=#newOrg
+    Click Element    css=#newOrg
+    
+Enters organization name
+    Sleep    2s
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Input Text     id=orgname      ${ORGANIZATION NAME}
+
+Enters organization domain name
+    Sleep    1s
+    Input Text     id=domainname      ${ORGANIZATION DOMAIN NAME}
+
+Clicks on Save button to save the Organization details
+    Click Element     css=div.btn-group.pull-right > button
+
+
+Clicks on Cancel Button
+    Click Element    xpath=.//*[@id='btncancel'] 
+
+
+Create New Business Group                                                        
+    Catalyst creates new business group1
+    
+
+Catalyst creates new business group1    
+    Clicks on Settings
+    Clicks on Organzatin Tree 
+    Clicks on Business Groups menu
+    Clicks on New button to create new Business Group
+    Enters new business group name1
+    Select organization for business group
+    Clicks on Save button to save the Business group details
+
+
+Vaildate the Business Group feilds
+    [Arguments]    ${productgroupname}
+    Clicks on Settings
+    Clicks on Organzatin Tree 
+    Clicks on Business Groups menu
+    Clicks on New button to create new Business Group
+    Enters new business group name    ${productgroupname}
+    Select organization for business group
+    Clicks on Save button to save the Business group details
+
+    
+Clicks on Organzatin Tree 
+    Click Element    css=ul.list-group > li:first-child > a
+    
+
+Clicks on Business Groups menu
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       css=ul.list-group > li:nth-of-type(3) > a
+    Click Element    css=ul.list-group > li:nth-of-type(3) > a
+
+Clicks on New button to create new Business Group
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       css=#newProd
+    Click Element    css=#newProd
+
+Enters new business group name1
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       id=productgroupname
+    Input Text     id=productgroupname      ${BUSINESS GROUP NAME1}
+
+
+
+Select organization for business group
+    Select From List     id=orgname      ${ORGANIZATION NAME}
+
+Clicks on Save button to save the Business group details
+    Click Element    css=div.btn-group.pull-right > button   
+
+
+Create New Projects                                                                  
+    Creates project 1   ${PROJECT NAME1}
+
+ 
+Creates project 1
+    [Arguments]    ${projectname}
+    Clicks on projects menu
+    Clicks on New button to create new project
+    Enters new Project name    ${projectname}
+    Enters new Project Description
+    Select organization for project
+    Clicks on Save button to save the Project details
+
+Clicks on projects menu
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//a[contains(text(),'Projects')]
+    Click Element    xpath=//a[contains(text(),'Projects')]
+
+Clicks on New button to create new project
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       link=New
+    Click Element    link=New
+
+Enters new Project name
+    [Arguments]     ${projectname}
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       id=projectname
+    Input Text     id=projectname      ${projectname}
+
+Enters new Project Description
+    Input Text     id=description      ${PROJECT DESCRIPTION}
+
+Select organization for project
+    Select From List     id=orgname      ${ORGANIZATION NAME}
+
+Select Business Group
+    Select From List    id=productgroupname    ${BUSINESS GROUP NAME}            #Devops
+           
+
+Select Business Groupn
+    Select From List    id=productgroupname    ${VaildEditBusinessGroup}          #HealthSystems
+
+Select environment for project
+     Click Element     xpath=.//*[@id='environmentname']/label[1]/i    #DEV Environment
+    
+
+Select environment1 for project
+    Click Element    xpath=.//*[@id='environmentname']/label[1]/i    #DEV Environment
+    Click Element    xpath=.//*[@id='environmentname']/label[2]/i    #Prod Environment
+    
+
+Clicks on Save button to save the Project details
+    Click Element    xpath=.//*[@id='myForm3']/div/div[3]/div/button                     
+                                                                          
+Catalyst Logout
+    Clicks on LogOut link
+
+Clicks on LogOut link
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='logout']/span/a/i
+    Focus    xpath=.//*[@id='logout']/span/a/i
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='logout']/span/a/i

@@ -1,0 +1,2971 @@
+*** Settings ***
+Documentation      A resource file with reusable keywords and variables.
+...
+...                This file is part of a prototype automated test suite designed to
+...                test web application products built on top of the SLZ platform.
+...
+
+Library            Selenium2Library
+Library            String
+Library            Collections
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
+Resource           ${CATALYST ACTION}/DevOps_Setup_Action_Steps.txt
+Resource           ${CATALYST ACTION}/Gallery_setup_TempService_Steps.txt
+Resource           ${CATALYST ACTION}/New_Environment_Creation.txt
+
+
+*** Keywords ***
+Validation of Adding New Providers
+    Validation of Selecting No Provider Type          #${VaildNoProvider}
+    No Selection of Provider Type  ${VaildProviderErrMsg}
+    Validation of No Name of Provider  ${VaildNoProviderName}
+    Provider Name Left Empty  ${VaildNoNameErrMsg}
+    Validation of No Access Key  ${VaildNoAccessKey}
+    Access Field Left Empty  ${VaildAccessFieldErrMsg}
+    Validation of No Secret Key  ${VaildNoSecretKey}
+    Secret Field Left Empty  ${VaildSecretFieldErrMsg}
+
+
+
+Validation of Selecting No Provider Type
+    Clicks on New Button of Providers
+    Select the no provider option from dropdown     
+    Enters the Name of the Provider
+    Enters the Access Key
+    Enters the Secret Key
+    Select organization now
+    Selects the Region
+    Selects the Key Pair
+    Uploads the Pem File for Provider
+    Clicks on Save Button of the Provider
+
+
+
+Select the no provider option from dropdown
+    Wait Until Keyword Succeeds    1 minute     1 seconds     Click Element    xpath=//span[text()='AWS']
+    Wait Until Keyword Succeeds    1 minute     1 seconds     Click Element    xpath=//div[text()='Select Provider']
+
+
+No Selection of Provider Type
+    [Arguments]    ${VaildProviderErrMsg}  
+    Validate the Provider field    ${VaildProviderErrMsg}
+
+Validate the Provider field    
+    [Arguments]    ${ErrMsg}
+    Element Should Contain    id=errmsg_providertype    ${ErrMsg}
+    Clicks on Provider Cancel Button
+
+Validation of No Name of Provider
+    [Arguments]    ${NoName}
+    Clicks on New Button of Providers
+    Select the Provider
+    Enters the Access Key
+    Enters the Secret Key
+    Select organization now
+    Selects the Region
+    Selects the Key Pair
+    Uploads the Pem File for Provider
+    Clicks on Save Button of the Provider
+
+Provider Name Left Empty
+    [Arguments]    ${VaildNoNameErrMsg}
+    Validate the provider name field  ${VaildNoNameErrMsg}
+
+Validate the provider name field
+    [Arguments]    ${ErrMsg}
+    Element Should Contain    id=errmsg_name    ${ErrMsg}
+    Clicks on Provider Cancel Button
+
+Validation of No Access Key
+    [Arguments]    ${NoAccessKey}
+    Clicks on New Button of Providers
+    Select the Provider
+    Enters the Name of the Provider
+    Enters the Secret Key
+    Select organization now
+    Selects the Region
+    Uploads the Pem File for Provider
+    Clicks on Save Button of the Provider
+
+Access Field Left Empty  
+    [Arguments]    ${VaildAccessFieldErrMsg}
+    Validate the no access Key  ${VaildAccessFieldErrMsg}
+
+Validate the no access Key
+    [Arguments]    ${ErrMsg}
+    Element Should Contain    id=errmsg_accessKey    ${ErrMsg}
+    Clicks on Provider Cancel Button
+
+Validation of No Secret Key
+    [Arguments]    ${NoSecretKey}
+    Clicks on New Button of Providers
+    Select the Provider
+    Enters the Name of the Provider
+    Enters the Access Key
+    Select organization now
+    Selects the Region
+    Uploads the Pem File for Provider
+    Clicks on Save Button of the Provider
+
+Secret Field Left Empty
+    [Arguments]    ${VaildSecretFieldErrMsg}
+    Validate No Secret Key  ${VaildSecretFieldErrMsg}
+
+Validate No Secret Key
+    [Arguments]    ${ErrMsg}
+    Element Should contain    id=errmsg_secretKey    ${ErrMsg}
+    Clicks on Provider Cancel Button
+
+
+Catalyst Creation of New Blueprint and Delete
+    #Verify the Blurprint Saved Successfully message
+    Clicks on Add New Blueprint Button
+    Choose the Template Type Created
+    Sleep    3s
+    Clicks on Next Button
+    Chooses the Template User Created
+    Clicks on Next Button
+    Chooses the Operating System
+    Sleep    4s
+    Choose the Provider
+    Choose the Available Images
+    Choose the Region
+    #Select the VPC
+    Select the Subnet
+    Select the Key Pair
+    Sleep    3s
+    Choose Instance Size
+    Select the Security Group
+    Clicks on Configure Provider Parameters
+    Clicks on Configure Organization Parameters
+    #Chooses Organization
+    Enters The Testing Blueprint Name
+    Chooses The Business Group
+    Chooses The Project
+    #Select WorkCookBooks
+    #Clicks on >>T Button
+    Clicks on close of Configure Organization Parameters
+    #Chooses The Environment
+    Clicks on Configure Application URL
+    Clicks on AppNew Button
+    Enters the Application URL Name
+    Enters the AppURL
+    Clicks on AppADD Button
+    Enable the Next Button 
+    Clicks on Next Button
+    Clicks on Confirm OK Button
+    Clicks on Workzone Button
+    Clicks on the Project to go to Environment
+    Clicks on the Environment to Launch
+    Sleep    5s
+    Clicks on the Infrastructure Tab to select Bluperints section
+    #Clicks on Blueprint Section
+    Select the CentosTesingBlueprint
+    Deleting the Testing Blueprint
+
+
+Catalyst Creation of Azure Ubuntu New Blueprint and Delete
+    Clicks on Add New Blueprint Button
+    Sleep    3s
+    Clicks on Azure link
+    Sleep    3s
+    Choose the Template Type Created
+    Sleep    3s
+    Clicks on Next Button
+    Chooses the Template User Created
+    Clicks on Next Button
+    Chooses the Operating System as Ubuntu
+    Sleep    4s
+    Choose the Azure Provider
+    Choose the Available Image of ubuntu
+    Enter the Security group ports
+    Choose the Azure ubuntu Region
+    Select the Azure VPC
+    Select the Azure Subnet
+    #Select the Key Pair
+    Choose Instance Size for azure ubuntu
+    #Select the Security Group
+    Clicks on Configure Provider Parameters
+    Clicks on Configure Organization Parameters
+    #Chooses Organization
+    Enters The Edit Blueprint Name for azure ubuntu
+    Chooses The Business Group
+    Chooses The Project
+    #Select WorkCookBooks
+    #Clicks on >>T Button
+    Clicks on close of Configure Organization Parameters
+    #Chooses The Environment
+    Clicks on Configure Application URL
+    Clicks on AppNew Button
+    Enters the Application URL Name
+    Enters the AppURL
+    Clicks on AppADD Button
+    Enable the Next Button 
+    Clicks on Next Button
+    Clicks on Confirm OK Button
+    Clicks on Workzone Button
+    #Clicks on the Project to go to Environment
+    #Clicks on the Environment to Launch
+    Sleep    5s
+    Clicks on the Infrastructure Tab to select Bluperints section
+    #Clicks on Blueprint Section
+    Select the ubuntuAzureTesingBlueprint
+    Deleting the ubuntu azure Testing Blueprint
+
+
+
+
+Enters The Edit Blueprint Name for azure ubuntu
+    Input Text    id=blueprintNameInput    ${EDIT AZURE BLUEPRINTNANE}
+
+
+Clicks on the Infrastructure Tab to select Bluperints section
+    Click Element    xpath=.//*[@id='myTab3']/li[1]/a/b
+    Sleep    1s
+    Click Element    xpath=.//*[@id='myTab3']/li[1]/ul/li[2]/a
+    Sleep    1s
+
+
+Verify the Blurprint Saved Successfully message
+    Sleep    1s
+    Element Text Should Be    css=.blueprintNameSuccess    Blueprint  ApacheNew  Saved Successfully
+
+
+Clicks on Add New Blueprint Button 
+    Click Element    css=div.alert.alert-success.bootstrapSuccess > div > button.btn.btn-primary
+    Sleep    3s
+
+Deleting the Testing Blueprint
+    Click Element    xpath=.//*[@id='l2']/footer/div/button
+    Sleep    1s
+    Click Element    xpath=//*[text()='OK']
+    Page Should Not Contain    ${BLUEPRINT TESTNAME}
+
+
+
+Deleting the ubuntu azure Testing Blueprint
+    Click Element    xpath=.//*[@id='l2']/footer/div/button
+    Sleep    1s
+    Click Element    xpath=//*[text()='OK']   
+    Page Should Not Contain    ${EDIT AZURE BLUEPRINTNANE}
+
+
+
+Catalyst Creation of Providers Setup 
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Providers           
+    Clicks on New Button of Providers
+    Select the Provider
+    Enters the Name of the Provider
+    Enters the Access Key
+    Enters the Secret Key
+    Sleep    3s
+    Select organization now
+    Selects the Region
+    Selects the Key Pair
+    Uploads the Pem File for Provider
+    Clicks on Save Button of the Provider
+    
+
+
+Catalyst Validation of OpenStack page
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Providers           
+    Clicks on New Button of Providers
+    #Select the no provider from dropdown
+    Select the OpenStack Provider
+    Clicks on Save Button of the Provider
+    Verfiy the Error Message Displayed for OpenStack
+    Clicks on Cancel Button of provider page
+
+
+Catalyst Validation of Public Cloud page
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Providers           
+    Clicks on New Button of Providers
+    Select the HP Public Cloud Provider
+    Clicks on Save Button of the Provider
+    Verify the Error Message Displayed for HP cloud
+    Clicks on Cancel Button of provider page
+
+
+
+Catalyst Validation of Azure page
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Providers           
+    Clicks on New Button of Providers
+    Select the Azure Provider
+    Clicks on Save Button of the Provider
+    Verify the Error Message Displayed for Azure
+    Clicks on Cancel Button of provider page
+
+
+
+Catalyst creation of Azure provider
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Providers           
+    Clicks on New Button of Providers
+    Select the Azure Provider
+    Enters the Name of Azure Provider
+    Enters the Subscription ID
+    Upload the Management pem file
+    Upload the Private keyfile
+    Select the org for Azure provider
+    Clicks on Save Button of the Provider
+    Verfiy the Azure Provider is created
+
+
+
+Catalyst Editing of Azure provider
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Providers
+    Clicks on Edit button of the Azure provider created
+    Enters the new Name of Azure Provider
+    Clicks on Save Button of the Provider
+    Verify the Edited Azure provider is created
+
+Catalyst Unique Azure provider
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Providers
+    Clicks on New Button of Providers
+    Select the Azure Provider
+    Enters the new Name of Azure Provider
+    Enters the Subscription ID
+    Upload the Management pem file
+    Upload the Private keyfile
+    Select the org for Azure provider
+    Clicks on Save Button of the Provider
+    Verify the error message displayed for already existing azure provider
+
+
+Verify the error message displayed for already existing azure provider
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Contain    id=errmsg_name    ${Provider ErrMsg}
+
+
+Verify the Edited Azure provider is created
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${AZURE EDIT PROVIDERNAME}']    ${AZURE EDIT PROVIDERNAME}    
+
+Clicks on Edit button of the Azure provider created
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${AZURE PROVIDERNAME}']/../td[4]/div/a[@title='Edit']
+
+Select the org for Azure provider
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=//span[text()='Select Organization']
+    Input Text    css=#select2-drop .select2-input    ${ORGANIZATION NAME}
+    Sleep    4s
+    Click Element    css=.select2-result-label
+
+
+
+Enters the Name of Azure Provider
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Input Text    id=name    ${AZURE PROVIDERNAME}
+
+Enters the new Name of Azure Provider
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Input Text    id=name    ${AZURE EDIT PROVIDERNAME}    
+
+Enters the Subscription ID
+    Input Text    id=azureSubscriptionId    ${SUBSCRIPTION ID}
+
+Upload the Management pem file
+    Choose File    id=azurepem    ${MANAGEMENT PEM}
+
+Upload the Private keyfile
+    Choose File    id=azurekey    ${PRIVATE KEYFILE}
+
+Verfiy the Azure Provider is created
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${AZURE PROVIDERNAME}']    ${AZURE PROVIDERNAME}
+
+
+Clicks on Cancel Button of provider page
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    css=#btncancel
+
+
+
+Catalyst Editing the ProviderName
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Providers
+    Sleep    1s
+    Clicks on Edit Button of Created Provider
+    Sleep    1s
+    Enters the New Edit Provider Name
+    Clicks on Save Button of the Provider
+    Sleep    2s
+    Verfiy the Provider is Created
+
+
+Catalyst Region & Keypair disabled
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Providers
+    Sleep    1s
+    Clicks on Edit button of the provider created
+    Verfiy the Region and the Keypair disabled
+
+
+Verfiy the Region and the Keypair disabled
+    ${Reg}=    Run Keyword and Return Status     Element Should Be Disabled    xpath=//span[text()='US West (Oregon) | us-west-2']
+    Log    ${Reg}
+    Run Keyword If    '${Reg}' == 'False'     
+    ...    Log    Region dropdown is enabled
+    ...    ELSE IF   '${Reg}' == 'True'
+    ...    Log    Region dropdwn is disabled
+    ${Key}=    Run Keyword and Return Status     Element Should Be Enabled     xpath=//span[text()='cat_instances']
+    Log    ${Key}
+    Run Keyword If    '${Key}' == 'False'     
+    ...    Log    Keypair dropdown is enabled
+    ...    ELSE IF   '${Key}' == 'True'
+    ...    Log    Keypair dropdwn is disabled
+
+
+
+     
+
+Clicks on Edit button of the provider created
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${EDIT PROVIDER NANME}']/../td[4]/div/a[1]/i
+
+
+Catalyst Unique Provider Creation Setup
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Providers           
+    Clicks on New Button of Providers
+    Select the Provider
+    Enters the New Edit Provider Name
+    Enters the Access Key
+    Enters the Secret Key
+    Sleep    3s
+    Select organization now
+    Selects the Region
+    Selects the Key Pair
+    Uploads the Pem File for Provider
+    Clicks on Save Button of the Provider
+    Verify the Error Message Displayed while duplicating the provider
+
+
+
+Verfiy the Error Message Displayed for OpenStack
+    #Element Should Contain    id=errmsg_providertype    ${REQ}
+    Element Should Contain    id=errmsg_openstackusername    ${REQ}
+    Element Should Contain    id=errmsg_openstackpassword    ${REQ}
+    Element Should Contain    id=errmsg_openstackhost    ${REQ}
+    Element Should Contain    id=errmsg_openstackprojectname    ${REQ}
+    Element Should Contain    id=errmsg_openstacktenantid    ${REQ}
+    Element Should Contain    id=errmsg_openstacktenantname    ${REQ}
+    Element Should Contain    id=errmsg_orgId    ${REQ}
+    Sleep    1s
+    
+
+Verify the Error Message Displayed for HP cloud
+    Element Should Contain    id=errmsg_openstackusername    ${REQ}
+    Element Should Contain    id=errmsg_openstackpassword    ${REQ}
+    Element Should Contain    id=errmsg_openstackhost   ${REQ}
+    Element Should Contain    id=errmsg_openstackprojectname    ${REQ}
+    Element Should Contain    id=errmsg_openstacktenantid    ${REQ}
+    Element Should Contain    id=errmsg_openstacktenantname    ${REQ}
+    Element Should Contain    id=errmsg_orgId    ${REQ}
+
+
+Verify the Error Message Displayed for Azure
+    Element Should Contain    id=errmsg_azureSubscriptionId    ${REQ}
+    #Element Should Contain    id=errmsg_orgId    ${REQ}
+    #Element Should Contain    id=errmsg_azureStorageAccount    ${STOREACC ERRMSG}
+    
+Verify the Error Message Displayed while duplicating the provider
+    Element Should Contain    id=errmsg_name    ${Provider ErrMsg}
+    Sleep    2s
+
+
+Enters the New Edit Provider Name
+    Input Text    id=name    ${EDIT PROVIDER NANME}
+
+Clicks on Edit Button of Created Provider
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${PROVIDER NAME}']/../td[4]/div/a[1]/i
+
+
+Verfiy the Provider is Created
+    Sleep    2s
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${EDIT PROVIDER NANME}']    ${EDIT PROVIDER NANME}
+
+Validation of Creation of AWS New Image
+    Validation of Empty Image Name  ${ValidEmptyImageName}
+    Image Name Left Empty  ${ValidEmptImgNameErrMsg}
+    Validation of No Selection organzation  ${ValidEmptyNoProvider}
+    Organization dropdown Left Empty  ${ValidEmptyProviderErrMsg}
+    Validation of No Operating System  ${ValidEmptyNoOperatingSys}
+    Operating System Left Empty  ${ValidEmptyNoOSErrMsg}
+    Validation of No Image ID  ${ValidEmptyImageID} 
+    Image ID Left Empty  ${ValidEmptImgIDErrMsg}
+    Validation of Image No User Name  ${ValidEmptyIUserName}
+    Image User Name Left Empty  ${ValidEmptyIUserNameErrMsg}
+
+
+
+
+Validation of Creation of AZURE New Image
+    Validation of Azure VM image creation page
+    Verfiy the error message displayed in vm image creation page
+    Validation of Azure VM image creation page after selecting Organization and Azure provider
+    Verfiy the error message displayed after selecting org and Azureprovider
+
+
+
+Validation of Azure VM image creation page
+    Clicks on Settings
+    Clicks on Gallery Setup
+    Clicks on VMImage
+    Clicks on New Button of VMImage
+    Clicks on Save Button of Providers
+
+
+Verfiy the error message displayed in vm image creation page
+    Element Should Contain    id=errmsg_name    ${ERRORMESSAGE}
+    Element Should Contain    id=errmsg_orgId    ${ERRORMESSAGE}
+    Element Should Contain    id=errmsg_osType    ${ERRORMESSAGE}
+    Element Should Contain    id=errmsg_imageidentifire    ${ERRORMESSAGE}
+    Element Should Contain    id=errmsg_UserName    ${ERRORMESSAGE}
+    Clicks on Image Cancel Button
+
+Validation of Azure VM image creation page after selecting Organization and Azure provider
+    Clicks on New Button of VMImage
+    Select the Organizatn to Create Cent OS Img
+    select the Azure provider from deopdown
+    Clicks on Save Button of Providers
+
+
+Verfiy the error message displayed after selecting org and Azureprovider
+    Element Should Contain    id=errmsg_name    ${ERRORMESSAGE}
+    Element Should Contain    id=errmsg_osType    ${ERRORMESSAGE}
+    Element Should Contain    id=errmsg_imageidentifire    ${ERRORMESSAGE}
+    Element Should Contain    id=errmsg_UserName    ${ERRORMESSAGE}
+    Element Should Contain    id=errmsg_password    ${ADMIN ERRMSG}
+    Clicks on Image Cancel Button
+
+
+select the Azure provider from deopdown
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=(//span[@class='select2-chosen'])[2]
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=//*[text()='${AZURE PROVIDERNAME}']
+
+
+
+Catalyst Creation of VM Image Process for CentOS
+    Sleep    5s    
+    Clicks on New Button of VMImage
+    Enters the Image Name for CentOS
+    Select the Organizatn to Create Cent OS Img
+    #Choosess The Provider of Image
+    Select the Operating System to Image for CentOS
+    Enters the Image ID for CentOS
+    Enters the UserName of CentOSProviders
+    Clicks on Save Button of Providers
+    Sleep    4s
+    Verfiy the Centos Img is Created
+   
+
+Catalyst Creation of Azure VM Image Process for Ubuntu
+    Sleep    5s    
+    Clicks on New Button of VMImage
+    Enters the image name for ubuntu azure
+    Select the Organizatn to Create Cent OS Img
+    select the Azure provider from deopdown
+    Select the Operating System to Image for Ubuntu
+    Enters the Image ID for azure ubuntu
+    Enters the Admin Usernane for Azure ubuntu
+    Enters the Admin password for azure ubuntu
+    Clicks on Save Button of Providers
+    Sleep    4s
+    Verfiy the azure Ubuntu vm image is created
+
+
+
+Catalyst Creation of Azure VM Image Process for Windows
+    Sleep    5s    
+    Clicks on New Button of VMImage
+    Enters the image name for windows azure
+    Select the Organizatn to Create Cent OS Img
+    select the Azure provider from deopdown
+    Select the Operating System to Image for Windows
+    Enters the Image ID for azure windows
+    Enters the Admin user name for azure windows
+    Enters the Admin password for azure windows
+    Clicks on Save Button of Providers
+    Sleep    4s
+    Verfiy the azure windows vm image is created
+
+Catalyst Azure VM Image Edit Setup
+    Clicks on Settings
+    Clicks on Gallery Setup
+    Clicks on VMImage
+    clicks on Edit button of windows vm image created
+    Enters the new edit image name for windows
+    Clicks on Save Button of Providers
+    Sleep    4s
+    Verfiy the edited azure windows vm image is created
+
+Catalyst Unique Azure VM Image Validation Setup
+    Clicks on Settings
+    Clicks on Gallery Setup
+    Clicks on VMImage
+    Sleep    5s    
+    Clicks on New Button of VMImage
+    Enters the new edit image name for windows
+    Select the Organizatn to Create Cent OS Img
+    select the Azure provider from deopdown
+    Select the Operating System to Image for Windows
+    Enters the Image ID for azure windows
+    Enters the Admin user name for azure windows
+    Enters the Admin password for azure windows
+    Clicks on Save Button of Providers
+    Verfiy the error message displayed for dupliting azure vm image
+
+
+Verfiy the error message displayed for dupliting azure vm image
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Contain    xpath=//div[text()='${Alreadexist vmimage}']    ${Alreadexist vmimage}
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=//*[text()='OK']
+
+Verfiy the edited azure windows vm image is created
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${AZURE UBUNTU IMAGENAME}']    ${AZURE UBUNTU IMAGENAME}
+
+clicks on Edit button of windows vm image created
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${AZURE WINDOWS IMAGENAME}']/../td[6]/div/a[@title='Edit']
+
+Enters the new edit image name for windows
+    Input Text    id=name    ${EDIT AZURE WINDOWS IMAGENAME}
+
+Enters the image name for windows azure
+    Input Text    id=name    ${AZURE WINDOWS IMAGENAME}
+
+Verfiy the azure Ubuntu vm image is created
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${EDIT AZURE WINDOWS IMAGENAME}']    ${EDIT AZURE WINDOWS IMAGENAME}
+
+Enters the Admin password for azure ubuntu
+    Input Text    id=password    ${AZURE UBUNTU PASSWORD}
+
+
+Enters the Admin password for azure windows
+    Input Text    id=password    ${AZURE WINDOWS PASSWORD}    
+
+
+Enters the Image ID for azure ubuntu
+    Input Text    id=imageidentifire    ${AZURE UBUNTU IMAGEID}
+
+Enters the Image ID for azure windows
+    Input Text    id=imageidentifire    ${AZURE WINDOWS IMAGEID}    
+
+Enters the Admin Usernane for Azure ubuntu
+    Input Text    id=UserName    ${AZURE UBUNTU USERNAME}
+
+Enters the Admin user name for azure windows
+    Input Text    id=UserName    ${AZURE WINDOWS USERNAME}    
+
+Enters the image name for ubuntu azure
+    Input Text    id=name    ${AZURE UBUNTU IMAGENAME}
+
+
+Verfiy the Centos Img is Created
+    Sleep    2s
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${IMAGE NAME1}']    ${IMAGE NAME1}
+
+
+Verfiy the azure windows vm image is created
+    Sleep    2s
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${AZURE WINDOWS IMAGENAME}']    ${AZURE WINDOWS IMAGENAME}
+
+
+Catalyst Creation of VM Image Process for Ubutnu
+    Sleep    5s
+    Clicks on New Button of VMImage
+    Enters the Image Name for Ubuntu
+    Select the Organizatn to Create Ubuntu Img
+    #Choosess The Provider of Image
+    Select the Operating System to Image for Ubuntu 
+    Enters the Image ID for Ubuntu
+    Enters the UserName of UbuntuProviders
+    Clicks on Save Button of Providers
+    Sleep    4s
+    Verfiy the Ubuntu Img is Created
+
+Verfiy the Ubuntu Img is Created
+    Sleep    2s
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${IMAGE NAME2}']    ${IMAGE NAME2}    
+
+
+Catalyst Creation of VM Image Process for Windows
+    Sleep    5s
+    Clicks on New Button of VMImage
+    Enters the Image Name for Windows
+    Select the Organizatn to Create Windows Img
+    #Choosess The Provider of Image
+    Select the Operating System to Image for Windows
+    Enters the Image ID for Windows
+    Enters the UserName of WindowsProviders
+    Clicks on Save Button of Providers
+
+Catalyst VM Image Edit Setup
+    Validate the Edit of VM Image
+
+
+
+Validate the Edit of VM Image
+    Sleep    5s
+    Clicks on Settings
+    Clicks on Gallery Setup
+    Clicks on VMImage
+    Sleep    2s
+    Clicks on Edit Button of Windows Image
+    Sleep    4s
+    Enters the New Image name for Windows
+    Enters the UserName of WindowsProviders
+    Clicks on Save Button of Providers
+    Sleep    4s
+    Verfiy the Windows Img is Created
+
+Verfiy the Windows Img is Created
+    Sleep    2s
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${IMAGE NAME4}']    ${IMAGE NAME4}
+
+
+
+Select organization now
+    Sleep    4s
+    Click Element    css=#s2id_orgId > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${ORGANIZATION NAME}
+    Sleep    4s
+    Click Element    css=.select2-result-label
+
+Clicks on Edit Button of Windows Image
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${IMAGE NAME3}']/../td[6]/div/a[1]
+
+Select the Organizatn to Create Cent OS Img
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='s2id_orgId']/a/span[1]
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Input Text    xpath=.//*[@id='select2-drop']/div/input     ${ORGANIZATION NAME}
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div  
+    
+
+Select the Organizatn to Create Ubuntu Img
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='s2id_orgId']/a/span[1]
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Input Text    xpath=.//*[@id='select2-drop']/div/input     ${ORGANIZATION NAME}
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+
+Select the Organizatn to Create Windows Img
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='s2id_orgId']/a/span[1]
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Input Text    xpath=.//*[@id='select2-drop']/div/input     ${ORGANIZATION NAME}
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+
+Select the Organizxatoin
+    Select From List     id=orgname      ${ORGANIZATION NAME}
+
+
+
+Enters the UserName of CentOSProviders
+    Input Text    id=UserName    root
+
+Enters the UserName of UbuntuProviders
+    Input Text    id=UserName    ubuntu
+
+Enters the UserName of WindowsProviders
+    Input Text    id=UserName    administrator
+
+
+
+Catalyst Form validation of Blueprint
+    Sleep    6s
+    Clicks on Design
+    Sleep    10s
+    Clicks on OK Button to Validate in loop
+    Sleep    1s
+    Choose the Template Type Created
+    Sleep    3s
+    Clicks on Next Button
+    Chooses the Template User Created
+    Clicks on Next Button
+    Sleep    1s
+    Clicks on Next Button
+    Verify the No Operating System selected Error Message
+    Verify the No Provider Error selected Message
+    Verify the No Available Images selected Error Message
+    Verify the No Region selected Error Message
+    Verify the No VPC selected Error Message
+    Verify the No Subnet selected Error Message
+    Verify the No KeyPair selected Error Message
+    Verify the No Instance Size selected Error Message
+    Clicks on Configure Provider Parameters
+    Clicks on Configure Organization Parameters
+    Verify the No Blueprint Name Error Message
+    Verify the No BusinessGroup selected Error Message
+    Verify the No Project selected Error Message
+    Sleep    3s
+
+
+Catalyst Form validation of Azure Blueprint
+    Sleep    6s
+    Clicks on Design
+    Sleep    10s
+    Clicks on Azure link
+    Clicks on OK Button to Validate in loop
+    Sleep    1s
+    Choose the Template Type Created
+    Sleep    3s
+    Clicks on Next Button
+    Chooses the Template User Created
+    Clicks on Next Button
+    Sleep    1s
+    Clicks on Next Button
+    Verfiy the dropdown and handle it
+    Verify the No Operating System selected Error Message
+    Verify the No Provider Error selected Message
+    Verify the No Available Images selected Error Message
+    Verify the No Location selected Error Message
+    Verify the No VPC selected Error Message
+    Verify the No Subnet selected Error Message
+    #Verify the No KeyPair selected Error Message
+    Verify the No Instance Size selected Error Message
+    Clicks on Configure Provider Parameters
+    Clicks on Configure Organization Parameters
+    Verify the No Blueprint Name Error Message
+    Verify the No BusinessGroup selected Error Message
+    Verify the No Project selected Error Message
+    Sleep    3s
+
+
+Clicks on Azure link
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=//div[@title='${AZURE NAME}']
+
+Verfiy the dropdown and handle it
+    ${said}=    Run Keyword and Return Status     Page Should Contain Element    xpath=.//*[text()='OK']
+    Run Keyword If    '${said}' == 'True'     
+    ...    Click Element    xpath=.//*[text()='OK']
+    ...    ELSE IF   '${said}' == 'False'
+    ...    Log    "Valiadtion failed. Do check the configuration before submitting." is not displayed
+
+
+
+
+
+
+
+
+
+
+
+
+Verify the No Operating System selected Error Message
+    Element should Contain    id=instanceOS-error    ${ERRROR MESSAGE}
+
+Verify the No Provider Error selected Message
+    Element should Contain    id=providerId-error    ${ERRROR MESSAGE}
+
+Verify the No Available Images selected Error Message
+    Element should Contain    id=imageId-error    ${ERRROR MESSAGE}
+
+Verify the No Region selected Error Message
+    Element should Contain    id=region-error    ${ERRROR MESSAGE}
+
+Verify the No Location selected Error Message
+    Element should Contain    id=location-error    ${ERRROR MESSAGE}    
+
+
+Verify the No VPC selected Error Message
+    Element should Contain    id=vpcId-error    ${ERRROR MESSAGE}
+
+Verify the No Subnet selected Error Message
+    Element should Contain    id=subnetId-error    ${ERRROR MESSAGE}
+
+Verify the No KeyPair selected Error Message
+    Element should Contain    id=keypairId-error    ${ERRROR MESSAGE}
+
+
+Verify the No Instance Size selected Error Message
+    Element should Contain    id=instancesize-error    ${ERRROR MESSAGE}
+
+Verify the No Blueprint Name Error Message
+    Element should Contain    id=blueprintNameInput-error    ${ERRROR MESSAGE}
+
+Verify the No BusinessGroup selected Error Message
+    Element should Contain    id=bgListInput-error    ${ERRROR MESSAGE}
+
+Verify the No Project selected Error Message
+    Element should Contain    id=projectListInput-error    ${ERRROR MESSAGE}
+
+
+
+Catalyst Choose Template and Save Setup of CentOS Blueprint
+    Sleep    6s
+    Clicks on Design
+    Sleep    10s
+    Clicks on OK Button to Validate in loop
+    Sleep    1s
+    Choose the Template Type Created
+    Sleep    3s
+    Clicks on Next Button
+    Chooses the Template User Created
+    Clicks on Next Button
+    Chooses the Operating System
+    Sleep    4s
+    Choose the Provider
+    Choose the Available Images
+    Choose the Region
+    #Select the VPC
+    Select the Subnet
+    Select the Key Pair
+    Choose Instance Size
+    Select the Security Group
+    Clicks on Configure Provider Parameters
+    Clicks on Configure Organization Parameters
+    #Chooses Organization
+    Enters The Blueprint Name
+    Chooses The Business Group
+    Chooses The Project
+    #Select WorkCookBooks
+    #Clicks on >>T Button
+    Clicks on close of Configure Organization Parameters
+    #Chooses The Environment
+    Clicks on Configure Application URL
+    Clicks on AppNew Button
+    Enters the Application URL Name
+    Enters the AppURL
+    Clicks on AppADD Button
+    Enable the Next Button 
+    Clicks on Next Button
+    Clicks on Confirm OK Button
+
+
+
+Catalyst Choose Template and Save Setup of ubuntu Blueprint for azure
+    Sleep    6s
+    Clicks on Design
+    Sleep    10s
+    Clicks on Azure link
+    Clicks on OK Button to Validate in loop
+    Sleep    1s
+    Choose the Template Type Created
+    Sleep    3s
+    Clicks on Next Button
+    Chooses the Template User Created
+    Clicks on Next Button
+    Chooses the Operating System as Ubuntu
+    Sleep    4s
+    Choose the Azure Provider
+    Choose the Available Image of ubuntu
+    Enter the Security group ports 
+    Choose the Azure ubuntu Region
+    Select the Azure VPC
+    Select the Azure Subnet
+    #Select the Key Pair
+    Choose Instance Size for azure ubuntu
+    #Select the Security Group
+    Clicks on Configure Provider Parameters
+    Clicks on Configure Organization Parameters
+    #Chooses Organization
+    Enters The Blueprint Name for azure ubuntu
+    Chooses The Business Group
+    Chooses The Project
+    #Select WorkCookBooks
+    #Clicks on >>T Button
+    Clicks on close of Configure Organization Parameters
+    #Chooses The Environment
+    Clicks on Configure Application URL
+    Clicks on AppNew Button
+    Enters the Application URL Name
+    Enters the AppURL
+    Clicks on AppADD Button
+    Enable the Next Button 
+    Clicks on Next Button
+    Clicks on Confirm OK Button
+
+
+Choose Instance Size for azure ubuntu
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=//span[text()='Choose Instanace Size']
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=//*[text()='${AZURE INSTANCE SIZE}']
+
+
+Enters The Blueprint Name for azure ubuntu
+    Input Text    id=blueprintNameInput    ${AZURE UBUNTU BLUEPRINTNAME}
+
+Select the Azure VPC
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=//span[text()='Select VPC']
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=//*[text()='${AZURE VPC}']
+
+
+Select the Azure Subnet
+    Sleep    1s
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=//span[text()='Select Subnet']
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=//*[text()='${AZURE SUBNET}']
+
+
+Enter the Security group ports
+    Input Text    id=securotyGrp    ${AZURE SECURITY PORTNO}
+
+Choose the Azure ubuntu Region
+    Sleep    4s
+    Click Element    xpath=//*[text()='${UBUNTU AZURE REGION}']
+
+Choose the Azure Provider
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//span[text()='Select Provider']
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='providerId']/option[text()='${AZURE PROVIDERNAME}']
+
+
+Clicks on OK Button to Create the New Blueprint
+    Click Element    xpath=.//*[text()='OK']
+
+Choose the Available Image of ubuntu
+    Click Element    xpath=.//*[@id='imageId']/option[text()='${AZURE UBUNTU IMAGENAME}']
+
+
+Clicks on OK Button to Validate in loop
+    ${said}=    Run Keyword and Return Status     Page Should Contain Element    xpath=.//*[text()='OK']
+    Run Keyword If    '${said}' == 'True'     
+    ...    Click Element    xpath=.//*[text()='OK']
+    ...    ELSE IF   '${said}' == 'False'
+    ...    Log    OK Button is not displayed
+    
+
+
+   
+   
+    #Run Keyword And Continue On Failure    Click Element    xpath=.//*[text()='OK']
+    #Log    Test is Continued
+    #Click Element    xpath=.//*[text()='OK']
+
+    
+CentOS Blueprint Launched and verify IP,Status,Chef,SSH,Stop,BootStrap
+    Clicks on the Project to go to Environment
+    Clicks on the Environment to Launch
+    Sleep    5s
+    Clicks on the Infrastructure Tab to select Bluperints section
+    #Clicks on Blueprint Section
+    Select the CentosBlueprint
+    Sleep    1s
+    Clicks on Launch Button
+    Sleep    2s
+    Confirmation to launch Blueprint
+    Sleep    1s
+    Clicks on Instance Close Button
+    Clicks on the Infrastructure Button to go to Instances    
+    #Clicks on Instances Button
+    Verify the IP Address of the Instance
+    Verfiy the Status of the Instance
+    Sleep    30s
+    Clicks on Design
+    Sleep    7s
+    Clicks on Workzone Button
+    Sleep    6s
+    Verify the CHEF Client Run
+    Verfiy the SSH is Enabled
+    Verfiy the STOP Button is Enabled
+    Verfiy the AppLink Button is Dispalyed
+    Sleep    2s
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Checking THe BootStrpa Status
+    Clicks on Back To Instances
+    Sleep    4s
+    
+
+Ubuntu Blueprint Launched and verify IP,Status,Chef,SSH,Stop,BootStrap of azure
+    Sleep    5s
+    Clicks on the Infrastructure Tab to select Bluperints section
+    #Clicks on Blueprint Section
+    Select the ubuntu azure blueprint
+    Sleep    1s
+    Clicks on Launch Button
+    Sleep    2s
+    Confirmation to launch Blueprint
+    Sleep    5s
+    Clicks on Instance Close Button
+    Clicks on the Infrastructure Button to go to Instances    
+    #Clicks on Instances Button
+    Sleep    5 minute
+    Verify the IP Address of the ubuntu azure Instance
+    Verfiy the Status of the ubuntu azure Instance
+    Sleep    30s
+    Clicks on Design
+    Sleep    7s
+    Clicks on Workzone Button
+    Sleep    6s
+    Verify the CHEF Client Run of azure ubuntu instance
+    Verfiy the SSH is Enabled for azure ubuntu instance
+    Verfiy the STOP Button is Enabled for azure ubuntu instance
+    Verfiy the AppLink Button is Dispalyed for azure ubuntu instance
+    Sleep    2s
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Checking THe BootStrpa Status for azure ubuntu instance
+    Clicks on Back To Instances
+    Sleep    4s
+
+
+Checking THe BootStrpa Status for azure ubuntu instance
+    Sleep    2 minute
+    Clicks on Back To Instances
+    Sleep    5s
+    Clicks on Contreol Panel
+    Clicks on Action History
+    ${BOOTSTRAP STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[2]/img@title
+    Log    ${BOOTSTRAP STATUSS}
+    Should Be Equal    ${BOOTSTRAP STATUSS}     ${ACTBOOT2}
+
+
+
+Select the ubuntu azure blueprint
+    Click Element    xpath=//*[text()='${AZURE UBUNTU BLUEPRINTNAME}']
+
+Verfiy the AppLink Button is Dispalyed for azure ubuntu instance
+    Wait Until Keyword Succeeds    1 minute     1 seconds     Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${AZURE UBUNTU BLUEPRINTNAME}")]/div/div/div/div/div/a[@class='btn1 showmenuAppTaskAnchor']
+
+
+Verify the CHEF Client Run of azure ubuntu instance
+    Sleep    5s
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${AZURE UBUNTU BLUEPRINTNAME}")]/div/div/div/div/div[1]/a[@class='chefClientRunlistImage actionbuttonChefClientRun instance-bootstrap-list-image']
+
+Verfiy the STOP Button is Enabled for azure ubuntu instance
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible     xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${AZURE UBUNTU BLUEPRINTNAME}")]/div/div/div/div/div[@class='startstoptoggler running']
+
+
+Verfiy the SSH is Enabled for azure ubuntu instance
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${AZURE UBUNTU BLUEPRINTNAME}")]/div/div/div/div/div[2]/a[@class='sshIcon devTOP']
+
+
+Verify the IP Address of the ubuntu azure Instance
+    Sleep    1s
+    ${IP ADRS AZUREUBUNTU}=    Get Text    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${AZURE UBUNTU BLUEPRINTNAME}")]/div/div/div/div/div/span/strong
+    Log    ${IP ADRS AZUREUBUNTU}
+
+Verfiy the Status of the ubuntu azure Instance
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${AZURE UBUNTU BLUEPRINTNAME}")]/div/div/div/div/div/span/span    ${STATUS RUN}
+
+
+
+
+Catalyst Inspect Functionality Setup
+    Clicks on the Project to go to Environment
+    Clicks on the Environment to Launch
+    Sleep    5s
+    Selects the CentOS Blueprint to go to Controlpanel
+    Clicks on Contreol Panel
+    Clicks on Inspect Button
+    Sleep    5s
+    Enter the Installed Software Name in the Filter
+    Verify the Particular Software is listed in list 
+
+    
+Catalyst Inspect Functionality Setup for Azure
+    Sleep    5s
+    Selects the Ubuntu Blueprint to go to Controlpanel
+    Clicks on Contreol Panel
+    Clicks on Inspect Button
+    Sleep    5s
+    Enter the Azure Installed Software Name in the Filter
+    Verify the Particular Azure Software is listed in list     
+
+
+Enter the Azure Installed Software Name in the Filter
+    Input Text    css=label > input.form-control    ${AZURE INSPECT SOFTWARE}    
+
+
+
+Clicks on the Infrastructure Button to go to Instances
+    Click Element    xpath=.//*[@id='myTab3']/li[1]/a/b
+    Sleep    1s
+    Click Element    xpath=.//*[@id='myTab3']/li[1]/ul/li[1]/a
+    Sleep    2s
+
+
+Verify the Particular Azure Software is listed in list
+    Sleep    2s 
+    Element Should Contain    css=#paragraphs > p:nth-child(2)    ${AZURE INSPECT SOFTWARE}
+    Sleep    3s
+    Click Element    css=#installedSoftwareModalContainer > div > div > div.modal-footer > button
+
+
+Verify the Particular Software is listed in list
+    Sleep    2s 
+    Element Should Contain    css=#paragraphs > p:nth-child(1)    ${SOFTWARE NAME}
+    Sleep    3s
+    Click Element    css=#installedSoftwareModalContainer > div > div > div.modal-footer > button
+
+
+
+Enter the Installed Software Name in the Filter
+    Input Text    css=label > input.form-control    ${SOFTWARE NAME}
+
+
+Clicks on Inspect Button
+    Execute Javascript    $('.btn.btn-primary.inspectBtn').click()
+    
+
+
+Selects the CentOS Blueprint to go to Controlpanel
+    Click Element    xpath=//div[@data-blueprintname='${BLUEPRINT NAME}']
+    Sleep    1s
+
+Selects the Ubuntu Blueprint to go to Controlpanel
+    Click Element    xpath=//div[@data-blueprintname='${AZURE UBUNTU BLUEPRINTNAME}']
+    Sleep    1s    
+
+
+
+Clicks on the Project to go to Environment
+    Execute Javascript    $('.expand-collapse.click-expand.fa.fa-angle-right').append('${Proj1}').click()
+    Sleep    2s
+
+
+Confirmation to launch Blueprint
+    Click Element    xpath=.//*[text()='OK']
+
+Clicks on the Environment to Launch
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//*[normalize-space(text())="Dev"]
+    Sleep    5 seconds
+
+
+
+
+
+
+
+
+
+
+
+
+
+#-Catalyst Check INFORMATION Status
+    Clicks on Workzone Button
+    #-Clicks on User Created Organization
+    #-Clicks on User Created BusinessGroup
+    #-Clicks on > Button to your Environment
+    #-Clicks on your Blueeeprint
+    #-Clicks on Contreol Panel
+    #-Check Machine Status
+    #-Check the Total MeMory
+    #-Check the Free Memory
+    #-Check the OS
+    #-Check the Version
+    #-Check the Chef BootStrap
+    #-Clicks on Back To Instances
+
+
+
+#Add The Appplication Name
+#Add The Appplication Url
+#Clicks on SUBMIT Button
+
+
+
+
+
+Catalyst CHEF CLIENT Action on CentOS Instance
+    Sleep    3s
+    Steps To Run Chef Client
+    Sleep    3s
+
+
+Catalyst SSH Action on CentOS Instance
+    Sleep    3s
+    Steps to Run SSH
+    Sleep    4s
+
+
+Catalyst STOP Action on CentOS Instance
+    Sleep    3s
+    Steps to Run Stopping the Instance
+    Sleep    20s
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Catalyst EDIT Instance Name of CentOS Instance
+    Clicks on the Project to go to Environment
+    Clicks on the Environment to Launch
+    Sleep    4s
+    Clicks on Edit Button of the CentosInstance Imported
+    Enters the New Instance Name for Centos
+    Clicks on Save Button of Edddited Instance
+    Sleep    3s
+
+
+Catalyst EDIT Instance Name of Ubuntu Instance of Azure
+    Sleep    4s
+    Clicks on Edit Button of the Ubuntu Instance of azure
+    Enters the New Instance Name for ubuntu Azure
+    Clicks on Save Button of Edddited Instance
+    Sleep    3s
+
+
+
+
+
+
+Catalyst CHEF CLIENT Action on Ubuntu Instance of Azure
+    Sleep    3s
+    Steps To Run Chef Client on ubuntu instance azure provider
+    Sleep    3s
+
+
+Steps To Run Chef Client on ubuntu instance azure provider
+    Sleep    3s
+    Click on RUNNN of Chef Client of Azure
+    Sleep    5s
+    Update the Run List with Cookbook
+    Clicks on Update Button of Runlist
+    Sleep    1s
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Checking the BChefClient Run Status
+    Clicks on Back To Instances
+
+
+Steps To Run Chef Client
+    Clicks on the Project to go to Environment
+    Clicks on the Environment to Launch
+    Click on RUNNN of Chef Client
+    Sleep    5s
+    Update the Run List with Cookbook
+    Clicks on Update Button of Runlist
+    Sleep    1s
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Checking the BChefClient Run Status
+    Clicks on Back To Instances
+    
+
+
+
+Steps to Run SSH
+    Clicks on the Project to go to Environment
+    Clicks on the Environment to Launch
+    Click on Verified SSH Instance
+    Enters the Username in the Terminal
+    Select Authentication Type
+    Upload the Catalyst PEM File
+    Clicks on Terminlal Submit Button
+    Close the SSH Terminal
+    Sleep    4s
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Sleep    7s
+    Verfify the status of SSH Shell
+    Clicks Back Burtton of Instances
+    
+Steps to Run Stopping the Instance
+    Clicks on the Project to go to Environment
+    Clicks on the Environment to Launch
+    Clicks on STOP of Verfied Instance
+    Verfified the STOPPED Status
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Verfiy the Table contains the Status
+    Clicks on Back To Instances
+    
+
+Catlayst verfication of CentOS Instance Stop Setup and Disable
+    #Clicks on Workzone Button
+    #Clicks on User Created Organization
+    #Clicks on User Created BusinessGroup
+    #Clicks on > Button to your Environment
+    #-Clicks on your Blueeeprint
+    Clicks on the Project to go to Environment
+    Clicks on the Environment to Launch
+    Verfified the STOPPED Status
+    Verify the IP Address after Launch of Instance
+    Verify the CHEF Client Run is disabled
+    Verfiy the SSH is Disabled
+    Verify the Start Button Enabled
+    Verfiy the Applink Button is Dispalyed
+    Clicks on Contreol Panel
+    Verify the IP Address after Launch of Instance in controlpanel
+    Verify the Stopped CHEF Client Run after Updation
+    Verfiy the Stopped SSH is Disabled after Updation
+    Verify the Start Button Enabled from Contrl Panel
+    Verfiy the Applink Button is Dispalyed from Control panel
+    Verify the Machine status from CntrlPanel
+    Verify the Total Memory from CntrlPanel
+    Verify the Free Memory from CntrlPanel
+    Verfiy the OS Frm ContrlPanels
+    Verfify the Chef Bootstrap frm ContrlPanel
+    Verify the Runlist from CntrlPanel
+    Clicks on Back To Instances
+
+
+
+Verify the IP Address after Launch of Instance in controlpanel
+    ${EXTRACTED}=    Execute Javascript    $('span.instance-details-id.instance-details-ip').parent().find("strong").text();
+    #Get Text    xpath=.//*[@id='controlPanelContainer']/div/div/ul/li[contains(.,"${NEW BLUEPRINT NAME}")]/div/div/div/div/div/div[3]/div/span[@class='instance-details-id instance-details-ip']
+    Log    ${EXTRACTED}
+    Run Keyword If    '${STATS}' != '${EXTRACTED}'    Log    ${PRINTSTMT}
+
+
+
+Catalyst Choose Template and Save Setup for UBUNTU
+    Sleep    6s
+    Clicks on Design
+    Sleep    10s
+    Choose the Template Type Created
+    Sleep    3s
+    Clicks on Next Button
+    Chooses the Template User Created
+    Clicks on Next Button
+    Chooses the Operating System as Ubuntu
+    Choose the Provider
+    Choose the Available Images for ubuntu
+    Choose the Region
+    #Select the VPC
+    Select the Subnet
+    Select the Key Pair
+    Choose Instance Size for Ubuntu
+    Select the Security Group
+    Clicks on Configure Provider Parameters
+    Clicks on Configure Organization Parameters
+    #Chooses Organization
+    Enters The ubuntu Blueprint Name
+    Chooses The Business Group
+    Chooses The Project
+    Clicks on close of Configure Organization Parameters
+    Sleep    1s
+    Clicks on Configure Runlist Parameters
+    Select WorkCookBooks for Ubuntu
+    Clicks on UpdateRunlist Buttton
+    #Chooses The Environment
+    Clicks on Configure Application URL
+    Clicks on AppNew Button
+    Enters the Application URL Name
+    Enters the AppURL
+    Clicks on AppADD Button
+    Enable the Next Button 
+    Clicks on Next Button
+    Clicks on Confirm OK Button
+
+Ubuntu Blueprint Launched and verify the IP,Status,Chef,SSH,Stop,BootStrap
+    Sleep    5s
+    #Clicks on the Project to go to Environment
+    Clicks on the Button to the Environment
+    Sleep    2s
+    #Clicks on Blueprint Section
+    Clicks on the Infrastructure Tab to select Bluperints section
+    Select the BlueprintUbuntu
+    Clicks on Launch Button
+    Sleep    2s
+    Confirmation to launch Blueprint
+    Sleep    6s
+    Clicks on Instance Close Button
+    Sleep    2 minute
+    Clicks on the Infrastructure Button to go to Instances
+    #Clicks on Instances Button
+    Verify the IP Address of the Ubuntu Instance
+    Verfiy the Status of the Ubuntu Instance
+    Sleep    30s
+    Clicks on Design
+    Sleep    7s
+    Clicks on Workzone Button
+    Sleep    6s
+    Verify the CHEF Client Run for Ubuntu
+    Verfiy the SSH is Enabled for Ubuntu
+    Verfiy the STOP Button is Enabled for Ubuntu
+    Verfiy the AppLink Button is Dispalyed for Ubuntu
+    Sleep    2s
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Checking THe BootStrpa Status
+    Clicks on Back To Instances
+    Sleep    4s
+
+
+
+Catalyst Check INFORMATION Status for Ubuntu
+    Clicks on Workzone Button
+    Clicks on User Created Organization
+    Clicks on User Created BusinessGroup
+    Clicks on > Button to your Environment
+    Clicks on your Ubuntu Blueeeprint
+    Clicks on Contreol Panel
+    Check Machine Status
+    Check the Total MeMory
+    Check the Free Memory
+    Check the OS
+    Check the Version
+    Check the Chef BootStrap
+    Clicks on Back To Instances
+
+Catalyst Grid View Verify Start ,Stop ,SSH ,Chef ,Client ,Log Setup
+    #Clicks on Workzone Button
+    #Clicks on User Created Organization
+    #Clicks on User Created BusinessGroup
+    #Clicks on > Button to your Environment
+    Clicks on the Project to go to Environment
+    Clicks on the Environment to Launch
+    Sleep    1s
+    Clicks on Instances View
+    Verfiy the Name of Instance
+    Verify the IP in Grid View
+    Clicks on View Run List and Verify the Runlists
+    Clicks on RunList Close Button
+    Verify the Status of the Instance From Grid View
+    Verify the logs Button
+    Clicks on Logs Info Button
+    Clicks on Close Instance logs Button
+    Verify the Chef Run is Disabled in Grid View
+    Verify the SSh is Disabled in Grid View
+    Verify the Start Button is Enabled in Grid View
+    Clicks on START Button in Actions of Grid View
+    Verify the STarted Status from Grid View
+    #Verfiy the Chef Run fron Grid View Enabled
+    #Verify the SSH Enabledd fromn Grid View
+    #Verfiy the STOP Toggler Enabled from Grid View
+    Clicks on View Instancess Button
+
+Catalyst CentOS Deleete the Instance Setup
+    Clicks on the Project to go to Environment
+    Clicks on the Environment to Launch
+    Sleep    4s
+    Clicks on CentOS Instance to Delete
+    Del the CentOS Instance
+
+Catalyst ubuntu OS Deleete the Instance Setup
+    Clicks on the Project to go to Environment
+    Sleep    4s
+    Clicks on the Button to the Environment
+    Sleep    3s
+    Clicks on Ubuntu OS Instance to Delete
+    Del the CentOS Instance
+
+Del the CentOS Instance
+    Click Element    id=removeInstance
+    Sleep    1s
+    Click Element    id=ckbChefDelete
+    Sleep    1s
+    Click Element    xpath=//*[text()='Delete']
+
+
+Clicks on CentOS Instance to Delete
+    Sleep    3s
+    Click Element    xpath=//span[@data-original-title='${NEW BLUEPRINT NAME}']
+
+
+Clicks on Ubuntu OS Instance to Delete
+    Sleep    3s
+    Click Element    xpath=//span[@data-original-title='${NEW UBUNTU BLUPRNT}']
+    
+
+Catalyst Grid View Verify Start ,Stop ,SSH ,Chef ,Client ,Log Setup of Ubuntu
+    #Clicks on the Project to go to Environment
+    Clicks on the Button to the Environment
+    Sleep    1s
+    Clicks on Instances View
+    Verfiy the Name of Ubuntu Instance
+    Verify the IP in Grid View
+    Clicks on View Run List and Verify the Runlists of ubuntu
+    Clicks on RunList Close Button
+    Verify the Status of the Instance From Grid View
+    Verify the logs Button
+    Clicks on Logs Info Button
+    Clicks on Close Instance logs Button
+    Verify the Chef Run is Disabled in Grid View
+    Verify the SSh is Disabled in Grid View
+    Verify the Start Button is Enabled in Grid View
+    Clicks on START Button in Actions of Grid View
+    Verify the STarted Status from Grid View
+    #Verfiy the Chef Run fron Grid View Enabled
+    #Verify the SSH Enabledd fromn Grid View
+    #Verfiy the STOP Toggler Enabled from Grid View
+    Clicks on View Instancess Button
+
+
+
+
+
+
+
+Clicks on Configure Runlist Parameters
+    Click Element    xpath=.//*[@id='accordion-Design']/div[3]/div[1]/h4/a/i[1]
+    Sleep    2s
+    Click Element    css=.addList
+    Sleep    2s
+
+Clicks on UpdateRunlist Buttton
+    Click Element    id=saveRunlist
+
+Enable the Next Button 
+    Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:block')
+
+
+
+Clicks on Confirm OK Button
+    Click Element    xpath=//*[text()='OK']
+
+
+Clicks on Edit Button of the CentosInstance Imported
+    Sleep    2s
+    Click Element    xpath=//div[@class='domain-roles-heading'][//span[text()='${BLUEPRINT NAME}']]/a
+
+Clicks on Edit Button of the Ubuntu Instance of azure
+    Sleep    2s
+    Click Element    xpath=//div[@class='domain-roles-heading'][//span[text()='${AZURE UBUNTU BLUEPRINTNAME}']]/a
+
+
+Clicks on Edit Button of the UbuntuInstance Imported
+    Sleep    2s
+    Click Element    xpath=//div[@class='domain-roles-heading'][//span[text()='${BLUEPRINT NAME1}']]/a
+    
+
+Enters the New Instance Name for Centos
+    Input Text    id=instanceEditName    ${NEW BLUEPRINT NAME}
+
+Enters the New Instance Name for ubuntu Azure
+    Input Text    id=instanceEditName    ${EDIT UBUNTU AZUREBP NAME}
+
+Enters the New Instance Name for Ubuntu
+    Input Text    id=instanceEditName    ${NEW UBUNTU BLUPRNT}    
+
+
+Clicks on Save Button of Edddited Instance
+    Click Element    id=editSaveBTN
+
+
+Choose the Template Type Created
+    Sleep    2s
+    Click Element    xpath=//div[@data-templatetype='${TEMPLATE TYPENAME}']
+
+Clicks on the Button to the Environment
+    Execute Javascript    $('.expand-collapse.click-expand.fa.fa-angle-right').append('${Proj1}').click()
+    Sleep    2s
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//*[normalize-space(text())="QA"]
+    Sleep    5 seconds
+
+
+Clicks on Instances View
+    Sleep    1s
+    Click Element    xpath=.//*[@id='instanceview']/i
+
+Verfiy the Name of Instance
+    Element Should Contain    xpath=.//*[@id='tableinstanceview']/tbody/tr/td[3]/span    ${BLUEPRINT NAME}
+
+Verfiy the Name of Ubuntu Instance
+    Element Should Contain    xpath=.//*[@id='tableinstanceview']/tbody/tr/td[3]/span    ${NEW UBUNTU BLUPRNT}
+
+
+Verify the IP in Grid View
+    ${IP VALUE}=    Get Text    xpath=.//*[@id='tableinstanceview']/tbody/tr/td[4]
+    Log    ${IP VALUE}
+
+Clicks on View Run List and Verify the Runlists
+    Click Element    xpath=.//*[@id='tableinstanceview']/tbody/tr/td[5]/div/span/a
+    Sleep    1s
+    Element Should Contain    xpath=.//*[@id='modalTableRunlist']/div/div/div[2]/span    ${RECIPE}
+    #Element Should Contain    xpath=.//*[@id='modalTableRunlist']/div/div/div[2]/span[2]    recipe[git]
+    #Element Should Contain    xpath=.//*[@id='modalTableRunlist']/div/div/div[2]/span[3]    recipe[a]
+
+Clicks on View Run List and Verify the Runlists of ubuntu
+    Click Element    xpath=.//*[@id='tableinstanceview']/tbody/tr/td[5]/div/span/a
+    Sleep    1s
+    Element Should Contain    xpath=.//*[@id='modalTableRunlist']/div/div/div[2]/span[1]    ${RECIPE1}
+    Element Should Contain    xpath=.//*[@id='modalTableRunlist']/div/div/div[2]/span[2]    ${RECIPE1}
+
+Clicks on RunList Close Button
+    Click Element    xpath=.//*[@id='modalTableRunlist']/div/div/div[3]/button
+
+Verify the Status of the Instance From Grid View
+    Element Should Be Visible    xpath=//*[@class='instancestatusindicator stopped']
+
+Verify the logs Button
+    Page Should Contain    logs
+
+Clicks on Logs Info Button
+    Sleep    4s
+    Click Element    xpath=.//*[@id='tableinstanceview']/tbody/tr/td[8]/a
+
+Clicks on Close Instance logs Button
+    Sleep    3s
+    Click Element    xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button
+
+Verify the Chef Run is Disabled in Grid View
+    Element Should Be Visible    xpath=//*[@class='chefClientRunlistImage instance-bootstrap-list-image isStopedInstance actionbuttonChefClientRundisable']
+
+Verify the SSh is Disabled in Grid View
+    Element Should Be Visible    xpath=//*[@class='devTOP isStopedInstance sshIcondisable']
+
+Verify the Start Button is Enabled in Grid View
+    Element Should Be Visible    xpath=//*[@class='startstoptoggler stopped']    
+
+Clicks on START Button in Actions of Grid View
+    Click Element    xpath=.//*[@id='tableinstanceview']/tbody/tr/td[10]/div/div[4]
+    Sleep    10s
+    Click Element    xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button
+
+Verify the STarted Status from Grid View
+    Sleep    30s
+    Element Should Be Visible    xpath=//*[@class='instancestatusindicator started']
+
+Verfiy the Chef Run fron Grid View Enabled
+    Sleep    1 minutes
+    Element Should Be Visible    xpath=//*[@class='chefClientRunlistImage instance-bootstrap-list-image actionbuttonChefClientRun']
+    
+
+
+
+
+Verify the SSH Enabledd fromn Grid View
+    Element Should Be Visible    xpath=//*[@class='sshIcon devTOP']
+
+Verfiy the STOP Toggler Enabled from Grid View
+    Element Should Be Visible    xpath=//*[@class='startstoptoggler running']
+
+Chef Run With New CookBook From Grid View
+    Click Element    xpath=.//*[@id='tableinstanceview']/tbody/tr/td[9]/a
+    Sleep    2s
+    Click Element    xpath=.//*[@id='chefRunAccordionRunlistArea']/div/div/div/div[1]/div[1]/label[3]
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='a']
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Click Element    id=btnaddToRunlist
+    Click Element    xpath=.//*[@id='chefRunModalContainer']/div/div/div[3]/button[1]
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Click Element    xpath=//*[text()='OK']
+    Sleep    25s
+    Click Element    xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button
+
+Clicks on View All Run List
+    Click Element    xpath=.//*[@id='tableinstanceview']/tbody/tr/td[5]/div/span/a
+    Element Should Contain    xpath=.//*[@id='modalTableRunlist']/div/div/div[2]/span[1]    recipe[apache2]
+    Element Should Contain    xpath=.//*[@id='modalTableRunlist']/div/div/div[2]/span[2]    recipe[git]
+    Element Should Contain    xpath=.//*[@id='modalTableRunlist']/div/div/div[2]/span[3]    recipe[cron]
+    Element Should Contain    xpath=.//*[@id='modalTableRunlist']/div/div/div[2]/span[4]    recipe[a]
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Click Element    xpath=.//*[@id='modalTableRunlist']/div/div/div[3]/button
+
+SSH in to the Instance from Grid view
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Click Element    xpath=//*[@class='sshIcon devTOP']
+    Sleep    1s
+
+Clicks on View Instancess Button
+    Click Element    id=defaultViewButton
+    Sleep    3s
+    
+
+
+
+
+
+Catalyst Ubuntu Instance Verfication and BootStrap steps
+    Sleep    5s
+    Clicks on the Button to the Environment
+    Verify the Status after Launch of Ubuntu Instance
+    Verify the IP Address after Launch of Ubuntu Instance
+    Verfiy the Chef Client Run of Ubuntu
+    Verify the SSH of Ubuntu
+    Verify the STOP of Ubuntu
+    Verfiy the AppLink Button is Dispalyed for Ubuntu
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Checking THe Ubuntu BootStrpa Status
+    Clicks on Back To Instances
+    Sleep    3s
+
+Catalyst CHEFCLIENT Action on Ubuntu Instance
+    Sleep    5s
+    #Clicks on the Project to go to Environment
+    Clicks on the Button to the Environment
+    Steps To Run Chef Client of Ubuntu
+    Sleep    3s
+
+
+Catalyst SSH Action on the Ubuntu Instance
+    Sleep    5s
+    #Clicks on the Project to go to Environment
+    Clicks on the Button to the Environment
+    Steps to Run SSH of Ubuntu
+    Sleep    3s
+
+
+Catalyst SSH Action on Ubuntu Azure Instance
+    Sleep    5s
+    Steps to Run SSH of Ubuntu on Azure Instance
+    Sleep    3s    
+
+Catalyst STOP Action on the Ubuntu Instance
+    Sleep    5s
+    #Clicks on the Project to go to Environment
+    Clicks on the Button to the Environment
+    Sleep    3s
+    Steps to Run Stopping the Instance of Ubuntu
+    Sleep    20s
+
+
+
+Catalyst EDIT Name of Ubuntu Instance
+    Sleep    5s
+    #Clicks on the Project to go to Environment
+    Clicks on the Button to the Environment
+    Clicks on Edit Button of the UbuntuInstance Imported
+    Enters the New Instance Name for Ubuntu
+    Clicks on Save Button of Edddited Instance
+    Sleep    3s
+
+
+Steps To Run Chef Client of Ubuntu
+    Click on RUNNN of Chef Client of Ubuntu
+    Update the Run List with Newwww Cookbook
+    Clicks on Update Button of Runlist
+    Sleep    1s
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Checking the Ubuntu BChefClient Run Status
+    Clicks on Back To Instances
+
+Steps to Run SSH of Ubuntu
+    Click on Verified SSH Instance of Ubuntu
+    Enters the Ubuntu Username in the Terminal
+    Select Authentication Type
+    Upload the Catalyst PEM File
+    Clicks on Terminlal Submit Button
+    Close the SSH Terminal
+    Sleep    4s
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Sleep    7s
+    Verfify the status of SSH Shell
+    Clicks Back Burtton of Instances
+
+
+Steps to Run SSH of Ubuntu on Azure Instance
+    Click on Verified SSH Instance of Ubuntu on Azure
+    Enters the Ubuntu Username in the Terminal for azure
+    Select Authentication Type as passwd
+    #Upload the Catalyst PEM File for azure
+    Enters the Azure SSH passwd
+    Clicks on Terminlal Submit Button
+    Close the SSH Terminal
+    Sleep    4s
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Sleep    7s
+    Verfify the status of SSH Shell
+    Clicks Back Burtton of Instances    
+
+
+Enters the Ubuntu Username in the Terminal for azure
+    Input Text    id=ssh-username    ${AZURE SSH USERNAME}
+
+Enters the Azure SSH passwd
+    Input Text    id=ssh-password    ${AZURE SSH PASSWORD}
+
+Select Authentication Type as passwd
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_ssh-pemFileCheckbox']/a
+    #Input Text    xpath=.//*[@id='select2-drop']/div/input  
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li[1]/div  
+
+
+
+Steps to Run Stopping the Instance of Ubuntu
+    Clicks Ubuntu STOP Machine of Verfied Instance    
+    Verfified the Ubuntu STOPPED Status
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Verfiy the Table contains the Status
+    Clicks on Back To Instances
+
+
+Catalyst STOP Action on Ubuntu Instance of Azure
+    #Clicks Ubuntu STOP Machine of Verfied Instance of Azure
+    Clicks on Contreol Panel
+    Clicks on Back To Instances
+    Verfified the Ubuntu STOPPED Status of azure
+    Clicks on Contreol Panel
+    Clicks on Action History
+    Verfiy the Table contains the Status
+    Clicks on Back To Instances
+
+
+
+Catlayst verfication of Instance Stop Setup and Disable of Ubuntu
+    #Clicks on Workzone Button
+    #Clicks on User Created Organization
+    #Clicks on User Created BusinessGroup
+    #Clicks on the Project to go to Environment
+    Clicks on the Button to the Environment
+    #Clicks on your Ubuntu Blueeeprint
+    Verfified the STOPPED Status of Ubuntu
+    Verify the IP Address after Launch of Ubuntu Instance
+    Verify the CHEF Client Run off Ubuntu disabled
+    Verfiy the SSH is Disabled off Ubuntu
+    Verify the Ubuntuu Start Button Enabled
+    Verfiy the More Info Button Dispalyed off Ubuntu
+    Clicks on Contreol Panel
+    Verify the IP Address after Launch of ubuntu Instance in controlpanel
+    Verify the Ubuntuu Stopped CHEF Client Run after Updation
+    Verfiy the Ubuntu Stopped SSH is Disabled after Updation
+    Verify the Ubuntu Start Button Enabled from Contrl Panel
+    Verfiy the Ubuntu More Info Button is Dispalyed from Control panel
+    Verify the Machine status from CntrlPanel
+    #Verify the UBUNTU Total Memory from CntrlPanel
+    #Verify the Free Memory from CntrlPanel
+    Verfiy the Ubuntu OS Frm ContrlPanel
+    Verfify the Chef Bootstrap frm ContrlPanel
+    Verify the Runlist for Ubuntu from CntrlPanel
+
+
+
+
+Verify the IP Address after Launch of ubuntu Instance in controlpanel
+    ${EXTRACTED}=    Get Text    xpath=.//*[@id='controlPanelContainer']/div/div/ul/li[contains(.,"${NEW UBUNTU BLUPRNT}")]/div/div/div/div/div/div[3]/div/span[1]/strong
+    Log    ${EXTRACTED}
+    Run Keyword If    '${STATS}' != '${EXTRACTED}'    Log    ${PRINTSTMT}
+
+
+Chooses the Operating System as Ubuntu
+    #Click Element    xpath=.//*[@id='s2id_instanceOS']/a
+    #Input Text    xpath=.//*[@id='select2-drop']/div/input    ${OPERATING SYSTEM2}
+    #Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    Click Element    xpath=.//*[@id='instanceOS']/option[text()='${OPERATING SYSTEM2}']
+
+#Enters The Blueprint Name
+    #Input Text    id=blueprintNameInput    ${BLUEPRINT NAME1}
+
+
+Verify the Start Button Enabled from Contrl Panel
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='controlPanelContainer']/div/div[1]/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div/div/div[4]/div[@class='startstoptoggler stopped']
+
+Verify the Ubuntu Start Button Enabled from Contrl Panel
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='controlPanelContainer']/div/div[1]/ul/li[contains(.,"${NEW UBUNTU BLUPRNT}")]/div/div/div/div/div/div[4]/div[@class='startstoptoggler stopped']
+
+
+Clicks on your Blueeeprint
+    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(., "${BLUEPRINT NAME}")]/div[1]
+
+Clicks on your Ubuntu Blueeeprint
+    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(., "${BLUEPRINT NAME1}")]/div[1]
+
+
+
+Verify the Machine status from CntrlPanel
+    ${MACHINE STATUS1}=    Get Text    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[1]/td[3]
+    Log    ${MACHINE STATUS1}
+
+
+Verify the Total Memory from CntrlPanel
+    ${TOTAL MEM1}=    Get Text    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[2]/td[3]
+    Log    ${TOTAL MEM1}  
+
+Verify the UBUNTU Total Memory from CntrlPanel
+    ${TOTAL MEM2}=    Get Text    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[2]/td[3]
+    Log    ${TOTAL MEM2}  
+
+Verify the Free Memory from CntrlPanel
+    ${FREE MEM1}=    Get Text    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[3]/td[3]
+    Log    ${FREE MEM1}     
+
+Verfiy the OS Frm ContrlPanel
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseSoftware']/div/table/tbody/tr[1]/td[3]    ${MAT OS}
+
+Verfiy the Ubuntu OS Frm ContrlPanel
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseSoftware']/div/table/tbody/tr[1]/td[3]    ${MAT OS1}
+
+
+
+Verfify the Chef Bootstrap frm ContrlPanel
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseConfigmgmt']/div/table/tbody/tr[1]/td[3]    ${MAT BOOTSTRAP}
+
+Verify the Runlist from CntrlPanel
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseConfigmgmt']/div/table/tbody/tr[2]/td[3]    ${MAT RUNLIST}
+
+Verify the Runlist for Ubuntu from CntrlPanel
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseConfigmgmt']/div/table/tbody/tr[2]/td[3]    ${UBUNTU REC}
+
+
+Verify the Start Button Enabled
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div[4]/div[@class='startstoptoggler stopped']
+
+Verify the Ubuntuu Start Button Enabled
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div[4]/div[@class='startstoptoggler stopped']
+
+
+Verify the Stopped CHEF Client Run after Updation
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='controlPanelContainer']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div/div/div[4]/div[1]/a[@class='instanceActionBtnUpdateRunlist instance-bootstrap-list-image isStopedInstance actionbuttonChefClientRundisable'] 
+
+Verify the Ubuntuu Stopped CHEF Client Run after Updation
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='controlPanelContainer']/div/div/ul/li[contains(.,"${NEW UBUNTU BLUPRNT}")]/div/div/div/div/div/div[4]/div[1]/a[@class='instanceActionBtnUpdateRunlist instance-bootstrap-list-image isStopedInstance actionbuttonChefClientRundisable']
+
+
+Verfiy the Stopped SSH is Disabled after Updation
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='controlPanelContainer']/div/div/ul/li[contains(.,"${NEW BLUEPRINT NAME}")]/div/div/div/div/div/div[4]/div[4]/a[@class='cpTop sshTerminalBtn isStopedInstance sshIcondisable']
+
+Verfiy the Ubuntu Stopped SSH is Disabled after Updation
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='controlPanelContainer']/div/div/ul/li[contains(.,"${NEW UBUNTU BLUPRNT}")]/div/div/div/div/div/div[4]/div[4]/a[@class='cpTop sshTerminalBtn isStopedInstance sshIcondisable']
+
+Checking THe BootStrpa Status
+    Sleep    7 minute
+    Clicks on Back To Instances
+    Sleep    5s
+    Clicks on Contreol Panel
+    Clicks on Action History
+    ${BOOTSTRAP STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[2]/img@title
+    Log    ${BOOTSTRAP STATUSS}
+    Should Be Equal    ${BOOTSTRAP STATUSS}     ${ACTBOOT2}
+
+    #${BOOTSTAT2}=    Get Element Attribute   xpath=//*[@id='tableactionHistory']/tbody/tr/td[2]/img@data-original-title
+    #Log    ${BOOTSTAT2}
+    #Should Be Equal    ${ACTBOOT2}     ${BOOTSTAT2}           #Success
+
+
+    #Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[2]    ${STATS RUN}
+    #Sleep    40 seconds
+    #Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody//tr/td[normalize-space(text())="Bootstrap"]/../td[2]    ${SATSS}
+
+
+Checking THe Ubuntu BootStrpa Status
+    Sleep    4 minutes
+    Clicks on Back To Instances
+    Sleep    5s
+    Clicks on Contreol Panel
+    Clicks on Action History
+    ${BOOTSTAT2}=    Get Element Attribute   xpath=//*[@id='tableactionHistory']/tbody/tr/td[2]/img@title
+    Log    ${BOOTSTAT2}
+    Should Be Equal    ${ACTBOOT2}     ${BOOTSTAT2}           #Success
+
+
+Clicks on Back To Instances
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Click Element    xpath=.//*[@id='getViewAttr']
+
+Clicks Back Burtton of Instances
+    Sleep    1 seconds
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Click Element    xpath=.//*[@id='getViewAttr']
+
+Check Machine Status
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[1]/td[3]    ${MACHINE STATS}
+
+Check the Total MeMory
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[2]/td[3]    ${MACHINE STATS}
+
+Check the Free Memory
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseHardware']/div/table/tbody/tr[3]/td[3]    ${MACHINE STATS}
+
+Check the OS
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseSoftware']/div/table/tbody/tr[1]/td[3]    ${MACHINE STATS}    
+
+Check the Version
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseSoftware']/div/table/tbody/tr[2]/td[3]    ${MACHINE STATS}
+
+Check the Chef BootStrap
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='collapseConfigmgmt']/div/table/tbody/tr[1]/td[3]    ${CHEF BOOTSTRAP}
+
+Add The Appplication Name
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Input Text    xpath=.//*[@id='appSeries12']/div[1]/input    ${APPLICATION NAME}
+
+Add The Appplication Url
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Input Text    xpath=.//*[@id='appSeries12']/div[2]/input    ${APPLICATION URL}
+
+Clicks on SUBMIT Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='appUrlTemplateFormCreate']/button
+
+
+
+
+
+Checking the BChefClient Run Status          
+    Sleep    2 minute
+    Clicks on Back To Instances
+    Sleep    5s
+    Clicks on Contreol Panel
+    Clicks on Action History
+    ${CHEFSUCCESS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[2]/td[2]/img@title
+    Log    ${CHEFSUCCESS}
+    Should Be Equal    ${CHEFSUCCESS}     ${SATSSYY}  
+
+    #Wait Until Keyword Succeeds    4 minute     1 seconds    Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody/tr[2]/td[2]    ${RUNNING}
+    #Sleep    2 minutes
+    #Wait Until Keyword Succeeds    3 minute     1 seconds    Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[2]    ${SATSS}
+
+
+Checking the Ubuntu BChefClient Run Status
+    Sleep    2 minute
+    Clicks on Back To Instances
+    Sleep    5s
+    Clicks on Contreol Panel
+    Clicks on Action History
+    ${CHEFSUCCESS1}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[2]/td[2]/img@title
+    Log    ${CHEFSUCCESS1}
+    Should Be Equal    ${CHEFSUCCESS1}     ${SATSSYY}  
+
+
+Verfiy the Table contains the Status
+    Sleep    15s
+    Clicks on Back To Instances
+    Sleep    5s
+    Clicks on Contreol Panel
+    Clicks on Action History
+    ${BOTTABLE}=    Get Element Attribute   xpath=//*[@id='tableactionHistory']/tbody/tr[4]/td[2]/img@title
+    Log    ${BOTTABLE}
+    Should Be Equal    ${ACTBOOT2}     ${BOTTABLE}  
+    Sleep    3s         
+    
+
+Verfify the status of SSH Shell
+    Sleep    15s
+    Clicks on Back To Instances
+    Sleep    5s
+    Clicks on Contreol Panel
+    Clicks on Action History
+    ${BOOTSTATUS1}=    Get Element Attribute   xpath=//*[@id='tableactionHistory']/tbody/tr[3]/td[2]/img@title
+    Log    ${BOOTSTATUS1}
+    Should Be Equal    ${ACTBOOT2}     ${BOOTSTATUS1}           
+    Sleep    2s
+
+Clicks on Contreol Panel
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Click Element    xpath=.//*[@id='l1']/footer/div/div/button
+
+Clicks on Action History
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='myTab3']/li[3]/a
+
+Verfiy the AppLink Button is Dispalyed
+    Wait Until Keyword Succeeds    1 minute     1 seconds     Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div/div/a[@class='btn1 showmenuAppTaskAnchor']
+
+Verfiy the AppLink Button is Dispalyed for Ubuntu
+    Wait Until Keyword Succeeds    1 minute     1 seconds     Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div/div/a[@class='btn1 showmenuAppTaskAnchor']
+
+Verfiy the More Info Button Dispalyed off Ubuntu
+    Element Should Be Visible    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${NEW UBUNTU BLUPRNT}']]]/div[4]/span
+    
+
+Verfiy the Applink Button is Dispalyed from Control panel
+    Wait Until Keyword Succeeds    1 minute     1 seconds     Element Should Be Visible    xpath=.//*[@id='controlPanelContainer']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div/div/div[4]/span/a[@class='moreInfo']
+
+Verfiy the Ubuntu More Info Button is Dispalyed from Control panel
+    Wait Until Keyword Succeeds    1 minute     1 seconds     Element Should Be Visible    xpath=.//*[@id='controlPanelContainer']/div/div/ul/li[contains(.,"${NEW UBUNTU BLUPRNT}")]/div/div/div/div/div/div[4]/span/a[@class='moreInfo']
+
+
+
+Clicks on Control Panel Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='l1']/footer/div/div/button
+
+Clicks on Configure Provider Parameters
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='accordion-Design']/div[1]/div[1]/h4/a/i[2]
+
+
+
+Verify the STOP
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div/div/div[4]/div[@class='startstoptoggler running']  
+
+Verify the STOP of Ubuntu
+    Element Should Be Visible    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${BLUEPRINT NAME1}']]]/div[4]/div[5] 
+
+
+Clicks on STOP of Verfied Instance    
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div[4]/div[5]
+    Wait Until Keyword Succeeds    1 minute     5 seconds      Click Element    xpath=//*[text()='OK']
+    Sleep    2s
+    Wait Until Keyword Succeeds    2 minute     5 seconds      Click Element    xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button
+    Sleep    15 seconds
+
+Clicks Ubuntu STOP Machine of Verfied Instance    
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div[4]/div[5]
+    Wait Until Keyword Succeeds    1 minute     5 seconds      Click Element    xpath=//*[text()='OK']
+    Sleep    2s
+    Wait Until Keyword Succeeds    2 minute     5 seconds      Click Element    xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button
+    Sleep    15 seconds
+
+Clicks Ubuntu STOP Machine of Verfied Instance of Azure
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${AZURE UBUNTU BLUEPRINTNAME}")]/div/div/div/div[4]/div[5]
+    Wait Until Keyword Succeeds    1 minute     5 seconds      Click Element    xpath=//*[text()='OK']
+    Sleep    2s
+    Wait Until Keyword Succeeds    2 minute     5 seconds      Click Element    xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button
+    Sleep    15 seconds
+
+
+
+
+Verfified the STOPPED Status
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div[3]/div/span[2]/span    ${STOPD}
+
+Verfified the Ubuntu STOPPED Status
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div[3]/div/span[2]/span    ${STOPD}
+
+Verfified the Ubuntu STOPPED Status of azure
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${AZURE UBUNTU BLUEPRINTNAME}")]/div/div/div/div[3]/div/span[2]/span    ${STOPD}
+
+
+
+
+Verfified the STOPPED Status of Ubuntu
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div[3]/div/span[2]/span    ${STOPD}
+
+
+
+
+
+
+
+Verify the IP Address after Launch of Instance
+    ${EXTRACTED}=    Get Text    xpath=//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div[3]/div/span[1]/strong[@class='instanceip']
+    Log    ${EXTRACTED}
+    Run Keyword If    '${STATS}' != '${EXTRACTED}'    Log    ${PRINTSTMT}
+
+Verify the IP Address after Launch of Ubuntu Instance
+    ${EXTRACTED}=    Get Text     xpath=//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1ssssssssssss}")]/div/div/div/div[3]/div/span[1]/strong[@class='instanceip']
+    Log    ${EXTRACTED}
+    Run Keyword If    '${STATS}' != '${EXTRACTED}'    Log    ${PRINTSTMT} is the IP Address
+
+
+
+Verify the Status after Launch of Instance
+    Sleep    3 minutes
+    Wait Until Keyword Succeeds    5 minute     10 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div/div/div[3]/div/span[2]/span    ${STATS RUN}
+
+Verify the Status after Launch of Ubuntu Instance
+    Sleep    30 seconds
+    Wait Until Keyword Succeeds    5 minute     10 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div/div/div[3]/div/span[2]/span    ${STATS RUN}
+
+
+Verfiy the Chef Client Run
+    Sleep    8 seconds
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div/div/div[4]/div[1]/a[@class='chefClientRunlistImage instance-bootstrap-list-image actionbuttonChefClientRun']
+
+Verfiy the Chef Client Run of Ubuntu
+    Element Should Be Visible    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${BLUEPRINT NAME1}']]]/div[4]/div[1]/a
+
+
+
+Click on RUNNN of Chef Client
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div[4]/div[1]/a
+
+    
+
+Click on RUNNN of Chef Client of Ubuntu
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div[4]/div[1]/a    
+
+
+
+Click on RUNNN of Chef Client of Azure
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${AZURE UBUNTU BLUEPRINTNAME}")]/div/div/div/div[4]/div[1]/a    
+
+
+
+Verify the SSH
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div//ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div/div/div[4]/div[2]/a[@class='devTOP sshIcon']
+
+Verify the SSH of Ubuntu
+    Element Should Be Visible    xpath=//div[@class='domain-roles-caption'][//div[//span[text()='${BLUEPRINT NAME1}']]]/div[4]/div[2]/a
+
+    
+Click on Verified SSH Instance
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div//ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div[4]/div[2]/a
+
+Click on Verified SSH Instance of Ubuntu
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div//ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div[4]/div[2]/a
+
+Click on Verified SSH Instance of Ubuntu on Azure
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div//ul/li[contains(.,"${AZURE UBUNTU BLUEPRINTNAME}")]/div/div/div/div[4]/div[2]/a    
+
+
+Verify the IP Address of the Instance
+    Sleep    1s
+    ${IP ADRS CENTOS}=    Get Text    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div/div/span/strong
+    Log    ${IP ADRS CENTOS}
+
+
+
+Verify the IP Address of the Ubuntu Instance
+    Sleep    1s
+    ${IP ADRS UBUNTU}=    Get Text    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div/div/span/strong
+    Log    ${IP ADRS UBUNTU}
+    
+
+Verfiy the Status of the Instance
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div/div/span/span    ${STATUS RUN}
+
+Verfiy the Status of the Ubuntu Instance
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Contain    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div/div/span/span    ${STATUS RUN}
+
+
+
+Verify the CHEF Client Run
+    Sleep    5s
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div/div[1]/a[@class='chefClientRunlistImage actionbuttonChefClientRun instance-bootstrap-list-image']
+
+Verify the CHEF Client Run is disabled
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div/div[1]/a[@class='chefClientRunlistImage instance-bootstrap-list-image isStopedInstance actionbuttonChefClientRundisable']
+
+
+Verify the CHEF Client Run for Ubuntu
+    Sleep    5s
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div/div[1]/a[@class='chefClientRunlistImage actionbuttonChefClientRun instance-bootstrap-list-image']
+
+Verify the CHEF Client Run off Ubuntu disabled
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${NEW UBUNTU BLUPRNT}")]/div/div/div/div/div/div[4]/div[1]/a[@class='chefClientRunlistImage instance-bootstrap-list-image isStopedInstance actionbuttonChefClientRundisable']
+
+
+Verfiy the SSH is Enabled
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div/div[2]/a[@class='sshIcon devTOP']
+
+Verfiy the SSH is Enabled for Ubuntu
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div/div[2]/a[@class='sshIcon devTOP']    
+
+Verfiy the SSH is Disabled off Ubuntu
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div[4]/div[2]/a[@class='devTOP isStopedInstance sshIcondisable']    
+
+Verfiy the SSH is Disabled
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div[4]/div[2]/a[@class='devTOP isStopedInstance sshIcondisable']
+
+
+
+Verfiy the STOP Button is Enabled
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible     xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div/div[@class='startstoptoggler running']
+
+Verfiy the STOP Button is Enabled for Ubuntu
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible     xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME1}")]/div/div/div/div/div[@class='startstoptoggler running']
+
+Verfiy the STOP Button is Disabled off Ubuntu
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Element Should Be Visible     xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${NEW UBUNTU BLUPRNT}")]/div/div/div/div/div/div[4]/div[@class='startstoptoggler pending']
+
+
+
+
+Verify the Chef run icon and click on it
+    #Element Should Be Visible      xpath=.//*[@id='divinstancescardview']/div/div/ul/li[2]/div/div/div[1]/div/div/div[4]/div[1]/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[2]/div/div/div[1]/div/div/div[4]/div[1]/a
+
+Update the Run List with Cookbook
+    Sleep    3s
+    Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='${COOKBOOK NAME1}']
+    Click Element    id=btnremoveFromRunlist
+    Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='${CookBkName}']
+    Click Element    id=btnremoveFromRunlist
+    Wait Until Keyword Succeeds    1 minute     10 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[@value='recipe[${CookBkName}]']
+    Wait Until Keyword Succeeds    1 minute     10 seconds      Click Element    id=btnaddToRunlist
+
+Update the Run List with Newwww Cookbook
+    Sleep    3s
+    Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='${COOKBOOK NAME1}']
+    Click Element    id=btnremoveFromRunlist
+    Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='${CookBkName}']
+    Click Element    id=btnremoveFromRunlist
+    Wait Until Keyword Succeeds    1 minute     10 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[@value='recipe[${CookBkName}]']
+    Wait Until Keyword Succeeds    1 minute     10 seconds      Click Element    id=btnaddToRunlist
+
+Clicks on Update Button of Runlist
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[text()='Update']
+    Wait Until Keyword Succeeds    1 minute     4 seconds      Click Element    xpath=//*[text()='OK']
+    Wait Until Keyword Succeeds    1 minute     5 seconds      Click Element    css=#instanceLogModalContainer > div.modal-dialog > div.modal-content > div.modal-footer > button.btn.btn-default.btn-primary
+
+
+
+
+Validation of Empty Image Name
+    [Arguments]    ${Name}
+    Clicks on Settings
+    Clicks on Gallery Setup
+    Clicks on VMImage
+    Clicks on New Button of VMImage
+    Enters the Empty Image Name
+    Select the Organizatn to Create Cent OS Img
+    #Choosess The Provider of Image
+    Select the Operating System to Image for CentOS
+    Enters the Image ID for CentOS
+    Enters the UserName of Providers
+    Clicks on Save Button of Providers
+    #Clicks on OKX Button
+
+
+Catalyst Unique VM Image Validation Setup
+    Clicks on Settings
+    Clicks on Gallery Setup
+    Clicks on VMImage
+    Clicks on New Button of VMImage
+    Enters the Image Name for Ubuntu
+    Select the Organizatn to Create Ubuntu Img
+    Choosess The Provider of Image
+    Select the Operating System to Image for Ubuntu 
+    Enters the Image ID for Ubuntu
+    Enters the UserName of UbuntuProviders
+    Clicks on Save Button of Providers
+    Sleep    4s
+    Verify the Error Message displaye while duplicating VM Image
+
+Verify the Error Message displaye while duplicating VM Image
+    Page Should Contain    Selected is already registered.
+    Sleep    2s
+    Click Element    xpath=.//*[text()='OK']
+    Sleep    1s
+
+Choose the Provider
+    #Click Element    xpath=.//*[@id='s2id_providerId']/a/span[1]
+    #Sleep    1s
+    #Input Text    xpath=.//*[@id='select2-drop']/div/input    ${EDIT PROVIDER NANME}
+    #Sleep    1s
+    #Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    Click Element    xpath=.//*[@id='providerId']/option[text()='${EDIT PROVIDER NANME}']
+
+
+
+    #Click Element    css=#s2id_providerId > .select2-choice
+    #Sleep    2s
+    #Input Text    css=#select2-search .select2-input    ${EDIT PROVIDER NANME}
+    #Sleep    1s
+    #Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+
+
+Choose the Available Images
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_imageId']/a/span[1]
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div
+    Click Element    xpath=.//*[@id='imageId']/option[text()='${IMAGE NAME1}']
+
+
+Choose the Available Images for ubuntu
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_imageId']/a/span[1]
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div
+    Click Element    xpath=.//*[@id='imageId']/option[text()='${IMAGE NAME2}']
+
+
+
+
+Choose the Region
+    Sleep    4s
+    Click Element    xpath=.//*[@id='region']/option[2]
+
+Select the Subnet
+    Sleep    1s
+    Click Element    xpath=.//*[@id='subnetId']/option[2]
+
+Select the VPC
+    Sleep    5s
+    Click Element    css=#s2id_vpcId > a > span.select2-chosen
+    Sleep    1s
+    Input Text    css=#select2-drop > div > input    ${VPC}
+    Sleep    1s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+
+
+
+
+
+Select the Key Pair
+    Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:none')
+    Click Element    xpath=.//*[@id='keypairId']/option[text()='${KEYPAIRNAME}']
+    
+    
+
+Choose Instance Size
+    #Sleep    1s
+    #Click Element    id=instancesize
+    Sleep    1s
+    Click Element    xpath=.//*[@id='instancesize']/option[text()='${CentosInstanceSize}']
+    
+
+Choose Instance Size for Ubuntu
+    #Sleep    1s
+    #Click Element    id=instancesize
+    Sleep    1s
+    Click Element    xpath=.//*[@id='instancesize']/option[text()='${UbuntuInstanceSize}']
+
+    
+
+Select the Security Group
+    Sleep    3s
+    Log    after scroll
+    Sleep    1s
+    Click Element    xpath=.//*[@id='securityGroupIds']/label[contains(.,'${SECRTY GRP1}')]/i
+    #Click Element    xpath=.//*[@id='securityGroupIds']/label[contains(.,'${SECRTY GRP2}')]/i
+    #Click Element    xpath=.//*[@id='securityGroupIds']/label[contains(.,'${SECRTY GRP3}')]/i
+    #Click Element    xpath=.//*[@id='securityGroupIds']/label[contains(.,'${SECRTY GRP4}')]/i
+    Log    after click
+    
+
+#Click Element    css=#select2-drop .select2-input    sg-c00ee1a5 | all_open
+#Click Element    css=#securityGroupIds > label:nth-child(1)
+
+
+Clicks on OKX Button
+    Click Element     xpath=.//*[@id='btnsubmit']
+
+
+Image Name Left Empty  
+    [Arguments]    ${ValidEmptImgNameErrMsg}
+    Validate the Empty Image Field  ${ValidEmptImgNameErrMsg}
+
+Validate the Empty Image Field
+    [Arguments]    ${ErrMsg}
+    Element Should Contain    id=errmsg_name    ${ErrMsg}
+    Clicks on Image Cancel Button
+
+Validation of No Selection organzation
+    [Arguments]    ${NoProvider}
+    Clicks on New Button of VMImage
+    Enters the Image Name for CentOS
+    #Select the Organizatn to Create Cent OS Img
+    Select the Operating System to Image for CentOS
+    Enters the Image ID for CentOS
+    Enters the UserName of Providers
+    Clicks on Save Button of Providers
+    #Clicks on OKX Button
+
+Organization dropdown Left Empty
+    [Arguments]    ${VaildNoNameErrMsg}
+    Validate Emptyorg name  ${VaildNoNameErrMsg}
+
+Validate Emptyorg name
+    [Arguments]    ${ErrMsg}
+    Element Should Contain    id=errmsg_orgId    ${ErrMsg}
+    Clicks on Image Cancel Button
+
+
+Validation of No Operating System
+    [Arguments]    ${OperatingSystem}
+    Clicks on New Button of VMImage
+    Enters the Image Name for CentOS
+    Select the Organizatn to Create Cent OS Img
+    #Choosess The Provider of Image
+    Enters the Image ID for CentOS
+    Enters the UserName of Providers
+    Clicks on Save Button of Providers
+    #Clicks on OKX Button
+
+Operating System Left Empty  
+    [Arguments]    ${ValidEmptyNoOSErrMsg}
+    Validate the Operating System field empty  ${ValidEmptyNoOSErrMsg}
+
+Validate the Operating System field empty
+    [Arguments]    ${ErrMsg}
+    Element Should Contain    id=errmsg_osType    ${ErrMsg}
+    Clicks on Image Cancel Button
+
+Validation of No Image ID
+    [Arguments]    ${Imageidentifire}
+    Clicks on New Button of VMImage
+    Enters the Image Name for CentOS
+    Select the Organizatn to Create Cent OS Img
+    #Choosess The Provider of Image
+    Select the Operating System to Image for CentOS
+    Enters the UserName of Providers
+    Clicks on Save Button of Providers
+    #Clicks on OKX Button
+
+Image ID Left Empty  
+    [Arguments]    ${ValidEmptImgIDErrMsg}
+    Validate the Image Id field  ${ValidEmptImgIDErrMsg}
+
+Validate the Image Id field
+    [Arguments]    ${ErrMsg}
+    Element Should Contain    id=errmsg_imageidentifire    ${ErrMsg}
+    Clicks on Image Cancel Button
+
+Validation of Image No User Name
+    [Arguments]    ${username}
+    Clicks on New Button of VMImage
+    Enters the Image Name for CentOS
+    Select the Organizatn to Create Cent OS Img
+    #Choosess The Provider of Image
+    Select the Operating System to Image for CentOS
+    Enters the Image ID for CentOS
+    Clicks on Save Button of Providers
+    #Clicks on OKX Button
+
+Image User Name Left Empty
+    [Arguments]    ${ValidEmptyIUserNameErrMsg}
+    Validate the Username field  ${ValidEmptyIUserNameErrMsg}
+
+Validate the Username field
+    [Arguments]    ${ErrMsg}
+    Element Should Contain    id=errmsg_UserName    ${ErrMsg}
+    Clicks on Image Cancel Button
+
+
+
+Clicks on Image Cancel Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='btncancel']
+
+
+
+Enters the Empty Image Name
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=name    ${EmptyImgName}
+
+
+Clicks on Provider Cancel Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='btncancel']
+
+Clicks on Providers
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//a[contains(text(),'Providers')]
+
+Clicks on New Button of Providers
+    Sleep    4s
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=addnewitem
+
+Select the Provider
+    Sleep    4s
+    Click Element    css=#s2id_providertype > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${PROVIDERR}
+    Sleep    3s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+
+
+Select the OpenStack Provider
+    Sleep    4s
+    Click Element    css=#s2id_providertype > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${OPENSTACK PROVIDERR}
+    Sleep    3s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+
+
+Select the no provider from dropdown
+    Sleep    4s
+    Click Element    css=#s2id_providertype > .select2-choice
+    Log    after click
+    Click Element    xpath=//div[text()='Select Provider']
+
+
+Select the HP Public Cloud Provider
+    Sleep    4s
+    Click Element    css=#s2id_providertype > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${HP CLOUD PROVIDERR}
+    Sleep    3s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+
+
+Select the Azure Provider
+    Sleep    4s
+    Click Element    xpath=//span[text()='AWS']
+    #css=#s2id_providertype > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${AZURE PROVIDERR}
+    Sleep    3s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span    
+
+
+Enters the Name of the Provider
+    Sleep    1s
+    Input Text    id=name    ${PROVIDER NAME}
+
+Enters the Access Key
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=accessKey    ${ACCESS KEY} 
+
+Enters the Secret Key
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=secretKey    ${SECRET KEY}
+
+Selects the Region
+    Sleep    4s
+    Click Element    css=.region > .select2-choice
+    Log    After Click
+    Input Text    css=#select2-drop .select2-input    US West
+    Sleep    4s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+    Sleep    1s
+    
+   #Wait Until Keyword Succeeds    2 minute     1 seconds      Click Element    xpath=//span[./text()='Select Region']
+    #Input Text    xpath=.//*[@id='select2-drop']/div/input     US West (Oregon) | us-west-2
+    #Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    #Select From List By Value    xpath=.//*[contains(text(), "US West (Oregon) | us-west-2")]     ${REG}
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li[3]/div
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    name=region
+     #//select/option[4]/@value
+     #//select/option[@value = "us-west-1"]
+     
+Selects the Key Pair
+    Sleep    4s
+    Click Element    css=div.row.pemrow > div:first-child > div > a > span:nth-of-type(1)
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${KeyNAME}
+    Sleep    4s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+
+
+
+
+    #Wait Until Keyword Succeeds    2 minute     1 seconds      Click Element    xpath=//span[./text()='Choose Any Key Pair']
+    #Input Text    xpath=.//*[@id='select2-drop']/div/input    ${KeyNAME}
+    #Click Element    xpath=.//*[@id='select2-drop']/ul/li[1]/div
+
+Uploads the Pem File for Provider
+    Sleep    4s
+    Choose File    xpath=(//input[@class='gui-file file'])[3]    ${CAT_INSTANCES}
+    Sleep    1s
+    
+
+    
+
+Clicks on Save Button of the Provider
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    css=div.widget-toolbox.clearfix > div > button
+
+Clicks on VMImage
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//a[contains(text(),'VMImage')]
+
+Clicks on New Button of VMImage
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='addnewitem']
+
+Enters the Image Name for CentOS
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=name    ${IMAGE NAME1}
+
+Enters the Image Name for Ubuntu
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=name    ${IMAGE NAME2}
+
+Enters the Image Name for Windows
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=name    ${IMAGE NAME3}
+
+Enters the New Image name for Windows
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=name    ${IMAGE NAME4}
+
+
+Choosess The Provider of Image
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_providerId']/a
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${EDIT PROVIDER NANME}
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+
+Select the Operating System to Image for CentOS
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_osType']/a/span[1]
+    Input Text    xpath=.//*[@id='select2-drop']/div/input     ${OPERATING SYSTEM1}
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div      #Cent OS
+
+Select the Operating System to Image for Ubuntu
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_osType']/a/span[1]
+    Input Text    xpath=.//*[@id='select2-drop']/div/input     ${OPERATING SYSTEM2}
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div     #Ubuntu
+
+Select the Operating System to Image for Windows   
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_osType']/a/span[1] 
+    Input Text    xpath=.//*[@id='select2-drop']/div/input     ${OPERATING SYSTEM3}
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div     #Windows 2008
+    
+Enters the Image ID for CentOS
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=imageidentifire    ${IMAGE ID1}
+
+Enters the Image ID for Ubuntu
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=imageidentifire    ${IMAGE ID2}
+
+Enters the Image ID for Windows
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=imageidentifire    ${IMAGE ID3}
+
+
+Enters the UserName of Providers
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=UserName    ${USER}
+
+Clicks on Save Button of Providers
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    css=div.widget-toolbox.clearfix > div > button
+
+
+
+
+Clicks on Instances Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='myTab3']/li[1]/a
+
+Clicks on More Info Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div/div/div/div[4]/span/a
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='instanceLogModalContainer']/div/div/div[3]/button
+
+
+Clicks on SSH Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='divinstancescardview']/div/div//ul/li[contains(.,"${BLUEPRINT NAME}")]/div/div/div[1]/div/div/div[4]/div[2]/a
+
+Enters the Ubuntu Username in the Terminal
+    Sleep    10s
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=ssh-username    ${MAT OS1}
+
+Enters the Username in the Terminal
+    Sleep    10s
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=ssh-username    ${TERMINAL USERNAME}    
+ 
+
+Select Authentication Type
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_ssh-pemFileCheckbox']/a
+    #Input Text    xpath=.//*[@id='select2-drop']/div/input  
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div  
+
+Clicks on Terminlal Submit Button
+    Wait Until Keyword Succeeds    2 minute     1 seconds      Click Element    xpath=.//*[@id='ssh-login-form']/div[7]/button[1]
+    Sleep      4s  
+
+
+Upload the Catalyst PEM File
+    Choose File     xpath=.//*[@id='ssh-pemfileInput']    ${CAT_INSTANCES}
+    #C:\\Users\\adarsh.RLINDIA\\Desktop\\caty\\Chef\\cat_instances.pem
+
+Upload the Catalyst PEM File for azure
+    Choose File     xpath=.//*[@id='ssh-pemfileInput']    ${GOLDEN PEM}
+
+Close the SSH Terminal
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='modalSSHShellContainer']/div/div/div[1]/button
+
+Clicks on Workzone Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='workZoneNew']
+
+Clicks on User Created Organization
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//*[normalize-space(text())="Relevance_Labs"]
+
+Clicks on User Created BusinessGroup
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//*[normalize-space(text())="Devops"]
+
+Clicks on User Created Projects
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//*[normalize-space(text())="Catalyst"]
+
+Clicks on > Button to your Environment
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//li[contains(., "Catalyst")]/./span[3]              #Catalyst project
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='tree']/ul/li[contains(., "Catalyst")]/./span[3]
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=//*[normalize-space(text())="Dev"]
+    Sleep    5 seconds         
+
+Clicks on Blueprint Section
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='myTab3']/li[2]/a
+
+Clicks on Launch Button
+    Wait Until Keyword Succeeds    2 minute     2 seconds      Click Element    css=#l2 > footer > div > div > a
+    Sleep    5 seconds
+
+Select the CentosBlueprint
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='checkout-form']/div[2]/div/div/div[1]/div[1]/label[3]
+    Click Element    xpath=//*[text()='${BLUEPRINT NAME}']
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='collapse5']/div/div/div/ul/li/u/b[text()="${BLUEPRINT NAME}"]
+
+Select the CentosTesingBlueprint
+    Click Element    xpath=//*[text()='${BLUEPRINT TESTNAME}']
+
+Select the ubuntuAzureTesingBlueprint
+    Sleep    3s
+    Click Element    xpath=//*[text()='${EDIT AZURE BLUEPRINTNANE}']
+
+Select the BlueprintUbuntu
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='checkout-form']/div[2]/div/div/div[1]/div[1]/label[3]
+    Click Element    xpath=//*[text()='${BLUEPRINT NAME1}']
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='collapse5']/div/div/div/ul/li/u/b[text()="${BLUEPRINT NAME1}"]    
+
+Clicks on Instance Close Button
+    Wait Until Keyword Succeeds    2 minute     1 seconds      Click Element    xpath=.//*[@id='launchResultContainer']/div/div/div[3]/button
+
+
+
+Clicks on Design
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='designNew']
+    Click Element    xpath=.//*[@id='designNew']
+
+Chooses the Template Type
+    Click Element    xpath=.//*[@id='grid0']           #AppFactory
+
+Clicks on Next Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='nextSpecificValue']/a
+
+Chooses the Template User Created
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='individualTemplateNameGrid']/div/div/ul/li/u/b[text()="${TEMPLATE NAME}"]
+
+Chooses the Operating System
+    #Wait Until Keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible       xpath=//span[./text()='Select Operating System']
+    #Click Element    xpath=//span[./text()='Select Operating System']
+    #Focus    xpath=.//*[@id='s2id_instanceOS']/a/span[2]
+    #Press Key    xpath=.//*[@id='s2id_instanceOS']/a/span[2]     13
+    #Sleep    3s
+    #Input Text    xpath=.//*[@id='select2-drop']/div/input    ${OPERATING SYSTEM1}
+    #Sleep    2s
+    Click Element    xpath=.//*[@id='instanceOS']/option[text()='${OPERATING SYSTEM1}']
+
+#Choose Instance Size
+    #Click Element    xpath=.//*[@id='s2id_intanceTypeControl']/a/span[1]
+    #Input Text    xpath=.//*[@id='select2-drop']/div/input    ${INSTANCE SIZE}
+    #Click Element    xpath=.//*[@id='select2-drop']/ul/li[1]/div
+
+Clicks on Configure Organization Parameters
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-Design']/div[2]/div[1]/h4/a/i[1]
+
+Clicks on close of Configure Organization Parameters
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-Design']/div[2]/div[1]/h4/a/i[2]
+
+
+Chooses Organization
+    Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:none')
+    Sleep    3s
+    Log    after scroll
+    Sleep    1s
+    Click Element    css=#s2id_orgnameSelect > .select2-choice
+    Log    after click
+    Input Text    css=#select2-drop .select2-input    ${ORGANIZATION NAME}
+    Sleep    1s
+    Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+
+
+
+    
+
+#Select WorkCookBooks
+    #Sleep    1s
+    #Click Element    id=btnRunlistItemUp
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[2]
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='checkout-form']/div[3]/div/div/div[1]/div[1]/label[3]
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[1]
+    #Click Element    id=btnremoveFromRunlist
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option
+    #Click Element    id=btnremoveFromRunlist
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='${ADD}']
+    #Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[@value='recipe[a]']
+
+Select WorkCookBooks for Ubuntu
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='${ADD}']
+    Click Element    id=btnremoveFromRunlist
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesselectedList']/option[text()='${CookBkName}']
+    Click Element    id=btnremoveFromRunlist
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='${CookBkName}']
+    Click Element    id=btnaddToRunlist
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='${ADD}']
+    Click Element    id=btnaddToRunlist
+
+
+
+
+
+
+Clicks on >>T Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    id=btnaddToRunlist
+
+Clicks on Edit Organization Parameters 
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-Design']/div[4]/div[1]/h4/a
+
+Enters The Blueprint Name
+    Input Text    id=blueprintNameInput    ${BLUEPRINT NAME}
+
+Enters The Testing Blueprint Name
+    Input Text    id=blueprintNameInput    ${BLUEPRINT TESTNAME}    
+
+Enters The ubuntu Blueprint Name
+    Input Text    id=blueprintNameInput    ${BLUEPRINT NAME1}
+
+Chooses The Business Group
+    Sleep    3s
+    Click Element    xpath=.//*[@id='bgListInput']/option[text()='${BUSINESS GROUP NAME}']
+
+    
+Chooses The Project
+    Sleep    3s
+    Click Element    xpath=.//*[@id='projectListInput']/option[text()='${Proj1}']
+
+
+
+Chooses The Environment
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='s2id_envList']/a
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${ENVIRONMENT NAME}
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+
+Clicks on Configure Application URL
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-Design']/div[6]/div[1]/h4/a/i[1]
+
+Clicks on AppNew Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='newAppSeries']
+
+Enters the Application URL Name
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    xpath=.//*[@id='appSeries']/div[1]/input     ${APPNAME}
+
+Enters the AppURL
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    xpath=.//*[@id='appSeries']/div[2]/input     ${APP URL}
+
+Clicks on AppADD Button
+    Click Element    xpath=.//*[@id='addAppBtn'] 
+    

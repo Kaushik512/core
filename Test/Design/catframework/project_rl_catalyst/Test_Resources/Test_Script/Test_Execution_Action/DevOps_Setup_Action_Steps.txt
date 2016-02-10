@@ -1,0 +1,143 @@
+*** Settings ***
+Documentation      A resource file with reusable keywords and variables.
+...
+...                This file is part of a prototype automated test suite designed to
+...                test web application products built on top of the SLZ platform.
+...
+
+Library            Selenium2Library
+Library            String
+Library            Collections
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
+
+*** Variables ***
+
+*** Keywords ***
+Navigates to Config Management page
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Config Management menu
+
+Create New Config Management
+    Clicks on New button to Create New Config Management
+    Enters config management name
+    Enters config management user name
+    Select organization for config management
+    Enters config management URL
+    Upload user Pem File
+    Upload Validator Pem File
+    Upload Validator Knife File
+    Clicks on Save button to save the Chef server
+    Verify ChefServer is Created
+
+
+Verify ChefServer is Created
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${CONFIG MANAGEMENT NAME}']    ${CONFIG MANAGEMENT NAME}
+
+Clicks on DevOps Setup menu
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//a[contains(text(),'DevOps Setup')]
+    Click Element    xpath=//a[contains(text(),'DevOps Setup')]
+
+
+Clicks on Config Management menu
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible       xpath=//a[contains(text(),'Chef Server')]
+    Click Element    xpath=//a[contains(text(),'Chef Server')]
+
+    
+Clicks on New button to Create New Config Management
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       link=New
+    Click Element    css=#newConfig
+
+
+Enters config management name
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       id=configname
+    Input Text     id=configname      ${CONFIG MANAGEMENT NAME}
+
+Enters config management user name
+    Wait Until Keyword Succeeds    1 minute     1 seconds     Input Text     id=loginname      ${CONFIG MANAGEMENT USER NAME}
+
+Select organization for config management
+    Select From List     id=orgname      ${ORGANIZATION NAME}
+
+Enters config management URL
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text     id=url      ${CONFIG MANAGEMENT URL}
+
+
+Upload user Pem File
+    Choose File     id=userpemfile     ${USERPEMFILE}
+
+
+Upload Validator Pem File
+    Choose File     id=validatorpemfile    ${VALIDATORPEMFILE}
+
+Upload Validator Knife File
+    Choose File     id=kniferbfile        ${KNIFERBFILE}
+
+
+Clicks on Save button to save the Chef server
+    Click Element    css=div.btn-group.pull-right > button
+
+
+
+
+
+
+
+test test
+        ${maxloop} =        Set Variable     200
+    :FOR    ${INDEX}    IN RANGE    1    ${maxloop}
+    \       ${no more book name exists} =    Run Keyword and Return Status      Element Should Not Be Visible      xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[1]
+    \       Exit For Loop If     ${no more book name exists}
+    \       Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Be Visible       xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]
+#    \       ${book exist} =       Run Keyword and Return Status     Get Text       xpath=//div[@id='envtable_wrapper']/table/tbody/there[${INDEX}]
+    \       ${extracted book name}          Get Text       xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[1]
+#    \       Run Keyword If    ${extracted book name}     ${ORGANIZATION NAME}     Log       Search keyword "${ORGANIZATION NAME}" exist in search result book name "${extracted book name}"
+#    \       Log       Search keyword "${ORGANIZATION NAME}" exist in search result book name "${extracted book name}"
+#    \       ${answer present} =       Run Keyword and Return Status     Evaluate         ${extracted book name} = ${ORGANIZATION NAME}
+#    \       ${answer present} =       Run Keyword and Return Status     ${extracted book name} == ${ORGANIZATION NAME}
+    \       Run Keyword If    '${extracted book name}' == '${ORGANIZATION NAME}'       Click Element        xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[5]/div/a[3]
+    \       Click Element        xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[5]/div/a[3]
+    \       Log         xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[5]/div/a[3]
+    \       Exit For Loop If     '${extracted book name}' == '${ORGANIZATION NAME}'
+
+
+
+
+
+Select chef server and click on the last icon namely import nodes under Action
+#        ${maxloop} =        Set Variable     200
+#    :FOR    ${INDEX}    IN RANGE    1    ${maxloop}
+#    \       ${no more chef server exists} =    Run Keyword and Return Status      Element Should Not Be Visible      xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[1]
+#    \       Exit For Loop If     ${no more chef server exists}
+#    \       Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Be Visible       xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]
+#    \       ${extracted chef server name}          Get Text       xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[1]
+#    \       Run Keyword If    '${extracted chef server name}' == '${ORGANIZATION NAME}'       Click Element        xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[5]/div/a[3]
+#    \       Click Element        xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[5]/div/a[3]
+#    \       Exit For Loop If     '${extracted chef server name}' == '${ORGANIZATION NAME}'
+    Wait Until Keyword sSucceeds    1 minute     1 seconds       Element Should Be Visible       xpath=//div[@id='envtable_wrapper']/table/tbody/tr[1]/td[1]
+                ${maxloop} =        Set Variable     200
+    :FOR    ${INDEX}    IN RANGE    1    ${maxloop}
+    \       ${extracted chef server name}          Get Text       xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${INDEX}]/td[4]
+    \       ${last index} =        Set Variable     ${INDEX}
+    \       Run Keyword If    '${extracted chef server name}' == '${ORGANIZATION NAME}'     Exit For Loop
+#    \       Exit For Loop If     '${extracted chef server name}' == '${ORGANIZATION NAME}'
+    Click Element        xpath=//div[@id='envtable_wrapper']/table/tbody/tr[${last index}]/td[5]/div/a[3]
+
+
+    
+ 
+Select instance from the list and verify the instance status
+            ${maxloop} =        Set Variable     200
+    :FOR    ${INDEX}    IN RANGE    1    ${maxloop}
+    \       ${no more chef server exists} =    Run Keyword and Return Status      Element Should Not Be Visible      xpath=.//*[@id='tableinstanceview']/tbody/tr[${INDEX}]
+    \       ${last index} =        Set Variable     ${INDEX}
+    \       Exit For Loop If     ${no more chef server exists}
+    Verify start status of the instance        ${last index}
+    run chef        ${last index}
+    Verify stop status of the instance         ${last index}
+
+
+  

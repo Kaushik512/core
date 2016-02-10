@@ -1,0 +1,54 @@
+*** Settings ***
+Documentation      A resource file with reusable keywords and variables.
+...
+...                This file is part of a prototype automated test suite designed to
+...                test web application products built on top of the SLZ platform.
+...
+
+Library            Selenium2Library
+Library            String
+Library            Collections
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
+Resource           ${CATALYST ACTION}/Catalyst_Designer_Consumer_Setup.txt
+
+*** Variables ***
+
+*** Keywords ***
+Catlayst Login as Designer Setup and verfication
+    Sleep    5s
+    Verify Page Should not Contain SETTINGS Link
+    Verify Page Should Contain WORKZONE Link
+    Verify Page Should Contain DESIGN Link
+
+
+Catlayst Login as Consumer Setup and verfication
+    Sleep    5s
+    Verify Page Should not Contain SETTINGS Link
+    Verify Page Should Contain WORKZONE Link
+    Verify Page Should not Contain DESIGN Link
+    
+
+
+
+
+
+
+
+
+
+
+
+Verify Page Should not Contain SETTINGS Link
+    Page Should Not Contain    SETTINGS
+
+Verify Page Should Contain WORKZONE Link
+    Page Should Contain    WORKZONE    
+
+Verify Page Should Contain DESIGN Link
+    Page Should Contain    DESIGN    
+
+Verify Page Should not Contain DESIGN Link
+    Page Should Not Contain    DESIGN    

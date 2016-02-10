@@ -1,0 +1,141 @@
+*** Settings ***
+Documentation     Organization_setup_Flow.txt
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
+Resource           ${CATALYST ACTION}/Users_Setup_With_New_Users_and_Teams.txt
+
+Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
+Library            String
+
+
+*** Test Cases ***
+Catalyst Get the Build Number Step
+    [Tags]       Sanity               Settings
+    Version Number and the Jenkins Buildnumber
+    [Teardown]     Close Browser
+
+
+
+Catalyst Validation and Creation of New Organization 
+    [Tags]       Sanity               Settings
+#    Catalyst Login 
+    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Validation and Creation of New Organization
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst Edit the Organization and Domain Name  
+    [Tags]       Sanity               Settings
+#    Catalyst Login 
+    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Catalyst Editing the Organization and Domain name
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst Verification of Unique Organization Creation
+    [Tags]       Sanity               Settings
+#    Catalyst Login 
+    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Catalyst Verification of Unique Organization
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+
+Catalyst Creation of New Org Admin 
+    [Tags]       Sanity               Settings
+#    Catalyst Login 
+    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Catalyst Create New Org Admin 
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst login as OrgAdmin user and ALL option disabled    
+    [Tags]       Sanity               Settings
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Verfiy ALL is Disabled for OrgAdmin
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+Catalyst Creation of New Designer and Consumer    
+    [Tags]       Sanity               Settings
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Creation of Designer and Consumer
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+
+Catalyst Validation and Creation of New Business Group
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Validation and Creation of New Business Groups 
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst Edit the BusinessGroup Name 
+    [Tags]       Sanity               Settings
+#    Catalyst Login 
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Editing the BusinessGroup Created
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+
+Catalyst Verification of Unique Business Group Creation
+    [Tags]       Sanity               Settings
+#    Catalyst Login 
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Verification of Unique Business Group
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+
+Catalyst Validation and Creation of New Projects
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Validation and Creation of New Projects                        
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst Edit the ProjectName and Description Name 
+    [Tags]       Sanity               Settings
+#    Catalyst Login 
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Editing the Proj and Descrptn Created
+    Catalyst Logout                      
+    [Teardown]     Close Browser    
+
+
+Catalyst Verification of Unique Project Creation
+    [Tags]       Sanity               Settings
+#    Catalyst Login 
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Verification of Unique Project
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+
+

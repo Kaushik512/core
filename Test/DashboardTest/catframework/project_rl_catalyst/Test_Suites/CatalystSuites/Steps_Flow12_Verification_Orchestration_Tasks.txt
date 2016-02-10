@@ -1,0 +1,20 @@
+*** Settings ***
+Documentation     Dashboard_setup_Flow.txt
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${CATALYST ACTION}/CFT_Launch_Action_Steps.txt
+
+Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
+Library            String
+
+
+*** Test Cases ***
+Catalyst Verification of Jobs In Environment 
+    [Tags]       Sanity               Job
+#    Catalyst Login 
+    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Catalyst Verification of Jobs in RL_QA Environment
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+

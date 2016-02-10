@@ -1,0 +1,127 @@
+*** Settings ***
+Documentation          slz_litpro_grid_node.txt
+...
+...                    A common resource file with standard directory path prefixes.
+...
+...                    Variables defined here are project-wide globals.
+...
+...                    File paths used in this project must be prefixed with
+...                    one of the following prefix variables,
+...                    so that they can be easily located by the framework.
+...
+Library                        Selenium2Library
+
+
+*** Variables ***
+${REMOTE_URL}                  http://192.168.150.49:5555/wd/hub
+#${DESIRED_CAPABILITIES}        browserName:firefox,version:33.0,platform:WINDOWS,maxInstances:5,seleniumProtocol:WebDriver
+
+#${DESIRED_CAPABILITIES}        browserName:internetexplorer,platform:WINDOWS,maxInstances:1,seleniumProtocol:WebDriver
+${DESIRED_CAPABILITIES}        browserName:googlechrome,platform:WINDOWS,maxInstances:1,seleniumProtocol:WebDriver
+
+${BROWSER}                     firefox
+
+
+${MAIN WINDOW}                  selenium_main_app_window
+
+${SLZ PRODUCT WINDOW NAME}      app_LF
+${SLZ PRODUCT WINDOW}           name=app_LF
+
+
+*** Keywords ***
+
+Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+#Catalyst Login
+    Browser is opened to login catalyst
+    Enters catalyst User Name      ${VALID USER}
+    Enters catalyst password     ${VALID PASSWORD}
+    Clicks on Login button
+
+Enters catalyst User Name
+    [Arguments]    ${username}
+    Input Text     xpath=//input[@name='username']      ${username}
+
+Enters catalyst password
+    [Arguments]    ${password}
+    Input Text     xpath=//input[@name='pass']      ${password}
+
+Clicks on Login button
+    Click Element    xpath=.//*[@id='login-form']/footer/button
+
+Browser is opened to login catalyst
+    Open Browser    ${ENVIRONMENTSERVER}    ${BROWSERTYPE}
+#    Open Browser in Grid Node    ${ENVIRONMENTSERVER}
+    Set Selenium Speed    ${DELAY}
+#    Set Selenium Timeout    ${DELAY SECONDS}
+    Maximize Browser Window
+    ${height}=  Get Window Size
+    Log    ${height}
+    Sleep      3s      Wait for screenshot to be captured and saved
+    Capture Page Screenshot     ${SEARCH RESULTS SCREENSHOT PATH}
+    Sleep      3s      Wait for screenshot to be captured and saved
+
+Open Browser in Grid Node
+    [Arguments]            ${site_url}
+    ${browser_name} =            Get Variable Value    ${BROWSER}
+    ${remote_node_url} =         Get Variable Value    ${REMOTE_URL}
+    ${desired_capabilities} =    Get Variable Value    ${DESIRED_CAPABILITIES}
+    Log    Attempting to open a browser instance in grid node running at url: '${remote_node_url}'
+    ${browser_index} =        Open Browser      ${site_url}
+    ...                                         browser=${browser_name}
+    ...                                         remote_url=${remote_node_url}
+    ...                                         desired_capabilities=${desired_capabilities}
+    Log    Current browser is now the instance of '${browser_name}' with index '${browser_index}' running at url: '${remote_node_url}'
+    [Return]    ${browser_index}
+
+
+
+Switch To New Window
+    [Arguments]       ${new window title}
+    Log    Browsing context is being changed to new window with title '${new window title}'
+    Wait Until Window Present     ${new window title}    title    300s    10s
+    Select Window     title=${new window title}
+    Log    Current browsing context is now the window with title '${new window title}'
+    [Return]    True
+
+
+Wait Until Window Present
+    [Arguments]        ${value}    ${attribute}=title    ${timeout}=90s    ${retry_interval}=5s
+    Wait Until Keyword Succeeds    ${timeout}    ${retry_interval}
+    ...        Window Should Be Present    ${value}    ${attribute}
+
+
+Window Should Be Present
+    [Arguments]     ${value}       ${attribute}=title
+    ${word} =       Evaluate       {'id':'Identifiers','name':'Names','title':'Titles'}['${attribute.lower()}']
+    ${values} =     Run Keyword    Get Window ${word}
+    Should Contain    ${values}    ${value}    Window with value '${value}' for attribute ${attribute.lower()} not present.
+
+
+
+Switch To Original Window
+    Comment   Switch to the original window of SLZ Welcome Page
+    #Select Window               ${EMPTY}            ### works well in Firefox, but not in Chrome
+    #Select Window               ${MAIN WINDOW}      ### works well in Chrome, but not in Firefox
+    Select Window               ${WELCOME TITLE}     ### this window title must be unique and not re-used for popup or new window
+    Log       Current browsing context is now the original main window
+    Wait Until Page Contains    ${WELCOME HEADING TEXT}
+    Title Should Be             ${WELCOME TITLE}
+    Location Should Be          ${WELCOME URL}
+
+
+
+Log Out And Exit
+    Click Element      ${SLZ PRODUCT LOGOUT}
+    Comment     This Product Window will now get closed after logout
+    Switch To Original Window
+    Set Selenium Timeout             ${Default Timeout}
+    Click Element      ${WELCOME LOGOUT}
+    Sleep      2s      Wait for SLZ home login page to appear
+    Close Browser
+
+
+
+
+
+
+

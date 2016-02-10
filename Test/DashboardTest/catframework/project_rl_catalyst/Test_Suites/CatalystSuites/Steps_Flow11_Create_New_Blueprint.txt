@@ -1,0 +1,29 @@
+*** Settings ***
+Documentation     Dashboard_setup_Flow.txt
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${CATALYST ACTION}/Design_New_Blueprint_Steps.txt
+
+Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
+Library            String
+
+
+*** Test Cases ***
+Catalyst Create New Blueprint
+    [Tags]       Sanity               BP
+#    Catalyst Login 
+    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Catalyst Creation of New Blueprint
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+Catalyst Delete Blueprint
+    [Tags]       Sanity               BP
+#    Catalyst Login 
+    Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    Catalyst deletion of New Blueprint
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+

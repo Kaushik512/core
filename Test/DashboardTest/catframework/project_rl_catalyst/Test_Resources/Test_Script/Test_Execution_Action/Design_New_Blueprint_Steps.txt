@@ -1,0 +1,273 @@
+*** Settings ***
+Documentation      A resource file with reusable keywords and variables.
+...
+...                This file is part of a prototype automated test suite designed to
+...                test web application products built on top of the SLZ platform.
+...
+
+Library            Selenium2Library
+Library            String
+Library            Collections
+
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
+
+
+
+
+*** Variables ***
+
+*** Keywords ***
+Catalyst Creation of New Blueprint
+    Sleep    6s
+    Clicks on Design
+    Sleep    10s
+    Clicks on OK Button to Validate in loop
+    Sleep    1s
+    Choose the Template Type Created
+    Sleep    3s
+    Clicks on Next Button
+    Chooses the Template User Created
+    Clicks on Next Button
+    Chooses the Operating System
+    Sleep    4s
+    Select the Provider
+    Choose the Available Images
+    Choose the Region
+    #Select the VPC
+    Select the Subnet
+    Select the Key Pair
+    Choose Instance Size
+    Select the Security Group
+    Clicks on Configure Provider Parameters
+    Clicks on Configure Organization Parameters
+    #Chooses Organization
+    Enters The Blueprint Name
+    Chooses The Business Group
+    Chooses The Project
+    #Select WorkCookBooks
+    #Clicks on >>T Button
+    Clicks on close of Configure Organization Parameters
+    #Chooses The Environment
+    Clicks on Configure Runlist parameters
+    Clicks on Edit Runlist
+    Sleep    1s
+    Clicks on Cookbooks and Selection
+    Clicks on Close of Runlist Tab
+    Clicks on Configure Application URL
+    Clicks on AppNew Button
+    Enters the Application URL Name
+    Enters the AppURL
+    Clicks on AppADD Button
+    Enable the Next Button
+    Clicks on Next Button
+    Clicks on Confirm OK Button
+    Sleep    2s
+    
+
+
+Catalyst deletion of New Blueprint
+    #Clicks on Workzone
+    Sleep    4s
+    Clicks on RL_QA Environment
+    Sleep    2s
+    Clicks on Infrastructure Tab
+    Sleep    2s
+    Clicks on Blueprints Section
+    Sleep    15s
+    Verify the Blueprint is created
+    Delete the Blueprint
+    Sleep    3s
+    verfiy blueprint is deleted
+
+
+verfiy blueprint is deleted
+    Page Should Not Contain    ${BLUEPRINT NAME}
+
+
+Clicks on Close of Runlist Tab
+    Click Element    xpath=.//*[@id='accordion-Design']/div[3]/div[1]/h4/a/i[2]
+
+
+Clicks on Cookbooks and Selection
+    #Click Element    id=cookbooks
+    #Sleep    1s
+    Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='nodejs']
+    Click Element    id=btnaddToRunlist
+    Sleep    1s
+    Click Element    id=saveRunlist
+
+Clicks on Edit Runlist
+    Click Element    xpath=.//*[@title='Edit Runlist']
+
+Clicks on Configure Runlist parameters
+    Click Element    xpath=.//*[@id='accordion-Design']/div[3]/div[1]/h4/a/i[1]
+
+Clicks on Infrastructure Tab
+    Click Element    css=.caret
+
+Clicks on Blueprints Section
+    Click Element    css=.Blueprints>a
+
+
+Verify the Blueprint is created
+    Page Should Contain    ${BLUEPRINT NAME}
+
+Delete the Blueprint
+    Click Element    xpath=.//b[text()='${BLUEPRINT NAME}']
+    Sleep    1s
+    Click Element    xpath=.//*[@id='l2']/footer/div/button
+    Sleep    1s
+    Click Element    xpath=.//*[text()='OK']
+ 
+Clicks on RL_QA Environment
+    Sleep    1s
+    Click Element    xpath=//a[text()='${SUPERCAT ENV}']
+
+Clicks on Workzone
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    id=workZoneNew
+
+Clicks on OK Button to Validate in loop
+    ${said}=    Run Keyword and Return Status     Page Should Contain Element    xpath=.//*[text()='OK']
+    Run Keyword If    '${said}' == 'True'     
+    ...    Click Element    xpath=.//*[text()='OK']
+    ...    ELSE IF   '${said}' == 'False'
+    ...    Log    OK Button is not displayed
+
+
+Clicks on Design
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='designNew']
+    Click Element    xpath=.//*[@id='designNew']
+
+
+Choose the Template Type Created
+    Click Element    xpath=(//b[text()='${TEMPLATE TYPENAME}'])[1]
+
+
+Clicks on Next Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='nextSpecificValue']/a
+
+ 
+Chooses the Template User Created
+    Click Element    xpath=//b[text()='${SUPERCAT TEMP}']
+
+
+Chooses the Operating System
+    Sleep    1s
+    #Click Element    id=instanceOS
+    #Log    after click    
+    #Sleep    1s
+    Click Element    xpath=.//*[@id='instanceOS']/option[text()='${OPERATING SYSTEM1}']
+    #Wait Until Keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible       xpath=//span[./text()='Select Operating System']
+    #Click Element    xpath=//span[./text()='Select Operating System']
+    #Sleep    3s
+    #Input Text    xpath=.//*[@id='select2-drop']/div/input    ${OPERATING SYSTEM1}
+    #Sleep    2s
+    #Click Element    css=#select2-drop > ul > li:nth-child(1) > div > span
+
+
+Select the Provider
+    Sleep    4s
+    #Click Element    id=providerId
+    #Log    after click
+    #Sleep    4s
+    Click Element    xpath=.//*[@id='providerId']/option[text()='${PROVIDER}']
+
+
+
+Choose the Available Images
+    #Sleep    4s
+    #Click Element    id=imageId
+    #Log    after click
+    #Sleep    4s
+    Click Element    xpath=.//*[@id='imageId']/option[text()='${IMAGE NAME1}']
+
+
+
+Choose the Region
+    Sleep    4s
+    Click Element    xpath=.//*[@id='region']/option[2]
+
+
+Select the Subnet
+    Sleep    1s
+    Click Element    xpath=.//*[@id='subnetId']/option[2]
+
+
+Select the Key Pair
+    Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:none')
+    Click Element    xpath=.//*[@id='keypairId']/option[text()='${Key_Pair}']
+
+
+Choose Instance Size
+    Sleep    1s
+    Click Element    xpath=.//*[@id='instancesize']/option[text()='${CentosInstanceSize}']
+
+Select the Security Group
+    Sleep    3s
+    Log    after scroll
+    Sleep    1s
+    Click Element    xpath=.//*[@id='securityGroupIds']/label[contains(.,'${SECRTY GRP}')]/i
+
+
+Clicks on Configure Provider Parameters
+     Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='accordion-Design']/div[1]/div[1]/h4/a/i[2]
+
+
+Clicks on Configure Organization Parameters
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-Design']/div[2]/div[1]/h4/a/i[1]
+
+Enters The Blueprint Name
+    Input Text    id=blueprintNameInput    ${BLUEPRINT NAME}
+
+
+Chooses The Business Group
+    Sleep    3s
+    #Click Element    id=bgListInput
+    Click Element    xpath=.//*[@id='bgListInput']/option[text()='${BUSINESS GROUP NAME1}']
+
+
+Chooses The Project
+    Sleep    3s
+    #Click Element    id=projectListInput
+    Click Element    xpath=.//*[@id='projectListInput']/option[text()='${PROJECT NAME1}']
+
+
+Clicks on close of Configure Organization Parameters
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-Design']/div[2]/div[1]/h4/a/i[2]
+
+Clicks on Configure Application URL
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='accordion-Design']/div[6]/div[1]/h4/a/i[1]
+
+Clicks on AppNew Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    css=#newAppSeries
+
+Enters the Application URL Name
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text     name=appNameInput    ${APPNAME}
+
+Enters the AppURL
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text     name=appNameURL     ${APP URL}
+
+Clicks on AppADD Button
+    Sleep    2s
+    Click Element    id=addAppBtn
+
+
+Enable the Next Button
+    Execute JavaScript    $('#bootstrap-wizard-1 > div.tab-content > footer > div').attr('style','display:block')
+
+
+Clicks on Confirm OK Button
+    Click Element    xpath=//*[text()='OK']
+
+
+Catalyst Logout
+    Clicks on LogOut link
+
+
+Clicks on LogOut link
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='logout']/span/a/i
+    Focus    xpath=.//*[@id='logout']/span/a/i
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='logout']/span/a/i

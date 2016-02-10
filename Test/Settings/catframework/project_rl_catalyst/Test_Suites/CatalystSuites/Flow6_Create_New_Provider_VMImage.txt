@@ -1,0 +1,31 @@
+*** Settings ***
+Documentation     Providers_VMImage_setup_Flow.txt
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
+Resource           ${CATALYST ACTION}/Design_Create_Launch_Providers_Template.txt
+Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
+
+
+
+*** Test Cases ***
+Catalyst new PROVIDERS setup
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Creation of Providers Setup 
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+Catalyst new VM IMAGE setup
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst navigates to VMImage page
+    Catalyst Creation of VM Image Process for CentOS
+    Catalyst Creation of VM Image Process for Ubutnu
+    #Catalyst Creation of VM Image Process for Windows      
+    Catalyst Logout                      
+    [Teardown]     Close Browser

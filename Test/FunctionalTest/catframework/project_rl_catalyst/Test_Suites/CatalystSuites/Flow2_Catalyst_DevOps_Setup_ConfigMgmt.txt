@@ -1,0 +1,146 @@
+*** Settings ***
+Documentation     Devops_Configmgmt_setup_Flow.txt
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${CATALYST ACTION}/DevOps_Setup_Action_Steps.txt
+Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
+Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
+
+	
+*** Test Cases ***
+Catalyst Validation of ChefServer Creation
+    [Tags]       Sanity          Settings
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst Login
+    Testing All New Config Management Conditions
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+
+Catalyst Create ChefServer setup
+    [Tags]       Sanity         Settings
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst Login
+    Create New Config Management
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+
+Catalyst Edit ChefServer setup
+    [Tags]       Sanity         Settings
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst Login
+    Catalyst Editing the Chef Server created
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+
+Catalyst Verify Unique ChefServer,Organization and Org Disabled
+    [Tags]       Sanity             Settings
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst Login
+    Unique Devops Configuration Management
+    Devops Click on Update of Your org and Org is disabled
+    Catlayst Unique Organization Validation 
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+
+
+Catalyst Create New DataBag Setup
+    [Tags]       Sanity         Settings
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst Login
+    Catalyst Create New Data Bag
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+
+Catalyst Validate DataBag Setup
+    [Tags]       Sanity         Settings
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst Login
+    Catalyst Validate Databag setup
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+
+
+Catalyst Duplicate DataBag Setup
+    [Tags]       Sanity         Settings
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst Login
+    Catalyst Duplicate DataBag setup
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+
+Catalyst Editing invalid josn & Checking Disabled DataBag Setup
+    [Tags]       Sanity         Settings
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst Login
+    Catalyst Editing and Disabled setup of Databag
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+Catalyst Delete the DataBag Setup
+    [Tags]       Sanity         Settings
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst Login
+    Catalyst Deleting the Databag
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+
+
+
+
+
+Catalyst Validation of Puppet Server
+    [Tags]       Sanity         Settings
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst Login
+    Catalyst Validation of the Puppet Server Page
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+Catalyst Creation of Puppet Server
+    [Tags]       Sanity         Settings
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst Login
+    Catalyst Creation of the Puppet Server
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+Catalyst Editing of Puppet Server
+    [Tags]       Sanity         Settings
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst Login
+    Catalyst Edition of the Puppet Server
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+Catalyst Unique Puppet Server validation
+    [Tags]       Sanity         Settings
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+#    Catalyst Login
+    Catalyst Unique Puppet Server verification
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+
+

@@ -1,0 +1,63 @@
+*** Settings ***
+Documentation     Gallery_setup_Flow.txt
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${CATALYST ACTION}/DevOps_Setup_Action_Steps.txt
+Resource           ${CATALYST ACTION}/Gallery_setup_TempService_Steps.txt
+Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
+
+
+
+*** Test Cases ***
+Catalyst Validation of New Software Stack Template
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Test Validation of Creation of New Templates
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+Catalyst Creation,Editing of New Software Stack Template
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst User New Template Creation,Editing  
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+Catalyst Unique Template Validation Setup
+    [Tags]       Sanity               settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Unique Template Validation Setup
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+
+
+
+
+Catalyst Validation of Service Command setup
+    [Tags]       Sanity               settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Test Validation of Creation of New Services
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+Catalyst Creation of Service Command setup
+    [Tags]       Sanity               settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst User Service Command Services
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+

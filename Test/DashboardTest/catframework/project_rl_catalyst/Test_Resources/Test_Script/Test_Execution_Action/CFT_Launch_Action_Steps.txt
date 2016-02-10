@@ -1,0 +1,492 @@
+*** Settings ***
+Documentation      A resource file with reusable keywords and variables.
+...
+...                This file is part of a prototype automated test suite designed to
+...                test web application products built on top of the SLZ platform.
+...
+
+Library            Selenium2Library
+Library            String
+Library            Collections
+
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
+
+
+
+
+*** Variables ***
+
+*** Keywords ***
+Catalyst Launch of Cloud Formation Blueprint
+    Clicks on Workzone
+    Sleep    1s
+    Clicks on RL_QA Environment
+    Sleep    2s
+    Clicks on Infrastructure Tab
+    Clicks on Blueprints Section
+    Sleep    1s
+    Clicks on close of Software Stack accordion
+    Sleep    1s
+    Clicks on Cloud Formation Accordion
+    Select the Cloud Formation Blueprint
+    Sleep    1s
+    Clicks on Launch Button
+    Clicks on Confirmation of OK Button
+    Enters the Unique StackName
+    Clicks on Submit Button
+    Sleep    3s
+    Clicks on Close of Launching Blueprint popup
+    Sleep    2 minute
+    Clicks on Infrastructure Tab
+    Clicks on Instances Tab
+    Sleep    2s
+    Capture Screen Shot of the page
+    Verfiy the Java Stack in the Instances Page
+    Sleep    4s
+    Editing the Names of the Stack
+    Sleep    1s
+    Select the Java Stack Instance to verify Bootstrap
+    Clicks on ControlPanel
+    Sleep    2s
+    Capture Screen Shot of the page
+    Clicks on Action History Tab
+    Verify the Java Bootstrap text and Status in the Table
+    Capture Screen Shot of the page
+    Clicks on Back To Instances
+    Sleep    3s
+    Select the MySql Stack Instance to verify Bootstrap
+    Clicks on ControlPanel
+    Sleep    2s
+    Capture Screen Shot of the page
+    Sleep    3s
+    Clicks on Action History Tab
+    Sleep    1s
+    Verify the MySql Bootstrap text and Status in the Table
+    Sleep    1s
+    Capture Screen Shot of the page
+    Sleep    2s
+    Clicks on Back To Instances
+    Sleep    3s
+    Clicks on Infrastructure Tab
+    Sleep    2s
+    Clicks on CloudFormation Tab
+    Sleep    1s
+    Capture Screen Shot of the page
+    Verify the Stacks with your Stackame is created
+    Sleep    1s
+    Clicks on Infrastructure Tab
+    Clicks on Instances Tab
+        
+        #Select the Java Stack Instance to verify Bootstrap
+        #Delete the Java and SQL Stack Instance
+        #Sleep    1s
+        #Select the MySql Stack Instance to verify Bootstrap
+        #Delete the Java and SQL Stack Instance
+        #Sleep    1s
+        #Verify the Stack Instances are Deleted
+        #Clicks on Infrastructure Tab
+        #Clicks on CloudFormation Tab
+        #Sleep    4s
+        #Select the Stack to delete
+        #Verify the Stack is Deleted
+
+
+Catalyst Chef Client Run and SSH on Cloud Formation Instance
+    Clicks on Workzone
+    Sleep    1s
+    Clicks on RL_QA Environment
+    Sleep    2s
+    Clicks on Chef Client Run of Java instance
+    Sleep    5s
+    Update the Run List with Cookbook
+    Select the RLCatalyst Cookbook
+    Clicks on Update Button
+    Select the Java Stack Instance to verify Bootstrap
+    Clicks on ControlPanel
+    Sleep    2s
+    Clicks on Action History Tab
+    Sleep    1s
+    Verfiy the Chefclient Text and Success Status
+    Clicks on Back To Instances
+    Sleep    1s
+    Click on Verified SSH Instance
+    Enters the Username in the Terminal
+    Select Authentication Type
+    Upload the Catalyst PEM File
+    Clicks on Terminlal Submit Button
+    Close the SSH Terminal
+    Sleep    4s
+    Clicks on ControlPanel
+    Sleep    2s
+    Clicks on Action History Tab
+    Sleep    1s
+    Sleep    7s
+    Verfify the status of SSH Shell
+    Sleep    1s
+    Clicks on Back To Instances
+    Sleep    3s
+    Delete the Java and SQL Stack Instance
+    Sleep    1s
+    Select the MySql Stack Instance to verify Bootstrap
+    Sleep    1s
+    Delete the Java and SQL Stack Instance
+    Sleep    1s
+    Verify the Stack Instances are Deleted
+    Sleep    1s
+    Clicks on Infrastructure Tab
+    Sleep    1s
+    Clicks on CloudFormation Tab
+    Sleep    4s
+    Select the Stack to delete
+    Verify the Stack is Deleted
+
+
+
+Catalyst Verification of Jobs in RL_QA Environment
+    Clicks on Workzone
+    Sleep    1s
+    Clicks on RL_QA Environment
+    Sleep    2s
+    Capture Screen Shot of the page
+    Sleep    1s
+    Clicks on Orchestration Tab
+    #Verify the Image is displayed for SMOKE_TEST_CONTAINER_STOP
+    Verify the Name of the Job
+    Clicks on History Button
+    Sleep    4s
+    Capture Screen Shot of the page
+    Sleep    6s
+    Click on Job Dashboard Button
+    Sleep    2s
+    Selects the Window
+    Capture Screen Shot of the page
+    Verify the Details of Dashboard
+    Close Window
+    Sleep    1s
+    Select the Catalyst Window
+    Sleep    6s
+    ##Get the Success path text
+    ##Verify if no status is there
+    #Sleep    2s
+    #Capture Screen Shot of the page
+    #Sleep    3s
+    #Select the Catalyst Suites Window
+    #Capture Screen Shot of the page
+    #verify the Log Page
+    #Close Window
+    #Sleep    2s
+    #Select the Catalyst Window
+    ##Sleep    1s
+    Clicks on Job Status Button
+    Sleep    1s
+    Capture Screen Shot of the page
+    Verfiy the Execute Logs Page
+    Sleep    1s
+        
+
+Get the Success path text
+    ${TEXT NEW}=    Get Text    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[1]/td[3]/span
+    Log    ${TEXT NEW}
+    Set Global Variable    ${TEXT NEW}
+
+
+Verify if no status is there
+    ${NO TEXT}=    Get Text    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[1]/td[3]/span
+    Log    ${NO TEXT}
+    Set Global Variable    ${NO TEXT}
+    Run Keyword If    '${NO TEXT}' == '${SMOKE STATUS}'
+    ...    Log    Smoke Test has no Status
+    ...    ELSE IF    '${TEXT NEW}' == '${NEW SUCCESS}'
+    ...    Steps to Go
+
+
+Steps to Go
+    Sleep    6s
+    Clicks on Job LogHtml Button
+    Sleep    5s
+    Select the Catalyst Suites Window
+    Capture Screen Shot of the page
+    verify the Log Page
+    Close Window
+    Sleep    1s
+    Select the Catalyst Window
+
+
+
+Select the Catalyst Window
+    Select Window    title=Catalyst
+
+Select the Catalyst Suites Window
+    Select Window    title=${JOB TITLE}
+
+Selects the Window
+    Select Window    title=Continuous Integration Dashboard
+
+
+Verfiy the Execute Logs Page
+    Page Should Contain    Execute Logs
+    Page Should Contain    Jenkins Job
+    Click Element    xpath=.//*[@id='assignedExecute']/div/div/div[3]/a
+        
+
+verify the Log Page
+    Page Should Contain    CatalystSuites Test Log
+    Page Should Contain    Test Statistics
+
+Verify the Details of Dashboard
+    Page Should Contain    Catalyst Build
+    Page Should Contain    Critical Test Trend
+    Page Should Contain    Statistics by Suite
+    Page Should Contain    Critical Tests Failed
+    Page Should Contain    Last Test
+    Page Should Contain    Test Coverage
+        
+
+
+Clicks on Job LogHtml Button
+    #Execute Javascript    $('#tablehistoryTaskForJenkins > tbody > tr:nth-child(1) > td:nth-child(2) > a:nth-child(2)').click();
+    Click Element    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[1]/td[2]/a[2]
+
+Clicks on Job Status Button
+    Click Element    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[1]/td[2]/a[3]
+
+Click on Job Dashboard Button
+    Click Element    xpath=.//*[@id='tablehistoryTaskForJenkins']/tbody/tr[1]/td[2]/a[2]
+
+Clicks on Close Button
+    Click Element    css=.btn.btn-minier.btn-primary.hideJenkinsJob
+
+Clicks on History Button
+    Click Element    xpath=.//*[@id='tableOrchestration']/tbody/tr/td[text()='${JENKINS JOB1}']/../td[6]/a/i
+    #Execute Javascript    $('#tableOrchestration > tbody > tr:nth-child(1) > td:nth-child(6) > a > i').click()
+
+
+Verify the Image is displayed for SMOKE_TEST_CONTAINER_STOP
+    ${JENKINS IMAGE}=    Get Element Attribute    xpath=.//*[@id='tableOrchestration']/tbody/tr[1]/td[1]/img[@src]
+    Log    ${JENKINS IMAGE}
+    Should Be Equal    ${JENKINS IMAGE}    ${JENKINS IMGNAME}   
+
+
+
+Verify the Name of the Job
+    Element Should Contain    xpath=.//*[@id='tableOrchestration']/tbody/tr/td[text()='CATALYST_SMOKE_TEST']    ${JENKINS JOB1}
+
+
+Clicks on Orchestration Tab
+    Click Element    xpath=.//*[@id='myTab3']/li[2]/a
+
+
+
+Verfify the status of SSH Shell
+    Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody/tr[3]/td[1]    ${SSH}
+    ${SSH STATUS}=    Get Element Attribute   xpath=//*[@id='tableactionHistory']/tbody/tr[3]/td[2]/img@title
+    Log    ${SSH STATUS}
+    Should Be Equal    ${ACTBOOT2}     ${SSH STATUS}           
+    Sleep    2s
+
+Close the SSH Terminal
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='modalSSHShellContainer']/div/div/div[1]/button
+
+
+Clicks on Terminlal Submit Button
+    Wait Until Keyword Succeeds    2 minute     1 seconds      Click Element    xpath=.//*[@id='ssh-login-form']/div[7]/button[1]
+    Sleep      4s  
+
+Upload the Catalyst PEM File
+    Choose File     xpath=.//*[@id='ssh-pemfileInput']    ${Goldendemo_pem}   
+
+        
+Select Authentication Type
+    Click Element    xpath=.//*[@id='s2id_ssh-pemFileCheckbox']/a/span[1]   
+    Sleep    1s
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    Pem File
+    Sleep    1s
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li[2]/div
+
+
+Enters the Username in the Terminal
+    Sleep    10s
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text    id=ssh-username    ${IP UBUNTUSERNAME}
+
+
+
+Verfiy the Chefclient Text and Success Status
+    Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody/tr[2]/td[1]    ${CHEF CLIENT}
+    ${CHEFSUCCESS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr[2]/td[2]/img@title
+    Log    ${CHEFSUCCESS}
+    Should Be Equal    ${CHEFSUCCESS}     ${SATSSYY}
+
+
+
+Click on Verified SSH Instance
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div//ul/li[contains(.,"${EDIT STACK1}")]/div/div/div/div[4]/div[2]/a
+
+
+
+Clicks on Update Button
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[text()='Update']
+    Wait Until Keyword Succeeds    1 minute     4 seconds      Click Element    xpath=//*[text()='OK']
+    Sleep    10 minutes
+    Wait Until Keyword Succeeds    1 minute     5 seconds      Click Element    css=#instanceLogModalContainer > div.modal-dialog > div.modal-content > div.modal-footer > button.btn.btn-default.btn-primary
+
+
+
+
+
+Select the RLCatalyst Cookbook
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='${ROLE NAME}']
+    Click Element    id=btnaddToRunlist
+
+
+Update the Run List with Cookbook
+    Click Element    css=div.row > div:first-child > label:nth-of-type(2) > i
+
+
+Clicks on Chef Client Run of Java instance
+    Wait Until Keyword Succeeds    2 minute     1 seconds    Click Element    xpath=.//*[@id='divinstancescardview']/div/div/ul/li[contains(.,"${EDIT STACK1}")]/div/div/div/div[4]/div[1]/a
+
+
+Catalyst Logout
+    Clicks on LogOut link
+
+
+Clicks on LogOut link
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='logout']/span/a/i
+    Focus    xpath=.//*[@id='logout']/span/a/i
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='logout']/span/a/i
+
+
+Verify the Stack is Deleted
+    Page Should Not Contain    ${STACK STORE}
+
+Delete the Java and SQL Stack Instance
+    Click Element    id=removeInstance
+    Click Element    id=ckbChefDelete
+    Click Element    xpath=.//*[text()='Delete']
+
+
+Editing the Names of the Stack
+    Click Element    xpath=.//*[@id='divinstancescardview']//span[@data-original-title='${JAVA}']/../a[@class='glyphicon glyphicon-pencil editInstanceNameBtn glyphiconNew']
+    Sleep    1s
+    Input Text    id=instanceEditName    ${EDIT STACK1}
+    Click Element    id=editSaveBTN
+    Click Element    xpath=.//*[@id='divinstancescardview']//span[@data-original-title='${MYSQL}']/../a[@class='glyphicon glyphicon-pencil editInstanceNameBtn glyphiconNew']
+    Sleep    1s
+    Input Text    id=instanceEditName    ${EDIT STACK2}
+    Click Element    id=editSaveBTN
+
+
+Verify the Stack Instances are Deleted
+    Page Should Not Contain    ${EDIT STACK1}
+    Page Should Not Contain    ${EDIT STACK2}
+
+Select the Stack to delete
+    Click Element    xpath=//b[text()='${STACK STORE}']
+    Click Element    xpath=.//*[@title='Delete Stack']
+    Sleep    1s
+    Click Element    xpath=.//*[text()='OK']
+
+Verify the Stacks with your Stackame is created
+    Page Should Contain    ${STACK STORE}
+    Element Should Contain    xpath=.//*[@id='cftStackContainer']/div/div[@data-stackname='${STACK STORE}']/div/span[2]/span    ${STACK STATUS}
+
+
+Clicks on CloudFormation Tab
+    Click Element    css=.CloudFormation>a
+
+
+Clicks on Back To Instances
+    Click Element    xpath=.//*[@id='getViewAttr']
+
+
+Verify the Java Bootstrap text and Status in the Table
+    Sleep    5 minutes
+    Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[text()='${BOOTSTRAP}']    ${BOOTSTRAP}
+    Sleep    1s
+    ${BOOTSTRAP STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[2]/img@title
+    Log    ${BOOTSTRAP STATUSS}
+    Should Be Equal    ${BOOTSTRAP STATUSS}     ${ACTBOOT2}
+
+
+Verify the MySql Bootstrap text and Status in the Table
+    Sleep    3 minutes
+    Element Should Contain    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[text()='${BOOTSTRAP}']    ${BOOTSTRAP}
+    Sleep    1s
+    ${BOOTSTRAP STATUSS}=    Get Element Attribute    xpath=.//*[@id='tableactionHistory']/tbody/tr/td[2]/img@title
+    Log    ${BOOTSTRAP STATUSS}
+    Should Be Equal    ${BOOTSTRAP STATUSS}     ${ACTBOOT2}
+        
+
+
+
+Clicks on Action History Tab
+    Click Element    xpath=.//*[@id='myTab3']/li[3]/a
+
+Select the Java Stack Instance to verify Bootstrap
+    Click Element    xpath=.//span[@data-original-title='${EDIT STACK1}']
+
+
+Select the MySql Stack Instance to verify Bootstrap
+    Sleep    3s
+    Click Element    xpath=.//span[@data-original-title='${EDIT STACK2}']  
+
+
+
+Clicks on ControlPanel
+    Click Element    css=.btn.btn-primary.actionControlPanel
+
+Verfiy the Java Stack in the Instances Page
+    Page Should Contain    Java
+    Page Should Contain    MySql
+    Element Text Should Be    xpath=.//span[@data-original-title='${JAVA}']    ${JAVA}
+    Element Text Should Be    xpath=.//span[@data-original-title='${MYSQL}']    ${MYSQL}
+
+Capture Screen Shot of the page
+    Capture Page Screenshot
+
+Clicks on Instances Tab
+    Click Element    css=.Instances>a
+
+Clicks on Close of Launching Blueprint popup
+    Click Element    xpath=.//*[@id='launchResultContainer']/div/div/div[3]/button
+
+Clicks on Submit Button
+    Click Element    xpath=//input[@value='Submit']
+
+Clicks on Confirmation of OK Button
+    Click Element    xpath=.//*[text()='OK']
+
+Enters the Unique StackName
+    ${STACK UNIQUE}=    Generate Random String    3    [NUMBERS]
+    ${STACK STORE}=    Catenate  SEPARATOR=    ${STACK NAME}${STACK UNIQUE}
+    Log     ${STACK STORE}
+    Set Global Variable    ${STACK STORE}
+    Input Text    id=cftInput    ${STACK STORE}
+
+Clicks on Launch Button
+    Click Element    css=.btn.pull-left.btn-primary.launchBtn
+
+
+Select the Cloud Formation Blueprint
+    Click Element    xpath=.//*[text()='${CLOUD BP}']
+
+Clicks on Cloud Formation Accordion
+    Click Element    xpath=.//*[@id='accordion-2']/div[3]/div[1]/h4/a/i[1]
+
+Clicks on close of Software Stack accordion
+    Click Element    xpath=.//*[@id='accordion-2']/div[1]/div[1]/h4/a/i[2]
+
+Clicks on RL_QA Environment    
+    Click Element    xpath=//*[normalize-space(text())="RL_QA"]
+
+Clicks on Infrastructure Tab
+    Click Element    css=.caret
+
+Clicks on Blueprints Section
+    Click Element    css=.Blueprints>a
+
+Clicks on Workzone
+    Click Element    id=workZoneNew    

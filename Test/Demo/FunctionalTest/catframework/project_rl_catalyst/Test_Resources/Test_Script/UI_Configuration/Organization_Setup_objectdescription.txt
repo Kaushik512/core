@@ -1,0 +1,10 @@
+
+*** Settings ***
+Documentation     A resource file with locators for page UI elements.
+...
+...               This file is part of a prototype automated test suite designed to
+...               test web application products built on top of the SLZ platform.
+...
+...
+*** Variables ***
+${SLZ PRODUCT NAME}        LiteracyPro

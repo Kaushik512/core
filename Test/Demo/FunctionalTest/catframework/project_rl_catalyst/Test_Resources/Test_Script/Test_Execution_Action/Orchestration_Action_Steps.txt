@@ -1,0 +1,128 @@
+*** Settings ***
+Documentation      A resource file with reusable keywords and variables.
+...
+...                This file is part of a prototype automated test suite designed to
+...                test web application products built on top of the SLZ platform.
+...
+
+Library            Selenium2Library
+Library            String
+Library            Collections
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
+Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
+Resource           ${CATALYST ACTION}/Import_By_IP_and_Chef_Sync.txt
+
+
+
+*** Variables ***
+
+*** Keywords ***
+Catalyst Create the ChefTask in the Environment and Execution
+    Catalyst Steps for Importing the CentosIns
+    Sleep    5s
+    Clicks on Orchestration Tab
+    Clicks on NewBtton
+    Clicks on Select Task Type
+    Inputs the Task type
+    Enters the Task Name of Chef 
+    Choose the Nodes
+    Asign Runlist with CookBooks
+    Clicks on Save Task Button of Task
+
+
+Catalyst Execution of the Chef Tasks Created
+    Clicks on Workzone Button
+    Sleep    4s
+    Clicks on Orchestration Tab
+    Sleep    1s
+    Verification of the Task Name Created
+    Verification of the Assigned Node for Name,IP Adress,Status
+    Clicks on the AssignNodes Cancel Button
+    Verification of the Assigned Runlists
+    Clicks on the AssignRunlist Cancel Button
+    Clicks on Execute Button of the Task and verify task completion
+    Clicks on History Button
+    Sleep    2s
+    Verify the Status from Task History
+
+
+
+
+Catalyst Steps for Importing the CentosIns
+    Clicks on Workzone Button
+    Sleep    4s
+    Clicks on Inport By IP Button
+    Enters the IP Address of CentOS Box
+    Select the Operating System of the Box
+    Input the User Name for IP
+    Choose The Authentication Type as Pem File
+    Upload the PEM File for Import By IP
+    Clicks on Import Button to Import an Instance
+    Clicks on Import Close Button
+
+
+
+Clicks on NewBtton
+    Wait Until Keyword Succeeds    1 minute    1 seconds    Click Element    xpath=.//*[@id='l3']/div/div/div/div/div[1]/div/div/button
+
+Clicks on Orchestration Tab
+    Wait Until Keyword Succeeds    1 minute    1 seconds    Click Element    xpath=.//*[@id='myTab3']/li[3]/a
+
+Clicks on Select Task Type
+    Wait Until Keyword Succeeds    1 minute    1 seconds    Click Element    xpath=.//*[@id='s2id_taskType']/a/span
+
+Inputs the Task type
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${TASK TYPE1}
+    Sleep    1s
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+
+Enters the Task Name of Chef
+    Input Text    id=chefTaskName    ${TASK NAME}
+
+Choose the Nodes
+    Wait Until Keyword Succeeds    1 minute    1 seconds    Click Element    xpath=.//*[@id='selectedNodesChefTask']/li/label
+
+Asign Runlist with CookBooks
+    Wait Until Keyword Succeeds    1 minute    1 seconds    Click Element    xpath=.//*[@id='cookbooksrecipesList']/option[text()='${RUNLIST2}']
+    Click Element    id=btnaddToRunlist
+    Sleep    1s
+
+Clicks on Save Task Button of Task
+    Wait Until Keyword Succeeds    1 minute    1 seconds    Click Element    css=.btn.pull-left.btn-primary.btnSaveTask.marginleft5px
+
+Verification of the Task Name Created
+    Element Should Contain    xpath=.//*[@id='tableOrchestration']/tbody/tr/td[1]    ${TASK NAME}
+
+Verification of the Assigned Node for Name,IP Adress,Status
+    Click Element    xpath=.//*[@id='tableOrchestration']/tbody/tr/td[text()='${TASK NAME}']/../td[2]/a
+    Sleep    1s
+    Element Should Contain    xpath=.//*[@id='login-form']/fieldset/section/div/table/tbody/tr/td[1]    ${IP Centos}
+    Element Should Contain    xpath=.//*[@id='login-form']/fieldset/section/div/table/tbody/tr/td[2]    ${IP Centos}
+    Element Should Contain    xpath=.//*[@id='login-form']/fieldset/section/div/table/tbody/tr/td[3]    ${RUN}
+
+Clicks on the AssignNodes Cancel Button
+    Wait Until Keyword Succeeds    1 minute    1 seconds    Click Element    xpath=.//*[@id='login-form']/footer/button
+
+Verification of the Assigned Runlists
+    Wait Until Keyword Succeeds    1 minute    1 seconds    Click Element    xpath=.//*[@id='tableOrchestration']/tbody/tr/td[text()='${TASK NAME}']/../td[3]/a
+    Element Should Contain    xpath=.//*[@id='login-form']/fieldset/section/div/div/ul/li    ${RUNLIST3}
+
+Clicks on the AssignRunlist Cancel Button
+    Wait Until Keyword Succeeds    1 minute    1 seconds    Click Element    xpath=.//*[@id='assignedRunlist']/div/div/div[1]/button
+
+Clicks on Execute Button of the Task and verify task completion
+    Click Element    xpath=.//*[@id='tableOrchestration']/tbody/tr/td[text()='${TASK NAME}']/../td[4]/a 
+    Sleep    15s
+    Wait Until Page Contains    Task execution success
+    Click Element    xpath=.//*[@id='assignedExecute']/div/div/div[1]/button
+
+Clicks on History Button
+    Click Element    xpath=.//*[@id='tableOrchestration']/tbody/tr/td[text()='${TASK NAME}']/../td[5]/a
+
+Verify the Status from Task History
+    ${TASK HISTORY}=    Get Element Attribute    xpath=.//*[@id='tablehistoryTask']/tbody/tr[1]/td[3]/img@title
+    Log    ${TASK HISTORY}
+    Should Be Equal    ${TASK HISTORY}    ${SATSSYY}
+    Click Element    xpath=.//*[@id='assignedTaskHistory']/div/div/div[1]/Button

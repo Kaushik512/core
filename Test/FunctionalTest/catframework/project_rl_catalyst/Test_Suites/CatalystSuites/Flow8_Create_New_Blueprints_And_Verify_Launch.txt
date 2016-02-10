@@ -1,0 +1,296 @@
+*** Settings ***
+Documentation     Providers_VMImage_setup_Flow.txt
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
+Resource           ${CATALYST ACTION}/Design_Create_Launch_Providers_Template.txt
+Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
+
+
+
+
+
+*** Test Cases ***
+Catalyst Validation of BlueprintPage(AWS Provider)               #AWS Blueprint ubuntu and centos
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Form validation of Blueprint
+    Catalyst Logout                                          
+    [Teardown]     Close Browser
+
+
+
+Catalyst CENT OS Blueprint Create Setup and create successive blueprint and deletion(AWS Provider)
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Choose Template and Save Setup of CentOS Blueprint
+    Sleep    2s
+    Catalyst Creation of New Blueprint and Delete
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+    
+
+
+Catalyst CENT OS Instance Launch Blueprint Setup(AWS Provider)
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Sleep    3s
+    CentOS Blueprint Launched and verify IP,Status,Chef,SSH,Stop,BootStrap          
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst Inspect Functionality after Bootstrap Setup(AWS Provider)
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Sleep    3s
+    Catalyst Inspect Functionality Setup
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+
+Catalyst CENT OS Instance CHEFCLIENT setup(AWS Provider)
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst CHEF CLIENT Action on CentOS Instance
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst CENT OS Instance SSH setup(AWS Provider)
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst SSH Action on CentOS Instance
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst CENT OS Instance STOP setup(AWS Provider)
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst STOP Action on CentOS Instance
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst CENT OS EDIT NAME setup(AWS Provider)
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst EDIT Instance Name of CentOS Instance
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst CENT OS INSTANCE CONTROL PANEL setup(AWS Provider)
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catlayst verfication of CentOS Instance Stop Setup and Disable
+    Catalyst Logout                      
+    [Teardown]     Close Browser    
+
+
+Cent OS Instance Grid View of the Stopped Instance and Restart,SSH,Chef Run,Start(AWS Provider)
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Grid View Verify Start ,Stop ,SSH ,Chef ,Client ,Log Setup
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+Cent OS Instance Delete Setup(AWS Provider)
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst CentOS Deleete the Instance Setup
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+
+
+
+
+Catalyst UBUNTU Create Blueprint and Save Setup(AWS Provider)
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Choose Template and Save Setup for UBUNTU
+    Sleep    2s    
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst UBUNTU Launch Blueprint(AWS Provider)
+    [Tags]       Sanity               ubuntu1
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Sleep    3s
+    Ubuntu Blueprint Launched and verify the IP,Status,Chef,SSH,Stop,BootStrap
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+
+Catalyst UBUNTU Instance CHEFCLIENT setup(AWS Provider)
+    [Tags]       Sanity               ubuntu
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst CHEFCLIENT Action on Ubuntu Instance
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+Catalyst UBUNTU Instance SSH setup(AWS Provider)
+    [Tags]       Sanity               ubuntu
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst SSH Action on the Ubuntu Instance
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+Catalyst UBUNTU Instance STOP setup(AWS Provider)
+    [Tags]       Sanity               ubuntu
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst STOP Action on the Ubuntu Instance
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+Catalyst UBUNTU Instance EDIT NAME setup(AWS Provider)
+    [Tags]       Sanity               ubuntu
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst EDIT Name of Ubuntu Instance
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst UBUNTU INSTANCE CONTROL PANEL setup(AWS Provider)
+    [Tags]       Sanity               ubuntu
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catlayst verfication of Instance Stop Setup and Disable of Ubuntu
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+Ubuntu Instance Grid View of Stopped Instance and Restart,SSH,Chef Run,Start(AWS Provider)
+    [Tags]       Sanity               ubuntu
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Grid View Verify Start ,Stop ,SSH ,Chef ,Client ,Log Setup of Ubuntu
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+Ubuntu OS Instance Delete Setup(AWS Provider)
+    [Tags]       Sanity               ubuntu
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst ubuntu OS Deleete the Instance Setup
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+#AZURE Blueprint windpws and ubuntu
+Catalyst Validation of BlueprintPage(AZURE Provider)               #AZURE Blueprint ubuntu and windows
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Form validation of Azure Blueprint
+    Catalyst Logout                                          
+    [Teardown]     Close Browser
+
+
+Catalyst ubuntu Blueprint Create Setup and create successive blueprint and deletion(Azure Provider)
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Choose Template and Save Setup of ubuntu Blueprint for azure
+    Sleep    2s
+    Catalyst Creation of Azure Ubuntu New Blueprint and Delete
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+Catalyst Ubuntu Instance Launch Blueprint Setup(Azure Provider)
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Sleep    3s
+    Ubuntu Blueprint Launched and verify IP,Status,Chef,SSH,Stop,BootStrap of azure
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst Inspect Functionality after Bootstrap Setup(AZURE Provider)
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Sleep    3s
+    Catalyst Inspect Functionality Setup for Azure
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+Catalyst Ubuntu Instance CHEFCLIENT setup(AZURE Provider)
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst CHEF CLIENT Action on Ubuntu Instance of Azure
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+Catalyst Ubuntu Instance SSH setup(AZURE Provider)
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst SSH Action on Ubuntu Azure Instance
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst Ubuntu Instance STOP setup(AZURE Provider)
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst STOP Action on Ubuntu Instance of Azure
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+Catalyst Ubuntu EDIT NAME setup(AZURE Provider)
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst EDIT Instance Name of Ubuntu Instance of Azure
+    Catalyst Logout                      
+    [Teardown]     Close Browser

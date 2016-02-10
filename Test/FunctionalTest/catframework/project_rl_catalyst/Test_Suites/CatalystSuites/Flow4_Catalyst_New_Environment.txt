@@ -1,0 +1,113 @@
+*** Settings ***
+Documentation     Environments_setup_Flow.txt
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${CATALYST ACTION}/New_Environment_Creation.txt
+Resource           ${CATALYST ACTION}/DevOps_Setup_Action_Steps.txt
+Resource           ${CATALYST ACTION}/Design_Create_Launch_Providers_Template.txt
+Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
+
+
+*** Test Cases ***
+Catalyst Validation of Environments Page
+    [Tags]       Sanity               Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Test Validation of Creation of New Environments         
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst new Environments setup
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Addition and Creation of New Envirorments Setup           
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst Edit Environment setup
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Edit the Environment setup           
+    Catalyst Logout                      
+    Teardown]     Close Browser
+
+
+
+
+
+Catalyst Unique Environment Validation
+    [Tags]       Sanity               Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Unique Environment Validation
+    Catalyst Logout                      
+    [Teardown]     Close Browser
+
+
+
+Catalyst Adding New Envirornments to the Chef          
+    [Tags]       Sanity           Settings
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Addition of New Environments
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+
+Catalyst Import a Node From ConfigManagement(Chef) in to the Environment
+    [Tags]       Sanity       Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Import a Node from Config Management
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+
+
+Catalyst Verify Node Imported from Config Management(Chef Server) & Delete
+    [Tags]       Sanity       Smoke
+#    Catalyst Login
+    Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    Catalyst Verify and Delete the InportedNode from Environment
+    Catalyst Logout
+    [Teardown]     Close Browser
+
+
+
+
+
+#-Catalyst Activation of User Created Envirornments           #from chef server
+    #-[Tags]       Sanity       ps
+#    Catalyst Login
+    #-Catalyst User "${ORG ADMIN USER}" logs in with password "${ORG ADMIN PASSWORD}"
+    #-Catalyst Activation of Environments in projects
+    #-Catalyst Logout
+    #-[Teardown]     Close Browser
+
+
+#-Catalyst import chef server nodes            #from chef server
+    #-[Tags]       Sanity       ps
+#    Catalyst Login
+    #-Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    #-Chef server nodes import
+    #-Catalyst Logout
+    #-[Teardown]     Close Browser
+
+
+
+#-Catalyst new edit project setup
+    #-[Tags]       Sanity               Smoke
+#    Catalyst Login
+    #-Catalyst User "${VALID USER}" logs in with password "${VALID PASSWORD}"
+    #-Catalyst Edit the Project Setup            
+    #-Catalyst Logout                      
+    #-[Teardown]     Close Browser

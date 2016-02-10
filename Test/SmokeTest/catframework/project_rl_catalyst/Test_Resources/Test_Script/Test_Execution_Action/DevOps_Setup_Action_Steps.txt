@@ -1,0 +1,74 @@
+*** Settings ***
+Documentation      A resource file with reusable keywords and variables.
+...
+...                This file is part of a prototype automated test suite designed to
+...                test web application products built on top of the SLZ platform.
+...
+
+Library            Selenium2Library
+Library            String
+Library            Collections
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${CATALYST ACTION}/Organization_Setup_Action_Steps.txt
+
+*** Variables ***
+
+*** Keywords ***
+Create New Chef Server
+    Clicks on Settings
+    Clicks on DevOps Setup menu
+    Clicks on Config Management menu
+    Clicks on New button to Create New Config Management
+    Enters config management name
+    Enters config management user name
+    Select organization for config management
+    Enters config management URL
+    Upload user Pem File
+    Upload Validator Pem File
+    Upload Validator Knife File
+    Clicks on Save button to save the Chef server
+
+
+Clicks on DevOps Setup menu
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//a[contains(text(),'DevOps Setup')]
+    Click Element    xpath=//a[contains(text(),'DevOps Setup')]
+
+
+Clicks on Config Management menu
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible       xpath=//a[contains(text(),'Chef Server')]
+    Click Element    xpath=//a[contains(text(),'Chef Server')]
+
+    
+Clicks on New button to Create New Config Management
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       link=New
+    Click Element    css=#newConfig
+
+
+Enters config management name
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       id=configname
+    Input Text     id=configname      ${CONFIG MANAGEMENT NAME}
+
+Enters config management user name
+    Wait Until Keyword Succeeds    1 minute     1 seconds     Input Text     id=loginname      ${CONFIG MANAGEMENT USER NAME}
+
+Select organization for config management
+    Select From List     id=orgname      ${ORGANIZATION NAME}
+
+Enters config management URL
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Input Text     id=url      ${CONFIG MANAGEMENT URL}
+
+Upload user Pem File
+    Choose File     id=userpemfile     ${USERPEMFILE}
+
+Upload Validator Pem File
+    Choose File     id=validatorpemfile    ${VALIDATORPEMFILE}
+
+Upload Validator Knife File
+    Choose File     id=kniferbfile        ${KNIFERBFILE}
+
+Clicks on Save button to save the Chef server
+    Click Element    css=div.btn-group.pull-right > button
+
+  

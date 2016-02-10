@@ -1,0 +1,486 @@
+*** Settings ***
+Documentation     A resource file with test data input by the user
+...
+...               This file is part of a prototype automated test suite designed to
+...               test web application products built on top of the SLZ platform.
+...
+...
+Resource           catalyst.txt
+
+
+*** Variables ***
+${BROWSER TYPE}                  firefox 
+${ENVIRONMENT SERVER}             http://d4d.rlcatalyst.com/public/login.html
+
+
+${height}             768
+${width}           1366
+${ENV}                 QA.txt
+${VALID USER}             superadmin
+${VALID PASSWORD}         superadmin@123
+${ORGANIZATION NAME}         Smoke_Rel_Org
+${ORGANIZATION DOMAIN NAME}          www.relevancelab.com
+${ORG ADMIN USER}               smoke_admin
+${ORG ADMIN PASSWORD}           smoke_admin
+${ORGADMN EMAILADD}             relevancelab@gmail.com
+${BUSINESS GROUP NAME1}           Digi_learning
+${BUSINESS GROUP NAME2}           SecurityBG
+${PROJECT NAME1}                  Scholastic
+${PROJECT NAME2}                  Jira-Catalyst
+${PROJECT DESCRIPTION}           Catalyst product automation Description
+${ENVIRONMENT NAME}              Dev
+${CONFIG MANAGEMENT NAME}             smokechef
+${CONFIG MANAGEMENT USER NAME}         jagadeesh12
+${CONFIG MANAGEMENT URL}         https://api.opscode.com/organizations/jm012
+${INSTANCE STARTED}        Instance Started
+${INSTANCE STOPPED}        Instance Stopped
+${RUNNING}            running
+${EXPECTED OS}       centos
+${MACHINE}         x86_64
+${TOTAL MEMORY}     604680kB
+${FREE MEMORY}      298024kB
+${AlreadyExistOrg}            Selected is already registered
+${IPTEXT}                   undefined
+${STATS}                    pending
+${STATSYY}                  Pending
+${STATS RUN}                running
+${VAR}            54.75.4.3
+${PRINTSTMT}            The Instance has an IP Address
+${SATSS}                         success
+${SATSSYY}                        Success
+${CENTOS STACK}          CentOS
+${ret}         0
+${APACHE COOKBOOK}            service_apache
+${GIT COOKBOOK}                     git
+${SERVER TIME COOKBOOK}            starter
+${DISABLED}           disabled
+${CENT OS}            Cent OS
+${UBUNTU OS}            ubuntu
+${SUITS}                stopped
+${UserName}             root
+
+
+${ROOT}                /home/ubuntu/Smoketest_pemfiles
+
+${USERPEMFILE}              ${ROOT}//jagadeesh12.pem
+${VALIDATORPEMFILE}      ${ROOT}//jm012-validator.pem
+${KNIFERBFILE}                ${ROOT}//knife.rb
+${CATALYSTPEM}                ${ROOT}//catalyst.pem
+${CAT_INSTANCES}              ${ROOT}//cat_instances.pem
+${TEMPLATE FILE}              ${ROOT}//CatalystStack.template
+${Goldendemo_pem}             ${ROOT}//GoldenDemo.pem
+
+
+${CLOUD TEMPTYPE}        CloudFormation
+${CLOUD TEMPNAME}        CloudTemp
+${CLOUD BLUEPRNTNAME}    CloudBP
+${USER INSTANCE NAME}    ubuntu
+
+
+${CENTOSIMG}                  ${ROOTPATH}//Images//centos.jpg
+${UBUNTUIMG}                  ${ROOTPATH}//Images//ubuntuu.jpg
+${APPICON}                    ${ROOTPATH}//Images//rel.jpg    
+${TEMPLTYPEICON}              ${ROOTPATH}//Images//index.jpg           
+${APACHEIMG}                  ${ROOTPATH}//Images//apache.jpg
+
+${RECIPE}                  recipe[apt]     		
+${RECIPE1}                 recipe[apt]
+
+${OPERATING SYSTEM}        Cent OS
+${CentosInstanceSize}      t1.micro
+${UbuntuInstanceSize}      t2.micro
+${BLUEPRINT NAME}          Apache-Centos
+${BLUEPRINT NAME1}         Ubuntu-Apache
+${NEW BLUEPRINT NAME}      ApacheNew-Edited
+${NEW UBUNTU BLUPRNT}      UbuntuNew-Edited
+${APPNAME}                 Catalyst              
+${APP URL}                 http://www.relevancelab.com
+${COOKBOOK NAME}            mongodb
+${TERMINAL USERNAME}       root
+${TASK TYPE}               Jenkins
+${TASK TYPE1}              Chef 
+${CHEF TASKNAME}           apache2deploy
+${SERVICE NAME}             MongoDB		
+${TEMP NME}                 Apac
+${REGION NAME}           US West 
+${VPC NAME}              vpc-b1f3ecd3
+${SUBNET NAME}           subnet-aed68ce8
+${Key_Pair}               cat_instances
+${SECRTY GRP1}                sg-c00ee1a5 | all_open
+${SECRTY GRP2}                sg-c06faca4 | HTTP&S_SG
+${SECRTY GRP3}                sg-038f4d67 | SSH_SG
+${SECRTY GRP4}                sg-ab6faccf | Tomcat
+
+
+
+${IP ADDRESS}             52.10.69.55
+${IP USERNAME}            root
+${IP APPNAME}             RelevanceApp
+${IP URL}                 http://www.google.com
+${REG}                    US West
+${CHEF BOOTSTRAP}         waiting
+${MACHINE STATS}           unknown
+${APPLICATION URL}        http://d4d.relevancelab.com
+${MAT STAT}                 x86_64
+${MAT MEM}                 604488kB
+${MAT FREEMEM}             80476kB
+${MAT OS}                  centos
+${MAT BOOTSTRAP}           success
+${MAT RUNLIST}             recipe[apt]
+${MAT RUNLIST1}            recipe[a],recipe[cron]
+${MAT OS1}                 ubuntu
+${UBUNTU MEM}              1016256kB
+${UBUNTU REC}              recipe[a],recipe[a],recipe[cron]
+${TEMPLATE TYPENAME}       SoftwareStack
+${random}                  adarsh
+${ADD}                     apache2              #tomcat-all
+${ACTBOOT1}                 Pending
+${ACTBOOT2}                 Success
+${IP Centos}                 52.24.178.71
+${AUTHN}                    Pem File 
+${NAME}                     Bootstrap
+${DUP MSG}                  An Instance with the same IP already exists.
+${NAME1}                    Chef-Client-Run
+${NAME2}                    SSH-Shell
+${TEAM1}                    Rel_Designer
+${TEAM DESCRPN1}            Designer of Catalyst
+${TEAM2}                    Rel_Consumer
+${TEAM DESCRPN2}            Consumer of Catalyst
+${Org_Admin1}               smoke_orgadmin2
+${Org_ Admin1_EMAIL_ID}     admin@gmail.com
+${Orgadmin1_PASSWD}         password1
+${Orgadmin1_CONFPASSWD}     password1
+${Org_Designer}             smoke_orgdes1
+${Org_Design_EMAIL_ID}      designer@gmail.com
+${Orgdesigner_PASSWD}       password1
+${Orgdesigner_CONFPASSWD}   password1
+${Org_Consumer}             smoke_orgcons1
+${Org_consumer_EMAIL_ID}    consumer@gmail.com
+${Orgconsumer_PASSWD}       password1
+${Orgconsumer_CONFPASSWD}   password1
+
+
+${EDIT_INSTANCE_NAME}       Instance_Centos
+${ERRORMESSAGE}             Please enter instance name
+${MORE INFO}                 SSH Terminal
+${NO MATCH}                 No matches found
+${ENVNAME}                  QA
+${NAMEOFINSTANCE}           Instance_Centos
+
+${IP Ubuntu}                54.68.147.50		
+${IP UBUNTUSERNAME}         ubuntu
+${EDIT_UBUNTU_INSTANCE_NAME}     Instance_Ubuntu
+
+${CENTOS NAME}              Instance_Centos		
+${UBUNTU NAME}              Instance_Ubuntu		
+${IP ADD UBUNTU}             54.68.147.50		
+${IP ADD CENTOS}             52.24.178.71 		
+${Proj1}                      Catalyst		
+${Proj2}                      Primary_Edu		
+${CookBkName}                apt
+${UbuntuUser}                 ubuntu
+${RUN}                       running
+
+${DESIGNER_NAME}            Designer01
+${DESIGNER_PASWD}           Designer01
+${CONSUMER_NAME}            Consumer01
+${CONSUMER_PASWD}           Consumer01
+
+#Provider
+${PROVIDER NAME}             smoke-Provider
+${PROVDR_Name}               AWSProvider
+${PROVIDERR}                 AWS
+${SECRET KEY}                  qm/j8lT0/IPc1P5ud8yujUSa61+QjqeyZ/jZkIff
+${ACCESS KEY}                  AKIAI3ETOOEFHJ62G2NQ
+${IMAGE NAME1}                 smoke_CentOS
+${IMAGE NAME2}                 smoke_ubuntu
+${IMAGE NAME3}                 smoke_Win08
+${IMAGE NAME4}                 smoke_Win2012
+${OPERATING SYSTEM1}           Cent OS
+${OPERATING SYSTEM2}           Ubuntu
+${OPERATING SYSTEM3}           Windows
+${IMAGE ID1}                   ami-b6bdde86
+${IMAGE ID2}                   ami-3d50120d
+${IMAGE ID3}                   ami-21732111
+${USER}                        superadmin
+${COOKBOOK NAME1}              apt
+${COOKBOOK NAME2}              apache2
+${SERVICE NAME1}               ApacheServ
+${ValidEditVMImage}            Windows 2008
+${Centos_IMAGE}                Centos6.6
+${Ubuntu_Image}                Ubuntu
+
+
+
+#${ValidateNotExistLDAP}             0564ghs
+#${LOG1}                        AdminRL15j
+#${LOG2}                        ConsmrRL15j                        
+#${LOG3}                        DesgnrRL15j
+
+${CATE1}                   AdminRL15j
+${CATE2}                   ConsmrRL15j
+${CATE3}                   DesgnrRL15j
+
+
+
+#Organization Name
+${Vaildate15ChrOrgName}            Relevancelabsinternationaltesting
+${VaildateBlankSpacesOrgName}       Relevance Labs
+${VaildateEmptyOrgName}            
+${VaildateSpecialChrOrgName}       RL&@Testing
+${VaildateAlreadyExistChrOrgName}  phoenixInc
+${VaildOrgName}                    07JulyOrg
+${VaildEditOrg}                    Relevance_Labs
+${VaildEditOrgDomainName}       https://www.relevancelab.com
+
+
+${Vaildate15ChrErrMsg}            limited to 15 chars
+${VaildateBlankSpacesErrMsg}      space(s) not allowed
+${VaildateEmptyErrMsg}            Required
+${VaildateSpecialChrErrMsg}       special chars not allowed
+${VaildateAlreadyExistErrMsg}     Selected is already registered
+${OrganizationMsg}                Relevance_Labs
+${OrganizationDomainMsg}        https://www.relevancelab.com
+
+
+#Environment Name
+${Vaildate15ChrEnvName}               RelevanceLabsEnvironmentname                   
+${VaildateBlankSpacesEnvName}         RL Env name
+${VaildateEmptyEnvName}
+${VaildateSpecialChrEnvName}           RL#@@f$%3d
+${VaildateAlreadyExistChrEnvName}       Dev  
+${VaildateNoOrgEName}                  RLdev                  
+${VaildEnvName1}                       Dev
+${VaildEnvName2}                       QTest
+${VaildEditEnvironment}                QA
+${EnV1}                                Dev
+${EnV2}                                QA
+${REQ}                                Required
+
+${Vaildate15ChrErrMsg}              limited to 15 chars            
+${VaildateBlankSpacesErrMsg}        space(s) not allowed
+${VaildateEmptyErrMsg}              Required
+${VaildateSpecialChrErrMsg}         special chars not allowed
+${VaildateAlreadyExistErrMsg}       Selected is already registered
+${VaildateNoOrgErrMsg}                 Required
+${EnvironmentMsg}                      QA
+${REQ1}                               Atleast one required
+${KeyNAME}                            GoldenDemo
+
+#Business Group Name 
+${Vaildate15ChrBGrpName}               RLTestBusinessGroup                   
+${VaildateBlankSpacesBGrpName}         RL Test BusinessGroup
+${VaildateEmptyBGrpName}
+${VaildateSpecialChrBGrpName}           RL#@@f$%3d
+${VaildateAlreadyExistChrBGrpName}       PhoenixEnv  
+${VaildateNoOrgBName}                    RL
+${VaildBGrpName1}                         TestBG1
+${VaildBGrpName2}                         TestBG2
+${VaildEditBusinessGroup}                 HealthSystems
+
+${Vaildate15ChrErrMsg}              limited to 15 chars            
+${VaildateBlankSpacesErrMsg}        space(s) not allowed
+${VaildateEmptyErrMsg}              Required
+${VaildateSpecialChrErrMsg}         special chars not allowed
+${VaildateAlreadyExistErrMsg}       Selected is already registered
+${VaildateNoOrgBErrMsg}             Required
+${BusinessGroupMsg}                 HealthSystems
+
+
+#Project Name
+${Vaildate15ChrProjName}               CatalystProjectTestingisGood                   
+${VaildateBlankSpacesProjName}         Catalyst Project
+${VaildateEmptyProjName}
+${VaildateSpecialChrProjName}           Cat#@@f$%3d
+#${VaildateAlreadyExistChrProjName}       PhoenixEnv  
+${VaildProjName1}                         07JulyProject1
+${VaildProjName2}                         07JulyProject2
+${VaildEditProject}                       Primary_Edu
+${VaildEditDescProject}             RelevanceLab DevOps Product
+${VaildNorgProErrMsg}               Required
+${VaildNoTeamErrMsg}                Atleast one required
+
+${Vaildate15ChrErrMsg}              limited to 15 chars            
+${VaildateBlankSpacesErrMsg}        space(s) not allowed
+${VaildateEmptyErrMsg}              Required
+${VaildateSpecialChrErrMsg}         special chars not allowed
+${VaildateAlreadyExistErrMsg}       Selected is already registered
+${ProjectMsg}                       Primary_Edu
+${ProjectEditDescMsg}               RelevanceLab DevOps Product
+
+
+#BreadCrumbs of Organization setup
+${ValidationOrgBreadCrumb}         SettingsOrganization SetupOrganizations
+${ValidationEnvBreadCrumb}         SettingsDevOps SetupEnvironments
+${ValidationBusGrpBreadCrumb}      SettingsOrganization SetupBusiness Groups
+${ValidationProjBreadCrumb}        SettingsOrganization SetupProjects
+
+#BreadCrumbs of Devops setup        
+${ValidationConfigMgmtBreadCrumb}     SettingsDevOps SetupConfig Management
+${ValidationDockerBreadCrumb}         SettingsDevOps SetupDocker
+${ValidationJenkinsBreadCrumb}        SettingsDevOps SetupJenkins
+
+#BreadCrumbs for Users Setup
+${ValidationUsersRolesBreadCrumb}    SettingsUsers SetupUser Roles    
+${ValidationUsersBreadCrumb}         SettingsUsers SetupUsers
+${ValidationTeamsBreadCrumb}         SettingsDevOps SetupUsers
+
+#BreadCrumbs for Templates Setup
+${ValidationTemplatesBreadCrumb}     SettingsGallery SetupTemplates
+${ValidationServiceBreadCrumb}       SettingsGallery SetupService Command
+
+#BreadCrumbs for Providers Setup
+${ValidationProvidersBreadCrumb}     SettingsDevOps SetupProviders
+${ValidationJiraBreadCrumb}          SettingsDevOps SetupJira
+${ValidationImageBreadCrumb}         SettingsDevOps SetupImage
+
+
+#Devops Config Mgmt
+${ValidateAlrdyExistConfigName}       RLChefServer
+${ValidateAlrdyExistOrgName}          Relevance_Labs
+${ValidateUserPemFilename}            catalyst.pem
+${ValidateValidatorPemFilename}       cat1-validator.pem
+${ValidateKnifeFilename}              Knife.rb
+${VaildEmptyURL}
+${VaildEmptyConfigname}
+${VaildEmptyUsername}
+${VaildEmptyValidatorname}
+${VaildEmptyKnifename}
+
+
+${ValidateAlrdyExistConfigNameErrMsg}    Selected is already registered
+${ValidateAlrdyExistOrgNameErrMsg}       Selected is already registered
+${VaildEmptyURLErrMsg}                   Please enter a valid Url
+${VaildEmptyConfignameErrMsg}           Required
+${VaildEmptyUsernameErrMsg}             Required
+${VaildEmptyValidatornameErrMsg}        Required
+${VaildEmptyKnifeErrMsg}                Required
+
+
+#Team Names
+${TEAMNAME1}                  smoke-QAteam
+${TEAMNAME2}                  Schlostic
+${TEAMDESCRIPTION}            Developes code
+${TEAMDESCRIPTION2}           Research on Project
+${VaildEmptyTeamName}
+${VaildEmptyUsers}
+${VaildEmptyProjects}
+${EDIT TEAMNAME}                   Schoolscast
+${EDIT DESCRIPTION}               Builds and Deployment
+${Vaildate15ChrTeamName}          ScholllasticTeameOrganizatn
+${VaildateBlankSpacesTeamName}    Schola Team 
+${VaildateSpecialChrTeamName}     Sch#21$$%#@
+
+
+${VPC}                        vpc-b1f3ecd3
+
+
+${VaildEmptyTeamNameErrMsg}           Required 
+${VaildEmptyUsersErrMsg}              Atleast one required
+${VaildEmptyProjectsErrMsg}           Atleast one required
+${Vaildate15ChrTeamErrMsg}            limited to 22 chars
+${VaildateTeamBlankSpacesErrMsg}       space(s) not allowed 
+${VaildateTeamSpecialChrErrMsg}        special chars not allowed  
+
+   
+#Users Setup
+${VaildateEmptyUserName} 
+${VaildateEmptyEmailName}
+${ValidAldyExistLogName}             userc
+${EDIT EMAIL}                        AdminDave@gmail.com
+${NEW USER}                           newipl
+
+${VaildateEmptyUserNameErrMsg}           Required    
+${VaildateEmptyEmailNameErrMsg}          Required
+${ValidNotLDAPExistErrMsg}              selected is NOT in LDAP.
+${ValidAldyExistLogNameErrMsg}          Selected is already registered
+
+
+#Gallery Setup
+${Template Type}                         Chef
+${VaildEmptyTemplateName}
+${Vaild15ChrTemplateName}                ReelvanceLabsTemplat
+${ValidTEditemplName}                    ApacRelevance
+${Vaild15ChrTempName}                    CatalystAutomation
+${VaildSpacesTEmpTyName}                 Catlsyt Auto
+${TEMPLATE NAME}                         Apache2
+${TEMP_NAME}                             Apache
+
+${VaildEmptyTemplateNameErrMsg}              Required
+${Vaild15ChrTemplateNameErrMsg}             limited to 15 chars
+${VaildOrGErrMsg}                           Required
+${VaildEmptyTempName}                       Required
+${Vaild15ChrTempErrMsg}                     limited to 15 chars
+${VaildBlankspErrMsg}                       space(s) not allowed
+
+
+#Service Setup
+${VaildEmptyServiceName}
+${Vaild15ChrServiceName}                        SQLLiteRelevance
+${ValidEditService}                              Apache2
+${VaildBlkSerName}                              Apache New
+${VaildSpclCharName}                            Apache@##$
+${Service Cookbook}                             service_apache
+
+${VaildEmptyServiceNameErrMsg}                  Required
+${Vaild15ChrServiceNameErrMsg}                  limited to 15 chars
+${VaildServiceErrMsg}                           special chars not allowed
+${VaildBlkServiceErrMsg}                        space(s) not allowed
+${VaildSpclCharErrMsg}                          special chars not allowed
+${VaildNoOrgErrMsg}                              Required
+
+
+#Jenkins Configuration 
+${VaildEmptyRefName}   
+${Vaild15ChrRefName}                        JenkinsConfiguration
+${VaildEmptyJenkinsURL} 
+${VaildEmptyUserID}      
+${VaildEmptyPassword}  
+
+
+
+${VaildEmptyRefNameErrMsg}                      Required
+${Vaild15ChrRefNameErrMsg}                      Required           
+${VaildEmptyJenkinsURLErrMsg}                   Please enter a valid Url
+${VaildEmptyUserIDErrMsg}                       Required
+${VaildEmptyPasswordErrMsg}                     Required
+${VaildNotSelectOrg}                            Required
+
+
+
+
+
+
+#IMPORT BY IP
+${TEMP NAMECENT}                     CentOS
+${CENTBLUEPRINT NAME}                CentOS
+${TEMP NAMEUBUN}                     UbuntuOS
+${UBUNBLUEPRINT NAME}                UbuntuOS
+
+
+
+
+${JENTASK NAME}            JenkinsJob
+${JENKINSNAME}            JenkinsRL
+${JENKINS URL}               http://jenkins.rlcatalyst.com
+${JENKINS USERID}         admin    
+${JENKINS PASSWORD}       admin@RL123
+${TASK NAME}              Task1
+${JENKINS SERVER}         JenkinsRL
+${DEF_JENKINS_SERVER}    PhoenixJenkins
+${JENKINS EDIT}           Jenkins
+${JJOB NAME}               testmail
+
+
+${Stack_Name}         RLStack
+${ORG_NAME}           Phoenix
+${BU_NAME}            PhoenixBG
+${Proj_Name}          PhoenixApp
+
+
+
+${Cheftask}      ChefTask
+
+${PHOENIX SERVER}             PhoenixChef
+${DATABAG NAME}               Testing
+${ID NAME}                    item1

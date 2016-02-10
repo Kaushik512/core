@@ -1,0 +1,1621 @@
+*** Settings ***
+Documentation      A resource file with reusable keywords and variables.
+...
+...                This file is part of a prototype automated test suite designed to
+...                test web application products built on top of the SLZ platform.
+...
+
+Library            Selenium2Library
+Library            String
+Library            Collections
+
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
+
+
+
+*** Variables ***
+
+*** Keywords ***
+Version Number and the Jenkins Buildnumber
+    Browser is opened to login catalyst
+    #Open Browser    ${ENVIRONMENT SERVER}     ${BROWSER TYPE}
+    Sleep    5s   
+    Store the Buildnumber
+
+
+
+Store the Buildnumber
+    ${JEN BUILDNUM}=    Get Text    xpath=.//*[@id='login']/footer/div[2]/p/span
+    Log    ${JEN BUILDNUM}
+
+
+Catalyst Login
+    Browser is opened to login catalyst
+    Enters catalyst User Name
+    Enters catalyst password
+    Clicks on Login button
+
+Catalyst Logout
+    Clicks on LogOut link
+
+
+Clicks on LogOut link
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='logout']/span/a/i
+    Focus    xpath=.//*[@id='logout']/span/a/i
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='logout']/span/a/i
+
+
+
+
+
+Catalyst AWS Cost Dashboard Verification
+    Clicks on Tracks Button
+    Sleep    8s
+    Clicks on AWS Cost Summary
+    Sleep    10s
+    Clicks on Left Panel Button
+    Sleep    2s
+    Selects the frame
+    Verfiy the NA in the Dashbaord
+    Verify Page contains Cost Usage for Month
+    Verify Page contains Cost Usage for Day
+    Verfiy Page contains Planned Cost 
+    #Verify the Cost of EC2 day
+    Verify Page contains Summary
+    Verify the Total Number of Running Instances
+    Verify Page contains Active Instance
+    Verify Page contains Security Groups
+    Verify Page contains EBS Volumes
+    #Verify Page contains EBS Snapshots
+    Verify Page contains S3 Buckets
+    Verify Page contains R53 Zone
+    Verify Page contains Elastic IP
+    #Verify Page contains I/O Traffic
+    Capture the Screen Shot of the Dashboard
+    Sleep    1s
+    Unselect Frame
+
+
+
+Catalyst Total AWS Cost Dashboard Verification
+    Clicks on Tracks Button
+    Sleep    8s
+    Clicks on AWS Cost total cost
+    Sleep    10s
+    Clicks on Left Panel Button
+    Sleep    2s
+    Selects the frame
+    Verfiy the total cost being displayed
+    Verfiy the Total EC2 Cost data
+    Verify the pie graph for Cost by region
+    Verify the pie graph for Cost by Tag
+    Capture the Screen Shot of the Dashboard
+    Sleep    1s
+    Unselect Frame
+
+
+
+
+
+Clicks on AWS Cost total cost
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Click Element    xpath=//a[text()='AWS Cost']
+
+
+Verfiy the total cost being displayed
+    Page Should Contain    Total Cost
+    Selects the frame
+    ${Total cost}=    Get Text    xpath=.//*[@id='container']/div/ul/li[3]/div/h2
+    Log    ${Total cost}
+    Run Keyword If    '${Total cost}' == '${NA}' or '${Total cost}' == '${VALUE}' or '${Total cost}' == '${NA3}'
+    ...    Fail    Dashboard has no Total Cost data
+    ...    ELSE
+    ...    Log     Dashboard has Total Cost Data
+
+
+Verfiy the Total EC2 Cost data
+    Page Should Contain    Total EC2 Cost
+    Selects the frame
+    ${Total EC2}=    Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/h2
+    Log    ${Total EC2}
+    Run Keyword If    '${Total EC2}' == '${NA}' or '${Total EC2}' == '${VALUE}' or '${Total EC2}' == '${NA3}'
+    ...    Fail    Dashboard has no Total EC2 Cost data
+    ...    ELSE
+    ...    Log     Dashboard has Total EC2 Cost Data    
+
+Verify the pie graph for Cost by region
+    Page Should Contain    Cost by region
+    Selects the frame
+    ${Graph Region}=    Get Text    xpath=//div[@data-title='Cost by region']
+    Log    ${Graph Region}
+    
+Verify the pie graph for Cost by Tag
+    Page Should Contain    Cost by tag(EC2)
+    Selects the frame
+    ${Graph Tag}=    Get Text    xpath=//div[@data-title='Cost by tag(EC2)']
+    Log    ${Graph Tag}    
+
+
+
+Catalyst AWS Cost NCalifornia Automation
+    Clicks on Tracks Button
+    Sleep    8s
+    Sleep    2s
+    Clicks on NCalifornia link
+    Sleep    10s
+    Clicks on Left Panel Button
+    Sleep    2s
+    Selects the frame
+    Verfiy the NA in the Dashbaord
+    #Verify Page contains Cost Usage for Month
+    Verify Page contains Ncalifornia Cost Usage for Day
+    Verify Page contains I/O Traffic
+    #Verify the Cost of EC2 day
+    Verify Page contains Ncalifornia Summary
+    Verify the Total Number of Ncal Running Instances
+    Verify Page contains NcalActive Instance
+    Verify Page contains NcalSecurity Groups
+    Verify Page contains Ncal EBS Volumes
+    #Verify Page contains EBS Snapshots
+    Verify Page contains Ncal S3 Buckets
+    Verify Page contains Ncal R53 Zone
+    Verify Page contains Elastic IP
+    Capture the Screen Shot of the Dashboard
+    Sleep    1s
+    Unselect Frame    
+
+
+Catalyst AWS Cost Oregon Automation
+    Clicks on Tracks Button
+    Sleep    8s
+    Sleep    2s
+    Clicks on Oregon link
+    Sleep    10s
+    Clicks on Left Panel Button
+    Sleep    2s
+    Selects the frame
+    Verfiy the NA in the Dashbaord
+    #Verify Page contains Cost Usage for Month
+    Verify Page contains Ncalifornia Cost Usage for Day
+    Verify Page contains I/O Traffic
+    #Verify the Cost of EC2 day
+    Verify Page contains Ncalifornia Summary
+    Verify the Total Number of Ncal Running Instances
+    Verify Page contains NcalActive Instance
+    Verify Page contains NcalSecurity Groups
+    Verify Page contains Ncal EBS Volumes
+    #Verify Page contains EBS Snapshots
+    Verify Page contains Ncal S3 Buckets
+    Verify Page contains Ncal R53 Zone
+    Verify Page contains Elastic IP
+    Capture the Screen Shot of the Dashboard
+    Sleep    1s
+    Unselect Frame    
+
+Catalyst AWS Cost NVirginia Automation
+    Clicks on Tracks Button
+    Sleep    8s
+    Sleep    2s
+    Clicks on Virginia link
+    Sleep    10s
+    Clicks on Left Panel Button
+    Sleep    2s
+    Selects the frame
+    Verfiy the NA in the Dashbaord
+    #Verify Page contains Cost Usage for Month
+    Verify Page contains Ncalifornia Cost Usage for Day
+    Verify Page contains I/O Traffic
+    #Verify the Cost of EC2 day
+    Verify Page contains Ncalifornia Summary
+    Verify the Total Number of Ncal Running Instances
+    Verify Page contains NcalActive Instance
+    Verify Page contains NcalSecurity Groups
+    Verify Page contains Ncal EBS Volumes
+    #Verify Page contains EBS Snapshots
+    Verify Page contains Ncal S3 Buckets
+    Verify Page contains Ncal R53 Zone
+    Verify Page contains Elastic IP
+    Capture the Screen Shot of the Dashboard
+    Sleep    1s
+    Unselect Frame        
+
+
+Clicks on Virginia link
+    Click Element    xpath=//a[text()='N.Virginia']
+
+
+Clicks on Oregon link
+    Click Element    xpath=//a[text()='Oregon']
+
+
+Clicks on NCalifornia link
+    Click Element    xpath=//a[text()='N.California']
+
+Verify Page contains Ncalifornia Cost Usage for Day
+    Page Should Contain    Cost Usage for Day
+    Selects the frame
+    ${NCost day}=    Get Text    xpath=.//*[@id='container']/div/ul/li[3]/div/h2
+    Log    ${NCost day}
+    Run Keyword If    '${NCost day}' == '${NA}'
+    ...    Fail    Dashboard has no Cost Usage for Day Data
+    ...    ELSE
+    ...    Log     Dashboard has Cost Usage for Day Data
+
+
+
+Verfiy the NA in the Dashbaord
+    Current Frame Should Not Contain    NA
+
+Catalyst AWS Usage Dashboard Verification
+    Clicks on Tracks Button
+    Sleep    4s
+    Clicks on AWS Usage Link
+    Sleep    10s
+    Clicks on usage summary link
+    Sleep    1s
+    Clicks on Left Panel Button
+    Sleep    3s
+    Selects the frame
+    Verify the Active Instances of Usage Summary
+    Verfiy the page contains Summary of Virginia
+    Verfiy the page contains Summary of Oregon
+    Verfiy the page contains Summary of California
+    Capture the Screen Shot of the Dashboard
+    Sleep    1s
+    Unselect Frame
+
+
+Catalyst AWS USage NCalifornia dashboard verification
+    Clicks on Tracks Button
+    Sleep    4s
+    Clicks on AWS Usage Link
+    Sleep    10s
+    Clicks on Usage Ncalifornia link
+    Sleep    1s
+    Clicks on Left Panel Button
+    Sleep    3s
+    Selects the frame
+    Verify the Active Instances in Ncalifornia
+    Verify the under utililzed instances
+    Verfiy th Average CPU Usage
+    Verfiy th Average Network IO
+    Verfiy th Average Disk RW
+    Verfiy the High Usage 
+    Verfiy the Low Usage 
+    Capture the Screen Shot of the Dashboard
+    Sleep    1s
+    Unselect Frame
+
+
+
+Catalyst AWS USage Oregon dashboard verification
+    Clicks on Tracks Button
+    Sleep    4s
+    Clicks on AWS Usage Link
+    Sleep    10s
+    Clicks on Usage Oregon link
+    Sleep    1s
+    Clicks on Left Panel Button
+    Sleep    3s
+    Selects the frame
+    Verify the Active Instances in Ncalifornia
+    Verify the under utililzed instances
+    Verfiy th Average CPU Usage
+    Verfiy th Average Network IO
+    Verfiy th Average Disk RW
+    Verfiy the High Usage 
+    Verfiy the Low Usage 
+    Capture the Screen Shot of the Dashboard
+    Sleep    1s
+    Unselect Frame    
+
+Catalyst AWS USage N.Virginia verification
+    Clicks on Tracks Button
+    Sleep    4s
+    Clicks on AWS Usage Link
+    Sleep    10s
+    Clicks on N.Virginia link
+    Sleep    1s
+    Clicks on Left Panel Button
+    Sleep    3s
+    Selects the frame
+    Verify the Active Instances in Ncalifornia
+    Verify the under utililzed instances
+    Verfiy th Average CPU Usage
+    Verfiy th Average Network IO
+    Verfiy th Average Disk RW
+    Verfiy the High Usage 
+    Verfiy the Low Usage 
+    Capture the Screen Shot of the Dashboard
+    Sleep    1s
+    Unselect Frame    
+
+
+
+Catalyst Uptime monitoring dashboard verification
+    Clicks on Tracks Button
+    Sleep    4s
+    Clicks on Monitoring link
+    Sleep    1s
+    Clicks on Uptime Dashboard
+    Sleep    5s
+    Clicks on Left Panel Button
+    Sleep    3s
+    Verify page contains Server Status
+    Verify page contains Last running since
+    Verify page contains Last down since
+    Verify page contains Server Status stats
+    Verify page contains Overall uptime 24hrs
+    Verify page contains Overall uptime 7 days
+    Verify page contains Overall Uptime 30 days
+    Capture the Screen Shot of the Dashboard
+    Sleep    1s
+    Unselect Frame  
+    
+   
+
+
+Verify page contains Overall uptime 24hrs
+    ${hours}=    Get Text    xpath=.//*[@id='container']/div/ul/li[8]/div/h1
+    Log    ${hours}
+    Should Be Equal    ${hours}    Overall Uptime(24 hrs)
+
+
+Verify page contains Overall uptime 7 days
+    ${days}=    Get Text    xpath=.//*[@id='container']/div/ul/li[9]/div/h1
+    Log    ${days}    
+    Should Be Equal    ${days}    Overall Uptime(7 days)
+
+
+
+Verify page contains Overall Uptime 30 days
+    ${more days}=    Get Text    xpath=.//*[@id='container']/div/ul/li[10]/div/h1
+    Log    ${more days}
+    Should Be Equal    ${more days}    Overall Uptime(30 days)   
+
+
+
+Verify page contains Server Status
+    Selects the frame
+    ${Server}=    Get Text    xpath=.//*[@id='container']/div/ul/li[3]/div/h1
+    Log    ${Server}
+    Should Be Equal    ${Server}    Server status
+    Page Should Contain    D4D
+    
+    #${d4d}=    Get Text    xpath=.//*[@id='container']/div/ul/li[3]/div/ul/li[1]/span
+    #Log    ${d4d}
+    #Should Be Equal    ${d4d}    D4D
+    #Sleep    2s
+    #${super}=    Get Text    xpath=.//*[@id='container']/div/ul/li[3]/div/ul/li[2]/span
+    #Log    ${super}
+    #Should Be Equal    ${super}    SuperCat
+    #Sleep    3s
+    #${ngnx}=    Get Text    xpath=.//*[@id='container']/div/ul/li[3]/div/ul/li[3]/span
+    #Log    ${ngnx}
+    #Should Be Equal    ${ngnx}    NGINX
+    #Sleep    2s
+    #${cat2}=    Get Text    xpath=.//*[@id='container']/div/ul/li[3]/div/ul/li[4]/span
+    #Log    ${cat2}
+    #Should Be Equal    ${cat2}    Cat2
+    #Sleep    2s
+    #${cat3}=    Get Text    xpath=.//*[@id='container']/div/ul/li[3]/div/ul/li[5]/span
+    #Log    ${cat3}
+    #Should Be Equal    ${cat3}    Cat3
+    #Sleep    2s
+    #${Eval}=    Get Text    xpath=.//*[@id='container']/div/ul/li[3]/div/ul/li[6]/span
+    #Log    ${Eval}
+    #Should Be Equal    ${Eval}    Eval Setup
+
+Verify page contains Last running since
+    Selects the frame
+    ${Running Ins}=    Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/h1
+    Log    ${Running Ins}
+    Should Be Equal    ${Running Ins}    Last running since 
+    Page Should Contain    Last running since
+    #${Since}=    Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[1]/span[2]
+    #Log    ${Since}
+    #${d4d1}=    Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[1]/span[1]
+    #Log    ${d4d1}
+    #Should Be Equal    ${d4d1}    D4D
+
+Verify page contains Last down since
+    Selects the frame
+    ${down}=    Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/h1
+    Log    ${down}
+    Should Be Equal    ${down}    Last down since
+    Page Should Contain    Last down since
+
+
+    #${Eval set}=    Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[6]/span[2]
+    #Log    ${Eval set}
+    #${Eval1}=    Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[6]/span[1]
+    #Log    ${Eval1}
+    #Should Be Equal    ${Eval1}    Eval Setup
+
+
+Verify page contains Server Status stats
+    Selects the frame
+    ${Stats Server}=    Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/h1
+    Log    ${Stats Server}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Clicks on Uptime Dashboard
+    Click Element    xpath=//a[text()='Uptime']
+
+
+
+
+
+Clicks on N.Virginia link
+    Click Element    xpath=(//a[text()='N.Virginia'])[2]
+
+Verfiy the High Usage
+    Page Should Contain    High Usage
+   
+Clicks on Usage Oregon link
+    Click Element    xpath=(//a[text()='Oregon'])[2]    
+
+Verfiy the Low Usage
+    Page Should Contain    Low Usage
+    #Selects the frame
+    #${Low}=    Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/div/div[1]/div/div[1]
+    #Log    ${Low}
+
+
+
+Verfiy th Average CPU Usage
+    Page Should Contain    Average CPU Usage
+    Selects the frame
+    ${CPU Use}=    Get Text    xpath=.//*[@id='container']/div/ul/li[7]/div/h2
+    Log    ${CPU Use}
+    ${Actve CPU}=    Get Length    ${CPU Use}
+    Run Keyword If    '${Actve CPU}' == '${VALUE}'
+    ...    Fail    Dashboard has no Average CPU Usage califonia Data
+    ...    ELSE
+    ...    Log     Dashboard has Average CPU Usage california Data  
+
+
+Verfiy th Average Network IO
+    Page Should Contain    Average Network IO
+    Selects the frame
+    ${CPU Net}=    Get Text    xpath=.//*[@id='container']/div/ul/li[8]/div/h2
+    Log    ${CPU Net}
+    ${Netwrk}=    Get Length    ${CPU Net}
+    Run Keyword If    '${Netwrk}' == '${VALUE}'
+    ...    Fail    Dashboard has no Average Network califonia Data
+    ...    ELSE
+    ...    Log     Dashboard has Average Network california Data  
+
+
+Verfiy th Average Disk RW
+    Page Should Contain    Average Disk RW
+    Selects the frame
+    ${CPU Disk}=    Get Text    xpath=.//*[@id='container']/div/ul/li[9]/div/h2
+    Log    ${CPU Disk}
+    ${Actve disk1}=    Get Length    ${CPU Disk}
+    Run Keyword If    '${Actve disk1}' == '${VALUE}'
+    ...    Fail    Dashboard has no Average CPU Usage califonia Data
+    ...    ELSE
+    ...    Log     Dashboard has Average CPU Usage california Data  
+
+
+
+
+
+
+
+
+
+    
+
+Clicks on Usage Ncalifornia link
+    Click Element    xpath=(//a[text()='N.California'])[2]
+
+
+Verify the Active Instances in Ncalifornia
+    Page Should Contain    Active Instances
+    Selects the frame
+    ${Act InsSum1}=    Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/h2
+    Log    ${Act InsSum1}
+    ${Actve InstlengthSumn}=    Get Length    ${Act InsSum1}
+    Run Keyword If    '${Actve InstlengthSumn}' == '${VALUE}'
+    ...    Fail    Dashboard has no Active Instances califonia Data
+    ...    ELSE
+    ...    Log     Dashboard has Active Instances california Data  
+    ${Usage Ncl}=    Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/h3
+    Log    ${Usage Ncl}
+
+
+Verify the under utililzed instances
+    Page Should Contain    Under-utilized Instances
+    Selects the frame
+    ${Act util1}=    Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/h2
+    Log    ${Act util1}
+    ${Actve InstlengthSumn1}=    Get Length    ${Act util1}
+    Run Keyword If    '${Actve InstlengthSumn1}' == '${VALUE}'
+    ...    Fail    Dashboard has no under utilized Instances califonia Data
+    ...    ELSE
+    ...    Log     Dashboard has under utilized Instances california Data  
+    ${Underutilized Int}=    Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/h3
+    Log    ${Underutilized Int}
+
+
+
+
+
+
+
+
+
+
+Verify the Active Instances of Usage Summary
+    Page Should Contain    Active Instances
+    Selects the frame
+    ${Act InsSum}=    Get Text    xpath=.//*[@id='container']/div/ul/li[3]/div/h2
+    Log    ${Act InsSum}
+    ${Actve InstlengthSum}=    Get Length    ${Act InsSum}
+    Run Keyword If    '${Actve InstlengthSum}' == '${VALUE}'
+    ...    Fail    Dashboard has no Active Instances Data
+    ...    ELSE
+    ...    Log     Dashboard has Active Instances Data    
+
+
+Verfiy the page contains Summary of Virginia
+    Page Should Contain    Summary of Virginia
+    Selects the frame
+    ${Virginia1}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[1]/span[1]
+    Log     ${Virginia1}
+    ${Virginia2}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[2]/span[1]
+    Log     ${Virginia2}
+    ${Virginia3}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[3]/span[1]
+    Log     ${Virginia3}
+    ${Virginia4}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[4]/span[1]
+    Log     ${Virginia4}
+    ${Virginia5}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[5]/span[1]
+    Log     ${Virginia5}
+
+
+    ${Act Virginia1}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[1]/span[2]
+    Log    ${Act Virginia1}
+    ${Run Vim1}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Length    ${Act Virginia1}
+    Run Keyword If    '${Run Vim1}' == '${VALUE}'
+    ...    Fail    Dashboard has no Active Instance Summary Data
+    ...    ELSE
+    ...    Log     Dashboard has Active Instance Summary Data
+    
+    ${Act Virginia2}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[2]/span[2]
+    Log    ${Act Virginia2}
+    ${Run Vim2}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Length    ${Act Virginia2}
+    Run Keyword If    '${Run Vim2}' == '${VALUE}'
+    ...    Fail    Dashboard has no utilized Instance Summary Data
+    ...    ELSE
+    ...    Log     Dashboard has utilized Instance Summary Data
+
+    ${Act Virginia3}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[3]/span[2]
+    Log    ${Act Virginia3}
+    ${Run Vim3}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Length    ${Act Virginia3}
+    Run Keyword If    '${Run Vim3}' == '${VALUE}'
+    ...    Fail    Dashboard has no avg cpu usage Data
+    ...    ELSE
+    ...    Log     Dashboard has avg cpu usage Data
+
+    ${Act Virginia4}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[4]/span[2]
+    Log    ${Act Virginia4}
+    ${Run Vim4}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Length    ${Act Virginia4}
+    Run Keyword If    '${Run Vim4}' == '${VALUE}'
+    ...    Fail    Dashboard has no network IO Data
+    ...    ELSE
+    ...    Log     Dashboard has network IO Data
+    
+    ${Act Virginia5}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[5]/span[2]
+    Log    ${Act Virginia5}
+    ${Run Vim5}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Length    ${Act Virginia5}
+    Run Keyword If    '${Run Vim5}' == '${VALUE}'
+    ...    Fail    Dashboard has no network IO Data
+    ...    ELSE
+    ...    Log     Dashboard has network IO Data
+
+
+Verfiy the page contains Summary of Oregon
+    Page Should Contain    Summary of Oregon
+    Selects the frame
+    Sleep    2s
+    Focus    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[1]/span[1]
+    ${Oregon1}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[1]/span[1]
+    Log     ${Oregon1}
+    Sleep    2s
+    Focus    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[2]/span[1]
+    ${Oregon2}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[2]/span[1]
+    Log     ${Oregon2}
+    Sleep    2s
+    Focus    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[3]/span[1]
+    ${Oregon3}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[3]/span[1]
+    Log     ${Oregon3}
+    Sleep    2s
+    Focus    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[4]/span[1]
+    ${Oregon4}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[4]/span[1]
+    Log     ${Oregon4}
+    Sleep    2s
+    Focus    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[5]/span[1]
+    ${Oregon5}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[5]/span[1]
+    Log     ${Oregon5}  
+    Sleep    2s
+
+    ${Act Oregon1}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[1]/span[2]
+    Log    ${Act Oregon1}
+    ${Run Ore1}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Length    ${Act Oregon1}
+    Run Keyword If    '${Run Ore1}' == '${VALUE}'
+    ...    Fail    Dashboard has no Active Instances Oregon Data
+    ...    ELSE
+    ...    Log     Dashboard has Active Instance Oregon Data
+
+    ${Act Oregon2}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[2]/span[2]
+    Log    ${Act Oregon2}
+    ${Run Ore2}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Length    ${Act Oregon2}
+    Run Keyword If    '${Run Ore2}' == '${VALUE}'
+    ...    Fail    Dashboard has no under utilized Instances Oregon Data
+    ...    ELSE
+    ...    Log     Dashboard has utilized Instances Oregon Data
+
+
+    ${Act Oregon3}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[3]/span[2]
+    Log    ${Act Oregon3}
+    ${Run Ore3}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Length    ${Act Oregon3}
+    Run Keyword If    '${Run Ore3}' == '${VALUE}'
+    ...    Fail    Dashboard has no CPU Usage Oregon Data
+    ...    ELSE
+    ...    Log     Dashboard has CPU Usage Oregon Data
+
+    ${Act Oregon4}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[4]/span[2]
+    Log    ${Act Oregon4}
+    ${Run Ore4}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Length    ${Act Oregon4}
+    Run Keyword If    '${Run Ore4}' == '${VALUE}'
+    ...    Fail    Dashboard has no Network IO Oregon Data
+    ...    ELSE
+    ...    Log     Dashboard has Network IO Oregon Data
+
+   ${Act Oregon5}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/ul/li[5]/span[2]
+    Log    ${Act Oregon5}
+    ${Run Ore5}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Length    ${Act Oregon5}
+    Run Keyword If    '${Run Ore5}' == '${VALUE}'
+    ...    Fail    Dashboard has no Disk IO Oregon Data
+    ...    ELSE
+    ...    Log     Dashboard has Disk IO Oregon Data
+
+
+Verfiy the page contains Summary of California
+    Page Should Contain    Summary of California
+    Selects the frame
+    ${Oregon1}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/ul/li[1]/span[1]
+    Log     ${Oregon1}
+    ${Oregon2}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/ul/li[2]/span[1]
+    Log     ${Oregon2}
+    ${Oregon3}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/ul/li[3]/span[1]
+    Log     ${Oregon3}
+    ${Oregon4}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/ul/li[4]/span[1]
+    Log     ${Oregon4}
+    ${Oregon5}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/ul/li[5]/span[1]
+    Log     ${Oregon5}
+
+    ${Act california1}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/ul/li[1]/span[2]
+    Log    ${Act california1}
+    ${Run cal1}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Length    ${Act california1}
+    Run Keyword If    '${Run cal1}' == '${VALUE}'
+    ...    Fail    Dashboard has no Active Instances california Data
+    ...    ELSE
+    ...    Log     Dashboard has Active Instance california Data
+
+    ${Act california2}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/ul/li[2]/span[2]
+    Log    ${Act california2}
+    ${Run cal2}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Length    ${Act california2}
+    Run Keyword If    '${Run cal2}' == '${VALUE}'
+    ...    Fail    Dashboard has no under utilized Instances california Data
+    ...    ELSE
+    ...    Log     Dashboard has utilized Instances california Data
+
+
+    ${Act california3}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/ul/li[3]/span[2]
+    Log    ${Act california3}
+    ${Run cal3}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Length    ${Act california3}
+    Run Keyword If    '${Run cal3}' == '${VALUE}'
+    ...    Fail    Dashboard has no CPU Usage california Data
+    ...    ELSE
+    ...    Log     Dashboard has CPU Usage california Data
+
+    ${Act california4}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/ul/li[4]/span[2]
+    Log    ${Act california4}
+    ${Run cal4}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Length    ${Act california4}
+    Run Keyword If    '${Run cal4}' == '${VALUE}'
+    ...    Fail    Dashboard has no Network IO california Data
+    ...    ELSE
+    ...    Log     Dashboard has Network IO california Data
+
+   ${Act california5}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/ul/li[5]/span[2]
+    Log    ${Act california5}
+    ${Run cal5}=    Wait Until Keyword Succeeds    1 minutes    1 seconds     Get Length    ${Act california5}
+    Run Keyword If    '${Run cal5}' == '${VALUE}'
+    ...    Fail    Dashboard has no Disk IO california Data
+    ...    ELSE
+    ...    Log     Dashboard has Disk IO california Data    
+
+
+
+
+
+
+
+
+
+
+
+#Verfiy the page contains Summary of Oregon
+    #Page Should Contain    Summary of Oregon
+    #Selects the frame
+
+#Verfiy the page contains Summary of California
+    #Page Should Contain    Summary of California
+    #Selects the frame
+
+
+Clicks on usage summary link
+    Click Element    xpath=(//a[text()='Summary'])[2]
+
+Catalyst System Monitoring Dashboard Verification
+    Clicks on Tracks Button
+    Sleep    4s
+    Clicks on Monitoring Link
+    Sleep    1s
+    Clicks on System Monitoring Link
+    Sleep    10s
+    Clicks on Left Panel Button
+    Sleep    40s
+    Verfiy page should not contain agent failed
+    Veridy page contains link
+    Verfiy page Contains click here
+    Verify Page Contains Ping
+    Verify Page Contains Traffic
+    Verify Page Contains DiskUse
+    Verify Page Contains Settings
+    Verify Page Contains Memory Used
+    Verify Page Contains Total Memory
+    Capture the Screen Shot of the Dashboard
+
+
+Catalyst Log Monitoring Dashboard Verification
+    Clicks on Tracks Button
+    Sleep    4s
+    Clicks on Monitoring Link
+    Sleep    1s
+    Clicks on Log Monitoring Link
+    Sleep    10s
+    Clicks on Left Panel Button
+    Sleep    20s
+    Verfiy page doesnot contain timeout
+    Verify the Element visibilty to check
+    Verfiy the Dashboard is displayed with Legend Running
+    #Verfiy the Page not contains no results
+    Capture the Screen Shot of the Dashboard
+    Verify Page Contains Access-Layer-Performance
+    Verify Page Contains Access-Layer-Uptime
+    Verify Page Contains Access-Layer-Response
+    Verify Page Contains Cat-Uptime
+    Verify Page Contains Cat-App-Usage
+    Verify Page Contains Cat-Bootstrap-Perday
+    Verify Page Contains Cat-LogLevel-Percent
+    Verify Page Contains Cat_Errors
+    Verify Page Contains Cat-Access-Errors
+    Capture the Screen Shot of the Dashboard
+    Sleep    1s
+    Unselect Frame
+ 
+
+Catalyst Log Monitoring Dashboard Visibility
+    Clicks on Tracks Button
+    Sleep    4s
+    Clicks on Monitoring Link
+    Sleep    1s
+    Clicks on Log Monitoring Link
+    Verify Page Contains Average Wiating,timestamp
+    Capture the Screen Shot of the Dashboard
+    Verify Page Contains Access-Layer-Performance
+    Verify Page Contains Access-Layer-Uptime
+    Verify Page Contains Access-Layer-Response
+    Verify Page Contains Cat-Uptime
+    Verify Page Contains Cat-App-Usage
+    Verify Page Contains Cat-Bootstrap-Perday
+    Verify Page Contains Cat-LogLevel-Percent
+    Verify Page Contains Cat_Errors
+    Verify Page Contains Cat-Access-Errors
+    Capture the Screen Shot of the Dashboard 
+    Sleep    1s
+    Unselect Frame  
+
+
+
+Catalyst Notifications Dashboard Verification
+    Clicks on Tracks Button
+    Sleep    4s
+    Clicks on Notifications link
+    Sleep    1s
+    Clicks on the Link to dashboard
+    Sleep    10s
+    Clicks on Left Panel Button
+    Sleep    10s
+    Selects the frame
+    Sleep    1s
+    Capture the Screen Shot of the Dashboard
+    Verify Page Contains Connected
+    Verify Page Contains CatsEye
+    Verify Page Contains Telemetry
+    Verify Page Contains Adverse Events
+    Verfiy Page Contains Aws Accounts
+    Verify Page Contains Running
+    Verify Page Contains Stopped
+    Verify Page Contains Monitoring
+    Verify Page Contains Laast Updated
+    Clicks on Telemetry
+    Clicks on Adverse Events
+    Capture the Screen Shot of the Dashboard
+    Sleep    1s
+    Unselect Frame
+
+
+
+Clicks on Telemetry
+    Selects the frame
+    Wait Until Keyword Succeeds    1 minutes    1 seconds     Click Element    xpath=.//*[@id='tabs']/li[2]/a
+    Capture the Screen Shot of the Dashboard
+    Page Should Contain    memory
+    Page Should Contain    cpu
+    Page Should Contain    disk
+    
+
+
+Verify the Element visibilty to check
+    Selects the frame
+    ${Visible}=    Run Keyword and Return Status    Element Should Be Visible    xpath=(//span[@class='legend-open'])[1]
+    Run Keyword If    '${Visible}' == 'True' 
+    ...    Log    log Monitoring Dashboard is displaying the Dashboard within 20 seconds with the data
+    ...    ELSE
+    ...    Fail   log Monitoring Dashboard is not displaying the Dashboard within 20 seconds with the data and its still loading or contains No results found
+
+
+Verfiy page doesnot contain timeout
+    Selects the frame
+    ${gateway}=    Run Keyword and Return Status    Page Should Not Contain    Gateway Timeout
+    ${gateway1}=    Run Keyword and Return Status    Page Should Not Contain     Bad Gateway
+    ${Visualize}=    Run Keyword and Return Status    Page Should Not Contain    No Living connections
+    Run Keyword If    '${gateway}' == 'True' and '${Visualize}' == 'True' and '${gateway1}' == 'True'
+    ...    Log    log Monitoring Dashboard is not displaying Gateway Timeout and No living Connections
+    ...    ELSE
+    ...    Fail   log Monitoring Dashboard is displaying Gateway Timeout or No living Connections
+
+
+
+
+Clicks on Adverse Events
+    Selects the frame
+    Wait Until Keyword Succeeds    1 minutes    1 seconds     Click Element    xpath=.//*[@id='tabs']/li[3]/a
+    Capture the Screen Shot of the Dashboard
+
+
+Verfiy the Dashboard is displayed with Legend Running
+    #Selects the frame
+    ${legnd}=    Get Text    xpath=(//span[@class='legend-open'])[1]
+    Log    ${legnd}
+    ${log1}=    Run Keyword and Return Status    Should Be Equal    ${legnd}    ${Accesslayr}
+    Run Keyword If    '${log1}' == 'True'
+    ...    Log    In Log Monitoring Dashboard Legend is visible
+    ...    ELSE
+    ...    Fail    In Log Monitoring Dashboard Legend is NOT visible and not displayng data
+
+
+
+
+
+Verfiy the Page not contains no results
+    ${No Results}=    Run Keyword and Return Status    Page Should Not Contain    No results found
+    Run Keyword If    '${No Results}' == 'True'     
+    ...    Log    log monitoring dashboard has all the data present in it
+    ...    ELSE IF   '${No Results}' == 'False'
+    ...    Fail    Dashboard has No Results Found Displaying and all data is not present
+
+
+Veridy page contains link
+    Page Should Contain    Click here
+    Page Should Contain    settings
+    Selects the frame
+    ${text}=    Get Text    xpath=html/body/div[1]/div/div[1]/div/span/a
+    Log    ${text}
+    ${link}=    Run Keyword and Return Status    Should Be Equal    ${text}    ${settn}
+    Run Keyword If    '${link}' == 'True'
+    ...    Log    In System Monitoring Dashboard Settings is visible
+    ...    ELSE
+    ...    Fail    In System Monitoring Dashboard Settings is NOT visible    
+
+
+Verfiy page Contains click here
+    ${text1}=    Get Text    css=div.container-fluid > div:nth-of-type(3) > a
+    Log    ${text1}
+    ${link1}=    Run Keyword and Return Status    Should Be Equal    ${text1}    ${click}
+    Run Keyword If    '${link1}' == 'True'
+    ...    Log    In System Monitoring Dashboard Click Here is visible
+    ...    ELSE
+    ...    Fail    In System Monitoring Dashboard Click Here is NOT visible    
+
+
+
+Selects the frame
+    Select Frame    css=#content > iframe
+    Sleep    1s
+    
+
+Verify Page Contains Average Wiating,timestamp
+    Wait Until Keyword Succeeds    0 minutes    19 seconds     Page Should Contain    Legend
+    #Wait Until Keyword Succeeds    5 minutes    19 seconds     Page Should Contain    Legend
+    Page Should Contain    Average Waiting
+
+
+Clicks on AdverseEvents tab
+    Click Element    xpath=.//*[@id='tabs']/li[3]/a
+
+Clicks on Telemetry Tab
+    Click Element    xpath=.//*[@id='tabs']/li[2]/a
+
+Verify Page Contains Connected
+    Page Should Contain    Connected
+    Selects the frame
+    ${Connect}=    Get Text    xpath=.//*[@id='pulse-holder-monitoring-on']/div[3]
+    Log    ${Connect}
+    Run Keyword If    '${NOTIFICATIONS}' == '${Connect}'
+    ...    Log    Notifications Dashboard is Showing Connected
+    ...    ELSE
+    ...    Fail    Notifications Dashboard is not showing Connected status
+    
+
+Verify Page Contains CatsEye
+    Page Should Contain    Cats Eye
+    Page Should Contain    Events Per Hour (Last 24 hrs)
+    Page Should Contain    Events by Type (Last 24 hrs)
+    Page Should Not Contain    Connection Failed
+
+Verify Page Contains Telemetry
+    Page Should Contain    Telemetry
+
+Verify Page Contains Adverse Events
+    Page Should Contain    Adverse Events
+
+Verfiy Page Contains Aws Accounts
+    Page Should Contain    AWS Accounts
+    Selects the frame
+    ${AWS Accounts}=    Get Text    xpath=.//*[@id='cats-eye-aws-accounts']
+    Log    ${AWS Accounts}
+    Run Keyword If    '${AWS Accounts}' == '${VALUE}'
+    ...    Fail    Notifications Dashboard is not displaying Total AWS Accounts
+    ...    ELSE
+    ...    Log     Notifications Dashboard is displaying Total AWS Accounts
+    
+    
+
+Verify Page Contains Tottal Instances
+    Page Should Contain    Total instances
+
+Verify Page Contains Running
+    Page Should Contain    Total Running
+    Selects the frame
+    ${Running}=    Get Text    xpath=.//*[@id='cats-eye-running-instances']
+    Log    ${Running}
+    Run Keyword If    '${Running}' == '${VALUE}'
+    ...    Fail    Notifications Dashboard is not displaying Total Instances
+    ...    ELSE
+    ...    Log     Notifications Dashboard is displaying Total Instances
+
+
+Verify Page Contains Stopped
+    Page Should Contain    Stopped
+    Selects the frame
+    ${Stopped}=    Get Text    xpath=.//*[@id='cats-eye-stoppped-instances']
+    Log    ${Stopped}
+    Run Keyword If    '${Stopped}' == '${VALUE}'
+    ...    Fail    Notifications Dashboard is not displaying Stopped Instances
+    ...    ELSE
+    ...    Log     Notifications Dashboard is displaying Stopped Intances
+
+
+Verify Page Contains Monitoring
+    Page Should Contain    Monitoring
+    Selects the frame
+    ${Monitoring}=    Get Text    xpath=.//*[@id='cats-eye-monitored']
+    Log    ${Monitoring}
+    Run Keyword If    '${Monitoring}' == '${VALUE}'
+    ...    Fail    Notifications Dashboard is not displaying Monitoring Data
+    ...    ELSE
+    ...    Log     Notifications Dashboard is displaying Monitoring Data
+
+
+Verify Page Contains Laast Updated
+    Page Should Contain    Events/Type
+    Page Should Not Contain    NA
+    Page Should Not Contain    No results found
+    #Page Should Not Contain    Connection failed !! 
+
+
+
+Clicks on the Link to dashboard
+    Click Element    xpath=.//a[text()='Notification']
+    #(//a[./text() = "Notifications"])[2] 
+
+Clicks on Notifications link
+    Click Element    xpath=.//a[text()='Notifications']  
+
+
+Verify Page Contains Access-Layer-Performance
+    Page Should Contain    ACCESS-LAYER-Performance
+    Selects the frame
+    ${Accss requests}=    Get Text    xpath=//li[@data-label='Average Requests_Connection']
+    Log    ${Accss requests}
+    ${performance1}=    Run Keyword and Return Status    Should Be Equal    ${Accss requests}    ${ACCESS REQUESTS}
+    ${Accss connections}=    Get Text    xpath=//li[@data-label='Average Active_connections']
+    Log    ${Accss connections}
+    ${performance2}=    Run Keyword and Return Status    Should Be Equal    ${Accss connections}    ${ACCESS CONNECTIONS}
+    ${Accss waiting}=    Get Text    xpath=//li[@data-label='Average Waiting']
+    Log    ${Accss waiting}
+    ${performance3}=    Run Keyword and Return Status    Should Be Equal    ${Accss waiting}    ${ACCESS WAITING}
+    Run Keyword If    '${performance1}' == 'True' and '${performance2}' == 'True' and '${performance3}' == 'True'
+    ...    Log    log Monitoring dashboard is displaying ACCESS LAYER Performance Graphs
+    ...    ELSE
+    ...    Fail    log Monitoring dashboard is not displaying ACCESS LAYER Performance Graphs
+
+
+
+Verify Page Contains Access-Layer-Uptime
+    Page Should Contain    ACCESS-LAYER-UPTIME
+    Selects the frame
+    ${Accss uptime}=    Get Text    xpath=(//li[@data-label='running'])[1]
+    Log    ${Accss uptime}
+    ${uptime}=    Run Keyword and Return Status    Should Be Equal    ${Accss uptime}    ${ACCESS UPTIME}
+    Run Keyword If    '${uptime}' == 'True'
+    ...    Log    log Monitoring dashboard is displaying ACCESS LAYER Uptime Graphs
+    ...    ELSE
+    ...    Fail    log Monitoring dashboard is not displaying ACCESS LAYER Uptime Graphs    
+
+
+
+
+Verify Page Contains Access-Layer-Response
+    Page Should Contain    ACCESS-LAYER-RESPONSE
+    Selects the frame
+    ${Accss response}=    Get Text    xpath=//li[@data-label='-']
+    Log    ${Accss response}
+    ${response}=    Run Keyword and Return Status    Should Be Equal    ${Accss response}    ${ACCESS RESPONSE}
+    Run Keyword If    '${response}' == 'True'
+    ...    Log    log Monitoring dashboard is displaying ACCESS LAYER Response Graphs
+    ...    ELSE
+    ...    Fail    log Monitoring dashboard is not displaying ACCESS LAYER Response Graphs    
+
+
+
+
+    
+
+
+Verify Page Contains Cat-Uptime
+    Page Should Contain    CAT-UPTIME
+    Selects the frame
+    ${cat uptime}=    Get Text    xpath=(//li[@data-label='running'])[2]
+    Log    ${cat uptime}
+    ${ng uptime}=    Run Keyword and Return Status    Should Be Equal    ${cat uptime}    ${CAT UPTIME}
+    Run Keyword If    '${ng uptime}' == 'True'
+    ...    Log    log Monitoring dashboard is displaying CAT Uptime Graphs
+    ...    ELSE
+    ...    Fail    log Monitoring dashboard is not displaying CAT Uptime Graphs    
+
+
+
+Verify Page Contains Cat-App-Usage
+    Page Should Contain    CAT-APP-USAGE
+    Selects the frame
+    ${App}=    Get Text    xpath=(//span[text()='message.@timestamp per minute'])[1]
+    Log   ${App}
+    ${App usage}=    Run Keyword and Return Status    Should Be Equal    ${App}    ${USAGE}  
+    Run Keyword If    '${App usage}' == 'True'
+    ...    Log    log monitoring dashboard is displaying cat app usage data
+    ...    ELSE
+    ...    Fail    log monitoring dashboard is not displaying cat app usage data
+    
+
+
+
+Verify Page Contains Cat-Bootstrap-Perday
+    Page Should Contain    CAT-BOOTSTRAP-PERDAY
+    Selects the frame
+    ${Bootstrap}=    Get Text    xpath=(//span[text()='Top 5 host'])[1]
+    Log   ${Bootstrap}
+    ${bootstrap usage}=    Run Keyword and Return Status    Should Be Equal    ${Bootstrap}    ${BOOTSTRAP USAGE}  
+    Run Keyword If    '${bootstrap usage}' == 'True'
+    ...    Log    log monitoring dashboard is displaying cat bootstrap data
+    ...    ELSE
+    ...    Fail    log monitoring dashboard is not displaying cat bootstrap data
+
+
+
+
+
+Verify Page Contains Cat-LogLevel-Percent
+    Page Should Contain    CAT-LOGLEVEL-Percent
+    Selects the frame
+    ${cat log}=    Get Text    xpath=//li[@data-label='debug']
+    Log    ${cat log}
+    ${logged1}=    Run Keyword and Return Status    Should Be Equal    ${cat log}    ${CAT DEBUG}
+    ${error}=    Get Text    xpath=//li[@data-label='error']
+    Log    ${error}
+    ${logged2}=    Run Keyword and Return Status    Should Be Equal    ${error}    ${CAT ERROR}
+    #${warn}=    Get Text    xpath=html/body/div[2]/div/div/dashboard-grid/ul/li[6]/dashboard-panel/div/visualize/div[2]/div/div[3]/ul/li[3]/span
+    #Log    ${warn}
+    #${logged3}=    Run Keyword and Return Status    Should Be Equal    ${warn}    ${CAT WARN}
+    Run Keyword If    '${logged1}' == 'True' and '${logged2}' == 'True'
+    ...    Log    log Monitoring dashboard is displaying CAT Log Level percent data
+    ...    ELSE
+    ...    Fail    log Monitoring dashboard is not displaying CAT Log Level percent data
+
+
+
+
+
+Verify Page Contains Cat_Errors
+    Page Should Contain    CAT-ERRORS
+    Selects the frame
+    ${cat errors}=    Get Text    xpath=html/body/div[2]/div/div/dashboard-grid/ul/li[7]/dashboard-panel/div/visualize/div[2]/div/div/kbn-agg-table-group/table/tbody/tr/td/kbn-agg-table/paginated-table/paginate/div[1]/table/thead/tr/th[1]/span
+    Log   ${cat errors}
+    ${cat err}=    Run Keyword and Return Status    Should Be Equal    ${cat errors}    ${CAT ERRORS}
+    Run Keyword If    '${cat err}' == 'True'
+    ...    Log    log monitoring dashboard is displaying cat errors data
+    ...    ELSE
+    ...    Fail    log monitoring dashboard is not displaying cat errors data
+
+
+
+Verify Page Contains Cat-Access-Errors
+    Page Should Contain    CAT-ACCESS-ERRORS    
+
+Clicks on Log Monitoring Link
+    Click Element    xpath=.//a[text()='Log_Monitoring']
+
+Clicks on Monitoring Link
+    Click Element    xpath=.//a[text()='Monitoring']
+
+Clicks on System Monitoring Link
+    Click Element    xpath=.//a[text()='System_Monitoring']
+
+
+Verfiy page should not contain agent failed
+    Selects the frame
+    ${Agent1}=    Run Keyword and Return Status    Page Should Not Contain    Get value from agent failed
+    ${Agent2}=    Run Keyword and Return Status    Page Should Not Contain    cannot connect to 
+    ${Agent3}=    Run Keyword and Return Status    Page Should Not Contain    No route to host
+    ${Agent4}=    Run Keyword and Return Status    Page Should Not Contain    Couldn't reach agent
+    #${Agent5}=    Run Keyword and Return Status    Page Should Not Contain    check firewall settings    
+    Run Keyword If    '${Agent1}' == 'True' and '${Agent2}' == 'True' and '${Agent3}' == 'True' and '${Agent4}' == 'True'
+    ...    Log    System Monitoring Dashboard is displaying all the data of the nodes and no nodes are down.
+    ...    ELSE
+    ...    Fail    System Monitoring Dashboard is showing that Nodes are down.
+
+
+
+#and '${Agent5}' == 'True'
+
+
+Verify Page Contains Ping
+    Page Should Contain    Ping
+
+Verify Page Contains Traffic
+    Page Should Contain    Traffic
+
+Verify Page Contains DiskUse
+    Page Should Contain    DISK USE
+
+Verify Page Contains Settings
+    Page Should Contain    settings
+
+Verify Page Contains Memory Used
+    Page Should Contain    Memory Used
+
+Verify Page Contains Total Memory
+    Page Should Contain    Total Memory
+
+
+
+
+Verfiy the Availabiltiy zone
+    Page Should Contain    Avaliablity Zone
+    Selects the frame
+    ${Availabilty zone}=    Get Text    xpath=.//*[@id='container']/div/ul/li[3]/div/h2
+    Log    ${Availabilty zone}
+    ${Availabilty length}=    Get Length    ${Availabilty zone}
+    Run Keyword If    '${Availabilty length}' == '${VALUE}'
+    ...    Fail    Dashboard has no Availabilty Zone Data
+    ...    ELSE
+    ...    Log     Dashboard has Availabilty Zone Data
+
+
+Verify the Low Usage
+    Page Should Contain    Low Usage
+    Selects the frame
+    ${Low Usage}=    Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/ul/li[1]/span[2]
+    Log    ${Low Usage}
+    ${Low Usagelength}=    Get Length    ${Low Usage}
+    Run Keyword If    '${Low Usagelength}' == '${VALUE}'
+    ...    Fail    Dashboard has no Low Usage Data
+    ...    ELSE
+    ...    Log     Dashboard has Low Usage Data
+
+    
+
+
+Verify the Total Instances
+    Page Should Contain    Total Instances
+    Selects the frame
+    ${Totl Ins}=    Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/h2
+    Log    ${Totl Ins}
+    ${Totl Instlength}=    Get Length    ${Totl Ins}
+    Run Keyword If    '${Totl Instlength}' == '${VALUE}'
+    ...    Fail    Dashboard has no Total Instances Data
+    ...    ELSE
+    ...    Log     Dashboard has Total Instances Data
+
+
+Verify the Active Instances
+    Page Should Contain    Active Instances
+    Selects the frame
+    ${Act Ins}=    Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/h2
+    Log    ${Act Ins}
+    ${Actve Instlength}=    Get Length    ${Act Ins}
+    Run Keyword If    '${Actve Instlength}' == '${VALUE}'
+    ...    Fail    Dashboard has no Active Instances Data
+    ...    ELSE
+    ...    Log     Dashboard has Active Instances Data    
+
+
+
+Verify the High Usage
+    Page Should Contain    High Usage
+
+
+Verify the Under Utilized Instances
+    Page Should Contain    Under-utilized Instances
+    Selects the frame
+    ${Utilized Ins}=    Get Text    xpath=.//*[@id='container']/div/ul/li[8]/div/h2
+    Log    ${Utilized Ins}
+    ${Utilizd Instlength}=    Get Length    ${Utilized Ins}
+    Run Keyword If    '${Utilizd Instlength}' == '${VALUE}'
+    ...    Fail    Dashboard has no Under utilized instances Data
+    ...    ELSE
+    ...    Log     Dashboard has Under utilized instances Data    
+
+
+
+
+Verify the Average CPU Usage
+    Page Should Contain    Average CPU Usage
+    Selects the frame
+    ${CPU Usage}=    Get Text    xpath=.//*[@id='container']/div/ul/li[9]/div/h2
+    Log    ${CPU Usage}
+    ${CPU Usagelength}=    Get Length    ${CPU Usage}
+    Run Keyword If    '${CPU Usagelength}' == '${VALUE}'
+    ...    Fail    Dashboard has no Under utilized instances Data
+    ...    ELSE
+    ...    Log     Dashboard has Under utilized instances Data    
+
+
+
+
+Clicks on AWS Usage Link
+    Click Element    xpath=.//a[text()='AWS_Usage']
+
+
+
+Clicks on Tracks Button
+   Click Element    id=trackNew
+
+Clicks on AWS Cost Summary
+    Click Element    xpath=.//a[text()='Summary']
+
+Clicks on Left Panel Button
+    Click Element    xpath=.//*[@id='left-panel']/span
+
+
+Verify Page contains Cost Usage for Month
+    Page Should Contain    Cost for Month
+    Selects the frame
+    ${Cost month}=    Get Text    xpath=.//*[@id='container']/div/ul/li[3]/div/h2
+    Log    ${Cost month}
+    Run Keyword If    '${Cost month}' == '${NA}'
+    ...    Fail    Dashboard has no Cost for Month Data
+    ...    ELSE
+    ...    Log     Dashboard has Cost for Month Data
+    
+    
+
+
+    
+
+
+Verify Page contains Cost Usage for Day
+    Page Should Contain    Cost of day
+    Selects the frame
+    ${Cost day}=    Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/h2
+    Log    ${Cost day}
+    Run Keyword If    '${Cost day}' == '${NA}'
+    ...    Fail    Dashboard has no Cost of Day Data
+    ...    ELSE
+    ...    Log     Dashboard has Cost of Day Data
+    
+ 
+Verfiy Page contains Planned Cost   
+    Page Should Contain    Planned Cost
+    Selects the frame
+    ${pland cost}=    Get Text    xpath=.//*[@id='container']/div/ul/li[4]/div/h2
+    Log    ${pland cost}
+    ${plnd costlength}=    Get Length    ${pland cost}
+    Log    ${plnd costlength}
+    Run Keyword If    '${pland cost}' == '${NA}' or '${pland cost}' == '${NA1}' or '${pland cost}' == '${NA2}'
+    ...    Fail    Dashboard has no Cost of Day Data
+    ...    ELSE
+    ...    Log     Dashboard has Cost of Day Data
+
+
+
+
+
+
+
+Verify the Cost of EC2 day
+    Page Should Contain    Cost of EC2(day)
+    Selects the frame
+    ${Cost EC2}=    Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/h2
+    Log    ${Cost EC2}
+    Run Keyword If    '${Cost EC2}' == '${NA}'
+    ...    Fail    Dashboard has no Cost of EC2 Day Data
+    ...    ELSE
+    ...    Log     Dashboard has Cost of EC2 Day Data
+    
+
+
+Verify Page contains Summary
+    Page Should Contain    Summary
+    Selects the frame
+    ${Totall Instance}=    Get Text    xpath=.//*[@id='container']/div/ul/li[9]/div/ul/li[1]/span[2]
+    Log    ${Totall Instance}
+    ${Summary length}=    Get Length    ${Totall Instance}
+    Run Keyword If    '${Summary length}' == '${VALUE}'
+    ...    Fail    Dashboard has no Total Instance Data
+    ...    ELSE
+    ...    Log     Dashboard has Total Instance Data
+ 
+
+Verify Page contains Ncalifornia Summary
+    Page Should Contain    Summary
+    Selects the frame
+    ${Ncal Instance}=    Get Text    xpath=.//*[@id='container']/div/ul/li[8]/div/ul/li[1]/span[2]
+    Log    ${Ncal Instance}
+    ${Ncal length}=    Get Length    ${Ncal Instance}
+    Run Keyword If    '${Ncal length}' == '${VALUE}'
+    ...    Fail    Dashboard has no Total Instance Data
+    ...    ELSE
+    ...    Log     Dashboard has Total Instance Data
+    
+
+
+
+
+Verify the Total Number of Running Instances
+    Page Should Contain    Summary
+    Selects the frame
+    ${Running Instance}=    Get Text    xpath=.//*[@id='container']/div/ul/li[9]/div/ul/li[2]/span[2]
+    Log    ${Running Instance}    
+    ${Running InsLength}=    Get Length    ${Running Instance} 
+    Run Keyword If    '${Running InsLength}' == '${VALUE}'
+    ...    Fail    Dashboard has no Running Instance Data
+    ...    ELSE
+    ...    Log     Dashboard has Running Instance Data
+   
+
+Verify the Total Number of Ncal Running Instances
+    Page Should Contain    Summary
+    Selects the frame
+    ${Ncalrun Instance}=    Get Text    xpath=.//*[@id='container']/div/ul/li[8]/div/ul/li[2]/span[2]
+    Log    ${Ncalrun Instance}
+    ${NcalRunning InsLength}=    Get Length    ${Ncalrun Instance} 
+    Run Keyword If    '${NcalRunning InsLength}' == '${VALUE}'
+    ...    Fail    Dashboard has no Running Instance Data
+    ...    ELSE
+    ...    Log     Dashboard has Running Instance Data
+
+
+Verify Page contains Active Instance
+    Page Should Contain    Active Instance
+    Selects the frame
+    ${Active Instance}=    Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/h2
+    Log    ${Active Instance}
+    ${Active Inslength}=    Get Length    ${Active Instance}
+    Run Keyword If    '${Active Inslength}' == '${VALUE}'
+    ...    Fail    Dashboard has no Active Instance Data
+    ...    ELSE
+    ...    Log     Dashboard has Active Instance Data
+    
+
+Verify Page contains NcalActive Instance
+    Page Should Contain    Active Instance
+    Selects the frame
+    ${Active NInstance}=    Get Text    xpath=.//*[@id='container']/div/ul/li[5]/div/h2
+    Log    ${Active NInstance}
+    ${Active NInslength}=    Get Length    ${Active NInstance}
+    Run Keyword If    '${Active NInslength}' == '${VALUE}'
+    ...    Fail    Dashboard has no Active Instance Data
+    ...    ELSE
+    ...    Log     Dashboard has Active Instance Data
+    
+
+
+Verify Page contains Security Groups
+    Page Should Contain    Security Groups
+    Selects the frame
+    ${Security Grp}=    Get Text    xpath=.//*[@id='container']/div/ul/li[7]/div/h2
+    Log    ${Security Grp}
+    ${Secrty GrpLength}=    Get Length    ${Security Grp}
+    Run Keyword If    '${Secrty GrpLength}' == '${VALUE}'
+    ...    Fail    Dashboard has no Security Grp Data
+    ...    ELSE
+    ...    Log     Dashboard has Security Grp Data
+    
+
+
+Verify Page contains NcalSecurity Groups
+    Page Should Contain    Security Groups
+    Selects the frame
+    ${NcalSecurity Grp}=    Get Text    xpath=.//*[@id='container']/div/ul/li[6]/div/h2
+    Log    ${NcalSecurity Grp}
+    ${NSecrty GrpLength}=    Get Length    ${NcalSecurity Grp}
+    Run Keyword If    '${NSecrty GrpLength}' == '${VALUE}'
+    ...    Fail    Dashboard has no Security Grp Data
+    ...    ELSE
+    ...    Log     Dashboard has Security Grp Data
+
+
+
+Verify Page contains EBS Volumes
+    Page Should Contain    EBS Volumes
+    Selects the frame
+    ${EBS Volumes}=    Get Text    xpath=.//*[@id='container']/div/ul/li[8]/div/h2
+    Log    ${EBS Volumes}
+    ${EBS VolLength}=    Get Length    ${EBS Volumes}
+    Run Keyword If    '${EBS VolLength}' == '${VALUE}'
+    ...    Fail    Dashboard has no EBS Volumes Data
+    ...    ELSE
+    ...    Log     Dashboard has EBS Volumes Data
+    
+
+Verify Page contains Ncal EBS Volumes
+    Page Should Contain    EBS Volumes
+    Selects the frame
+    ${NcalEBS Volumes}=    Get Text    xpath=.//*[@id='container']/div/ul/li[7]/div/h2
+    Log    ${NcalEBS Volumes}
+    ${NcalEBS VolLength}=    Get Length    ${NcalEBS Volumes}
+    Run Keyword If    '${NcalEBS VolLength}' == '${VALUE}'
+    ...    Fail    Dashboard has no EBS Volumes Data
+    ...    ELSE
+    ...    Log     Dashboard has EBS Volumes Data
+
+
+
+
+
+Verify Page contains EBS Snapshots
+    Page Should Contain    EBS Snapshots
+
+
+Verify Page contains S3 Buckets
+    Page Should Contain    S3 Buckets
+    Selects the frame
+    ${S3 Buckets}=    Get Text    xpath=.//*[@id='container']/div/ul/li[12]/div/h2
+    Log    ${S3 Buckets}
+    ${S3 Bucket Length}=    Get Length    ${S3 Buckets}
+    Run Keyword If    '${S3 Bucket Length}' == '${VALUE}'
+    ...    Fail    Dashboard has no S3 Buckets Data
+    ...    ELSE
+    ...    Log     Dashboard has S3 Buckets Data
+    
+Verify Page contains Ncal S3 Buckets
+    Page Should Contain    S3 Buckets
+    Selects the frame
+    ${S3 NcalBuckets}=    Get Text    xpath=.//*[@id='container']/div/ul/li[11]/div/h2
+    Log    ${S3 NcalBuckets}
+    ${S3Cal Bucket Length}=    Get Length    ${S3 NcalBuckets}
+    Run Keyword If    '${S3Cal Bucket Length}' == '${VALUE}'
+    ...    Fail    Dashboard has no S3 Buckets Data
+    ...    ELSE
+    ...    Log     Dashboard has S3 Buckets Data
+
+
+Verify Page contains R53 Zone
+    Page Should Contain    R53 Zone
+    Selects the frame
+    ${R53 Zone}=    Get Text    xpath=.//*[@id='container']/div/ul/li[11]/div/h2
+    Log    ${R53 Zone}
+    ${R53 ZoneLength}=    Get Length    ${R53 Zone}
+    Run Keyword If    '${R53 ZoneLength}' == '${VALUE}'
+    ...    Fail    Dashboard has no R53 Zone Data
+    ...    ELSE
+    ...    Log     Dashboard has R53 Zone Data
+
+
+Verify Page contains Ncal R53 Zone
+    Page Should Contain    R53 Zone
+    Selects the frame
+    ${R53 NZone}=    Get Text    xpath=.//*[@id='container']/div/ul/li[10]/div/h2
+    Log    ${R53 NZone}
+    ${R53 NZoneLength}=    Get Length    ${R53 NZone}
+    Run Keyword If    '${R53 NZoneLength}' == '${VALUE}'
+    ...    Fail    Dashboard has no R53 Zone Data
+    ...    ELSE
+    ...    Log     Dashboard has R53 Zone Data
+
+
+
+Verify Page contains Elastic IP
+    Page Should Contain    Elastic IP
+    Selects the frame
+    ${Elastic IP}=    Get Text    xpath=.//*[@id='container']/div/ul/li[10]/div/h2
+    Log    ${Elastic IP}
+    ${Elastic Length}=    Get Length    ${Elastic IP}
+    Run Keyword If    '${Elastic Length}' == '${VALUE}'
+    ...    Fail    Dashboard has no Elastic IP Data
+    ...    ELSE
+    ...    Log     Dashboard has Elastic IP Data
+    
+
+
+Verify Page contains I/O Traffic
+    Page Should Contain    IO Traffic
+    Page Should Contain    Inbound
+    Page Should Contain    Outbound
+    Selects the frame
+    ${IO Inbound}=    Get Text    xpath=//*[@id="container"]/div/ul/li[4]/div/ol/li[1]/span[2]
+    Log    ${IO Inbound}
+    ${IO Length}=    Get Length    ${IO Inbound}
+    Run Keyword If    '${IO Length}' == '${VALUE}'
+    ...    Fail    Dashboard has no Inbound Data
+    ...    ELSE
+    ...    Log     Dashboard has Inbound Data
+    ${OUT Inbound}=    Get Text    xpath=//*[@id="container"]/div/ul/li[4]/div/ol/li[2]/span[2]
+    Log    ${OUT Inbound}
+    ${Out Length}=    Get Length    ${OUT Inbound}
+    Run Keyword If    '${Out Length}' == '${VALUE}'
+    ...    Fail    Dashboard has no Outbound Data
+    ...    ELSE
+    ...    Log     Dashboard has Outbound Data
+
+
+
+
+Capture the Screen Shot of the Dashboard
+    Capture Page Screenshot
+

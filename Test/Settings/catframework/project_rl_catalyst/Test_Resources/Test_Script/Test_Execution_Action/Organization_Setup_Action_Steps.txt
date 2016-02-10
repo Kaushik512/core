@@ -1,0 +1,524 @@
+*** Settings ***
+Documentation      A resource file with reusable keywords and variables.
+...
+...                This file is part of a prototype automated test suite designed to
+...                test web application products built on top of the SLZ platform.
+...
+
+Library            Selenium2Library
+Library            String
+Library            Collections
+
+
+Resource           catalyst.txt
+Resource           ${CATALYST TEST DATA}/${TESTDATA}
+Resource           ${COMMON RESOURCES}/catalyst_grid_node.txt
+Resource           ${CATALYST ACTION}/Users_Setup_With_New_Users_and_Teams.txt
+
+
+*** Variables ***
+
+*** Keywords ***
+Version Number and the Jenkins Buildnumber
+    Browser is opened to login catalyst
+    #Open Browser    ${ENVIRONMENT SERVER}     ${BROWSER TYPE}
+    Sleep    5s   
+    Store the Buildnumber
+
+
+
+Store the Buildnumber
+    ${JEN BUILDNUM}=    Get Text    xpath=.//*[@id='login']/footer/div[2]/p/span
+    Log    ${JEN BUILDNUM}
+
+
+Catalyst Login
+    Browser is opened to login catalyst
+    Enters catalyst User Name
+    Enters catalyst password
+    Clicks on Login button
+
+Creates New Org Admin 
+    Clicks on Users Setup
+    Clicks on Users
+    Clicks on New Button
+    Enters the Org Admin Login Name
+    Enters the Org Admin Email Address
+    Enters password for Org Admin
+    Enters confirm password for Org Admin
+    Select The Organization of the OrgAdmin created
+    Assign the Roles as Admin
+    Assign Teams for OrgAdmin
+    Clicks on Save button in Users Page
+    Verify OrgAdmin is created
+
+
+Verify OrgAdmin is created
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${ORG ADMIN USER}']    ${ORG ADMIN USER}
+
+
+
+Catalyst Org Admin Verfifcation of New,Update,Delete Button disabled
+    Clicks on Settings
+    Clicks on Organization image
+    Sleep    2s
+    Verify New Button is Disabled
+    Verfiy Delete Button is Disabled
+    Verify Update Button is Disabled
+
+Catalyst Creating New User and Verfiy ALL is Disabled
+    Clicks on Settings
+    Clicks on Users Setup
+    Clicks on Users
+    Clicks on New Button
+    Enters Email Address
+    Verification of Organization only with out ALL option Being Disabled
+    Sleep    1s
+    Clicks on UserCancel Button
+
+
+Verification of Organization only with out ALL option Being Disabled
+    Click Element    xpath=.//*[@id='s2id_orgname']/a/span[1]
+    Sleep    1s
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ALL
+    Element Should Contain    xpath=.//*[@id='select2-drop']/ul/li    ${NO MATCH}
+    Log    ${NO MATCH}
+    Clear Element Text    xpath=.//*[@id='select2-drop']/div/input
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${ORGANIZATION NAME}
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+
+
+Enters Login name as Designer
+    Input Text    id=loginname    ${DESIGNER_NAME}
+
+Enters Login name as Consumer
+    Input Text    id=loginname    ${CONSUMER_NAME}    
+
+Verify New Button is Disabled
+    ${NEW}=    Get Element Attribute    xpath=.//*[@id='newOrg']@disabled
+    Log    ${NEW}
+    Should Be Equal    ${NEW}    ${DISABLED}
+
+Verfiy Delete Button is Disabled
+    ${NEW1}=    Get Element Attribute    xpath=.//*[@id='envtable']/tbody/tr/td[text()='Relevance_Labs']/../td/div/button@disabled
+    Log    ${NEW1}
+    Should Be Equal    ${NEW}    ${DISABLED}    
+
+
+Verfiy Update Button is Disabled
+    ${NEW2}=    Get Element Attribute    xpath=.//*[@id='envtable']/tbody/tr/td[text()='Relevance_Labs']/../td/div/a@disabled
+    Should Be Equal    ${NEW2}    ${DISABLED}    
+
+Enters Designer Passwd
+    Input Text    id=userpassword    ${DESIGNER_PASWD}
+
+Enters Designer Confirm Passwd
+    Input Text    id=userpassword1    ${DESIGNER_PASWD}    
+
+Enters Consumer Passwd
+    Input Text    id=userpassword    ${CONSUMER_PASWD}
+
+Enters Consumer Confirm Passwd
+    Input Text    id=userpassword1    ${CONSUMER_PASWD}    
+
+
+Selecting the Role as Designer
+    Click Element    xpath=.//*[@id='userrolename']/label[text()='Designer']
+
+Selecting the Role as Consumer
+    Click Element    xpath=.//*[@id='userrolename']/label[text()='Consumer']    
+
+Creates New Organization
+      Vaildate the Organization feilds
+
+
+
+Addition of Random Numbers to Unique Names
+    Generation of New Unique Numbers1
+    Generation of New Unique Numbers2
+    Generation of New Unique Numbers3
+    Not Exits in LDAP
+
+Generation of New Unique Numbers1
+    ${GEN}=    Generate Random String    3    [NUMBERS]
+    ${LOG1}=   Catenate  SEPARATOR=   ${CATE1}${GEN}
+    Log    ${LOG1}
+    Set Global Variable    ${LOG1}
+
+Generation of New Unique Numbers2
+    ${GEN}=    Generate Random String    3    [NUMBERS]
+    ${LOG2}=   Catenate  SEPARATOR=   ${CATE2}${GEN}
+    Log    ${LOG2}
+    Set Global Variable    ${LOG2}
+
+Generation of New Unique Numbers3
+    ${GEN}=    Generate Random String    3    [NUMBERS]
+    ${LOG3}=   Catenate  SEPARATOR=   ${CATE3}${GEN}
+    Log    ${LOG3}
+    Set Global Variable    ${LOG3}
+
+Not Exits in LDAP
+    ${ValidateNotExistLDAP}=    Generate Random String
+    Log    ${ValidateNotExistLDAP}
+    Set Global Variable    ${ValidateNotExistLDAP}   
+
+
+Enters the Org Admin Login Name
+    Sleep    1s
+    Input Text    id=loginname    ${ORG ADMIN USER}
+    Log    ${ORG ADMIN USER}
+
+Enters the Org Admin Email Address
+    Input Text    id=email    ${ORGADMN EMAILADD}
+
+Enters password for Org Admin
+    Input Text    id=password    ${ORG ADMIN PASSWORD}
+
+Enters confirm password for Org Admin
+    Input Text    id=cnfPassword    ${ORG ADMIN PASSWORD}
+
+    
+Select The Organization of the OrgAdmin created
+    Click Element    xpath=.//*[@id='s2id_orgname']/a/span[1]
+    Input Text    xpath=.//*[@id='select2-drop']/div/input    ${ORGANIZATION NAME}
+    Click Element    xpath=.//*[@id='select2-drop']/ul/li/div
+    
+Enters the LDAP Org Admin Password
+    Input Text    id=userpassword    ${ORG ADMIN PASSWORD}
+
+Enters the Confirm LDAP Password
+    Input Text    id=userpassword1    ${ORG ADMIN PASSWORD}
+
+Assign the Roles as Admin
+    Click Element    xpath=.//*[@id='userrolename']/label[text()='Admin']
+
+Assign Teams for OrgAdmin
+    Click Element    xpath=.//*[@id='teamname']/label[text()='${ORGANIZATION NAME}_Admins']
+
+
+Vaildate the Organization feilds
+    Clicks on Settings
+    Clicks on Organization image
+    Validate Org same path
+
+Validate Org same path
+    Clicks on New button to Create New Organization
+    Enters organization name
+    Enters organization domain name    
+    Clicks on Save button to save the Organization details
+    Verify Organization is created
+
+
+Verify Organization is created
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${ORGANIZATION NAME}']    ${ORGANIZATION NAME}
+
+
+Validate Org remaining path
+    Enters organization name        ${OrgName}
+    Enters organization domain name    
+    Clicks on Save button to save the Organization details
+
+
+#Vaildate the Edit Organization fields
+    [Arguments]    ${Orgname}
+    #Clicks on Update Button of Organization Created
+    #Enters New Edit Organization Name
+    #Clicks on Save button to save the Organization details 
+    #Verfiy that EditedOrganization is created  ${Orgname}
+
+
+Clicks on Settings      
+    Wait Until Element Is Visible      css=#settingsNew      1 seconds
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible    css=#settingsNew
+    Click Element    css=#settingsNew
+
+Clicks on Organization image
+    Click Element    css=ul.list-group > li:first-child > a
+    Click element    css=ul.list-group > li:nth-of-type(2) > a
+    
+Clicks on New button to Create New Organization
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       css=#newOrg
+    Click Element    css=#newOrg
+    
+Enters organization name
+    Sleep    5s
+    Input Text     id=orgname      ${ORGANIZATION NAME}
+
+Enters organization domain name
+    Sleep    1s
+    Input Text     id=domainname      ${ORGANIZATION DOMAIN NAME}
+
+Clicks on Save button to save the Organization details
+    Click Element     css=div.btn-group.pull-right > button
+
+
+#Verfiy that EditedOrganization is created
+    #[Arguments]    ${OrganizationMsg}
+    #Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is #Visible       xpath=.//*[@id='envtable']/tbody/tr/td[text()="Relevance_Labs"]
+    #Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()="Relevance_Labs"]    ${OrganizationMsg}   
+
+#Verfiy that EditedOrganizationdomain is created
+    #[Arguments]    ${OrganizationDomainMsg}
+    #Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is #Visible       xpath=.//*[@id='envtable']/tbody/tr/td[text()="https://www.relevancelab.com"]
+    #Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()="https://www.relevancelab.com"]    ${OrganizationDomainMsg} 
+
+#Organization ends
+
+
+
+Create New Environments
+     Clicks on Settings
+     Clicks on Environments Wrapper
+     Vaildate the Environmentname feilds  ${VaildEnvName1}
+     Vaildate the Environmentname feilds  ${VaildEnvName2}
+
+Vaildate the Environmentname feilds
+    [Arguments]    ${environmentname}
+    Validate Env path
+
+Vaildate the Environmentsame feilds
+    [Arguments]    ${environmentname}
+    Validate Env2 path
+
+Validate Env2 path
+    Clicks on New button to create new Environment
+    Enters new Environment name    ${environmentname}
+    Clicks on Save button to save the Environment details 
+
+#Vaildate the Environment name1 feilds
+     #[Arguments]    ${ErrorMsg}
+     #Element Should Contain    id=unique_environmentname     ${ErrorMsg}
+
+
+Vaildate the Environment feilds   
+     [Arguments]     ${environmentname}
+     Validate Env path
+    
+Validate Env path   
+    Clicks on New button to create new Environment
+    Enters new Environment name    ${environmentname}
+    Select organization
+    Clicks on Save button to save the Environment details  
+        
+
+Vaildate the Edit Environmentname fields
+    [Arguments]    ${Environmentname}
+    Clicks on Update Button of Environment Created
+    Enters New Edit Environment Name
+    Clicks on Save button to save the Environment details 
+    Verfiy that EditedEnvironment is created  ${Environmentname}                   
+
+
+Clicks on Environments Wrapper
+    Click Element    xpath=.//*[@id='page-wrapper']/div/div[3]/div/div/div[1]/a
+
+Clicks on New Button to create Environments
+    Click Element    xpath= .//*[@id='content']/div/div/div/div/div[1]/div/div/a[2]
+
+Clicks on Environments menu
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//span[./text()='Environments']
+    Click Element    xpath=//span[./text()='Environments']
+
+Clicks on New button to create new Environment
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       link=New
+    Click Element    link=New
+
+Clicks on Cancel Button
+    Click Element    xpath=.//*[@id='btncancel'] 
+
+Enters new Environment name
+    [Arguments]     ${environmentname}
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       id=environmentname
+    Input Text     id=environmentname      ${environmentname}
+
+Select organization
+    Select From List     id=orgname      ${ORGANIZATION NAME}
+
+Clicks on Save button to save the Environment details
+    Click Element    xpath=.//*[@id='myForm1']/div/div[3]/div/button   
+
+Clicks on Update Button of Environment Created
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible    xpath=.//*[@id='envtable']/tbody/tr/td[text()="QTest"]/../td[text()="Relevance_Labs"]/../td[3]/div/a
+    Click Element    xpath=.//*[@id='envtable']/tbody/tr/td[text()="QTest"]/../td[text()="Relevance_Labs"]/../td[3]/div/a
+
+Enters New Edit Environment Name
+    Wait Until Keyword Succeeds    1 minute     1 seconds    Wait Until Element Is Visible    id=environmentname
+    Input Text    id=environmentname    ${VaildEditEnvironment}
+
+Verfiy that EditedEnvironment is created
+    [Arguments]    ${EnvironmentMsg}
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='envtable']/tbody/tr/td[text()="QA"]
+    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()="QA"]    ${EnvironmentMsg}       
+
+                                                                                    #environment ends
+
+    
+Create New Business Group                                                        
+    Catalyst creates new business group1
+    #Catalyst creates new business group2
+
+Catalyst creates new business group1    
+    Clicks on Settings
+    Clicks on Organzatin Tree 
+    Clicks on Business Groups menu
+    Clicks on New button to create new Business Group
+    Enters new business group name1
+    Select organization for business group
+    Clicks on Save button to save the Business group details
+    Verify BusinessGroup is created
+
+
+
+Verify BusinessGroup is created
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${BUSINESS GROUP NAME1}']    ${BUSINESS GROUP NAME1}
+
+
+Catalyst creates new business group2
+    Clicks on New button to create new Business Group
+    Enters new business group name2
+    Select organization for business group
+    Clicks on Save button to save the Business group details    
+ 
+
+#Business Group Validation                                                 #business group start
+  
+Vaildate the Business Group feilds
+    [Arguments]    ${productgroupname}
+    Clicks on Settings
+    Clicks on Organzatin Tree 
+    Clicks on Business Groups menu
+    Clicks on New button to create new Business Group
+    Enters new business group name    ${productgroupname}
+    Select organization for business group
+    Clicks on Save button to save the Business group details
+
+    
+Clicks on Organzatin Tree 
+    Click Element    css=ul.list-group > li:first-child > a
+    
+
+
+Clicks on Business Groups menu
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       css=ul.list-group > li:nth-of-type(3) > a
+    Click Element    css=ul.list-group > li:nth-of-type(3) > a
+
+Clicks on New button to create new Business Group
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       css=#newProd
+    Click Element    css=#newProd
+
+Enters new business group name1
+   # [Arguments]     ${VaildBGrpName1}
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       id=productgroupname
+    Input Text     id=productgroupname      ${BUSINESS GROUP NAME1}
+
+Enters new business group name2
+   # [Arguments]     ${VaildBGrpName2}
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       id=productgroupname
+    Input Text     id=productgroupname      ${BUSINESS GROUP NAME2}
+
+Select organization for business group
+    Select From List     id=orgname      ${ORGANIZATION NAME}
+
+Clicks on Save button to save the Business group details
+    Click Element    css=div.btn-group.pull-right > button   
+
+
+#Verfiy that Edited Business Group is created
+ #   [Arguments]    ${BusinessGroupMsg}
+  #  Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='envtable']/tbody/tr/td[text()="HealthSystems"]
+   # Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()="HealthSystems"]    ${BusinessGroupMsg}   
+
+                                                                            #business group ends
+
+
+
+
+Create New Projects                                                                  
+     Creates project 1   ${PROJECT NAME1}
+     #Creates project 2   ${PROJECT NAME2}
+
+
+ 
+Creates project 1
+    [Arguments]    ${projectname}
+    Clicks on projects menu
+    Clicks on New button to create new project
+    Enters new Project name    ${projectname}
+    Enters new Project Description
+    Select organization for project
+    #Select Business Group
+    #Assign Teams for Orgnaization in Projects
+    Clicks on Save button to save the Project details
+    Verify project is created
+
+
+Verify project is created
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()='${PROJECT NAME1}']    ${PROJECT NAME1}
+
+Creates project 2
+    [Arguments]    ${projectname}
+    Clicks on projects menu
+    Clicks on New button to create new project
+    Enters new Project name    ${projectname}
+    Enters new Project Description
+    Select organization for project
+    #Select Business Groupn
+    #Assign Teams for Orgnaization in Projects
+    Clicks on Save button to save the Project details     
+
+Clicks on projects menu
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=//a[contains(text(),'Projects')]
+    Click Element    xpath=//a[contains(text(),'Projects')]
+
+Clicks on New button to create new project
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       link=New
+    Click Element    link=New
+
+Enters new Project name
+    [Arguments]     ${projectname}
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       id=projectname
+    Input Text     id=projectname      ${projectname}
+
+Enters new Project Description
+    Input Text     id=description      ${PROJECT DESCRIPTION}
+
+Select organization for project
+    Select From List     id=orgname      ${ORGANIZATION NAME}
+
+Select Business Group
+    Select From List    id=productgroupname    ${BUSINESS GROUP NAME}            #Devops
+           
+
+Select Business Groupn
+    Select From List    id=productgroupname    ${VaildEditBusinessGroup}          #HealthSystems
+
+Select environment for project
+     Click Element     xpath=.//*[@id='environmentname']/label[1]/i    #DEV Environment
+    #Click Element    xpath=.//*[@id='environmentname']/label[2]/i    #Prod Environment
+    #Click Element    xpath=.//*[@id='environmentname']/label[3]/i    #QA Environment
+    #Click Element    xpath=.//*[@id='environmentname']/label[4]/i    #Stage Environment
+
+Select environment1 for project
+    Click Element    xpath=.//*[@id='environmentname']/label[1]/i    #DEV Environment
+    Click Element    xpath=.//*[@id='environmentname']/label[2]/i    #Prod Environment
+    #Click Element    xpath=.//*[@id='environmentname']/label[3]/i    #QA Environment
+    #Click Element    xpath=.//*[@id='environmentname']/label[4]/i    #Stage Environment
+
+
+Clicks on Save button to save the Project details
+    Click Element    xpath=.//*[@id='myForm3']/div/div[3]/div/button                     
+
+
+#Verfiy that EditedProject is created
+#    [Arguments]    ${ProjectMsg}
+#    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='envtable']/tbody/tr/td[text()="Primary_Edu"]
+#    Element Should Contain    xpath=.//*[@id='envtable']/tbody/tr/td[text()="Primary_Edu"]    ${ProjectMsg}       
+
+                                                                             #project ends
+Catalyst Logout
+    Clicks on LogOut link
+
+Clicks on LogOut link
+    Wait Until Keyword Succeeds    1 minute     1 seconds       Wait Until Element Is Visible       xpath=.//*[@id='logout']/span/a/i
+    Focus    xpath=.//*[@id='logout']/span/a/i
+    Wait Until Keyword Succeeds    1 minute     1 seconds      Click Element    xpath=.//*[@id='logout']/span/a/i
